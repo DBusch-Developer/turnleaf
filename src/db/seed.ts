@@ -3,13 +3,15 @@ import { fallbackRules } from '../data/fallbackRules';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// Load .env.local
+// Load env vars. .env.local takes precedence (Next.js convention), then .env.
+// dotenv does not override already-set vars, so load .env.local first.
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 async function seed() {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    console.error('DATABASE_URL is not set in .env.local. Seeding aborted.');
+    console.error('DATABASE_URL is not set in .env.local or .env. Seeding aborted.');
     process.exit(1);
   }
 

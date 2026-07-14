@@ -1,0 +1,58 @@
+"use client";
+
+import React from 'react';
+import { ArrowLeft, BookOpen, ExternalLink } from 'lucide-react';
+
+export interface ComingSoonConfig {
+  comingSoon: true;
+  code: string;
+  name: string;
+  referrals: Array<{ name: string; url: string }>;
+}
+
+interface ComingSoonPanelProps {
+  config: ComingSoonConfig;
+  onReset: () => void;
+}
+
+export default function ComingSoonPanel({ config, onReset }: ComingSoonPanelProps) {
+  return (
+    <div className="glass-card animate-slide-up" style={{ padding: '2.5rem', maxWidth: '650px', margin: '0 auto', textAlign: 'center' }}>
+      <BookOpen size={44} style={{ color: 'var(--color-primary)', margin: '0 auto 1rem' }} />
+
+      <h2 style={{ fontSize: '1.5rem', color: 'var(--color-text)', marginBottom: '0.75rem' }}>
+        {config.name} is being researched
+      </h2>
+
+      <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
+        Every state in Turnleaf is researched from its actual statutes and encoded by hand
+        — we don&apos;t publish rules we haven&apos;t verified. {config.name} isn&apos;t ready yet,
+        and we&apos;d rather tell you that than guess.
+      </p>
+
+      <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '1.75rem' }}>
+        In the meantime, these are real places to learn where your record stands in {config.name} today:
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '2rem' }}>
+        {config.referrals.map(r => (
+          <a
+            key={r.url}
+            href={r.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.8rem 1rem' }}
+          >
+            <span>{r.name}</span>
+            <ExternalLink size={15} />
+          </a>
+        ))}
+      </div>
+
+      <button className="btn btn-primary" onClick={onReset} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+        <ArrowLeft size={16} /> Choose another state
+      </button>
+    </div>
+  );
+}

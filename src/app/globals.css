@@ -1,0 +1,344 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --color-primary: #4D7C59;
+  --color-primary-hover: #3A5E44;
+  --color-primary-light: #E8F0EA;
+  --color-primary-light-hover: #D6E4DB;
+  --color-primary-dark: #2D4834;
+  
+  --color-bg: #FAF9F5;
+  --color-bg-alt: #F3F1EA;
+  
+  --color-card-bg: rgba(255, 255, 255, 0.85);
+  --color-card-border: rgba(77, 124, 89, 0.15);
+  
+  --color-text: #1E221F;
+  --color-text-muted: #5A625C;
+  --color-text-light: #8E9690;
+  
+  --color-success: #1E824C;
+  --color-success-bg: #E8F8F0;
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3C7;
+  --color-error: #C0392B;
+  --color-error-bg: #FDEDEC;
+  
+  --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(77, 124, 89, 0.08);
+  --shadow-lg: 0 16px 40px rgba(77, 124, 89, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #141715;
+    --color-bg-alt: #1B1F1C;
+    
+    --color-card-bg: rgba(27, 31, 28, 0.85);
+    --color-card-border: rgba(77, 124, 89, 0.25);
+    
+    --color-text: #F3F5F3;
+    --color-text-muted: #A3ACA5;
+    --color-text-light: #707972;
+    
+    --color-success-bg: rgba(30, 130, 76, 0.15);
+    --color-warning-bg: rgba(217, 119, 6, 0.15);
+    --color-error-bg: rgba(192, 57, 43, 0.15);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg);
+  background-image:
+    linear-gradient(rgba(250, 249, 245, 0.28), rgba(250, 249, 245, 0.28)),
+    url('/hero-tree.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Dark mode: darken the full-page photo scrim instead of the cream one */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-image:
+      linear-gradient(rgba(20, 23, 21, 0.5), rgba(20, 23, 21, 0.5)),
+      url('/hero-tree.jpg');
+  }
+}
+
+/* Polished frosted header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 0.9rem 0;
+  background: rgba(255, 255, 255, 0.66);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid rgba(77, 124, 89, 0.18);
+  box-shadow: 0 6px 24px rgba(45, 72, 52, 0.08);
+}
+/* Hairline green accent under the header */
+.site-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary) 20%, var(--color-primary) 80%, transparent);
+  opacity: 0.5;
+}
+@media (prefers-color-scheme: dark) {
+  .site-header {
+    background: rgba(20, 23, 21, 0.6);
+    border-bottom-color: rgba(77, 124, 89, 0.3);
+  }
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-card-border);
+  color: var(--color-primary-dark);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Feathered readability halo behind hero copy — fades to nothing, no box */
+.hero-copy {
+  padding: 3rem 2rem 1.75rem;
+  background: radial-gradient(
+    ellipse 72% 78% at 50% 44%,
+    rgba(250, 249, 245, 0.9) 0%,
+    rgba(250, 249, 245, 0.74) 44%,
+    rgba(250, 249, 245, 0) 76%
+  );
+}
+@media (prefers-color-scheme: dark) {
+  .hero-copy {
+    background: radial-gradient(
+      ellipse 72% 78% at 50% 44%,
+      rgba(20, 23, 21, 0.92) 0%,
+      rgba(20, 23, 21, 0.72) 44%,
+      rgba(20, 23, 21, 0) 76%
+    );
+  }
+}
+
+/* Frosted mini-cards for the feature row so text reads over the photo */
+.info-card {
+  background: var(--color-card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-card-border);
+  border-radius: 16px;
+  padding: 1.35rem 1.4rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Glassmorphism Card styling */
+.glass-card {
+  background: var(--color-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.glass-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(77, 124, 89, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-slow) forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight var(--transition-normal) forwards;
+}
+
+/* Custom Interactive Inputs */
+button, .btn {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #FAF9F5;
+  box-shadow: 0 4px 12px rgba(77, 124, 89, 0.2);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(77, 124, 89, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--color-primary-light-hover);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-card-border);
+  color: var(--color-text);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-card-border);
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dark .input-field {
+  background: rgba(20, 23, 21, 0.6);
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(77, 124, 89, 0.15);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-card-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-light);
+}
+
+/* Utility Containers */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

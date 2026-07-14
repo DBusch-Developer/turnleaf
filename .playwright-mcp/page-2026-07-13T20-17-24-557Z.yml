@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: Turnleaf
+        - generic [ref=e9]: 50-State Check
+      - generic [ref=e10]:
+        - generic [ref=e11]: 🔒
+        - generic [ref=e12]: 100% Confidential. No Account Needed.
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - button "Demo Panel" [ref=e15] [cursor=pointer]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - heading "Fifty states of record-clearing law. One plain answer, and the form to file next." [level=1] [ref=e25]: Fifty states of record-clearing law.One plain answer, and the form to file next.
+            - paragraph [ref=e26]: Turnleaf is an anonymous expungement screening tool. Answer a few questions about your record to see where it may stand under your state's sealing, expungement, or set-aside laws.
+          - generic [ref=e27]:
+            - heading "Start Your Screening" [level=2] [ref=e28]
+            - paragraph [ref=e29]: Select your state to load its researched eligibility rules and forms.
+            - generic [ref=e30]:
+              - textbox "Search states..." [disabled] [ref=e31]
+              - generic [ref=e32]: 🔍
+            - paragraph [ref=e34]: Loading states...
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - heading "⚖️ 50-State Statutory Rules" [level=4] [ref=e37]:
+              - generic [ref=e38]: ⚖️
+              - text: 50-State Statutory Rules
+            - paragraph [ref=e39]: Unlike templates or partial coverage tools, Turnleaf maps core record clearance guidelines for all 50 states, citing code numbers and dates.
+          - generic [ref=e40]:
+            - heading "🔒 Privacy & Minimisation" [level=4] [ref=e41]:
+              - generic [ref=e42]: 🔒
+              - text: Privacy & Minimisation
+            - paragraph [ref=e43]: We do not collect names, Social Security Numbers, or store charge files. PDF summaries are compiled inside your browser.
+          - generic [ref=e44]:
+            - heading "📋 Form Filing Packets" [level=4] [ref=e45]:
+              - generic [ref=e46]: 📋
+              - text: Form Filing Packets
+            - paragraph [ref=e47]: Eligible results compile direct links to state self-help petition forms, estimated filing fees, and local clinic assistance registries.
+  - contentinfo [ref=e48]:
+    - generic [ref=e50]:
+      - paragraph [ref=e51]: LEGAL INFORMATION DISCLAIMER
+      - paragraph [ref=e52]: Turnleaf is a screening tool built to reference published legal rules. It displays potential eligibility and references state statutes, but does not provide legal advice or definitive filing determinations. A legal aid attorney, public defender, or court clerk should verify all details before filing any petition. Use of this application does not establish an attorney-client relationship.
+      - paragraph [ref=e53]: © 2026 Turnleaf. Designed for the Next Chapter AI-Augmented Builder Cohort.
+  - button "Open Next.js Dev Tools" [ref=e59] [cursor=pointer]

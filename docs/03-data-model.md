@@ -70,10 +70,15 @@ results.eligible_expungement { status:'eligible', citation:'California Penal Cod
 
 A state config is only valid if:
 1. **References resolve** — every `next` / `yes` / `no` / `nextPass` / `nextFail` names an existing node or result.
-2. **No dead-ends** — every path from `startNode` terminates at a result; no unreachable orphan nodes.
+2. **No dead-ends** — every path from `startNode` terminates at a result; no unreachable orphan nodes; the graph is acyclic (a cycle means some sequence of answers never terminates).
 3. **Required fields present** — `startNode` set; every result has a `citation`; every remedy has `formName`, `formUrl`, `fees`, `steps`, `courtContact`.
+4. **Node shape matches type** — `choice` has `options`; `boolean` has `yes` and `no`; `date` has `validation`.
 
-The seed validates these before writing (FR-21). This checks *structure*, not legal correctness — see [`../RULES.md`](../RULES.md).
+`validateState` (`src/data/validateState.ts`) implements these. `npm run db:seed` runs it across all states and aborts without writing if any fail; `npm run validate` runs it standalone for CI. See [ADR-0005](./decisions/ADR-0005-vitest-for-structural-validation.md).
+
+`result.remedy` is **not** checked against the keys of `resources.remedies`. It is a display label (e.g. `'Petition for Dismissal (PC 1203.4)'`), not a foreign key — `ResultsDisplay` renders every remedy in `resources` rather than looking one up by that string.
+
+This checks *structure*, not legal correctness — see [`../RULES.md`](../RULES.md). A well-formed tree can still be entirely wrong about the law.
 
 ## 5. Runtime record shape
 

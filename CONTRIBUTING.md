@@ -85,17 +85,32 @@ Rules for the content itself:
 - **Set `lastReviewed` to the date you actually read the source.**
 - **Comment the landscape.** Each existing state carries a header comment explaining what the current law looks like and what changed recently. Future you will need it.
 
-### 3. Check the structure by hand
+### 3. Validate the structure
 
-**There is no automated validator yet.** [`docs/03-data-model.md`](./docs/03-data-model.md) §4 says the seed validates structure before writing, and [`docs/01-prd.md`](./docs/01-prd.md) FR-21 calls the seed "validated" — as of now, neither is true. `src/db/seed.ts` creates the table and upserts; it does not check your tree. [ADR-0002](./docs/decisions/ADR-0002-per-state-research-files.md) proposes a `validateState` check plus per-state files under `src/data/states/`, but it is still **Proposed** and unbuilt.
+```bash
+npm run validate
+```
 
-So until it exists, walk the tree yourself:
+This checks your tree and names the state and the exact bad key:
 
-1. **References resolve** — every `next`, `yes`, `no`, `nextPass`, and `nextFail` names a node or result that exists. A typo (`next: 'sentance_date'`) fails silently and strands a real user mid-questionnaire.
-2. **No dead ends** — every path from `startNode` terminates at a result, and no node is orphaned.
-3. **Required fields present** — `startNode` set; every result has a `citation`; every remedy has `formName`, `formUrl`, `fees`, `steps`, and `courtContact`.
+```
+CA — 1 problem:
+  [unresolved-ref] nodes.probation_status.options[0].next
+    'eligible_expungment' names no node or result
+```
 
-This checks *structure*, never legal correctness. Nothing automated can tell you the law is right.
+It enforces:
+
+1. **References resolve** — every `next`, `yes`, `no`, `nextPass`, and `nextFail` names a node or result that exists. A typo (`next: 'sentance_date'`) would otherwise fail silently.
+2. **Reachability** — every node is reachable from `startNode`, and the tree is acyclic, so no sequence of answers can loop forever.
+3. **Required fields** — `startNode` set; every result has a `citation`; every remedy has `formName`, `formUrl`, `fees`, `steps`, and `courtContact`.
+4. **Node shape** — `choice` has options, `boolean` has both branches, `date` has a validation block.
+
+`npm run db:seed` runs the same check first and refuses to write anything if it fails, so a broken tree cannot reach the database.
+
+This matters more than it looks. The rules engine does **not** crash on a malformed tree — traversal caps at 30 steps and returns a hardcoded "Complex Analysis Required" result. A typo therefore produces a plausible-looking wrong answer for a real person rather than an obvious failure.
+
+**It checks structure, never legal correctness.** A tree can be perfectly well-formed and completely wrong about the law. Only your primary sources can tell you that.
 
 ### 4. Seed
 
@@ -124,11 +139,15 @@ Be aware of a known limitation: the rules engine still branches on specific node
 Run these and read the output:
 
 ```bash
+npm run validate   # state rule structure
+npm test           # unit tests (Vitest)
 npm run lint
 npm run build
 ```
 
-Your change is ready when the behavior meets its acceptance criteria and you've demonstrated it; user-facing legal output is hedged and cites real statutes; anonymity holds; the fallback paths still work; changed state rules pass the structural checklist and seed cleanly; affected docs are updated in the same change set; and no secrets are committed.
+> **Note:** `npm run lint` currently reports pre-existing errors in `src/` (unescaped entities, `no-explicit-any`, and some React hook warnings) that predate the test suite. Don't let them mask *new* problems in your own diff — lint your changed files directly with `npx eslint <file>`.
+
+Your change is ready when the behavior meets its acceptance criteria and you've demonstrated it; user-facing legal output is hedged and cites real statutes; anonymity holds; the fallback paths still work; changed state rules pass `npm run validate` and seed cleanly; affected docs are updated in the same change set; and no secrets are committed.
 
 **Evidence before assertions.** Don't report a build green or a screening working without having run it. If something failed or you skipped it, say so plainly, with the output. An honest "I didn't test the waiting-period branch" is worth more than a confident guess.
 

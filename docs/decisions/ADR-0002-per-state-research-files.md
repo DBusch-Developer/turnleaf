@@ -1,7 +1,9 @@
 # ADR-0002 — Per-state research files + validated reseed
 
-- **Status:** Proposed
+- **Status:** Proposed (partially implemented — see note)
 - **Date:** 2026-07-14
+
+> **Note (2026-07-15):** The **validator** half of this ADR is built and shipped — `validateState` lives in `src/data/validateState.ts` and gates `npm run db:seed`; see [ADR-0005](./ADR-0005-vitest-for-structural-validation.md). The **per-state file split** (`src/data/states/<code>.ts` + index barrel + `_template.ts`) is **not** built; researched rules still live in the single `src/data/fallbackRules.ts`. This ADR remains Proposed for that half.
 
 ## Context
 

@@ -8,6 +8,7 @@ Each ADR captures one significant decision: its context, the choice, and the con
 | [0002](./ADR-0002-per-state-research-files.md) | Per-state research files + validated reseed | Proposed |
 | [0003](./ADR-0003-neon-jsonb-with-code-fallback.md) | Neon JSONB rules with code source-of-truth + fallback | Accepted |
 | [0004](./ADR-0004-language-safety-policy.md) | Language-safety policy (never legal advice) | Accepted |
+| [0005](./ADR-0005-vitest-for-structural-validation.md) | Vitest as the test runner, starting with structural validation | Accepted |
 
 ## Format
 

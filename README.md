@@ -65,7 +65,9 @@ All 50 states appear in the selector. **Four states currently have researched, c
 | `npm run build` | Production build |
 | `npm run start` | Serve the production build |
 | `npm run lint` | Run ESLint |
-| `npm run db:seed` | Create the schema and seed researched states into Neon |
+| `npm test` | Run the unit tests (Vitest) |
+| `npm run validate` | Check every state's rule structure (no database needed) |
+| `npm run db:seed` | Validate, then create the schema and seed researched states into Neon |
 
 ## Project structure
 
@@ -77,10 +79,12 @@ src/
 │   └── api/mock-checkr/  # mock background-check personas (demo)
 ├── components/           # StateSelector, EligibilityWizard, ResultsDisplay, ...
 ├── data/
-│   └── fallbackRules.ts  # researched state rules (source of truth, mirrored to DB)
+│   ├── fallbackRules.ts  # researched state rules (source of truth, mirrored to DB)
+│   └── validateState.ts  # structural checker for decision trees
 └── db/
     ├── client.ts         # Neon access + code fallback
     ├── schema.sql        # DDL reference
+    ├── validate.ts       # standalone structural validation (CI)
     └── seed.ts           # validates + seeds states
 ```
 

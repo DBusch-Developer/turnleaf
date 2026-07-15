@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { fallbackRules } from '../data/fallbackRules';
+import { validateAll, formatErrors } from '../data/validateState';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -9,6 +10,20 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 async function seed() {
+  // Validate every state BEFORE touching the database (FR-21). A malformed
+  // tree must never reach the DB: the rules engine does not crash on one, it
+  // silently returns a hardcoded result, so a real person gets a wrong answer.
+  // Structure only — this says nothing about whether the law is right.
+  console.log('Validating state rule structure...');
+  const errors = validateAll(fallbackRules);
+  if (errors.length > 0) {
+    console.error(`\nStructural validation FAILED — ${errors.length} problem(s). Nothing was written.\n`);
+    console.error(formatErrors(errors));
+    console.error('\nFix the keys named above and reseed.\n');
+    process.exit(1);
+  }
+  console.log(`Structure OK — ${Object.keys(fallbackRules).length} state(s).`);
+
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error('DATABASE_URL is not set in .env.local or .env. Seeding aborted.');

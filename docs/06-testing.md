@@ -2,7 +2,9 @@
 
 ## 1. Philosophy
 
-Turnleaf's highest risk is giving someone a wrong answer about their legal record. Testing prioritizes the **rules engine** and the **safety guarantees** (hedged language, privacy) over UI polish. A test suite is not yet established; this document defines what to build (a Phase-1 roadmap item).
+Turnleaf's highest risk is giving someone a wrong answer about their legal record. Testing prioritizes the **rules engine** and the **safety guarantees** (hedged language, privacy) over UI polish.
+
+**Status:** Vitest is the runner ([ADR-0005](./decisions/ADR-0005-vitest-for-structural-validation.md)); run `npm test`. Only the structural-validation item below is built so far — the rest of this document is still the plan.
 
 ## 2. What to test, by priority
 
@@ -11,8 +13,9 @@ Turnleaf's highest risk is giving someone a wrong answer about their legal recor
 - Cover each branch: offense level, disposition, probation status, prison/restitution flags, and every waiting-period boundary (just-under vs. just-over `yearsRequired`).
 - Use the mock Checkr personas as ready-made fixtures — each persona has a known expected outcome (e.g., Marcus CA → eligible expungement; Sarah TX felony → ineligible).
 
-### P0 — Structural validation
+### P0 — Structural validation — ✅ built
 - Every state config passes the structural checker (references resolve, no dead-ends, required fields present) — run in CI so a broken tree can never be seeded (FR-21).
+- Implemented as `validateState` (`src/data/validateState.ts`), tested in `src/data/validateState.test.ts`, and enforced by `npm run db:seed` and `npm run validate`. CI wiring (GitHub Actions) is still outstanding.
 
 ### P1 — Language safety (NFR-1)
 - The deterministic summary never contains banned phrasings ("you are eligible," "you should file," "legal advice"). Assert against a denylist.

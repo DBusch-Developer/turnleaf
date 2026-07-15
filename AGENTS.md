@@ -29,7 +29,7 @@ Turnleaf is an anonymous, 50-state record-clearing eligibility screening tool fo
 2. **Ask if unclear** (see "Ask, don't assume"). Never start on a guess about a legal rule.
 3. **Branch** off `main` for non-trivial work; keep commits small and logical.
 4. **Implement** following the architecture rules below. Keep legal rules in data (`fallbackRules` / the database), not hard-coded in components.
-5. **Validate** any new/changed state rules structurally, then reseed with `npm run db:seed`.
+5. **Validate** any new/changed state rules with `npm run validate`, then reseed with `npm run db:seed` (which validates first and refuses to write a broken tree).
 6. **Sync documentation** in the same change set (see `RULES.md` → Documentation synchronization).
 7. **Verify** before you claim done (see below).
 8. **Commit / open a PR** with an honest description of what was and wasn't tested.
@@ -42,7 +42,7 @@ A task is done only when all of the following hold:
 - All user-facing legal output is hedged and cites real statutes — no invented rules, no legal advice.
 - Anonymity is preserved: no PII collected, stored, or logged.
 - Graceful degradation still works (DB → `fallbackRules`; Groq → deterministic summary).
-- `npm run lint` and `npm run build` pass; any changed state rules pass structural validation and seed cleanly.
+- `npm test` and `npm run build` pass; any changed state rules pass `npm run validate` and seed cleanly. (`npm run lint` has pre-existing errors in `src/` — lint your changed files directly with `npx eslint <file>` so they aren't masked.)
 - All affected documentation is updated in the same change set.
 - No secrets are committed.
 
@@ -62,7 +62,7 @@ Evidence before assertions. Never state that a build is green, a screening works
 
 ## Required stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Neon PostgreSQL (`@neondatabase/serverless`) · Groq (with deterministic fallback) · `jspdf` · `lucide-react`.
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Neon PostgreSQL (`@neondatabase/serverless`) · Groq (with deterministic fallback) · `jspdf` · `lucide-react` · Vitest (tests, [ADR-0005](./docs/decisions/ADR-0005-vitest-for-structural-validation.md)).
 
 Do not replace a stack element without an approved ADR (`docs/decisions/`).
 

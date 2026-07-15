@@ -1,0 +1,251 @@
+import { describe, test, expect } from 'vitest';
+import { validateState, validateAll } from './validateState';
+import { fallbackRules, type StateRuleConfig } from './fallbackRules';
+
+// A minimal, structurally valid config. Each test clones this and breaks
+// exactly one thing, so a failure names the rule that caught it.
+function validConfig(): StateRuleConfig {
+  return {
+    code: 'ZZ',
+    name: 'Teststate',
+    lastReviewed: '2026-07-15',
+    verificationStatus: 'statute_cited',
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          text: 'What was the outcome?',
+          options: [
+            { label: 'Convicted', value: 'convicted', next: 'wait_check' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_dismissed' },
+          ],
+        },
+        wait_check: {
+          type: 'date',
+          text: 'When were you sentenced?',
+          validation: { yearsRequired: 2, nextPass: 'eligible_expungement', nextFail: 'waiting' },
+        },
+      },
+      results: {
+        eligible_dismissed: {
+          status: 'eligible',
+          title: 'Potentially eligible',
+          message: 'You appear potentially eligible.',
+          remedy: 'Sealing',
+          citation: 'Test Code § 1',
+        },
+        eligible_expungement: {
+          status: 'eligible',
+          title: 'Potentially eligible',
+          message: 'You appear potentially eligible.',
+          remedy: 'Sealing',
+          citation: 'Test Code § 2',
+        },
+        waiting: {
+          status: 'waiting',
+          title: 'Waiting period',
+          message: 'You may need to wait.',
+          remedy: 'Sealing',
+          citation: 'Test Code § 3',
+        },
+      },
+    },
+    resources: {
+      remedies: {
+        Sealing: {
+          name: 'Sealing',
+          formName: 'Form ZZ-1',
+          formUrl: 'https://courts.zz.gov/form-zz-1',
+          steps: ['File the form.'],
+          fees: '$0',
+          feeWaiver: 'Available',
+          courtContact: 'Clerk of Court',
+        },
+      },
+      legalAid: [{ name: 'ZZ Legal Aid', url: 'https://legalaid.zz.org' }],
+    },
+  };
+}
+
+describe('validateState — valid configs', () => {
+  test('returns no errors for a structurally valid config', () => {
+    expect(validateState(validConfig())).toEqual([]);
+  });
+});
+
+describe('validateState — reference resolution', () => {
+  test('flags a choice option pointing at a nonexistent key', () => {
+    const c = validConfig();
+    c.rules.nodes.disposition.options![0].next = 'wait_chek'; // typo
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('wait_chek');
+    expect(errors[0].path).toBe('nodes.disposition.options[0].next');
+  });
+
+  test('flags a boolean yes/no pointing at a nonexistent key', () => {
+    const c = validConfig();
+    c.rules.nodes.gate = { type: 'boolean', text: 'Registered?', yes: 'nowhere', no: 'waiting' };
+    c.rules.nodes.disposition.options![0].next = 'gate';
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('nodes.gate.yes');
+    expect(errors[0].message).toContain('nowhere');
+  });
+
+  test('flags a date validation nextPass/nextFail pointing at a nonexistent key', () => {
+    const c = validConfig();
+    c.rules.nodes.wait_check.validation!.nextFail = 'waitng'; // typo
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('nodes.wait_check.validation.nextFail');
+  });
+
+  test('flags a startNode that names nothing', () => {
+    const c = validConfig();
+    c.rules.startNode = 'ghost';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.path === 'rules.startNode')).toBe(true);
+  });
+});
+
+describe('validateState — reachability', () => {
+  test('flags an orphan node unreachable from startNode', () => {
+    const c = validConfig();
+    c.rules.nodes.stranded = { type: 'boolean', text: 'Unreachable?', yes: 'waiting', no: 'waiting' };
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('unreachable');
+    expect(errors[0].path).toBe('nodes.stranded');
+  });
+
+  // A questionnaire must be acyclic: a cycle means some sequence of answers
+  // loops forever. The engine caps traversal at 30 steps and then emits a
+  // hardcoded result with a fabricated citation, so a loop never surfaces as
+  // a crash — it surfaces as a wrong answer. Catch it here instead.
+  test('flags a cycle, because a path through it can never terminate', () => {
+    const c = validConfig();
+    c.rules.nodes.loop_a = { type: 'boolean', text: 'A?', yes: 'loop_b', no: 'waiting' };
+    c.rules.nodes.loop_b = { type: 'boolean', text: 'B?', yes: 'loop_a', no: 'waiting' };
+    c.rules.nodes.disposition.options![0].next = 'loop_a';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'cycle')).toBe(true);
+  });
+
+  test('accepts converging branches, which are not a cycle', () => {
+    const c = validConfig();
+    c.rules.nodes.gate = { type: 'boolean', text: 'Gate?', yes: 'wait_check', no: 'waiting' };
+    c.rules.nodes.disposition.options![0].next = 'gate';
+
+    // 'waiting' is now reached from both gate.no and wait_check.nextFail.
+    expect(validateState(c)).toEqual([]);
+  });
+});
+
+describe('validateState — required fields', () => {
+  test('flags a result with a missing citation', () => {
+    const c = validConfig();
+    c.rules.results.waiting.citation = '';
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('missing-field');
+    expect(errors[0].path).toBe('results.waiting.citation');
+  });
+
+  test('flags a remedy missing required fields', () => {
+    const c = validConfig();
+    c.resources.remedies.Sealing.formUrl = '';
+    c.resources.remedies.Sealing.courtContact = '';
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(2);
+    expect(errors.map(e => e.path).sort()).toEqual([
+      'resources.remedies.Sealing.courtContact',
+      'resources.remedies.Sealing.formUrl',
+    ]);
+  });
+
+  test('flags a remedy with no steps', () => {
+    const c = validConfig();
+    c.resources.remedies.Sealing.steps = [];
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('resources.remedies.Sealing.steps');
+  });
+
+  // NOTE: result.remedy is deliberately NOT checked against the keys of
+  // resources.remedies. It is a display label (e.g. 'Petition for Dismissal
+  // (PC 1203.4)'), not a foreign key — ResultsDisplay renders every remedy in
+  // resources rather than looking one up by this string.
+});
+
+describe('validateState — node shape', () => {
+  test('flags a choice node with no options', () => {
+    const c = validConfig();
+    c.rules.nodes.disposition.options = [];
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'bad-shape' && e.path === 'nodes.disposition.options')).toBe(true);
+  });
+
+  test('flags a boolean node missing a branch', () => {
+    const c = validConfig();
+    c.rules.nodes.gate = { type: 'boolean', text: 'Registered?', yes: 'waiting' };
+    c.rules.nodes.disposition.options![0].next = 'gate';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'bad-shape' && e.path === 'nodes.gate.no')).toBe(true);
+  });
+
+  test('flags a date node missing validation', () => {
+    const c = validConfig();
+    delete c.rules.nodes.wait_check.validation;
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'bad-shape' && e.path === 'nodes.wait_check.validation')).toBe(true);
+  });
+});
+
+describe('validateState — error reporting', () => {
+  test('reports every error, not just the first', () => {
+    const c = validConfig();
+    c.rules.nodes.disposition.options![0].next = 'gone';
+    c.rules.results.waiting.citation = '';
+    const errors = validateState(c);
+
+    expect(errors.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test('every error names the state code so a seed failure is actionable', () => {
+    const c = validConfig();
+    c.rules.nodes.disposition.options![0].next = 'gone';
+
+    for (const e of validateState(c)) {
+      expect(e.state).toBe('ZZ');
+    }
+  });
+});
+
+describe('validateAll', () => {
+  test('every researched state in fallbackRules is structurally valid', () => {
+    expect(validateAll(fallbackRules)).toEqual([]);
+  });
+
+  test('aggregates errors across states, tagging each with its code', () => {
+    const broken = validConfig();
+    broken.rules.startNode = 'ghost';
+    const errors = validateAll({ ZZ: broken });
+
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].state).toBe('ZZ');
+  });
+});

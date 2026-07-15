@@ -92,7 +92,7 @@ Turnleaf's rules live in code and are mirrored into the database. To add a state
 2. Encode it as a decision tree in `src/data/fallbackRules.ts` (see an existing state like `CA` as a model).
 3. Run `npm run db:seed` to push it to Neon. Seeding is idempotent (upsert).
 
-See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/03-data-model.md`](./docs/03-data-model.md) (once written) for the full process and the decision-tree format.
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/03-data-model.md`](./docs/03-data-model.md) for the full process and the decision-tree format.
 
 ## Documentation
 

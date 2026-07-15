@@ -76,7 +76,7 @@ export default function RootLayout({
         </main>
 
         {/* Persistent Legal Disclaimer Footer (NFR-1 / R1) */}
-        <footer style={{
+        <footer className="site-footer" style={{
           background: 'var(--color-bg-alt)',
           borderTop: '1px solid var(--color-card-border)',
           padding: '2rem 0',
@@ -84,6 +84,12 @@ export default function RootLayout({
           fontSize: '0.85rem',
           color: 'var(--color-text-muted)'
         }}>
+          {/* Decorative sprigs, hidden from assistive tech. The disclaimer is the
+              only place they appear, so they read as a deliberate flourish rather
+              than scattered ornament. */}
+          <img src="/leaves-left.png" alt="" aria-hidden="true" className="footer-leaf footer-leaf--left" />
+          <img src="/leaves-right.png" alt="" aria-hidden="true" className="footer-leaf footer-leaf--right" />
+
           <div className="container">
             <div style={{
               maxWidth: '800px',

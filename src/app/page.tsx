@@ -7,7 +7,16 @@ import ResultsDisplay from '../components/ResultsDisplay';
 import CheckrMockPanel from '../components/CheckrMockPanel';
 import { StateRuleConfig } from '../data/fallbackRules';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
-import { Settings, ArrowLeft, RefreshCw, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Settings, ArrowLeft, RefreshCw, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
+
+// The four steps of the screening, in order. The number is not decoration —
+// it is the sequence the CTA refers back to ("Start Step 1").
+const STEPS = [
+  { n: 1, Icon: MapPin, name: 'Choose your state', desc: 'We’ll apply your state’s laws.' },
+  { n: 2, Icon: FileText, name: 'Answer questions', desc: 'A few yes/no questions about your record.' },
+  { n: 3, Icon: Check, name: 'See your results', desc: 'Instantly see if you may qualify.', solid: true },
+  { n: 4, Icon: Download, name: 'Download forms', desc: 'Get the right court forms to file.' },
+];
 
 export default function Home() {
   const [selectedStateCode, setSelectedStateCode] = useState<string | null>(null);
@@ -18,6 +27,7 @@ export default function Home() {
   const [results, setResults] = useState<any[] | null>(null);
   const [showDemoPanel, setShowDemoPanel] = useState(false);
   const [loadingState, setLoadingState] = useState(false);
+  const [showSelector, setShowSelector] = useState(false);
 
   // Fetch state config when selected
   useEffect(() => {
@@ -70,10 +80,29 @@ export default function Home() {
     setRecords([]);
     setPrepopulatedRecords([]);
     setResults(null);
+    setShowSelector(false);
   };
 
+  // The landing page: hero, then the four steps, then the way in.
+  const onLanding = !selectedStateCode && !showSelector;
+
+  // The landing shows the oak in its own hero band. Every screen past it —
+  // states, wizard, results — sits directly on the full-page photo instead, so
+  // the content floats on the tree with no white band above it. Only ever one
+  // tree on screen: a fixed page photo plus a scrolling hero photo reads as two.
+  useEffect(() => {
+    document.body.classList.toggle('has-photo-bg', !onLanding);
+    return () => document.body.classList.remove('has-photo-bg');
+  }, [onLanding]);
+
   return (
-    <div style={{ padding: '3rem 0', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div style={{
+      padding: onLanding ? 0 : '3rem 0',
+      minHeight: '80vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: onLanding ? 'flex-start' : 'center'
+    }}>
       
       {/* Floating Developer Panel Toggle */}
       <button 
@@ -103,73 +132,86 @@ export default function Home() {
         onLoadReport={handleLoadMockReport}
       />
 
+      {onLanding ? (
+        <>
+          {/* Hero — the oak carries the message; the copy stays out of its way. */}
+          <section className="hero-band">
+            <div className="container">
+              <div className="hero-band__copy animate-slide-up">
+                <h1 className="hero-band__title">
+                  Record clearing<br />can open doors.
+                </h1>
+                <p className="hero-band__sub">
+                  We make it simple. Anonymous screening.<br />
+                  Plain-language answers. Court forms ready to file.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* The four steps, then the way in. */}
+          <section className="guide">
+
+            <div className="container">
+              <div className="guide__head">
+                <h2 className="guide__title">{'We’ll guide you in 4 simple steps.'}</h2>
+                <p className="guide__sub">{'It’s fast, free, and anonymous.'}</p>
+              </div>
+
+              <div className="guide__steps">
+                {STEPS.map((step, i) => (
+                  <React.Fragment key={step.n}>
+                    <div className="step">
+                      <div className="step__badge">
+                        <div className="step__disc">
+                          {step.solid ? (
+                            // Step 3 is the payoff: a filled check, but sized to
+                            // sit in the same footprint as the other icons.
+                            <span className="step__check">
+                              <Check size={22} strokeWidth={3.5} />
+                            </span>
+                          ) : (
+                            <step.Icon size={34} strokeWidth={2} />
+                          )}
+                        </div>
+                        <span className="step__num">{step.n}</span>
+                      </div>
+                      <h3 className="step__name">{step.name}</h3>
+                      <p className="step__desc">{step.desc}</p>
+                    </div>
+                    {i < STEPS.length - 1 && (
+                      <ArrowRight className="step__arrow" size={22} aria-hidden="true" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="guide__cta-wrap">
+                <button className="cta-start" onClick={() => setShowSelector(true)}>
+                  Start Step 1: Choose Your State
+                  <ArrowRight className="cta-start__arrow" size={20} aria-hidden="true" />
+                </button>
+                <p className="guide__note">{'Takes about 2 minutes • No account needed'}</p>
+              </div>
+            </div>
+          </section>
+        </>
+      ) : (
       <div className="container">
-        
-        {/* Step-based Workspace rendering */}
+
+        {/* Step-based Workspace rendering — every screen past the landing sits
+            directly on the full-page oak, no band, no white gap above it. */}
         {!selectedStateCode ? (
-          /* Landing Screen (Hero + Selector) */
-          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            <div className="animate-slide-up hero-copy" style={{ marginBottom: '2.5rem' }}>
-              <h1 style={{
-                fontSize: '3rem',
-                fontFamily: 'var(--font-title)',
-                fontWeight: 800,
-                color: 'var(--color-text)',
-                lineHeight: '1.15',
-                marginBottom: '1.25rem',
-                letterSpacing: '-0.03em'
-              }}>
-                Fifty states of record-clearing law.<br />
-                <span style={{ color: 'var(--color-primary)' }}>One plain answer</span>, and the form to file next.
-              </h1>
-              
-              <p style={{
-                fontSize: '1.15rem',
-                color: 'var(--color-text-muted)',
-                maxWidth: '620px',
-                margin: '0 auto',
-                lineHeight: '1.6'
-              }}>
-                Turnleaf is an anonymous expungement screening tool. Answer a few questions about your record to see where it may stand under your state's sealing, expungement, or set-aside laws.
-              </p>
-            </div>
-
-            {/* State Search and List Grid */}
+          /* Step 1: choose a state */
+          <div style={{ maxWidth: '800px', margin: '0 auto' }} className="animate-fade-in">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowSelector(false)}
+              style={{ marginBottom: '1.5rem' }}
+            >
+              <ArrowLeft size={16} /> Back
+            </button>
             <StateSelector onSelectState={setSelectedStateCode} />
-
-            {/* Reentry / Next Chapter Info Details */}
-            <div className="animate-fade-in" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.25rem',
-              marginTop: '3rem',
-              textAlign: 'left'
-            }}>
-              <div className="info-card">
-                <h4 style={{ fontWeight: 700, color: 'var(--color-primary-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <span>⚖️</span> 50-State Statutory Rules
-                </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                  Unlike templates or partial coverage tools, Turnleaf maps core record clearance guidelines for all 50 states, citing code numbers and dates.
-                </p>
-              </div>
-              <div className="info-card">
-                <h4 style={{ fontWeight: 700, color: 'var(--color-primary-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <span>🔒</span> Privacy & Minimisation
-                </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                  We do not collect names, Social Security Numbers, or store charge files. PDF summaries are compiled inside your browser.
-                </p>
-              </div>
-              <div className="info-card">
-                <h4 style={{ fontWeight: 700, color: 'var(--color-primary-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <span>📋</span> Form Filing Packets
-                </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                  Eligible results compile direct links to state self-help petition forms, estimated filing fees, and local clinic assistance registries.
-                </p>
-              </div>
-            </div>
           </div>
         ) : loadingState ? (
           /* Loading indicator when state config fetches */
@@ -214,6 +256,7 @@ export default function Home() {
         )}
 
       </div>
+      )}
     </div>
   );
 }

@@ -62,13 +62,6 @@
 
 body {
   background-color: var(--color-bg);
-  background-image:
-    linear-gradient(rgba(250, 249, 245, 0.28), rgba(250, 249, 245, 0.28)),
-    url('/hero-tree.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -96,24 +89,132 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
-/* Dark mode: darken the full-page photo scrim instead of the cream one */
+/* The oak behind the whole app — wizard and results read over it through their
+   frosted cards, and it shows through the frosted header too.
+   Only ever ONE tree on screen: this is applied only on screens with no hero
+   band. A fixed page photo plus a scrolling hero photo reads as two mismatched
+   trees, which is exactly what it looks like. */
+body.has-photo-bg {
+  background-image:
+    linear-gradient(rgba(250, 249, 245, 0.28), rgba(250, 249, 245, 0.28)),
+    url('/hero-tree.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 @media (prefers-color-scheme: dark) {
-  body {
+  body.has-photo-bg {
     background-image:
       linear-gradient(rgba(20, 23, 21, 0.5), rgba(20, 23, 21, 0.5)),
       url('/hero-tree.jpg');
   }
 }
 
-/* Polished frosted header */
+/* ---------------------------------------------------------------------------
+   Hero band — the oak photo, cropped to keep its composition: trunk right,
+   path entering bottom-left. The scrim is a left-to-right wash, not a flat
+   overlay, so the headline sits on quiet ground while the tree stays legible.
+   --------------------------------------------------------------------------- */
+.hero-band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(340px, 44vw, 540px);
+  background-color: var(--color-primary-light);
+  background-image:
+    linear-gradient(
+      100deg,
+      rgba(250, 249, 245, 0.95) 0%,
+      rgba(250, 249, 245, 0.88) 26%,
+      rgba(250, 249, 245, 0.45) 48%,
+      rgba(250, 249, 245, 0.06) 68%,
+      rgba(250, 249, 245, 0) 82%
+    ),
+    url('/hero-tree.jpg');
+  background-size: cover;
+  background-position: 62% 58%;
+  background-repeat: no-repeat;
+}
+
+.hero-band__copy {
+  max-width: 34rem;
+  padding: 2rem 0;
+}
+
+.hero-band__title {
+  font-family: var(--font-title);
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--color-text);
+  margin-bottom: 1.1rem;
+}
+
+.hero-band__sub {
+  font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+  color: var(--color-text-muted);
+  line-height: 1.65;
+  max-width: 27rem;
+}
+
+@media (max-width: 640px) {
+  .hero-band {
+    /* Portrait viewports crop the trunk away; drop the copy below it instead. */
+    min-height: 300px;
+    align-items: flex-end;
+    background-position: 72% 62%;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(250, 249, 245, 0.18) 0%,
+        rgba(250, 249, 245, 0.72) 52%,
+        rgba(250, 249, 245, 0.96) 100%
+      ),
+      url('/hero-tree.jpg');
+  }
+  .hero-band__copy {
+    padding: 1.5rem 0 1.75rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hero-band {
+    background-color: var(--color-bg-alt);
+    background-image:
+      linear-gradient(
+        100deg,
+        rgba(20, 23, 21, 0.94) 0%,
+        rgba(20, 23, 21, 0.86) 26%,
+        rgba(20, 23, 21, 0.44) 48%,
+        rgba(20, 23, 21, 0.06) 68%,
+        rgba(20, 23, 21, 0) 82%
+      ),
+      url('/hero-tree.jpg');
+  }
+  @media (max-width: 640px) {
+    .hero-band {
+      background-image:
+        linear-gradient(
+          180deg,
+          rgba(20, 23, 21, 0.2) 0%,
+          rgba(20, 23, 21, 0.74) 52%,
+          rgba(20, 23, 21, 0.96) 100%
+        ),
+        url('/hero-tree.jpg');
+    }
+  }
+}
+
+/* Solid header — opaque, so nothing shows through it. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 40;
   padding: 0.9rem 0;
-  background: rgba(255, 255, 255, 0.66);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  background: #FFFFFF;
   border-bottom: 1px solid rgba(77, 124, 89, 0.18);
   box-shadow: 0 6px 24px rgba(45, 72, 52, 0.08);
 }
@@ -130,7 +231,7 @@ a:hover {
 }
 @media (prefers-color-scheme: dark) {
   .site-header {
-    background: rgba(20, 23, 21, 0.6);
+    background: #1B1F1C;
     border-bottom-color: rgba(77, 124, 89, 0.3);
   }
 }
@@ -341,4 +442,236 @@ button, .btn {
   width: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Guide section — the four steps. Numbering is load-bearing here: this is an
+   actual ordered process, and the number is what the CTA refers back to
+   ("Start Step 1"). Arrows only appear when the row reads as a row.
+   --------------------------------------------------------------------------- */
+.guide {
+  padding: clamp(2.75rem, 6vw, 4.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+  background: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.guide__head {
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.guide__title {
+  font-family: var(--font-title);
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.guide__sub {
+  color: var(--color-text-muted);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+}
+
+/* Four steps with an arrow between each: 4 columns + 3 narrow arrow columns.
+   Below 1024px the arrows are display:none, which drops them out of the grid
+   entirely and lets the steps reflow to 2 columns cleanly. */
+.guide__steps {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: start;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.step {
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+.step__badge {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 1rem;
+}
+
+.step__disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+/* Step 3's check: the one filled mark in the row. Sized to match the optical
+   footprint of the 34px outline icons beside it, not to outshout them. */
+.step__check {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #FAF9F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step__num {
+  position: absolute;
+  top: -0.35rem;
+  left: -0.35rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  background: var(--color-primary-dark);
+  color: #FAF9F5;
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-bg);
+}
+
+.step__name {
+  font-family: var(--font-title);
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.35rem;
+}
+
+.step__desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  max-width: 12rem;
+  margin: 0 auto;
+}
+
+.step__arrow {
+  align-self: center;
+  color: var(--color-primary);
+  opacity: 0.4;
+  margin-top: -3.25rem;
+}
+
+.guide__cta-wrap {
+  text-align: center;
+  margin-top: clamp(2.25rem, 4vw, 3.25rem);
+  position: relative;
+  z-index: 1;
+}
+
+.cta-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.05rem 2.25rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--color-primary-dark);
+  color: #FAF9F5;
+  font-family: var(--font-title);
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(45, 72, 52, 0.28);
+  transition: background var(--transition-fast), transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.cta-start:hover {
+  background: #24392a;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(45, 72, 52, 0.34);
+}
+
+.cta-start:active {
+  transform: translateY(0);
+}
+
+.cta-start:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.cta-start__arrow {
+  transition: transform var(--transition-normal);
+}
+
+.cta-start:hover .cta-start__arrow {
+  transform: translateX(4px);
+}
+
+.guide__note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+/* Leaf motifs anchoring the lower corners, echoing the mark in the wordmark.
+   Decorative only — hidden from assistive tech, dropped on small screens. */
+@media (max-width: 1024px) {
+  .guide__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1rem; }
+  .step__arrow { display: none; }
+}
+
+@media (max-width: 560px) {
+  .guide__steps { grid-template-columns: minmax(0, 1fr); }
+  .cta-start { width: 100%; justify-content: center; padding: 1rem 1.25rem; font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-start,
+  .cta-start__arrow,
+  .cta-start:hover,
+  .cta-start:hover .cta-start__arrow {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Legal disclaimer sprigs — the one piece of ornament in the app, on every page.
+   --------------------------------------------------------------------------- */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Keep the disclaimer above the art — this text must never be obscured. */
+.site-footer .container {
+  position: relative;
+  z-index: 1;
+}
+
+.footer-leaf {
+  position: absolute;
+  bottom: 0;
+  width: clamp(5rem, 9vw, 8rem);
+  height: auto;
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.footer-leaf--left { left: 0; }
+.footer-leaf--right { right: 0; }
+
+/* Narrow viewports: the disclaimer needs the full width, so drop the art. */
+@media (max-width: 720px) {
+  .footer-leaf {
+    display: none;
+  }
 }

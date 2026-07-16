@@ -599,7 +599,102 @@ const PA: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA]];
+const NJ: Persona[] = [
+  {
+    source: 'Wave 1 — NJ persona 1',
+    package: 'one indictable (burglary 3rd), 6 yrs post-everything, fines paid → eligible-standard.',
+    record: { title: 'Burglary (3rd degree indictable)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      title39_nj: false,
+      marijuana_nj: false,
+      excluded_nj: false,
+      count_profile_nj: 'standard',
+      date_5_nj: '2020-07-15',   // 6 yrs past the latest of the four events
+    },
+    expect: {
+      resultKey: 'eligible_standard_nj',
+      reading:
+        'One indictable, no exclusions, 6 years past the latest of conviction / payment / '
+        + 'completion / release → the standard 5-year path. Third-degree burglary is not on the '
+        + '2C:52-2(b) list. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — NJ persona 2',
+    package: 'one indictable + 2 DP, 4 yrs, pending job offer → complex/possible early pathway.',
+    record: { title: 'Indictable Offense', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      title39_nj: false,
+      marijuana_nj: false,
+      excluded_nj: false,
+      count_profile_nj: 'standard',   // one indictable + 2 DP is inside 1 + 3
+      date_5_nj: '2022-07-15',        // 4 yrs — short of 5
+      date_4_nj: '2022-07-15',        // but past 4
+    },
+    expect: {
+      resultKey: 'complex_early_nj',
+      reading:
+        'Four years in: short of the standard 5 but past the 4-year "compelling circumstances" '
+        + 'threshold. That is a discretionary judgment about the person\'s situation — a pending job '
+        + 'offer is exactly the kind of thing courts weigh — so the tree routes to legal aid rather '
+        + 'than deciding. Exact: the package asks for complex/possible-early and that is what it gets.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — NJ persona 3',
+    package: '2 indictables, latest closed 11 yrs ago, none excluded → eligible-clean-slate.',
+    record: { title: 'Indictable Offense (second)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      title39_nj: false,
+      marijuana_nj: false,
+      excluded_nj: false,
+      count_profile_nj: 'clean_slate',   // 2 indictables is outside 1 + 3
+      date_10_nj: '2015-07-15',          // 11 yrs from the most recent
+    },
+    expect: {
+      resultKey: 'eligible_clean_slate_nj',
+      reading:
+        'Two indictables puts the record outside the standard limits, which is precisely who Clean '
+        + 'Slate (2C:52-5.3) exists for: the ENTIRE record, 10 years from the most recent conviction, '
+        + 'regardless of count. 11 years clears it. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — NJ persona 4',
+    package: 'DWI → not expungable (Title 39).',
+    record: { title: 'DWI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { title39_nj: true },
+    expect: {
+      resultKey: 'ineligible_title39_nj',
+      reading:
+        'Asked first and answered in one question. Title 39 motor vehicle offences sit outside the '
+        + 'expungement statute entirely — no waiting period, no Clean Slate, nothing. Wave 1 calls '
+        + 'this a common user confusion; a hard no delivered immediately beats five questions and '
+        + 'then a no. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — NJ persona 5',
+    package: 'marijuana possession 2015 → eligible-immediate.',
+    record: { title: 'Marijuana Possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-01-01' },
+    answers: { title39_nj: false, marijuana_nj: true },
+    expect: {
+      resultKey: 'eligible_marijuana_nj',
+      reading:
+        'Since 2021 legalisation most marijuana offences are treated as DP-level and expungable '
+        + 'immediately — no waiting period, no date node. Asked before the exclusion list and the '
+        + 'count profile because it short-circuits both. Exact.',
+    },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

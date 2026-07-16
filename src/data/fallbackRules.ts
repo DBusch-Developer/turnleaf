@@ -2600,6 +2600,300 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'PALawHelp', url: 'https://www.palawhelp.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // NEW JERSEY — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave1_Draft_Package.md
+  //
+  // NJ's vocabulary is its own and the UI must use it: felonies are INDICTABLE
+  // OFFENCES, misdemeanours are DISORDERLY PERSONS (DP) OFFENCES. Using the
+  // wrong words here is not a style problem — a person looking at their own
+  // paperwork will not recognise "felony" on it.
+  //
+  // TITLE 39 IS ASKED FIRST, and it is the single most useful thing this tree
+  // does. Motor-vehicle offences under Title 39 — including DWI — are NOT
+  // expungable in New Jersey, at all, ever. Wave 1 calls this a common user
+  // confusion, and it is: people come looking to clear a DWI and there is
+  // nothing to clear it with. Better to say so in one question than to walk
+  // them through five.
+  //
+  // Two petition tracks: STANDARD (2C:52-2/-3) for one indictable plus up to 3
+  // DP offences (or up to 5 DP with no indictable), 5 years from the latest of
+  // four events; and CLEAN SLATE (2C:52-5.3) for everyone who does not fit —
+  // the entire record, 10 years from the most recent of the same four events,
+  // regardless of conviction count and even with prior expungements.
+  // ==========================================================================
+  NJ: {
+    code: 'NJ',
+    name: 'New Jersey',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave1_Draft_Package.md',
+    terminology:
+      'New Jersey says EXPUNGEMENT, and it means it — the records are extracted and isolated, not '
+      + 'just hidden. The vocabulary is New Jersey\'s own: what other states call felonies are '
+      + 'INDICTABLE OFFENSES here, and what other states call misdemeanors are DISORDERLY PERSONS '
+      + '(DP) OFFENSES. Your paperwork will use those words. The one thing to know before anything '
+      + 'else: motor-vehicle offenses under Title 39 — including DWI — cannot be expunged in New '
+      + 'Jersey at all. Filing is free and done online through the eCourts Expungement System.',
+    keyDates: [
+      {
+        label: 'Clean Slate expungement (2C:52-5.3) enacted',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 1 gives the year only. The same 2019 law ordered an AUTOMATED clean-slate system whose rollout has been slow — see open questions.',
+      },
+      {
+        label: 'Venue expanded to the county of residence',
+        date: '2025',
+        kind: 'effective',
+        note: 'Wave 1 gives the year only. You may now file in the Superior Court for the county where you live, not only where you were convicted.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is expungement filing genuinely free, and is there any fee at any stage? Wave 1 says the NJ Courts\' own page states it is free and that the $75 fee was eliminated in the 2019 reforms — but flags that older sources still cite $75 and says to VERIFY on njcourts.gov and by phone. Sources conflict, so no fee is stated in the app; the results attribute the free claim to njcourts.gov rather than asserting it. Wave 1 wants to "wear it proudly" once confirmed, and it is worth confirming: free-and-online is New Jersey\'s headline.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'What is the current status of the AUTOMATED clean-slate system ordered by the 2019 law? Wave 1 says the rollout has been slow and backlogged, and says to verify before claiming any automation in the UI. Nothing in the tree claims it — no automatic path is encoded for New Jersey — but if it is running, people need to be told to check their records first, as in every other automated state.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the early-pathway waiting periods: 4 years via "compelling circumstances" instead of the standard 5, and Wave 1 flags a possible 3-year early path for DP-only records. The tree offers the 4-year compelling-circumstances route as a "talk to someone" result and does not encode the 3-year DP path at all, because it is flagged unverified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the name and URL of the State Police backlog status portal created by the 2025 law (A3881)? Wave 1 flags both as unverified. State Police processing backlogs are documented, so a person needs to know where to check whether their granted expungement has actually been processed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm how unpaid financial assessments are treated on the Clean Slate path: Wave 1 says a non-willful unpaid assessment does NOT block, and the court enters a civil judgment instead. This is disclosed in the results because it is user-relevant, but it is not verified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the once-per-lifetime limit on the indictable expungement grant, and the crime-spree / interdependent-offences exception to it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions (including PTI and conditional discharge) treated? Standing call-sheet question for every state. Not covered in Wave 1.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What are the exact effective dates for the 2019 Clean Slate law and the 2025 venue expansion? Wave 1 gives years only.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.J.S.A. 2C:52-2 (standard expungement — indictable offences)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-2(b) (ineligible convictions)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-3 (disorderly persons offences)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-4 (ordinance violations)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-5.1 (marijuana expungement)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-5.3 (clean slate expungement)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-6 (dismissals and acquittals)', url: null, retrievedOn: null },
+      { id: 'N.J.S.A. 2C:52-6.1 (marijuana)', url: null, retrievedOn: null },
+      { id: 'A3881 (2025 — State Police backlog status portal)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'title39_nj' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_dismissal_nj' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_dismissal_nj' },
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // Asked first for convictions: a Title 39 offence has no path at all, so
+        // there is no kindness in walking someone through five more questions.
+        title39_nj: {
+          type: 'boolean',
+          text: 'Was this a motor vehicle offense under Title 39 — for example DWI, driving while suspended, or reckless driving?',
+          yes: 'ineligible_title39_nj',
+          no: 'marijuana_nj'
+        },
+        marijuana_nj: {
+          type: 'boolean',
+          text: 'Was this a marijuana offense?',
+          yes: 'eligible_marijuana_nj',
+          no: 'excluded_nj'
+        },
+        excluded_nj: {
+          type: 'boolean',
+          text: 'Was the offense any of these: homicide (other than vehicular), kidnapping, sexual assault, robbery, arson, endangering the welfare of a child, terrorism, most first-degree drug distribution, or a crime committed in a public office that touched that office?',
+          yes: 'ineligible_serious_nj',
+          no: 'count_profile_nj'
+        },
+        count_profile_nj: {
+          type: 'choice',
+          text: 'Thinking about your whole record: which describes you? (In New Jersey, indictable offenses are what other states call felonies; disorderly persons offenses are what they call misdemeanors.)',
+          options: [
+            { label: 'One indictable offense, plus no more than 3 disorderly persons offenses', value: 'standard', next: 'date_5_nj' },
+            { label: 'No indictable offenses, and no more than 5 disorderly persons offenses', value: 'standard_dp', next: 'date_5_nj' },
+            { label: 'More than that — more indictables, or more DP offenses', value: 'clean_slate', next: 'date_10_nj' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_counts_nj' }
+          ]
+        },
+        // NJ's clock runs from the LATEST of four events. Asked, because no
+        // single collected date can stand in for that.
+        date_5_nj: {
+          type: 'date',
+          text: 'Which of these came LAST: your conviction, your payment of all fines and financial assessments, your completion of probation or parole, or your release from custody? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the LATEST of conviction, fine payment, probation/parole completion, or release (N.J.S.A. 2C:52-2)' },
+            nextPass: 'eligible_standard_nj',
+            nextFail: 'date_4_nj'
+          }
+        },
+        date_4_nj: {
+          type: 'date',
+          text: 'And the same date again, so we can check the early pathway: which of conviction, fine payment, completion of supervision, or release came last?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'the LATEST of the four events — the "compelling circumstances" early pathway (N.J.S.A. 2C:52-2)' },
+            nextPass: 'complex_early_nj',
+            nextFail: 'waiting_nj'
+          }
+        },
+        date_10_nj: {
+          type: 'date',
+          text: 'Thinking about your MOST RECENT conviction, not just this one: which came last — that conviction, your payment of all fines and financial assessments, your completion of probation or parole, or your release from custody? Enter that date.',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the LATEST of the four events, measured from the MOST RECENT conviction (N.J.S.A. 2C:52-5.3 clean slate)' },
+            nextPass: 'eligible_clean_slate_nj',
+            nextFail: 'waiting_clean_slate_nj'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'New Jersey\'s paths split sharply on how the case ended: a dismissal or acquittal can be expunged immediately with no waiting period, while a conviction runs through a 5-year or 10-year clock depending on your whole record. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. LSNJ Law\'s "Clearing Your Record" guide and hotline (888-576-5529) can help you find out what your disposition actually was.',
+          remedy: 'Get Your Record First (LSNJ Law)',
+          citation: 'N.J.S.A. 2C:52-1 et seq. (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'New Jersey\'s expungement rules are screened here for convictions, dismissals, and acquittals. How a completed diversion is treated — including PTI (Pretrial Intervention) and conditional discharge, which New Jersey uses often — is not something this screening has researched yet, and we would rather tell you that than guess. LSNJ Law (888-576-5529) can confirm how your case was disposed and which path fits.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
+          citation: 'N.J.S.A. 2C:52-1 et seq. (treatment of diversions not yet researched)'
+        },
+        // The most useful thing this tree says.
+        ineligible_title39_nj: {
+          status: 'ineligible',
+          title: 'Title 39 Motor Vehicle Offenses Cannot Be Expunged',
+          message: 'This is the thing most people are surprised by, so here it is plainly: motor vehicle offenses under Title 39 — including DWI, driving while suspended, and reckless driving — cannot be expunged in New Jersey. Not after a waiting period, not through Clean Slate, not at all. New Jersey\'s expungement law covers criminal offenses; Title 39 offenses are motor vehicle violations, which sit outside it entirely. That is a hard no and we would rather you hear it now than after paying for advice. Two things that may still help: your driving record and your criminal record are different things, and a Title 39 offense does not create a criminal record to clear. And if you have OTHER offenses that are not Title 39, those may well be expungable — run this again for them. LSNJ Law (888-576-5529) can confirm.',
+          remedy: 'None (Title 39 Offenses Are Outside the Expungement Statute)',
+          citation: 'N.J.S.A. 2C:52-1 et seq. (applies to criminal offenses; Title 39 motor vehicle offenses are not covered)'
+        },
+        eligible_dismissal_nj: {
+          status: 'eligible',
+          title: 'Dismissed or Acquitted — Expungeable Now',
+          message: 'Because your case ended without a conviction, you can seek expungement immediately under N.J.S.A. 2C:52-6 — no waiting period at all. File through the eCourts Expungement System at njcourts.gov: it is online, the system generates the petition for you, and the NJ Courts\' own page says there is no filing fee (we are confirming that, since older sources still mention $75). Once a judge grants the order it is transmitted to the agencies electronically. One thing worth knowing: the State Police have documented backlogs in processing granted expungements, so it is worth checking afterwards that yours went through rather than assuming.',
+          remedy: 'eCourts Expungement (N.J.S.A. 2C:52-6) — no waiting period',
+          citation: 'N.J.S.A. 2C:52-6'
+        },
+        eligible_marijuana_nj: {
+          status: 'eligible',
+          title: 'Marijuana Offense — Expungeable Now',
+          message: 'Since New Jersey legalized marijuana in 2021, most marijuana offenses are treated as disorderly persons offenses and can be expunged IMMEDIATELY — no waiting period. File through the eCourts Expungement System at njcourts.gov; it is online and the NJ Courts say filing is free (we are confirming that). This is a better route than waiting out any general clock, so start here. If your marijuana offense was a large-scale distribution charge rather than possession, the answer may differ — LSNJ Law (888-576-5529) can confirm which category yours falls in.',
+          remedy: 'eCourts Expungement — Marijuana (N.J.S.A. 2C:52-5.1, -6.1)',
+          citation: 'N.J.S.A. 2C:52-5.1, 2C:52-6.1'
+        },
+        eligible_standard_nj: {
+          status: 'eligible',
+          title: 'Potentially Eligible — Standard Expungement',
+          message: 'Based on your record and your dates, you appear potentially eligible for a standard expungement: New Jersey allows one indictable offense plus up to three disorderly persons offenses (or up to five DP offenses if you have no indictable), five years after the latest of your conviction, your final payment, your completion of supervision, or your release. File through the eCourts Expungement System at njcourts.gov — it is online, it generates the petition for you, and the NJ Courts\' own page says filing is free, which we are in the process of confirming. Since 2025 you can file in the Superior Court for the county where you LIVE, not only where you were convicted. Two notes: the indictable expungement is generally once per lifetime, and the State Police have documented backlogs, so check afterwards that your granted order was actually processed.',
+          remedy: 'eCourts Expungement — Standard (N.J.S.A. 2C:52-2, -3)',
+          citation: 'N.J.S.A. 2C:52-2, 2C:52-3'
+        },
+        complex_early_nj: {
+          status: 'complex',
+          title: 'Four Years In — The Early Pathway May Be Open',
+          message: 'You are short of the standard five-year mark but past four, and that gap is exactly where New Jersey has an early pathway: a court can grant an expungement at four years in "compelling circumstances". That is a discretionary judgment about your situation rather than a box this screening can tick — a pending job offer, for instance, is the kind of thing courts consider. We are also still verifying a possible three-year early path for records with no indictable offense, so if your record is disorderly-persons-only it is doubly worth asking. This is a good moment to talk to a person: LSNJ Law (888-576-5529) runs a free hotline and their "Clearing Your Record" guide covers the early pathway. If the early route is not open, you are a short wait from the standard one.',
+          remedy: 'Consult Legal Aid (Compelling-Circumstances Early Pathway)',
+          citation: 'N.J.S.A. 2C:52-2'
+        },
+        eligible_clean_slate_nj: {
+          status: 'eligible',
+          title: 'Potentially Eligible — Clean Slate Expungement of Your ENTIRE Record',
+          message: 'Your record is outside the standard limits, and New Jersey has a route built for exactly that: Clean Slate expungement under N.J.S.A. 2C:52-5.3 expunges your ENTIRE record — every conviction — ten years after the latest of your most recent conviction, your final payment, your completion of supervision, or your release. It does not care how many convictions you have, and it is available even if you have had an expungement before. Based on your dates that period appears to have passed. One thing worth knowing, because it stops people who should not be stopped: an unpaid financial assessment does NOT block Clean Slate if the non-payment was not willful — the court enters a civil judgment for the balance instead and grants the expungement. So do not assume an outstanding balance is the end of it. File through eCourts at njcourts.gov; the NJ Courts say filing is free, which we are confirming.',
+          remedy: 'eCourts Clean Slate Expungement (N.J.S.A. 2C:52-5.3)',
+          citation: 'N.J.S.A. 2C:52-5.3'
+        },
+        waiting_nj: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'New Jersey\'s standard expungement comes five years after whichever of these came LAST: your conviction, your payment of all fines and financial assessments, your completion of probation or parole, or your release from custody. Based on your dates, that has not run yet. Two things worth knowing. A court can grant an expungement at four years in "compelling circumstances", so if you are close and have a reason — a job offer, say — it is worth asking LSNJ Law about the early pathway. And if paying off a remaining balance is what is holding your date back, paying it is what starts the clock running to its end.',
+          remedy: 'Wait for the five-year period (or ask about the early pathway)',
+          citation: 'N.J.S.A. 2C:52-2'
+        },
+        waiting_clean_slate_nj: {
+          status: 'waiting',
+          title: 'Clean Slate — Ten-Year Period Not Yet Met',
+          message: 'Your record is outside the standard expungement limits, so the route open to you is Clean Slate under N.J.S.A. 2C:52-5.3 — which expunges your ENTIRE record, regardless of how many convictions, ten years after the latest of your most recent conviction, final payment, completion of supervision, or release. Based on your dates that has not run yet. It is measured from your MOST RECENT conviction, so staying conviction-free is what gets you there. And note: an unpaid balance does not block Clean Slate if the non-payment was not willful — the court enters a civil judgment instead — so an outstanding amount is not necessarily what is standing in your way.',
+          remedy: 'Wait for the ten-year Clean Slate period',
+          citation: 'N.J.S.A. 2C:52-5.3'
+        },
+        ineligible_serious_nj: {
+          status: 'ineligible',
+          title: 'Excluded Offense',
+          message: 'New Jersey excludes a specific list of convictions from expungement entirely: homicide other than vehicular, kidnapping, sexual assault, robbery, arson, endangering the welfare of a child, terrorism, most first-degree drug distribution, and crimes committed in a public office that touched that office. No waiting period changes that, and Clean Slate does not reach them either. If you are not certain your offense is on that list — the categories are narrower than they sound, and the degree matters — it is worth asking before you accept this answer. LSNJ Law runs a free hotline at 888-576-5529.',
+          remedy: 'None (Statutorily Excluded) — Consult Legal Aid',
+          citation: 'N.J.S.A. 2C:52-2(b)'
+        },
+        complex_counts_nj: {
+          status: 'complex',
+          title: 'Your Record Needs Counting — By a Person',
+          message: 'Which New Jersey route you take depends on your whole record, not on this one case. The standard path covers one indictable offense plus up to three disorderly persons offenses, or up to five DP offenses with no indictable, at five years. Anything beyond that goes to Clean Slate, which expunges everything but takes ten years. Since you are not sure where you fall, we are not going to guess — the two paths differ by five years, and getting it wrong means either waiting when you did not need to or filing when you cannot. There is also a rule that may help: multiple offenses that were part of a single crime spree, or that are interdependent, can be treated as one for the once-per-lifetime indictable limit. LSNJ Law (888-576-5529) will count your record with you for free.',
+          remedy: 'Get Your Record Counted (LSNJ Law)',
+          citation: 'N.J.S.A. 2C:52-2, 2C:52-5.3'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'eCourts Expungement (N.J.S.A. 2C:52-1 et seq.)',
+          formName: 'No paper form — the eCourts Expungement System generates the petition',
+          formUrl: 'https://www.njcourts.gov/self-help/expunge-record',
+          steps: [
+            'File online through the eCourts Expungement System at njcourts.gov — the system generates the petition from your answers.',
+            'File in the Superior Court for the county where you live OR any county where you were convicted (the residence option was added in 2025).',
+            'If a judge grants the order, it is transmitted to the agencies electronically.',
+            'Check afterwards that it was actually processed — State Police backlogs are documented, and a granted order is not the same as a cleared record.'
+          ],
+          // null: Wave 1 says the NJ Courts' own page states filing is free and
+          // that the $75 fee went in the 2019 reforms — but flags that older
+          // sources still cite $75, and says to verify. Sources conflict, so the
+          // field stays out; the results attribute the claim to njcourts.gov
+          // rather than asserting it.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Superior Court — county of residence or of any conviction'
+        }
+      },
+      legalAid: [
+        { name: 'LSNJ Law — Clearing Your Record (hotline 888-576-5529)', url: 'https://www.lsnjlaw.org' },
+        { name: 'NJ Courts Expungement Self-Help', url: 'https://www.njcourts.gov/self-help/expunge-record' }
+      ]
+    }
   }
 };
 

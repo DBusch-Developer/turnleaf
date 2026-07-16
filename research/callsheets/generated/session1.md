@@ -1,9 +1,9 @@
-# Turnleaf — Call Session 1 (Wave 1: MI · PA · UT)
+# Turnleaf — Call Session 1 (Wave 1: MI · NJ · PA · UT)
 
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**21 open questions across 3 states.**
+**29 open questions across 4 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -47,7 +47,41 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 2. PENNSYLVANIA (PA)
+## 2. NEW JERSEY (NJ)
+
+**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+
+**Contacts (from the data — no phone numbers are stored; see header):**
+- **eCourts Expungement (N.J.S.A. 2C:52-1 et seq.)** — Superior Court — county of residence or of any conviction
+- LSNJ Law — Clearing Your Record (hotline 888-576-5529) — https://www.lsnjlaw.org
+- NJ Courts Expungement Self-Help — https://www.njcourts.gov/self-help/expunge-record
+
+**Dates that govern:**
+- 2019 — Clean Slate expungement (2C:52-5.3) enacted (effective) · Wave 1 gives the year only. The same 2019 law ordered an AUTOMATED clean-slate system whose rollout has been slow — see open questions.
+- 2025 — Venue expanded to the county of residence (effective) · Wave 1 gives the year only. You may now file in the Superior Court for the county where you live, not only where you were convicted.
+
+**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+
+1. Is expungement filing genuinely free, and is there any fee at any stage? Wave 1 says the NJ Courts' own page states it is free and that the $75 fee was eliminated in the 2019 reforms — but flags that older sources still cite $75 and says to VERIFY on njcourts.gov and by phone. Sources conflict, so no fee is stated in the app; the results attribute the free claim to njcourts.gov rather than asserting it. Wave 1 wants to "wear it proudly" once confirmed, and it is worth confirming: free-and-online is New Jersey's headline.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+2. What is the current status of the AUTOMATED clean-slate system ordered by the 2019 law? Wave 1 says the rollout has been slow and backlogged, and says to verify before claiming any automation in the UI. Nothing in the tree claims it — no automatic path is encoded for New Jersey — but if it is running, people need to be told to check their records first, as in every other automated state.
+   - *Blocks no single field — affects a branch or wording.*
+3. Confirm the early-pathway waiting periods: 4 years via "compelling circumstances" instead of the standard 5, and Wave 1 flags a possible 3-year early path for DP-only records. The tree offers the 4-year compelling-circumstances route as a "talk to someone" result and does not encode the 3-year DP path at all, because it is flagged unverified.
+   - *Blocks no single field — affects a branch or wording.*
+4. What is the name and URL of the State Police backlog status portal created by the 2025 law (A3881)? Wave 1 flags both as unverified. State Police processing backlogs are documented, so a person needs to know where to check whether their granted expungement has actually been processed.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm how unpaid financial assessments are treated on the Clean Slate path: Wave 1 says a non-willful unpaid assessment does NOT block, and the court enters a civil judgment instead. This is disclosed in the results because it is user-relevant, but it is not verified.
+   - *Blocks no single field — affects a branch or wording.*
+6. Confirm the once-per-lifetime limit on the indictable expungement grant, and the crime-spree / interdependent-offences exception to it.
+   - *Blocks no single field — affects a branch or wording.*
+7. How are completed deferrals/diversions (including PTI and conditional discharge) treated? Standing call-sheet question for every state. Not covered in Wave 1.
+   - *Blocks no single field — affects a branch or wording.*
+8. What are the exact effective dates for the 2019 Clean Slate law and the 2025 venue expansion? Wave 1 gives years only.
+   - *Blocks no single field — affects a branch or wording.*
+
+---
+
+## 3. PENNSYLVANIA (PA)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
@@ -82,7 +116,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 3. UTAH (UT)
+## 4. UTAH (UT)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 

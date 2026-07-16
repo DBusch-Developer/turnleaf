@@ -81,7 +81,7 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
   });
 
   test('NY misdemeanours seal at 3 years, felonies at 8 — not a flat 10', () => {
-    const answers = { excluded_offense_ny: false, supervision_status: false };
+    const answers = { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false };
     const now = new Date('2026-07-15');
 
     const misd = walk('NY', rec({ charge_type: 'misdemeanor' }), { ...answers, clean_slate_date_misd: '2022-01-01' }, now);

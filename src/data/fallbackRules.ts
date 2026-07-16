@@ -1030,8 +1030,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   NY: {
     code: 'NY',
     name: 'New York',
-    lastReviewed: '2026-07-15',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
       'New York SEALS; it has no general adult expungement. (The one exception is cannabis: MRTA expunged qualifying marijuana convictions automatically in 2021.) There are two conviction pathways. The CLEAN SLATE ACT (CPL § 160.57) seals eligible convictions AUTOMATICALLY, with no petition. PETITION SEALING (CPL § 160.59) is a discretionary motion you file yourself. Non-convictions seal automatically at disposition under CPL §§ 160.50/.55 and always have. The crucial implementation fact: Clean Slate is law, but eligible does NOT mean sealed yet — the court system has until November 16, 2027 to work through the backlog of pre-existing records, so an eligible conviction may still be showing up on background checks today.',
@@ -1046,7 +1047,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         label: 'OCA deadline to seal the pre-existing backlog',
         date: '2027-11-16',
         kind: 'deadline',
-        note: 'Until this date the rollout is incomplete: many eligible old records are NOT yet sealed. "Eligible" and "sealed" are different states and the copy must not blur them.',
+        note: 'CPL 160.57 subd. 6: OCA must complete sealing of pre-effective-date convictions no later than 3 years after the effective date. Until then many eligible old records are NOT yet sealed — "eligible" and "sealed" are different states and the copy must not blur them.',
       },
       {
         label: 'Petition sealing (CPL § 160.59) enacted',
@@ -1058,59 +1059,38 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Is there a filing fee for the CPL § 160.59 sealing motion, and if there is, is a waiver available? Wave 0 says "No filing fee" but flags it for verification.',
+          'Is there a filing fee for the CPL § 160.59 sealing motion, and if there is, is a waiver available? The statute is SILENT on a filing fee (Diana, 7/16), so this is an OCA/practice question, not statute-resolved — the fee and waiver fields stay null pending it.',
         blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
       },
       {
         question:
-          'Confirm the supervision condition for Clean Slate sealing: must the person be off probation/parole entirely? Wave 0 flags this. The whole supervision_status branch and the ineligible_supervision result rest on it.',
-        blocksFields: [],
-      },
-      {
-        // Found by running Wave 0's own persona 3 against the tree: the package
-        // contradicts itself. Refereed to the rules section, so the tree lets a
-        // violent felony through to Clean Slate. If the persona was right, New
-        // York is currently telling violent-felony convictions they are sealable.
-        question:
-          'Are Penal Law § 70.02 violent felonies eligible for Clean Slate automatic sealing after the 8-year wait? (Package sources conflicted.) Wave 0\'s rules section lists Clean Slate exclusions as sex offences (Arts. 130/263) and non-drug Class A felonies only — § 70.02 appears solely as a CPL 160.59 petition exclusion — but Wave 0\'s own persona 3 says a violent felony is excluded from BOTH paths. Resolved to the rules section pending confirmation. This is a practitioner question (Legal Aid Society / LawNY), not a clerk question.',
+          'Clock-reset modeling limitation (not a legal unknown). Diana confirmed the mechanic (7/16): under CPL 160.57 a new conviction before sealing restarts the prior conviction\'s clock on the SAME date as the new conviction\'s clock; under 160.59 subd. 5, time incarcerated after the latest conviction tolls the 10-year period. The single-date tree cannot model a multi-conviction reset — the copy states it in prose instead.',
         blocksFields: [],
       },
       {
         question:
-          'The Clean Slate clock resets on a new conviction. This has no representation in the tree — the date nodes only ask for one date and cannot model a reset.',
+          'What is the current Clean Slate rollout status? Wave 0 names this as the call question for nycourts.gov — how far through the backlog is OCA (subd. 6 deadline Nov 16, 2027), and can a person find out whether their own record has been reached?',
         blocksFields: [],
       },
       {
         question:
-          'How are completed deferrals/diversions treated for sealing? Not covered in Wave 0 — add to call sheet. The tree hedges these rather than guess (see unknown_deferred).',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the current Clean Slate rollout status? Wave 0 names this as the call question for nycourts.gov — how far through the backlog is OCA, and can a person find out whether their own record has been reached?',
-        blocksFields: [],
-      },
-      {
-        question:
-          'MRTA cannabis expungement (2021) is a real New York remedy that Wave 0 documents, but it is not encoded as a branch and is not surfaced anywhere in the tree.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the filing steps but appears nowhere in Wave 0 — it entered the rules from outside the research package. Confirm with a court clerk.',
+          'The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the § 160.59 filing steps but is a court-clerk practice figure, not in the verified statute. Confirm the current cost with a court clerk.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'N.Y. Crim. Proc. Law § 160.57 (Clean Slate Act; automatic sealing)', url: null, retrievedOn: null },
-      { id: 'N.Y. Crim. Proc. Law § 160.59 (petition sealing)', url: null, retrievedOn: null },
-      { id: 'N.Y. Crim. Proc. Law § 160.50 (automatic sealing of non-convictions)', url: null, retrievedOn: null },
-      { id: 'N.Y. Crim. Proc. Law § 160.55 (sealing of non-criminal dispositions)', url: null, retrievedOn: null },
-      { id: 'N.Y. Penal Law art. 130 (sex offences; Clean Slate exclusion)', url: null, retrievedOn: null },
-      { id: 'N.Y. Penal Law art. 263 (sexual performance by a child; Clean Slate exclusion)', url: null, retrievedOn: null },
+      { id: 'N.Y. Crim. Proc. Law § 160.57 (Clean Slate automatic sealing; (1)(a) DWAI 3-yr; (1)(b)(i)/(ii) misd 3-yr / felony 8-yr anchors; (1)(b)(iv)+subd.8 supervision bar; (1)(b)(v)-(vi) exclusions; (1)(c) quarterly recheck; (1)(e) 30-day form; subd.4 waiver void; subd.6 Nov-16-2027 backlog; subd.10 LFOs survive but do not gate)', url: 'https://legislation.nysenate.gov/laws/CPL/leaf/160.57', retrievedOn: '2026-07-16' },
+      { id: 'N.Y. Crim. Proc. Law § 160.59 (petition sealing; (1)(a) exclusions incl. §70.02/art.125/130/263/105/attempts/SORA; (2)(a)+4 cap of 2 (max 1 felony), same-transaction=one; (3)(f)/(3)(h) summary-denial gates; 10-yr from latest conviction/release, subd.5 tolled by incarceration; subd.6 no hearing if DA does not oppose, 45-day objection; subd.11 waiver void)', url: 'https://legislation.nysenate.gov/laws/CPL/leaf/160.59', retrievedOn: '2026-07-16' },
+      { id: 'N.Y. Crim. Proc. Law § 160.50 (favorable-termination sealing incl. COURT records (1)(c); subd.3 termination list incl. ACD 170.55, marijuana-ACD 170.56/210.46, declination (3)(i), police no-action (3)(j); subd.5 MRTA marijuana vacatur/expungement; interests-of-justice exception on 5 days notice)', url: 'https://legislation.nysenate.gov/laws/CPL/leaf/160.50', retrievedOn: '2026-07-16' },
+      { id: 'N.Y. Crim. Proc. Law § 160.55 (traffic-infraction/violation sealing at termination, EXCEPT VTL 1192(1) DWAI; (1)(c) seals DCJS/police/prosecutor but NOT the court file; interests-of-justice exception; (1)(a)/(d)(vi) harassment-2 family carve-out)', url: 'https://legislation.nysenate.gov/laws/CPL/leaf/160.55', retrievedOn: '2026-07-16' },
+      { id: 'N.Y. Veh. & Traf. Law § 1192(1) (DWAI — carved out of 160.55, sealed under Clean Slate 160.57(1)(a) after 3 yrs)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 130 (sex offences; 160.57 and 160.59 exclusion)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 263 (sexual performance by a child; exclusion)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 125 (homicide felonies; 160.59 exclusion)', url: null, retrievedOn: null },
       { id: 'N.Y. Penal Law art. 220 (Class A drug felonies — ARE Clean Slate eligible)', url: null, retrievedOn: null },
-      { id: 'N.Y. Penal Law § 70.02 (violent felonies; § 160.59 exclusion)', url: null, retrievedOn: null },
-      { id: 'Marijuana Regulation and Taxation Act (MRTA, 2021; cannabis expungement)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law § 70.02 (violent felonies — Clean Slate 160.57 ELIGIBLE, but 160.59 petition EXCLUSION)', url: null, retrievedOn: null },
+      { id: 'N.Y. Correction Law § 168-a (sex-offense registration; defines the 160.57(1)(b)(v) exclusion)', url: null, retrievedOn: null },
+      { id: 'Marijuana Regulation and Taxation Act (MRTA, 2021) — cannabis expungement, now statute-cited to CPL 160.50 subd. 5', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -1120,24 +1100,30 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted of a misdemeanor or felony', value: 'convicted', next: 'excluded_offense_ny' },
+            { label: 'Convicted of a misdemeanor or felony', value: 'convicted', next: 'cannabis_ny' },
             { label: 'Dismissed / Acquitted / Non-criminal violation or infraction', value: 'dismissed', next: 'eligible_seal_dismissed' },
-            // Explicit, so a deferral does NOT widen into the 'dismissed'
-            // option. This label names no diversion track, and Wave 0
-            // researches none for NY — see unknown_deferred.
-            { label: 'Deferred adjudication / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            // A completed ACD (CPL 170.55 / marijuana 170.56/210.46) is a
+            // termination in favor of the accused (160.50 subd. 3(b)) and seals
+            // automatically at the dismissal. (Diana, statute pass 7/16.)
+            { label: 'Deferred adjudication / ACD / Diversion completed', value: 'deferred', next: 'eligible_acd_ny' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        cannabis_ny: {
+          type: 'boolean',
+          text: 'Was this a marijuana or cannabis conviction?',
+          yes: 'check_cannabis_ny',
+          no: 'excluded_offense_ny'
+        },
         excluded_offense_ny: {
           type: 'boolean',
-          text: 'Is the conviction a sex offense requiring registration, or a Class A felony that is not a drug offense (e.g., murder)?',
+          text: 'Is the conviction a sex offense requiring registration (a Correction Law § 168-a offense) or a sexually violent offense, or a Class A felony that is NOT an Article 220 drug offense (for example, murder)?',
           yes: 'ineligible_offense',
           no: 'supervision_status'
         },
         supervision_status: {
           type: 'boolean',
-          text: 'Are you currently on probation, parole, or post-release supervision, or do you have pending criminal charges?',
+          text: 'For THIS conviction, are you still serving any part of the sentence — incarceration, probation, parole, or post-release supervision — or do you have any pending criminal charges?',
           yes: 'ineligible_supervision',
           no: 'offense_level_ny'
         },
@@ -1147,21 +1133,30 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the level of the offense?',
           options: [
             { label: 'Misdemeanor', value: 'misdemeanor', next: 'clean_slate_date_misd' },
-            { label: 'Felony', value: 'felony', next: 'clean_slate_date_felony' }
+            { label: 'Felony', value: 'felony', next: 'clean_slate_date_felony' },
+            { label: 'Traffic infraction or violation', value: 'infraction', next: 'violation_dwai_ny' }
           ]
         },
-        // Clean Slate periods. The anchor carries the "whichever is later"
-        // rule, which the number alone cannot: sentencing and release can be
-        // years apart. The clock-reset-on-new-conviction rule has no
-        // representation here at all — see open questions.
+        // A DWAI (VTL 1192(1)) is carved OUT of the 160.55 immediate violation-seal
+        // and instead seals under Clean Slate 160.57(1)(a) after 3 years. Every
+        // other violation/traffic infraction conviction seals at termination (160.55).
+        violation_dwai_ny: {
+          type: 'boolean',
+          text: 'Was this a DWAI — driving while ability impaired under Vehicle & Traffic Law § 1192(1)?',
+          yes: 'clean_slate_date_dwai',
+          no: 'eligible_violation_seal_ny'
+        },
+        // Clean Slate periods. The anchor carries the statute's "release, else
+        // sentencing" rule; a new conviction restarts the clock (see open questions
+        // — the single-date tree states the reset in prose, cannot compute it).
         clean_slate_date_misd: {
           type: 'date',
-          text: 'When were you sentenced, or released from incarceration for this conviction (whichever is later)? Note: a new conviction during the waiting period resets the clock.',
+          text: 'When were you released from incarceration for this conviction — or, if there was no incarceration, when was sentence imposed? (A new conviction before sealing restarts this clock.)',
           validation: {
             period: {
               amount: 3,
               unit: 'years',
-              anchor: 'sentencing, or release from incarceration — whichever is later'
+              anchor: 'release from incarceration, or imposition of sentence if none (CPL 160.57(1)(b)(i) — misdemeanor)'
             },
             nextPass: 'eligible_clean_slate',
             nextFail: 'waiting_clean_slate_misd'
@@ -1169,15 +1164,28 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         clean_slate_date_felony: {
           type: 'date',
-          text: 'When were you sentenced, or released from incarceration for this conviction (whichever is later)? Note: a new conviction during the waiting period resets the clock.',
+          text: 'When were you LAST released from incarceration for this conviction — or, if there was no incarceration, when was sentence imposed? (A new conviction before sealing restarts this clock.)',
           validation: {
             period: {
               amount: 8,
               unit: 'years',
-              anchor: 'sentencing, or release from incarceration — whichever is later'
+              anchor: 'last release from incarceration for the sentence, or imposition of sentence if none (CPL 160.57(1)(b)(ii) — felony)'
             },
             nextPass: 'eligible_clean_slate',
             nextFail: 'waiting_clean_slate_felony'
+          }
+        },
+        clean_slate_date_dwai: {
+          type: 'date',
+          text: 'When were you sentenced for the DWAI — or released from incarceration, if any (whichever is later)?',
+          validation: {
+            period: {
+              amount: 3,
+              unit: 'years',
+              anchor: 'release from incarceration, or imposition of sentence if none (CPL 160.57(1)(a) — VTL 1192(1) DWAI)'
+            },
+            nextPass: 'eligible_clean_slate',
+            nextFail: 'waiting_clean_slate_misd'
           }
         }
       },
@@ -1189,20 +1197,31 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (NYS DCJS Record Review)',
           citation: 'New York Criminal Procedure Law §§ 160.50, 160.57, 160.59 (which path applies depends on the disposition)'
         },
-        // OPEN QUESTION (carry into openQuestions on the schema migration):
-        // "How are completed deferrals/diversions treated for sealing?
-        //  ⚠️ not covered in Wave 0 — add to call sheet."
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Deferred and Diverted Cases Need a Person',
-          message: 'New York\'s sealing paths are screened here for convictions, dismissals, and acquittals. How a completed deferral or diversion is treated is not something this screening has researched yet, and we would rather tell you that than guess — a guess here could point you at the wrong path, or tell you that you have none when you do. The legal aid organizations listed below can confirm how your case was actually disposed and which path fits.',
-          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
-          citation: 'New York Criminal Procedure Law §§ 160.50, 160.57, 160.59 (how these apply to a completed deferral is not yet researched)'
+        eligible_acd_ny: {
+          status: 'eligible',
+          title: 'ACD / Deferral Completed — Sealed Automatically at Dismissal',
+          message: 'Because you completed an adjournment in contemplation of dismissal (ACD) or a similar diversion, New York treats the resulting dismissal as a termination in your favor (CPL § 160.50 subd. 3(b)), and it seals automatically — reaching the court file as well as the DCJS, police, and prosecutor records. One timing point: the sealing follows the DISMISSAL at the end of the adjournment period, not the date you took the ACD, so if your adjournment is not over yet, the seal comes when it ends. For a marijuana ACD (CPL 170.56/210.46), the fingerprints are sealed rather than destroyed. As with any § 160.50 sealing, the district attorney (on 5 days\' notice) or the court can move to keep it open in the interests of justice. If your record still shows the case after dismissal, ask the court to confirm sealing. LawHelpNY can help.',
+          remedy: 'Automatic sealing at ACD dismissal (CPL 160.50 subd. 3(b))',
+          citation: 'New York Criminal Procedure Law § 160.50 subd. 3(b)'
+        },
+        eligible_violation_seal_ny: {
+          status: 'eligible',
+          title: 'Violation / Traffic Infraction — Sealed at Termination',
+          message: 'A conviction for a non-criminal violation or a traffic infraction (other than DWAI) is sealed automatically when the case terminates, under CPL § 160.55. One honest limit on how far that seal reaches: § 160.55 seals the records held by DCJS, the police, and the prosecutor, but — unlike the § 160.50 sealing for non-convictions — it does NOT reach the COURT\'s file, which remains. Sealing is the default but not unconditional: the DA (on 5 days\' notice) or the court can move to keep a record open in the interests of justice. One carve-out to know: a harassment-in-the-second-degree conviction against a family or household member keeps its fingerprints and stays visible to law enforcement. (A DWAI is handled differently — it is not sealed as a violation, but clears under Clean Slate after 3 years.)',
+          remedy: 'Automatic sealing at termination (CPL 160.55) — court file remains',
+          citation: 'New York Criminal Procedure Law § 160.55'
+        },
+        check_cannabis_ny: {
+          status: 'eligible',
+          title: 'Marijuana Conviction — Expunged Automatically (Check Your Record)',
+          message: 'Because this was a marijuana or cannabis conviction, New York has likely already handled it: under the MRTA (now in CPL § 160.50 subd. 5), qualifying marijuana convictions were automatically vacated, dismissed, and EXPUNGED — not merely sealed — and the deadline for clearing pre-2019 records has passed. So the honest first step is to CHECK whether yours has come off rather than assume you must do anything: request your DCJS criminal-history record. If it is somehow still showing, there is a concrete fix — under subd. 5(b)(ii)(B) you can present a disposition record to the court, and the expungement must be completed within 30 days. LawHelpNY and the Legal Aid Society can help.',
+          remedy: 'Automatic MRTA expungement (CPL 160.50 subd. 5) — check your record',
+          citation: 'New York Criminal Procedure Law § 160.50 subd. 5 (MRTA)'
         },
         eligible_seal_dismissed: {
           status: 'eligible',
           title: 'Automatic Sealing (Non-Conviction)',
-          message: 'Cases that ended in dismissal, acquittal, or a non-criminal violation/infraction are sealed automatically under CPL § 160.50/160.55. If your record still shows the case, you can ask the court to confirm sealing was applied.',
+          message: 'Because your case ended in your favor, New York seals it automatically under CPL § 160.50 — and § 160.50 reaches the full record, INCLUDING the court file, along with the DCJS, police, and prosecutor records. This covers acquittals; dismissals (including trial orders of dismissal, grand-jury dismissals under 190.75, and vacaturs under 440.10 with no retrial); cases the prosecutor declined to charge (subd. 3(i)); and arrests where the police released you without further action (subd. 3(j)). Sealing is the default, but not unconditional: on 5 days\' notice the district attorney can move, or the court can act on its own, to keep a record open in the interests of justice. If your record still shows the case, ask the court to confirm sealing was applied. (A conviction for a non-criminal violation or traffic infraction seals under the narrower § 160.55 instead — see that result.)',
           remedy: 'Automatic Sealing (CPL 160.50)',
           citation: 'New York Criminal Procedure Law § 160.50'
         },
@@ -1214,7 +1233,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // conviction-count logic to compute it. Disclosing the cap lets a
           // person work out for themselves whether the petition is open to
           // them. The count logic needs the record model — post-demo.
-          message: 'Under New York\'s Clean Slate Act (CPL § 160.57, effective Nov 16, 2024), eligible misdemeanors are sealed automatically 3 years — and felonies 8 years — after sentencing or release from incarceration, whichever is later. Based on your entries, your conviction appears eligible. Important: courts have until November 16, 2027 to finish sealing pre-existing records, so an eligible conviction may not be physically sealed yet — eligible and sealed are not the same thing. Check where you stand by requesting your criminal history from the NYS Division of Criminal Justice Services. There may also be a faster route: the CPL § 160.59 petition lets you ask a judge to seal now rather than wait for the backlog, but it is capped at 2 convictions in your lifetime, of which at most 1 may be a felony, and it needs 10+ years since sentencing or release. If you are inside those limits it is worth weighing the petition\'s cost and effort against simply waiting for the automatic sealing to reach you; if you are outside them, waiting is your path.',
+          message: 'Under New York\'s Clean Slate Act (CPL § 160.57, effective Nov 16, 2024), an eligible misdemeanor is sealed automatically 3 years, and an eligible felony 8 years, after you are released from incarceration — or, if there was no incarceration, after sentence was imposed. Based on your entries, your conviction appears eligible; note that even a Penal Law § 70.02 violent felony qualifies for Clean Slate (only the discretionary § 160.59 petition excludes violent felonies). Two reassurances: unpaid fines or restitution do NOT block sealing — they survive but are not a condition (subd. 10) — and any plea term waiving your Clean Slate eligibility is void (subd. 4). The catch is timing, not eligibility: courts have until November 16, 2027 to work through pre-existing records (subd. 6), so an eligible conviction may not be physically sealed yet — eligible and sealed are not the same thing. Check your status by requesting your criminal history from the NYS Division of Criminal Justice Services; OCA also re-checks eligibility quarterly. If your record is eligible but still not sealed, there is a concrete remedy: submit the Judiciary Law § 212(2)(dd) request form, and OCA must seal within 30 days. A faster route than waiting for the backlog is the CPL § 160.59 petition — but it is narrower (it excludes violent felonies and other categories, is capped at 2 eligible convictions with at most 1 felony, and runs 10 years from your latest conviction); see the petition steps below to weigh it.',
           remedy: 'Clean Slate Automatic Sealing (CPL 160.57); optional CPL 160.59 petition',
           citation: 'New York Criminal Procedure Law §§ 160.57, 160.59'
         },
@@ -1235,14 +1254,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_offense: {
           status: 'ineligible',
           title: 'Excluded Offense Type',
-          message: 'Sex offenses requiring registration and non-drug Class A felonies (such as murder) are excluded from both Clean Slate automatic sealing (CPL § 160.57) and petition-based sealing (CPL § 160.59). Class A drug felonies, however, ARE eligible under Clean Slate — if that is your situation, consult legal aid.',
+          message: 'A sex offense requiring registration (a Correction Law § 168-a offense) and a Class A felony that is not an Article 220 drug offense (such as murder) are excluded from BOTH Clean Slate automatic sealing (CPL § 160.57) and the § 160.59 petition. Two things worth knowing: a Class A DRUG felony under Article 220 IS eligible for Clean Slate; and a Penal Law § 70.02 violent felony, while excluded from the § 160.59 petition, is NOT excluded from Clean Slate — it seals automatically after the 8-year wait. If either might be your situation, consult legal aid.',
           remedy: 'None (Statutorily Excluded) — Consult Legal Aid',
           citation: 'New York Criminal Procedure Law §§ 160.57, 160.59'
         },
         ineligible_supervision: {
           status: 'ineligible',
           title: 'Currently Under Supervision or Facing Charges',
-          message: 'Convictions cannot seal — automatically or by petition — while you are on probation, parole, or post-release supervision, or while criminal charges are pending. Once supervision ends and charges resolve, the Clean Slate waiting period can complete.',
+          message: 'A conviction cannot seal — automatically or by petition — while you are still serving any part of its sentence: incarceration, probation, parole, or post-release supervision (CPL § 160.57(1)(b)(iv) and subd. 8), or while criminal charges are pending. One nuance: being held on a parole or post-release-supervision detention does not by itself pause the Clean Slate clock — the clock only restarts if the detention leads to revocation and reincarceration. Once your sentence is fully served and any charges resolve, the waiting period can complete.',
           remedy: 'None Yet (Active Supervision / Pending Charges)',
           citation: 'New York Criminal Procedure Law § 160.57'
         }
@@ -1252,13 +1271,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       remedies: {
         clean_slate: {
           name: 'Clean Slate Automatic Sealing (CPL 160.57)',
-          formName: 'No application required (review-request form available from the courts by Nov 2027 if an eligible record is not sealed)',
+          formName: 'No application required; if an eligible record is not sealed, submit the Judiciary Law § 212(2)(dd) request form (OCA must then seal within 30 days)',
           formUrl: 'https://www.nycourts.gov/criminal-history-record-search/new-york-states-clean-slate-act',
           steps: [
             'No petition is needed — sealing is automatic once the waiting period runs and you are not under supervision.',
             'Courts have until November 16, 2027 to seal all pre-existing eligible records, so an eligible record may still appear on checks for now.',
             'To check your status, request your NYS criminal history (RAP sheet) from the Division of Criminal Justice Services.',
-            'If you believe an eligible conviction was not sealed, the court system provides a review-request process (form available no later than Nov 16, 2027).'
+            'If an eligible conviction is not sealed, submit the Judiciary Law § 212(2)(dd) request form — OCA must then complete sealing within 30 days. OCA also re-checks eligibility quarterly.'
           ],
           fees: '$0 (automatic; no filing)',
           feeWaiver: 'Not applicable',
@@ -1269,16 +1288,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'CPL 160.59 Sealing Application (Notice of Motion & Affidavit in Support)',
           formUrl: 'https://www.nycourts.gov/FORMS/cpl_160.59_sealing_application/index.shtml',
           steps: [
-            'Confirm you meet the limits: no more than 2 lifetime NY convictions, at most 1 felony, and 10+ years since sentencing or release (whichever is later).',
-            'Obtain a Certificate of Disposition from the court where you were sentenced (one per case).',
-            'Complete the Sealing Application (Notice of Motion and Affidavit in Support) and sign before a notary.',
-            'Serve the District Attorney in each county of conviction, complete the Affidavit of Service, and file everything with the sentencing court.',
-            // Moved out of `fees`: that one string held a flagged claim (the $0
-            // motion fee) and an unflagged procedural cost. Nulling the field
-            // would have destroyed the second along with the first, so the
-            // Certificate of Disposition cost lives here, where it belongs.
-            // It is not in Wave 0 either — see open questions.
-            'Budget for the Certificate of Disposition itself: reported as $5 per case outside New York City and $10 within it. Confirm the current cost with the clerk.'
+            'Confirm eligibility: no more than 2 eligible convictions total, at most 1 a felony (offenses from the same criminal transaction count as ONE). The petition is summarily denied if you have 2+ felony convictions, more than 2 crimes, or any conviction entered AFTER the one you want sealed.',
+            'Confirm the offense is not excluded: § 160.59 excludes sex offenses (Penal art. 130), art. 263, § 70.02 violent felonies, art. 125 homicide felonies, Class A felonies, conspiracies/attempts tied to an ineligible offense, and SORA-registrable offenses. (A § 70.02 violent felony is barred here but still qualifies for Clean Slate.)',
+            'Confirm the wait: 10 years from imposition of sentence on your LATEST conviction (or latest release from incarceration) — not from the conviction being sealed — and any time you spent incarcerated after that conviction extends it (subd. 5).',
+            'Obtain a Certificate of Disposition from the court where you were sentenced (one per case), complete the Sealing Application (Notice of Motion & Affidavit in Support), sign before a notary, and serve the District Attorney in each county of conviction.',
+            // Procedure + the Certificate-of-Disposition cost (a clerk practice
+            // figure, not in the verified statute — see open questions).
+            'The DA has 45 days to object; if the DA does not oppose, there is no hearing (subd. 6). Any plea term waiving sealing eligibility is void (subd. 11). Budget for the Certificate of Disposition (reported $5 per case outside New York City, $10 within — confirm the current cost with the clerk).'
           ],
           // null: Wave 0 flags the "no filing fee" claim for the § 160.59
           // motion. Blocked by an open question.

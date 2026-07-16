@@ -208,7 +208,7 @@ const NY: Persona[] = [
     record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition_date: '2019-06-01' },
     // Clean Slate runs from sentencing OR release, whichever is LATER. 'sentence
     // done' in 2019 with no incarceration, so the two coincide.
-    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2019-06-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2019-06-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -223,7 +223,7 @@ const NY: Persona[] = [
     package: 'drug Class A felony, released 2015 → Clean-Slate-eligible (the surprise).',
     record: { title: 'Class A Drug Felony', charge_type: 'felony', disposition_date: '2015-01-01' },
     // 'released 2015' — release is the later event, so it is the anchor.
-    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -237,26 +237,23 @@ const NY: Persona[] = [
     source: 'Wave 0 — NY persona 3',
     package: 'violent felony → excluded both paths; honest-no.',
     record: { title: 'Robbery (violent felony)', charge_type: 'felony', disposition_date: '2015-01-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
-        'Package persona contradicted rules section; resolved to rules section, phone-confirm '
-        + 'pending. The persona says a violent felony is excluded from BOTH paths. Wave 0\'s rules '
-        + 'section says Clean Slate excludes sex offences and non-drug Class A felonies — § 70.02 '
-        + 'violent felonies appear there only as a CPL 160.59 PETITION exclusion, which is a '
-        + 'different remedy with a different list. Refereed to the rules section: the persona '
-        + 'overgeneralised one list onto the other. Held open as an NY question for a '
-        + 'practitioner, not a clerk.',
+        'RESOLVED by statute (Diana, 7/16). CPL 160.57(1)(b)(v)-(vi) exclude only sex/sexually-violent '
+        + 'offenses and non-Article-220 Class A felonies; Penal § 70.02 violent felonies appear NOWHERE in '
+        + 'the Clean Slate conditions, so a robbery IS Clean-Slate eligible (only the § 160.59 petition '
+        + 'excludes violent felonies). 8-year felony period, 2015 + 8 = 2023 < 2026 -> eligible. Now EXACT '
+        + '(was expectIsApproximate).',
     },
-    expectIsApproximate: true,
     now: NOW,
   },
   {
     source: 'Wave 0 — NY persona 4',
     package: 'two misdemeanors 2010 → 160.59 petition now OR wait for auto — cost/speed tradeoff copy.',
     record: { title: 'Misdemeanor (one of two)', charge_type: 'misdemeanor', disposition_date: '2010-01-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2010-01-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2010-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -274,6 +271,39 @@ const NY: Persona[] = [
     package: 'dismissal → already sealed at disposition.',
     record: { title: 'Dismissed', disposition: 'dismissed', disposition_date: '2021-01-01' },
     expect: { resultKey: 'eligible_seal_dismissed', reading: 'CPL 160.50/.55 seal non-convictions automatically at disposition. Exact.' },
+    now: NOW,
+  },
+  // Diana statute-verification locks (7/16) for the newly-encoded 160.50/.55/.57 branches.
+  {
+    source: 'Wave 0 — NY persona 6 (Diana statute verification, CPL 160.50 subd. 3(b))',
+    package: 'ACD / deferral completed -> automatic sealing at dismissal (160.50 subd. 3(b)).',
+    record: { title: 'ACD completed', disposition: 'deferred', disposition_date: '2023-01-01' },
+    answers: {},
+    expect: { resultKey: 'eligible_acd_ny', reading: 'A completed ACD is a termination in favor of the accused (160.50 subd. 3(b)) and seals automatically at the dismissal; the deferred path routes there (was the unknown_deferred hedge).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — NY persona 7 (Diana statute verification, CPL 160.57(1)(a) DWAI)',
+    package: 'DWAI (VTL 1192(1)) -> not sealed as a violation; Clean Slate seals it after 3 years.',
+    record: { title: 'DWAI (VTL 1192(1))', charge_type: 'infraction', disposition: 'convicted', disposition_date: '2020-01-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, violation_dwai_ny: true, clean_slate_date_dwai: '2020-01-01' },
+    expect: { resultKey: 'eligible_clean_slate', reading: 'DWAI is carved out of the 160.55 violation-seal and clears under Clean Slate 160.57(1)(a) after 3 years; 2020 + 3 = 2023 < 2026 -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — NY persona 8 (Diana statute verification, CPL 160.55)',
+    package: 'non-criminal violation conviction (not DWAI) -> sealed at termination, court file remains.',
+    record: { title: 'Disorderly conduct (violation)', charge_type: 'infraction', disposition: 'convicted', disposition_date: '2022-01-01' },
+    answers: { cannabis_ny: false, excluded_offense_ny: false, supervision_status: false, violation_dwai_ny: false },
+    expect: { resultKey: 'eligible_violation_seal_ny', reading: 'A non-DWAI violation/infraction seals at termination under 160.55 (which does NOT reach the court file); the tree routes it there.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — NY persona 9 (Diana statute verification, CPL 160.50 subd. 5 / MRTA)',
+    package: 'marijuana conviction -> vacated/dismissed/expunged automatically under MRTA (160.50 subd. 5) — check record.',
+    record: { title: 'Marijuana possession', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { cannabis_ny: true },
+    expect: { resultKey: 'check_cannabis_ny', reading: 'MRTA (now 160.50 subd. 5) auto-expunges qualifying marijuana convictions; the cannabis gate routes to the check-your-record result (subd. 5(b)(ii)(B) 30-day fallback).' },
     now: NOW,
   },
 ];

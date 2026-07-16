@@ -7515,8 +7515,1156 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Missouri Courts — Expungement self-help', url: 'https://www.courts.mo.gov/page.jsp?id=98230' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // MARYLAND — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  //
+  // Cheap, broad, freshly reformed. The REDEEM Act (Oct 1, 2023) cut conviction
+  // waits (eligible misdemeanours 5 yrs, second-degree assault 7, eligible
+  // felonies 7, with burglary 1/2 + felony theft at 10). Several sites still
+  // quote the un-passed 3/5-year version — encode the enacted numbers.
+  //
+  // PBJ (probation before judgment) is Maryland's signature disposition and has
+  // its own 3-year branch.
+  //
+  // THE UNIT RULE, which blocks tons of Marylanders and needs its own node: all
+  // charges in one case must be expungable or NONE are — except cannabis
+  // charges (2023 carve-out). Encode current law; flag the 2025 session outcome.
+  // ==========================================================================
+  MD: {
+    code: 'MD',
+    name: 'Maryland',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
+    terminology:
+      'Maryland uses EXPUNGEMENT (Criminal Procedure § 10-101 and following). It is one of the '
+      + 'cheaper and broader states, and it got broader in October 2023 when the REDEEM Act cut the '
+      + 'waiting periods for convictions. Two Maryland-specific things shape the answer: PBJ '
+      + '(probation before judgment) is a common disposition here with its own timeline, and there '
+      + 'is a "unit rule" — every charge in a single case must be expungable, or none of them are, '
+      + 'with a carve-out for cannabis. Non-conviction expungements are free; conviction petitions '
+      + 'cost a small fee.',
+    keyDates: [
+      {
+        label: 'REDEEM Act — conviction waiting periods cut',
+        date: '2023-10-01',
+        kind: 'effective',
+        note: 'Eligible misdemeanours 5 yrs (was 10), second-degree assault 7 (was 15), eligible felonies 7, burglary 1/2 + felony theft 10 (was 15). Several sites still quote the un-passed 3/5-year version.',
+      },
+      {
+        label: 'Automatic expungement of acquittals and full dismissals began',
+        date: '2021-10',
+        kind: 'operative',
+        note: 'Wave 5 gives month and year only. NOT retroactive — older cases petition. Verify the mechanics.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What actually passed in Maryland\'s 2025 legislative session? Wave 5 flags a "2025 Expungement Reform Act" headline and says to verify what passed before encoding. The tree encodes the enacted REDEEM Act (2023) waits; confirm whether 2025 changed anything against the MVLS 2025 presentation.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Does "sentence completed" for the conviction waiting clock include full expiration of parole and probation? Wave 5 flags this as contested (2024 HB 73 stalled). The tree anchors on completion of sentence including probation/parole; confirm current practice.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 10-110 eligible-offence list itself: Wave 5 notes REDEEM cut the WAITS but did NOT expand the eligible-offence list (mostly nonviolent misdemeanours plus a short felony list). The tree asks a person whether their offence is eligible; the list needs confirming.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the non-conviction mechanics: automatic expungement of acquittals/full dismissals since Oct 2021 (not retroactive), nolle prosequi (3-yr wait or immediate with general waiver), and stet (3 yrs). Wave 5 flags the nolle and automatic mechanics.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the conviction petition fee? Wave 5 gives "$30 per petition, waivable" and flags it; non-conviction expungements are free. Confirm with a clerk.',
+        blocksFields: ['resources.remedies.conviction.fees'],
+      },
+    ],
+    sources: [
+      { id: 'Md. Code, Crim. Proc. § 10-105 (expungement of non-convictions)', url: null, retrievedOn: null },
+      { id: 'Md. Code, Crim. Proc. § 10-110 (expungement of convictions; eligible-offence list)', url: null, retrievedOn: null },
+      { id: 'REDEEM Act (2023 — conviction waiting periods)', url: null, retrievedOn: null },
+      { id: 'Md. Code, Crim. Proc. § 10-101 et seq. (expungement generally; unit rule; cannabis carve-out)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'unit_rule_md' },
+            { label: 'Dismissed / Acquitted', value: 'dismissed', next: 'eligible_nonconviction_md' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_md' },
+            { label: 'Probation Before Judgment (PBJ) / Stet / Diversion', value: 'deferred', next: 'pbj_date_md' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // THE UNIT RULE — its own node.
+        unit_rule_md: {
+          type: 'boolean',
+          text: 'Did this case include any OTHER charge that is NOT eligible for expungement — for example a charge that resulted in a separate conviction that cannot be expunged? (In Maryland, every charge in one case must be expungable or none are — except cannabis charges.)',
+          yes: 'complex_unit_md',
+          no: 'cannabis_md'
+        },
+        cannabis_md: {
+          type: 'boolean',
+          text: 'Was this a simple cannabis (marijuana) possession offense?',
+          yes: 'eligible_cannabis_md',
+          no: 'eligible_offense_md'
+        },
+        eligible_offense_md: {
+          type: 'choice',
+          text: 'Which best describes the offense? (Maryland only expunges a specific list — mostly nonviolent misdemeanors plus a short felony list. Your court paperwork has the offense.)',
+          options: [
+            { label: 'An eligible misdemeanor', value: 'misd', next: 'misd_date_md' },
+            { label: 'Second-degree assault', value: 'assault2', next: 'assault2_date_md' },
+            { label: 'An eligible felony (short list — most felonies are NOT eligible)', value: 'felony', next: 'felony_date_md' },
+            { label: 'Burglary (1st/2nd degree) or felony theft', value: 'burglary', next: 'burglary_date_md' },
+            { label: 'I\'m not sure if my offense is on the eligible list', value: 'unsure', next: 'complex_offense_md' }
+          ]
+        },
+        misd_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — eligible misdemeanours; 5 yrs under the 2023 REDEEM Act)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        assault2_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — second-degree assault; 7 yrs under REDEEM)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        felony_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — eligible felonies; 7 yrs under REDEEM)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        burglary_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — burglary 1/2 and felony theft; 10 yrs under REDEEM)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        pbj_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from probation (for a PBJ or stet)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'discharge from probation (Md. Crim. Proc. § 10-105 — PBJ and stet)' },
+            nextPass: 'eligible_pbj_md',
+            nextFail: 'waiting_pbj_md'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Maryland treats a conviction, a PBJ, and a dismissal on completely different timelines. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Maryland Court Help Centers offer free brief advice (statewide line on mdcourts.gov), and MVLS is the practitioner authority.',
+          remedy: 'Get Your Record First (Maryland Court Help Centers)',
+          citation: 'Md. Crim. Proc. § 10-101 et seq. (which path applies depends on the disposition)'
+        },
+        eligible_nonconviction_md: {
+          status: 'eligible',
+          title: 'No Conviction — Likely Already Expunged, or Free to Petition',
+          message: 'Because your case ended without a conviction, Maryland has a fast, free path. Acquittals and full dismissals have been expunged AUTOMATICALLY since October 2021 — though that is not retroactive, so an older case may need a petition. Either way, non-conviction expungements are FREE. Check whether yours was already done through the Maryland Court Help Centers; if not, the petition costs nothing. If your case was a nolle prosequi or a stet, a short wait may apply instead.',
+          remedy: 'Automatic or free petition expungement of a non-conviction (§ 10-105)',
+          citation: 'Md. Crim. Proc. § 10-105'
+        },
+        eligible_pbj_md: {
+          status: 'eligible',
+          title: 'PBJ, Discharged 3+ Years Ago — Expungeable',
+          message: 'Because you received a probation before judgment (PBJ) and were discharged more than 3 years ago, you are eligible to expunge this record under § 10-105. A PBJ is not a conviction, which is why the path is shorter. File the petition in the court of the case. The fee for a PBJ expungement is small (and non-conviction expungements are often free) — the Maryland Court Help Centers can confirm and help you file.',
+          remedy: 'Petition to Expunge a PBJ (§ 10-105)',
+          citation: 'Md. Crim. Proc. § 10-105'
+        },
+        eligible_conviction_md: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Expunge This Conviction',
+          message: 'Based on your dates, you appear eligible to expunge this conviction under § 10-110. The 2023 REDEEM Act cut the waiting periods — so if you last checked a while ago, you may be eligible sooner than you think (5 years for an eligible misdemeanor, 7 for second-degree assault or an eligible felony, 10 for burglary or felony theft, all from completing your sentence including probation and parole). File the petition (form CC-DC-CR-072) in the court of the case; the fee is about $30 and can be waived, and the prosecutor has 30 days to object. Completion typically takes around 90 days.',
+          remedy: 'Petition to Expunge a Conviction (§ 10-110, form CC-DC-CR-072)',
+          citation: 'Md. Crim. Proc. § 10-110'
+        },
+        eligible_cannabis_md: {
+          status: 'eligible',
+          title: 'Cannabis Possession — Petition Now, No Fee (and Check Your Court Record)',
+          message: 'Simple cannabis possession has Maryland\'s easiest path: you can petition to expunge it immediately, and the fee is waived. One important thing many people do not realize, and it can save you confusion: Maryland\'s automatic cannabis expungement that took effect by July 2024 updated the state police (CJIS) database only — NOT the court records. So your state record may already look clear while the court file still shows the case. Filing this petition is what finishes the job on the court side. The Maryland Court Help Centers can help.',
+          remedy: 'Cannabis Expungement Petition — immediate, no fee (court record separate from CJIS)',
+          citation: 'Md. Crim. Proc. § 10-105'
+        },
+        waiting_md: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Maryland\'s conviction expungement waits, cut by the 2023 REDEEM Act, run from when you completed your sentence including any probation and parole: 5 years for an eligible misdemeanor, 7 for second-degree assault or an eligible felony, 10 for burglary or felony theft. Based on your dates, yours has not run yet. One nuance Maryland is still settling: exactly when the clock starts if you were on long probation or parole — so if you are close, it is worth confirming the start date with the Court Help Centers.',
+          remedy: 'Wait for the REDEEM Act period from sentence completion',
+          citation: 'Md. Crim. Proc. § 10-110'
+        },
+        waiting_pbj_md: {
+          status: 'waiting',
+          title: 'PBJ — 3-Year Wait Not Yet Met',
+          message: 'A probation before judgment (PBJ) becomes expungeable 3 years after you are discharged from probation. Based on your dates, that has not run yet. Come back when it has — a PBJ expungement is one of Maryland\'s simpler and cheaper paths.',
+          remedy: 'Wait for 3 years post-discharge',
+          citation: 'Md. Crim. Proc. § 10-105'
+        },
+        complex_unit_md: {
+          status: 'complex',
+          title: 'The Unit Rule May Block This — Worth a Closer Look',
+          message: 'Maryland has a rule that surprises people and blocks quite a few: every charge in a single case must be expungable, or none of them are. So if this case also included a charge that cannot be expunged, that can hold up the whole case — even the parts that would otherwise qualify. There is one important exception: cannabis charges are carved out of this rule (2023), so a non-cannabis conviction in the same case does not block the cannabis charge. Because whether a specific charge is "eligible" is a legal determination, this is worth having someone look at rather than assuming the worst. MVLS and the Maryland Court Help Centers can check whether the unit rule actually blocks you.',
+          remedy: 'Consult Legal Aid (Unit Rule) — cannabis charges are exempt',
+          citation: 'Md. Crim. Proc. § 10-101 et seq.'
+        },
+        complex_offense_md: {
+          status: 'complex',
+          title: 'We Need to Confirm the Offense Is on Maryland\'s List',
+          message: 'Maryland only expunges a specific list of offenses — mostly nonviolent misdemeanors plus a short list of felonies — and the 2023 REDEEM Act cut the waits but did NOT add new offenses to that list. So the threshold question is whether YOUR offense is on it, and that is not something to guess at. Your court paperwork has the exact offense, and MVLS or the Maryland Court Help Centers can check it against § 10-110. If it is on the list, the wait is 5 to 10 years depending on the offense.',
+          remedy: 'Confirm the Offense Is Eligible (§ 10-110) — MVLS / Court Help Centers',
+          citation: 'Md. Crim. Proc. § 10-110'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        conviction: {
+          name: 'Expungement of a Conviction (Md. Crim. Proc. § 10-110)',
+          formName: 'Form CC-DC-CR-072 (and related series)',
+          formUrl: 'https://www.mdcourts.gov/legalhelp/expungement',
+          steps: [
+            'Confirm the offense is on the § 10-110 eligible list and that no other charge in the case blocks it under the unit rule (cannabis charges are exempt).',
+            'Confirm you are past the REDEEM Act wait from completing your sentence including probation/parole.',
+            'File form CC-DC-CR-072 in the court of the case; the prosecutor has 30 days to object.',
+            'The fee is about $30 and can be waived; completion typically takes around 90 days.'
+          ],
+          // null: Wave 5 gives "$30, waivable" and flags it.
+          fees: null,
+          // NOT null: waivability is stated independently of the amount.
+          feeWaiver: 'The conviction petition fee can be waived; non-conviction expungements are free.',
+          courtContact: 'The court of the case'
+        }
+      },
+      legalAid: [
+        { name: 'Maryland Court Help Centers (free brief advice)', url: 'https://www.mdcourts.gov/legalhelp' },
+        { name: 'Maryland Volunteer Lawyers Service (MVLS)', url: 'https://www.mvlslaw.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // WISCONSIN — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  //
+  // THE HONEST-NO TEMPLATE. Wis. Stat. § 973.015: expungement exists ONLY if the
+  // judge ordered it AT SENTENCING, for offences committed BEFORE age 25, max
+  // penalty 6 years or less. If the judge did not order it then, NO PETITION
+  // PROCESS EXISTS (State v. Matasek / State v. Arberry closed the door). Reform
+  // failed AGAIN in 2025. Almost everyone gets "no path; here is the pardon".
+  //
+  // Two honesty notes in every result: (1) if it WAS ordered, completion is
+  // self-executing (State v. Hemp) and may already have happened — check CCAP.
+  // (2) Expungement removes COURT records (CCAP) only; the DOJ Crime Information
+  // Bureau record survives, so CIB-check employers still see it.
+  //
+  // Getting this page right — accurate, kind, useful — demonstrates the
+  // product's integrity better than any generous state.
+  // ==========================================================================
+  WI: {
+    code: 'WI',
+    name: 'Wisconsin',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
+    terminology:
+      'Wisconsin expungement is unusually limited, and being honest about that is the whole point. '
+      + 'Under Wis. Stat. § 973.015, a record can only be expunged if the JUDGE ORDERED it at the '
+      + 'time of sentencing — for an offense committed before you turned 25, with a maximum penalty '
+      + 'of six years or less. If the judge did not order it then, there is no later petition you '
+      + 'can file; the courts have confirmed that door is closed. For most people, the real path is '
+      + 'a Governor\'s pardon, which does not erase the record but restores rights. And even a '
+      + 'granted expungement only clears the court record — the state Crime Information Bureau record '
+      + 'survives, so some background checks still show it.',
+    keyDates: [
+      {
+        label: 'Governor\'s pardon process revived',
+        date: '2019',
+        kind: 'operative',
+        note: 'Wave 5 gives the year only. Felony convictions, generally 5 years post-sentence-completion, via the Pardon Advisory Board.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm no expungement-petition process passed in the 2025-26 Wisconsin session. Wave 5 says reform failed again — Evers put a petition process in the budget (LRB-1770), the Legislature stripped it; Assembly bills passed in 2021 and 2024 but the Senate never voted. As of the research date the answer is no. Verify nothing passed in the weeks since before softening the honest-no.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the current Governor\'s pardon criteria and wait: Wave 5 gives felony convictions, ~5 years post-sentence-completion, via the Pardon Advisory Board, with some expedited review since 2021. The tree routes most people here; confirm the criteria.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 973.015(1m)(a)3 exclusion list (listed violent Class H felonies and others) and the special tracks: juvenile § 938.355(4m) petition at 17, and trafficking-survivor § 973.015(2m) motion for prostitution convictions anytime. The tree asks the at-sentencing question; these are disclosed.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Wis. Stat. § 973.015 (expungement — at-sentencing only; under 25; max 6-yr penalty)', url: null, retrievedOn: null },
+      { id: 'State v. Matasek; State v. Arberry (no post-sentencing petition process)', url: null, retrievedOn: null },
+      { id: 'State v. Hemp (completion self-executing once ordered)', url: null, retrievedOn: null },
+      { id: 'Wis. Stat. § 973.015(2m) (trafficking-survivor motion)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'ordered_wi' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_wi' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_wi' },
+            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // The single question that decides everything in Wisconsin.
+        ordered_wi: {
+          type: 'boolean',
+          text: 'At your SENTENCING, did the judge order that this offense would be expunged upon your successful completion? (This had to be decided at sentencing — for an offense committed before you turned 25, with a maximum penalty of 6 years or less. If it was not ordered then, Wisconsin has no way to add it later.)',
+          yes: 'completed_wi',
+          no: 'pardon_path_wi'
+        },
+        completed_wi: {
+          type: 'boolean',
+          text: 'Have you successfully completed the sentence — no new convictions, probation not revoked, all conditions met, and fines paid?',
+          yes: 'eligible_already_wi',
+          no: 'waiting_wi'
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Wisconsin\'s expungement rules are narrow and depend heavily on what happened at your sentencing. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. You can check your court record on Wisconsin\'s CCAP system, and the Wisconsin court system\'s expungement brochure explains the basics.',
+          remedy: 'Get Your Record First (Wisconsin CCAP)',
+          citation: 'Wis. Stat. § 973.015 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'How a completed diversion is treated in Wisconsin is not something this screening has researched in detail, and given how narrow Wisconsin\'s options are, it is worth talking to someone. Wisconsin legal aid can tell you whether your disposition left you a record to address and, if so, whether the pardon process is your route.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
+          citation: 'Wis. Stat. § 973.015'
+        },
+        eligible_nonconviction_wi: {
+          status: 'eligible',
+          title: 'No Conviction — Limited Record to Address',
+          message: 'Because your case ended without a conviction, there is generally no conviction on your record. Wisconsin\'s court records (CCAP) may still show the case was filed, and CCAP does not remove non-conviction case entries the way some states do. If the case is showing and causing problems, Wisconsin legal aid can advise on your options — but there is no conviction here to expunge.',
+          remedy: 'Generally no conviction to expunge — consult legal aid if the CCAP entry is a problem',
+          citation: 'Wis. Stat. § 973.015'
+        },
+        eligible_already_wi: {
+          status: 'eligible',
+          title: 'It May Already Be Expunged — Check CCAP',
+          message: 'Here is some good news that a lot of people miss: because the judge ordered expungement at your sentencing and you successfully completed the sentence, your expungement is SELF-EXECUTING — it happens automatically on completion, with no petition to file. It may already be done. Check the Wisconsin court records system (CCAP) to confirm the case has been expunged. One honest caveat to know, though: Wisconsin expungement removes the COURT record only. The state Department of Justice Crime Information Bureau (CIB) record survives, so an employer running a CIB background check may still see it. That is a real limit, not a technicality — but the court-record expungement is still meaningful.',
+          remedy: 'Check CCAP — expungement is automatic on completion (but the CIB record survives)',
+          citation: 'Wis. Stat. § 973.015'
+        },
+        waiting_wi: {
+          status: 'waiting',
+          title: 'Finish the Sentence — Then It Expunges Automatically',
+          message: 'Your judge ordered expungement at sentencing, which is the hard part in Wisconsin — so you are on the right track. It has not happened yet because it triggers on SUCCESSFUL completion: no new convictions, probation not revoked, all conditions met, and fines paid. Once you finish all of that, the expungement is automatic — you do not file anything. Stay on track and it will happen. One thing to know for later: it clears the court record but not the state Crime Information Bureau record, which survives.',
+          remedy: 'Complete the sentence successfully — expungement is then automatic',
+          citation: 'Wis. Stat. § 973.015'
+        },
+        pardon_path_wi: {
+          status: 'complex',
+          title: 'No Expungement Path — But a Pardon Is a Real Route',
+          message: 'We are going to be straight with you, because Wisconsin is unusual and a lot of tools are not honest about it. If the judge did NOT order expungement at your sentencing, there is no way to add it now — Wisconsin has no petition process to expunge a conviction after the fact, and the courts have confirmed that. That is a hard no on expungement, and we would rather tell you plainly than send you chasing a filing that does not exist. But it is not the end of the road. The real path in Wisconsin is a GOVERNOR\'S PARDON, and the process is active — you can generally apply 5 years after completing your sentence for a felony. A pardon does not erase the record, but it restores your rights and removes many barriers, and Wisconsin has been granting them. Apply through the Governor\'s Pardon Advisory Board (evers.wi.gov has the information). If you were under 18, or your conviction was a trafficking-related prostitution offense, there are separate narrow routes worth asking legal aid about.',
+          remedy: 'Governor\'s Pardon (Pardon Advisory Board) — no expungement path exists',
+          citation: 'Wis. Stat. § 973.015; State v. Matasek'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        pardon: {
+          name: 'Governor\'s Pardon (the route for most Wisconsin convictions)',
+          formName: 'Pardon Application (Governor\'s Pardon Advisory Board)',
+          formUrl: 'https://evers.wi.gov/Pages/Pardon-Information.aspx',
+          steps: [
+            'Confirm expungement is not already available: it exists only if the judge ordered it at sentencing (for an offense before age 25, max penalty 6 years) — if so, it is automatic on completion, no application.',
+            'For everything else, apply for a Governor\'s pardon — generally 5 years after completing your sentence for a felony.',
+            'Apply through the Governor\'s Pardon Advisory Board (evers.wi.gov).',
+            'A pardon restores rights and removes barriers, but does not erase the record.'
+          ],
+          fees: '$0 — there is no statutory fee for the at-sentencing expungement mechanism or the pardon application.',
+          feeWaiver: 'Not applicable.',
+          courtContact: 'Governor\'s Pardon Advisory Board'
+        }
+      },
+      legalAid: [
+        { name: 'Wisconsin Governor — Pardon Information', url: 'https://evers.wi.gov/Pages/Pardon-Information.aspx' },
+        { name: 'Wisconsin Court System — Expungement information', url: 'https://www.wicourts.gov' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // SOUTH CAROLINA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  //
+  // THE STRUCTURAL QUIRK: you apply through the circuit SOLICITOR'S office (a
+  // prosecutor), not the court. The solicitor determines eligibility,
+  // coordinates SLED verification, and processes the order. "Where do I go" is a
+  // prosecutor's office — that surprises people, so every result says it.
+  //
+  // Convictions are a CLOSED LIST of specific first-offence statutes (§ 22-5-910
+  // low-penalty first offence 3yr; § 22-5-920 Youthful Offender Act 5yr once-
+  // ever; § 22-5-930 first-offence drug possession 3yr; and niche ones).
+  // Everything else -> pardon only. The general first-offence bill (§ 17-22-915)
+  // is NOT law as of the research date — encode current law, flag the bill.
+  //
+  // Fees: $310 total ($250 solicitor + $25 SLED + $35 clerk), separate money
+  // orders. Summary-court dismissals auto-expunge free since 2009.
+  // ==========================================================================
+  SC: {
+    code: 'SC',
+    name: 'South Carolina',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
+    terminology:
+      'South Carolina EXPUNGEMENT (an Order for Destruction of Arrest Records) works differently '
+      + 'from most states in one big way: you apply through the circuit SOLICITOR\'S office — a '
+      + 'prosecutor\'s office — not the court. The solicitor decides eligibility, coordinates the '
+      + 'SLED record check, and processes the order. Which convictions can be expunged is a short, '
+      + 'closed list of specific first-offense situations; most everything else routes to a pardon. '
+      + 'Non-conviction cases from the lower (summary) courts have been expunged automatically and '
+      + 'for free since 2009.',
+    keyDates: [
+      {
+        label: 'Automatic free expungement of summary-court non-convictions',
+        date: '2009-06',
+        kind: 'operative',
+        note: 'Wave 5 gives month and year only. Magistrate/municipal dismissals and not-guilty verdicts (§ 17-22-950).',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Did the general first-offense nonviolent expungement bill (§ 17-22-915, H.4602 / H.3730) become law? Wave 5 says it has been filed repeatedly and was NOT law as of the research date — verify the session status. If it passed, South Carolina changes fundamentally (a broad 3-year path). The tree encodes current law (the closed statute list); confirm nothing passed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the $310 fee breakdown and refund mechanics: Wave 5 gives $250 solicitor admin + $25 SLED verification + $35 clerk, separate money orders, nonrefundable if denied at the SLED stage but the $35 returns if the solicitor rejects. Confirm current amounts and the refund rule (per the 14th circuit\'s description).',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the plea-deal dismissal fee rule: Wave 5 says General Sessions dismissals/nolle pros are free through the solicitor if NOT part of a plea deal, but plea-deal dismissals pay full fees. Verify.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 22-5-930 first-offense drug-possession conditional-discharge 10-year lookback quirk, and the § 22-5-920 Youthful Offender Act retroactive path for pre-2010 convictions. The tree uses the standard 3-yr and 5-yr periods; these nuances are flagged.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'S.C. Code § 17-22-910 et seq. (Uniform Expungement of Criminal Records Act; solicitor process)', url: null, retrievedOn: null },
+      { id: 'S.C. Code § 17-22-950 (automatic summary-court non-conviction expungement)', url: null, retrievedOn: null },
+      { id: 'S.C. Code § 22-5-910 (first-offence low-penalty conviction; 3 yrs)', url: null, retrievedOn: null },
+      { id: 'S.C. Code § 22-5-920 (Youthful Offender Act convictions; 5 yrs; once per lifetime)', url: null, retrievedOn: null },
+      { id: 'S.C. Code § 22-5-930 (first-offence drug possession; 3 yrs)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_type_sc' },
+            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'court_type_sc' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'court_type_sc' },
+            { label: 'PTI / Diversion completed', value: 'deferred', next: 'eligible_diversion_sc' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        court_type_sc: {
+          type: 'boolean',
+          text: 'Was the case in a summary court — a magistrate court or a municipal court (for a lower-level offense) — rather than General Sessions (the main trial court)?',
+          yes: 'eligible_auto_sc',
+          no: 'eligible_gs_dismissal_sc'
+        },
+        conv_type_sc: {
+          type: 'choice',
+          text: 'South Carolina only expunges a few specific first-offense situations. Which, if any, describes yours?',
+          options: [
+            { label: 'A first-offense conviction with a penalty of 30 days or less, or a $1,000 fine or less', value: 's910', next: 's910_date_sc' },
+            { label: 'A Youthful Offender Act conviction (I was 17 to 24, non-violent, no registry)', value: 's920', next: 's920_date_sc' },
+            { label: 'A first-offense simple drug possession or minor drug offense', value: 's930', next: 's930_date_sc' },
+            { label: 'None of these — it was a more serious offense, a DUI, or a repeat offense', value: 'other', next: 'pardon_path_sc' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_conv_sc' }
+          ]
+        },
+        s910_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction, conviction-free (S.C. Code § 22-5-910 — first-offence low-penalty; DV 3rd degree is 5 yrs)' },
+            nextPass: 'eligible_conviction_sc',
+            nextFail: 'waiting_sc'
+          }
+        },
+        s920_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'sentence completion (S.C. Code § 22-5-920 — Youthful Offender Act; non-violent; no registry; once per lifetime)' },
+            nextPass: 'eligible_yoa_sc',
+            nextFail: 'waiting_sc'
+          }
+        },
+        s930_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction (S.C. Code § 22-5-930 — first-offence drug possession; conditional-discharge lookback may apply)' },
+            nextPass: 'eligible_conviction_sc',
+            nextFail: 'waiting_sc'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'South Carolina treats non-convictions and its short list of expungeable convictions very differently. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The sccourts.org expungement FAQ is current and good, and the solicitor\'s office in your circuit is where expungement is actually handled.',
+          remedy: 'Get Your Record First (sccourts.org / circuit solicitor)',
+          citation: 'S.C. Code § 17-22-910 et seq. (which path applies depends on the disposition)'
+        },
+        eligible_diversion_sc: {
+          status: 'eligible',
+          title: 'Completed Diversion or PTI — Expungeable',
+          message: 'Because you completed a pretrial intervention (PTI) or diversion program, that case is expungeable. Here is the South Carolina-specific thing to know: you apply through the SOLICITOR\'S office (the prosecutor) in your circuit, not the court — the solicitor handles eligibility and processing. Many PTI programs include the expungement as part of completion, so check whether yours was already done. The sccourts.org FAQ explains the process.',
+          remedy: 'Expungement through the Circuit Solicitor (PTI/diversion)',
+          citation: 'S.C. Code § 17-22-910 et seq.'
+        },
+        eligible_auto_sc: {
+          status: 'eligible',
+          title: 'Summary-Court Non-Conviction — Should Be Automatic and Free',
+          message: 'Because your case ended without a conviction in a summary court (magistrate or municipal), South Carolina should have expunged it AUTOMATICALLY and for FREE — this has been the rule since 2009 (§ 17-22-950). So there may be nothing for you to do. Request your record to confirm the expungement went through; if it did not, the solicitor\'s office in your circuit can correct it. This is the one South Carolina path that does not run up the usual fees.',
+          remedy: 'Automatic Free Expungement (§ 17-22-950) — check it was applied',
+          citation: 'S.C. Code § 17-22-950'
+        },
+        eligible_gs_dismissal_sc: {
+          status: 'eligible',
+          title: 'General Sessions Dismissal — Expungeable Through the Solicitor',
+          message: 'Because your General Sessions case ended without a conviction, you can have it expunged — through the SOLICITOR\'S office (the prosecutor) in your circuit, which is where South Carolina handles this rather than the court. One thing that affects the cost: if the dismissal was NOT part of a plea deal, it is generally free; if it came as part of a plea agreement, the full fees may apply. The sccourts.org FAQ and your circuit solicitor\'s application page explain the process.',
+          remedy: 'Expungement through the Circuit Solicitor (free if not part of a plea deal)',
+          citation: 'S.C. Code § 17-22-910 et seq.'
+        },
+        eligible_conviction_sc: {
+          status: 'eligible',
+          title: 'Eligible First-Offense Conviction — Apply Through the Solicitor',
+          message: 'Based on your dates, this first-offense conviction appears eligible for expungement. Two South Carolina-specific things to know. First, you apply through the SOLICITOR\'S office in your circuit — the prosecutor, not the court — and they coordinate the SLED record check and process the order. Second, the cost: expungement in South Carolina runs about $310 total ($250 to the solicitor, $25 for SLED verification, $35 to the clerk), typically in separate money orders. The sccourts.org FAQ walks through it, and your circuit solicitor\'s page has the application.',
+          remedy: 'Expungement through the Circuit Solicitor (§ 22-5-910 / 930)',
+          citation: 'S.C. Code §§ 22-5-910, 22-5-930'
+        },
+        eligible_yoa_sc: {
+          status: 'eligible',
+          title: 'Youthful Offender Act Conviction — Eligible, Once in a Lifetime',
+          message: 'Because this was a Youthful Offender Act conviction (you were 17 to 24, it was non-violent, and it is not a registry offense) and you completed your sentence more than 5 years ago, you appear eligible to expunge it under § 22-5-920. One important limit: this route can be used only ONCE in your lifetime, so if you have more than one YOA conviction you might clear, it is worth being deliberate about which. You apply through the SOLICITOR\'S office in your circuit, and the cost is about $310 total. If your conviction is from before 2010, there is a retroactive YOA path worth asking about.',
+          remedy: 'YOA Expungement through the Circuit Solicitor (§ 22-5-920) — once per lifetime',
+          citation: 'S.C. Code § 22-5-920'
+        },
+        waiting_sc: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'South Carolina\'s conviction expungement waits are 3 years for a first-offense low-penalty conviction or a first drug-possession offense (5 years for a third-degree DV), and 5 years after sentence completion for a Youthful Offender Act conviction. Based on your dates, yours has not run yet, and it requires staying conviction-free. When the time comes, you apply through the solicitor\'s office in your circuit.',
+          remedy: 'Wait for the period (conviction-free), then apply through the solicitor',
+          citation: 'S.C. Code §§ 22-5-910, 22-5-920, 22-5-930'
+        },
+        pardon_path_sc: {
+          status: 'complex',
+          title: 'This Conviction Is Not on the Expungement List — A Pardon Is the Route',
+          message: 'We will be straight with you: South Carolina only expunges a short, specific list of first-offense situations, and most convictions — including more serious offenses, DUIs, and repeat offenses — are not on it. There is no general expungement for them, however long ago they were. But there is a real route, and it is worth pursuing: a PARDON from the South Carolina Board of Probation, Parole and Pardon Services. A pardon does not erase the record, but it removes many of the barriers a conviction creates and restores rights. One thing to watch: South Carolina\'s legislature has repeatedly considered a broad first-offense expungement bill, and if it passes, more convictions would become expungeable — so it is worth checking current law. The sccourts.org resources and the Pardon board can point you to the right path.',
+          remedy: 'Pardon (Board of Probation, Parole and Pardon Services) — not on the expungement list',
+          citation: 'S.C. Code § 17-22-910 et seq.'
+        },
+        complex_conv_sc: {
+          status: 'complex',
+          title: 'We Need to Match Your Conviction to the List',
+          message: 'South Carolina expunges only a few specific first-offense situations — a low-penalty first offense, a Youthful Offender Act conviction, or a first drug-possession offense — and everything else needs a pardon instead. Since you are not sure which, if any, fits your case, we are not going to guess, because it is the difference between a straightforward expungement and no expungement at all. Your court paperwork has the offense and penalty, and the solicitor\'s office in your circuit determines eligibility as a matter of course. The sccourts.org FAQ is a good starting point.',
+          remedy: 'Match Your Conviction to the List (court paperwork / circuit solicitor)',
+          citation: 'S.C. Code § 17-22-910 et seq.'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement through the Circuit Solicitor (S.C. Code § 17-22-910 et seq.)',
+          formName: 'Application for Expungement (filed with the circuit solicitor)',
+          formUrl: 'https://www.sccourts.org/selfHelp/',
+          steps: [
+            'Identify your circuit\'s solicitor office — that is where South Carolina expungements are handled, not the court.',
+            'For a summary-court non-conviction, it should already be automatic and free (since 2009) — check first.',
+            'For an eligible conviction or a General Sessions dismissal, file the application with the solicitor; they coordinate the SLED verification.',
+            'Budget for the fees: about $310 total ($250 solicitor, $25 SLED, $35 clerk), typically in separate money orders — with exemptions for non-plea-deal dismissals.'
+          ],
+          // null: Wave 5 gives the $310 breakdown but flags current amounts and
+          // the refund mechanics.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The circuit solicitor\'s office (16 judicial circuits)'
+        }
+      },
+      legalAid: [
+        { name: 'South Carolina Courts — Expungement self-help', url: 'https://www.sccourts.org/selfHelp/' },
+        { name: 'SC Appleseed Legal Justice Center', url: 'https://www.scjustice.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // ALABAMA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  //
+  // Broad-ish law, brutal fee. Ala. Code § 15-27 (2014 + 2021 REDEEMER Act). No
+  // automatic anything. THE HEADLINE IS THE FEE: $500 administrative filing fee
+  // per case/arrest event (raised from $300; Act 2024-407) — the highest flat
+  // fee in the country alongside Louisiana. One fee covers multiple charges from
+  // the same arrest. Indigency relief exists (the main AL call question). The
+  // fee leads the copy.
+  //
+  // Non-convictions: petition after 90 days (dismissed-with-prejudice, no-bill,
+  // acquittal, unconditional nolle); diversion/specialty-court completions 1 yr.
+  // Misdemeanour convictions (REDEEMER): 3 yrs; DUI counts as serious traffic
+  // (explicitly since Jul 1, 2023) so never. Felonies: pardon-first + 180 days.
+  // ==========================================================================
+  AL: {
+    code: 'AL',
+    name: 'Alabama',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
+    terminology:
+      'Alabama EXPUNGEMENT (Ala. Code § 15-27) is reasonably broad in what it covers but expensive '
+      + 'to use: there is a flat $500 administrative filing fee per arrest event, one of the highest '
+      + 'in the country, though one fee covers all the charges from a single arrest and an indigency '
+      + 'waiver exists. Nothing is automatic — everything is a petition to the circuit court. '
+      + 'Non-convictions can be petitioned relatively quickly; misdemeanor convictions after 3 years '
+      + 'under the 2021 REDEEMER Act; and felonies only after a full pardon.',
+    keyDates: [
+      {
+        label: '$500 administrative filing fee (raised from $300, Act 2024-407)',
+        date: '2024-10-01',
+        kind: 'effective',
+        note: 'Per case/arrest event. One fee covers multiple charges from the same arrest. Confirm the current amount.',
+      },
+      {
+        label: 'REDEEMER Act — misdemeanour conviction expungement',
+        date: '2021-07-01',
+        kind: 'effective',
+        note: '3 years from conviction. DUI was explicitly made a "serious traffic" offence (never expungeable) as of July 1, 2023.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the current administrative filing fee: Wave 5 gives $500 per case/arrest event (raised from $300 by Act 2024-407, effective Oct 1, 2024) and flags it. This is the main Alabama call. Confirm the amount and, critically, the § 15-27-4 indigency-relief mechanics with a circuit clerk.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm the § 15-27-2.1 lifetime cap: Wave 5 says secondary sources report 2 misdemeanour-conviction expungements lifetime, and flags verifying the section text. The tree does not gate on this (it cannot count priors); it is disclosed in prose.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the felony pardon-then-expunge mechanics: a full pardon with restoration of civil and political rights from the Board of Pardons and Paroles, plus 180 days from the certificate, not violent/sex/moral-turpitude/serious-traffic, 1 pardoned-felony expungement lifetime. Also the Act 2015-185 reclassified-felony exception (15-yr clean record).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the moral-turpitude offence list that bars misdemeanour-conviction expungement alongside violent, sex, and serious-traffic offences. The tree asks a person whether their offence is excluded; the moral-turpitude list is specific and needs confirming.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ala. Code § 15-27-1 (non-conviction expungement)', url: null, retrievedOn: null },
+      { id: 'Ala. Code § 15-27-2 (misdemeanour/felony conviction expungement; REDEEMER Act)', url: null, retrievedOn: null },
+      { id: 'Ala. Code § 15-27-2.1 (lifetime caps)', url: null, retrievedOn: null },
+      { id: 'Ala. Code § 15-27-4 (fees; indigency relief)', url: null, retrievedOn: null },
+      { id: 'Act 2024-407 ($500 fee); REDEEMER Act 2021; Act 2015-185 (reclassified felonies)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_al' },
+            { label: 'Dismissed with prejudice / No-billed / Charges dropped', value: 'dismissed', next: 'nonconv_date_al' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_al' },
+            { label: 'Diversion / Drug court / Mental health court / Veterans court (Completed)', value: 'deferred', next: 'diversion_date_al' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_al: {
+          type: 'boolean',
+          text: 'Was the offense a violent offense, a sex offense, a DUI or other serious traffic offense, or a "moral turpitude" offense?',
+          yes: 'excluded_path_al',
+          no: 'conv_level_al'
+        },
+        excluded_path_al: {
+          type: 'boolean',
+          text: 'Was it specifically a DUI?',
+          yes: 'ineligible_dui_al',
+          no: 'conv_level_al_excluded'
+        },
+        conv_level_al: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_al' },
+            { label: 'Felony', value: 'felony', next: 'pardon_path_al' },
+            { label: 'Infraction', value: 'infraction', next: 'misd_date_al' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_al' }
+          ]
+        },
+        misd_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted? (You must also have completed all supervision and paid everything owed.)',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction, supervision complete and all paid (Ala. Code § 15-27-2 — misdemeanour; REDEEMER Act)' },
+            nextPass: 'eligible_misd_al',
+            nextFail: 'waiting_al'
+          }
+        },
+        nonconv_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed, no-billed, or acquitted?',
+          validation: {
+            period: { amount: 90, unit: 'days', anchor: 'dismissal/no-bill/acquittal (Ala. Code § 15-27-1 — non-conviction; 90 days)' },
+            nextPass: 'eligible_nonconviction_al',
+            nextFail: 'waiting_nonconv_al'
+          }
+        },
+        diversion_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the diversion or specialty-court program?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'completion of diversion/specialty court (Ala. Code § 15-27-1 — 1 year)' },
+            nextPass: 'eligible_nonconviction_al',
+            nextFail: 'waiting_nonconv_al'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Alabama treats non-convictions (petition after 90 days), misdemeanor convictions (3 years), and felonies (pardon first) on completely different tracks — and the fee is significant, so it is worth being sure before filing. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Montgomery Volunteer Lawyers Program handout is practitioner-grade, and a circuit clerk can confirm your disposition.',
+          remedy: 'Get Your Record First (circuit clerk / MVLP)',
+          citation: 'Ala. Code § 15-27 (which path applies depends on the disposition)'
+        },
+        eligible_nonconviction_al: {
+          status: 'eligible',
+          title: 'No Conviction — Eligible to Petition (Mind the Fee)',
+          message: 'Because your case ended without a conviction — dismissed with prejudice, no-billed, acquitted, or a completed diversion — you are eligible to petition to expunge it, and there is no limit on how many non-conviction expungements you can get. The catch in Alabama is the cost: there is a $500 administrative filing fee per arrest event (though one fee covers all the charges from the same arrest), plus court costs. That fee is the single most important thing to plan for. Critically, Alabama has an indigency provision that can waive or reduce it if you cannot afford it — asking the circuit clerk about that is the most valuable question you can ask. File in the circuit court of the county where the charges were filed.',
+          remedy: 'Non-Conviction Expungement Petition (§ 15-27-1) — ask about the indigency waiver',
+          citation: 'Ala. Code § 15-27-1'
+        },
+        eligible_misd_al: {
+          status: 'eligible',
+          title: 'Misdemeanor Conviction — Eligible Under REDEEMER (Mind the Fee)',
+          message: 'Based on your dates — 3 years since conviction, with all supervision complete and everything paid — this misdemeanor appears eligible for expungement under Alabama\'s 2021 REDEEMER Act. Two things to plan for. The fee: $500 per arrest event, the main hurdle, though one fee covers all charges from the same arrest — and there is an indigency provision to ask the clerk about if you cannot afford it. And a lifetime limit: Alabama caps how many misdemeanor-conviction expungements you can get, so it is worth being deliberate. File in the circuit court of the county where the charges were filed.',
+          remedy: 'Misdemeanor Expungement Petition (§ 15-27-2) — ask about the indigency waiver',
+          citation: 'Ala. Code § 15-27-2'
+        },
+        waiting_al: {
+          status: 'waiting',
+          title: 'Three-Year Wait Not Yet Met',
+          message: 'A misdemeanor conviction becomes expungeable in Alabama 3 years after conviction, provided all supervision is complete and everything owed is paid. Based on your dates, that has not run yet. Getting any outstanding balance paid matters, since the requirements include full payment. When the time comes, remember to budget for the $500 fee — and ask about the indigency waiver.',
+          remedy: 'Wait for 3 years (supervision complete, all paid)',
+          citation: 'Ala. Code § 15-27-2'
+        },
+        waiting_nonconv_al: {
+          status: 'waiting',
+          title: 'Short Wait Not Yet Met',
+          message: 'A non-conviction can be expunged 90 days after the dismissal, no-bill, or acquittal, and a completed diversion after 1 year. Based on your dates, that short period has not quite run yet. Come back when it has — and budget for the $500 fee, or ask the clerk about the indigency waiver.',
+          remedy: 'Wait out the short period (90 days / 1 year)',
+          citation: 'Ala. Code § 15-27-1'
+        },
+        ineligible_dui_al: {
+          status: 'ineligible',
+          title: 'DUI Cannot Be Expunged',
+          message: 'As of July 1, 2023, Alabama explicitly treats a DUI as a "serious traffic" offense, which cannot be expunged. This is a firm rule, so be cautious of any service suggesting otherwise. If you have a non-conviction or a different, eligible conviction on your record, those may still qualify — run this again for them. The Montgomery Volunteer Lawyers Program can confirm your options.',
+          remedy: 'None (DUI / Serious Traffic)',
+          citation: 'Ala. Code § 15-27-2'
+        },
+        conv_level_al_excluded: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded From Expungement',
+          message: 'Alabama does not expunge violent offenses, sex offenses, or "moral turpitude" offenses. No waiting period changes that for a conviction. Because "moral turpitude" is a specific legal category and not always obvious, if you are not certain your offense is actually on that list it is worth confirming rather than assuming. For a felony, the route may still exist through a pardon (see below). The Montgomery Volunteer Lawyers Program can check where your offense falls.',
+          remedy: 'None (Excluded Offense) — confirm the classification; a pardon may help a felony',
+          citation: 'Ala. Code § 15-27-2'
+        },
+        pardon_path_al: {
+          status: 'complex',
+          title: 'For a Felony, the Path Runs Through a Pardon First',
+          message: 'Alabama does not expunge a felony conviction directly — but it is a road, not a wall. The route is to obtain a FULL PARDON with restoration of your civil and political rights from the Board of Pardons and Paroles first, and then, 180 days after the pardon certificate, you can petition to expunge (for one pardoned felony in your lifetime, and not for violent, sex, moral-turpitude, or serious-traffic offenses). There is also a narrower path for certain felonies reclassified by a 2015 law if you have a 15-year clean record. It is more steps and it carries the $500 expungement fee at the end, but people do complete it. The Board of Pardons and Paroles handles the pardon, and the Montgomery Volunteer Lawyers Program can map the full sequence.',
+          remedy: 'Full Pardon (Board of Pardons and Paroles), then Expungement 180 days later',
+          citation: 'Ala. Code § 15-27-2'
+        },
+        complex_level_al: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'In Alabama the path is different by level: a misdemeanor can be expunged 3 years after conviction, while a felony requires a full pardon first. Since you are not sure which yours is, we are not going to guess, especially given the $500 fee at stake. Your court paperwork states it, and the Montgomery Volunteer Lawyers Program can read your record with you.',
+          remedy: 'Get Your Conviction Level First (court paperwork / MVLP)',
+          citation: 'Ala. Code § 15-27-2'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement Petition (Ala. Code § 15-27)',
+          formName: 'Petition for Expungement (circuit court)',
+          formUrl: 'https://eforms.alacourt.gov',
+          steps: [
+            'Confirm eligibility: non-convictions after 90 days (diversion after 1 year), misdemeanor convictions after 3 years, felonies only after a full pardon plus 180 days.',
+            'File in the circuit court of the county where the charges were filed.',
+            'Budget for the $500 administrative filing fee per arrest event (one fee covers all charges from the same arrest), plus court costs.',
+            'If you cannot afford it, ask the clerk about the § 15-27-4 indigency provision — this is the most important question in an Alabama expungement.'
+          ],
+          // null: Wave 5 gives $500 (Act 2024-407) but flags confirming the
+          // current amount and the indigency mechanics.
+          fees: null,
+          // NOT null: the indigency provision is a named, independent mechanism.
+          feeWaiver: 'Alabama\'s § 15-27-4 has an indigency provision that can waive or reduce the fee — ask the clerk.',
+          courtContact: 'Circuit court of the county where the charges were filed'
+        }
+      },
+      legalAid: [
+        { name: 'Montgomery Volunteer Lawyers Program (CLE handout)', url: 'https://www.montgomeryvlp.org' },
+        { name: 'Alabama Board of Pardons and Paroles', url: 'https://paroles.alabama.gov' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // LOUISIANA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  //
+  // Highest fees, newest automation. Motion to expunge (CCrP arts. 971-995);
+  // records removed from public access, not destroyed; eligible = MANDATORY
+  // grant. Filed in the parish of arrest/conviction.
+  //
+  // THE MONEY-SAVING LEAD, on every eligible result: SB 111's automated BCII
+  // request process (live Jan 1, 2025) covers all art. 976/977/978-eligible
+  // records back to Jan 1, 2006 — submit basic info, Bureau expunges within 30
+  // days, FREE. So the copy says "try the free automated request before paying
+  // up to $550". Its operational reality is an open question.
+  //
+  // FELONY COUNT follows art. 978(F), NOT the guides: multiple felonies OK in a
+  // 10-year window if each is eligible (old one-shot limit repealed 2020).
+  // 978(E) surprise: six named violent offences ARE expungable after 10 yrs via
+  // contradictory hearing. COURT DEBT CANNOT BLOCK ELIGIBILITY — LA is the only
+  // state; the results say so and there is no restitution gate.
+  // ==========================================================================
+  LA: {
+    code: 'LA',
+    name: 'Louisiana',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
+    terminology:
+      'Louisiana uses a MOTION TO EXPUNGE (Code of Criminal Procedure arts. 971-995), which removes '
+      + 'a record from public access rather than destroying it — and if you are eligible, the grant '
+      + 'is mandatory. Two things make Louisiana distinctive. Since January 2025 there is an '
+      + 'automated, FREE request system for eligible records, so the first move is often to try that '
+      + 'before paying the fees, which otherwise run up to $550. And Louisiana is the only state '
+      + 'where court debt cannot block your eligibility — owing money does not stop you.',
+    keyDates: [
+      {
+        label: 'SB 111 automated/free expungement request system (LSP BCII) live',
+        date: '2025-01-01',
+        kind: 'operative',
+        note: 'Covers art. 976/977/978-eligible records back to Jan 1, 2006. Submit basic info, Bureau expunges eligible records within 30 days, free. No damages remedy if records are missed. Verify the portal is operational.',
+      },
+      {
+        label: 'First-offence marijuana possession fee reduced to $300 (sunsets)',
+        date: '2026-08-01',
+        kind: 'deadline',
+        note: 'The reduced $300 fee for first-offence marijuana possession sunsets on this date, after which it reverts. Dated urgency for that specific case.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is the SB 111 automated expungement portal actually live and working? Wave 5 calls this the state\'s biggest story and says to verify operational reality — is the online portal live, what is it called, is it processing requests? The tree leads eligible results with "try the free automated request first"; confirm it exists before the copy leans on it. LSP BCII expungement page is the check.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the art. 978(F) felony-count rule against the current article text: a person may expunge MORE THAN ONE felony in a 10-year period if each is eligible (the old 15-year/one-shot limit was repealed 2020). Wave 5 says encode from the article, not the guides that still say one-per-lifetime. The tree does not cap felonies; confirm.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the fee structure: Wave 5 caps it at $550 ($250 LSP BCII + $50 sheriff + $50 DA + up to $200 clerk), nonrefundable, one fee per arrest event. First-offence marijuana possession is $300 until Aug 1, 2026. DA-certified fee waiver only for non-conviction outcomes with zero felony history; expedited (17-yr-old arrestee, 2025) and trafficking-victim paths fee-exempt. Confirm the clerk portion with a parish clerk.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm the art. 978(E) six-offence violent carve-out list (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, illegal use of weapons — expungable after 10 yrs via contradictory hearing) and the general exclusion list (crimes of violence R.S. 14:2(B), sex-registry, crimes against minors, domestic abuse battery, certain CDS). The tree asks these; confirm the lists.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the art. 893/894 set-aside-and-dismiss immediate expungement path, and the non-conviction charging-time-limit waits (felony-hard-labour 6 yrs / other felony 4 / misdemeanour 2 / fine-only 6 mo where there was no prosecution). The tree routes deferred to an immediate set-aside result and non-convictions to a general result.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'La. Code Crim. Proc. art. 977 (misdemeanour expungement; 5-yr cleansing period)', url: null, retrievedOn: null },
+      { id: 'La. Code Crim. Proc. art. 978 (felony expungement; 10-yr; (E) violent carve-out; (F) multiple-felony rule)', url: null, retrievedOn: null },
+      { id: 'La. Code Crim. Proc. art. 976 (non-conviction expungement)', url: null, retrievedOn: null },
+      { id: 'La. Code Crim. Proc. arts. 893, 894 (set-aside-and-dismiss)', url: null, retrievedOn: null },
+      { id: 'La. Code Crim. Proc. art. 983 (expungement fees; $550 cap)', url: null, retrievedOn: null },
+      { id: 'SB 111 of 2023 (automated expungement request system, live Jan 1, 2025)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_la' },
+            { label: 'Dismissed / Refused prosecution', value: 'dismissed', next: 'nonconviction_la' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_la' },
+            { label: 'Set aside and dismissed (Art. 893/894) / Diversion completed', value: 'deferred', next: 'eligible_setaside_la' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_la: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a crime of violence, a sex offense requiring registration, a crime against a minor, domestic abuse battery, or certain controlled-substance offenses?',
+          yes: 'violent_carveout_la',
+          no: 'level_la'
+        },
+        // THE SURPRISE-YES — inside the excluded path.
+        violent_carveout_la: {
+          type: 'boolean',
+          text: 'Was the offense specifically one of these six: aggravated battery, second-degree battery, aggravated criminal damage to property, simple robbery, purse snatching, or illegal use of weapons? (Louisiana allows expunging these six after 10 years even though they are violent.)',
+          yes: 'felony_978e_date_la',
+          no: 'ineligible_excluded_la'
+        },
+        level_la: {
+          type: 'choice',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'dwi_la' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_la' },
+            { label: 'Infraction', value: 'infraction', next: 'dwi_la' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_la' }
+          ]
+        },
+        dwi_la: {
+          type: 'boolean',
+          text: 'Was this a DWI (driving while intoxicated)?',
+          yes: 'dwi_date_la',
+          no: 'misd_date_la'
+        },
+        misd_date_la: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence/probation/parole, conviction-free (La. C.Cr.P. art. 977 — misdemeanour; one per 5-year period)' },
+            nextPass: 'eligible_misd_la',
+            nextFail: 'waiting_la'
+          }
+        },
+        dwi_date_la: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence for the DWI?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 977 — DWI; limited to one per 10 years; +$50 OMV fee)' },
+            nextPass: 'eligible_dwi_la',
+            nextFail: 'waiting_la'
+          }
+        },
+        felony_date_la: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence/probation/parole, conviction-free with DA certification (La. C.Cr.P. art. 978 — felony; multiple felonies allowed in a 10-yr window per 978(F))' },
+            nextPass: 'eligible_felony_la',
+            nextFail: 'waiting_la'
+          }
+        },
+        felony_978e_date_la: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence/probation/parole (La. C.Cr.P. art. 978(E) — one of the six carve-out offences; via a contradictory hearing)' },
+            nextPass: 'eligible_978e_la',
+            nextFail: 'waiting_la'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Louisiana treats convictions, non-convictions, and set-aside dispositions on different tracks. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Justice & Accountability Center of Louisiana ((504) 273-1091) runs workshops and has the CLEAN JACKET eligibility app, and an LSP Right to Review fingerprint check is recommended before filing.',
+          remedy: 'Get Your Record First (JAC of Louisiana / LSP Right to Review)',
+          citation: 'La. C.Cr.P. arts. 971-995 (which path applies depends on the disposition)'
+        },
+        nonconviction_la: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable (Try the Free Automated Request First)',
+          message: 'Because your case ended without a conviction — dismissed, acquitted, or refused for prosecution — it is expungeable. Start with the cheapest route: since January 2025, Louisiana has an automated request system that expunges eligible records for FREE, so try that before paying anything. If you need to file a motion instead, a DA-certified fee waiver is available for non-conviction outcomes when you have no felony history. And a Louisiana-specific reassurance: court debt does NOT block your eligibility here — owing money does not stop you. The Justice & Accountability Center can help.',
+          remedy: 'Try the free automated request; else a non-conviction motion (art. 976)',
+          citation: 'La. C.Cr.P. art. 976'
+        },
+        eligible_setaside_la: {
+          status: 'eligible',
+          title: 'Set Aside and Dismissed — Immediate Expungement Path',
+          message: 'Because your case was set aside and dismissed under Article 893 or 894 (Louisiana\'s version of a deferred disposition), you have an immediate path to expungement — no lengthy waiting period. Try the free automated request system first (live since January 2025); if you need to file a motion, do so in the parish of the case. Remember that in Louisiana, court debt does not block eligibility. The Justice & Accountability Center and their CLEAN JACKET app can confirm your route.',
+          remedy: 'Expungement after a 893/894 set-aside — try the automated request first',
+          citation: 'La. C.Cr.P. arts. 893, 894'
+        },
+        eligible_misd_la: {
+          status: 'eligible',
+          title: 'Misdemeanor, 5+ Years Clean — Expungeable (Try Automated First)',
+          message: 'Based on your dates — 5 years conviction-free since completing your sentence — this misdemeanor is expungeable under Article 977, and if you are eligible the grant is mandatory. Do the cheap thing first: try Louisiana\'s free automated request system (live since January 2025) before paying, since it covers eligible records at no cost. If you file a motion instead, it goes in the parish of the case and the fees are capped at $550. Two Louisiana specifics worth knowing: you can use the misdemeanor expungement once per 5-year period, and court debt does not block your eligibility. The Justice & Accountability Center can help.',
+          remedy: 'Try the free automated request; else a motion (art. 977)',
+          citation: 'La. C.Cr.P. art. 977'
+        },
+        eligible_dwi_la: {
+          status: 'eligible',
+          title: 'DWI, 5+ Years Clean — Expungeable, With Two Catches',
+          message: 'A DWI can be expunged in Louisiana 5 years after you complete the sentence — with two DWI-specific catches worth knowing. You can only expunge a DWI once every 10 years, and there is an extra $50 fee to the Office of Motor Vehicles on top of the regular costs. Try the free automated request system first (live since January 2025) to see whether it handles yours. If you file a motion, it goes in the parish of the case, fees capped at $550 plus the $50 OMV fee. Court debt does not block your eligibility in Louisiana. The Justice & Accountability Center can confirm the timing.',
+          remedy: 'Expunge a DWI (art. 977) — once per 10 years, +$50 OMV fee',
+          citation: 'La. C.Cr.P. art. 977'
+        },
+        eligible_felony_la: {
+          status: 'eligible',
+          title: 'Felony, 10+ Years Clean — Expungeable (and Not Just One)',
+          message: 'Based on your dates — 10 years conviction-free since completing your sentence — this felony appears expungeable under Article 978, with the district attorney certifying your clean record. One thing many guides get wrong, so it is worth stating: Louisiana no longer limits you to one felony expungement for life. Under the current article, you can expunge more than one felony within a 10-year period as long as each is eligible (the old one-shot limit was repealed in 2020). Try the free automated request system first (live since January 2025). If you file a motion, it goes in the parish of the case, fees capped at $550. And court debt does not block your eligibility. The Justice & Accountability Center and their CLEAN JACKET app can help.',
+          remedy: 'Try the free automated request; else a motion (art. 978) — multiple felonies allowed',
+          citation: 'La. C.Cr.P. art. 978'
+        },
+        eligible_978e_la: {
+          status: 'eligible',
+          title: 'One of the Six — Expungeable Despite Being a Violent Offense',
+          message: 'This is a route many people do not know exists. Louisiana generally does not expunge crimes of violence — but there is a specific exception for six offenses (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, and illegal use of weapons), and yours appears to be one of them. After 10 years, these can be expunged through a contradictory hearing (a hearing where the district attorney can weigh in). Based on your dates, the 10 years appear met. Because this route involves a hearing and is specific, it is worth doing with help: the Justice & Accountability Center handles exactly these. Court debt does not block your eligibility. The free automated system may not cover a hearing-based path, so plan on the motion.',
+          remedy: 'Expungement via contradictory hearing (art. 978(E)) — one of the six carve-out offences',
+          citation: 'La. C.Cr.P. art. 978(E)'
+        },
+        waiting_la: {
+          status: 'waiting',
+          title: 'Cleansing Period Not Yet Met',
+          message: 'Louisiana\'s "cleansing periods" run conviction-free from when you complete your sentence, probation, and parole: 5 years for a misdemeanor or DWI, 10 years for a felony (including the six violent-offense carve-outs). Based on your dates, yours has not run yet, and it requires staying conviction-free. One reassurance for the meantime: unlike almost everywhere else, court debt does NOT delay or block your Louisiana expungement — so an unpaid balance is not something holding your clock back. When the time comes, try the free automated request system first.',
+          remedy: 'Wait for the cleansing period (court debt does not block it)',
+          citation: 'La. C.Cr.P. arts. 977, 978'
+        },
+        ineligible_excluded_la: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Expunged',
+          message: 'Louisiana excludes crimes of violence generally, sex offenses requiring registration, crimes against minors, domestic abuse battery, and certain controlled-substance offenses from expungement. No waiting period changes that. There is one important exception you should rule out first, because it catches people: six specific violent offenses (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, illegal use of weapons) CAN be expunged after 10 years — so if your offense might be one of those, it is worth confirming. Otherwise, a first-offender pardon (Louisiana\'s automatic constitutional pardon) can open an expungement path for some non-violent offenses. The Justice & Accountability Center can check where yours falls.',
+          remedy: 'None (Excluded Offense) — rule out the six carve-outs; ask about a first-offender pardon',
+          citation: 'La. C.Cr.P. art. 978'
+        },
+        complex_level_la: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Louisiana the cleansing period depends on the level: 5 years for a misdemeanor or DWI, 10 for a felony. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the Justice & Accountability Center\'s CLEAN JACKET app can help you check your eligibility. An LSP Right to Review fingerprint check will also show your record.',
+          remedy: 'Get Your Offense Level First (court paperwork / CLEAN JACKET)',
+          citation: 'La. C.Cr.P. arts. 977, 978'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Motion to Expunge (La. C.Cr.P. arts. 971-995)',
+          formName: 'Standardized statewide expungement forms (art. 992) / the automated request system',
+          formUrl: 'https://www.lsp.org/services/legal/expungements/',
+          steps: [
+            'Try the FREE automated request system first (live since January 2025) — it expunges eligible records back to 2006 within 30 days at no cost. This can save you up to $550.',
+            'If you file a motion, do it in the parish of the arrest or conviction, using the standardized statewide forms.',
+            'Budget for the capped fees ($550 max: $250 LSP BCII, $50 sheriff, $50 DA, up to $200 clerk) — first-offense marijuana possession is $300 until August 1, 2026.',
+            'Court debt does NOT block your eligibility in Louisiana. An LSP Right to Review fingerprint check before filing is recommended.'
+          ],
+          // null: Wave 5 gives the $550 cap breakdown but flags the clerk portion
+          // and the various exemptions/reductions.
+          fees: null,
+          // NOT null: the DA-certified and specialty waivers are named mechanisms.
+          feeWaiver: 'A DA-certified fee waiver is available for non-conviction outcomes with no felony history; expedited (17-year-old arrestee) and trafficking-victim paths are fee-exempt.',
+          courtContact: 'The parish of arrest or conviction; LSP BCII for the automated request'
+        }
+      },
+      legalAid: [
+        { name: 'Justice & Accountability Center of Louisiana (CLEAN JACKET app; (504) 273-1091)', url: 'https://www.jaclouisiana.org' },
+        { name: 'Louisiana Law Help', url: 'https://www.louisianalawhelp.org' }
+      ]
+    }
   }
 };
+
+
+
 
 
 

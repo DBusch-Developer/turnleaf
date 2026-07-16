@@ -1508,7 +1508,232 @@ const MO: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO]];
+const MD: Persona[] = [
+  {
+    source: 'Wave 5 - MD persona 1',
+    package: 'PBJ for theft 2020, discharged -> eligible now.',
+    record: { title: 'PBJ Theft', disposition: 'deferred', disposition_date: '2020-01-01' },
+    expect: { resultKey: 'eligible_pbj_md', reading: 'PBJ discharged 2020, 3yr (2020+3=2023<2026) -> eligible. PBJ is Maryland\'s signature disposition, its own branch. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - MD persona 2',
+    package: 'misdemeanor CDS conviction 2017 -> 5-yr REDEEM wait met -> eligible.',
+    record: { title: 'Misdemeanor CDS', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2017-01-01' },
+    answers: { unit_rule_md: false, cannabis_md: false, eligible_offense_md: 'misd', misd_date_md: '2017-01-01' },
+    expect: { resultKey: 'eligible_conviction_md', reading: 'Eligible misdemeanour, REDEEM 5yr (2017+5=2022<2026) -> eligible. Old law was 10yr. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - MD persona 3',
+    package: '2nd-degree assault 2018 -> 2025+ -> eligible.',
+    record: { title: '2nd-Degree Assault', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { unit_rule_md: false, cannabis_md: false, eligible_offense_md: 'assault2', assault2_date_md: '2018-01-01' },
+    expect: { resultKey: 'eligible_conviction_md', reading: '2nd-degree assault, REDEEM 7yr (2018+7=2025<2026) -> eligible. Was 15yr. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - MD persona 4',
+    package: 'case with one expungable + one non-expungable charge -> unit-rule block; honest-no.',
+    record: { title: 'Mixed-Charge Case', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { unit_rule_md: true },
+    expect: { resultKey: 'complex_unit_md', reading: 'THE UNIT RULE. One non-expungable charge in the case blocks the whole case -> complex_unit_md, its own node, notes the cannabis exception. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - MD persona 5',
+    package: 'cannabis possession conviction -> immediate petition, no fee.',
+    record: { title: 'Cannabis Possession', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { unit_rule_md: false, cannabis_md: true },
+    expect: { resultKey: 'eligible_cannabis_md', reading: 'Cannabis -> immediate petition, no fee, and the CJIS-only vs court-record note. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const WI: Persona[] = [
+  {
+    source: 'Wave 5 - WI persona 1',
+    package: '23-yr-old, misdemeanor, judge ordered expungement, probation done -> already expunged - check CCAP.',
+    record: { title: 'Misdemeanor (ordered at sentencing)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { ordered_wi: true, completed_wi: true },
+    expect: { resultKey: 'eligible_already_wi', reading: 'Ordered at sentencing + completed -> self-executing (State v. Hemp), may already be done -> check CCAP. Notes CIB record survives. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - WI persona 2',
+    package: '23-yr-old, same crime, judge silent at sentencing -> NO path; pardon only - the defining honest-no.',
+    record: { title: 'Misdemeanor (not ordered)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { ordered_wi: false },
+    expect: { resultKey: 'pardon_path_wi', reading: 'THE DEFINING HONEST-NO. Judge did not order at sentencing -> no petition process exists (Matasek/Arberry); pardon is the route. This is the template honest-no page. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - WI persona 3',
+    package: '27-yr-old at offense -> never eligible.',
+    record: { title: 'Offense at 27', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { ordered_wi: false },
+    expect: { resultKey: 'pardon_path_wi', reading: 'Over 25 at offense -> never eligible for the at-sentencing mechanism, and no petition exists -> pardon path. (The tree asks the at-sentencing question, which a 27-yr-old could not have gotten a yes to; answering no routes correctly.) Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - WI persona 4',
+    package: 'Class I felony at 22, ordered, completed -> expunged, but CIB record persists - expectation-setting.',
+    record: { title: 'Class I Felony (ordered at 22)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { ordered_wi: true, completed_wi: true },
+    expect: { resultKey: 'eligible_already_wi', reading: 'Ordered + completed -> already expunged; the result sets the expectation that the CIB record persists even after court-record expungement. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - WI persona 5',
+    package: 'old felony, sentence done 2015 -> pardon application.',
+    record: { title: 'Old Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-01-01' },
+    answers: { ordered_wi: false },
+    expect: { resultKey: 'pardon_path_wi', reading: 'Old felony, not ordered at sentencing -> pardon path (5yr post-completion). Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SC: Persona[] = [
+  {
+    source: 'Wave 5 - SC persona 1',
+    package: 'shoplifting conviction (30-day max) 2019, clean -> § 910 eligible.',
+    record: { title: 'Shoplifting (30-day max)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { conv_type_sc: 's910', s910_date_sc: '2019-01-01' },
+    expect: { resultKey: 'eligible_conviction_sc', reading: 'First-offence low-penalty (30-day max), 3yr (2019+3=2022<2026) -> § 22-5-910 eligible, through the solicitor, $310. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - SC persona 2',
+    package: 'YOA burglary conviction 2016, done 2018, clean -> § 920 eligible, once-ever.',
+    record: { title: 'YOA Burglary', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { conv_type_sc: 's920', s920_date_sc: '2018-01-01' },
+    expect: { resultKey: 'eligible_yoa_sc', reading: 'YOA conviction, 5yr from completion (2018+5=2023<2026) -> § 22-5-920, once per lifetime. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - SC persona 3',
+    package: 'DUI -> never; pardon.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { conv_type_sc: 'other' },
+    expect: { resultKey: 'pardon_path_sc', reading: 'DUI is not on the closed list -> pardon path (honest-no with the pardon route + the pending-bill note). Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - SC persona 4',
+    package: 'magistrate-court dismissal 2015 -> should already be auto-expunged - check.',
+    record: { title: 'Magistrate Dismissal', disposition: 'dismissed' },
+    answers: { court_type_sc: true },
+    expect: { resultKey: 'eligible_auto_sc', reading: 'Summary-court non-conviction -> automatic free since 2009 (§ 17-22-950); result says check it was applied. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - SC persona 5',
+    package: 'first-offense simple possession 2021 -> eligible 2024+ -> yes.',
+    record: { title: 'First-Offense Simple Possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-01-01' },
+    answers: { conv_type_sc: 's930', s930_date_sc: '2021-01-01' },
+    expect: { resultKey: 'eligible_conviction_sc', reading: 'First simple possession, 3yr (2021+3=2024<2026) -> § 22-5-930 eligible. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const AL: Persona[] = [
+  {
+    source: 'Wave 5 - AL persona 1',
+    package: 'charges no-billed 2023 -> eligible now (fee!).',
+    record: { title: 'No-Billed Charges', disposition: 'dismissed', disposition_date: '2023-01-01' },
+    expect: { resultKey: 'eligible_nonconviction_al', reading: 'No-bill, 90-day wait (2023+90d<<2026) -> eligible; result leads with the $500 fee and the indigency waiver. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - AL persona 2',
+    package: 'misdemeanor theft conviction 2020, paid -> REDEEMER-eligible 2023+ -> yes, $500.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-01-01' },
+    answers: { excluded_al: false, conv_level_al: 'misdemeanor', misd_date_al: '2020-01-01' },
+    expect: { resultKey: 'eligible_misd_al', reading: 'Misdemeanour, REDEEMER 3yr (2020+3=2023<2026), paid -> eligible; fee + lifetime-cap noted. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - AL persona 3',
+    package: 'DUI -> never.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_al: true, excluded_path_al: true },
+    expect: { resultKey: 'ineligible_dui_al', reading: 'DUI = serious traffic (explicit since Jul 2023) -> never. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - AL persona 4',
+    package: 'nonviolent felony 2010, clean -> pardon path -> then 180 days -> expungement.',
+    record: { title: 'Nonviolent Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2010-01-01' },
+    answers: { excluded_al: false, conv_level_al: 'felony' },
+    expect: { resultKey: 'pardon_path_al', reading: 'Felony -> pardon-first + 180 days path (encoded as a path, not flat ineligible). Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - AL persona 5',
+    package: 'drug-court completion 2024 -> eligible mid-2025.',
+    record: { title: 'Drug Court Completion', disposition: 'deferred', disposition_date: '2024-01-01' },
+    expect: { resultKey: 'eligible_nonconviction_al', reading: 'Specialty-court completion, 1yr (2024+1=2025<2026) -> eligible via the diversion date node. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const LA: Persona[] = [
+  {
+    source: 'Wave 5 - LA persona 1',
+    package: 'misdemeanor conviction 2018, clean -> art. 977 eligible - try automated path first.',
+    record: { title: 'Misdemeanor Conviction', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { excluded_la: false, level_la: 'misdemeanor', dwi_la: false, misd_date_la: '2018-01-01' },
+    expect: { resultKey: 'eligible_misd_la', reading: 'Misdemeanour, 5yr (2018+5=2023<2026) -> art. 977 eligible; result leads with the free automated request. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - LA persona 2',
+    package: 'felony possession 2012, clean -> art. 978 eligible.',
+    record: { title: 'Felony Possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-01-01' },
+    answers: { excluded_la: false, level_la: 'felony', felony_date_la: '2012-01-01' },
+    expect: { resultKey: 'eligible_felony_la', reading: 'Felony, 10yr (2012+10=2022<2026) -> art. 978; result states the multiple-felonies-in-10yr rule (978(F)), not the one-per-lifetime guides. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - LA persona 3',
+    package: 'simple robbery 2010, clean -> 978(E) contradictory-hearing path - the surprise-yes.',
+    record: { title: 'Simple Robbery', charge_type: 'felony', disposition: 'convicted', disposition_date: '2010-01-01' },
+    answers: { excluded_la: true, violent_carveout_la: true, felony_978e_date_la: '2010-01-01' },
+    expect: { resultKey: 'eligible_978e_la', reading: 'THE SURPRISE-YES. Simple robbery is a crime of violence (excluded_la yes), BUT one of the six 978(E) carve-outs -> expungable after 10yr (2010+10=2020<2026) via contradictory hearing. Sits inside the excluded path. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - LA persona 4',
+    package: 'domestic abuse battery -> excluded.',
+    record: { title: 'Domestic Abuse Battery', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_la: true, violent_carveout_la: false },
+    expect: { resultKey: 'ineligible_excluded_la', reading: 'Domestic abuse battery is excluded and not one of the six carve-outs -> ineligible, with the carve-out rule-out and first-offender-pardon note. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 5 - LA persona 5',
+    package: 'first-offense marijuana possession -> $300 window until Aug 1, 2026 - dated urgency copy.',
+    record: { title: 'First-Offense Marijuana Possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { excluded_la: false, level_la: 'misdemeanor', dwi_la: false, misd_date_la: '2018-01-01' },
+    expect: {
+      resultKey: 'eligible_misd_la',
+      reading:
+        'A first-offence marijuana possession is a misdemeanour on the art. 977 path (5yr, 2018+5=2023<2026) '
+        + '-> eligible_misd_la. The package wants the dated $300-until-Aug-1-2026 urgency surfaced; that fee '
+        + 'detail lives in the keyDate and fee open question rather than a distinct marijuana result. Flagged '
+        + 'approximate: the tree routes correctly but does not branch a marijuana-specific fee result.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO], ['MD', MD], ['WI', WI], ['SC', SC], ['AL', AL], ['LA', LA]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

@@ -99,10 +99,20 @@ the hedge stands.
 
 ## SD — automatic-removal waiting period for minor convictions (5 vs 10 years)
 
-**Wave 7, South Dakota. Hedged: `check_autoremoval_sd` (no year asserted).**
-**STATUS: OPEN — tagged for Diana's statute pass (verify against current
-§ 23A-3-34 text on sdlegislature.gov). Do NOT resolve from a model reading.
-Wave 7 calls this "the wave's ugliest source conflict."**
+**Wave 7, South Dakota. Was hedged: `check_autoremoval_sd` (no year asserted).**
+**STATUS: RESOLVED — Diana verified § 23A-3-34 against sdlegislature.gov
+(https://sdlegislature.gov/Statutes/23A-3-34, retrieved 2026-07-16). The wait is
+FIVE years; the "10" appears nowhere in the section. `check_autoremoval_sd` now
+states the real 5-year wait while keeping its check-your-record framing (the
+relief is automatic). Also encoded from the verified text: the gate is the
+HIGHEST offense CHARGED in the case (reaching charges, not just convictions); the
+clock needs all court-ordered conditions satisfied AND no further convictions in
+5 years; and removal is from the PUBLIC record only — the case stays available to
+court personnel and usable as a later-prosecution enhancement. Source linked;
+amendment history (SL 2016 ch 134, SL 2021 ch 106) added to keyDates. SD stays
+`draft` overall — § 23A-3-34 is one branch; the rest of SD's statutes are
+unverified — so only that source carries a link (partial verification). Closed
+2026-07-16.**
 
 South Dakota automatically removes petty offenses, municipal ordinance
 violations, and Class 2 misdemeanors from the public record after conditions are

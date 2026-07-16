@@ -39,10 +39,11 @@ export type ValidationRule =
   /** A record-backed node offers an option value that field can never hold, so
    *  the branch is unreachable no matter what the person answers. */
   | 'unproducible-value'
-  /** A statute link that does not represent a real human verification: a url
-   *  with no retrievedOn (a link nobody recorded reading), or a url on a state
-   *  still marked 'draft' (a link on rules no human has checked). The link IS
-   *  the verification claim, so it may only exist where the claim is true. */
+  /** A statute link with no retrievedOn — a link nobody recorded reading. The
+   *  link is a PER-SOURCE claim ("a human opened this official text"), so it must
+   *  carry the date it was read. It is NOT gated on the state's status: a single
+   *  verified statute may be linked while the state overall is still 'draft'
+   *  (partially verified — one branch checked, the rest not). */
   | 'source-url-integrity'
   /** verifiedDate (when the badge was earned) must be present exactly when the
    *  badge is: set on a non-draft state, absent on a draft one, and a real date
@@ -222,20 +223,16 @@ function checkRequiredFields(config: StateRuleConfig, err: (r: ValidationRule, p
   }
   config.sources?.forEach((s, i) => {
     if (!s.id?.trim()) err('missing-field', `sources[${i}].id`, 'source has no statute identifier');
-    // A url is a claim that a human opened the official text. It may only exist
-    // where that is true: it needs a retrievedOn (the date it was read), and it
-    // may not sit on a state still marked 'draft' (rules no human has checked).
-    // Never auto-fill a url from a domain or a guess — a link nobody read is
-    // exactly the false verification this rule exists to catch.
-    if (s.url) {
-      if (!s.retrievedOn) {
-        err('source-url-integrity', `sources[${i}].retrievedOn`,
-          `source has a url but no retrievedOn — a statute link must record the date a human read it`);
-      }
-      if (config.verificationStatus === 'draft') {
-        err('source-url-integrity', `sources[${i}].url`,
-          `source has a url but the state is still 'draft' — a link may only sit on rules a human has verified (flip the state's verificationStatus first)`);
-      }
+    // A url is a claim that a human opened the official text, so it must carry
+    // the retrievedOn that records the read. This is a PER-SOURCE invariant, not
+    // a state-level one: a single verified statute may be linked even while the
+    // state is still 'draft' (partially verified — one branch checked against the
+    // official text, the rest not), because the link tracks the source's own
+    // read date, not the state's screenable status. Never auto-fill a url from a
+    // domain or a guess — the retrievedOn must reflect an actual reading.
+    if (s.url && !s.retrievedOn) {
+      err('source-url-integrity', `sources[${i}].retrievedOn`,
+        `source has a url but no retrievedOn — a statute link must record the date a human read it`);
     }
   });
 

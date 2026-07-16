@@ -40,8 +40,9 @@ export async function GET(
         openQuestionCount: stateConfig?.openQuestions.length ?? 0,
         referrals: nationalReferrals,
         // Draft states carry their cited statutes so the panel can show what was
-        // read. They will all render as plain citations — a draft state can hold
-        // no verified url (the validator forbids it), which is the point.
+        // read. Usually all plain citations — but a partially-verified draft may
+        // carry a linked source (one statute checked against the official text),
+        // which the panel then shows linked while the state stays in-research.
         sources: stateConfig?.sources ?? [],
       });
     }

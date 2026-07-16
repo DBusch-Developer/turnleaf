@@ -427,12 +427,11 @@ describe('validateState — statute-link integrity', () => {
     expect(errors.some(e => e.rule === 'source-url-integrity' && e.path === 'sources[0].retrievedOn')).toBe(true);
   });
 
-  test('flags a source url on a state still marked draft (unverified rules)', () => {
-    const c = validConfig(); // draft
+  test('accepts a linked source on a draft state (partial verification — one branch checked)', () => {
+    const c = validConfig(); // draft overall
     c.sources[0] = { id: 'Test Code § 1', url: 'https://leg.zz.gov/1', retrievedOn: '2026-07-16' };
-    const errors = validateState(c);
 
-    expect(errors.some(e => e.rule === 'source-url-integrity' && e.path === 'sources[0].url')).toBe(true);
+    expect(validateState(c).filter(e => e.rule === 'source-url-integrity')).toEqual([]);
   });
 
   test('accepts a url with a retrievedOn on a human-verified state', () => {

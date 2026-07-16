@@ -17,9 +17,10 @@ export interface ComingSoonConfig {
   name: string;
   openQuestionCount?: number;
   referrals: Array<{ name: string; url: string }>;
-  /** The state's cited statutes. On a draft state these are all unlinked (the
-   *  validator forbids a verified url on unverified rules), so they render as
-   *  plain citations — showing what was read without claiming it was confirmed. */
+  /** The state's cited statutes. A draft state is usually all plain citations,
+   *  but a partially-verified one may carry a linked source (a single statute
+   *  read against the official text while the rest of the state is not) — so the
+   *  panel can show one branch verified even while the state stays in-research. */
   sources?: SourceItem[];
 }
 

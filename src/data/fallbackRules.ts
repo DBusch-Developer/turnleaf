@@ -12102,13 +12102,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         kind: 'effective',
         note: 'Wave 7 gives the year. A dismissed case can be expunged sooner than the usual 1 year on a showing of compelling necessity.',
       },
+      {
+        label: 'Automatic-removal amended (§ 23A-3-34, SL 2016 ch 134)',
+        date: '2016',
+        kind: 'effective',
+        note: 'Amendment history for the § 23A-3-34 automatic-removal section (Diana, statute pass 2026-07-16).',
+      },
+      {
+        label: 'Automatic-removal amended (§ 23A-3-34, SL 2021 ch 106)',
+        date: '2021',
+        kind: 'effective',
+        note: 'Amendment history for the § 23A-3-34 automatic-removal section (Diana, statute pass 2026-07-16).',
+      },
     ],
     openQuestions: [
-      {
-        question:
-          'Resolve the automatic-removal waiting period. Wave 7 flags that sources split 5 vs 10 years for § 23A-3-34 automatic removal of petty offenses, municipal violations, and Class 2 misdemeanors — encode from current statute text only. The tree routes those to a "check whether it is already off your record" result without asserting a specific year; confirm the exact period against the current statute.',
-        blocksFields: [],
-      },
       {
         question:
           'Confirm the circuit court filing fee, and whether any fee waiver applies. Wave 7 gives the DCI record check as $24 (Pierre, (605) 773-3331) but flags the circuit court filing fee as a per-clerk phone target and gives no waiver information. The fees and feeWaiver fields are null pending both.',
@@ -12117,7 +12124,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     ],
     sources: [
       { id: 'S.D. Codified Laws §§ 23A-3-26 to -37 (non-conviction expungement)', url: null, retrievedOn: null },
-      { id: 'S.D. Codified Laws § 23A-3-34 (automatic removal of petty/ordinance/Class-2 offenses)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws § 23A-3-34 (automatic removal from the PUBLIC record — highest-charged petty offense / municipal ordinance violation / Class 2 misdemeanor; 5-year wait after all court-ordered conditions satisfied and no further convictions in 5 yrs; record stays available to court personnel and usable as a later-prosecution enhancement)', url: 'https://sdlegislature.gov/Statutes/23A-3-34', retrievedOn: '2026-07-16' },
       { id: 'S.D. Codified Laws § 23A-27-13 (suspended imposition of sentence)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -12149,7 +12156,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'choice',
           text: 'What kind of conviction is it?',
           options: [
-            { label: 'A petty offense, municipal ordinance violation, or Class 2 misdemeanor (as the highest charge)', value: 'auto', next: 'check_autoremoval_sd' },
+            { label: 'A case where a petty offense, municipal ordinance violation, or Class 2 misdemeanor was the HIGHEST offense charged (whether or not it ended in a conviction)', value: 'auto', next: 'check_autoremoval_sd' },
             { label: 'A DUI or other motor-vehicle conviction', value: 'dui', next: 'ineligible_dui_sd' },
             { label: 'Any other conviction (Class 1 misdemeanor or higher)', value: 'other', next: 'ineligible_conviction_sd' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_sd' }
@@ -12195,8 +12202,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         check_autoremoval_sd: {
           status: 'eligible',
           title: 'Minor Conviction — May Be Auto-Removed, Check',
-          message: 'Because your highest charge was a petty offense, municipal ordinance violation, or Class 2 misdemeanor, South Dakota removes it from the public record AUTOMATICALLY once the conditions are satisfied (§ 23A-3-34) — this is the state\'s quiet automation. So the first step is to CHECK whether it has already come off, rather than assume you must file. One honest caveat: our sources disagree on exactly how long the wait is (5 versus 10 years), so we are not asserting a specific date — a DCI record check ($24) or the ujs.sd.gov self-help will show your current status.',
-          remedy: 'Check your record — minor convictions auto-remove (§ 23A-3-34; exact wait being confirmed)',
+          message: 'Because a petty offense, municipal ordinance violation, or Class 2 misdemeanor was the HIGHEST offense charged in your case, South Dakota removes that charge or conviction from the PUBLIC record AUTOMATICALLY (§ 23A-3-34) — the state\'s quiet automation. It comes off 5 years after all court-ordered conditions on the case are satisfied, as long as you have no further convictions during those 5 years. Because it is automatic, the honest first step is to CHECK whether it has already come off rather than assume you must file — a DCI record check ($24) or the ujs.sd.gov self-help will show your current status. One caveat to be clear about: this removes the case from PUBLIC view only. It stays available to court personnel, and it can still be used as an enhancement if you are prosecuted for something later.',
+          remedy: 'Check your record — a highest-minor-charge case auto-removes from public view 5 years after conditions are met (§ 23A-3-34)',
           citation: 'S.D. Codified Laws § 23A-3-34'
         },
         ineligible_dui_sd: {
@@ -12230,7 +12237,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formUrl: 'https://ujs.sd.gov/Forms/',
           steps: [
             'For a non-conviction, petition after 1 year (dismissal/no-charge arrest) or anytime (acquittal); use the ujs.sd.gov Guide & File interview.',
-            'For a minor conviction (petty offense, municipal violation, Class 2 misdemeanor), check whether it has already auto-removed under § 23A-3-34.',
+            'For a case whose highest charge was a petty offense, municipal violation, or Class 2 misdemeanor, check whether it has already auto-removed from the PUBLIC record — 5 years after conditions are met, no further convictions — under § 23A-3-34.',
             'For a suspended imposition or completed diversion, check your record — it should already be sealed/expunged.',
             'Get a DCI record check ($24, Pierre, (605) 773-3331) to confirm your status. DUI/motor-vehicle convictions are excluded; a pardon is the route there.'
           ],

@@ -21,16 +21,18 @@ console.log('Note: this checks structure only, never whether the law is right.')
 
 // Statute-pass footer. The verification workflow ends here: after reading a
 // state's official text, fill each source's url + retrievedOn, re-run this
-// check, and commit. Show which human-verified states still have unlinked
-// sources so the URL step does not get forgotten.
-const verified = Object.values(fallbackRules).filter((s) => s.verificationStatus !== 'draft');
-if (verified.length > 0) {
+// check, and commit. Show every state with verification activity — including a
+// draft state that has one branch verified (partial) — so the URL step does not
+// get forgotten and partial reads stay visible.
+const touched = Object.values(fallbackRules).filter((s) => s.sources.some((src) => src.url || src.retrievedOn));
+if (touched.length > 0) {
   console.log('');
-  console.log('Human-verified states — statute-link status:');
-  for (const s of verified) {
+  console.log('States with verified sources — statute-link status (linked / read / total):');
+  for (const s of touched) {
     const linked = s.sources.filter((src) => src.url).length;
-    const flag = linked === 0 ? '  ← no links yet' : linked < s.sources.length ? '' : '  ✓';
-    console.log(`  ${s.code} (${s.verificationStatus}): ${linked}/${s.sources.length} sources linked to official text${flag}`);
+    const read = s.sources.filter((src) => src.retrievedOn).length;
+    const tag = s.verificationStatus === 'draft' ? 'draft, partial' : s.verificationStatus;
+    console.log(`  ${s.code} (${tag}): ${linked} linked / ${read} read / ${s.sources.length} total`);
   }
 }
 console.log('');

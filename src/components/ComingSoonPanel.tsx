@@ -52,8 +52,8 @@ export default function ComingSoonPanel({ config, onReset }: ComingSoonPanelProp
       ) : (
         <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '0.75rem' }}>
           Every state in Turnleaf is researched from its actual statutes and encoded by hand
-          — we don&apos;t publish rules we haven&apos;t verified. {config.name} isn&apos;t ready yet,
-          and we&apos;d rather tell you that than guess.
+          — we don&apos;t publish rules we haven&apos;t verified. {config.name}{' '}
+          isn&apos;t ready yet, and we&apos;d rather tell you that than guess.
         </p>
       )}
 

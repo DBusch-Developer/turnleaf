@@ -5237,7 +5237,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     code: 'IL',
     name: 'Illinois',
     lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
     terminology:
       'Illinois has two remedies. EXPUNGEMENT destroys the record and is for cases without a '
@@ -5291,11 +5292,6 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Which completed-supervision offences carry the longer 5-year expungement wait rather than 2? Wave 3 flags the list. The tree uses the general 2-year supervision period and notes the exception.',
-        blocksFields: [],
-      },
-      {
-        question:
           'Confirm the education-waiver provision: does earning a diploma or degree during the sealing wait accelerate eligibility? Wave 3 says it is real and great UX but flags it for verification. Disclosed in prose on the sealing results, not encoded as a branch (it is a discretionary accelerator).',
         blocksFields: [],
       },
@@ -5306,7 +5302,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       },
     ],
     sources: [
-      { id: '20 ILCS 2630/5.2 — expungement and sealing (GOVERNING TEXT: after amendment by P.A. 104-459, eff. 6-1-26). (c)(4) Blank (prior-felony bar + unseal-on-new-conviction repealed); (c)(3)(B) 2-yr / (c)(2)(F) 3-yr sealing ladder; (d)(3) Blank (drug test repealed); (d)(6)(C) + (a)(1)(M) LFO rule; (k) automatic sealing (Jan 1 2029); (l) clerk auto-seal (Jan 1 2028); (b)(2)(A-5) 61-day-early diversion filing', url: 'https://ilga.gov/documents/legislation/ilcs/documents/002026300K5.2.htm', retrievedOn: '2026-07-16' },
+      { id: '20 ILCS 2630/5.2 — expungement and sealing (GOVERNING TEXT: after amendment by P.A. 104-459, eff. 6-1-26). (c)(4) Blank (prior-felony bar + unseal-on-new-conviction repealed); (c)(3)(B) 2-yr / (c)(2)(F) 3-yr sealing ladder; (d)(3) Blank (drug test repealed); (d)(6)(C) + (a)(1)(M) LFO rule; (k) automatic sealing (Jan 1 2029); (l) clerk auto-seal (Jan 1 2028); (b)(2)(A-5) 61-day-early diversion filing; (b)(2)(B)(i)/(i-5) 5-year supervision list (Vehicle Code 3-707/3-708/3-710/5-401.3, Criminal Code 11-1.50/12-3.2/12-15, under-25 11-503) vs (ii) 2-year default', url: 'https://ilga.gov/documents/legislation/ilcs/documents/002026300K5.2.htm', retrievedOn: '2026-07-16' },
       { id: 'Illinois Clean Slate Act / P.A. 104-459 (amends 20 ILCS 2630/5.2; signed Jan 16, 2026; amendment eff. 6-1-26)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -5385,14 +5381,32 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'boolean',
           text: 'Was it QUALIFIED probation — a program like 410 (drug), TASC, or a similar deferred sentence — as opposed to ordinary court supervision?',
           yes: 'qualified_prob_date_il',
+          no: 'supervision_5yr_list_il'
+        },
+        // (b)(2)(B)(i)/(i-5): a specific list of supervisions carries a 5-year wait;
+        // (ii): all other supervisions clear at 2. (Diana, statute pass 7/16.)
+        supervision_5yr_list_il: {
+          type: 'boolean',
+          text: 'Was the court supervision for one of these specific offenses, which carry a longer 5-year wait: certain insurance- or registration-related traffic offenses (625 ILCS 5/3-707, 3-708, 3-710, or 5-401.3), domestic battery (720 ILCS 5/12-3.2), or criminal sexual abuse (720 ILCS 5/11-1.50 or 12-15) — or, if you were under 25, reckless driving (625 ILCS 5/11-503)?',
+          yes: 'supervision_5yr_date_il',
           no: 'supervision_date_il'
+        },
+        supervision_5yr_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the court supervision?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of court supervision for a listed offense (20 ILCS 2630/5.2(b)(2)(B)(i)/(i-5) as amended by P.A. 104-459 — Vehicle Code 3-707/3-708/3-710/5-401.3, Criminal Code 11-1.50/12-3.2/12-15, or under-25 reckless driving 11-503)' },
+            nextPass: 'eligible_expungement_il',
+            nextFail: 'waiting_expungement_il'
+          }
         },
         supervision_date_il: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete the court supervision?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'completion of court supervision (20 ILCS 2630/5.2 — expungement; some offences 5 yrs, see open questions)' },
+            period: { amount: 2, unit: 'years', anchor: 'completion of court supervision (20 ILCS 2630/5.2(b)(2)(B)(ii) as amended by P.A. 104-459 — all supervisions except the listed 5-year offenses)' },
             nextPass: 'eligible_expungement_il',
             nextFail: 'waiting_expungement_il'
           }
@@ -5447,7 +5461,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         waiting_expungement_il: {
           status: 'waiting',
           title: 'Expungement Waiting Period Not Yet Met',
-          message: 'For a completed court supervision, Illinois expungement generally comes 2 years after you finish (some offenses carry a longer 5-year wait, which we are confirming), and for qualified probation like 410 or TASC it is 5 years. Based on your dates, yours has not run yet. Once it does, the record can be expunged — destroyed, not just hidden.',
+          message: 'For a completed court supervision, Illinois expungement generally comes 2 years after you finish — though a specific list of offenses carries a longer 5-year wait (certain insurance/registration traffic offenses, domestic battery, criminal sexual abuse, and, if you were under 25, reckless driving), and qualified probation like 410 or TASC is 5 years. Based on your dates, yours has not run yet. Once it does, the record can be expunged — destroyed, not just hidden.',
           remedy: 'Wait for the expungement period',
           citation: '20 ILCS 2630/5.2'
         },

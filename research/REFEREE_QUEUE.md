@@ -34,10 +34,13 @@ new felony restarts the wait. New Leaf Illinois kept as a referral. Also encoded
 from the verified text: (d)(3) drug test repealed (no copy referenced it); (k)
 automatic sealing Jan 1 2029 / (l) clerk auto-seal Jan 1 2028 (inversion note —
 petition now beats waiting); (b)(2)(A-5) 61-day-early diversion filing; (d)(6)(C)
-+ (a)(1)(M) LFO rule (unpaid court debt cannot block sealing). Source linked;
-IL stays `draft` (the 5-year-supervision-offence list is still an open legal
-question, so one branch is unverified — partial verification). Regression-locked
-by IL persona 5. Closed 2026-07-16.**
++ (a)(1)(M) LFO rule (unpaid court debt cannot block sealing). Source linked.
+IL was then FLIPPED to statute_cited on 2026-07-16 after Diana also verified the
+(b)(2)(B)(i)/(i-5) 5-year supervision list (Vehicle Code 3-707/3-708/3-710/5-401.3,
+Criminal Code 11-1.50/12-3.2/12-15, under-25 11-503) against the same text — the
+last open legal question — which the tree now encodes as a 5-year-list gate on the
+ordinary-supervision path ((ii) 2-year default). verifiedDate 2026-07-16.
+Regression-locked by IL persona 5. Closed 2026-07-16.**
 
 The Illinois Clean Slate Act (signed Jan 16, 2026; phasing in from June 30,
 2026 — two weeks before the package) removed the rule that a prior felony

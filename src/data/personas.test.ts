@@ -1136,8 +1136,8 @@ const IL: Persona[] = [
     source: 'Wave 3 - IL persona 4',
     package: 'supervision completed 2023 -> expungement 2025+.',
     record: { title: 'Court Supervision', disposition: 'deferred', disposition_date: '2023-01-01' },
-    answers: { supervision_type_il: false },
-    expect: { resultKey: 'eligible_expungement_il', reading: 'Ordinary court supervision, 2yr expungement wait, 2023+2=2025<2026 -> eligible. Exact.' },
+    answers: { supervision_type_il: false, supervision_5yr_list_il: false },
+    expect: { resultKey: 'eligible_expungement_il', reading: 'Ordinary court supervision, not on the 5-year list, so the (b)(2)(B)(ii) 2yr wait; 2023+2=2025<2026 -> eligible. Exact.' },
     now: NOW,
   },
   {

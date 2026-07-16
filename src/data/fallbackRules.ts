@@ -1439,6 +1439,429 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Lone Star Legal Aid', url: 'https://www.lonestarlegal.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // UTAH — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave1_Draft_Package.md
+  //
+  // The structural fact most tools miss: Utah requires a BCI Certificate of
+  // Eligibility BEFORE the court petition. The court will not accept a petition
+  // without one, and BCI reviews the person's FULL history including
+  // out-of-state records. So Utah's petition path ends at "apply to BCI", not
+  // "file with the court" — and the certificate expires after 180 days, so
+  // requesting it early wastes it.
+  //
+  // Two tracks, and their periods INVERT. Petition is FASTER than automatic for
+  // the same offence (class C: 3 years vs 5). So between the two thresholds the
+  // honest answer is "petitioning now beats waiting", which is the opposite of
+  // what every other state's automation advice says. Wave 1 flags the inversion
+  // as counter-intuitive enough to possibly be a transcription error — an open
+  // question stands on it, and the result says the counterintuitive thing
+  // plainly rather than smoothing it over.
+  //
+  // Automatic (Clean Slate) covers misdemeanour-level ONLY: class C/infraction
+  // 5 yrs, class B 6 yrs, class A drug possession 7 yrs. Class A non-drug,
+  // misdemeanour DUI and every felony are petition-only.
+  //
+  // The count-limit gate (§ 77-40a-303(4)/(5)) is a hard gate BEFORE any
+  // per-conviction check, and it is a four-clause test over a person's whole
+  // history. ConvictionRecord holds one charge and has no offence-class field,
+  // so the engine cannot compute it — it is asked, spelled out, with an
+  // "unsure" route to a hedge. A wrong self-count at the master gate is worse
+  // than a clunky question, and nobody is forced to guess. The record-model
+  // version is backlogged alongside NY's and MI's count logic.
+  // ==========================================================================
+  UT: {
+    code: 'UT',
+    name: 'Utah',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave1_Draft_Package.md',
+    terminology:
+      'Utah says EXPUNGEMENT, and it covers what other states split into sealing and expungement. '
+      + 'Two tracks. PETITION expungement requires a Certificate of Eligibility from the Bureau of '
+      + 'Criminal Identification (BCI) FIRST — the court will not accept a petition without one, and '
+      + 'BCI reviews your full history including out-of-state records. So the petition path ends at '
+      + '"apply to BCI", not "file with the court". AUTOMATIC ("Clean Slate") expungement needs no '
+      + 'petition and no fee, but reaches misdemeanour-level offences only; felonies are '
+      + 'petition-only. Counter-intuitively, the petition periods are SHORTER than the automatic '
+      + 'ones for the same offence, so petitioning can be faster than waiting.',
+    keyDates: [
+      {
+        label: 'Automatic expungement process changed — form requirement ended, courts self-identify',
+        date: '2026-01-01',
+        kind: 'effective',
+        note: 'Confirm the current process description before writing UI copy.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What is the court filing fee for a Petition to Expunge Records, and if there is one, can it be waived? Wave 1 gives "~$135 per one source" and marks it VERIFY BY PHONE — one source and an approximation is not a fee. Ask both halves: the waiver answer is only knowable once the fee is.',
+        blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
+      },
+      {
+        question:
+          'The automatic-expungement process changed on Jan 1, 2026 — the form requirement ended and courts self-identify cases again. Confirm the current process on the utcourts self-help page, and confirm how a person checks whether their case was already auto-expunged.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the petition-vs-automatic period split against §§ 77-40a-303 and -205 directly. The same offence has a SHORTER petition period than automatic period (class C: 3 years petition vs 5 years automatic), which is counter-intuitive enough to be a transcription error somewhere. Both tracks are encoded separately and the tree tells people plainly that petitioning is faster — if the inversion is wrong, that advice is wrong.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'BCI posts which date it is currently processing, and the backlog is real. What is the actual wait now? No duration is asserted anywhere in the app until this is answered.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions (including pleas in abeyance) treated for expungement? Not covered in Wave 1 — standing call-sheet question for every state. The tree hedges these rather than guess.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 77-40a-303(4)/(5) count limits and the § 303(8) "+1 if 10 years clean" allowance. The tree asks a person to self-assess this four-clause test because the record model cannot compute it; if the clauses are wrong, the master gate is wrong.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Utah Code § 77-40a-301 (petition expungement)', url: null, retrievedOn: null },
+      { id: 'Utah Code § 77-40a-303 (waiting periods; count limits; disqualifiers)', url: null, retrievedOn: null },
+      { id: 'Utah Code § 77-40a-304 (petition expungement procedure)', url: null, retrievedOn: null },
+      { id: 'Utah Code §§ 77-40a-202 through -206 (automatic "Clean Slate" expungement)', url: null, retrievedOn: null },
+      { id: 'Utah Code § 77-40a-205 (automatic expungement periods)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'pending_charges_ut' },
+            { label: 'Dismissed', value: 'dismissed', next: 'dismissal_prejudice_ut' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_acquittal_ut' },
+            { label: 'Deferred adjudication / Plea in abeyance / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        pending_charges_ut: {
+          type: 'boolean',
+          text: 'Do you have any criminal charges pending against you right now?',
+          yes: 'ineligible_pending_ut',
+          no: 'count_limits_ut'
+        },
+        // The § 303(4)/(5) master gate. Asked, not computed: it is a test over a
+        // whole history and the record model holds one charge at a time.
+        count_limits_ut: {
+          type: 'choice',
+          text: 'Counting every separate criminal episode on your record — not just this case, and including any out-of-state convictions, since BCI reviews your full history — does ANY of these describe you? (a) two or more felonies that were not drug offenses; (b) three or more convictions of any kind, of which two or more are class A misdemeanors; (c) four or more convictions, of which three or more are class B misdemeanors; or (d) five or more convictions of any degree. If ten or more years have passed clean since your last conviction, you are allowed one more than each number above.',
+          options: [
+            { label: 'No — none of those describe me', value: 'within', next: 'supervision_ut' },
+            { label: 'Yes — at least one describes me', value: 'over_limits', next: 'ineligible_counts_ut' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_counts_ut' }
+          ]
+        },
+        supervision_ut: {
+          type: 'boolean',
+          text: 'Are you currently incarcerated, on probation, or on parole?',
+          yes: 'ineligible_supervision_ut',
+          no: 'disqualifiers_ut'
+        },
+        disqualifiers_ut: {
+          type: 'boolean',
+          text: 'Was this offense a capital felony, a first-degree felony, a violent felony, a felony DUI, or an offense requiring registration as a sex offender or child-abuse offender?',
+          yes: 'ineligible_serious_ut',
+          no: 'restitution_ut'
+        },
+        restitution_ut: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you paid all fines, fees and restitution in full?',
+          yes: 'offense_level_ut',
+          no: 'ineligible_restitution_ut'
+        },
+        // Utah's classes. Asked — the form has no class field, and asking is how
+        // a state's own vocabulary reaches the person.
+        offense_level_ut: {
+          type: 'choice',
+          text: 'What was the level and class of the offense? (It appears on your sentencing paperwork, or on the criminal history BCI will review.)',
+          options: [
+            { label: 'Felony (other than capital, first-degree, violent, or DUI)', value: 'felony', next: 'closure_felony_ut' },
+            { label: 'Misdemeanor DUI or impaired driving', value: 'dui', next: 'closure_dui_ut' },
+            { label: 'Class A Misdemeanor — drug possession', value: 'a_drug', next: 'closure_a_drug_ut' },
+            { label: 'Class A Misdemeanor — anything else', value: 'a_nondrug', next: 'closure_a_ut' },
+            { label: 'Class B Misdemeanor', value: 'b', next: 'closure_b_ut' },
+            { label: 'Class C Misdemeanor or Infraction', value: 'c', next: 'closure_c_ut' }
+          ]
+        },
+        // Every closure date node ASKS. Utah's clock runs from CASE CLOSURE —
+        // sentence complete AND fines and restitution paid — which is not the
+        // date the form collects and can land years after it.
+        closure_dui_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'eligible_bci_apply_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        closure_felony_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'eligible_bci_apply_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        // Class A drug possession: petition 7 yrs, automatic 7 yrs. The periods
+        // coincide, so past the threshold BOTH have arrived — check first.
+        closure_a_drug_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'check_record_first_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        // Class A non-drug: petition 5 yrs, and NO automatic track reaches it.
+        closure_a_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'eligible_bci_apply_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        // Class B: petition at 4, automatic at 6. Between them, petitioning wins.
+        closure_b_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'closure_b_auto_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        closure_b_auto_ut: {
+          type: 'date',
+          text: 'And again, so we can check the automatic track: when did your case close?',
+          validation: {
+            period: { amount: 6, unit: 'years', anchor: 'case closure — automatic expungement period for a class B misdemeanour (§ 77-40a-205)' },
+            nextPass: 'check_record_first_ut',
+            nextFail: 'eligible_petition_faster_ut'
+          }
+        },
+        // Class C / infraction: petition at 3, automatic at 5.
+        closure_c_ut: {
+          type: 'date',
+          text: 'When did your case close — that is, when did you finish your sentence AND finish paying all fines, fees and restitution, whichever came last?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'case closure — sentence complete and all fines, fees and restitution paid' },
+            nextPass: 'closure_c_auto_ut',
+            nextFail: 'waiting_ut'
+          }
+        },
+        closure_c_auto_ut: {
+          type: 'date',
+          text: 'And again, so we can check the automatic track: when did your case close?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'case closure — automatic expungement period for a class C misdemeanour or infraction (§ 77-40a-205)' },
+            nextPass: 'check_record_first_ut',
+            nextFail: 'eligible_petition_faster_ut'
+          }
+        },
+        dismissal_prejudice_ut: {
+          type: 'choice',
+          text: 'Was the case dismissed WITH prejudice (it cannot be refiled) or WITHOUT prejudice (it could be refiled)? Your dismissal order says which.',
+          options: [
+            { label: 'With prejudice', value: 'with', next: 'closure_dismissal_30_ut' },
+            { label: 'Without prejudice', value: 'without', next: 'closure_dismissal_180_ut' },
+            { label: 'I don\'t know / Not sure', value: 'unsure', next: 'closure_dismissal_180_ut' }
+          ]
+        },
+        // Dismissals read the record: the anchor IS the dismissal, which is the
+        // disposition the form already collected.
+        closure_dismissal_30_ut: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed?',
+          validation: {
+            period: { amount: 30, unit: 'days', anchor: 'date of dismissal with prejudice' },
+            nextPass: 'eligible_dismissal_ut',
+            nextFail: 'waiting_dismissal_ut'
+          }
+        },
+        closure_dismissal_180_ut: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed?',
+          validation: {
+            period: { amount: 180, unit: 'days', anchor: 'date of dismissal without prejudice' },
+            nextPass: 'eligible_dismissal_ut',
+            nextFail: 'waiting_dismissal_ut'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Utah\'s paths split sharply on how the case ended: a dismissal can be expunged in as little as 30 days, an acquittal is handled automatically, and a conviction runs through the BCI certificate process with waiting periods of 3 to 10 years. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Ask the clerk of the court that handled your case for a copy of the disposition, or request your criminal history from the Utah Bureau of Criminal Identification. Once you know the outcome, come back and run this again.',
+          remedy: 'Get Your Record First (Utah BCI / court clerk)',
+          citation: 'Utah Code § 77-40a-301 et seq. (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Utah\'s expungement rules are screened here for convictions, dismissals, and acquittals. How a completed deferral, diversion, or plea in abeyance is treated is not something this screening has researched yet, and we would rather tell you that than guess — a guess here could point you at the wrong remedy, or tell you that you have none when you do. Clean Slate Utah and Utah Legal Services can confirm how your case was actually disposed and which path fits.',
+          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
+          citation: 'Utah Code § 77-40a-301 et seq. (treatment of deferrals not yet researched)'
+        },
+        eligible_acquittal_ut: {
+          status: 'eligible',
+          title: 'Acquittal — Expungement Should Be Automatic',
+          // No computed date: Wave 1 says "~60 days" and the tilde is the
+          // package hedging. The result inherits the hedge rather than turning
+          // an approximation into a deadline.
+          message: 'Because you were found not guilty, the expungement of this case should happen automatically — you do not need to petition and you do not need a Certificate of Eligibility. Wave 1 research puts the timeframe at roughly 60 days, but that is an approximation and we are not going to hand you a date built on it. Contact the Utah Bureau of Criminal Identification to confirm the expungement was processed. If it was not, Clean Slate Utah can help you find out why.',
+          remedy: 'Automatic Expungement After Acquittal — confirm with BCI',
+          citation: 'Utah Code §§ 77-40a-202 through -206'
+        },
+        eligible_dismissal_ut: {
+          status: 'eligible',
+          title: 'Dismissed Case — Potentially Expungeable Now',
+          message: 'Because your case was dismissed, the waiting period is short: 30 days when the dismissal was with prejudice, 180 days when it was without. Based on your dates, that period appears to have passed. You will still need a Certificate of Eligibility from the Utah Bureau of Criminal Identification before the court will take a petition — but there is no issuance fee for dismissals, only the $65 application fee. Apply to BCI first; the court cannot act without the certificate.',
+          remedy: 'Apply to BCI for a Certificate of Eligibility, then Petition to Expunge',
+          citation: 'Utah Code §§ 77-40a-303, 77-40a-304'
+        },
+        waiting_dismissal_ut: {
+          status: 'waiting',
+          title: 'Dismissed Case — Short Wait Not Yet Met',
+          message: 'Dismissed cases have Utah\'s shortest waiting periods: 30 days if the case was dismissed with prejudice, 180 days if it was dismissed without prejudice. Based on your dates that period has not run yet. Come back when it has — and if you are not sure which kind of dismissal you got, your dismissal order says, and the difference here is five months.',
+          remedy: 'Wait, then apply to BCI for a Certificate of Eligibility',
+          citation: 'Utah Code § 77-40a-303'
+        },
+        // The BCI-first ending. This is the structural fact most tools miss.
+        eligible_bci_apply_ut: {
+          status: 'eligible',
+          title: 'Potentially Eligible — Start With BCI, Not the Court',
+          message: 'Based on your dates, the waiting period for your offense appears to have passed. Utah\'s process starts somewhere people do not expect: you must get a Certificate of Eligibility from the Bureau of Criminal Identification BEFORE the court will accept a petition. The court cannot act without it. BCI reviews your ENTIRE criminal history for this — including out-of-state records — not just the case you want expunged, so anything anywhere can affect the answer. The application costs $65, plus $65 per conviction case when the certificate issues. One thing worth planning around: the certificate is only valid for 180 days once issued, so do not request it until you are ready to file the petition — an expired certificate means paying again. BCI publishes which date\'s applications it is currently processing; check that before you count on any timeline.',
+          remedy: 'BCI Certificate of Eligibility, then Petition to Expunge Records',
+          citation: 'Utah Code §§ 77-40a-301, 77-40a-303, 77-40a-304'
+        },
+        // The inversion, said plainly.
+        eligible_petition_faster_ut: {
+          status: 'eligible',
+          title: 'Petitioning Now Is Faster Than Waiting',
+          message: 'Here is something counterintuitive, and it is worth reading twice: for your offense, petitioning now is FASTER than waiting for Utah\'s automatic system to reach you. Utah has automatic ("Clean Slate") expungement that needs no petition and costs nothing — but its waiting period is LONGER than the petition\'s for the same offense. A class C misdemeanor can be petitioned at 3 years but is not automatically expunged until 5; a class B at 4 years versus 6. Based on your dates you have passed the petition threshold but not the automatic one, so waiting would cost you time you do not have to spend. If you would rather not pay and not file, you can wait — but you would be waiting longer on purpose. To petition: get a Certificate of Eligibility from the Bureau of Criminal Identification first ($65, plus $65 per conviction case at issuance, valid 180 days), then file the Petition to Expunge Records in the court that handled the case. We are still verifying these periods against the statute — that shorter-petition-than-automatic split is unusual enough that we want it confirmed.',
+          remedy: 'Petition now (BCI Certificate, then Petition to Expunge) — do not wait for automatic',
+          citation: 'Utah Code §§ 77-40a-303 (petition periods), 77-40a-205 (automatic periods)'
+        },
+        // Check-record-first, Wave 1 flag 2.
+        check_record_first_ut: {
+          status: 'eligible',
+          title: 'Your Record May Already Be Clear — Check Before You File',
+          message: 'Start here, not with a petition or a fee. Utah expunges eligible misdemeanor-level offenses AUTOMATICALLY under its Clean Slate law — no petition, no application, no cost, and nobody tells you it happened. Based on your dates you are past the automatic period for your offense, so there is a real chance this is already done. Find out before you spend anything: contact the Bureau of Criminal Identification and ask what your record shows now. If the automatic system reached you, you are finished. If it missed you, the petition path is still open — a Certificate of Eligibility from BCI first, then a Petition to Expunge in the court that handled the case. One caution: the automatic process changed on January 1, 2026, and we are still confirming how a person checks their status under the new process, so ask BCI directly rather than relying on older guidance.',
+          remedy: 'Check with BCI first — petition only if automatic relief missed you',
+          citation: 'Utah Code §§ 77-40a-202 through -206'
+        },
+        waiting_ut: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Utah\'s waiting periods run from CASE CLOSURE — which means the later of finishing your sentence and finishing payment of every fine, fee and restitution amount. Unpaid restitution does not just block the petition; it stops the clock from starting. The periods are 10 years for a misdemeanor DUI, 7 years for an eligible felony or a class A drug possession, 5 years for other class A misdemeanors, 4 years for a class B, and 3 years for a class C or infraction. Based on your dates, yours has not run yet. If you have an unpaid balance, paying it off is the single thing that starts your clock.',
+          remedy: 'Wait for the period to run, then apply to BCI',
+          citation: 'Utah Code § 77-40a-303'
+        },
+        ineligible_pending_ut: {
+          status: 'ineligible',
+          title: 'Pending Charges Block Expungement',
+          message: 'Utah will not expunge a record while you have criminal charges pending. This is not a permanent no — once the pending case resolves, come back and run this again. How that case ends will also affect what you are eligible for, so it is worth waiting for the outcome before planning anything.',
+          remedy: 'None Yet (Pending Charges)',
+          citation: 'Utah Code § 77-40a-303(2)'
+        },
+        ineligible_counts_ut: {
+          status: 'ineligible',
+          title: 'Conviction History Exceeds Utah\'s Limits',
+          message: 'Utah caps how much can be expunged across a person\'s whole record, not just per case. Based on what you told us, your history is over one of those caps: two or more non-drug felonies; three or more convictions with two or more class A misdemeanors; four or more with three or more class B misdemeanors; or five or more convictions of any degree. One thing worth knowing: if ten or more years pass clean since your last conviction, Utah allows one more than each of those numbers — so this can change with time. A pardon is a separate path that these caps do not govern. Clean Slate Utah can look at the whole picture with you; the counting rules are genuinely intricate and worth a person\'s eyes.',
+          remedy: 'Consult Legal Aid (History Exceeds Statutory Caps)',
+          citation: 'Utah Code § 77-40a-303(4), (5), (8)'
+        },
+        complex_counts_ut: {
+          status: 'complex',
+          title: 'Your Conviction History Needs Counting — By a Person',
+          message: 'Utah\'s eligibility turns on a count across your ENTIRE record before anything about this specific case matters, and the counting rules are intricate: two or more non-drug felonies; three or more convictions with two or more class A misdemeanors; four or more with three or more class B misdemeanors; or five or more of any degree — with one extra allowed on each if you have been ten years clean. Since you are not sure where you fall, we are not going to guess: getting this wrong would send you down the wrong path entirely. Two ways to find out: BCI reviews your full history (including out-of-state records) as part of the Certificate of Eligibility process, so applying will answer it definitively. Or Clean Slate Utah can look at your record with you first, which costs nothing.',
+          remedy: 'Get Your Full History Counted (BCI or Clean Slate Utah)',
+          citation: 'Utah Code § 77-40a-303(4), (5), (8)'
+        },
+        ineligible_supervision_ut: {
+          status: 'ineligible',
+          title: 'Not While You Are Under Supervision',
+          message: 'Utah will not expunge a record while you are incarcerated, on probation, or on parole. This is a timing bar, not a permanent one. Note also that Utah\'s waiting period does not begin at sentencing — it begins at case closure, meaning the later of finishing your sentence and paying every fine, fee and restitution amount in full. So the clock starts when supervision ends and the balance is zero.',
+          remedy: 'None Yet (Active Supervision)',
+          citation: 'Utah Code § 77-40a-303(2)'
+        },
+        ineligible_serious_ut: {
+          status: 'ineligible',
+          title: 'Excluded Offense',
+          message: 'Capital felonies, first-degree felonies, violent felonies, felony DUI, and offenses requiring registration as a sex offender or child-abuse offender are excluded from expungement in Utah. That exclusion is in the statute itself, so no waiting period changes it. A pardon from the Board of Pardons and Parole is a separate remedy that is not governed by these rules — Clean Slate Utah or Utah Legal Services can tell you whether it is worth pursuing in your situation.',
+          remedy: 'None (Statutorily Excluded) — Consult Legal Aid About a Pardon',
+          citation: 'Utah Code § 77-40a-303(2)'
+        },
+        ineligible_restitution_ut: {
+          status: 'ineligible',
+          title: 'Unpaid Balance Blocks — And Stops the Clock',
+          message: 'Utah requires all fines, fees and restitution to be paid before an expungement, and there is a second thing here that catches people out: the waiting period runs from CASE CLOSURE, and your case does not close until that balance is zero. So an unpaid balance is not just a blocker at the end — it means your waiting period has not started at all. Paying it off is the single most useful thing you can do, and the clock starts the day you do. Ask the court clerk what your current balance is; Clean Slate Utah offers fee assistance and may be able to help.',
+          remedy: 'Pay the Balance in Full — that starts your waiting period',
+          citation: 'Utah Code § 77-40a-303'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        bci_certificate: {
+          name: 'BCI Certificate of Eligibility (required before any petition)',
+          formName: 'BCI Expungement Application',
+          formUrl: 'https://bci.utah.gov/expungements/',
+          steps: [
+            'Apply to the Bureau of Criminal Identification for a Certificate of Eligibility — the court will not accept a petition without one.',
+            'BCI reviews your FULL criminal history, including out-of-state records, not just the case you want expunged.',
+            'BCI posts which date\'s applications it is currently processing; check that before counting on a timeline.',
+            'A certificate is valid for 180 days once issued — do not request it before you are ready to file, or you will pay for it twice.'
+          ],
+          fees: '$65 application fee, plus $65 per conviction case when the certificate issues. No issuance fee for dismissals or acquittals.',
+          feeWaiver: 'An indigency waiver exists for the BCI fees.',
+          courtContact: 'Utah Bureau of Criminal Identification (BCI)'
+        },
+        petition: {
+          name: 'Petition to Expunge Records',
+          formName: 'Petition to Expunge Records',
+          formUrl: 'https://utcourts.gov/en/self-help/case-categories/criminal-justice/expunge.html',
+          steps: [
+            'Obtain your BCI Certificate of Eligibility first — this petition cannot be filed without it.',
+            'File the Petition to Expunge Records in the court that handled the case.',
+            'File within 180 days of the certificate issuing, or it expires and you start over.'
+          ],
+          // null: Wave 1 gives "~$135 per one source" and says VERIFY BY PHONE.
+          fees: null,
+          // Dependent: whether a waiver applies is unknowable while the fee is.
+          feeWaiver: null,
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Clean Slate Utah (fee assistance available)', url: 'https://cleanslateutah.org' },
+        { name: 'Utah Legal Services', url: 'https://utahlegalservices.org' }
+      ]
+    }
   }
 };
 

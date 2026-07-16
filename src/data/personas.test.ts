@@ -326,7 +326,93 @@ const TX: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX]];
+const UT: Persona[] = [
+  {
+    source: 'Wave 1 — UT persona 1',
+    package: 'class B misd, closed 5 yrs ago, clean history → eligible (automatic track + petition option).',
+    record: { title: 'Class B Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: {
+      pending_charges_ut: false,
+      count_limits_ut: 'within',
+      supervision_ut: false,
+      disqualifiers_ut: false,
+      offense_level_ut: 'b',
+      // Utah's clock runs from CASE CLOSURE — asked, not read off the form.
+      closure_b_ut: '2021-07-15',
+      closure_b_auto_ut: '2021-07-15',
+    },
+    expect: {
+      resultKey: 'eligible_petition_faster_ut',
+      reading:
+        'Closed 5 years ago. Class B: petition at 4 years (passed), automatic at 6 (NOT passed). So '
+        + 'the person sits BETWEEN the thresholds, and the honest answer is the counterintuitive '
+        + 'one — petitioning now is faster than waiting for the automatic system. The package says '
+        + '"automatic track + petition option", which reads as though both are available now; at 5 '
+        + 'years the automatic track has not arrived. Flagged approximate: if the package is right, '
+        + 'the automatic period is not 6 years and the inversion open question resolves differently.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — UT persona 2',
+    package: 'eligible felony, closed 4 yrs ago → waiting, date = closure+7y.',
+    record: { title: 'Eligible Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: {
+      pending_charges_ut: false,
+      count_limits_ut: 'within',
+      supervision_ut: false,
+      disqualifiers_ut: false,
+      offense_level_ut: 'felony',
+      closure_felony_ut: '2022-07-15',
+    },
+    expect: { resultKey: 'waiting_ut', reading: 'Felony: 7 years from case closure. Closed 2022, so 4 years elapsed of 7. Waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — UT persona 3',
+    package: '2 non-drug felonies → ineligible (count limit).',
+    record: { title: 'Second Non-Drug Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { pending_charges_ut: false, count_limits_ut: 'over_limits' },
+    expect: {
+      resultKey: 'ineligible_counts_ut',
+      reading:
+        'Two or more non-drug felonies is clause (a) of the § 303(4) cap. The gate fires BEFORE any '
+        + 'per-conviction check, which is what Wave 1 asks for. Exact — though the person has to '
+        + 'self-assess the count, which is the known limitation.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — UT persona 4',
+    package: 'dismissal with prejudice 60 days ago → eligible-automatic.',
+    record: { title: 'Dismissed Charge', disposition: 'dismissed', disposition_date: '2026-05-16' },
+    answers: { dismissal_prejudice_ut: 'with' },
+    expect: {
+      resultKey: 'eligible_dismissal_ut',
+      reading:
+        'Dismissed with prejudice, 60 days ago; the threshold is 30 days, so it has passed. The '
+        + 'package calls this "eligible-automatic". Utah\'s automatic track covers misdemeanour-level '
+        + 'CONVICTIONS (§ 77-40a-205); Wave 1 gives dismissals a 30/180-day PETITION period, and no '
+        + 'automatic dismissal path. Reading it as the petition path with its short wait. Flagged '
+        + 'approximate: if dismissals really are automatic, this needs its own branch and the person '
+        + 'should be told to check rather than file.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — UT persona 5',
+    package: 'class A misd, on parole → ineligible-for-now.',
+    record: { title: 'Class A Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { pending_charges_ut: false, count_limits_ut: 'within', supervision_ut: true },
+    expect: { resultKey: 'ineligible_supervision_ut', reading: 'On parole → the supervision bar fires. "For now" is the point: the result says it is a timing bar and that the clock starts at case closure. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

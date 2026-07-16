@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
-import { ConvictionRecord } from './EligibilityWizard';
 import { generateReportPDF } from '../utils/pdfGenerator';
-import { FileDown, Calendar, FileText, Landmark, ShieldCheck, RefreshCw, HelpCircle } from 'lucide-react';
+import { FileDown, FileText, Landmark, ShieldCheck, RefreshCw, HelpCircle } from 'lucide-react';
 
 interface ResultItem {
   recordId: string;
@@ -21,14 +20,21 @@ interface ResultItem {
 interface ResultsDisplayProps {
   stateConfig: StateRuleConfig;
   results: ResultItem[];
-  records: ConvictionRecord[];
   onReset: () => void;
 }
+
+/**
+ * What a null resource field says out loud.
+ *
+ * null means we have not verified it — not that it is zero, not that it is
+ * free. Rendering it as "null", or silently as nothing, would turn "we didn't
+ * check" into "there's nothing to pay". Say the true thing instead.
+ */
+const NOT_VERIFIED = 'Not yet verified — ask the court clerk';
 
 export default function ResultsDisplay({
   stateConfig,
   results,
-  records,
   onReset
 }: ResultsDisplayProps) {
   const [aiSummary, setAiSummary] = useState<string>('');
@@ -72,33 +78,21 @@ export default function ResultsDisplay({
     }
   };
 
-  const getWaitingDetails = (record: ConvictionRecord) => {
-    let yearsRequired = 3; // general default
-    if (stateConfig.code === 'CA') yearsRequired = 1;
-    else if (stateConfig.code === 'AZ') yearsRequired = record.charge_type === 'felony' ? 2 : 0;
-    else if (stateConfig.code === 'NY') yearsRequired = 10;
-    else if (stateConfig.code === 'TX') {
-      if (record.disposition === 'deferred') {
-        yearsRequired = record.charge_type === 'felony' ? 5 : 2;
-      } else {
-        yearsRequired = record.charge_type === 'felony' ? 3 : 1;
-      }
-    }
-    
-    const dispDate = new Date(record.disposition_date);
-    const targetDate = new Date(dispDate.getFullYear() + yearsRequired, dispDate.getMonth(), dispDate.getDate());
-    const now = new Date();
-    const diffTime = targetDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const formattedTarget = targetDate.toISOString().split('T')[0];
-    const monthsRemaining = Math.max(0, Math.ceil(diffDays / 30));
-    
-    return {
-      targetDate: formattedTarget,
-      monthsRemaining,
-      yearsRequired
-    };
-  };
+  // REMOVED: getWaitingDetails().
+  //
+  // It computed the "earliest potential eligibility date" from a hardcoded
+  // table of waiting periods keyed on state code, with `let yearsRequired = 3`
+  // as a general default. It was a second, competing copy of the law that
+  // disagreed with fallbackRules on three of four states — AZ felonies (2 yrs
+  // here vs 5/10 in the rules), NY (10 yrs flat vs Clean Slate's 3/8), and TX
+  // deferred misdemeanours (2 yrs vs no wait at all) — and it invented a
+  // 3-year answer for any state it had never heard of.
+  //
+  // Legal rules live in data (AGENTS.md), and a waiting period the user can
+  // see must come from the node that applied. The engine does not yet surface
+  // WHICH period decided a result, so the computed date is gone rather than
+  // wrong; the result's own message still states the period in prose. Restoring
+  // a real date is tracked with the engine extraction.
 
   const triggerDownload = () => {
     generateReportPDF(
@@ -188,8 +182,7 @@ export default function ResultsDisplay({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2.5rem' }}>
         {results.map((res) => {
           const style = getStatusColor(res.resultStatus);
-          const recordData = records.find(r => r.id === res.recordId);
-          
+
           return (
             <div 
               key={res.recordId}
@@ -227,27 +220,6 @@ export default function ResultsDisplay({
                 {res.resultMessage}
               </p>
 
-              {res.resultStatus === 'waiting' && recordData && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  fontSize: '0.85rem',
-                  color: 'var(--color-warning)',
-                  fontWeight: 600,
-                  background: 'rgba(217, 119, 6, 0.08)',
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '8px',
-                  marginBottom: '0.75rem',
-                  width: 'fit-content'
-                }}>
-                  <Calendar size={16} />
-                  <span>
-                    Earliest potential eligibility date: {getWaitingDetails(recordData).targetDate} ({getWaitingDetails(recordData).monthsRemaining} month(s) left)
-                  </span>
-                </div>
-              )}
-
               <p style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', fontStyle: 'italic' }}>
                 Rule applied: {res.citation}
               </p>
@@ -280,16 +252,32 @@ export default function ResultsDisplay({
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem', fontSize: '0.9rem' }}>
                   <div>
-                    <strong>Required Form:</strong> <a href={remedy.formUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>{remedy.formName}</a>
+                    <strong>Required Form:</strong>{' '}
+                    {/* No link when the URL is unverified: href="null" is a
+                        broken promise, and a link is itself a claim. */}
+                    {remedy.formUrl && remedy.formName ? (
+                      <a href={remedy.formUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>{remedy.formName}</a>
+                    ) : (
+                      <span style={{ color: 'var(--color-text-light)' }}>{remedy.formName ?? NOT_VERIFIED}</span>
+                    )}
                   </div>
                   <div>
-                    <strong>Estimated Fees:</strong> {remedy.fees}
+                    <strong>Fees:</strong>{' '}
+                    <span style={remedy.fees ? undefined : { color: 'var(--color-text-light)' }}>
+                      {remedy.fees ?? NOT_VERIFIED}
+                    </span>
                   </div>
                   <div>
-                    <strong>Fee Waiver:</strong> {remedy.feeWaiver}
+                    <strong>Fee Waiver:</strong>{' '}
+                    <span style={remedy.feeWaiver ? undefined : { color: 'var(--color-text-light)' }}>
+                      {remedy.feeWaiver ?? NOT_VERIFIED}
+                    </span>
                   </div>
                   <div>
-                    <strong>Where to File:</strong> {remedy.courtContact}
+                    <strong>Where to File:</strong>{' '}
+                    <span style={remedy.courtContact ? undefined : { color: 'var(--color-text-light)' }}>
+                      {remedy.courtContact ?? NOT_VERIFIED}
+                    </span>
                   </div>
                 </div>
 

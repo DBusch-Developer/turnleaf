@@ -21,7 +21,10 @@ export type ValidationRule =
   | 'unresolved-ref'
   | 'unreachable'
   | 'cycle'
-  | 'bad-shape';
+  | 'bad-shape'
+  /** A field is null (unknown) with no open question accounting for it, or an
+   *  open question claims to block a field that still holds a value. */
+  | 'unblocked-null';
 
 export interface ValidationError {
   /** Two-letter state code, so a seed failure names the state. */
@@ -42,11 +45,45 @@ function edgesOf(node: RuleNode, nodeId: string): Array<{ path: string; target: 
   if (node.yes !== undefined) edges.push({ path: `nodes.${nodeId}.yes`, target: node.yes });
   if (node.no !== undefined) edges.push({ path: `nodes.${nodeId}.no`, target: node.no });
   if (node.validation) {
-    edges.push({ path: `nodes.${nodeId}.validation.nextPass`, target: node.validation.nextPass });
-    edges.push({ path: `nodes.${nodeId}.validation.nextFail`, target: node.validation.nextFail });
+    const v = node.validation;
+    if ('nextUnknown' in v) {
+      // A null period has no pass/fail to compute — only the hedged route.
+      edges.push({ path: `nodes.${nodeId}.validation.nextUnknown`, target: v.nextUnknown });
+    } else {
+      edges.push({ path: `nodes.${nodeId}.validation.nextPass`, target: v.nextPass });
+      edges.push({ path: `nodes.${nodeId}.validation.nextFail`, target: v.nextFail });
+    }
   }
 
   return edges;
+}
+
+/** 'YYYY', 'YYYY-MM' or 'YYYY-MM-DD' — the precision the package gave, no more. */
+const PARTIAL_DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+/** Remedy fields that may be null, and only with an open question behind them. */
+const NULLABLE_REMEDY_FIELDS = ['formName', 'formUrl', 'fees', 'feeWaiver', 'courtContact'] as const;
+
+/** Read a dotted path (the shape blocksField uses). undefined = no such field. */
+function readPath(config: StateRuleConfig, path: string): unknown {
+  let cursor: unknown = config;
+  for (const key of path.split('.')) {
+    if (cursor === null || typeof cursor !== 'object') return undefined;
+    if (!(key in (cursor as Record<string, unknown>))) return undefined;
+    cursor = (cursor as Record<string, unknown>)[key];
+  }
+  return cursor;
+}
+
+/**
+ * Is `path` accounted for by an open question? Either the question names it
+ * exactly, or it names an ancestor of it ('...remedies.sealing' covers
+ * '...remedies.sealing.fees').
+ */
+function isBlocked(config: StateRuleConfig, path: string): boolean {
+  return config.openQuestions.some(q =>
+    q.blocksFields.some(f => f === path || path.startsWith(`${f}.`))
+  );
 }
 
 function checkShape(config: StateRuleConfig, err: (r: ValidationRule, p: string, m: string) => void) {
@@ -69,6 +106,38 @@ function checkRequiredFields(config: StateRuleConfig, err: (r: ValidationRule, p
     err('missing-field', 'rules.startNode', 'startNode is not set');
   }
 
+  // Provenance. Rules data comes from a research package or it does not ship:
+  // a state whose rules came from somewhere else cannot be audited against
+  // anything, and "somewhere else" in practice means a model's recollection
+  // of state law.
+  if (!config.sourcePackage?.trim()) {
+    err('missing-field', 'sourcePackage', 'no research package recorded — where did these rules come from?');
+  } else if (!config.sourcePackage.startsWith('research/waves/')) {
+    err('bad-shape', 'sourcePackage',
+      `'${config.sourcePackage}' is not under research/waves/ — rules data may only come from a research package`);
+  }
+
+  if (!config.terminology?.trim()) {
+    err('missing-field', 'terminology', 'no terminology recorded — what does this state call its remedies, and what does it NOT have?');
+  }
+
+  if (!config.sources?.length) {
+    err('missing-field', 'sources', 'no statute sources recorded');
+  }
+  config.sources?.forEach((s, i) => {
+    if (!s.id?.trim()) err('missing-field', `sources[${i}].id`, 'source has no statute identifier');
+  });
+
+  // Dates carry the precision the package gave and no more. '2021' is a fact;
+  // '2021-01-01' invented from '2021' is a fabrication wearing a date's clothes.
+  config.keyDates?.forEach((kd, i) => {
+    if (!PARTIAL_DATE.test(kd.date)) {
+      err('bad-shape', `keyDates[${i}].date`,
+        `'${kd.date}' is not 'YYYY', 'YYYY-MM' or 'YYYY-MM-DD' — record the precision the package gave, never pad it`);
+    }
+    if (!kd.label?.trim()) err('missing-field', `keyDates[${i}].label`, 'key date has no label');
+  });
+
   // RULES.md: every result must trace to a real, cited statute. We can only
   // check that a citation is present — never that it is real.
   for (const [id, result] of Object.entries(config.rules.results)) {
@@ -77,16 +146,52 @@ function checkRequiredFields(config: StateRuleConfig, err: (r: ValidationRule, p
     }
   }
 
+  // The inverted rule. A field may be null — null means UNKNOWN, which is
+  // often the only honest value — but only when an open question accounts for
+  // it. Unaccounted nulls are how "we never checked" quietly becomes "$0".
   for (const [id, remedy] of Object.entries(config.resources.remedies)) {
-    for (const field of ['formName', 'formUrl', 'fees', 'courtContact'] as const) {
-      if (!remedy[field]?.trim()) {
-        err('missing-field', `resources.remedies.${id}.${field}`, `remedy '${id}' has no ${field}`);
+    if (!remedy.name?.trim()) {
+      err('missing-field', `resources.remedies.${id}.name`, `remedy '${id}' has no name`);
+    }
+
+    for (const field of NULLABLE_REMEDY_FIELDS) {
+      const path = `resources.remedies.${id}.${field}`;
+      const value = remedy[field];
+
+      if (value === null) {
+        if (!isBlocked(config, path)) {
+          err('unblocked-null', path,
+            `${field} is null (unknown) but no open question blocks it — either record the question that makes it unknown, or fill it in`);
+        }
+      } else if (!value.trim()) {
+        err('missing-field', path,
+          `${field} is empty. Unknown is spelled null, and needs an open question; an empty string says nothing`);
       }
     }
+
     if (!remedy.steps?.length) {
       err('missing-field', `resources.remedies.${id}.steps`, `remedy '${id}' has no steps`);
     }
   }
+
+  // ...and the same rule read backwards: a question that claims to block a
+  // field must actually be blocking one. Otherwise a stale question makes a
+  // live value look checked.
+  config.openQuestions?.forEach((q, i) => {
+    if (!q.question?.trim()) {
+      err('missing-field', `openQuestions[${i}].question`, 'open question has no text');
+    }
+    q.blocksFields.forEach((field, j) => {
+      const value = readPath(config, field);
+      if (value === undefined) {
+        err('unresolved-ref', `openQuestions[${i}].blocksFields[${j}]`,
+          `'${field}' names no field on this state`);
+      } else if (value !== null) {
+        err('unblocked-null', `openQuestions[${i}].blocksFields[${j}]`,
+          `'${field}' has an open question against it but still holds a value (${JSON.stringify(value)}) — a field we are still asking about must be null`);
+      }
+    });
+  });
 }
 
 function checkReferences(config: StateRuleConfig, err: (r: ValidationRule, p: string, m: string) => void) {

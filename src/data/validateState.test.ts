@@ -9,7 +9,12 @@ function validConfig(): StateRuleConfig {
     code: 'ZZ',
     name: 'Teststate',
     lastReviewed: '2026-07-15',
-    verificationStatus: 'statute_cited',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
+    terminology: 'Teststate seals; it does not expunge.',
+    keyDates: [{ label: 'Sealing act effective', date: '2023-01-01', kind: 'effective', note: null }],
+    openQuestions: [],
+    sources: [{ id: 'Test Code § 1', url: null, retrievedOn: null }],
     rules: {
       startNode: 'disposition',
       nodes: {
@@ -24,7 +29,11 @@ function validConfig(): StateRuleConfig {
         wait_check: {
           type: 'date',
           text: 'When were you sentenced?',
-          validation: { yearsRequired: 2, nextPass: 'eligible_expungement', nextFail: 'waiting' },
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'sentencing' },
+            nextPass: 'eligible_expungement',
+            nextFail: 'waiting',
+          },
         },
       },
       results: {
@@ -98,11 +107,28 @@ describe('validateState — reference resolution', () => {
 
   test('flags a date validation nextPass/nextFail pointing at a nonexistent key', () => {
     const c = validConfig();
-    c.rules.nodes.wait_check.validation!.nextFail = 'waitng'; // typo
+    c.rules.nodes.wait_check.validation = {
+      period: { amount: 2, unit: 'years', anchor: 'sentencing' },
+      nextPass: 'eligible_expungement',
+      nextFail: 'waitng', // typo
+    };
     const errors = validateState(c);
 
     expect(errors).toHaveLength(1);
     expect(errors[0].path).toBe('nodes.wait_check.validation.nextFail');
+  });
+
+  test('flags a null-period nextUnknown pointing at a nonexistent key', () => {
+    const c = validConfig();
+    // A period we do not know: the only route is the hedged one.
+    c.rules.nodes.wait_check.validation = {
+      period: { amount: null, unit: 'years', anchor: 'sentencing' },
+      nextUnknown: 'ghost',
+    };
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].path).toBe('nodes.wait_check.validation.nextUnknown');
   });
 
   test('flags a startNode that names nothing', () => {
@@ -186,6 +212,139 @@ describe('validateState — required fields', () => {
   // resources.remedies. It is a display label (e.g. 'Petition for Dismissal
   // (PC 1203.4)'), not a foreign key — ResultsDisplay renders every remedy in
   // resources rather than looking one up by this string.
+});
+
+// The rules these tests pin are the reason the schema exists. A null that
+// nobody is asking about is how "we never checked" becomes "$0" — which is how
+// someone gets told a filing is free, shows up at a counter without the money,
+// and goes home.
+describe('validateState — unknown values must be accounted for', () => {
+  test('flags a null field with no open question behind it', () => {
+    const c = validConfig();
+    c.resources.remedies.Sealing.fees = null;
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('unblocked-null');
+    expect(errors[0].path).toBe('resources.remedies.Sealing.fees');
+  });
+
+  test('accepts a null field when an open question blocks it', () => {
+    const c = validConfig();
+    c.resources.remedies.Sealing.fees = null;
+    c.openQuestions = [
+      { question: 'Is there a filing fee? Ask the clerk.', blocksFields: ['resources.remedies.Sealing.fees'] },
+    ];
+
+    expect(validateState(c)).toEqual([]);
+  });
+
+  test('accepts one question blocking several fields — dependent claims null together', () => {
+    const c = validConfig();
+    // "Waiver not required" only follows from "the fee is $0". One call answers
+    // both, so one question blocks both.
+    c.resources.remedies.Sealing.fees = null;
+    c.resources.remedies.Sealing.feeWaiver = null;
+    c.openQuestions = [
+      {
+        question: 'Is there a filing fee, and can it be waived? Ask the clerk.',
+        blocksFields: [
+          'resources.remedies.Sealing.fees',
+          'resources.remedies.Sealing.feeWaiver',
+        ],
+      },
+    ];
+
+    expect(validateState(c)).toEqual([]);
+  });
+
+  test('flags a question standing against a field that still holds a value', () => {
+    const c = validConfig();
+    // fees is '$0' — a stale question here makes an unverified value look checked.
+    c.openQuestions = [
+      { question: 'Is there a filing fee?', blocksFields: ['resources.remedies.Sealing.fees'] },
+    ];
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('unblocked-null');
+    expect(errors[0].path).toBe('openQuestions[0].blocksFields[0]');
+  });
+
+  test('flags a question naming a field that does not exist', () => {
+    const c = validConfig();
+    c.openQuestions = [
+      { question: 'What about this?', blocksFields: ['resources.remedies.Sealing.filingCost'] },
+    ];
+    const errors = validateState(c);
+
+    expect(errors.some(e =>
+      e.rule === 'unresolved-ref' && e.path === 'openQuestions[0].blocksFields[0]')).toBe(true);
+  });
+
+  test('flags an empty string standing in for unknown', () => {
+    const c = validConfig();
+    c.resources.remedies.Sealing.fees = '';
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('missing-field');
+    expect(errors[0].message).toContain('null');
+  });
+});
+
+describe('validateState — provenance', () => {
+  test('flags rules sourced from outside research/waves/', () => {
+    const c = validConfig();
+    c.sourcePackage = 'general knowledge of state law';
+    const errors = validateState(c);
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('bad-shape');
+    expect(errors[0].path).toBe('sourcePackage');
+  });
+
+  test('flags a state with no recorded research package', () => {
+    const c = validConfig();
+    c.sourcePackage = '';
+
+    expect(validateState(c).some(e => e.path === 'sourcePackage')).toBe(true);
+  });
+
+  test('flags a state with no statute sources', () => {
+    const c = validConfig();
+    c.sources = [];
+
+    expect(validateState(c).some(e => e.path === 'sources')).toBe(true);
+  });
+
+  test('flags missing terminology', () => {
+    const c = validConfig();
+    c.terminology = '';
+
+    expect(validateState(c).some(e => e.path === 'terminology')).toBe(true);
+  });
+});
+
+describe('validateState — key dates', () => {
+  test.each(['2021', '2021-06', '2021-06-15'])('accepts the precision the package gave: %s', (date) => {
+    const c = validConfig();
+    c.keyDates = [{ label: 'Act effective', date, kind: 'effective', note: null }];
+
+    expect(validateState(c)).toEqual([]);
+  });
+
+  test.each(['2021-6-1', 'June 2021', '21-06-15', ''])('rejects malformed date: %s', (date) => {
+    const c = validConfig();
+    c.keyDates = [{ label: 'Act effective', date, kind: 'effective', note: null }];
+
+    expect(validateState(c).some(e => e.path === 'keyDates[0].date')).toBe(true);
+  });
+
+  // Deliberately NOT tested, because it cannot be: '2021-01-01' padded from a
+  // package that said only "2021" is a well-formed date and passes every check
+  // here. The validator has never read the package. Precision against the
+  // source is a reviewer's job — see AGENTS.md, "What the machine holds".
 });
 
 describe('validateState — node shape', () => {

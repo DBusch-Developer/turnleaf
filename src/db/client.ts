@@ -1,5 +1,17 @@
 import { neon } from '@neondatabase/serverless';
-import { fallbackRules, stateDirectory, StateRuleConfig } from '../data/fallbackRules';
+import { fallbackRules, stateDirectory, StateRuleConfig, VerificationStatus } from '../data/fallbackRules';
+
+/**
+ * Is this state's research finished enough to screen someone with?
+ *
+ * 'draft' means the rules were read out of a research package but nobody has
+ * confirmed them with a court yet. A draft state is NOT screenable: it routes
+ * to the in-research panel like any unresearched state, and comes back only
+ * when a human flips its status after a verification call. This is why every
+ * state can go dark at once — the seeder writes 'draft' and nothing else.
+ */
+export const isScreenable = (status: VerificationStatus | null | undefined): boolean =>
+  status === 'statute_cited' || status === 'phone_verified';
 
 const getDb = () => {
   const connectionString = process.env.DATABASE_URL;
@@ -17,19 +29,24 @@ const getDb = () => {
 export interface StateListEntry {
   code: string;
   name: string;
-  available: boolean; // true only when researched, cited rules exist
+  /** Screenable: researched AND verified. Draft states are false. */
+  available: boolean;
+  /** True when rules exist but are still draft — researched, not yet verified. */
+  draft: boolean;
   lastReviewed: string | null;
-  verificationStatus: 'statute_cited' | 'phone_verified' | 'pending' | null;
+  verificationStatus: VerificationStatus | null;
 }
 
 /**
  * Returns ALL 50 states for the selector. `available` is true only for states
- * with researched rules (in the database, or in local fallbackRules when no
- * DATABASE_URL is configured). States without rules are listed honestly as
- * in-research; they never receive generic/template rules.
+ * whose rules are researched AND verified. States with no rules, and states
+ * whose rules are still 'draft', are both listed as not available — they never
+ * receive generic/template rules, and they are never screened against research
+ * nobody has confirmed. `draft` distinguishes the two so the UI can say which
+ * is which honestly.
  */
 export async function getStatesList(): Promise<StateListEntry[]> {
-  const researched = new Map<string, { lastReviewed: string; verificationStatus: StateListEntry['verificationStatus'] }>();
+  const researched = new Map<string, { lastReviewed: string; verificationStatus: VerificationStatus }>();
 
   const sql = getDb();
   if (sql) {
@@ -43,7 +60,7 @@ export async function getStatesList(): Promise<StateListEntry[]> {
           lastReviewed: r.lastReviewed instanceof Date
             ? r.lastReviewed.toISOString().split('T')[0]
             : String(r.lastReviewed),
-          verificationStatus: r.verificationStatus as StateListEntry['verificationStatus'],
+          verificationStatus: r.verificationStatus as VerificationStatus,
         });
       }
     } catch (error) {
@@ -63,7 +80,8 @@ export async function getStatesList(): Promise<StateListEntry[]> {
     return {
       code,
       name,
-      available: Boolean(r),
+      available: isScreenable(r?.verificationStatus),
+      draft: Boolean(r) && !isScreenable(r?.verificationStatus),
       lastReviewed: r?.lastReviewed ?? null,
       verificationStatus: r?.verificationStatus ?? null,
     };
@@ -82,22 +100,32 @@ export async function getState(code: string): Promise<StateRuleConfig | null> {
   if (sql) {
     try {
       const rows = await sql`
-        SELECT code, name, rules, resources, last_reviewed as "lastReviewed", verification_status as "verificationStatus"
+        SELECT code, name, rules, resources,
+               last_reviewed as "lastReviewed", verification_status as "verificationStatus",
+               source_package as "sourcePackage", terminology,
+               key_dates as "keyDates", open_questions as "openQuestions", sources
         FROM states
         WHERE code = ${cleanCode}
         LIMIT 1
       `;
       if (rows && rows.length > 0) {
         const row = rows[0];
+        const json = <T>(v: unknown, fallback: T): T =>
+          v == null ? fallback : (typeof v === 'string' ? JSON.parse(v) : v) as T;
         return {
           code: row.code as string,
           name: row.name as string,
           lastReviewed: row.lastReviewed instanceof Date
             ? row.lastReviewed.toISOString().split('T')[0]
             : String(row.lastReviewed),
-          verificationStatus: row.verificationStatus as StateRuleConfig['verificationStatus'],
-          rules: typeof row.rules === 'string' ? JSON.parse(row.rules) : row.rules,
-          resources: typeof row.resources === 'string' ? JSON.parse(row.resources) : row.resources,
+          verificationStatus: row.verificationStatus as VerificationStatus,
+          sourcePackage: (row.sourcePackage as string) ?? '',
+          terminology: (row.terminology as string) ?? '',
+          keyDates: json(row.keyDates, []),
+          openQuestions: json(row.openQuestions, []),
+          sources: json(row.sources, []),
+          rules: json(row.rules, { startNode: '', nodes: {}, results: {} }),
+          resources: json(row.resources, { remedies: {}, legalAid: [] }),
         } as StateRuleConfig;
       }
       return fallbackRules[cleanCode] || null;

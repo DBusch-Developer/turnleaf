@@ -17,14 +17,23 @@ interface PDFStateInfo {
   legalAid: Array<{ name: string; url: string }>;
   remedies: Record<string, {
     name: string;
-    formName: string;
-    formUrl: string;
+    formName: string | null;
+    formUrl: string | null;
     steps: string[];
-    fees: string;
-    feeWaiver: string;
-    courtContact: string;
+    fees: string | null;
+    feeWaiver: string | null;
+    courtContact: string | null;
   }>;
 }
+
+/**
+ * What a null resource field says out loud.
+ *
+ * This one matters more in the PDF than on screen: people take this document
+ * to a courthouse. `${null}` renders as the literal string "null", which would
+ * read as an answer. It is not an answer.
+ */
+const NOT_VERIFIED = 'Not yet verified — ask the court clerk';
 
 export function generateReportPDF(
   candidateName: string,
@@ -120,11 +129,16 @@ export function generateReportPDF(
 
     Object.entries(stateInfo.remedies).forEach(([_, remedy]) => {
       y = addTextWithWrapping(`Remedy: ${remedy.name}`, margin, y, 11, 'bold');
-      y = addTextWithWrapping(`Required Form: ${remedy.formName}`, margin + 5, y, 9.5, 'normal');
-      y = addTextWithWrapping(`Download Link: ${remedy.formUrl}`, margin + 5, y, 8.5, 'normal', [77, 124, 89]);
-      y = addTextWithWrapping(`Court Fees: ${remedy.fees}`, margin + 5, y, 9.5, 'normal');
-      y = addTextWithWrapping(`Fee Waiver Availability: ${remedy.feeWaiver}`, margin + 5, y, 9.5, 'normal');
-      y = addTextWithWrapping(`Where to File: ${remedy.courtContact}`, margin + 5, y, 9.5, 'normal');
+      y = addTextWithWrapping(`Required Form: ${remedy.formName ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+      // The link line is omitted entirely when unverified — printing
+      // "Download Link: null" in a document someone carries to a courthouse is
+      // worse than printing no line at all.
+      if (remedy.formUrl) {
+        y = addTextWithWrapping(`Download Link: ${remedy.formUrl}`, margin + 5, y, 8.5, 'normal', [77, 124, 89]);
+      }
+      y = addTextWithWrapping(`Court Fees: ${remedy.fees ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+      y = addTextWithWrapping(`Fee Waiver Availability: ${remedy.feeWaiver ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+      y = addTextWithWrapping(`Where to File: ${remedy.courtContact ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
       
       y = addTextWithWrapping('Filing Steps:', margin + 5, y, 9.5, 'bold');
       remedy.steps.forEach((step, idx) => {

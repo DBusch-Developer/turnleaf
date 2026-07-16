@@ -5,9 +5,12 @@ import React, { useState, useEffect } from 'react';
 export interface StateSummary {
   code: string;
   name: string;
+  /** Screenable: researched AND verified by a person. */
   available: boolean;
+  /** Rules exist but are still draft — researched, not yet confirmed. */
+  draft?: boolean;
   lastReviewed: string | null;
-  verificationStatus: 'statute_cited' | 'phone_verified' | 'pending' | null;
+  verificationStatus: 'draft' | 'statute_cited' | 'phone_verified' | null;
 }
 
 interface StateSelectorProps {
@@ -45,7 +48,13 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
 
   const getStatusLabel = (state: StateSummary) => {
     if (!state.available) {
-      return { text: '🔬 In Research', bg: 'var(--color-bg-alt)', color: 'var(--color-text-muted)' };
+      // Draft and not-researched are both unscreenable, but they are different
+      // claims: draft means the research exists and is cited but nobody has
+      // confirmed it with a court yet. Badging a draft state "In Research"
+      // would understate what we have; badging it as ready would overstate it.
+      return state.draft
+        ? { text: '📝 Drafted — Not Confirmed', bg: 'var(--color-warning-bg)', color: 'var(--color-warning)' }
+        : { text: '🔬 In Research', bg: 'var(--color-bg-alt)', color: 'var(--color-text-muted)' };
     }
     switch (state.verificationStatus) {
       case 'phone_verified':
@@ -53,7 +62,7 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
       case 'statute_cited':
         return { text: '⚖️ Statute Cited', bg: 'var(--color-primary-light)', color: 'var(--color-primary-dark)' };
       default:
-        return { text: '⏳ Review Pending', bg: 'var(--color-bg-alt)', color: 'var(--color-text-muted)' };
+        return { text: '🔬 In Research', bg: 'var(--color-bg-alt)', color: 'var(--color-text-muted)' };
     }
   };
 

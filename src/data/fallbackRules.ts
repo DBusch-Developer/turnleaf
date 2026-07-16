@@ -15,17 +15,103 @@
 //   - TX form kit URL
 // ============================================================================
 
+/**
+ * How far a state's rules have been checked.
+ *
+ * Seeding only ever writes 'draft'. 'statute_cited' and 'phone_verified' are
+ * earned, one state at a time, by a person reading the statute text or calling
+ * the clerk — they are never produced by a migration, a script, or a model.
+ * Only draft states are withheld from screening (see db/client.ts).
+ */
+export type VerificationStatus = 'draft' | 'statute_cited' | 'phone_verified';
+
+/**
+ * A question the research package left open. Every ⚠️ flag in a package becomes
+ * one of these — never a resolved value.
+ *
+ * `blocksFields` holds the dotted paths this question makes unknowable, e.g.
+ * 'resources.remedies.expunction.fees'. Every path listed MUST be null while
+ * the question stands, and every null MUST be listed by some question; the
+ * validator enforces both directions. An empty array means the question blocks
+ * no single field — it blocks a whole branch, or a sentence in a message.
+ *
+ * It is a LIST because dependent claims null together, and one unknown can
+ * therefore strand several fields. "Fee waiver not required" only follows from
+ * "the fee is $0" — so one unanswered question about a fee makes both the fee
+ * and the waiver unknown, and one call answers both. Dependence is about
+ * derivation, not field names: "waiver form FW-001 exists" stands on its own
+ * and survives the fee being unknown.
+ */
+export interface OpenQuestion {
+  question: string;
+  blocksFields: string[];
+}
+
+/**
+ * A statute the state's rules rest on.
+ *
+ * `url` and `retrievedOn` are null until someone actually opens the source and
+ * records that they did. A citation we have not read is still just a citation.
+ */
+export interface StatuteSource {
+  id: string;
+  url: string | null;
+  retrievedOn: string | null;
+}
+
+/**
+ * A date that changes what the law does: when an act took effect, when an
+ * automatic program actually began running, or a deadline the state is under.
+ *
+ * `date` carries EXACTLY the precision the package gives — 'YYYY', 'YYYY-MM',
+ * or 'YYYY-MM-DD'. A package that says a provision was "added 2021" supports
+ * '2021' and nothing finer; padding it to '2021-01-01' to satisfy a date type
+ * invents a day the source never claimed. Consumers must render what is here
+ * ("2021"), never expand it. Lexicographic sort still orders these correctly.
+ * The validator enforces the format.
+ */
+export type PartialDate = string;
+
+export interface KeyDate {
+  label: string;
+  date: PartialDate;
+  kind: 'effective' | 'operative' | 'deadline';
+  note: string | null;
+}
+
+/**
+ * A waiting period, as the statute states it.
+ *
+ * `amount` is null when the package does not give a period, or gives conflicting
+ * ones. A null period cannot be computed against, so it has no pass/fail branch
+ * — see Validation. `anchor` records what the clock runs from, which differs by
+ * state and is not recoverable from the number alone: two states can both say
+ * "2 years" and mean different dates.
+ */
+export interface WaitingPeriod {
+  amount: number | null;
+  unit: 'days' | 'months' | 'years';
+  anchor: string;
+}
+
+/**
+ * A date node's rule.
+ *
+ * Split so that a null period CANNOT carry a pass/fail branch: if we do not
+ * know the period, there is no answer to compute, and the only honest move is
+ * to route to a result that says so. The type makes the alternative unwritable.
+ */
+export type Validation =
+  | { period: WaitingPeriod & { amount: number }; nextPass: string; nextFail: string }
+  | { period: WaitingPeriod & { amount: null }; nextUnknown: string };
+
 export interface RuleNode {
   type: 'choice' | 'boolean' | 'date' | 'checkpoint';
   text: string;
   options?: Array<{ label: string; value: string; next: string }>;
   yes?: string;
   no?: string;
-  validation?: {
-    yearsRequired: number;
-    nextPass: string;
-    nextFail: string;
-  };
+  validation?: Validation;
 }
 
 export interface RuleResult {
@@ -40,21 +126,32 @@ export interface StateRuleConfig {
   code: string;
   name: string;
   lastReviewed: string;
-  verificationStatus: 'statute_cited' | 'phone_verified' | 'pending';
+  verificationStatus: VerificationStatus;
+  /** The research package this state's rules come from. Rules data may come
+   *  from nowhere else — not from a model's knowledge of state law. */
+  sourcePackage: string;
+  /** What this state calls its remedies, and what it does NOT have. Load-bearing:
+   *  California has no expungement, Texas destroys vs seals, New York only seals. */
+  terminology: string;
+  keyDates: KeyDate[];
+  openQuestions: OpenQuestion[];
+  sources: StatuteSource[];
   rules: {
     startNode: string;
     nodes: Record<string, RuleNode>;
     results: Record<string, RuleResult>;
   };
   resources: {
+    /** null on any field means UNKNOWN — never zero, never "typical", never a
+     *  guess. A null must be backed by an OpenQuestion naming its path. */
     remedies: Record<string, {
       name: string;
-      formName: string;
-      formUrl: string;
+      formName: string | null;
+      formUrl: string | null;
       steps: string[];
-      fees: string;
-      feeWaiver: string;
-      courtContact: string;
+      fees: string | null;
+      feeWaiver: string | null;
+      courtContact: string | null;
     }>;
     legalAid: Array<{ name: string; url: string }>;
   };
@@ -72,8 +169,80 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   CA: {
     code: 'CA',
     name: 'California',
-    lastReviewed: '2026-07-14',
-    verificationStatus: 'statute_cited',
+    lastReviewed: '2026-07-15',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
+    terminology:
+      'California has no true expungement. The petition remedy is a DISMISSAL / SET-ASIDE under PC § 1203.4 (probation cases), § 1203.4a (misdemeanours and infractions where probation was not granted), and §§ 1203.41/.42 (felony and realignment cases) — colloquially called "expungement", but it does not erase anything. Separately, California runs the largest AUTOMATIC relief system in the country: PC § 851.93 (arrests) and § 1203.425 (convictions), under which the Department of Justice reviews statewide databases monthly and grants relief with no petition at all. Since August 2022, courts are barred from disclosing set-asides, which makes them function as sealing. Because the automatic layer is running, the honest first question is not "can I petition" but "is my record already clear" — check first, petition second.',
+    keyDates: [
+      {
+        label: 'Automatic record relief fully operative (PC § 1203.425)',
+        date: '2024-10-01',
+        kind: 'operative',
+        note: 'AB 1076 (2019) as expanded by SB 731, after two delays: AB 134 pushed it to Jul 2024, AB 168 to Oct 2024. This final date is the one that governs.',
+      },
+      {
+        label: 'Courts barred from disclosing set-asides',
+        date: '2022-08',
+        kind: 'effective',
+        note: 'Wave 0 gives month and year only ("since Aug 2022"). Applies to all set-asides, past and future — this is what makes them function as sealing.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is there any filing fee for the PC § 1203.4 dismissal petition (Form CR-180)? Recent sources say none statewide following the AB 1076-era fee elimination, but older county fee schedules show roughly $120-150. Wave 0 calls this "a perfect confirm-kill call" — ask an LA Superior Court clerk.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Is arrest sealing under PC § 851.91 / § 851.87 genuinely free? The encoded rules asserted "$0, no filing fee under state law", but Wave 0 does not address arrest sealing fees at all and no source is recorded for the claim.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
+      },
+      {
+        question:
+          'What are the exact felony tiers for automatic relief under the current PC § 1203.425(b)? Wave 0 gives "generally 4 yrs post-sentence for non-serious/non-violent" but flags the tiers as unverified. The 4-year figure has been removed from user-facing messages until this is confirmed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the PC § 1203.41 waiting period for felony/realignment cases. Wave 0 gives "2 yrs post-completion" but flags it. The figure has been removed from the complex_prison message until confirmed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What are the sub-criteria for automatic misdemeanour relief at 1 year after judgment under PC § 1203.425? Wave 0 gives the 1-year period but flags the sub-criteria as unverified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Verify adjacent-remedy statute references on the Session 0 call: PC § 4852.01 (Certificate of Rehabilitation), PC § 17(b) (felony reduction), PC § 1203.3 (early termination of probation), and PC § 290.5 (ending registration). These are cited in user-facing messages but appear nowhere in Wave 0 — they entered the rules from outside the research package.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The automatic relief layer (PC §§ 851.93, 1203.425) is not encoded as a branch — it exists only as prose inside petition results. The "check your record first" posture Wave 0 calls for has no structural representation.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Cal. Penal Code § 1203.4 (dismissal after probation)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.4a (dismissal, probation not granted)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.41 (felony/realignment dismissal)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.42 (felony/realignment dismissal)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.425 (automatic conviction relief)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 851.93 (automatic arrest relief)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 851.91 (arrest sealing petition)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 851.87 (sealing after completed diversion)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 290 (sex offender registration; exclusion)', url: null, retrievedOn: null },
+      { id: 'AB 1076 (2019); SB 731; AB 134; AB 168 (automatic relief and its delays)', url: null, retrievedOn: null },
+      // Cited in messages but NOT present in Wave 0 — recorded here so they are
+      // visible and verifiable rather than silently trusted. See open questions.
+      { id: 'Cal. Penal Code § 4852.01 (Certificate of Rehabilitation) — NOT IN WAVE 0', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 17(b) (felony reduction) — NOT IN WAVE 0', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.3 (early termination of probation) — NOT IN WAVE 0', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 290.5 (ending registration) — NOT IN WAVE 0', url: null, retrievedOn: null },
+    ],
     rules: {
       startNode: 'disposition',
       nodes: {
@@ -115,7 +284,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'When was judgment pronounced (your sentencing date)?',
           validation: {
-            yearsRequired: 1,
+            period: {
+              amount: 1,
+              unit: 'years',
+              anchor: 'judgment pronounced (PC § 1203.4a — applies only where probation was not granted)'
+            },
             nextPass: 'eligible_expungement_no_probation',
             nextFail: 'waiting_period_ca'
           }
@@ -139,7 +312,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_expungement: {
           status: 'eligible',
           title: 'Potential Dismissal Eligible',
-          message: 'You appear potentially eligible for a dismissal of conviction under Penal Code § 1203.4, available upon successful completion of probation. Also note: under the state\'s automatic record relief program (PC § 1203.425), many misdemeanors (1 year after judgment) and eligible non-serious, non-violent felonies (4 years after sentence completion) are dismissed automatically by the DOJ — your conviction may already have relief. Filing the petition can still add benefits, such as felony reduction under PC § 17(b).',
+          // The "4 years after sentence completion" figure is removed: Wave 0
+          // flags the § 1203.425(b) felony tiers as unverified. See open
+          // questions. The 1-year misdemeanour period is stated unflagged in
+          // Wave 0 and stays; only its sub-criteria are in question.
+          message: 'You appear potentially eligible for a dismissal of conviction under Penal Code § 1203.4, available upon successful completion of probation. Also note: under the state\'s automatic record relief program (PC § 1203.425), many misdemeanors (1 year after judgment) and some non-serious, non-violent felonies are dismissed automatically by the DOJ — your conviction may already have relief, so it is worth checking your record before you file anything. We are still verifying which felonies qualify and after how long. Filing the petition can still add benefits, such as felony reduction under PC § 17(b).',
           remedy: 'Petition for Dismissal (PC 1203.4)',
           citation: 'California Penal Code §§ 1203.4, 1203.425'
         },
@@ -160,7 +337,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         complex_prison: {
           status: 'complex',
           title: 'State Prison Sentence — Relief May Still Be Available',
-          message: 'State prison sentences are not eligible under PC § 1203.4, but since SB 731 (effective July 1, 2023), the court may grant discretionary dismissal under PC § 1203.41 for many felonies even where state prison time was served — generally after a waiting period (2 years after sentence completion for prison sentences) and if no sex-offender registration is required. Automatic relief under PC § 1203.425 may also apply to eligible non-serious, non-violent felonies 4 years after sentence completion. A Certificate of Rehabilitation (PC § 4852.01) is another path. Consult legal aid — this area is fact-specific.',
+          // Both waiting periods removed: Wave 0 flags the § 1203.41 period
+          // ("2 yrs post-completion") and the § 1203.425 felony tiers ("4 yrs")
+          // as unverified. Neither number is asserted here. See open questions.
+          message: 'State prison sentences are not eligible under PC § 1203.4, but SB 731 opened PC § 1203.41 to many felonies even where state prison time was served — the court may grant a discretionary dismissal after a waiting period, if no sex-offender registration is required. We are still verifying how long that period runs, so we are not going to put a number on it here; a legal aid attorney or the sentencing court can tell you. Automatic relief under PC § 1203.425 may also reach some non-serious, non-violent felonies. A Certificate of Rehabilitation (PC § 4852.01) is another path. This area is fact-specific — please consult legal aid.',
           remedy: 'Discretionary Dismissal (PC 1203.41) / Certificate of Rehabilitation',
           citation: 'California Penal Code §§ 1203.41, 1203.425, 4852.01'
         },
@@ -200,9 +380,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Serve a copy of the petition on the District Attorney (and probation department where required) at least 15 days before the hearing.',
             'Attend the court hearing if required by the judge.'
           ],
-          // TODO(phone-verify): fee practice varies by county; current
-          // self-help guidance indicates no filing fee for CR-180 itself.
-          fees: 'No statewide filing fee for Form CR-180; some counties may charge related costs. Verify with your county clerk.',
+          // null: Wave 0 flags this fee. Recent sources say none statewide;
+          // older county schedules charged ~$120-150. Blocked by an open
+          // question — a confirm-kill call to an LA clerk settles it.
+          fees: null,
+          // NOT nulled: this does not derive from the fee being $0 — it is the
+          // opposite claim (that a waiver exists if a fee does), so it survives
+          // the fee being unknown.
           feeWaiver: 'Available using Form FW-001 (Request to Waive Court Fees).',
           courtContact: 'County Superior Court Clerk'
         },
@@ -216,8 +400,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'File the petition with the court in the county where the arrest occurred.',
             'Serve the law enforcement agency that arrested you and the District Attorney.'
           ],
-          fees: '$0 (no filing fee under state law for arrest sealing)',
-          feeWaiver: 'Not required',
+          // null: "$0 under state law" is an affirmative claim about California
+          // law that Wave 0 never makes — it does not address arrest sealing
+          // fees at all. Blocked by an open question.
+          fees: null,
+          // Dependent claim: "not required" followed from the $0. Nulls with it.
+          feeWaiver: null,
           courtContact: 'County Superior Court Clerk'
         }
       },
@@ -229,25 +417,112 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // ARIZONA
-  // Three distinct remedies, all encoded:
-  //   1. Set-aside (ARS § 13-905) — NO waiting period after absolute
+  // ARIZONA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave0_Draft_Package.md
+  //
+  // Three distinct remedies. Two are encoded as branches; the third is not:
+  //   1. Set-aside (ARS § 13-905) — no waiting period after absolute
   //      discharge; conviction stays public but is annotated. Comes with a
   //      Certificate of Second Chance in many cases.
   //   2. Record sealing (ARS § 13-911, effective Jan 1, 2023) — hides the
-  //      record from public view. Class-based waiting periods after
-  //      completing the entire sentence (incl. restitution):
+  //      record from public view. Class-based waiting periods running from
+  //      absolute discharge (which requires restitution paid in full):
   //      Class 2/3 felony: 10 yrs · Class 4/5/6 felony: 5 yrs ·
   //      Class 1 misdemeanor: 3 yrs · Class 2/3 misdemeanor: 2 yrs.
-  //      Dismissals/acquittals/not-charged: sealable immediately.
-  //   3. Marijuana expungement (ARS § 36-2862) — narrow, Prop 207 offenses,
-  //      no waiting period. Surfaced in messaging, not a full branch.
+  //      Wave 0 flags this ladder "encode from statute text" — the numbers
+  //      stand (they are not in conflict) but an open question stands too.
+  //      The prior-felony bump has no representation here at all.
+  //   3. Marijuana expungement (ARS § 36-2862) — NOT ENCODED. Prop 207
+  //      offenses, free, no waiting period, mandatory grant if in scope. It
+  //      appears in one message and nowhere else; it needs its own branch.
+  //
+  // Arizona has NO automatic relief. Every remedy is a petition. Users who
+  // have heard "clean slate" news from other states assume otherwise, so the
+  // copy has to say it plainly.
   // ==========================================================================
   AZ: {
     code: 'AZ',
     name: 'Arizona',
-    lastReviewed: '2026-07-14',
-    verificationStatus: 'statute_cited',
+    lastReviewed: '2026-07-15',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
+    terminology:
+      'Arizona has three separate remedies and the difference between them matters. A SET ASIDE (ARS § 13-905) vacates the judgment of guilt and releases you from most penalties, but the conviction stays on the public record with a "set aside" notation — it is not an expungement and does not hide anything. SEALING (ARS § 13-911, in effect since Jan 1, 2023) is the stronger remedy: it hides the case records from public view, and you may deny the record in most contexts. Only marijuana relief under ARS § 36-2862 (Prop 207) is a true EXPUNGEMENT. Arizona has no automatic relief of any kind — every remedy requires a petition, and nothing arrives on its own.',
+    keyDates: [
+      {
+        label: 'ARS § 13-911 record sealing available',
+        date: '2023-01-01',
+        kind: 'effective',
+        note: 'The sealing remedy did not exist before this date.',
+      },
+      {
+        label: 'Certificate of Second Chance added to § 13-905',
+        // Year only — that is the precision Wave 0 gives ("added 2021").
+        // Padding to 2021-01-01 would invent a day the package never claimed.
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 0 gives the year only. The exact effective date is an open question.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is there a filing fee to apply for a set-aside under ARS § 13-905? The Maricopa County packet appears to show none, but that is one county and it is not confirmed. Ask on the Session 1 call.',
+        blocksFields: ['resources.remedies.set_aside.fees', 'resources.remedies.set_aside.feeWaiver'],
+      },
+      {
+        question:
+          'Is there a filing fee to petition for sealing under ARS § 13-911? The encoded rules claimed "the legislature removed filing fees", but Wave 0 does not state this and no source is recorded for it. Ask on the Session 1 call.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the § 13-911 waiting periods against the current statute text: class 2-3 felonies 10 yrs, class 4-6 felonies 5 yrs, class 1 misdemeanors 3 yrs, class 2-3 misdemeanors 2 yrs. Wave 0 flags these as "encode from statute text" rather than as verified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How does the prior-felony bump change the § 13-911 waiting periods? Wave 0 notes a bump exists but does not give its size, and the decision tree cannot express it at all.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the prosecutor/victim response window on a § 13-911 petition? The filing steps currently tell people the court must wait 60 days, which is unverified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Is a DUI misdemeanor eligible for a set-aside, and is it excluded from § 13-911 sealing? Resolve from the § 13-911 text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Is § 13-911 sealing of a non-conviction really available immediately? The tree currently tells dismissed/acquitted users there is no waiting period.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions treated for sealing? Not covered in Wave 0 — add to call sheet. The tree hedges these rather than guess (see unknown_deferred).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Marijuana expungement under ARS § 36-2862 (Prop 207) is a real Arizona remedy — petition anytime, free, mandatory grant if in scope — but it is not encoded as a branch, only mentioned in one message. It needs its own path.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the exact effective date of the Certificate of Second Chance addition to ARS § 13-905? Wave 0 gives only the year (2021), so it is recorded in no keyDate rather than guessed at.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-911 (record sealing)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-3821 (registrable offenses; § 13-905 exclusion)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; § 13-911 exclusion)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: null },
+    ],
     rules: {
       startNode: 'disposition',
       nodes: {
@@ -286,25 +561,45 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Class 2 or 3 Misdemeanor', value: 'misd_23', next: 'discharge_date_m23' }
           ]
         },
+        // The § 13-911 ladder. Wave 0 gives these numbers but flags them
+        // "encode from statute text" — an open question stands on all four.
+        // The anchor is the whole point: the clock runs from absolute
+        // discharge, which does not arrive until restitution is paid in full.
         discharge_date_f23: {
           type: 'date',
           text: 'When did you complete your sentence and receive your absolute discharge?',
-          validation: { yearsRequired: 10, nextPass: 'eligible_both_az', nextFail: 'waiting_seal_az' }
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
+            nextPass: 'eligible_both_az',
+            nextFail: 'waiting_seal_az'
+          }
         },
         discharge_date_f456: {
           type: 'date',
           text: 'When did you complete your sentence and receive your absolute discharge?',
-          validation: { yearsRequired: 5, nextPass: 'eligible_both_az', nextFail: 'waiting_seal_az' }
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
+            nextPass: 'eligible_both_az',
+            nextFail: 'waiting_seal_az'
+          }
         },
         discharge_date_m1: {
           type: 'date',
           text: 'When did you complete your sentence and receive your absolute discharge?',
-          validation: { yearsRequired: 3, nextPass: 'eligible_both_az', nextFail: 'waiting_seal_az' }
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
+            nextPass: 'eligible_both_az',
+            nextFail: 'waiting_seal_az'
+          }
         },
         discharge_date_m23: {
           type: 'date',
           text: 'When did you complete your sentence and receive your absolute discharge?',
-          validation: { yearsRequired: 2, nextPass: 'eligible_both_az', nextFail: 'waiting_seal_az' }
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
+            nextPass: 'eligible_both_az',
+            nextFail: 'waiting_seal_az'
+          }
         }
       },
       results: {
@@ -325,10 +620,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
           citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (how these apply to a completed deferral is not yet researched)'
         },
+        // The "no waiting period" claim was flagged in Wave 0 ("verify immediate
+        // availability") and is asserted nowhere now. A flagged claim does not
+        // get to stay just because it is the headline — see openQuestions.
         eligible_seal_dismissed_az: {
           status: 'eligible',
-          title: 'Potential Immediate Sealing',
-          message: 'Charges that were dismissed, resulted in a not-guilty verdict, or never led to charges can be sealed under ARS § 13-911 with no waiting period. Once sealed, you can generally state the arrest never happened in most situations.',
+          title: 'Potentially Sealable — Waiting Period Being Verified',
+          message: 'Charges that were dismissed, resulted in a not-guilty verdict, or never led to charges may be sealable under ARS § 13-911. Whether any waiting period applies to a non-conviction is one of the things we are still verifying, so we are not going to tell you it is zero until we have confirmed it — call the clerk of the court that handled your case and ask when you can file. Once a record is sealed, you can generally state the arrest never happened in most situations.',
           remedy: 'Petition to Seal Case Records (ARS § 13-911)',
           citation: 'Arizona Revised Statutes § 13-911'
         },
@@ -377,8 +675,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Complete the set-aside application used by the court where you were sentenced.',
             'File the completed form with the Clerk of the Court in the county where you were sentenced.'
           ],
-          fees: '$0 (no filing fee to request a Set-Aside)',
-          feeWaiver: 'Not required',
+          // null: Wave 0 flags this fee. The Maricopa packet appears to show
+          // none, but that is one county and unconfirmed. Blocked by an open
+          // question; do not fill this in without a call.
+          fees: null,
+          // feeWaiver followed from the $0 claim, so it goes with it.
+          feeWaiver: null,
           courtContact: 'Clerk of the Superior Court / Municipal or Justice Court Clerk (wherever you were sentenced)'
         },
         sealing: {
@@ -390,10 +692,17 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Request your criminal history report from the Arizona Department of Public Safety to confirm offense classes and discharge dates.',
             'Confirm the offense is not excluded and the class-based waiting period has elapsed.',
             'File the petition to seal with the court that handled the case (each case must be filed separately).',
-            'The court must wait 60 days before ruling unless the prosecutor and any victims waive objection; attend a hearing if one is set.'
+            // Was: "The court must wait 60 days before ruling unless the
+            // prosecutor and any victims waive objection." Wave 0 flags the
+            // response window as unverified, so the number comes out until the
+            // call confirms it. See open questions.
+            'The prosecutor and any victims get a window to respond before the court rules; ask the clerk how long it currently runs. Attend a hearing if one is set.'
           ],
-          fees: '$0 (the legislature removed filing fees for § 13-911 petitions)',
-          feeWaiver: 'Not required',
+          // null: the old value asserted "the legislature removed filing fees"
+          // — an affirmative claim about Arizona law that Wave 0 does not make
+          // and no recorded source supports. Blocked by an open question.
+          fees: null,
+          feeWaiver: null,
           courtContact: 'Clerk of the court that handled the original case'
         }
       },
@@ -422,8 +731,79 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   NY: {
     code: 'NY',
     name: 'New York',
-    lastReviewed: '2026-07-14',
-    verificationStatus: 'statute_cited',
+    lastReviewed: '2026-07-15',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
+    terminology:
+      'New York SEALS; it has no general adult expungement. (The one exception is cannabis: MRTA expunged qualifying marijuana convictions automatically in 2021.) There are two conviction pathways. The CLEAN SLATE ACT (CPL § 160.57) seals eligible convictions AUTOMATICALLY, with no petition. PETITION SEALING (CPL § 160.59) is a discretionary motion you file yourself. Non-convictions seal automatically at disposition under CPL §§ 160.50/.55 and always have. The crucial implementation fact: Clean Slate is law, but eligible does NOT mean sealed yet — the court system has until November 16, 2027 to work through the backlog of pre-existing records, so an eligible conviction may still be showing up on background checks today.',
+    keyDates: [
+      {
+        label: 'Clean Slate Act (CPL § 160.57) effective',
+        date: '2024-11-16',
+        kind: 'effective',
+        note: null,
+      },
+      {
+        label: 'OCA deadline to seal the pre-existing backlog',
+        date: '2027-11-16',
+        kind: 'deadline',
+        note: 'Until this date the rollout is incomplete: many eligible old records are NOT yet sealed. "Eligible" and "sealed" are different states and the copy must not blur them.',
+      },
+      {
+        label: 'Petition sealing (CPL § 160.59) enacted',
+        date: '2017',
+        kind: 'effective',
+        note: 'Wave 0 gives the year only.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is there a filing fee for the CPL § 160.59 sealing motion? Wave 0 says "No filing fee" but flags it for verification.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the supervision condition for Clean Slate sealing: must the person be off probation/parole entirely? Wave 0 flags this. The whole supervision_status branch and the ineligible_supervision result rest on it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The Clean Slate clock resets on a new conviction. This has no representation in the tree — the date nodes only ask for one date and cannot model a reset.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions treated for sealing? Not covered in Wave 0 — add to call sheet. The tree hedges these rather than guess (see unknown_deferred).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the current Clean Slate rollout status? Wave 0 names this as the call question for nycourts.gov — how far through the backlog is OCA, and can a person find out whether their own record has been reached?',
+        blocksFields: [],
+      },
+      {
+        question:
+          'MRTA cannabis expungement (2021) is a real New York remedy that Wave 0 documents, but it is not encoded as a branch and is not surfaced anywhere in the tree.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the filing steps but appears nowhere in Wave 0 — it entered the rules from outside the research package. Confirm with a court clerk.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.Y. Crim. Proc. Law § 160.57 (Clean Slate Act; automatic sealing)', url: null, retrievedOn: null },
+      { id: 'N.Y. Crim. Proc. Law § 160.59 (petition sealing)', url: null, retrievedOn: null },
+      { id: 'N.Y. Crim. Proc. Law § 160.50 (automatic sealing of non-convictions)', url: null, retrievedOn: null },
+      { id: 'N.Y. Crim. Proc. Law § 160.55 (sealing of non-criminal dispositions)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 130 (sex offences; Clean Slate exclusion)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 263 (sexual performance by a child; Clean Slate exclusion)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law art. 220 (Class A drug felonies — ARE Clean Slate eligible)', url: null, retrievedOn: null },
+      { id: 'N.Y. Penal Law § 70.02 (violent felonies; § 160.59 exclusion)', url: null, retrievedOn: null },
+      { id: 'Marijuana Regulation and Taxation Act (MRTA, 2021; cannabis expungement)', url: null, retrievedOn: null },
+    ],
     rules: {
       startNode: 'disposition',
       nodes: {
@@ -460,15 +840,35 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Felony', value: 'felony', next: 'clean_slate_date_felony' }
           ]
         },
+        // Clean Slate periods. The anchor carries the "whichever is later"
+        // rule, which the number alone cannot: sentencing and release can be
+        // years apart. The clock-reset-on-new-conviction rule has no
+        // representation here at all — see open questions.
         clean_slate_date_misd: {
           type: 'date',
           text: 'When were you sentenced, or released from incarceration for this conviction (whichever is later)? Note: a new conviction during the waiting period resets the clock.',
-          validation: { yearsRequired: 3, nextPass: 'eligible_clean_slate', nextFail: 'waiting_clean_slate_misd' }
+          validation: {
+            period: {
+              amount: 3,
+              unit: 'years',
+              anchor: 'sentencing, or release from incarceration — whichever is later'
+            },
+            nextPass: 'eligible_clean_slate',
+            nextFail: 'waiting_clean_slate_misd'
+          }
         },
         clean_slate_date_felony: {
           type: 'date',
           text: 'When were you sentenced, or released from incarceration for this conviction (whichever is later)? Note: a new conviction during the waiting period resets the clock.',
-          validation: { yearsRequired: 8, nextPass: 'eligible_clean_slate', nextFail: 'waiting_clean_slate_felony' }
+          validation: {
+            period: {
+              amount: 8,
+              unit: 'years',
+              anchor: 'sentencing, or release from incarceration — whichever is later'
+            },
+            nextPass: 'eligible_clean_slate',
+            nextFail: 'waiting_clean_slate_felony'
+          }
         }
       },
       results: {
@@ -557,10 +957,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Confirm you meet the limits: no more than 2 lifetime NY convictions, at most 1 felony, and 10+ years since sentencing or release (whichever is later).',
             'Obtain a Certificate of Disposition from the court where you were sentenced (one per case).',
             'Complete the Sealing Application (Notice of Motion and Affidavit in Support) and sign before a notary.',
-            'Serve the District Attorney in each county of conviction, complete the Affidavit of Service, and file everything with the sentencing court.'
+            'Serve the District Attorney in each county of conviction, complete the Affidavit of Service, and file everything with the sentencing court.',
+            // Moved out of `fees`: that one string held a flagged claim (the $0
+            // motion fee) and an unflagged procedural cost. Nulling the field
+            // would have destroyed the second along with the first, so the
+            // Certificate of Disposition cost lives here, where it belongs.
+            // It is not in Wave 0 either — see open questions.
+            'Budget for the Certificate of Disposition itself: reported as $5 per case outside New York City and $10 within it. Confirm the current cost with the clerk.'
           ],
-          fees: '$0 to file the motion. Certificate of Disposition costs $5 (outside NYC) or $10 (within NYC) per case.',
-          feeWaiver: 'Not required for the motion itself',
+          // null: Wave 0 flags the "no filing fee" claim for the § 160.59
+          // motion. Blocked by an open question.
+          fees: null,
+          // Dependent claim: "not required for the motion itself" followed from
+          // the motion being free. Nulls with it.
+          feeWaiver: null,
           courtContact: 'Sentencing Court Clerk (Supreme / County / City / Town Court)'
         }
       },
@@ -584,8 +994,71 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   TX: {
     code: 'TX',
     name: 'Texas',
-    lastReviewed: '2026-07-14',
-    verificationStatus: 'statute_cited',
+    lastReviewed: '2026-07-15',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
+    terminology:
+      'Texas has two remedies and they are not the same thing. EXPUNCTION (Code of Criminal Procedure Ch. 55A — recodified from Ch. 55 effective Jan 1, 2025, so any form or guide still citing Ch. 55 is stale) DESTROYS the records: you can lawfully deny the arrest ever happened. An ORDER OF NONDISCLOSURE (Government Code Ch. 411, Subch. E-1) only SEALS: the record survives and stays visible to law enforcement and some licensing bodies. The bright line that governs almost every Texas screening: CONVICTIONS ARE ESSENTIALLY NEVER EXPUNGABLE (a pardon aside). If you were convicted, nondisclosure is the only route, and only for certain offences. Nondisclosure is not one rule but a lattice of per-section rules under § 411.0725 and its neighbours.',
+    keyDates: [
+      {
+        label: 'Expunction recodified from CCP Ch. 55 to Ch. 55A',
+        date: '2025-01-01',
+        kind: 'effective',
+        note: 'HB 4504. Substance largely carried over. Most of the internet — including older forms and guides — still cites Ch. 55; every citation here reads 55A deliberately.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What does an expunction actually cost? Wave 0 gives "civil filing fee, county-set, ~$280-$400 range commonly cited, plus per-agency service costs" — "commonly cited" is not a source. The encoded rules said $300-$450, which does not even match. Ask a Harris County district clerk for both fee stacks.',
+        blocksFields: ['resources.remedies.expunction.fees'],
+      },
+      {
+        question:
+          'What does an Order of Nondisclosure cost? Wave 0 gives "civil filing fee + $28 statutory fee"; the encoded rules said "approximately $280 to $350" and never mentioned the $28 statutory fee at all. Ask a Harris County district clerk.',
+        blocksFields: ['resources.remedies.nondisclosure.fees'],
+      },
+      {
+        question:
+          'CONFLICT: what is the waiting period under Gov\'t Code § 411.0735 for certain misdemeanour convictions? Wave 0 records that sources split between 2 and 5 years and says to encode from the statute. Because the sources disagree, no period is encoded — this path stays prose-only until the statute settles it, then it gets a real branch.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Does CCP Ch. 55A create AUTOMATIC expunction at acquittal — the trial court ordering it then and there? Wave 0 flags this as new and unverified. It matters directly: if true, an acquitted person may already have relief and should confirm it happened rather than petition. The eligible_expunction message now says both.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Which dismissals qualify for expunction without community supervision, and what are the "certain automatic-dismissal pathways" Wave 0 flags?',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Map the correct DWI nondisclosure section numbers (§§ 411.0726 / .0731 / .0736). Wave 0 gives the rule — first-offence DWI, BAC under 0.15, no accident involving another person, no CDL: 2 years with full-term ignition interlock, 5 years without — but flags the section mapping. Neither the rule nor the interlock condition is encoded as a branch.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The 180-day Class C expunction wait cannot be encoded yet: the screening form offers only misdemeanour/felony/infraction and has no way to say "Class C". A Class C arrestee currently gets the Class A/B 1-year rule and may be told to wait when they are already eligible. Needs a form value before it can be a branch.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the TexasLawHelp expunction kit URL and whether the county requires its own form. The current formUrl points at the site root because the deep link was never verified.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: null, retrievedOn: null },
+      { id: 'Tex. Code Crim. Proc. art. 55A.002 (expunction after acquittal)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code ch. 411, subch. E-1 (orders of nondisclosure)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code § 411.072 (deferred adjudication nondisclosure, certain misdemeanours)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code § 411.0725 (deferred adjudication nondisclosure)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period in conflict)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code §§ 411.0726, 411.0731, 411.0736 (DWI nondisclosure paths)', url: null, retrievedOn: null },
+      { id: 'HB 4504 (recodification of ch. 55 to ch. 55A)', url: null, retrievedOn: null },
+    ],
     rules: {
       startNode: 'disposition_type',
       nodes: {
@@ -612,11 +1085,22 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Felony', value: 'felony', next: 'arrest_date_tx_felony' }
           ]
         },
+        // Class A/B misdemeanours: 1 year from arrest.
+        //
+        // Class C is only 180 days, and `unit: 'days'` can now express that —
+        // but the branch still cannot exist, because the screening form has no
+        // way to SAY "Class C" (its offence classes are misdemeanour / felony /
+        // infraction / unknown). Encoding a Class C option here would create an
+        // option value the UI can never produce. So a Class C arrestee lands
+        // here and gets the 1-year rule: they may be told to wait when they are
+        // already eligible. The waiting message discloses the 180-day rule so
+        // nobody is misled, and an open question holds the gap until the form
+        // grows the value.
         arrest_date_tx_misd: {
           type: 'date',
           text: 'When was the arrest date?',
           validation: {
-            yearsRequired: 1, // Class A/B: 1 yr. Class C is only 180 days — see waiting message. Immediate if prosecutor certifies no charges.
+            period: { amount: 1, unit: 'years', anchor: 'date of arrest (Class A/B misdemeanour)' },
             nextPass: 'eligible_expunction',
             nextFail: 'waiting_period_tx_dismissal'
           }
@@ -625,7 +1109,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'When was the arrest date?',
           validation: {
-            yearsRequired: 3,
+            period: { amount: 3, unit: 'years', anchor: 'date of arrest (felony)' },
             nextPass: 'eligible_expunction',
             nextFail: 'waiting_period_tx_dismissal'
           }
@@ -642,7 +1126,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'When did you complete your deferred adjudication probation?',
           validation: {
-            yearsRequired: 5,
+            period: {
+              amount: 5,
+              unit: 'years',
+              anchor: 'discharge and dismissal from deferred adjudication'
+            },
             nextPass: 'eligible_nondisclosure_felony',
             nextFail: 'waiting_period_tx_felony'
           }
@@ -659,14 +1147,27 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_expunction: {
           status: 'eligible',
           title: 'Potential Expunction Eligible',
-          message: 'Since your case ended in acquittal, dismissal, or was never charged, you appear potentially eligible for a complete Expunction under Texas Code of Criminal Procedure Chapter 55A (which replaced Chapter 55 effective January 1, 2025). An expunction destroys the records, and you can generally deny the arrest ever occurred.',
+          // Wave 0 flags that 55A may create AUTOMATIC expunction at acquittal,
+          // ordered by the trial court on the spot. If that is right, telling an
+          // acquitted person to go and petition is wrong advice — they may
+          // already have relief. Neither possibility is asserted; both are said.
+          message: 'Since your case ended in acquittal, dismissal, or was never charged, you appear potentially eligible for a complete Expunction under Texas Code of Criminal Procedure Chapter 55A (which replaced Chapter 55 effective January 1, 2025). An expunction destroys the records, and you can generally deny the arrest ever occurred. If you were ACQUITTED, check before you file: Chapter 55A may direct the trial court to order the expunction at the time of the acquittal, which would mean it has already been done. Ask the clerk of the court that tried the case whether an expunction order was entered — we are still verifying how far this reaches.',
           remedy: 'Petition for Expunction (CCP Ch. 55A)',
           citation: 'Texas Code of Criminal Procedure Chapter 55A (e.g., Art. 55A.002 for acquittals)'
         },
         eligible_nondisclosure_misdemeanor: {
           status: 'eligible',
           title: 'Potential Nondisclosure Eligible',
-          message: 'Since you completed Deferred Adjudication for a misdemeanor, you appear potentially eligible to petition for an Order of Nondisclosure — immediately upon discharge and dismissal for many misdemeanors, or after a 2-year wait for certain offenses (e.g., under Penal Code chapters covering assaultive, weapons, and public-order offenses). Some offense types (like family violence) are excluded.',
+          // Wave 0 § 411.0725: most misdemeanours immediate on discharge;
+          // misdemeanours under Penal Code chs. 20-22, 25, 42, 43, 46, 71 -> 5
+          // yrs. Neither figure is flagged, so both stand. The old text said "a
+          // 2-year wait", which matches no figure in the package at all.
+          //
+          // The chapters are named by NUMBER, exactly as Wave 0 gives them.
+          // Glossing them ("assaultive, weapons, public-order") means naming
+          // Texas law the package never named — that is a rule 1 gap-fill, and
+          // it is how the old text drifted in the first place.
+          message: 'Since you completed Deferred Adjudication for a misdemeanor, you appear potentially eligible to petition for an Order of Nondisclosure — immediately upon discharge and dismissal for many misdemeanors. Misdemeanors under Texas Penal Code chapters 20, 21, 22, 25, 42, 43, 46, or 71 instead require a 5-year wait after discharge and dismissal, and some offense types (such as family violence) are excluded outright. Which chapter your offense sits under decides the answer, so confirm that on your court papers before relying on this.',
           remedy: 'Order of Nondisclosure',
           citation: 'Texas Government Code § 411.072 / § 411.0725'
         },
@@ -694,7 +1195,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_conviction: {
           status: 'ineligible',
           title: 'Conviction Generally Ineligible',
-          message: 'In Texas, standard convictions (found guilty and sentenced to jail, prison, or regular community supervision) are generally not eligible for expunction. Limited nondisclosure paths exist for certain first-time misdemeanor convictions with completed sentences (e.g., Gov\'t Code §§ 411.073, 411.0735) and certain first-time DWI convictions (§§ 411.0731, 411.0736) — these are narrow, so consult legal aid. Otherwise, a pardon is the remaining remedy.',
+          // The § 411.0735 period is NOT stated: Wave 0 records that sources
+          // split between 2 and 5 years. A conflicting period is exactly the
+          // case where the value stays out — prose and an open question hold
+          // the place until the statute settles it, then it gets a real branch.
+          message: 'In Texas, standard convictions (found guilty and sentenced to jail, prison, or regular community supervision) are generally not eligible for expunction. Limited nondisclosure paths do exist for certain first-time misdemeanor convictions with completed sentences (Gov\'t Code §§ 411.073, 411.0735) and for certain first-time DWI convictions (§§ 411.0731, 411.0736). Those paths carry a waiting period after you complete your sentence, and we are not going to quote you a number: our sources disagree on how long § 411.0735 requires, and we would rather tell you that than pick one. A legal aid attorney or the sentencing court clerk can give you the current period. Otherwise, a pardon is the remaining remedy.',
           remedy: 'Limited Nondisclosure (certain misdemeanors) / Governor\'s Pardon',
           citation: 'Texas Gov\'t Code §§ 411.073–411.0736; CCP Chapter 55A'
         }
@@ -715,8 +1220,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'File the petition in a district court in the county where the arrest occurred.',
             'Attend the scheduled hearing to obtain the Expunction Order, then confirm agencies comply with it.'
           ],
-          // TODO(phone-verify): fees vary significantly by county.
-          fees: 'Typically $300 to $450 (filing fee plus agency notification costs); varies by county — verify with the district clerk.',
+          // null: Wave 0 flags this fee and gives "~$280-$400 commonly cited"
+          // — and the encoded $300-$450 did not even match that. "Commonly
+          // cited" is not a source. Blocked by an open question.
+          fees: null,
+          // NOT nulled: an independent waiver mechanism, not a claim derived
+          // from the fee amount.
           feeWaiver: 'Available using the Statement of Inability to Afford Payment of Court Costs.',
           courtContact: 'County District Court Clerk'
         },
@@ -730,8 +1239,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Fill out the specific Nondisclosure form for your offense category (the Office of Court Administration publishes them by section).',
             'File with the court that placed you on deferred adjudication.'
           ],
-          // TODO(phone-verify): fee varies by county.
-          fees: 'Approximately $280 to $350 in court fees; varies by county — verify with the clerk.',
+          // null: Wave 0 gives "civil filing fee + $28 statutory fee" and flags
+          // it. The encoded "$280 to $350" never mentioned the $28 statutory
+          // fee at all. Blocked by an open question.
+          fees: null,
           feeWaiver: 'Available using the Statement of Inability to Afford Payment of Court Costs.',
           courtContact: 'Sentencing Court Clerk'
         }

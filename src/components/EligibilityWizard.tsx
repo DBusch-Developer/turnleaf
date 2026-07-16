@@ -44,6 +44,31 @@ const DISPOSITION_VALUES: Record<ConvictionRecord['disposition'], string[]> = {
 /** Result key every tree exposes for "we cannot screen this yet". */
 const HEDGE = 'unknown_disposition';
 
+/**
+ * How much time has passed since `from`, in `unit`. null if the date is unusable.
+ *
+ * Months and years are counted as calendar steps, not as 30- or 365.25-day
+ * approximations: a 2-year period that starts on Feb 29 ends on a real
+ * calendar date, and someone sitting one day either side of their eligibility
+ * date deserves the same answer a clerk would give them.
+ */
+function elapsedSince(from: string, unit: 'days' | 'months' | 'years'): number | null {
+  const start = new Date(from);
+  if (isNaN(start.getTime())) return null;
+
+  const now = new Date();
+  if (unit === 'days') {
+    return Math.floor((now.getTime() - start.getTime()) / 86_400_000);
+  }
+
+  let months =
+    (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+  // Not a full month until the day-of-month is reached.
+  if (now.getDate() < start.getDate()) months--;
+
+  return unit === 'months' ? months : Math.floor(months / 12);
+}
+
 /** The value `node` actually offers for this disposition, or null if none. */
 function resolveDisposition(
   node: RuleNode,
@@ -165,18 +190,28 @@ export default function EligibilityWizard({
         currentNodeId === 'sentence_date_tx_felony_deferred' ||
         currentNodeId === 'sentence_date_tx_dismissal'
       ) {
-        const yearsRequired = node.validation?.yearsRequired || 1;
-        const dispDate = new Date(record.disposition_date);
-        const now = new Date();
-        const diffTime = Math.abs(now.getTime() - dispDate.getTime());
-        const diffYears = diffTime / (1000 * 60 * 60 * 24 * 365.25);
+        const v = node.validation;
 
-        if (isNaN(diffYears)) {
-          currentNodeId = node.validation?.nextFail || 'complex';
-        } else if (diffYears >= yearsRequired) {
-          currentNodeId = node.validation?.nextPass || 'complex';
+        // No rule on a date node is a data bug, not a reason to invent one.
+        // This used to read `node.validation?.yearsRequired || 1`, which turned
+        // a missing period into a confident one-year answer.
+        if (!v) {
+          currentNodeId = HEDGE;
+          continue;
+        }
+
+        // A period we do not know cannot be computed against. The type makes
+        // this branch the only thing a null period can do.
+        if ('nextUnknown' in v) {
+          currentNodeId = v.nextUnknown;
+          continue;
+        }
+
+        const elapsed = elapsedSince(record.disposition_date, v.period.unit);
+        if (elapsed === null) {
+          currentNodeId = v.nextFail;
         } else {
-          currentNodeId = node.validation?.nextFail || 'complex';
+          currentNodeId = elapsed >= v.period.amount ? v.nextPass : v.nextFail;
         }
         continue;
       }

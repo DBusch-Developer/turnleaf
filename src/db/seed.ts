@@ -41,31 +41,72 @@ async function seed() {
       rules JSONB NOT NULL,
       resources JSONB NOT NULL,
       last_reviewed DATE NOT NULL DEFAULT CURRENT_DATE,
-      verification_status VARCHAR(20) NOT NULL CHECK (verification_status IN ('statute_cited', 'phone_verified', 'pending'))
+      verification_status VARCHAR(20) NOT NULL CHECK (verification_status IN ('draft', 'statute_cited', 'phone_verified'))
     );
   `;
   await sql`CREATE INDEX IF NOT EXISTS idx_states_code ON states (code);`;
 
+  // Migration for databases created before the draft/provenance columns.
+  //
+  // CREATE TABLE IF NOT EXISTS does nothing to an existing table, so a live
+  // database keeps its old CHECK constraint and would reject every 'draft'
+  // row this seeder now writes. Each step is idempotent, so fresh and existing
+  // databases converge here.
+  console.log('Applying schema migrations...');
+
+  // Order matters: no row may hold a value the new constraint rejects, or the
+  // ADD CONSTRAINT below fails on the way in. 'pending' is the one being retired.
+  await sql`
+    UPDATE states SET verification_status = 'draft'
+    WHERE verification_status NOT IN ('draft', 'statute_cited', 'phone_verified');
+  `;
+  await sql`ALTER TABLE states DROP CONSTRAINT IF EXISTS states_verification_status_check;`;
+  await sql`
+    ALTER TABLE states ADD CONSTRAINT states_verification_status_check
+    CHECK (verification_status IN ('draft', 'statute_cited', 'phone_verified'));
+  `;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS source_package TEXT;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS terminology TEXT;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS key_dates JSONB NOT NULL DEFAULT '[]'::jsonb;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS open_questions JSONB NOT NULL DEFAULT '[]'::jsonb;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS sources JSONB NOT NULL DEFAULT '[]'::jsonb;`;
+
   console.log('Seeding states database...');
   for (const [code, config] of Object.entries(fallbackRules)) {
-    console.log(`Upserting ${config.name} (${code})...`);
+    // Rule 4: seeding only ever writes what the source of truth says, and the
+    // source of truth only ever says 'draft' until a human changes it by hand
+    // after a verification call. Nothing here promotes a state.
+    console.log(`Upserting ${config.name} (${code}) [${config.verificationStatus}]...`);
     await sql`
-      INSERT INTO states (code, name, rules, resources, last_reviewed, verification_status)
+      INSERT INTO states (
+        code, name, rules, resources, last_reviewed, verification_status,
+        source_package, terminology, key_dates, open_questions, sources
+      )
       VALUES (
-        ${code}, 
-        ${config.name}, 
-        ${config.rules}, 
-        ${config.resources}, 
-        ${config.lastReviewed}, 
-        ${config.verificationStatus}
+        ${code},
+        ${config.name},
+        ${config.rules},
+        ${config.resources},
+        ${config.lastReviewed},
+        ${config.verificationStatus},
+        ${config.sourcePackage},
+        ${config.terminology},
+        ${JSON.stringify(config.keyDates)},
+        ${JSON.stringify(config.openQuestions)},
+        ${JSON.stringify(config.sources)}
       )
       ON CONFLICT (code) DO UPDATE
-      SET 
+      SET
         name = EXCLUDED.name,
         rules = EXCLUDED.rules,
         resources = EXCLUDED.resources,
         last_reviewed = EXCLUDED.last_reviewed,
-        verification_status = EXCLUDED.verification_status;
+        verification_status = EXCLUDED.verification_status,
+        source_package = EXCLUDED.source_package,
+        terminology = EXCLUDED.terminology,
+        key_dates = EXCLUDED.key_dates,
+        open_questions = EXCLUDED.open_questions,
+        sources = EXCLUDED.sources;
     `;
   }
 

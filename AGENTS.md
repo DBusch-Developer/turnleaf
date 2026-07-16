@@ -81,3 +81,20 @@ Do not replace a stack element without an approved ADR (`docs/decisions/`).
 3. If a package doesn't state a value, the field is `null`. No defaults, no "typical" values, no inference.
 4. Every state seeds with `verification_status: "draft"`. Nothing is ever written as `"phone_verified"` or `"statute_cited"` — only Diana flips those manually after verification calls.
 5. Every state gets a `sources` array containing the statute citations from its package.
+
+### What the machine holds, and what it doesn't
+
+`npm run validate` enforces some of these rules and cannot enforce others. Know which is which before you trust a green run.
+
+**Machine-held** — `validateState.ts` fails the build on these:
+- Rule 2 and rule 3's null handling: a null field with no open question accounting for it (`unblocked-null`), and an open question standing against a field that still holds a value.
+- Empty strings standing in for unknown — unknown is spelled `null`, and needs a question.
+- Rule 1's provenance: `sourcePackage` must point under `research/waves/`.
+- Rule 5: `sources` must be present and non-empty.
+- Structural integrity: every reference resolves, every node is reachable, no cycles.
+
+**Human-held** — no automated check exists or can exist:
+- **Date and number precision against the package.** The validator checks that `2021-01-01` is a well-formed date; it cannot know Wave 0 said only "2021". It has never read the package and never will. Padding a year into a day passes every check we have.
+- Whether a citation is real, whether a waiting period is accurate, whether a rule matches the statute.
+
+**The reviewer checks precision on every data diff.** For any number, date, or period in a change set, ask: does the package actually say this, at this precision? That rule has no net under it — you are the net.

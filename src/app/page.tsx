@@ -22,7 +22,10 @@ export default function Home() {
   const [selectedStateCode, setSelectedStateCode] = useState<string | null>(null);
   const [stateConfig, setStateConfig] = useState<StateRuleConfig | null>(null);
   const [comingSoon, setComingSoon] = useState<ComingSoonConfig | null>(null);
-  const [records, setRecords] = useState<ConvictionRecord[]>([]);
+  // NOTE: the screened `records` state was removed with ResultsDisplay's
+  // hardcoded waiting-period table — nothing reads it now. When the engine
+  // starts reporting which period decided a result, the display will need the
+  // record's date again and this comes back.
   const [prepopulatedRecords, setPrepopulatedRecords] = useState<ConvictionRecord[]>([]);
   const [results, setResults] = useState<any[] | null>(null);
   const [showDemoPanel, setShowDemoPanel] = useState(false);
@@ -63,13 +66,11 @@ export default function Home() {
   // Load a Checkr mock report (FR-22)
   const handleLoadMockReport = (mockRecords: ConvictionRecord[], stateCode: string) => {
     setPrepopulatedRecords(mockRecords);
-    setRecords(mockRecords);
     setSelectedStateCode(stateCode);
     setResults(null); // Clear previous results
   };
 
-  const handleScreeningComplete = (screeningResults: any[], finalRecords: ConvictionRecord[]) => {
-    setRecords(finalRecords);
+  const handleScreeningComplete = (screeningResults: any[]) => {
     setResults(screeningResults);
   };
 
@@ -77,7 +78,6 @@ export default function Home() {
     setSelectedStateCode(null);
     setStateConfig(null);
     setComingSoon(null);
-    setRecords([]);
     setPrepopulatedRecords([]);
     setResults(null);
     setShowSelector(false);
@@ -236,7 +236,6 @@ export default function Home() {
               <ResultsDisplay
                 stateConfig={stateConfig}
                 results={results}
-                records={records}
                 onReset={handleReset}
               />
             )}

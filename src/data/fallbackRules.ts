@@ -541,8 +541,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   AZ: {
     code: 'AZ',
     name: 'Arizona',
+    // Statute-verified by Diana against azleg.gov on 2026-07-15: §§ 13-905,
+    // 13-911 and 36-2862 read in full. See sources[].retrievedOn — that field
+    // records WHICH statutes were read, which is more than one state-level date
+    // can say. NOT phone_verified: the sealing court filing fee, the DPS
+    // investigation fee amount, the forms and the processing times are all
+    // still counter questions.
     lastReviewed: '2026-07-15',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
       'Arizona has three separate remedies and the difference between them matters. A SET ASIDE (ARS § 13-905) vacates the judgment of guilt and releases you from most penalties, but the conviction stays on the public record with a "set aside" notation — it is not an expungement and does not hide anything. SEALING (ARS § 13-911, in effect since Jan 1, 2023) is the stronger remedy: it hides the case records from public view, and you may deny the record in most contexts. Only marijuana relief under ARS § 36-2862 (Prop 207) is a true EXPUNGEMENT. Arizona has no automatic relief of any kind — every remedy requires a petition, and nothing arrives on its own.',
@@ -564,38 +570,33 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     ],
     openQuestions: [
       {
+        // NARROWED 7/16. The statute check answered the shape and left the
+        // amounts. § 13-911(H) confirms a DPS investigation fee EXISTS but sets
+        // its amount by the DPS director, not in statute. The WAIVER rule is
+        // answered, so feeWaiver is filled and drops out of blocksFields.
         question:
-          'Is there a filing fee to apply for a set-aside under ARS § 13-905, and if there is, is a waiver or deferral available? The Maricopa County packet appears to show none, but that is one county and it is not confirmed. Ask both halves: the waiver answer is only knowable once the fee is.',
-        blocksFields: ['resources.remedies.set_aside.fees', 'resources.remedies.set_aside.feeWaiver'],
+          'Two amounts for the § 13-911 sealing petition. (a) What does the DPS investigation fee cost? § 13-911(H) confirms it exists but leaves the amount to the DPS director, so it is not in the statute — only DPS or a clerk can say. (b) Is there a court filing fee on top, and how much? § 13-911 does not mention one, which is not the same as there being none. The waiver rule is already answered by § 13-911(H).',
+        blocksFields: ['resources.remedies.sealing.fees'],
       },
       {
         question:
-          'Is there a filing fee to petition for sealing under ARS § 13-911, and if there is, is a waiver or deferral available? The encoded rules claimed "the legislature removed filing fees", but Wave 0 does not state this and no source is recorded for it.',
-        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the § 13-911 waiting periods against the current statute text: class 2-3 felonies 10 yrs, class 4-6 felonies 5 yrs, class 1 misdemeanors 3 yrs, class 2-3 misdemeanors 2 yrs. Wave 0 flags these as "encode from statute text" rather than as verified.',
+          'Is a DUI misdemeanor eligible for a set-aside, and is it excluded from § 13-911 sealing? DUI does not appear among the § 13-911(O) items recorded on 7/15 — but that list was given as "including", not as exhaustive, so its absence is not an answer. The tree still hedges DUI rather than infer from a partial list.',
         blocksFields: [],
       },
       {
+        // RESOLVED 7/16 by the statute check: the lists are NOT identical, and
+        // the tree now has two gates. What is left is which side of the line a
+        // particular offence falls on, which is a case-file question.
         question:
-          'How does the prior-felony bump change the § 13-911 waiting periods? Wave 0 notes a bump exists but does not give its size, and the decision tree cannot express it at all.',
+          'For a specific case, which exclusion list does the offense actually fall on? § 13-905(P) (set-aside) covers dangerous, registrable, sexual-motivation and victim-under-15 offenses. § 13-911(O) (sealing) adds serious/violent/aggravated offenses under § 13-706, dangerous crimes against children, sex trafficking, deadly-weapon or serious-injury elements, and the chapter 14/35.1 felony classes. The tree asks a person to self-assess both. Whether an offense was found "dangerous", or carried a sexual-motivation finding, is a legal finding in the case file — worth asking a clerk how someone reads that off their own paperwork.',
         blocksFields: [],
       },
       {
+        // SOFTENED 7/16: the statute half is answered. § 13-911(A)(2)-(3) sets
+        // no waiting period, so the tree says so. What a counter does with a
+        // same-week dismissal is a different question, and it is the one left.
         question:
-          'What is the prosecutor/victim response window on a § 13-911 petition? The filing steps currently tell people the court must wait 60 days, which is unverified.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Is a DUI misdemeanor eligible for a set-aside, and is it excluded from § 13-911 sealing? Resolve from the § 13-911 text.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Is § 13-911 sealing of a non-conviction really available immediately? The tree currently tells dismissed/acquitted users there is no waiting period.',
+          'Statute confirmed: § 13-911(A)(2)-(3) sets NO waiting period for dismissed, acquitted or never-charged cases, and the tree now tells people they can file now. What remains is clerk practice — will a counter accept a petition on a case dismissed last week, and does the § 13-911(H) fee waiver get applied without a fight?',
         blocksFields: [],
       },
       {
@@ -604,8 +605,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: [],
       },
       {
+        // This question went STALE and I did not notice: it still said "not
+        // encoded as a branch" after I had encoded the branch. A question
+        // describing a gap that no longer exists is worse than no question — it
+        // sends a call after an answer nobody needs.
         question:
-          'Marijuana expungement under ARS § 36-2862 (Prop 207) is a real Arizona remedy — petition anytime, free, mandatory grant if in scope — but it is not encoded as a branch, only mentioned in one message. It needs its own path.',
+          'Marijuana expungement (ARS § 36-2862) is encoded as its own branch and asked before the set-aside/sealing ladder. Statute checked 7/15. What is left is practice, not law: which form does the court want, how long does a § 36-2862 petition take, and does the "no fee" hold at the counter?',
         blocksFields: [],
       },
       {
@@ -623,12 +628,22 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: [],
       },
     ],
+    // Three of these were READ, by a person, on 2026-07-15 — the first sources
+    // in the project with a retrievedOn. That date is what separates a citation
+    // we are relying on from one we merely wrote down.
+    //
+    // url stays null deliberately: the source given was "azleg.gov". The
+    // canonical deep link is constructible, but constructing it means writing a
+    // URL nobody actually opened, which is the same species as padding "2021"
+    // into "2021-01-01". If the deep links were used, paste them and they go in.
     sources: [
-      { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance)', url: null, retrievedOn: null },
-      { id: 'Ariz. Rev. Stat. § 13-911 (record sealing)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance; § 13-905(B) no filing fee; (K),(L) CSC timing; (O) firearms; (P) exclusions)', url: null, retrievedOn: '2026-07-15' },
+      { id: 'Ariz. Rev. Stat. § 13-911 (record sealing; (A)(2)-(3) non-convictions; (D) 60-day rule; (E) clock; (F) prior-felony +5; (G) payment at filing; (H) DPS fee and waiver; (L) 3-year denial bar; (O) exclusions)', url: null, retrievedOn: '2026-07-15' },
+      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: '2026-07-15' },
       { id: 'Ariz. Rev. Stat. § 13-3821 (registrable offenses; § 13-905 exclusion)', url: null, retrievedOn: null },
-      { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; § 13-911 exclusion)', url: null, retrievedOn: null },
-      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-705 (dangerous crimes against children; § 13-911(O) exclusion)', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; firearms exception at § 13-905(O))', url: null, retrievedOn: null },
+      { id: 'Ariz. Rev. Stat. § 13-1307 (sex trafficking; § 13-911(O) exclusion)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -638,7 +653,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_offense' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_setaside_az' },
             { label: 'Dismissed / Acquitted / Arrested but never charged', value: 'dismissed', next: 'eligible_seal_dismissed_az' },
             // Explicit, so a deferral does NOT widen into the 'dismissed'
             // option. This label names no diversion track, and Wave 0
@@ -647,9 +662,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_offense: {
+        // SPLIT 7/16. These were ONE question applying one answer to both
+        // remedies, and the lists are not the same list:
+        //
+        //   § 13-905(P) — SET-ASIDE exclusions: dangerous, registrable,
+        //     sexual-motivation, victim under 15.
+        //   § 13-911(O) — SEALING exclusions: all of the above PLUS serious /
+        //     violent / aggravated offences (§ 13-706), dangerous crimes against
+        //     children (§ 13-705), sex trafficking (§ 13-1307), deadly-weapon or
+        //     serious-injury elements, and the chapter 14 / 35.1 felony classes.
+        //
+        // So § 13-911(O) is the wider list, and a person can be SEALING-excluded
+        // while remaining SET-ASIDE eligible. The merged question denied both to
+        // that person — it took away a remedy the statute gives them. Two gates
+        // now, each citing its own subsection, with a result for the gap.
+        excluded_setaside_az: {
           type: 'boolean',
-          text: 'Was the offense a dangerous offense (involving a deadly weapon, dangerous instrument, or serious physical injury), an offense requiring sex offender registration, an offense with a sexual motivation finding, or a crime against a victim under 15?',
+          text: 'Was the offense a dangerous offense (one involving a deadly weapon, a dangerous instrument, or serious physical injury), an offense requiring sex offender registration, an offense with a sexual motivation finding, or a crime against a victim under 15?',
           yes: 'ineligible_serious',
           no: 'marijuana_offense'
         },
@@ -677,11 +706,40 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           yes: 'complex_dui_az',
           no: 'sentence_completed'
         },
+        // CORRECTED 7/16 against § 13-911(E) and (G) (Diana, azleg.gov, 7/15).
+        //
+        // The old question asked whether the sentence was complete "including
+        // payment of all fines, fees, and victim restitution", and the old
+        // anchor ran the clock from that. Both were wrong. § 13-911(E) runs the
+        // clock from completion of the NONMONETARY conditions plus discharge.
+        // § 13-911(G) makes payment a condition of FILING, not of the clock.
+        //
+        // So an unpaid balance never delayed anyone's clock — the encoding just
+        // said it did, and told people to wait who did not have to. Wrong in the
+        // safe direction, and still wrong.
         sentence_completed: {
           type: 'boolean',
-          text: 'Have you completed all terms of your sentence and been discharged (including probation, jail/prison time, and payment of all fines, fees, and victim restitution)?',
-          yes: 'offense_level',
-          no: 'ineligible_restitution'
+          text: 'Have you finished the NON-MONEY parts of your sentence and been discharged — probation, parole, any jail or prison time, classes, community service? (Money you still owe does not matter for this question. Unpaid fines, fees and restitution do NOT delay your waiting period; they only have to be paid by the time you file.)',
+          yes: 'excluded_sealing_az',
+          no: 'ineligible_not_discharged_az'
+        },
+        // The SECOND gate — § 13-911(O)'s additions over § 13-905(P). A "yes"
+        // here does not end the screening: the set-aside survives it.
+        excluded_sealing_az: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a serious, violent or aggravated offense (ARS § 13-706); a dangerous crime against children (ARS § 13-705); sex trafficking (ARS § 13-1307); an offense with a deadly weapon or serious physical injury as an element; or a class 2, 3, 4 or 5 felony under chapter 14 (sexual offenses) or chapter 35.1 (sexual exploitation of children)?',
+          yes: 'eligible_setaside_only_az',
+          no: 'prior_felony_az'
+        },
+        // CONFIRMED 7/16: § 13-911(F) adds FIVE YEARS to each period where the
+        // person has a prior felony conviction. This was an open question and is
+        // now encoded — it was the item on the data that Diana's own call sheet
+        // did not have.
+        prior_felony_az: {
+          type: 'boolean',
+          text: 'Apart from this case, do you have any prior felony conviction?',
+          yes: 'offense_level_bumped',
+          no: 'offense_level'
         },
         offense_level: {
           type: 'choice',
@@ -693,45 +751,103 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Class 2 or 3 Misdemeanor', value: 'misd_23', next: 'discharge_date_m23' }
           ]
         },
+        // The same ladder, +5 years throughout — § 13-911(F).
+        offense_level_bumped: {
+          type: 'choice',
+          text: 'What was the level and class of the offense? (It appears on your sentencing paperwork or your DPS criminal history report.)',
+          options: [
+            { label: 'Class 2 or 3 Felony', value: 'felony_high', next: 'discharge_date_f23_bumped' },
+            { label: 'Class 4, 5, or 6 Felony', value: 'felony_low', next: 'discharge_date_f456_bumped' },
+            { label: 'Class 1 Misdemeanor', value: 'misd_1', next: 'discharge_date_m1_bumped' },
+            { label: 'Class 2 or 3 Misdemeanor', value: 'misd_23', next: 'discharge_date_m23_bumped' }
+          ]
+        },
         // The § 13-911 ladder. Wave 0 gives these numbers but flags them
         // "encode from statute text" — an open question stands on all four.
         // The anchor is the whole point: the clock runs from absolute
         // discharge, which does not arrive until restitution is paid in full.
         discharge_date_f23: {
           type: 'date',
-          text: 'When did you complete your sentence and receive your absolute discharge?',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
-            nextPass: 'eligible_both_az',
+            period: { amount: 10, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock' },
+            nextPass: 'monetary_check_az',
             nextFail: 'waiting_seal_az'
           }
         },
         discharge_date_f456: {
           type: 'date',
-          text: 'When did you complete your sentence and receive your absolute discharge?',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
-            nextPass: 'eligible_both_az',
+            period: { amount: 5, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock' },
+            nextPass: 'monetary_check_az',
             nextFail: 'waiting_seal_az'
           }
         },
         discharge_date_m1: {
           type: 'date',
-          text: 'When did you complete your sentence and receive your absolute discharge?',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
-            nextPass: 'eligible_both_az',
+            period: { amount: 3, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock' },
+            nextPass: 'monetary_check_az',
             nextFail: 'waiting_seal_az'
           }
         },
         discharge_date_m23: {
           type: 'date',
-          text: 'When did you complete your sentence and receive your absolute discharge?',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'absolute discharge — completion of the entire sentence, including all fines, fees, and victim restitution' },
-            nextPass: 'eligible_both_az',
+            period: { amount: 2, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock' },
+            nextPass: 'monetary_check_az',
             nextFail: 'waiting_seal_az'
           }
+        }
+,
+        discharge_date_f23_bumped: {
+          type: 'date',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
+          validation: {
+            period: { amount: 15, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock — plus five years for a prior felony conviction (§ 13-911(F))' },
+            nextPass: 'monetary_check_az',
+            nextFail: 'waiting_seal_az'
+          }
+        },
+        discharge_date_f456_bumped: {
+          type: 'date',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock — plus five years for a prior felony conviction (§ 13-911(F))' },
+            nextPass: 'monetary_check_az',
+            nextFail: 'waiting_seal_az'
+          }
+        },
+        discharge_date_m1_bumped: {
+          type: 'date',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
+          validation: {
+            period: { amount: 8, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock — plus five years for a prior felony conviction (§ 13-911(F))' },
+            nextPass: 'monetary_check_az',
+            nextFail: 'waiting_seal_az'
+          }
+        },
+        discharge_date_m23_bumped: {
+          type: 'date',
+          text: 'When did you finish the non-money parts of your sentence and get discharged? (Probation, parole, jail or prison time, classes, community service — whichever came last. Do not count money still owed: that has to be paid before you file, but it does not change this date.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'completion of the NON-MONETARY conditions of sentence plus discharge (ARS § 13-911(E)); money owed is a condition of FILING under § 13-911(G), not of the clock — plus five years for a prior felony conviction (§ 13-911(F))' },
+            nextPass: 'monetary_check_az',
+            nextFail: 'waiting_seal_az'
+          }
+        },
+        // § 13-911(G): money owed must be paid AT FILING. It is not a clock
+        // gate and never was — it decides whether they file today or after
+        // they have paid, which is a different sentence to write.
+        monetary_check_az: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you paid all fines, fees and restitution in full?',
+          yes: 'eligible_both_az',
+          no: 'eligible_pay_then_file_az'
         }
       },
       results: {
@@ -771,38 +887,60 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         eligible_seal_dismissed_az: {
           status: 'eligible',
-          title: 'Potentially Sealable — Waiting Period Being Verified',
-          message: 'Charges that were dismissed, resulted in a not-guilty verdict, or never led to charges may be sealable under ARS § 13-911. Whether any waiting period applies to a non-conviction is one of the things we are still verifying, so we are not going to tell you it is zero until we have confirmed it — call the clerk of the court that handled your case and ask when you can file. Once a record is sealed, you can generally state the arrest never happened in most situations.',
+          title: 'Potentially Sealable Now — No Statutory Waiting Period',
+          message: 'Charges that were dismissed, ended in a not-guilty verdict, or never led to charges can be sealed under ARS § 13-911, and the statute sets NO waiting period for them (§ 13-911(A)(2)-(3)) — you can file now. Two useful things. The DPS investigation fee that normally comes with a sealing petition is WAIVED where the case ended in a not-guilty verdict or a dismissal (§ 13-911(H)), so this should cost you little or nothing. And the court cannot rule for 60 calendar days unless nobody objects (§ 13-911(D)), so expect that wait after filing. One caution worth knowing before you file: if a sealing petition is denied, you must wait three years to file again (§ 13-911(L)). We have confirmed the statute; what we are still confirming is what the clerk\'s counter actually requires in practice.',
           remedy: 'Petition to Seal Case Records (ARS § 13-911)',
-          citation: 'Arizona Revised Statutes § 13-911'
+          citation: 'Arizona Revised Statutes §§ 13-911(A)(2)-(3), 13-911(D), 13-911(H), 13-911(L)'
         },
         eligible_both_az: {
           status: 'eligible',
           title: 'Potential Set-Aside AND Sealing Eligible',
-          message: 'You appear potentially eligible for both Arizona remedies. A Set-Aside under ARS § 13-905 (available any time after discharge, no waiting period) vacates the judgment of guilt and can come with a Certificate of Second Chance, but the record stays publicly visible with an annotation. Record Sealing under ARS § 13-911 hides the record from public view and most background checks — and based on your dates, the sealing waiting period appears satisfied. Many people pursue both.',
+          message: 'You appear potentially eligible for both Arizona remedies, and they do different things. A SET-ASIDE under ARS § 13-905 is available any time after discharge with no waiting period, and it costs nothing — the clerk is not permitted to charge a filing fee (§ 13-905(B)). It vacates the judgment of guilt, but the record stays publicly visible with a "set aside" annotation. It also restores your right to possess a firearm, unless the offense was a serious offense under § 13-706 (§ 13-905(O)). SEALING under ARS § 13-911 is the stronger remedy — it hides the record from public view and most background checks — and based on your dates the waiting period appears satisfied. Many people pursue both. Two things to plan around before you file the sealing petition. First, the court cannot rule for 60 calendar days unless nobody objects (§ 13-911(D)), so build that into your timeline. Second, and more important: if a sealing petition is DENIED, you must wait three years before filing again (§ 13-911(L)). That makes this worth getting right the first time rather than fast — if anything about your case is borderline, the free legal aid organizations below are worth a call before you file.',
           remedy: 'Set-Aside (ARS § 13-905) + Petition to Seal (ARS § 13-911)',
-          citation: 'Arizona Revised Statutes §§ 13-905, 13-911'
+          citation: 'Arizona Revised Statutes §§ 13-905(B), 13-905(O), 13-911(D), 13-911(L)'
         },
         waiting_seal_az: {
           status: 'waiting',
           title: 'Set-Aside Available Now; Sealing Waiting Period Not Met',
-          message: 'You appear potentially eligible RIGHT NOW for a Set-Aside under ARS § 13-905 — there is no waiting period after absolute discharge. However, Record Sealing under ARS § 13-911 requires a waiting period after completing your entire sentence: 10 years for Class 2/3 felonies, 5 years for Class 4/5/6 felonies, 3 years for Class 1 misdemeanors, and 2 years for Class 2/3 misdemeanors. You can file the set-aside now and seal later.',
+          message: 'Two different answers here, and the first one is good. You appear potentially eligible RIGHT NOW for a Set-Aside under ARS § 13-905 — there is no waiting period once you are discharged, and it costs nothing, because the clerk is not permitted to charge a filing fee (§ 13-905(B)). It also restores your firearm rights unless the offense was a serious offense under § 13-706 (§ 13-905(O)). Do not wait to do that. Record Sealing under ARS § 13-911 is the one that needs time. The periods run from when you finished the NON-MONEY conditions of your sentence and were discharged (§ 13-911(E)): 10 years for a class 2 or 3 felony, 5 for a class 4, 5 or 6 felony, 3 for a class 1 misdemeanor, 2 for a class 2 or 3 misdemeanor — and five years is added to each if you have a prior felony conviction (§ 13-911(F)). Based on your dates, yours has not run yet. Worth knowing: money you still owe does NOT delay this clock. Under § 13-911(G) it has to be paid by the time you file, but the waiting period runs regardless — so if you owe a balance, your clock is still going.',
           remedy: 'Set-Aside Now (ARS § 13-905); Sealing Later (ARS § 13-911)',
-          citation: 'Arizona Revised Statutes §§ 13-905, 13-911'
+          citation: 'Arizona Revised Statutes §§ 13-905(B), 13-911(E), 13-911(F), 13-911(G)'
         },
         ineligible_serious: {
           status: 'ineligible',
-          title: 'Excluded Offense',
-          message: 'Dangerous offenses, offenses requiring sex offender registration, offenses with a sexual-motivation finding, and crimes against victims under 15 are excluded from both Set-Aside (ARS § 13-905) and Record Sealing (ARS § 13-911). If your case involved marijuana conduct legalized by Prop 207, a separate expungement under ARS § 36-2862 may still apply — consult legal aid.',
-          remedy: 'None (Statutorily Excluded) — Consult Legal Aid',
-          citation: 'Arizona Revised Statutes §§ 13-905, 13-911'
+          title: 'Excluded From Both Remedies',
+          message: 'Dangerous offenses, offenses requiring sex offender registration, offenses with a sexual-motivation finding, and crimes against victims under 15 are excluded from a Set-Aside under ARS § 13-905(P). They also sit on the wider sealing exclusion list at § 13-911(O), so both of Arizona\'s main remedies are closed here, and no waiting period changes that. Two things still worth knowing. If your case involved marijuana conduct that Proposition 207 made legal, a separate expungement under ARS § 36-2862 may apply regardless — it is its own statute with its own rules. And these lists are narrower than they sound: whether an offense counts as "dangerous", or carries a sexual-motivation finding, is a specific legal finding in your case file rather than a description of what happened. If you are not certain, the free legal aid organizations below can read your paperwork and tell you which list you are actually on.',
+          remedy: 'None (Excluded under § 13-905(P) and § 13-911(O)) — Consult Legal Aid',
+          citation: 'Arizona Revised Statutes §§ 13-905(P), 13-911(O), 36-2862'
         },
-        ineligible_restitution: {
+        // REPLACED 7/16. The old result said unpaid money "will block a
+        // Set-Aside and delay the start of the § 13-911 sealing waiting period".
+        // The statute says otherwise: § 13-911(E) starts the clock at
+        // NON-MONETARY completion plus discharge, and § 13-911(G) makes payment
+        // a filing condition. Telling someone their clock had not started
+        // because they owed money was simply false.
+        ineligible_not_discharged_az: {
           status: 'ineligible',
-          title: 'Sentence Not Yet Complete',
-          message: 'Both remedies require completion of all sentence terms. Unpaid fines, fees, or victim restitution will block a Set-Aside (ARS § 13-905) and delay the start of the § 13-911 sealing waiting period. Confirm your balance is $0 with the court clerk, obtain your discharge, and then apply.',
-          remedy: 'Complete Sentence / Pay Restitution First',
-          citation: 'Arizona Revised Statutes §§ 13-905, 13-911'
+          title: 'Not Discharged Yet — Your Clock Has Not Started',
+          message: 'Arizona\'s sealing clock starts when you finish the non-money parts of your sentence and are discharged — probation, parole, any jail or prison time, classes, community service. Until that happens the waiting period has not begun. A Set-Aside under ARS § 13-905 also comes after discharge. One thing worth being clear about, because it is commonly misunderstood: money you still owe does NOT hold your clock back. Under § 13-911(G) fines, fees and restitution have to be paid by the time you FILE, but the waiting period runs regardless. So if the only thing outstanding is a balance, your clock is already running — come back when you are discharged.',
+          remedy: 'Finish the non-money conditions and get discharged first',
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911(E), 13-911(G)'
+        },
+        // The good news the old encoding was hiding.
+        // The result the merged gate made unreachable.
+        eligible_setaside_only_az: {
+          status: 'eligible',
+          title: 'Set-Aside Available — Sealing Is Not',
+          message: 'Two different answers, and the useful one first. A SET-ASIDE under ARS § 13-905 appears to be available to you: it has no waiting period once you are discharged, and it costs nothing, because the clerk is not permitted to charge a filing fee (§ 13-905(B)). It vacates the judgment of guilt. The record stays publicly visible with a "set aside" annotation — but that annotation says a court reviewed your case and set the conviction aside, which is worth having. Ask for a Certificate of Second Chance at the same time (§ 13-905(K),(L)): for a class 4, 5 or 6 felony it comes two years after discharge, for a class 2 or 3 felony five years, and for felonies it is once in a lifetime. Now the other half. SEALING under ARS § 13-911 is not available to you: § 13-911(O) excludes serious, violent and aggravated offenses, dangerous crimes against children, sex trafficking, offenses with a deadly weapon or serious injury as an element, and the chapter 14 and 35.1 felony classes. That list is wider than the set-aside list, which is why one remedy is open and the other is not. Note too that a set-aside does not restore firearm rights where the offense was a serious offense under § 13-706 (§ 13-905(O)). The legal aid organizations below can confirm which list your offense actually falls on — worth a call, because the two statutes draw the line in different places.',
+          remedy: 'Set-Aside (ARS § 13-905) — sealing excluded under § 13-911(O)',
+          citation: 'Arizona Revised Statutes §§ 13-905(B), 13-905(K), 13-905(L), 13-905(O), 13-911(O)'
+        },
+        eligible_pay_then_file_az: {
+          status: 'eligible',
+          title: 'Your Waiting Period Is Done — Pay the Balance, Then File',
+          message: 'Your waiting period has run. The only thing between you and filing is the money: under ARS § 13-911(G), fines, fees and restitution must be paid in full at the time you file — but, and this matters, an unpaid balance does NOT delay your waiting period. It has been running this whole time and it is finished. So there is no more waiting to do here; there is a balance to clear. Ask the court clerk for your exact payoff amount. Once it is paid you can file the Petition to Seal (ARS § 13-911) immediately, and a Set-Aside under § 13-905 alongside it — that one has no filing fee at all, because the clerk is not permitted to charge one. If the balance is the obstacle, ask the clerk about a payment plan or a community-restitution conversion; people do get these resolved.',
+          remedy: 'Pay the balance, then Set-Aside (§ 13-905) + Petition to Seal (§ 13-911)',
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911(E), 13-911(G)'
         }
       }
     },
@@ -816,17 +954,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // sentencing court's self-service center before shipping this link.
           formUrl: 'https://www.azcourts.gov/selfservicecenter',
           steps: [
-            'Verify you have completed all terms of your sentence and been discharged (probation office or Department of Corrections).',
-            'Ensure all fines, fees, and victim restitution are paid in full.',
+            'Verify you have been discharged — that you finished probation, parole, and any jail or prison time (probation office or Department of Corrections).',
+            'Pay any outstanding fines, fees, and victim restitution.',
             'Complete the set-aside application used by the court where you were sentenced.',
-            'File the completed form with the Clerk of the Court in the county where you were sentenced.'
+            'File it with the Clerk of the Court in the county where you were sentenced. The clerk may not charge you a filing fee (ARS § 13-905(B)).',
+            'Ask for a Certificate of Second Chance at the same time. Timing depends on the offense (ARS § 13-905(K),(L)): for a misdemeanor it can issue immediately with the set-aside; for a class 4, 5 or 6 felony, two years after discharge; for a class 2 or 3 felony, five years. For felonies it is once in a lifetime — so if you have more than one, think about which case to use it on.',
+            'If the set-aside is granted, your firearm rights are restored unless the offense was a serious offense under ARS § 13-706 (ARS § 13-905(O)).'
           ],
-          // null: Wave 0 flags this fee. The Maricopa packet appears to show
-          // none, but that is one county and unconfirmed. Blocked by an open
-          // question; do not fill this in without a call.
-          fees: null,
-          // feeWaiver followed from the $0 claim, so it goes with it.
-          feeWaiver: null,
+          // CLOSED 7/16 by statute (Diana, azleg.gov, 7/15): § 13-905(B) says
+          // the clerk MAY NOT charge a filing fee. Not "shows none in one
+          // county" — the statute forbids it. This is what closing a question
+          // with a citation looks like.
+          fees: '$0 — the clerk may not charge a filing fee for a set-aside application (ARS § 13-905(B)).',
+          // A waiver is moot where the statute forbids the fee.
+          feeWaiver: 'Not applicable — there is no filing fee to waive.',
           courtContact: 'Clerk of the Superior Court / Municipal or Justice Court Clerk (wherever you were sentenced)'
         },
         sealing: {
@@ -838,17 +979,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'Request your criminal history report from the Arizona Department of Public Safety to confirm offense classes and discharge dates.',
             'Confirm the offense is not excluded and the class-based waiting period has elapsed.',
             'File the petition to seal with the court that handled the case (each case must be filed separately).',
-            // Was: "The court must wait 60 days before ruling unless the
-            // prosecutor and any victims waive objection." Wave 0 flags the
-            // response window as unverified, so the number comes out until the
-            // call confirms it. See open questions.
-            'The prosecutor and any victims get a window to respond before the court rules; ask the clerk how long it currently runs. Attend a hearing if one is set.'
+            // CONFIRMED 7/16 (Diana, azleg.gov, 7/15): § 13-911(D). The number
+            // was pulled when it was unverified and comes back now that it is,
+            // with the citation attached.
+            'The court may not rule for 60 calendar days after filing, unless there are no objections (ARS § 13-911(D)). Attend a hearing if one is set.',
+            'If the petition is DENIED, you must wait three years before filing again (ARS § 13-911(L)) — so it is worth getting right rather than fast.'
           ],
-          // null: the old value asserted "the legislature removed filing fees"
-          // — an affirmative claim about Arizona law that Wave 0 does not make
-          // and no recorded source supports. Blocked by an open question.
+          // Still null: § 13-911(H) confirms a DPS investigation fee EXISTS but
+          // sets its amount by the DPS director rather than in statute, and the
+          // court filing fee is not in § 13-911 at all. Both are phone-tier.
           fees: null,
-          feeWaiver: null,
+          // NOT null any more, and not dependent on the amount: § 13-911(H)
+          // states the waiver rule itself. Dependence is about derivation — this
+          // does not derive from the fee amount, so it survives not knowing it.
+          feeWaiver: 'The DPS investigation fee is waived if you are indigent, or if the case ended in a not-guilty verdict or a dismissal (ARS § 13-911(H)).',
           courtContact: 'Clerk of the court that handled the original case'
         }
       },

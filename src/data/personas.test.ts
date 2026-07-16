@@ -138,17 +138,27 @@ const AZ: Persona[] = [
     source: 'Wave 0 — AZ persona 1',
     package: 'class 6 felony possession, done 2018 → set aside now + sealing eligible 2023+ → both.',
     record: { title: 'Possession', charge_type: 'felony', disposition_date: '2018-04-01', restitution_paid: true },
-    // 'done 2018' = discharged 2018. The § 13-911 clock runs from absolute
-    // discharge, so the persona states THAT date, not a sentencing date.
-    answers: { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_low', discharge_date_f456: '2018-04-01' },
-    expect: { resultKey: 'eligible_both_az', reading: 'Class 6 = class 4/5/6 ladder, 5 years from discharge. 2018 + 5 = 2023, and it is 2026. Exact.' },
+    // 'done 2018' = discharged 2018. CORRECTED 7/16: the § 13-911(E) clock runs
+    // from completion of the NON-MONETARY conditions plus discharge — not from
+    // "absolute discharge including all money paid", which is what this fixture
+    // used to say and which the statute does not.
+    answers: {
+      excluded_setaside_az: false, excluded_sealing_az: false,
+      marijuana_offense: false,
+      dui_offense: false,
+      sentence_completed: true,
+      prior_felony_az: false,          // § 13-911(F) would add five years
+      offense_level: 'felony_low',
+      discharge_date_f456: '2018-04-01',
+    },
+    expect: { resultKey: 'eligible_both_az', reading: 'Class 6 = class 4/5/6 ladder, 5 years from non-monetary completion + discharge (§ 13-911(E)), no prior felony so no +5 bump (§ 13-911(F)). 2018 + 5 = 2023, and it is 2026. Restitution paid, so no pay-then-file detour. Exact — and now statute-verified rather than package-verified.' },
     now: NOW,
   },
   {
     source: 'Wave 0 — AZ persona 2',
     package: 'marijuana possession 2015 → § 36-2862 free expungement.',
     record: { title: 'Marijuana Possession', charge_type: 'felony', disposition_date: '2015-01-01' },
-    answers: { excluded_offense: false, marijuana_offense: true },
+    answers: { excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: true },
     expect: {
       resultKey: 'eligible_marijuana_az',
       reading:
@@ -162,7 +172,7 @@ const AZ: Persona[] = [
     source: 'Wave 0 — AZ persona 3',
     package: 'DUI misdemeanor → set aside OK ⚠️ verify; sealing excluded? — resolve from § 13-911 text.',
     record: { title: 'DUI', charge_type: 'misdemeanor', disposition_date: '2019-01-01' },
-    answers: { excluded_offense: false, marijuana_offense: false, dui_offense: true },
+    answers: { excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: true },
     expect: {
       resultKey: 'complex_dui_az',
       reading:
@@ -177,7 +187,7 @@ const AZ: Persona[] = [
     source: 'Wave 0 — AZ persona 4',
     package: 'dangerous offense → neither; honest-no.',
     record: { title: 'Aggravated Assault', charge_type: 'felony' },
-    answers: { excluded_offense: true },
+    answers: { excluded_setaside_az: true },
     expect: { resultKey: 'ineligible_serious', reading: 'Dangerous offence → excluded from both § 13-905 and § 13-911. Exact.' },
     now: NOW,
   },

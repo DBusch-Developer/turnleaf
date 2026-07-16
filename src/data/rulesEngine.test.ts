@@ -30,13 +30,15 @@ describe('dispatch is by node shape, not node id', () => {
   // Required" no matter what a person entered.
   test('AZ conviction path reaches a real result — it never used to', () => {
     const result = walk('AZ', rec({ charge_type: 'felony' }), {
-      excluded_offense: false,
+      excluded_setaside_az: false, excluded_sealing_az: false,
       marijuana_offense: false,
       dui_offense: false,
       sentence_completed: true,
+      prior_felony_az: false,
       offense_level: 'felony_low', // class 4/5/6 — ASKED, since the form has no classes
-      // The § 13-911 clock runs from ABSOLUTE DISCHARGE, so the node asks for
-      // that date rather than reading the form's disposition date.
+      // The § 13-911(E) clock runs from completion of the NON-MONETARY
+      // conditions plus discharge, so the node asks for that date rather than
+      // reading the form's disposition date.
       discharge_date_f456: '2015-01-01',
     });
 
@@ -67,7 +69,7 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
   test('AZ class 2/3 felony needs 10 years from discharge, not 2', () => {
     // The deleted ResultsDisplay table said AZ felonies waited 2 years. The
     // rules say 10 for class 2/3. A 5-years-ago discharge is still waiting.
-    const answers = { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_high' };
+    const answers = { excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, prior_felony_az: false, offense_level: 'felony_high' };
     const now = new Date('2026-07-15');
 
     // Discharged 2021: five years back, and class 2/3 needs ten.
@@ -96,8 +98,8 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
     // probation — discharged 2025, eligible 2030 — was told they were eligible
     // NOW, four years early. They would have filed, paid, and been denied.
     const answers = {
-      excluded_offense: false, marijuana_offense: false, dui_offense: false,
-      sentence_completed: true, offense_level: 'felony_low',
+      excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: false,
+      sentence_completed: true, prior_felony_az: false, offense_level: 'felony_low',
     };
     const now = new Date('2026-07-15');
 
@@ -107,6 +109,78 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
 
     // Six years since sentencing, but only one since discharge. Five are needed.
     expect(result.status).toBe('waiting');
+  });
+
+  // Statute-verified 2026-07-15 (Diana, azleg.gov). These pin the corrections
+  // so they cannot quietly regress to the pre-check encoding.
+  test('AZ: money owed does not delay the sealing clock (§ 13-911(E), (G))', () => {
+    // The old encoding ran the clock from "absolute discharge including all
+    // fines, fees and restitution", and told people with a balance that their
+    // waiting period had not started. § 13-911(E) starts it at NON-MONETARY
+    // completion plus discharge; § 13-911(G) makes payment a filing condition.
+    const answers = {
+      excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: false,
+      sentence_completed: true, prior_felony_az: false, offense_level: 'misd_23',
+      discharge_date_m23: '2020-01-01',   // discharged 6 years ago; needs 2
+    };
+    const now = new Date('2026-07-15');
+
+    // Balance outstanding: the wait is DONE, they just pay before filing.
+    const owing = walk('AZ', rec({ restitution_paid: false }), answers, now);
+    expect(owing.status).toBe('eligible');
+    expect(owing.title).toContain('Pay the Balance');
+
+    const paid = walk('AZ', rec({ restitution_paid: true }), answers, now);
+    expect(paid.status).toBe('eligible');
+  });
+
+  test('AZ: a prior felony adds five years to the sealing period (§ 13-911(F))', () => {
+    const base = {
+      excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: false,
+      sentence_completed: true,
+    };
+    const now = new Date('2026-07-15');
+    const discharged = '2019-01-01';   // 7 years ago
+
+    // Class 4-6 felony: 5 years without a prior felony -> eligible at 7.
+    const clean = walk('AZ', rec(), {
+      ...base, prior_felony_az: false,
+      offense_level: 'felony_low', discharge_date_f456: discharged,
+    }, now);
+    expect(clean.status).toBe('eligible');
+
+    // Same facts, prior felony: the tree routes through the bumped ladder,
+    // where 5 + 5 = 10 years -> still waiting at 7.
+    const prior = walk('AZ', rec(), {
+      ...base, prior_felony_az: true,
+      offense_level_bumped: 'felony_low', discharge_date_f456_bumped: discharged,
+    }, now);
+    expect(prior.status).toBe('waiting');
+  });
+
+  test('AZ: sealing-excluded does not mean set-aside-excluded (§ 13-911(O) vs § 13-905(P))', () => {
+    // The lists are not the same list. § 13-911(O) is wider — it adds § 13-706
+    // serious/violent/aggravated offences, dangerous crimes against children,
+    // sex trafficking, deadly-weapon and serious-injury elements, and the
+    // chapter 14/35.1 felony classes. One merged question applied the wider
+    // list to both remedies and took away a set-aside the statute grants.
+    const now = new Date('2026-07-15');
+    const base = {
+      marijuana_offense: false, dui_offense: false,
+      sentence_completed: true, prior_felony_az: false,
+    };
+
+    // On § 13-905(P): excluded from BOTH.
+    const both = walk('AZ', rec(), { ...base, excluded_setaside_az: true }, now);
+    expect(both.status).toBe('ineligible');
+
+    // On § 13-911(O) only: the set-aside SURVIVES.
+    const setAsideOnly = walk('AZ', rec(), {
+      ...base, excluded_setaside_az: false, excluded_sealing_az: true,
+    }, now);
+    expect(setAsideOnly.status).toBe('eligible');
+    expect(setAsideOnly.title).toContain('Set-Aside Available');
+    expect(setAsideOnly.citation).toContain('13-911(O)');
   });
 
   test('elapsedSince counts calendar steps, not 365.25-day approximations', () => {
@@ -161,7 +235,7 @@ describe('record-backed vs asked nodes', () => {
     // not a class — so the tree asks rather than assuming.
     const step = currentNode(
       fallbackRules.AZ,
-      { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true },
+      { excluded_setaside_az: false, excluded_sealing_az: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, prior_felony_az: false },
       rec({ charge_type: 'felony' })
     );
     expect(step?.id).toBe('offense_level');

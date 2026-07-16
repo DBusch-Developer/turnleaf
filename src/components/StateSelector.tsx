@@ -19,6 +19,7 @@ interface StateSelectorProps {
 
 export default function StateSelector({ onSelectState }: StateSelectorProps) {
   const [states, setStates] = useState<StateSummary[]>([]);
+  const [dataSource, setDataSource] = useState<'database' | 'fallback' | null>(null);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +29,15 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
         const res = await fetch('/api/states');
         if (res.ok) {
           const data = await res.json();
-          setStates(data);
+          setStates(data.states ?? []);
+          setDataSource(data.dataSource ?? null);
+          // Also on the console, so it is visible without scrolling anywhere.
+          console.info(
+            `[turnleaf] state rules served from: ${data.dataSource ?? 'unknown'}` +
+            (data.dataSource === 'fallback'
+              ? ' — the DATABASE was not used. If you expected DB rows, the query failed or the schema is behind.'
+              : '')
+          );
         }
       } catch (err) {
         console.error('Failed to fetch states:', err);
@@ -82,6 +91,37 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
           </span>
         )}
       </p>
+
+      {/* Data-source indicator.
+         *
+         * Small on purpose: this is for whoever is verifying a migration, not
+         * for the person screening their record. It exists because the fallback
+         * path is SILENT — when the database is unreachable or its schema is
+         * behind, the site serves in-code rules and looks exactly the same. On
+         * 2026-07-15 that happened for hours and the only evidence was a stack
+         * trace in a terminal. 'fallback' is amber rather than red because it
+         * is correct behaviour, not an outage — it just must never be mistaken
+         * for the database. */}
+      {!loading && dataSource && (
+        <p
+          title={
+            dataSource === 'database'
+              ? 'These rules were read from the Neon database.'
+              : 'The database was NOT used. These rules came from src/data/fallbackRules.ts — either DATABASE_URL is unset, the query failed, or the schema is behind.'
+          }
+          style={{
+            textAlign: 'center',
+            fontSize: '0.7rem',
+            marginTop: '-0.75rem',
+            marginBottom: '1.25rem',
+            letterSpacing: '0.02em',
+            color: dataSource === 'database' ? 'var(--color-text-light)' : 'var(--color-warning)',
+            fontWeight: dataSource === 'database' ? 400 : 600,
+          }}
+        >
+          {dataSource === 'database' ? '● rules: database' : '▲ rules: fallback (database not used)'}
+        </p>
+      )}
 
       {/* Quick select: researched states */}
       {quickSelect.length > 0 && (

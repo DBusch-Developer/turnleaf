@@ -38,14 +38,33 @@ export interface StateListEntry {
 }
 
 /**
- * Returns ALL 50 states for the selector. `available` is true only for states
- * whose rules are researched AND verified. States with no rules, and states
- * whose rules are still 'draft', are both listed as not available — they never
- * receive generic/template rules, and they are never screened against research
- * nobody has confirmed. `draft` distinguishes the two so the UI can say which
- * is which honestly.
+ * Where the rules being served actually came from.
+ *
+ * The fallback path is silent by design — if the database is unreachable or its
+ * schema is behind, getState/getStatesList quietly serve fallbackRules and the
+ * site looks identical. That is the right runtime behaviour and a terrible
+ * property for a person trying to verify a migration: on 2026-07-15 the live
+ * database was missing five columns for hours and the only evidence was a stack
+ * trace in a terminal. This makes the difference legible.
  */
-export async function getStatesList(): Promise<StateListEntry[]> {
+export type DataSource = 'database' | 'fallback';
+
+export interface StatesListResponse {
+  dataSource: DataSource;
+  states: StateListEntry[];
+}
+
+/**
+ * Returns ALL 50 states for the selector, and says where they came from.
+ *
+ * `available` is true only for states whose rules are researched AND verified.
+ * States with no rules, and states whose rules are still 'draft', are both
+ * listed as not available — they never receive generic/template rules, and they
+ * are never screened against research nobody has confirmed. `draft`
+ * distinguishes the two so the UI can say which is which honestly.
+ */
+export async function getStatesList(): Promise<StatesListResponse> {
+  let dataSource: DataSource = 'fallback';
   const researched = new Map<string, { lastReviewed: string; verificationStatus: VerificationStatus }>();
 
   const sql = getDb();
@@ -55,6 +74,7 @@ export async function getStatesList(): Promise<StateListEntry[]> {
         SELECT code, last_reviewed as "lastReviewed", verification_status as "verificationStatus"
         FROM states
       `;
+      if (rows) dataSource = 'database';
       for (const r of rows) {
         researched.set(String(r.code), {
           lastReviewed: r.lastReviewed instanceof Date
@@ -64,6 +84,7 @@ export async function getStatesList(): Promise<StateListEntry[]> {
         });
       }
     } catch (error) {
+      dataSource = 'fallback';
       console.error('Error fetching states from Neon, using local rules only:', error);
     }
   }
@@ -75,17 +96,16 @@ export async function getStatesList(): Promise<StateListEntry[]> {
     }
   }
 
-  return stateDirectory.map(({ code, name }) => {
-    const r = researched.get(code);
-    return {
-      code,
-      name,
-      available: isScreenable(r?.verificationStatus),
-      draft: Boolean(r) && !isScreenable(r?.verificationStatus),
-      lastReviewed: r?.lastReviewed ?? null,
-      verificationStatus: r?.verificationStatus ?? null,
-    };
-  });
+  const states = stateDirectory.map(({ code, name }) => ({
+    code,
+    name,
+    available: isScreenable(researched.get(code)?.verificationStatus),
+    draft: Boolean(researched.get(code)) && !isScreenable(researched.get(code)?.verificationStatus),
+    lastReviewed: researched.get(code)?.lastReviewed ?? null,
+    verificationStatus: researched.get(code)?.verificationStatus ?? null,
+  }));
+
+  return { dataSource, states };
 }
 
 /**

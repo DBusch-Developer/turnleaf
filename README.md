@@ -10,14 +10,17 @@ Turnleaf is an anonymous, web-based record-clearing (expungement) eligibility sc
 
 ## What makes it different
 
-- **Real cited law, not templates.** Every rule Turnleaf shows is tied to a specific statute (code number + last-reviewed date). We do **not** ship generic or approximate rules. A state either has researched, cited rules, or it shows an honest "in research" panel with real referral links. (See [`RULES.md`](./RULES.md) — "no fallback templates, no shallow data.")
+- **Real cited law, not templates.** Every rule Turnleaf shows is tied to a specific statute (code number + last-reviewed date). We do **not** ship generic or approximate rules. (See [`RULES.md`](./RULES.md) — "no fallback templates, no shallow data.")
+- **Drafted is not verified.** A state is only screened against once a human has read its rules against the official statute text. Until then it shows an honest "drafted, not confirmed" panel with real referral links rather than screening you against unverified law. Verified citations link to the official source ("verified against official text · date"); unread ones render as plain text — so the verification status is visible on the page.
 - **Anonymous by design.** No names, no Social Security Numbers, no stored charge files. PDF summaries are compiled inside your browser.
 - **Ends with a next step.** Eligible results compile direct links to state self-help petition forms, estimated filing fees, and local clinic/legal-aid registries.
 - **Plain, hedged language.** Screening results are rephrased into warm, non-advice language that always recommends confirming with a professional before filing.
 
 ## Current coverage
 
-All 50 states appear in the selector. **Four states currently have researched, cited rules:** California, Arizona, New York, and Texas. The rest show the in-research panel. Expanding coverage is the core ongoing work (see [`docs/05-roadmap.md`](./docs/05-roadmap.md) once written).
+All 50 states are **drafted** — every one has researched, cited rules encoded from its statutes in `src/data/fallbackRules.ts`. But a drafted rule is not a screenable one: a state becomes screenable only after a human verifies its rules against the official statute text (the `draft` → `statute_cited` → `phone_verified` ladder).
+
+**Three states are currently human-verified and screenable:** Arizona, New Hampshire, and Texas. The other 47 are drafted and awaiting verification — they show the "drafted, not confirmed" panel with real referral links. Verifying the drafts against statute and phone-confirming the practical details (fees, forms, timelines) is the core ongoing work; `npm run statutecheck` reports each verified state's statute-link status.
 
 ---
 
@@ -67,6 +70,7 @@ All 50 states appear in the selector. **Four states currently have researched, c
 | `npm run lint` | Run ESLint |
 | `npm test` | Run the unit tests (Vitest) |
 | `npm run validate` | Check every state's rule structure (no database needed) |
+| `npm run statutecheck` | Same structural check, plus each verified state's statute-link status and the statute-pass reminder |
 | `npm run db:seed` | Validate, then create the schema and seed researched states into Neon |
 
 ## Project structure

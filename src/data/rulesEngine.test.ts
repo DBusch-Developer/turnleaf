@@ -31,6 +31,8 @@ describe('dispatch is by node shape, not node id', () => {
   test('AZ conviction path reaches a real result — it never used to', () => {
     const result = walk('AZ', rec({ charge_type: 'felony' }), {
       excluded_offense: false,
+      marijuana_offense: false,
+      dui_offense: false,
       sentence_completed: true,
       offense_level: 'felony_low', // class 4/5/6 — ASKED, since the form has no classes
     });
@@ -62,7 +64,7 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
   test('AZ class 2/3 felony needs 10 years from discharge, not 2', () => {
     // The deleted ResultsDisplay table said AZ felonies waited 2 years. The
     // rules say 10 for class 2/3. A 5-years-ago discharge is still waiting.
-    const answers = { excluded_offense: false, sentence_completed: true, offense_level: 'felony_high' };
+    const answers = { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_high' };
     const waiting = walk('AZ', rec({ disposition_date: '2021-01-01' }), answers, new Date('2026-07-15'));
     expect(waiting.status).toBe('waiting');
 
@@ -131,7 +133,11 @@ describe('record-backed vs asked nodes', () => {
   test('a node without a field is asked, even when the record looks similar', () => {
     // AZ offense_level asks for a CLASS. charge_type says 'felony', which is
     // not a class — so the tree asks rather than assuming.
-    const step = currentNode(fallbackRules.AZ, { excluded_offense: false, sentence_completed: true }, rec({ charge_type: 'felony' }));
+    const step = currentNode(
+      fallbackRules.AZ,
+      { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true },
+      rec({ charge_type: 'felony' })
+    );
     expect(step?.id).toBe('offense_level');
     expect(step?.node.options?.map(o => o.value)).toContain('felony_high');
   });

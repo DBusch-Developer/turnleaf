@@ -316,11 +316,48 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'probation_status',
           text: 'What is your current probation status?',
           options: [
-            { label: 'Successfully completed probation', value: 'completed', next: 'eligible_expungement' },
+            { label: 'Successfully completed probation', value: 'completed', next: 'auto_relief_check_ca' },
             { label: 'Did not complete probation successfully', value: 'failed', next: 'complex_probation' },
             { label: 'Currently still on probation or supervision', value: 'active', next: 'ineligible_active_probation' },
             { label: 'No probation was sentenced', value: 'none', next: 'judgment_date' }
           ]
+        },
+        // CHECK-RECORD-FIRST (Wave 0 cross-package flag 2).
+        //
+        // California's DOJ grants relief automatically every month under PC
+        // § 1203.425 — no petition, nobody asked. The honest first question is
+        // therefore not "can you petition" but "are you already clear". Wave 0
+        // asks for this posture explicitly and the tree did not have it: a
+        // misdemeanant whose relief had probably already landed was told to go
+        // and file a petition, with the automation mentioned afterwards under
+        // "Also note". Found by running Wave 0's own CA persona 1.
+        //
+        // Misdemeanours get the 1-year automatic period (§ 1203.425). Felonies
+        // do NOT route here: Wave 0 flags the felony tiers as unverified, so we
+        // will not tell a felony conviction it is probably already clear.
+        auto_relief_check_ca: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'auto_relief_date_ca' },
+            { label: 'Infraction', value: 'infraction', next: 'auto_relief_date_ca' },
+            { label: 'Felony', value: 'felony', next: 'eligible_expungement' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'eligible_expungement' }
+          ]
+        },
+        auto_relief_date_ca: {
+          type: 'date',
+          text: 'When was judgment pronounced (your sentencing date)?',
+          validation: {
+            period: {
+              amount: 1,
+              unit: 'years',
+              anchor: 'judgment pronounced (PC § 1203.425 automatic relief for misdemeanours)'
+            },
+            nextPass: 'check_record_first_ca',
+            nextFail: 'eligible_expungement'
+          }
         },
         // PC 1203.4a: the 1-year wait applies ONLY when probation was NOT
         // granted. If probation was completed, PC 1203.4 relief is available
@@ -347,12 +384,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (CA DOJ Record Review)',
           citation: 'California Penal Code §§ 1203.4, 851.91 (which path applies depends on the disposition)'
         },
+        // CHECK-RECORD-FIRST. The automatic system ran; lead with that.
+        check_record_first_ca: {
+          status: 'eligible',
+          title: 'Your Record May Already Be Clear — Check Before You File',
+          message: 'Start here, not with a petition. California\'s Department of Justice reviews state records every month and grants relief automatically under Penal Code § 1203.425 — no petition, no fee, and nobody tells you it happened. Misdemeanors generally qualify one year after judgment, and yours is past that, so there is a real chance this is already done. Find out before you spend anything: request a record review from the CA DOJ (a fingerprint-based review costs about $25), or ask the court that handled your case what your record shows now. If the automatic system did reach you, you are finished. If it missed you, or if you want the extra benefits a petition can add — such as a felony reduction under PC § 17(b) — the dismissal petition under PC § 1203.4 is still there, and completing probation makes it available as of right. We are still verifying which felonies the automatic program reaches and after how long.',
+          remedy: 'Check Your Record First (CA DOJ Record Review) — then PC 1203.4 if needed',
+          citation: 'California Penal Code §§ 1203.425, 1203.4'
+        },
         eligible_dismissed: {
           status: 'eligible',
-          title: 'Potential Arrest Record Sealing',
-          message: 'Since your charge was dismissed, acquitted, resolved by completed diversion, or never filed, you appear potentially eligible to seal your arrest record — as a matter of right in many cases under Penal Code § 851.91 (and § 851.87 for completed diversion). Note: many arrests that did not lead to conviction are also cleared automatically by the CA Department of Justice under § 851.93, so check your record first — the work may already be done.',
-          remedy: 'Arrest Record Sealing (PC 851.91 / 851.87)',
-          citation: 'California Penal Code §§ 851.91, 851.87, 851.93'
+          title: 'Your Arrest Record May Already Be Cleared — Check First',
+          // CHECK-RECORD-FIRST: § 851.93 automation leads, the § 851.91
+          // petition follows. Wave 0's CA persona 5 asks for exactly this
+          // order and the result used to lead with the petition instead.
+          message: 'Start by checking, not by filing. Arrests that did not lead to a conviction are cleared automatically by the California Department of Justice under Penal Code § 851.93 — the DOJ reviews state databases monthly, grants the relief itself, and does not notify you. So the work may already be done. Request a record review from the CA DOJ (a fingerprint-based review costs about $25) to see where you stand. If the automatic system missed your arrest, you can petition to seal it under Penal Code § 851.91 — sealing is available as a matter of right in many cases where charges were dismissed, you were acquitted, or you were never charged — or under § 851.87 if you completed diversion.',
+          remedy: 'Check Your Record First (PC 851.93) — then Arrest Sealing (PC 851.91 / 851.87)',
+          citation: 'California Penal Code §§ 851.93, 851.91, 851.87'
         },
         eligible_expungement: {
           status: 'eligible',
@@ -598,6 +646,30 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'boolean',
           text: 'Was the offense a dangerous offense (involving a deadly weapon, dangerous instrument, or serious physical injury), an offense requiring sex offender registration, an offense with a sexual motivation finding, or a crime against a victim under 15?',
           yes: 'ineligible_serious',
+          no: 'marijuana_offense'
+        },
+        // Prop 207 relief is asked BEFORE the set-aside/sealing ladder, because
+        // it is strictly better than both: a true expungement, free, no waiting
+        // period, and a mandatory grant if the conduct is in scope. Wave 0
+        // documents it as one of Arizona's three tracks; it was encoded as a
+        // sentence in one message and nowhere else, so a person entitled to it
+        // was routed to the slower, weaker remedy instead. Found by running
+        // Wave 0's own AZ persona 2.
+        marijuana_offense: {
+          type: 'boolean',
+          text: 'Was this offense for marijuana conduct that Proposition 207 made legal — possessing, consuming, or transporting 2.5 ounces or less, marijuana paraphernalia, or cultivating six plants or fewer at your primary residence?',
+          yes: 'eligible_marijuana_az',
+          no: 'dui_offense'
+        },
+        // Wave 0 leaves DUI unresolved: set-aside looks available, but whether
+        // § 13-911 sealing is excluded for DUI is flagged "resolve from the
+        // statute text". The tree used to treat a DUI as any other class 1
+        // misdemeanour and offer BOTH remedies — asserting the very thing the
+        // package says is unknown. It asks instead, and hedges.
+        dui_offense: {
+          type: 'boolean',
+          text: 'Was this a DUI or impaired-driving offense?',
+          yes: 'complex_dui_az',
           no: 'sentence_completed'
         },
         sentence_completed: {
@@ -678,6 +750,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // The "no waiting period" claim was flagged in Wave 0 ("verify immediate
         // availability") and is asserted nowhere now. A flagged claim does not
         // get to stay just because it is the headline — see openQuestions.
+        complex_dui_az: {
+          status: 'complex',
+          title: 'DUI — Set-Aside Likely, Sealing Being Verified',
+          message: 'A set-aside under ARS § 13-905 appears to be available for a DUI once your sentence is complete and everything is paid — that part looks the same as any other conviction. What we are not going to tell you is whether Record Sealing under ARS § 13-911 is available for a DUI: our sources do not agree, and this is exactly the kind of thing that is worth a phone call rather than a guess. Ask the clerk of the court that handled your case whether a DUI can be sealed under § 13-911, or ask one of the legal aid organizations below. The set-aside is worth pursuing either way.',
+          remedy: 'Set-Aside (ARS § 13-905); § 13-911 sealing eligibility unverified for DUI',
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (DUI treatment under 13-911 not yet resolved)'
+        },
+        eligible_marijuana_az: {
+          status: 'eligible',
+          title: 'Marijuana Expungement — The Strongest Path Arizona Has',
+          message: 'Because this was marijuana conduct that Proposition 207 made legal, you can petition to EXPUNGE it under ARS § 36-2862 — and that is a better outcome than either of Arizona\'s other remedies. An expungement is a true erasure, not a set-aside notation and not a sealing. There is no waiting period, you can file at any time, there is no fee, and the court must grant it if your conduct is within what Prop 207 legalized. Do this before considering a set-aside or a petition to seal: those are slower, weaker, and unnecessary here.',
+          remedy: 'Petition to Expunge Marijuana Records (ARS § 36-2862)',
+          citation: 'Arizona Revised Statutes § 36-2862 (Proposition 207)'
+        },
         eligible_seal_dismissed_az: {
           status: 'eligible',
           title: 'Potentially Sealable — Waiting Period Being Verified',
@@ -823,6 +909,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: [],
       },
       {
+        // Found by running Wave 0's own persona 3 against the tree: the package
+        // contradicts itself. Refereed to the rules section, so the tree lets a
+        // violent felony through to Clean Slate. If the persona was right, New
+        // York is currently telling violent-felony convictions they are sealable.
+        question:
+          'Are Penal Law § 70.02 violent felonies eligible for Clean Slate automatic sealing after the 8-year wait? (Package sources conflicted.) Wave 0\'s rules section lists Clean Slate exclusions as sex offences (Arts. 130/263) and non-drug Class A felonies only — § 70.02 appears solely as a CPL 160.59 petition exclusion — but Wave 0\'s own persona 3 says a violent felony is excluded from BOTH paths. Resolved to the rules section pending confirmation. This is a practitioner question (Legal Aid Society / LawNY), not a clerk question.',
+        blocksFields: [],
+      },
+      {
         question:
           'The Clean Slate clock resets on a new conviction. This has no representation in the tree — the date nodes only ask for one date and cannot model a reset.',
         blocksFields: [],
@@ -956,7 +1051,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_clean_slate: {
           status: 'eligible',
           title: 'Clean Slate Automatic Sealing Likely Applies',
-          message: 'Under New York\'s Clean Slate Act (CPL § 160.57, effective Nov 16, 2024), eligible misdemeanors are sealed automatically 3 years — and felonies 8 years — after sentencing or release from incarceration, whichever is later. Based on your entries, your conviction appears eligible. Important: courts have until November 16, 2027 to finish sealing pre-existing records, so an eligible conviction may not be physically sealed yet. If you also have no more than 2 lifetime convictions (max 1 felony) and 10+ years have passed, you can alternatively petition for sealing now under CPL § 160.59 rather than wait.',
+          // The 160.59 cap is spelled out rather than alluded to: Wave 0's NY
+          // persona 4 wants a cost/speed tradeoff, and the tree has no
+          // conviction-count logic to compute it. Disclosing the cap lets a
+          // person work out for themselves whether the petition is open to
+          // them. The count logic needs the record model — post-demo.
+          message: 'Under New York\'s Clean Slate Act (CPL § 160.57, effective Nov 16, 2024), eligible misdemeanors are sealed automatically 3 years — and felonies 8 years — after sentencing or release from incarceration, whichever is later. Based on your entries, your conviction appears eligible. Important: courts have until November 16, 2027 to finish sealing pre-existing records, so an eligible conviction may not be physically sealed yet — eligible and sealed are not the same thing. Check where you stand by requesting your criminal history from the NYS Division of Criminal Justice Services. There may also be a faster route: the CPL § 160.59 petition lets you ask a judge to seal now rather than wait for the backlog, but it is capped at 2 convictions in your lifetime, of which at most 1 may be a felony, and it needs 10+ years since sentencing or release. If you are inside those limits it is worth weighing the petition\'s cost and effort against simply waiting for the automatic sealing to reach you; if you are outside them, waiting is your path.',
           remedy: 'Clean Slate Automatic Sealing (CPL 160.57); optional CPL 160.59 petition',
           citation: 'New York Criminal Procedure Law §§ 160.57, 160.59'
         },
@@ -1105,6 +1205,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           'Confirm the TexasLawHelp expunction kit URL and whether the county requires its own form. The current formUrl points at the site root because the deep link was never verified.',
         blocksFields: [],
       },
+      {
+        // Raised by Wave 0's own TX persona 4, which expects a dated answer
+        // ("first DWI, interlock full term, done 2023 -> nondisclosure 2025")
+        // the tree cannot give.
+        question:
+          'Confirm the first-DWI nondisclosure timing and which section governs: 2 years after sentence completion with a full-term ignition interlock, 5 years without? Wave 0 gives the rule but flags the mapping across §§ 411.0726 / .0731 / .0736. The DWI path is disclosed in prose on the conviction result but is NOT a branch — the tree has no interlock question — so a first-DWI person is currently told less than the research knows.',
+        blocksFields: [],
+      },
     ],
     sources: [
       { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: null, retrievedOn: null },
@@ -1124,7 +1232,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of your Texas case?',
           options: [
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expunction' },
+            // CHECK-RECORD-FIRST: 55A may have had the trial court order the
+            // expunction on the spot, so an acquittal gets its own result that
+            // says "check whether it already happened" BEFORE petition advice.
+            // Wave 0's TX persona 5 asks for exactly this.
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'check_record_first_tx' },
             // 'dismissed', not 'dropped': option values are matched against the
             // screening form's vocabulary (ConvictionRecord['disposition']).
             // 'dropped' matched nothing, so every dismissed Texas case fell
@@ -1204,14 +1316,18 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Certified Disposition from the Clerk)',
           citation: 'Texas Code of Criminal Procedure Chapter 55A; Texas Government Code Chapter 411, Subchapter E-1 (which path applies depends on the disposition)'
         },
+        // CHECK-RECORD-FIRST for acquittals.
+        check_record_first_tx: {
+          status: 'eligible',
+          title: 'It May Already Be Done — Check Before You File',
+          message: 'Start with a phone call, not a petition. Since January 1, 2025, Texas expunction lives in Chapter 55A of the Code of Criminal Procedure, and that chapter may direct the trial court to order an expunction at the time of an acquittal — then and there, without you asking. If that happened in your case, it is finished and you owe nobody a filing fee. Ask the clerk of the court that tried your case whether an expunction order was entered. We are still verifying how far this reaches, so do not assume either way. If no order was entered, you appear potentially eligible to petition for an Expunction under Chapter 55A: an expunction destroys the records, and afterwards you can generally deny the arrest ever occurred.',
+          remedy: 'Ask the Court Whether It Was Already Ordered — then Petition for Expunction (CCP Ch. 55A)',
+          citation: 'Texas Code of Criminal Procedure Chapter 55A (Art. 55A.002 for acquittals)'
+        },
         eligible_expunction: {
           status: 'eligible',
           title: 'Potential Expunction Eligible',
-          // Wave 0 flags that 55A may create AUTOMATIC expunction at acquittal,
-          // ordered by the trial court on the spot. If that is right, telling an
-          // acquitted person to go and petition is wrong advice — they may
-          // already have relief. Neither possibility is asserted; both are said.
-          message: 'Since your case ended in acquittal, dismissal, or was never charged, you appear potentially eligible for a complete Expunction under Texas Code of Criminal Procedure Chapter 55A (which replaced Chapter 55 effective January 1, 2025). An expunction destroys the records, and you can generally deny the arrest ever occurred. If you were ACQUITTED, check before you file: Chapter 55A may direct the trial court to order the expunction at the time of the acquittal, which would mean it has already been done. Ask the clerk of the court that tried the case whether an expunction order was entered — we are still verifying how far this reaches.',
+          message: 'Since your case ended in dismissal or was never charged, you appear potentially eligible for a complete Expunction under Texas Code of Criminal Procedure Chapter 55A (which replaced Chapter 55 effective January 1, 2025). An expunction destroys the records, and you can generally deny the arrest ever occurred.',
           remedy: 'Petition for Expunction (CCP Ch. 55A)',
           citation: 'Texas Code of Criminal Procedure Chapter 55A (e.g., Art. 55A.002 for acquittals)'
         },
@@ -1259,7 +1375,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // split between 2 and 5 years. A conflicting period is exactly the
           // case where the value stays out — prose and an open question hold
           // the place until the statute settles it, then it gets a real branch.
-          message: 'In Texas, standard convictions (found guilty and sentenced to jail, prison, or regular community supervision) are generally not eligible for expunction. Limited nondisclosure paths do exist for certain first-time misdemeanor convictions with completed sentences (Gov\'t Code §§ 411.073, 411.0735) and for certain first-time DWI convictions (§§ 411.0731, 411.0736). Those paths carry a waiting period after you complete your sentence, and we are not going to quote you a number: our sources disagree on how long § 411.0735 requires, and we would rather tell you that than pick one. A legal aid attorney or the sentencing court clerk can give you the current period. Otherwise, a pardon is the remaining remedy.',
+          //
+          // The DWI path IS disclosed in prose, with its conditions, because
+          // Wave 0 states them unflagged and a first-DWI person otherwise
+          // leaves here knowing less than the research does. It is not a
+          // branch: there is no interlock question in the tree yet, and the
+          // section mapping is flagged. See openQuestions.
+          message: 'In Texas, standard convictions (found guilty and sentenced to jail, prison, or regular community supervision) are generally not eligible for expunction. Limited nondisclosure paths do exist. For certain first-time misdemeanor convictions with completed sentences (Gov\'t Code §§ 411.073, 411.0735), there is a waiting period after you finish your sentence — and we are not going to quote you a number, because our sources disagree on how long § 411.0735 requires and we would rather say so than pick one. For a FIRST DWI, a nondisclosure path exists (Gov\'t Code §§ 411.0726, 411.0731, 411.0736) if your BAC was under 0.15, no accident involved another person, and you did not hold a commercial license: reported as a 2-year wait after your sentence if you kept an ignition interlock for the full term, and 5 years without one. We have not confirmed which section applies to which situation, so treat those as leads to check rather than as your answer. A legal aid attorney or the sentencing court clerk can give you the current periods. Otherwise, a pardon is the remaining remedy.',
           remedy: 'Limited Nondisclosure (certain misdemeanors) / Governor\'s Pardon',
           citation: 'Texas Gov\'t Code §§ 411.073–411.0736; CCP Chapter 55A'
         }

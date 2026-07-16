@@ -191,10 +191,20 @@ async function main() {
     process.exit(1);
   }
 
-  // Questions explicitly moved INTO this session from another state's wave.
+  // Questions explicitly moved INTO this session from a state whose own wave is
+  // a different session.
+  //
+  // Compare by CODE, not object identity: load() returns a fresh object from the
+  // database on every call, so an identity check silently matches nothing and
+  // re-adds every state that is already here — duplicating each state and
+  // double-counting every open question. That is exactly what it did once the
+  // database was migrated and load() stopped returning the fallbackRules
+  // singleton.
+  const already = new Set(states.map(s => s.code));
   for (const code of Object.keys(fallbackRules)) {
+    if (already.has(code.toUpperCase())) continue;
     const config = await load(code);
-    if (!config || states.includes(config)) continue;
+    if (!config) continue;
     const moved = config.openQuestions.filter(q => sessionOfQuestion(config, q) === session);
     if (moved.length) states.push({ ...config, openQuestions: moved });
   }

@@ -15,6 +15,11 @@ contradicts itself and does not say which wins."
 ## IL — prior felony interacting with a later felony sealing petition
 
 **Wave 3, Illinois. Hedged: `complex_new_law_il`.**
+**STATUS: OPEN — tagged for Diana's statute pass (verify against current
+20 ILCS 2630/5.2 text on ilga.gov). Do NOT resolve from a model reading; a
+two-week-old statute is exactly what the statute-check tier is for. The hedge
+is the correct answer until a human reads the text. Ask New Leaf Illinois on
+the Session 3 call (added to the call sheet). Ruling by Diana, 2026-07-16.**
 
 The Illinois Clean Slate Act (signed Jan 16, 2026; phasing in from June 30,
 2026 — two weeks before the package) removed the rule that a prior felony

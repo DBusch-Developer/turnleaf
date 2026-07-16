@@ -452,6 +452,44 @@ describe('validateState — statute-link integrity', () => {
   });
 });
 
+describe('validateState — verified-date integrity', () => {
+  test('flags a non-draft state with no verifiedDate (a badge with no date)', () => {
+    const c = validConfig();
+    c.verificationStatus = 'statute_cited';
+    c.verifiedDate = null;
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'verified-date-integrity' && e.path === 'verifiedDate')).toBe(true);
+  });
+
+  test('flags a draft state that carries a verifiedDate (a date on unverified rules)', () => {
+    const c = validConfig(); // draft
+    c.verifiedDate = '2026-07-16';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'verified-date-integrity' && e.path === 'verifiedDate')).toBe(true);
+  });
+
+  test('flags a verifiedDate that is not a full YYYY-MM-DD date', () => {
+    const c = validConfig();
+    c.verificationStatus = 'statute_cited';
+    c.verifiedDate = '2026-07';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'verified-date-integrity')).toBe(true);
+  });
+
+  test('accepts a draft state with no verifiedDate, and a verified state with one', () => {
+    const draft = validConfig();
+    expect(validateState(draft).filter(e => e.rule === 'verified-date-integrity')).toEqual([]);
+
+    const verified = validConfig();
+    verified.verificationStatus = 'statute_cited';
+    verified.verifiedDate = '2026-07-16';
+    expect(validateState(verified).filter(e => e.rule === 'verified-date-integrity')).toEqual([]);
+  });
+});
+
 describe('validateState — error reporting', () => {
   test('reports every error, not just the first', () => {
     const c = validConfig();

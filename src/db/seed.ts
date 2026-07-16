@@ -67,6 +67,7 @@ async function seed() {
       rules JSONB NOT NULL,
       resources JSONB NOT NULL,
       last_reviewed DATE NOT NULL DEFAULT CURRENT_DATE,
+      verified_date DATE,
       verification_status VARCHAR(20) NOT NULL CHECK (verification_status IN ('draft', 'statute_cited', 'phone_verified'))
     );
   `;
@@ -96,6 +97,7 @@ async function seed() {
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS key_dates JSONB NOT NULL DEFAULT '[]'::jsonb;`;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS open_questions JSONB NOT NULL DEFAULT '[]'::jsonb;`;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS sources JSONB NOT NULL DEFAULT '[]'::jsonb;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS verified_date DATE;`;
 
   console.log('Seeding states database...');
   for (const [code, config] of Object.entries(fallbackRules)) {
@@ -105,7 +107,7 @@ async function seed() {
     console.log(`Upserting ${config.name} (${code}) [${config.verificationStatus}]...`);
     await sql`
       INSERT INTO states (
-        code, name, rules, resources, last_reviewed, verification_status,
+        code, name, rules, resources, last_reviewed, verified_date, verification_status,
         source_package, terminology, key_dates, open_questions, sources
       )
       VALUES (
@@ -114,6 +116,7 @@ async function seed() {
         ${config.rules},
         ${config.resources},
         ${config.lastReviewed},
+        ${config.verifiedDate ?? null},
         ${config.verificationStatus},
         ${config.sourcePackage},
         ${config.terminology},
@@ -127,6 +130,7 @@ async function seed() {
         rules = EXCLUDED.rules,
         resources = EXCLUDED.resources,
         last_reviewed = EXCLUDED.last_reviewed,
+        verified_date = EXCLUDED.verified_date,
         verification_status = EXCLUDED.verification_status,
         source_package = EXCLUDED.source_package,
         terminology = EXCLUDED.terminology,

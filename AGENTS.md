@@ -81,6 +81,8 @@ Do not replace a stack element without an approved ADR (`docs/decisions/`).
 3. If a package doesn't state a value, the field is `null`. No defaults, no "typical" values, no inference.
 4. Every state seeds with `verification_status: "draft"`. Nothing is ever written as `"phone_verified"` or `"statute_cited"` — only Diana flips those manually after verification calls.
 5. Every state gets a `sources` array containing the statute citations from its package.
+6. A source's `url` + `retrievedOn` are a verification claim — a person opened the official text and read it. Populate them **only** for human-verified sources, and **never construct a url**: if the exact official URL is unknown, ask. A `url` requires a `retrievedOn`, and may not sit on a `draft` state; the validator enforces both (`source-url-integrity`). `verifiedDate` is when the badge was earned (null on draft, a date otherwise — `verified-date-integrity`), distinct from `lastReviewed` ("someone looked").
+7. Verified statute PDFs live in [`research/statutes/`](./research/statutes/) as `<STATE>/<section>-<retrievedOn>.pdf`. They are **provenance artifacts only** — never user-facing, and never a data source for encoding (the `research/waves/` packages and Diana's corrections remain that). They exist so a future re-verification can diff what the law said then vs. now.
 
 ### What the machine holds, and what it doesn't
 

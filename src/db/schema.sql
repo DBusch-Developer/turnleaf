@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS states (
   name                VARCHAR(100) NOT NULL,
   rules               JSONB       NOT NULL,   -- the decision tree
   resources           JSONB       NOT NULL,   -- remedies + legal aid
-  last_reviewed       DATE        NOT NULL DEFAULT CURRENT_DATE,
+  last_reviewed       DATE        NOT NULL DEFAULT CURRENT_DATE,   -- when someone last LOOKED
+  verified_date       DATE,                                        -- when the badge was earned (null on draft)
   verification_status VARCHAR(20) NOT NULL
     CHECK (verification_status IN ('draft', 'statute_cited', 'phone_verified')),
   source_package      TEXT,                   -- research/waves/... — rule 1 provenance
@@ -53,3 +54,4 @@ ALTER TABLE states ADD COLUMN IF NOT EXISTS terminology    TEXT;
 ALTER TABLE states ADD COLUMN IF NOT EXISTS key_dates      JSONB NOT NULL DEFAULT '[]'::jsonb;
 ALTER TABLE states ADD COLUMN IF NOT EXISTS open_questions JSONB NOT NULL DEFAULT '[]'::jsonb;
 ALTER TABLE states ADD COLUMN IF NOT EXISTS sources        JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE states ADD COLUMN IF NOT EXISTS verified_date  DATE;   -- null until a person earns the badge

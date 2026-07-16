@@ -43,7 +43,12 @@ export type ValidationRule =
    *  with no retrievedOn (a link nobody recorded reading), or a url on a state
    *  still marked 'draft' (a link on rules no human has checked). The link IS
    *  the verification claim, so it may only exist where the claim is true. */
-  | 'source-url-integrity';
+  | 'source-url-integrity'
+  /** verifiedDate (when the badge was earned) must be present exactly when the
+   *  badge is: set on a non-draft state, absent on a draft one, and a real date
+   *  when present. A badge with no date, or a date on unverified rules, is a
+   *  verification claim that does not line up with itself. */
+  | 'verified-date-integrity';
 
 export interface ValidationError {
   /** Two-letter state code, so a seed failure names the state. */
@@ -193,6 +198,23 @@ function checkRequiredFields(config: StateRuleConfig, err: (r: ValidationRule, p
 
   if (!config.terminology?.trim()) {
     err('missing-field', 'terminology', 'no terminology recorded — what does this state call its remedies, and what does it NOT have?');
+  }
+
+  // verifiedDate lines up with the badge or it is wrong. A non-draft state has
+  // earned its badge and must date it; a draft state has not and must not.
+  const isDraftState = config.verificationStatus === 'draft';
+  const verifiedDate = config.verifiedDate ?? null;
+  if (isDraftState && verifiedDate !== null) {
+    err('verified-date-integrity', 'verifiedDate',
+      `verifiedDate is set (${JSON.stringify(verifiedDate)}) but the state is still 'draft' — a badge date may only exist once the badge is earned`);
+  }
+  if (!isDraftState && verifiedDate === null) {
+    err('verified-date-integrity', 'verifiedDate',
+      `state is '${config.verificationStatus}' but has no verifiedDate — record the date the badge was earned`);
+  }
+  if (verifiedDate !== null && !/^\d{4}-\d{2}-\d{2}$/.test(verifiedDate)) {
+    err('verified-date-integrity', 'verifiedDate',
+      `'${verifiedDate}' is not a full YYYY-MM-DD date — a verification happened on a specific day`);
   }
 
   if (!config.sources?.length) {

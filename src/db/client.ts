@@ -121,7 +121,8 @@ export async function getState(code: string): Promise<StateRuleConfig | null> {
     try {
       const rows = await sql`
         SELECT code, name, rules, resources,
-               last_reviewed as "lastReviewed", verification_status as "verificationStatus",
+               last_reviewed as "lastReviewed", verified_date as "verifiedDate",
+               verification_status as "verificationStatus",
                source_package as "sourcePackage", terminology,
                key_dates as "keyDates", open_questions as "openQuestions", sources
         FROM states
@@ -138,6 +139,11 @@ export async function getState(code: string): Promise<StateRuleConfig | null> {
           lastReviewed: row.lastReviewed instanceof Date
             ? row.lastReviewed.toISOString().split('T')[0]
             : String(row.lastReviewed),
+          verifiedDate: row.verifiedDate == null
+            ? null
+            : (row.verifiedDate instanceof Date
+                ? row.verifiedDate.toISOString().split('T')[0]
+                : String(row.verifiedDate)),
           verificationStatus: row.verificationStatus as VerificationStatus,
           sourcePackage: (row.sourcePackage as string) ?? '',
           terminology: (row.terminology as string) ?? '',

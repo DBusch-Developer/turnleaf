@@ -152,8 +152,16 @@ export interface RuleResult {
 export interface StateRuleConfig {
   code: string;
   name: string;
+  /** When someone last LOOKED at this state — a fresh draft, or a re-review.
+   *  Distinct from verifiedDate: lastReviewed moves on every re-review, the
+   *  badge date does not, so the two drift apart after the first post-call look. */
   lastReviewed: string;
   verificationStatus: VerificationStatus;
+  /** When the human verification that earned the current badge happened — null
+   *  on a draft state (no badge), a date on a verified one. "lastReviewed means
+   *  someone looked; verifiedDate means the badge was earned." The validator
+   *  enforces the null-iff-draft correspondence. */
+  verifiedDate?: string | null;
   /** The research package this state's rules come from. Rules data may come
    *  from nowhere else — not from a model's knowledge of state law. */
   sourcePackage: string;
@@ -549,6 +557,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     // still counter questions.
     lastReviewed: '2026-07-15',
     verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-15',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
       'Arizona has three separate remedies and the difference between them matters. A SET ASIDE (ARS § 13-905) vacates the judgment of guilt and releases you from most penalties, but the conviction stays on the public record with a "set aside" notation — it is not an expungement and does not hide anything. SEALING (ARS § 13-911, in effect since Jan 1, 2023) is the stronger remedy: it hides the case records from public view, and you may deny the record in most contexts. Only marijuana relief under ARS § 36-2862 (Prop 207) is a true EXPUNGEMENT. Arizona has no automatic relief of any kind — every remedy requires a petition, and nothing arrives on its own.',
@@ -637,9 +646,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     // URL nobody actually opened, which is the same species as padding "2021"
     // into "2021-01-01". If the deep links were used, paste them and they go in.
     sources: [
-      { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance; § 13-905(B) no filing fee; (K),(L) CSC timing; (O) firearms; (P) exclusions)', url: null, retrievedOn: '2026-07-15' },
-      { id: 'Ariz. Rev. Stat. § 13-911 (record sealing; (A)(2)-(3) non-convictions; (D) 60-day rule; (E) clock; (F) prior-felony +5; (G) payment at filing; (H) DPS fee and waiver; (L) 3-year denial bar; (O) exclusions)', url: null, retrievedOn: '2026-07-15' },
-      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance; § 13-905(B) no filing fee; (K),(L) CSC timing; (O) firearms; (P) exclusions)', url: 'https://www.azleg.gov/ars/13/00905.htm', retrievedOn: '2026-07-15' },
+      { id: 'Ariz. Rev. Stat. § 13-911 (record sealing; (A)(2)-(3) non-convictions; (D) 60-day rule; (E) clock; (F) prior-felony +5; (G) payment at filing; (H) DPS fee and waiver; (L) 3-year denial bar; (O) exclusions)', url: 'https://www.azleg.gov/ars/13/00911.htm', retrievedOn: '2026-07-15' },
+      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement; (B) state bears the clear-and-convincing burden of proving ineligibility)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Ariz. Rev. Stat. § 13-3821 (registrable offenses; § 13-905 exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-705 (dangerous crimes against children; § 13-911(O) exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; firearms exception at § 13-905(O))', url: null, retrievedOn: null },
@@ -881,9 +890,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_marijuana_az: {
           status: 'eligible',
           title: 'Marijuana Expungement — The Strongest Path Arizona Has',
-          message: 'Because this was marijuana conduct that Proposition 207 made legal, you can petition to EXPUNGE it under ARS § 36-2862 — and that is a better outcome than either of Arizona\'s other remedies. An expungement is a true erasure, not a set-aside notation and not a sealing. There is no waiting period, you can file at any time, there is no fee, and the court must grant it if your conduct is within what Prop 207 legalized. Do this before considering a set-aside or a petition to seal: those are slower, weaker, and unnecessary here.',
+          message: 'Because this was marijuana conduct that Proposition 207 made legal, you can petition to EXPUNGE it under ARS § 36-2862 — and that is a better outcome than either of Arizona\'s other remedies. An expungement is a true erasure, not a set-aside notation and not a sealing. There is no waiting period, you can file at any time, and there is no fee. And the burden is on the STATE: under § 36-2862(B), the court must grant the expungement unless the prosecuting agency proves by clear and convincing evidence that you are not eligible. Do this before considering a set-aside or a petition to seal: those are slower, weaker, and unnecessary here.',
           remedy: 'Petition to Expunge Marijuana Records (ARS § 36-2862)',
-          citation: 'Arizona Revised Statutes § 36-2862 (Proposition 207)'
+          citation: 'Arizona Revised Statutes § 36-2862; state bears the clear-and-convincing burden under § 36-2862(B) (Proposition 207)'
         },
         eligible_seal_dismissed_az: {
           status: 'eligible',
@@ -1308,6 +1317,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     // 411.0735's 2-vs-5-year period is still in conflict (see open questions).
     lastReviewed: '2026-07-16',
     verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
       'Texas has two remedies and they are not the same thing. EXPUNCTION (Code of Criminal Procedure Ch. 55A — recodified from Ch. 55 effective Jan 1, 2025, so any form or guide still citing Ch. 55 is stale) DESTROYS the records: you can lawfully deny the arrest ever happened. An ORDER OF NONDISCLOSURE (Government Code Ch. 411, Subch. E-1) only SEALS: the record survives and stays visible to law enforcement and some licensing bodies. The bright line that governs almost every Texas screening: CONVICTIONS ARE ESSENTIALLY NEVER EXPUNGABLE (a pardon aside). If you were convicted, nondisclosure is the only route, and only for certain offences. Nondisclosure is not one rule but a lattice of per-section rules under § 411.0725 and its neighbours.',
@@ -1388,7 +1398,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     // why these carry a retrievedOn and the sub-articles are listed separately.
     // A citation we have read is a different thing from one we wrote down.
     sources: [
-      { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: 'https://statutes.capitol.texas.gov/Docs/CR/htm/CR.55A.htm', retrievedOn: '2026-07-16' },
       { id: 'Tex. Code Crim. Proc. art. 55A.002 (entitlement after acquittal)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Tex. Code Crim. Proc. arts. 55A.003, 55A.004 (pardon-based expunction)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Tex. Code Crim. Proc. art. 55A.051(3) (community-supervision bar; Class C excepted)', url: null, retrievedOn: '2026-07-16' },
@@ -1405,11 +1415,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       { id: 'Tex. Code Crim. Proc. art. 55A.401 (effect of expunction — lawful denial)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code ch. 411, subch. E-1 (orders of nondisclosure)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code § 411.072 (deferred adjudication nondisclosure, certain misdemeanours)', url: null, retrievedOn: null },
-      { id: 'Tex. Gov\'t Code § 411.0725 (deferred adjudication nondisclosure)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period still in conflict; see open questions)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Tex. Gov\'t Code § 411.0736 (DWI nondisclosure)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Tex. Gov\'t Code § 411.074 (nondisclosure — required conditions)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Tex. Gov\'t Code §§ 411.0726, 411.0731 (DWI nondisclosure paths)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code § 411.0725 (deferred adjudication nondisclosure)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0725', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period still in conflict; see open questions)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0735', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0736 (DWI nondisclosure)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0736', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.074 (nondisclosure — required conditions)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.074', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0731 (DWI nondisclosure path)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0731', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0726 (DWI nondisclosure path)', url: null, retrievedOn: null },
       { id: 'HB 4504 (recodification of ch. 55 to ch. 55A)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -10978,6 +10989,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     name: 'New Hampshire',
     lastReviewed: '2026-07-16',
     verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
     terminology:
       'New Hampshire calls it ANNULMENT (RSA 651:5), filed in the court that handled the case — a separate '

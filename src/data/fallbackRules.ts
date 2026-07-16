@@ -639,7 +639,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     sources: [
       { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance; § 13-905(B) no filing fee; (K),(L) CSC timing; (O) firearms; (P) exclusions)', url: null, retrievedOn: '2026-07-15' },
       { id: 'Ariz. Rev. Stat. § 13-911 (record sealing; (A)(2)-(3) non-convictions; (D) 60-day rule; (E) clock; (F) prior-felony +5; (G) payment at filing; (H) DPS fee and waiver; (L) 3-year denial bar; (O) exclusions)', url: null, retrievedOn: '2026-07-15' },
-      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: '2026-07-15' },
+      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Ariz. Rev. Stat. § 13-3821 (registrable offenses; § 13-905 exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-705 (dangerous crimes against children; § 13-911(O) exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; firearms exception at § 13-905(O))', url: null, retrievedOn: null },

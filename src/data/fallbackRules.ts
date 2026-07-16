@@ -1,3 +1,5 @@
+import type { RecordField } from './screening';
+
 // ============================================================================
 // TURNLEAF FALLBACK RULES — CA / AZ / NY / TX
 // Corrected 2026-07-14. Sources: primary statutes + state court self-help
@@ -117,7 +119,22 @@ export type Validation =
 
 export interface RuleNode {
   type: 'choice' | 'boolean' | 'date' | 'checkpoint';
+  /** The question, as a person reads it. This IS the UI — the wizard renders
+   *  it. There is no second copy of these questions in a form. */
   text: string;
+  /**
+   * Read the answer from this record field instead of asking.
+   *
+   * Set it only when the screening form already collects the answer. Every
+   * option value must then be a value that field can hold (FIELD_DOMAINS) —
+   * the validator rejects the rest, because an option the form can never emit
+   * is an unreachable branch.
+   *
+   * Omit it and the node is ASKED: the tree names its own answers, so a state
+   * can turn on class 2/3 felonies or indictable offences without the form
+   * growing a field per state.
+   */
+  field?: RecordField;
   options?: Array<{ label: string; value: string; next: string }>;
   yes?: string;
   no?: string;
@@ -273,6 +290,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       nodes: {
         disposition: {
           type: 'choice',
+          field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'sex_registration' },
@@ -288,12 +306,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         prison_sentence: {
           type: 'boolean',
+          field: 'prison_sentenced',
           text: 'Did your sentence include time in a California state prison (as opposed to county jail or probation)?',
           yes: 'complex_prison',
           no: 'probation_status'
         },
         probation_status: {
           type: 'choice',
+          field: 'probation_status',
           text: 'What is your current probation status?',
           options: [
             { label: 'Successfully completed probation', value: 'completed', next: 'eligible_expungement' },
@@ -562,6 +582,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       nodes: {
         disposition: {
           type: 'choice',
+          field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_offense' },
@@ -843,6 +864,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       nodes: {
         disposition: {
           type: 'choice',
+          field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted of a misdemeanor or felony', value: 'convicted', next: 'excluded_offense_ny' },
@@ -868,6 +890,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         offense_level_ny: {
           type: 'choice',
+          field: 'charge_type',
           text: 'What was the level of the offense?',
           options: [
             { label: 'Misdemeanor', value: 'misdemeanor', next: 'clean_slate_date_misd' },
@@ -1098,6 +1121,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       nodes: {
         disposition_type: {
           type: 'choice',
+          field: 'disposition',
           text: 'What was the outcome of your Texas case?',
           options: [
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expunction' },
@@ -1113,6 +1137,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         dismissal_offense_level: {
           type: 'choice',
+          field: 'charge_type',
           text: 'What was the level of the offense that was dismissed or never charged?',
           options: [
             { label: 'Misdemeanor', value: 'misdemeanor', next: 'arrest_date_tx_misd' },
@@ -1150,6 +1175,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         offense_level: {
           type: 'choice',
+          field: 'charge_type',
           text: 'What was the level of the offense?',
           options: [
             { label: 'Misdemeanor', value: 'misdemeanor', next: 'eligible_nondisclosure_misdemeanor' },

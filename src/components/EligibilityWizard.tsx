@@ -1,82 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { StateRuleConfig, RuleNode } from '../data/fallbackRules';
-import { Trash2, AlertTriangle, Plus, ClipboardList } from 'lucide-react';
+import { StateRuleConfig } from '../data/fallbackRules';
+import { evaluate, currentNode, isAsked, type Answers } from '../data/rulesEngine';
+import type { ConvictionRecord } from '../data/screening';
+import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 
-export interface ConvictionRecord {
-  id: string;
-  title: string;
-  charge_type: 'misdemeanor' | 'felony' | 'infraction' | 'unknown';
-  disposition: 'convicted' | 'dismissed' | 'deferred' | 'acquitted' | 'unknown';
-  disposition_date: string;
-  probation_status: 'completed' | 'failed' | 'active' | 'none';
-  prison_sentenced: boolean;
-  restitution_paid: boolean;
-}
-
-// ---------------------------------------------------------------------------
-// Disposition vocabulary
-//
-// The screening form and the rule trees are two separate lists of strings that
-// have to agree. They are reconciled here and nowhere else. Two rules hold:
-//
-//   1. A disposition no option accepts routes to a HEDGE, never to a
-//      substantive answer. Texas encoded dismissals as 'dropped' while the
-//      form emits 'dismissed'; the mismatch fell through to that node's
-//      default and told people whose cases were DISMISSED that their
-//      CONVICTION was ineligible for relief.
-//   2. 'unknown' never widens. Not knowing the outcome is a reason to go get
-//      the record, not a reason to guess on someone's behalf.
-//
-// A tree that draws a finer distinction takes the specific value (Texas
-// separates acquittal from dismissal); a tree that only splits conviction from
-// non-conviction takes the general one.
-// ---------------------------------------------------------------------------
-const DISPOSITION_VALUES: Record<ConvictionRecord['disposition'], string[]> = {
-  convicted: ['convicted'],
-  dismissed: ['dismissed'],
-  acquitted: ['acquitted', 'dismissed'],
-  deferred: ['deferred', 'dismissed'],
-  unknown: ['unknown'],
-};
-
-/** Result key every tree exposes for "we cannot screen this yet". */
-const HEDGE = 'unknown_disposition';
-
-/**
- * How much time has passed since `from`, in `unit`. null if the date is unusable.
- *
- * Months and years are counted as calendar steps, not as 30- or 365.25-day
- * approximations: a 2-year period that starts on Feb 29 ends on a real
- * calendar date, and someone sitting one day either side of their eligibility
- * date deserves the same answer a clerk would give them.
- */
-function elapsedSince(from: string, unit: 'days' | 'months' | 'years'): number | null {
-  const start = new Date(from);
-  if (isNaN(start.getTime())) return null;
-
-  const now = new Date();
-  if (unit === 'days') {
-    return Math.floor((now.getTime() - start.getTime()) / 86_400_000);
-  }
-
-  let months =
-    (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-  // Not a full month until the day-of-month is reached.
-  if (now.getDate() < start.getDate()) months--;
-
-  return unit === 'months' ? months : Math.floor(months / 12);
-}
-
-/** The value `node` actually offers for this disposition, or null if none. */
-function resolveDisposition(
-  node: RuleNode,
-  disposition: ConvictionRecord['disposition']
-): string | null {
-  const offered = new Set((node.options ?? []).map(o => o.value));
-  return DISPOSITION_VALUES[disposition].find(v => offered.has(v)) ?? null;
-}
+// ConvictionRecord now lives in the data layer, alongside the field domains the
+// validator checks against. Re-exported because half the app imports it here.
+export type { ConvictionRecord };
 
 interface EligibilityWizardProps {
   stateConfig: StateRuleConfig;
@@ -137,145 +69,29 @@ export default function EligibilityWizard({
     }));
   };
 
-  // The Deterministic Rules Engine (FR-6)
-  const evaluateRecord = (record: ConvictionRecord) => {
-    let currentNodeId = stateConfig.rules.startNode;
-    const nodes = stateConfig.rules.nodes;
-    const results = stateConfig.rules.results;
-    let steps = 0;
+  // The engine lives in src/data/rulesEngine.ts and is tested there. This
+  // component asks questions and shows answers; it does not decide anything.
 
-    while (steps < 30) {
-      steps++;
-      
-      // If we land directly on a result key
-      if (results[currentNodeId]) {
-        return results[currentNodeId];
-      }
+  /** Answers to ASKED nodes, per record id: { [recordId]: { [nodeId]: answer } } */
+  const [answers, setAnswers] = useState<Record<string, Answers>>({});
 
-      const node = nodes[currentNodeId];
-      if (!node) {
-        break;
-      }
+  /** The question a record is currently sitting on, if any. */
+  const pendingFor = (record: ConvictionRecord) =>
+    currentNode(stateConfig, answers[record.id] ?? {}, record);
 
-      if (currentNodeId === 'offense_level') {
-        const match = node.options?.find(o => o.value === record.charge_type);
-        currentNodeId = match ? match.next : 'complex';
-        continue;
-      }
+  /** Every record that still needs a person to answer something. */
+  const pending = records
+    .map(r => ({ record: r, step: pendingFor(r) }))
+    .filter((x): x is { record: ConvictionRecord; step: NonNullable<ReturnType<typeof pendingFor>> } =>
+      x.step !== null && isAsked(x.step.node));
 
-      if (currentNodeId === 'prison_sentence' || currentNodeId === 'offense_type') {
-        currentNodeId = record.prison_sentenced ? (node.yes || 'complex') : (node.no || 'complex');
-        continue;
-      }
-
-      // Both node IDs ask the same question; CA/AZ/NY name it 'disposition',
-      // TX names it 'disposition_type'. One resolver serves both.
-      if (currentNodeId === 'disposition' || currentNodeId === 'disposition_type') {
-        const value = resolveDisposition(node, record.disposition);
-        const match = value ? node.options?.find(o => o.value === value) : undefined;
-        currentNodeId = match ? match.next : HEDGE;
-        continue;
-      }
-
-      if (currentNodeId === 'probation_status') {
-        const match = node.options?.find(o => o.value === record.probation_status);
-        currentNodeId = match ? match.next : 'complex';
-        continue;
-      }
-
-      if (
-        currentNodeId === 'completion_date' ||
-        currentNodeId === 'sentence_completion_date' ||
-        currentNodeId === 'sentence_date' ||
-        currentNodeId === 'sentence_date_tx_felony_deferred' ||
-        currentNodeId === 'sentence_date_tx_dismissal'
-      ) {
-        const v = node.validation;
-
-        // No rule on a date node is a data bug, not a reason to invent one.
-        // This used to read `node.validation?.yearsRequired || 1`, which turned
-        // a missing period into a confident one-year answer.
-        if (!v) {
-          currentNodeId = HEDGE;
-          continue;
-        }
-
-        // A period we do not know cannot be computed against. The type makes
-        // this branch the only thing a null period can do.
-        if ('nextUnknown' in v) {
-          currentNodeId = v.nextUnknown;
-          continue;
-        }
-
-        const elapsed = elapsedSince(record.disposition_date, v.period.unit);
-        if (elapsed === null) {
-          currentNodeId = v.nextFail;
-        } else {
-          currentNodeId = elapsed >= v.period.amount ? v.nextPass : v.nextFail;
-        }
-        continue;
-      }
-
-      if (currentNodeId === 'dangerous_offense') {
-        const isDangerous = record.title.toLowerCase().includes('assault') ||
-                            record.title.toLowerCase().includes('violent') ||
-                            record.title.toLowerCase().includes('sexual') ||
-                            record.title.toLowerCase().includes('robbery');
-        currentNodeId = isDangerous ? (node.yes || 'complex') : (node.no || 'complex');
-        continue;
-      }
-
-      if (currentNodeId === 'sentence_completed') {
-        currentNodeId = (record.probation_status === 'completed' || record.probation_status === 'none') 
-          ? (node.yes || 'complex') 
-          : (node.no || 'complex');
-        continue;
-      }
-
-      if (currentNodeId === 'conviction_count') {
-        // Evaluate based on total conviction count in records list
-        const totalConvictions = records.filter(r => r.disposition === 'convicted').length;
-        if (totalConvictions <= 2) {
-          currentNodeId = node.options?.[0].next || 'complex';
-        } else {
-          currentNodeId = node.options?.[1].next || 'complex';
-        }
-        continue;
-      }
-
-      if (currentNodeId === 'check_dismissal') {
-        currentNodeId = (record.disposition === 'dismissed' || record.disposition === 'acquitted') 
-          ? (node.yes || 'complex') 
-          : (node.no || 'complex');
-        continue;
-      }
-
-      // Default safety break
-      break;
-    }
-
-    // Default Fallback Result.
-    //
-    // This fires when the tree could not classify the record at all, so it
-    // cannot name the law that applies — and must not pretend to. It used to
-    // cite 'General State Sealing Statutes', which is not a statute in any
-    // state; it was invented text in the result that fires most often. A hedge
-    // carrying a fake source is not a hedge (RULES.md, rule 1).
-    //
-    // It also must not say "your conviction": this path is reached by records
-    // that were never convictions.
-    return {
-      status: 'complex',
-      title: 'Complex Analysis Required',
-      message: 'This screening could not classify your record from what was entered, so it has no answer for you — and would rather say so than guess. A legal aid attorney can review the case directly.',
-      remedy: 'Legal Aid Intake Evaluation',
-      citation: 'No citation — this result means the screener could not classify your situation.'
-    };
+  const answerNode = (recordId: string, nodeId: string, value: string | boolean) => {
+    setAnswers(prev => ({ ...prev, [recordId]: { ...(prev[recordId] ?? {}), [nodeId]: value } }));
   };
 
   const handleScreening = () => {
     const results = records.map(r => {
-      const evaluation = evaluateRecord(r);
+      const evaluation = evaluate(stateConfig, answers[r.id] ?? {}, r);
       return {
         recordId: r.id,
         title: r.title || 'Unnamed Offense',
@@ -290,6 +106,7 @@ export default function EligibilityWizard({
     });
     onScreeningComplete(results, records);
   };
+
 
   return (
     <div className="glass-card animate-slide-up" style={{ padding: '2rem', maxWidth: '800px', width: '100%', margin: '0 auto' }}>
@@ -486,6 +303,70 @@ export default function EligibilityWizard({
             </p>
           </div>
 
+          {/* The tree's own questions.
+             *
+             * These come from the rule data — node.text and node.options,
+             * verbatim. There is no second list of questions in this file, and
+             * that is deliberate: a hand-maintained copy of the legal questions
+             * is what drifts from the law. Whatever a state's statutes turn on
+             * (Arizona's offence classes, New Jersey's indictable offences),
+             * the tree asks it and this renders it, with no code per state.
+             *
+             * A node is asked ONLY when the record cannot already answer it. */}
+          {pending.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {pending.map(({ record, step }) => (
+                <div
+                  key={record.id}
+                  style={{
+                    border: '1px solid var(--color-primary-border)',
+                    borderRadius: '12px',
+                    padding: '1.25rem',
+                    background: 'var(--color-card-bg)'
+                  }}
+                >
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start', marginBottom: '0.85rem' }}>
+                    <HelpCircle size={18} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '0.15rem' }} />
+                    <div>
+                      <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-light)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                        {record.title || 'Unnamed charge'}
+                      </p>
+                      <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                        {step.node.text}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {step.node.type === 'boolean' ? (
+                      [{ label: 'Yes', value: true }, { label: 'No', value: false }].map(opt => (
+                        <button
+                          key={String(opt.value)}
+                          className="btn btn-outline"
+                          style={{ padding: '0.5rem 1.1rem', fontSize: '0.9rem' }}
+                          onClick={() => answerNode(record.id, step.id, opt.value)}
+                        >
+                          {opt.label}
+                        </button>
+                      ))
+                    ) : (
+                      (step.node.options ?? []).map(opt => (
+                        <button
+                          key={opt.value}
+                          className="btn btn-outline"
+                          style={{ padding: '0.5rem 1.1rem', fontSize: '0.9rem', textAlign: 'left' }}
+                          onClick={() => answerNode(record.id, step.id, opt.value)}
+                        >
+                          {opt.label}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid var(--color-card-border)', textAlign: 'left' }}>
@@ -535,8 +416,8 @@ export default function EligibilityWizard({
             <button 
               className="btn btn-primary" 
               onClick={handleScreening}
-              disabled={!checkpointVerified}
-              style={{ opacity: checkpointVerified ? 1 : 0.6 }}
+              disabled={!checkpointVerified || pending.length > 0}
+              style={{ opacity: checkpointVerified && pending.length === 0 ? 1 : 0.6 }}
             >
               Generate Eligibility Report
             </button>

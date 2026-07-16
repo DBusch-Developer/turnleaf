@@ -25,6 +25,7 @@
 // ============================================================================
 
 import type { StateRuleConfig, RuleNode } from './fallbackRules';
+import { FIELD_DOMAINS, BOOLEAN_FIELDS } from './screening';
 
 export type ValidationRule =
   | 'missing-field'
@@ -34,7 +35,10 @@ export type ValidationRule =
   | 'bad-shape'
   /** A field is null (unknown) with no open question accounting for it, or an
    *  open question claims to block a field that still holds a value. */
-  | 'unblocked-null';
+  | 'unblocked-null'
+  /** A record-backed node offers an option value that field can never hold, so
+   *  the branch is unreachable no matter what the person answers. */
+  | 'unproducible-value';
 
 export interface ValidationError {
   /** Two-letter state code, so a seed failure names the state. */
@@ -94,6 +98,41 @@ function isBlocked(config: StateRuleConfig, path: string): boolean {
   return config.openQuestions.some(q =>
     q.blocksFields.some(f => f === path || path.startsWith(`${f}.`))
   );
+}
+
+/**
+ * A node that reads its answer from the record may only offer values that field
+ * can hold. Anything else is a branch nobody can ever reach: Arizona offered
+ * 'felony_high' against charge_type, which only ever holds 'felony', so its
+ * whole sealing ladder was dead no matter what a person entered.
+ *
+ * Nodes with no `field` are ASKED — the tree names its own answers, so there is
+ * no domain to check and nothing to constrain them.
+ */
+function checkProducibility(config: StateRuleConfig, err: (r: ValidationRule, p: string, m: string) => void) {
+  for (const [id, node] of Object.entries(config.rules.nodes)) {
+    if (!node.field) continue;
+
+    const domain = FIELD_DOMAINS[node.field];
+    if (!domain) {
+      err('bad-shape', `nodes.${id}.field`, `'${node.field}' is not a record field`);
+      continue;
+    }
+
+    if (node.type === 'boolean' && !BOOLEAN_FIELDS.includes(node.field)) {
+      err('bad-shape', `nodes.${id}.field`,
+        `boolean node '${id}' reads '${node.field}', which is not a yes/no field`);
+    }
+
+    node.options?.forEach((opt, i) => {
+      if (!domain.includes(opt.value)) {
+        err('unproducible-value', `nodes.${id}.options[${i}].value`,
+          `'${opt.value}' is not a value '${node.field}' can hold (${domain.join(' | ')}) — ` +
+          `this branch is unreachable. Either use a value the form produces, or drop the ` +
+          `'field' so the tree asks the question itself.`);
+      }
+    });
+  }
 }
 
 function checkShape(config: StateRuleConfig, err: (r: ValidationRule, p: string, m: string) => void) {
@@ -286,6 +325,7 @@ export function validateState(config: StateRuleConfig): ValidationError[] {
 
   checkRequiredFields(config, err);
   checkShape(config, err);
+  checkProducibility(config, err);
   checkReferences(config, err);
 
   if (!errors.some(e => e.rule === 'unresolved-ref')) {

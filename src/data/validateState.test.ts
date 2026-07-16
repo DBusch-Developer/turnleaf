@@ -293,6 +293,49 @@ describe('validateState — unknown values must be accounted for', () => {
   });
 });
 
+describe('validateState — producibility', () => {
+  test('flags an option value the record field can never hold', () => {
+    // The real defect: AZ bound its class ladder to charge_type, which only
+    // ever holds 'felony'. 'felony_high' could never match, so the whole
+    // sealing ladder was unreachable no matter what a person entered.
+    const c = validConfig();
+    c.rules.nodes.disposition.field = 'charge_type';
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'unproducible-value')).toBe(true);
+    expect(errors[0].message).toContain('unreachable');
+  });
+
+  test('a node with no field is asked, so its options are unconstrained', () => {
+    // The tree names its own answers — that is how a state asks about class
+    // 2/3 felonies without the form growing a field per state.
+    const c = validConfig();
+    c.rules.nodes.disposition.field = undefined;
+    c.rules.nodes.disposition.options = [
+      { label: 'Class 2 or 3 Felony', value: 'felony_high', next: 'wait_check' },
+      { label: 'Anything else', value: 'other', next: 'eligible_dismissed' },
+    ];
+
+    expect(validateState(c).some(e => e.rule === 'unproducible-value')).toBe(false);
+  });
+
+  test('flags a boolean node reading a non-boolean field', () => {
+    const c = validConfig();
+    c.rules.nodes.gate = { type: 'boolean', text: 'Gate?', field: 'charge_type', yes: 'wait_check', no: 'waiting' };
+    c.rules.nodes.disposition.options![0].next = 'gate';
+
+    expect(validateState(c).some(e => e.path === 'nodes.gate.field')).toBe(true);
+  });
+
+  test('flags a field that is not a record field at all', () => {
+    const c = validConfig();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (c.rules.nodes.disposition as any).field = 'astrological_sign';
+
+    expect(validateState(c).some(e => e.path === 'nodes.disposition.field')).toBe(true);
+  });
+});
+
 describe('validateState — provenance', () => {
   test('flags rules sourced from outside research/waves/', () => {
     const c = validConfig();

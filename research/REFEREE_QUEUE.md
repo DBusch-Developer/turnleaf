@@ -55,9 +55,18 @@ node. Until confirmed, the hedge stands.
 
 ## NH — the Class B misdemeanor annulment waiting period (1 vs 3 years)
 
-**Wave 7, New Hampshire. Hedged: `complex_classBmisd_nh`.**
-**STATUS: OPEN — tagged for Diana's statute pass (verify against current
-RSA 651:5(III) text on gc.nh.gov). Do NOT resolve from a model reading.**
+**Wave 7, New Hampshire. Was hedged: `complex_classBmisd_nh`.**
+**STATUS: RESOLVED — Diana verified RSA 651:5 against gc.nh.gov (retrieved
+2026-07-16). The Class B misdemeanor wait is 2 YEARS (III(b)). The 1-vs-3
+conflict was both sources being wrong: 1 yr = violations III(a); 3 yr = Class A
+misdemeanor III(c). The hedge (`complex_classBmisd_nh`) was replaced with an
+ordinary 2-year date node (`date2b_nh`) citing III(b); the complex result was
+removed. Regression-locked by NH persona 6. Full ladder confirmed: violation
+1yr (a) / Class B misd 2yr (b) / Class A misd 3yr (c) / Class B felony 5yr (d) /
+Class A felony 10yr (e), with 10-yr carve-outs for sexual assault 632-A:4 (f),
+felony indecent exposure (g), and DV misdemeanor 631:2-b (h, with stacking), and
+a 2-yr drug carve-out under 318-B:26 II for a class A misdemeanor OR felony (i).
+NH flipped to verificationStatus: statute_cited. Closed 2026-07-16.**
 
 New Hampshire's annulment statute sets a waiting period per offense class. For a
 Class B misdemeanor the sources conflict: the statute historically said **3

@@ -10977,16 +10977,17 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     code: 'NH',
     name: 'New Hampshire',
     lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
     terminology:
       'New Hampshire calls it ANNULMENT (RSA 651:5), filed in the court that handled the case — a separate '
       + 'petition for each charge. The single most important thing to know is a procedural trap: if you file '
       + 'before your waiting period has fully run, the petition is denied AND you are barred from filing a new '
       + 'one for THREE YEARS. So the rule here is simple and strict — do not file early. Waiting periods run '
-      + 'from completion of ALL sentence terms, including fines and fees, and they vary a lot by offense. '
-      + 'Dismissals and acquittals since January 1, 2019 are annulled automatically 30 days after disposition, '
-      + 'so those usually need no petition at all.',
+      + 'from completion of ALL terms and conditions of the sentence, including fines and fees, and they vary a '
+      + 'lot by offense. You also have to stay conviction-free during the wait — a new DWI breaks that clean '
+      + 'record, though minor motor-vehicle violations do not. Dismissals and acquittals since January 1, 2019 '
+      + 'are annulled automatically 30 days after disposition, so those usually need no petition at all.',
     keyDates: [
       {
         label: 'Automatic annulment of dismissals/acquittals begins (RSA 651:5)',
@@ -10998,25 +10999,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Confirm the Class B misdemeanor waiting period against current RSA 651:5(III). Wave 7 flags a conflict: the statute historically said 3 years, but some current summaries say 1 year. Because the value conflicts, the tree routes Class B misdemeanors to an "exact wait needs confirming" result rather than guess — do not resolve from a model reading. Confirm the current statutory text.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the court filing fee. Wave 7 gives $125 per court location from the official Judicial Branch checklist, but notes some guides say $100. The fees field encodes $125 (the official checklist) and flags the conflict; confirm with courts.nh.gov. Also confirm the DOC investigation fee amount and the ~$25 record-copy fee.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the multi-conviction sequencing rule. Wave 7 says annulment is barred until the time requirement is met for ALL offenses of record, and barred entirely if any conviction is in a never-eligible class — but State v. Williams (2020) lets a person petition the latest-occurring offense first and work backwards. The tree routes people with more than one conviction to a "get sequencing help" result; confirm the Williams approach and how courts apply it.',
+          'Confirm the court filing fee amount. Diana verified RSA 651:5 against gc.nh.gov (7/16): the three statutory fees are now known — $100 DOC investigation (IX), $100 DPS record-correction, and up to $100 State Police removal (X(d)), each waived if indigent, acquitted, or dismissed. The COURT filing fee is not set by statute and remains a phone-tier item (a waiver form exists); confirm the amount with courts.nh.gov.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'N.H. Rev. Stat. Ann. § 651:5 (annulment; waiting periods; 3-year early-filing bar (IV); automatic annulment; multi-conviction rule)', url: null, retrievedOn: null },
+      { id: 'N.H. Rev. Stat. Ann. § 651:5 (annulment; III ladder 1/2/3/5/10-yr with 10-yr carve-outs (f)/(g)/(h) and 2-yr drug carve-out (i); III clean-record anchor; IV 3-year re-file bar; V/XIII never-eligible; VI whole-record; VII pending-charge freeze; II-a automatic since Jan 1 2019; IX/X(d) fees)', url: 'https://gc.nh.gov/rsa/html/LXII/651/651-5.htm', retrievedOn: '2026-07-16' },
+      { id: 'N.H. Rev. Stat. Ann. § 631:2-b (domestic-violence misdemeanor — 10-yr wait (h) with DV stacking)', url: null, retrievedOn: null },
+      { id: 'N.H. Rev. Stat. Ann. § 632-A:4 (sexual assault — 10-yr wait (f))', url: null, retrievedOn: null },
+      { id: 'N.H. Rev. Stat. Ann. § 318-B:26, II (drug offenses, misdemeanor or felony — 2-year annulment wait, 651:5(III)(i))', url: null, retrievedOn: null },
       { id: 'N.H. Rev. Stat. Ann. §§ 651:5-b, 651:5-c (cannabis annulment — anytime paths)', url: null, retrievedOn: null },
-      { id: 'N.H. Rev. Stat. Ann. § 318-B:26, II (drug-felony 2-year annulment wait)', url: null, retrievedOn: null },
-      { id: 'State v. Williams (N.H. 2020) (petition latest-occurring offense first)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -11047,7 +11039,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         multi_nh: {
           type: 'boolean',
-          text: 'Do you have more than one conviction on your record?',
+          text: 'Do you have more than one conviction on your record — including any new conviction (such as a DWI) since this offense?',
           yes: 'complex_multi_nh',
           no: 'level_nh'
         },
@@ -11056,10 +11048,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'How would you describe the offense?',
           options: [
             { label: 'A violation', value: 'violation', next: 'mv_predicate_nh' },
-            { label: 'A Class B misdemeanor', value: 'misdB', next: 'complex_classBmisd_nh' },
+            { label: 'A Class B misdemeanor', value: 'misdB', next: 'date2b_nh' },
             { label: 'A Class A misdemeanor', value: 'misdA', next: 'misd_dv_nh' },
             { label: 'A Class B felony', value: 'felonyB', next: 'felonyB_drug_nh' },
-            { label: 'A Class A felony', value: 'felonyA', next: 'date10_nh' },
+            { label: 'A Class A felony', value: 'felonyA', next: 'felonyA_drug_nh' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nh' }
           ]
         },
@@ -11071,22 +11063,50 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         misd_dv_nh: {
           type: 'boolean',
-          text: 'Was this a domestic-violence misdemeanor?',
+          text: 'Was this a domestic-violence misdemeanor (RSA 631:2-b)?',
           yes: 'date10_nh',
+          no: 'misdA_drug_nh'
+        },
+        misdA_drug_nh: {
+          type: 'boolean',
+          text: 'Was this a drug offense under RSA 318-B:26, II?',
+          yes: 'date2_nh',
           no: 'date3_nh'
         },
         felonyB_drug_nh: {
           type: 'boolean',
-          text: 'Was this a drug felony under RSA 318-B:26, II?',
+          text: 'Was this a drug offense under RSA 318-B:26, II?',
           yes: 'date2_nh',
+          no: 'felonyB_sexual_nh'
+        },
+        felonyB_sexual_nh: {
+          type: 'boolean',
+          text: 'Was this a sexual assault under RSA 632-A:4, or felony indecent exposure?',
+          yes: 'date10_nh',
           no: 'date5_nh'
+        },
+        felonyA_drug_nh: {
+          type: 'boolean',
+          text: 'Was this a drug offense under RSA 318-B:26, II?',
+          yes: 'date2_nh',
+          no: 'date10_nh'
         },
         date1_nh: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — violation)' },
+            period: { amount: 1, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III)(a) — violation)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date2b_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III)(b) — Class B misdemeanor)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11096,7 +11116,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 318-B:26, II — drug felony)' },
+            period: { amount: 2, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III)(i) / RSA 318-B:26, II — drug offense, misdemeanor or felony)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11106,7 +11126,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class A misdemeanor)' },
+            period: { amount: 3, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III)(c) — Class A misdemeanor)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11116,7 +11136,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class B felony)' },
+            period: { amount: 5, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III)(d) — Class B felony)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11126,7 +11146,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — motor-vehicle habitual-offender predicate)' },
+            period: { amount: 7, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III) — motor-vehicle habitual-offender predicate)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11136,7 +11156,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete ALL terms of your sentence, including fines and fees?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class A felony, DV misdemeanor, sexual assault under 632-A:4, or felony indecent exposure)' },
+            period: { amount: 10, unit: 'years', anchor: 'from completion of all sentence terms, conviction-free during the wait (RSA 651:5(III) (e) Class A felony / (f) sexual assault 632-A:4 / (g) felony indecent exposure / (h) DV misdemeanor 631:2-b, with DV stacking)' },
             nextPass: 'eligible_nh',
             nextFail: 'waiting_nh'
           }
@@ -11167,14 +11187,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_nh: {
           status: 'eligible',
           title: 'Waiting Period Met — Annulment Available',
-          message: 'Based on your dates, the waiting period for your offense has passed, measured from when you completed ALL sentence terms including fines and fees. You petition the court that handled the case (a separate petition per charge). Budget for the fee stack: a $125 court filing fee and, on grant, a $100 State Police record-correction fee, plus a record copy and a Department of Corrections investigation fee for most conviction annulments. It typically takes 3-6 months. If your offense was a drug felony, note the wait is only 2 years — unusually short. New Hampshire Legal Assistance can help.',
+          message: 'Based on your dates, the waiting period for your offense has passed, measured from when you completed ALL terms and conditions of your sentence and stayed conviction-free during the wait. You petition the court that handled the case (a separate petition per charge). Budget for the fee stack: a $100 Department of Corrections investigation fee, a $100 State Police record-correction fee, and up to $100 for the removal fee — each of which is waived if you are indigent, or the case ended in acquittal or dismissal — plus a court filing fee (amount set by the court, not the statute). It typically takes 3-6 months. If your offense was a drug offense under RSA 318-B:26, the wait is only 2 years — unusually short, whether it was a misdemeanor or a felony. New Hampshire Legal Assistance can help.',
           remedy: 'Annulment petition (§ 651:5)',
           citation: 'N.H. Rev. Stat. Ann. § 651:5'
         },
         waiting_nh: {
           status: 'waiting',
           title: 'Not Yet — And Do NOT File Early',
-          message: 'This is the most important warning in New Hampshire: DO NOT FILE YET. Your waiting period has not passed, and New Hampshire is one of the very few states that punishes filing early — if you petition before the full period has run, the court denies it AND bars you from filing a new petition for THREE YEARS (RSA 651:5(IV)). So even if you are eager, wait until your date has clearly passed. The period runs from when you completed all sentence terms including fines and fees. Mark the date, and if you are unsure exactly when it lands, New Hampshire Legal Assistance can help you calculate it before you file. (Cannabis possession has its own anytime paths and is not subject to this.)',
+          message: 'This is the most important warning in New Hampshire: DO NOT FILE YET. Your waiting period has not passed, and New Hampshire is one of the very few states that punishes filing early — under RSA 651:5(IV), after a denial you cannot file another petition more often than once every THREE YEARS. So even if you are eager, wait until your date has clearly passed. The period runs from when you completed all terms and conditions of your sentence, and it requires staying conviction-free in the meantime — a new conviction, and a DWI in particular, resets the clean record (minor motor-vehicle violations do not). If you are unsure exactly when your date lands, New Hampshire Legal Assistance can help you calculate it before you file. (Cannabis possession has its own anytime paths and is not subject to this.)',
           remedy: 'WAIT — filing before your date bars you for 3 years (§ 651:5(IV))',
           citation: 'N.H. Rev. Stat. Ann. § 651:5(IV)'
         },
@@ -11188,16 +11208,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         complex_multi_nh: {
           status: 'complex',
           title: 'Multiple Convictions — Sequence Matters, Get Help',
-          message: 'New Hampshire has a tricky rule when you have more than one conviction: annulment is barred until the waiting period is met for ALL of your offenses, and barred entirely if any one of them is in a never-eligible class. A 2020 case (State v. Williams) softened this by letting you petition the latest-occurring offense first and work backwards. Because getting the sequence right matters and a wrong early filing carries a 3-year penalty, this is exactly the situation to handle with help rather than guess at. New Hampshire Legal Assistance can map out the order for your specific record.',
+          message: 'New Hampshire has several rules that interact when you have more than one conviction. Annulment is barred until the waiting period is met for ALL of your offenses (VI), and barred entirely if any one of them is in a never-eligible class. You also have to have stayed conviction-free during your wait — a new conviction, and a DWI specifically, breaks that clean record (III). And there is a domestic-violence stacking rule: an earlier DV conviction cannot be annulled until your most recent DV conviction is itself eligible (631:2-b). A 2020 case (State v. Williams) lets you petition the latest-occurring offense first and work backwards, and a pending charge freezes any petition (VII). Because getting this sequence right matters and a wrong early filing carries a 3-year penalty, this is a situation to handle with help. New Hampshire Legal Assistance can map out the order for your specific record.',
           remedy: 'Get Multi-Conviction Sequencing Help (NH Legal Assistance)',
           citation: 'N.H. Rev. Stat. Ann. § 651:5; State v. Williams (2020)'
-        },
-        complex_classBmisd_nh: {
-          status: 'complex',
-          title: 'Class B Misdemeanor — We Need to Confirm the Exact Wait',
-          message: 'Your offense is annullable, but the waiting period for a Class B misdemeanor is exactly the kind of detail we will not guess on: the statute historically said 3 years, while some current summaries say 1 year, and getting it wrong matters here because filing early bars you for 3 years. So rather than risk that, we are flagging it for a precise answer from the current RSA 651:5(III) text. A court clerk or New Hampshire Legal Assistance can confirm the exact wait before you file. The route exists; it is the timing we want to pin down.',
-          remedy: 'Confirm the exact Class B misdemeanor wait before filing (court clerk / NHLA)',
-          citation: 'N.H. Rev. Stat. Ann. § 651:5(III)'
         },
         complex_level_nh: {
           status: 'complex',
@@ -11217,13 +11230,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           steps: [
             'Confirm your waiting period has FULLY passed before filing — filing early bars a new petition for 3 years (RSA 651:5(IV)).',
             'For a non-conviction since January 1, 2019, do not file — it should already be auto-annulled; check your State Police record.',
-            'File a separate petition per charge in the court that handled the case, with the court filing fee; on grant, pay the $100 State Police record-correction fee (waived for non-convictions).',
+            'File a separate petition per charge in the court that handled the case. The three statutory fees ($100 DOC, $100 DPS, up-to-$100 removal) are each waived if you are indigent, acquitted, or dismissed; a court filing fee (amount set by the court) also applies.',
             'Expect 3-6 months and a DOC investigation for most conviction annulments. New Hampshire Legal Assistance can help.'
           ],
-          // NOT null: Wave 7 gives the fee stack from the official checklist. The
-          // $100-vs-$125 court-fee conflict and the DOC fee amount are open questions.
-          fees: '$125 court filing fee per court location (official checklist; some guides say $100), plus a $100 State Police record-correction fee on grant (waived for non-convictions), a ~$25 record copy, and a Department of Corrections investigation fee for most conviction annulments.',
-          feeWaiver: 'The $100 State Police record-correction fee is waived for non-conviction annulments.',
+          // NOT null: Diana verified the statutory fees (RSA 651:5 IX / X(d), 7/16):
+          // $100 DOC + $100 DPS + up-to-$100 removal, each waivable. Only the court
+          // filing fee amount (not set by statute) remains an open question.
+          fees: 'Three statutory fees: a $100 Department of Corrections investigation fee (IX), a $100 State Police (DPS) record-correction fee, and up to $100 for the removal fee (X(d)) — each waived if you are indigent, or the case ended in acquittal or dismissal. A court filing fee also applies, per court location; its amount is not set by statute (a waiver form exists).',
+          feeWaiver: 'Each of the three statutory fees ($100 DOC, $100 DPS, up-to-$100 removal) is waived if you are indigent, or if the case ended in a not-guilty verdict or dismissal. A waiver form exists for the court filing fee.',
           courtContact: 'The court that handled the case'
         }
       },

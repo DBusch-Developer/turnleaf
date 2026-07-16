@@ -73,3 +73,11 @@ Do not replace a stack element without an approved ADR (`docs/decisions/`).
 - Route Handlers (`src/app/api/*`) own server work; never expose secrets to the client. The Groq key stays server-side in `/api/summarize`.
 - Preserve graceful degradation paths — do not remove a fallback without an ADR.
 - User-facing summaries go through the hedged-language path; never emit an un-hedged eligibility claim.
+
+## Data Integrity Rules
+
+1. State rules data may only come from files in `research/waves/`. Never fill gaps from your own knowledge of state law.
+2. Any ⚠️ flag in a package becomes an entry in an `open_questions` array on that state — never a resolved value. If a fee or waiting period is flagged as conflicting, the field itself stays `null`.
+3. If a package doesn't state a value, the field is `null`. No defaults, no "typical" values, no inference.
+4. Every state seeds with `verification_status: "draft"`. Nothing is ever written as `"phone_verified"` or `"statute_cited"` — only Diana flips those manually after verification calls.
+5. Every state gets a `sources` array containing the statute citations from its package.

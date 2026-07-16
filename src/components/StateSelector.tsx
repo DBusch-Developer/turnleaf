@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { RefreshCw } from 'lucide-react';
 
 export interface StateSummary {
   code: string;
@@ -14,39 +15,32 @@ export interface StateSummary {
 }
 
 interface StateSelectorProps {
+  /** The 50 states. Owned by the page, so returning here costs no round trip. */
+  states: StateSummary[];
+  dataSource: 'database' | 'fallback' | null;
+  loading: boolean;
+  /** The state being opened right now, if any — it gets the waiting treatment. */
+  pendingCode: string | null;
   onSelectState: (code: string) => void;
 }
 
-export default function StateSelector({ onSelectState }: StateSelectorProps) {
-  const [states, setStates] = useState<StateSummary[]>([]);
-  const [dataSource, setDataSource] = useState<'database' | 'fallback' | null>(null);
+/**
+ * The list does NOT fetch.
+ *
+ * It used to fetch on mount, which meant every "Change State" threw the list
+ * away and rebuilt it: the person watched fifty states blink out, "Loading
+ * states..." appear, and the same fifty come back, for a round trip that
+ * returned identical data. The page owns the list now and hands it down, so
+ * coming back is instant and the list is simply there.
+ */
+export default function StateSelector({
+  states,
+  dataSource,
+  loading,
+  pendingCode,
+  onSelectState,
+}: StateSelectorProps) {
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchStates() {
-      try {
-        const res = await fetch('/api/states');
-        if (res.ok) {
-          const data = await res.json();
-          setStates(data.states ?? []);
-          setDataSource(data.dataSource ?? null);
-          // Also on the console, so it is visible without scrolling anywhere.
-          console.info(
-            `[turnleaf] state rules served from: ${data.dataSource ?? 'unknown'}` +
-            (data.dataSource === 'fallback'
-              ? ' — the DATABASE was not used. If you expected DB rows, the query failed or the schema is behind.'
-              : '')
-          );
-        }
-      } catch (err) {
-        console.error('Failed to fetch states:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchStates();
-  }, []);
 
   const filteredStates = states.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -79,7 +73,11 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
   const quickSelect = states.filter(s => s.available).slice(0, 4);
 
   return (
-    <div className="glass-card animate-slide-up" style={{ padding: '2rem', maxWidth: '650px', width: '100%', margin: '0 auto' }}>
+    // 800px, matching the wizard and the results card. It was 650, so choosing
+    // a state resized the card by 150px and slid it 75px sideways — the layout
+    // visibly re-centring under the cursor. One width across the workspace, so
+    // the card stays put and only its contents change.
+    <div className="glass-card animate-slide-up" style={{ padding: '2rem', maxWidth: '800px', width: '100%', margin: '0 auto' }}>
       <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--color-primary)', textAlign: 'center' }}>
         Start Your Screening
       </h2>
@@ -168,26 +166,38 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
         ) : filteredStates.length > 0 ? (
           filteredStates.map(state => {
             const status = getStatusLabel(state);
+            // The state being opened. The click lands here rather than on a
+            // spinner that replaced the page, so the feedback is attached to the
+            // thing that was clicked. While one is opening the others dim, which
+            // also stops a second click starting a second load.
+            const isPending = state.code === pendingCode;
+            const isDimmed = pendingCode !== null && !isPending;
             return (
               <button
                 key={state.code}
                 onClick={() => onSelectState(state.code)}
+                disabled={pendingCode !== null}
+                aria-busy={isPending}
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.85rem 1rem',
-                  border: '1px solid var(--color-card-border)',
+                  border: `1px solid ${isPending ? 'var(--color-primary)' : 'var(--color-card-border)'}`,
                   borderRadius: '12px',
-                  background: 'rgba(255,255,255,0.4)',
-                  cursor: 'pointer',
+                  background: isPending ? 'var(--color-primary-light)' : 'rgba(255,255,255,0.4)',
+                  cursor: pendingCode !== null ? 'default' : 'pointer',
                   textAlign: 'left',
                   width: '100%',
-                  opacity: state.available ? 1 : 0.75,
-                  transition: 'background var(--transition-fast)'
+                  opacity: isDimmed ? 0.4 : state.available ? 1 : 0.75,
+                  transition: 'background var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast)'
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.background = 'var(--color-primary-light)')}
-                onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.4)')}
+                onMouseOver={(e) => {
+                  if (pendingCode === null) e.currentTarget.style.background = 'var(--color-primary-light)';
+                }}
+                onMouseOut={(e) => {
+                  if (pendingCode === null) e.currentTarget.style.background = 'rgba(255,255,255,0.4)';
+                }}
               >
                 <div>
                   <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{state.name}</span>
@@ -199,11 +209,15 @@ export default function StateSelector({ onSelectState }: StateSelectorProps) {
                     fontSize: '0.75rem',
                     padding: '0.2rem 0.5rem',
                     borderRadius: '9999px',
-                    background: status.bg,
-                    color: status.color,
-                    fontWeight: 600
+                    background: isPending ? 'var(--color-primary)' : status.bg,
+                    color: isPending ? '#fff' : status.color,
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem'
                   }}>
-                    {status.text}
+                    {isPending && <RefreshCw className="animate-spin" size={12} />}
+                    {isPending ? 'Opening' : status.text}
                   </span>
 
                   {state.available && state.lastReviewed && (

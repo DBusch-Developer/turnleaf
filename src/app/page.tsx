@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import StateSelector from '../components/StateSelector';
+import StateSelector, { StateSummary } from '../components/StateSelector';
 import EligibilityWizard, { ConvictionRecord } from '../components/EligibilityWizard';
 import ResultsDisplay from '../components/ResultsDisplay';
 import CheckrMockPanel from '../components/CheckrMockPanel';
 import { StateRuleConfig } from '../data/fallbackRules';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
-import { Settings, ArrowLeft, RefreshCw, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
+import { Settings, ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
 
 // The four steps of the screening, in order. The number is not decoration —
 // it is the sequence the CTA refers back to ("Start Step 1").
@@ -31,6 +31,36 @@ export default function Home() {
   const [showDemoPanel, setShowDemoPanel] = useState(false);
   const [loadingState, setLoadingState] = useState(false);
   const [showSelector, setShowSelector] = useState(false);
+
+  // The state list lives HERE, not in StateSelector, and is fetched once.
+  // The selector used to fetch on mount, so every "Change State" tore the list
+  // down and rebuilt it from a round trip that returned identical data.
+  const [states, setStates] = useState<StateSummary[]>([]);
+  const [dataSource, setDataSource] = useState<'database' | 'fallback' | null>(null);
+  const [loadingStates, setLoadingStates] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/states');
+        if (res.ok) {
+          const data = await res.json();
+          setStates(data.states ?? []);
+          setDataSource(data.dataSource ?? null);
+          console.info(
+            `[turnleaf] state rules served from: ${data.dataSource ?? 'unknown'}` +
+            (data.dataSource === 'fallback'
+              ? ' — the DATABASE was not used. If you expected DB rows, the query failed or the schema is behind.'
+              : '')
+          );
+        }
+      } catch (err) {
+        console.error('Failed to fetch states:', err);
+      } finally {
+        setLoadingStates(false);
+      }
+    })();
+  }, []);
 
   // Fetch state config when selected
   useEffect(() => {
@@ -216,9 +246,21 @@ export default function Home() {
 
         {/* Step-based Workspace rendering — every screen past the landing sits
             directly on the full-page oak, no band, no white gap above it. */}
-        {!selectedStateCode ? (
+        {/* The list stays up while a state loads.
+           *
+           * Opening a state used to blow the whole layout away and put a
+           * centred spinner in its place — "Loading state rules engine..." —
+           * then build a third layout for the wizard. Three screens for one
+           * click, and the middle one lasted about 150ms: too fast to read,
+           * too slow to miss. The list holds its ground instead, and the state
+           * you clicked shows that it is opening. One layout, then the next.
+           *
+           * The outer animate-fade-in went with it: the card already has its
+           * own entrance, and two animations on the same element stacking is
+           * what read as choppy. */}
+        {!selectedStateCode || loadingState ? (
           /* Step 1: choose a state */
-          <div style={{ maxWidth: '800px', margin: '0 auto' }} className="animate-fade-in">
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <button
               className="btn btn-secondary"
               onClick={() => setShowSelector(false)}
@@ -226,13 +268,13 @@ export default function Home() {
             >
               <ArrowLeft size={16} /> Back
             </button>
-            <StateSelector onSelectState={setSelectedStateCode} />
-          </div>
-        ) : loadingState ? (
-          /* Loading indicator when state config fetches */
-          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
-            <RefreshCw className="animate-spin" size={40} style={{ color: 'var(--color-primary)', margin: '0 auto 1rem' }} />
-            <p style={{ color: 'var(--color-text-muted)' }}>Loading state rules engine...</p>
+            <StateSelector
+              states={states}
+              dataSource={dataSource}
+              loading={loadingStates}
+              pendingCode={loadingState ? selectedStateCode : null}
+              onSelectState={setSelectedStateCode}
+            />
           </div>
         ) : comingSoon ? (
           /* State not yet researched: honest in-research panel with real referrals */

@@ -82,7 +82,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'sex_registration' },
-            { label: 'Dismissed / Acquitted / Diversion Completed / Never Charged', value: 'dismissed', next: 'eligible_dismissed' }
+            { label: 'Dismissed / Acquitted / Diversion Completed / Never Charged', value: 'dismissed', next: 'eligible_dismissed' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         sex_registration: {
@@ -121,6 +122,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Eligibility in California turns entirely on how the case ended: a dismissal, an acquittal, a completed diversion, and a conviction each follow a different statute and a different path. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request a record review from the California Department of Justice (about $25) to get your official criminal history, or ask the clerk of the court that heard the case for a certified copy of the disposition. Once you know the outcome, come back and run this again.',
+          remedy: 'Get Your Record First (CA DOJ Record Review)',
+          citation: 'California Penal Code §§ 1203.4, 851.91 (which path applies depends on the disposition)'
+        },
         eligible_dismissed: {
           status: 'eligible',
           title: 'Potential Arrest Record Sealing',
@@ -248,7 +256,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_offense' },
-            { label: 'Dismissed / Acquitted / Arrested but never charged', value: 'dismissed', next: 'eligible_seal_dismissed_az' }
+            { label: 'Dismissed / Acquitted / Arrested but never charged', value: 'dismissed', next: 'eligible_seal_dismissed_az' },
+            // Explicit, so a deferral does NOT widen into the 'dismissed'
+            // option. This label names no diversion track, and Wave 0
+            // researches none for AZ — see unknown_deferred.
+            { label: 'Deferred adjudication / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         excluded_offense: {
@@ -295,6 +308,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Arizona\'s three remedies split on how the case ended: a dismissal or acquittal can be sealed under ARS § 13-911, while a conviction runs through a set-aside (ARS § 13-905), sealing, or both. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your criminal history report from the Arizona Department of Public Safety, or ask the clerk of the court that handled the case for a certified copy of the disposition. Once you know the outcome, come back and run this again.',
+          remedy: 'Get Your Record First (AZ DPS Criminal History Report)',
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (which path applies depends on the disposition)'
+        },
+        // OPEN QUESTION (carry into openQuestions on the schema migration):
+        // "How are completed deferrals/diversions treated for sealing?
+        //  ⚠️ not covered in Wave 0 — add to call sheet."
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Arizona\'s set-aside (ARS § 13-905) and sealing (ARS § 13-911) paths are screened here for convictions, dismissals, and acquittals. How a completed deferral or diversion is treated is not something this screening has researched yet, and we would rather tell you that than guess — a guess here could point you at the wrong remedy, or tell you that you have none when you do. The legal aid organizations listed below can confirm how your case was actually disposed and which remedy fits.',
+          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (how these apply to a completed deferral is not yet researched)'
+        },
         eligible_seal_dismissed_az: {
           status: 'eligible',
           title: 'Potential Immediate Sealing',
@@ -402,7 +432,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted of a misdemeanor or felony', value: 'convicted', next: 'excluded_offense_ny' },
-            { label: 'Dismissed / Acquitted / Non-criminal violation or infraction', value: 'dismissed', next: 'eligible_seal_dismissed' }
+            { label: 'Dismissed / Acquitted / Non-criminal violation or infraction', value: 'dismissed', next: 'eligible_seal_dismissed' },
+            // Explicit, so a deferral does NOT widen into the 'dismissed'
+            // option. This label names no diversion track, and Wave 0
+            // researches none for NY — see unknown_deferred.
+            { label: 'Deferred adjudication / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         excluded_offense_ny: {
@@ -437,6 +472,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'New York\'s paths split on how the case ended: dismissals and acquittals seal automatically at disposition under CPL § 160.50, while convictions run through the Clean Slate Act (CPL § 160.57) or a CPL § 160.59 petition. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your criminal history record from the NYS Division of Criminal Justice Services, or ask the clerk of the court that heard the case for a Certificate of Disposition. Once you know the outcome, come back and run this again.',
+          remedy: 'Get Your Record First (NYS DCJS Record Review)',
+          citation: 'New York Criminal Procedure Law §§ 160.50, 160.57, 160.59 (which path applies depends on the disposition)'
+        },
+        // OPEN QUESTION (carry into openQuestions on the schema migration):
+        // "How are completed deferrals/diversions treated for sealing?
+        //  ⚠️ not covered in Wave 0 — add to call sheet."
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'New York\'s sealing paths are screened here for convictions, dismissals, and acquittals. How a completed deferral or diversion is treated is not something this screening has researched yet, and we would rather tell you that than guess — a guess here could point you at the wrong path, or tell you that you have none when you do. The legal aid organizations listed below can confirm how your case was actually disposed and which path fits.',
+          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
+          citation: 'New York Criminal Procedure Law §§ 160.50, 160.57, 160.59 (how these apply to a completed deferral is not yet researched)'
+        },
         eligible_seal_dismissed: {
           status: 'eligible',
           title: 'Automatic Sealing (Non-Conviction)',
@@ -542,9 +594,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of your Texas case?',
           options: [
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expunction' },
-            { label: 'Dismissed / Never charged / No-billed by grand jury', value: 'dropped', next: 'dismissal_offense_level' },
+            // 'dismissed', not 'dropped': option values are matched against the
+            // screening form's vocabulary (ConvictionRecord['disposition']).
+            // 'dropped' matched nothing, so every dismissed Texas case fell
+            // through to this node's old default — 'ineligible_conviction'.
+            { label: 'Dismissed / Never charged / No-billed by grand jury', value: 'dismissed', next: 'dismissal_offense_level' },
             { label: 'Deferred Adjudication (Completed)', value: 'deferred', next: 'offense_level' },
-            { label: 'Convicted (Jail / Prison / Standard Probation)', value: 'convicted', next: 'ineligible_conviction' }
+            { label: 'Convicted (Jail / Prison / Standard Probation)', value: 'convicted', next: 'ineligible_conviction' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         dismissal_offense_level: {
@@ -592,6 +649,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Texas draws a hard line on how a case ended: an acquittal or dismissal can lead to expunction under Code of Criminal Procedure Chapter 55A, completed deferred adjudication leads to an Order of Nondisclosure, and a conviction is generally eligible for neither. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Ask the district or county clerk in the county where the case was filed for a certified copy of the disposition. Once you know the outcome, come back and run this again.',
+          remedy: 'Get Your Record First (Certified Disposition from the Clerk)',
+          citation: 'Texas Code of Criminal Procedure Chapter 55A; Texas Government Code Chapter 411, Subchapter E-1 (which path applies depends on the disposition)'
+        },
         eligible_expunction: {
           status: 'eligible',
           title: 'Potential Expunction Eligible',

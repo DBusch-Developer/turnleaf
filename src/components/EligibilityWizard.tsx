@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { StateRuleConfig } from '../data/fallbackRules';
+import { StateRuleConfig, RuleNode } from '../data/fallbackRules';
 import { Trash2, AlertTriangle, Plus, ClipboardList } from 'lucide-react';
 
 export interface ConvictionRecord {
@@ -13,6 +13,44 @@ export interface ConvictionRecord {
   probation_status: 'completed' | 'failed' | 'active' | 'none';
   prison_sentenced: boolean;
   restitution_paid: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Disposition vocabulary
+//
+// The screening form and the rule trees are two separate lists of strings that
+// have to agree. They are reconciled here and nowhere else. Two rules hold:
+//
+//   1. A disposition no option accepts routes to a HEDGE, never to a
+//      substantive answer. Texas encoded dismissals as 'dropped' while the
+//      form emits 'dismissed'; the mismatch fell through to that node's
+//      default and told people whose cases were DISMISSED that their
+//      CONVICTION was ineligible for relief.
+//   2. 'unknown' never widens. Not knowing the outcome is a reason to go get
+//      the record, not a reason to guess on someone's behalf.
+//
+// A tree that draws a finer distinction takes the specific value (Texas
+// separates acquittal from dismissal); a tree that only splits conviction from
+// non-conviction takes the general one.
+// ---------------------------------------------------------------------------
+const DISPOSITION_VALUES: Record<ConvictionRecord['disposition'], string[]> = {
+  convicted: ['convicted'],
+  dismissed: ['dismissed'],
+  acquitted: ['acquitted', 'dismissed'],
+  deferred: ['deferred', 'dismissed'],
+  unknown: ['unknown'],
+};
+
+/** Result key every tree exposes for "we cannot screen this yet". */
+const HEDGE = 'unknown_disposition';
+
+/** The value `node` actually offers for this disposition, or null if none. */
+function resolveDisposition(
+  node: RuleNode,
+  disposition: ConvictionRecord['disposition']
+): string | null {
+  const offered = new Set((node.options ?? []).map(o => o.value));
+  return DISPOSITION_VALUES[disposition].find(v => offered.has(v)) ?? null;
 }
 
 interface EligibilityWizardProps {
@@ -105,10 +143,12 @@ export default function EligibilityWizard({
         continue;
       }
 
-      if (currentNodeId === 'disposition') {
-        const val = record.disposition === 'convicted' ? 'convicted' : 'dismissed';
-        const match = node.options?.find(o => o.value === val);
-        currentNodeId = match ? match.next : 'complex';
+      // Both node IDs ask the same question; CA/AZ/NY name it 'disposition',
+      // TX names it 'disposition_type'. One resolver serves both.
+      if (currentNodeId === 'disposition' || currentNodeId === 'disposition_type') {
+        const value = resolveDisposition(node, record.disposition);
+        const match = value ? node.options?.find(o => o.value === value) : undefined;
+        currentNodeId = match ? match.next : HEDGE;
         continue;
       }
 
@@ -175,30 +215,26 @@ export default function EligibilityWizard({
         continue;
       }
 
-      if (currentNodeId === 'disposition_type') {
-        const match = node.options?.find(o => o.value === record.disposition);
-        currentNodeId = match ? match.next : 'ineligible_conviction';
-        continue;
-      }
-
-      if (currentNodeId === 'dismissal_type') {
-        const val = record.disposition === 'acquitted' ? 'acquitted' : 'dropped';
-        const match = node.options?.find(o => o.value === val);
-        currentNodeId = match ? match.next : 'ineligible_conviction';
-        continue;
-      }
-
       // Default safety break
       break;
     }
 
-    // Default Fallback Result
+    // Default Fallback Result.
+    //
+    // This fires when the tree could not classify the record at all, so it
+    // cannot name the law that applies — and must not pretend to. It used to
+    // cite 'General State Sealing Statutes', which is not a statute in any
+    // state; it was invented text in the result that fires most often. A hedge
+    // carrying a fake source is not a hedge (RULES.md, rule 1).
+    //
+    // It also must not say "your conviction": this path is reached by records
+    // that were never convictions.
     return {
       status: 'complex',
       title: 'Complex Analysis Required',
-      message: 'Based on the legal rules for this state, your conviction has attributes requiring individual manual review by a legal aid attorney.',
+      message: 'This screening could not classify your record from what was entered, so it has no answer for you — and would rather say so than guess. A legal aid attorney can review the case directly.',
       remedy: 'Legal Aid Intake Evaluation',
-      citation: 'General State Sealing Statutes'
+      citation: 'No citation — this result means the screener could not classify your situation.'
     };
   };
 

@@ -5245,9 +5245,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       + 'supervision, and qualified probation. SEALING hides the record from most employers and is '
       + 'how most convictions are cleared. A fresh law matters here: the Clean Slate Act, signed in '
       + 'January 2026 and phasing in from June 30, 2026, cut the misdemeanor sealing wait from 3 '
-      + 'years to 2 and removed the rule that a prior felony automatically blocked sealing a later '
-      + 'one. The automatic part of Clean Slate comes later, so for now Illinois is petition-only. '
-      + 'One hard line: a DUI can never be sealed.',
+      + 'years to 2 and repealed the rule that a prior felony blocked sealing a later one entirely '
+      + '(it is now (c)(4) "Blank"). Automatic sealing begins January 1, 2029, so for now Illinois is '
+      + 'petition-only — and petitioning now, at a 2-to-3-year wait, beats waiting for the automation. '
+      + 'Unpaid court debt does not block sealing (except unconverted victim restitution). One hard '
+      + 'line: a DUI can never be sealed.',
     keyDates: [
       {
         label: 'Clean Slate Act began phasing in (misdemeanour wait 3->2 yrs; prior-felony bar removed)',
@@ -5261,18 +5263,32 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         kind: 'effective',
         note: null,
       },
+      {
+        label: 'Governing amendment P.A. 104-459 effective (20 ILCS 2630/5.2)',
+        date: '2026-06-01',
+        kind: 'effective',
+        note: 'The version Diana verified against ilga.gov (7/16): repeals the (c)(4) prior-felony bar, sets the (c)(3)(B) 2-yr / (c)(2)(F) 3-yr ladder, blanks the (d)(3) drug test, and adds the (k)/(l) automatic-sealing provisions.',
+      },
+      {
+        label: 'Automatic sealing begins (20 ILCS 2630/5.2(k)) — ISP quarterly',
+        date: '2029-01-01',
+        kind: 'operative',
+        note: 'ISP seals eligible conviction records quarterly, with its own exclusion list (Class X, Articles 9/11, crimes of violence, robbery, hijacking, residential/Class 1-2 burglary, trafficking, organized retail; felonies wait until ALL eligible felonies meet timing). Petitioning now beats waiting for this.',
+      },
+      {
+        label: 'Automatic-sealing backlog phase-in deadline (subsection (k))',
+        date: '2034',
+        kind: 'deadline',
+        note: 'Wave 7 / Diana statute pass: the automatic-sealing backlog is phased in through 2034 — another reason to petition now rather than wait.',
+      },
+      {
+        label: 'Clerk auto-sealing of municipal-ordinance & Class C misdemeanor records begins (subsection (l))',
+        date: '2028-01-01',
+        kind: 'operative',
+        note: 'Circuit clerks auto-seal municipal-ordinance-violation and Class C misdemeanor records one year after the case closes.',
+      },
     ],
     openQuestions: [
-      {
-        question:
-          'When does the Clean Slate AUTOMATIC sealing system actually start? The Act phased in June 30, 2026 but the automatic system comes later. Verify the automatic-start date on ILAO\'s Clean Slate FAQ before any UI copy claims records seal automatically — until then Illinois is petition-only and the tree treats it that way.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'GENUINE FIGHT (research/REFEREE_QUEUE.md): under the post-June-30 text, how does a prior felony interact with a later felony sealing petition? Clean Slate removed the automatic bar, but the current rule for the felony-plus-felony fact pattern (Wave 3 persona 5) is unresolved. The tree hedges this to complex_new_law_il. Confirm against 20 ILCS 2630/5.2 current text (the July 1, 2025 version split matters).',
-        blocksFields: [],
-      },
       {
         question:
           'Which completed-supervision offences carry the longer 5-year expungement wait rather than 2? Wave 3 flags the list. The tree uses the general 2-year supervision period and notes the exception.',
@@ -5288,15 +5304,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           'What is the county filing fee, and specifically the Cook County rule that one fee covers all petitions filed the same day? Wave 3 flags it. A fee waiver is available.',
         blocksFields: ['resources.remedies.petition.fees'],
       },
-      {
-        question:
-          'Confirm the current subsequent-felony unsealing risk text under Clean Slate. Wave 3 notes it is changing. Not encoded; flagged.',
-        blocksFields: [],
-      },
     ],
     sources: [
-      { id: '20 ILCS 2630/5.2 (expungement and sealing)', url: null, retrievedOn: null },
-      { id: 'Illinois Clean Slate Act (signed Jan 16, 2026; phase-in June 30, 2026)', url: null, retrievedOn: null },
+      { id: '20 ILCS 2630/5.2 — expungement and sealing (GOVERNING TEXT: after amendment by P.A. 104-459, eff. 6-1-26). (c)(4) Blank (prior-felony bar + unseal-on-new-conviction repealed); (c)(3)(B) 2-yr / (c)(2)(F) 3-yr sealing ladder; (d)(3) Blank (drug test repealed); (d)(6)(C) + (a)(1)(M) LFO rule; (k) automatic sealing (Jan 1 2029); (l) clerk auto-seal (Jan 1 2028); (b)(2)(A-5) 61-day-early diversion filing', url: 'https://ilga.gov/documents/legislation/ilcs/documents/002026300K5.2.htm', retrievedOn: '2026-07-16' },
+      { id: 'Illinois Clean Slate Act / P.A. 104-459 (amends 20 ILCS 2630/5.2; signed Jan 16, 2026; amendment eff. 6-1-26)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -5325,7 +5336,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the level of the offense?',
           options: [
             { label: 'Misdemeanor', value: 'misdemeanor', next: 'seal_misd_date_il' },
-            { label: 'Felony', value: 'felony', next: 'felony_history_il' },
+            { label: 'Felony', value: 'felony', next: 'felony_prob_il' },
             { label: 'Infraction', value: 'infraction', next: 'seal_misd_date_il' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_il' }
           ]
@@ -5335,24 +5346,37 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete your sentence?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'sentence completion (20 ILCS 2630/5.2 — misdemeanour sealing; 3 yrs cut to 2 by the Clean Slate Act, June 30, 2026)' },
+            period: { amount: 2, unit: 'years', anchor: 'from completion of the LAST sentence, conviction-free (20 ILCS 2630/5.2 (c)(3)(B) as amended by P.A. 104-459 — misdemeanor sealing; 3 yrs cut to 2)' },
             nextPass: 'eligible_sealing_il',
             nextFail: 'waiting_sealing_il'
           }
         },
-        // The genuine fight: a felony plus another felony is hedged.
-        felony_history_il: {
+        // P.A. 104-459 blanked (c)(4): a prior felony no longer bars sealing a
+        // later one. What matters now is HOW the sentence was served — a felony
+        // completed on probation/conditional discharge seals at 2 yrs ((c)(2)(D)),
+        // one that included incarceration at 3 ((c)(2)(F)).
+        felony_prob_il: {
           type: 'boolean',
-          text: 'Apart from this case, do you have any OTHER felony conviction on your record?',
-          yes: 'complex_new_law_il',
+          text: 'Was this felony sentence completed on probation or conditional discharge WITHOUT revocation — as opposed to a sentence that included incarceration?',
+          yes: 'seal_felony_prob_date_il',
           no: 'seal_felony_date_il'
+        },
+        seal_felony_prob_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'from completion of the LAST sentence, conviction-free (20 ILCS 2630/5.2 (c)(3)(B), (c)(2)(D) as amended by P.A. 104-459 — felony completed on probation/conditional discharge without revocation)' },
+            nextPass: 'eligible_sealing_il',
+            nextFail: 'waiting_sealing_il'
+          }
         },
         seal_felony_date_il: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'sentence completion (20 ILCS 2630/5.2 — Class 1-4 felony sealing)' },
+            period: { amount: 3, unit: 'years', anchor: 'from completion of the LAST sentence, conviction-free (20 ILCS 2630/5.2 (c)(2)(F) as amended by P.A. 104-459 — felony sentence including incarceration)' },
             nextPass: 'eligible_sealing_il',
             nextFail: 'waiting_sealing_il'
           }
@@ -5402,28 +5426,21 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_expungement_il: {
           status: 'eligible',
           title: 'Non-Conviction — Eligible for Expungement',
-          message: 'Because this case did not end in a conviction, you are eligible for EXPUNGEMENT — the stronger remedy, which destroys the record rather than just hiding it. Arrests without conviction, acquittals, and dismissals can generally be expunged right away. File in the circuit court of the county of the case; the Illinois Legal Aid Online Easy Form generates the petition for you, and e-filing is available statewide. The county filing fee varies (in Cook County, one fee covers all petitions filed the same day), and a fee waiver is available if you cannot afford it. There is a roughly 60-day window for the State\'s Attorney or State Police to object.',
+          message: 'Because this case did not end in a conviction, you are eligible for EXPUNGEMENT — the stronger remedy, which destroys the record rather than just hiding it. Arrests without conviction, acquittals, and dismissals can generally be expunged right away. File in the circuit court of the county of the case; the Illinois Legal Aid Online Easy Form generates the petition for you, and e-filing is available statewide. The county filing fee varies (in Cook County, one fee covers all petitions filed the same day), and a fee waiver is available if you cannot afford it. There is a roughly 60-day window for the State\'s Attorney or State Police to object. One diversion-specific timing rule worth knowing: if you are in a problem-solving court or a diversion program, you can file the expungement petition up to 61 days BEFORE your anticipated dismissal (20 ILCS 2630/5.2(b)(2)(A-5)), so the relief is ready when the case closes.',
           remedy: 'Petition for Expungement (20 ILCS 2630/5.2)',
           citation: '20 ILCS 2630/5.2'
         },
         eligible_sealing_il: {
           status: 'eligible',
           title: 'Potentially Eligible to Seal',
-          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under 20 ILCS 2630/5.2. Two pieces of good news from the Clean Slate Act that took effect June 30, 2026: the misdemeanor wait dropped from 3 years to 2, and a prior felony no longer automatically blocks sealing. File in the circuit court of the county of the case — the Illinois Legal Aid Online Easy Form is genuinely good and builds the petition for you, and e-filing is statewide. The county fee varies (Cook County charges one fee for all petitions filed the same day) and a waiver is available. One thing worth asking legal aid about: Illinois has a provision that earning a diploma or degree during the waiting period can accelerate eligibility — if that applies to you, it is worth raising.',
-          remedy: 'Petition to Seal (20 ILCS 2630/5.2)',
-          citation: '20 ILCS 2630/5.2'
-        },
-        complex_new_law_il: {
-          status: 'complex',
-          title: 'The Sealing Law Just Changed — This One Needs a Person',
-          message: 'You have a felony and at least one other felony on your record, and that is exactly the situation the new law leaves genuinely unsettled. Before June 30, 2026, a prior felony automatically blocked sealing a later one. The Clean Slate Act removed that automatic bar — but how a prior felony now factors into a later felony sealing petition is being worked out in practice as we speak, and we are not going to give you a yes or a no on a two-week-old rule and risk sending you the wrong way. This is worth a real person: New Leaf Illinois provides free representation, and Cabrini Green Legal Aid runs sealing clinics. Both are tracking the new law closely, and your specific record is the kind of thing they can now assess where a screening tool cannot.',
-          remedy: 'Consult Legal Aid (Multiple Felonies Under the New Clean Slate Rules)',
+          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under 20 ILCS 2630/5.2. The waits are 2 years for a misdemeanor and for a felony completed on probation or conditional discharge, and 3 years for a felony sentence that included incarceration. A prior felony no longer blocks you — that bar was repealed — though if the State objects, the court may weigh your criminal history in deciding. One timing note: the clock runs from your MOST RECENT sentence, so a newer conviction restarts the wait for everything. Two reassurances: unpaid court debt cannot be used to deny sealing (except unconverted victim restitution), and your sentence counts as complete even if you still owe fines or fees. And do not wait for automation: Illinois begins automatic sealing on January 1, 2029 (phased through 2034), but petitioning now at a 2-to-3-year wait clears your record years sooner. File in the circuit court of the county of the case — the Illinois Legal Aid Online Easy Form builds the petition and e-filing is statewide; the county fee varies (Cook County: one fee for all same-day petitions) and a waiver is available. (For the lowest-level records — a municipal-ordinance violation or Class C misdemeanor — circuit clerks begin auto-sealing one year after the case closes as of January 1, 2028.) Ask legal aid whether the education accelerator applies if you are working toward a diploma or degree.',
+          remedy: 'Petition to Seal now (20 ILCS 2630/5.2) — do not wait for 2029 automation',
           citation: '20 ILCS 2630/5.2'
         },
         waiting_sealing_il: {
           status: 'waiting',
           title: 'Sealing Waiting Period Not Yet Met',
-          message: 'Illinois sealing comes after a wait from when you completed your sentence: 2 years for a misdemeanor (cut from 3 by the Clean Slate Act in June 2026) and 3 years for a Class 1-4 felony. Based on your dates, yours has not run yet. One thing that can move it: Illinois has a provision under which earning a diploma or degree during the wait can accelerate eligibility, so if you are working toward one, ask legal aid whether it applies to you.',
+          message: 'Illinois sealing comes after a wait from when you completed your MOST RECENT sentence: 2 years for a misdemeanor or a felony completed on probation/conditional discharge, and 3 years for a felony sentence that included incarceration. Based on your dates, yours has not run yet — and note a newer conviction would restart the clock. A reassurance for the meantime: unpaid court debt does not delay or block sealing (except unconverted victim restitution), and your sentence counts as complete even with fines or fees outstanding. One thing that can move your date: earning a diploma or degree during the wait may accelerate eligibility — ask legal aid whether it applies to you.',
           remedy: 'Wait for the sealing period, or ask about the education accelerator',
           citation: '20 ILCS 2630/5.2'
         },

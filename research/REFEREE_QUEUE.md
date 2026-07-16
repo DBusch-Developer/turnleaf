@@ -10,16 +10,34 @@ open — not a fee, a rollout date, or a list to confirm (those are openQuestion
 on the state). This is for "the law itself is unsettled or the package
 contradicts itself and does not say which wins."
 
+**QUEUE STATUS: EMPTY — all three fights resolved by Diana's statute pass
+(NH 651:5, SD § 23A-3-34, IL 5.2), each on 2026-07-16. The entries below are kept
+as a record of what was hedged and how it resolved.**
+
 ---
 
 ## IL — prior felony interacting with a later felony sealing petition
 
-**Wave 3, Illinois. Hedged: `complex_new_law_il`.**
-**STATUS: OPEN — tagged for Diana's statute pass (verify against current
-20 ILCS 2630/5.2 text on ilga.gov). Do NOT resolve from a model reading; a
-two-week-old statute is exactly what the statute-check tier is for. The hedge
-is the correct answer until a human reads the text. Ask New Leaf Illinois on
-the Session 3 call (added to the call sheet). Ruling by Diana, 2026-07-16.**
+**Wave 3, Illinois. Was hedged: `complex_new_law_il`.**
+**STATUS: RESOLVED — Diana verified 20 ILCS 2630/5.2 against ilga.gov
+(https://ilga.gov/documents/legislation/ilcs/documents/002026300K5.2.htm,
+retrieved 2026-07-16), governing text "after amendment by P.A. 104-459, eff.
+6-1-26". Subsection (c)(4) is now "(Blank)": the subsequent-felony sealing bar
+AND the unseal-on-new-conviction provision are repealed — a prior felony no
+longer bars sealing a later one. `complex_new_law_il` (the "don't rely on yes or
+no" hedge) was removed; the felony path now routes to the normal timeline via a
+new probation-vs-incarceration split (felony completed on probation/conditional
+discharge without revocation = 2 yrs (c)(2)(D); incarceration felony = 3 yrs
+(c)(2)(F)), with the eligible copy noting the court may weigh criminal history on
+objection (d)(7) and that the clock runs from the LAST sentence (a)(1)(F), so a
+new felony restarts the wait. New Leaf Illinois kept as a referral. Also encoded
+from the verified text: (d)(3) drug test repealed (no copy referenced it); (k)
+automatic sealing Jan 1 2029 / (l) clerk auto-seal Jan 1 2028 (inversion note —
+petition now beats waiting); (b)(2)(A-5) 61-day-early diversion filing; (d)(6)(C)
++ (a)(1)(M) LFO rule (unpaid court debt cannot block sealing). Source linked;
+IL stays `draft` (the 5-year-supervision-offence list is still an open legal
+question, so one branch is unverified — partial verification). Regression-locked
+by IL persona 5. Closed 2026-07-16.**
 
 The Illinois Clean Slate Act (signed Jan 16, 2026; phasing in from June 30,
 2026 — two weeks before the package) removed the rule that a prior felony

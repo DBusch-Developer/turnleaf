@@ -1120,8 +1120,8 @@ const IL: Persona[] = [
     source: 'Wave 3 - IL persona 2',
     package: 'Class 4 felony possession, done 2021 -> eligible-sealing.',
     record: { title: 'Class 4 Felony Possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2021-01-01' },
-    answers: { sealable_il: false, seal_level_il: 'felony', felony_history_il: false },
-    expect: { resultKey: 'eligible_sealing_il', reading: 'Class 4 felony, no other felony, 3yr wait, 2021+3=2024<2026 -> eligible. Exact.' },
+    answers: { sealable_il: false, seal_level_il: 'felony', felony_prob_il: true },
+    expect: { resultKey: 'eligible_sealing_il', reading: 'Class 4 possession completed on probation -> 2yr wait under the amended (c)(2)(D) ladder; 2021+2=2023<2026 -> eligible. (The prior-felony bar was repealed, so felony_prob now sets the wait.)' },
     now: NOW,
   },
   {
@@ -1141,11 +1141,11 @@ const IL: Persona[] = [
     now: NOW,
   },
   {
-    source: 'Wave 3 - IL persona 5',
-    package: 'old felony + new felony -> post-June-30 rules resolve during verification.',
-    record: { title: 'Felony (with a prior felony)', charge_type: 'felony', disposition: 'convicted' },
-    answers: { sealable_il: false, seal_level_il: 'felony', felony_history_il: true },
-    expect: { resultKey: 'complex_new_law_il', reading: 'THE GENUINE FIGHT (REFEREE_QUEUE.md). Felony + another felony under two-week-old Clean Slate rules is unresolved by the package, so the tree hedges to complex_new_law_il rather than guessing eligible or ineligible. Exact for the hedge.' },
+    source: 'Wave 3 - IL persona 5 (referee item RESOLVED, Diana statute verification P.A. 104-459, 7/16)',
+    package: 'old felony + new felony -> post-June-30 rules resolve during verification. [RESOLVED: (c)(4) is Blank — a prior felony no longer bars sealing a later one.]',
+    record: { title: 'Felony (with a prior felony), incarceration', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-06-01' },
+    answers: { sealable_il: false, seal_level_il: 'felony', felony_prob_il: false },
+    expect: { resultKey: 'eligible_sealing_il', reading: 'The former referee fight, resolved: P.A. 104-459 blanked (c)(4), so a prior felony no longer bars sealing a later one. Felony-plus-felony now routes to the normal path — an incarceration felony at the 3yr wait (2019+3=2022<2026) -> eligible (the court may weigh history on objection under (d)(7)). Locks the resolution.' },
     now: NOW,
   },
 ];

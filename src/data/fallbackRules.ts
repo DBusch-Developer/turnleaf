@@ -648,7 +648,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     sources: [
       { id: 'Ariz. Rev. Stat. § 13-905 (set aside; Certificate of Second Chance; § 13-905(B) no filing fee; (K),(L) CSC timing; (O) firearms; (P) exclusions)', url: 'https://www.azleg.gov/ars/13/00905.htm', retrievedOn: '2026-07-15' },
       { id: 'Ariz. Rev. Stat. § 13-911 (record sealing; (A)(2)-(3) non-convictions; (D) 60-day rule; (E) clock; (F) prior-felony +5; (G) payment at filing; (H) DPS fee and waiver; (L) 3-year denial bar; (O) exclusions)', url: 'https://www.azleg.gov/ars/13/00911.htm', retrievedOn: '2026-07-15' },
-      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement; (B) state bears the clear-and-convincing burden of proving ineligibility)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Ariz. Rev. Stat. § 36-2862 (Prop 207 marijuana expungement; (B) state bears the clear-and-convincing burden of proving ineligibility)', url: 'https://www.azleg.gov/ars/36/02862.htm', retrievedOn: '2026-07-16' },
       { id: 'Ariz. Rev. Stat. § 13-3821 (registrable offenses; § 13-905 exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-705 (dangerous crimes against children; § 13-911(O) exclusion)', url: null, retrievedOn: null },
       { id: 'Ariz. Rev. Stat. § 13-706 (serious offenses; firearms exception at § 13-905(O))', url: null, retrievedOn: null },
@@ -1331,6 +1331,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     ],
     openQuestions: [
       {
+        // STATUTE-PASS WORKLIST (7/16): a guard on future encoding, not a fee/date question.
+        question:
+          'Before any TX DWI nondisclosure branch is built on § 411.0731, do a FULL read of the section. Only subsection (f) — the waiting ladder (2 years with an ignition interlock, 5 without) — has been human-verified against the official text (it surfaced via a page-break spillover in the retrieved PDF); the section\'s applicability and conditions are unread. The link on the 411.0731 source is kept because the sole currently-encoded claim traces to that verified (f) text, but no further 411.0731 rule may be encoded until the whole section is read.',
+        blocksFields: [],
+      },
+      {
         // NARROWED 7/16 by the statute check. The per-agency half is answered:
         // Art. 55A.254(e)-(f) as amended 2025 makes electronic service FREE and
         // charges $25 only per entity that cannot receive it — so the
@@ -1419,7 +1425,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period still in conflict; see open questions)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0735', retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code § 411.0736 (DWI nondisclosure)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0736', retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code § 411.074 (nondisclosure — required conditions)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.074', retrievedOn: '2026-07-16' },
-      { id: 'Tex. Gov\'t Code § 411.0731 (DWI nondisclosure path)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0731', retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0731 (DWI nondisclosure path — PARTIAL READ: only subsection (f), the waiting ladder (2y with interlock / 5y without), was verified against official text via a page-break spillover; applicability and conditions unread. Full read required before a DWI branch is built on this section)', url: 'https://statutes.capitol.texas.gov/Docs/GV/htm/GV.411.htm#411.0731', retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code § 411.0726 (DWI nondisclosure path)', url: null, retrievedOn: null },
       { id: 'HB 4504 (recodification of ch. 55 to ch. 55A)', url: null, retrievedOn: null },
     ],

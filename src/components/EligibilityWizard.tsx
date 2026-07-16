@@ -338,7 +338,21 @@ export default function EligibilityWizard({
                   </div>
 
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {step.node.type === 'boolean' ? (
+                    {/* A date node asks for ITS OWN anchor date. The form's one
+                        date is the disposition date, and most waiting periods do
+                        not run from it — Arizona's runs from absolute discharge,
+                        New York's from sentencing-or-release whichever is later.
+                        The node's text says which date it wants, in the state's
+                        own language. */}
+                    {step.node.type === 'date' ? (
+                      <input
+                        type="date"
+                        className="input-field"
+                        style={{ maxWidth: '220px' }}
+                        value={typeof answers[record.id]?.[step.id] === 'string' ? String(answers[record.id][step.id]) : ''}
+                        onChange={(e) => answerNode(record.id, step.id, e.target.value)}
+                      />
+                    ) : step.node.type === 'boolean' ? (
                       [{ label: 'Yes', value: true }, { label: 'No', value: false }].map(opt => (
                         <button
                           key={String(opt.value)}

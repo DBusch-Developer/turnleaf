@@ -138,7 +138,9 @@ const AZ: Persona[] = [
     source: 'Wave 0 — AZ persona 1',
     package: 'class 6 felony possession, done 2018 → set aside now + sealing eligible 2023+ → both.',
     record: { title: 'Possession', charge_type: 'felony', disposition_date: '2018-04-01', restitution_paid: true },
-    answers: { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_low' },
+    // 'done 2018' = discharged 2018. The § 13-911 clock runs from absolute
+    // discharge, so the persona states THAT date, not a sentencing date.
+    answers: { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_low', discharge_date_f456: '2018-04-01' },
     expect: { resultKey: 'eligible_both_az', reading: 'Class 6 = class 4/5/6 ladder, 5 years from discharge. 2018 + 5 = 2023, and it is 2026. Exact.' },
     now: NOW,
   },
@@ -194,7 +196,9 @@ const NY: Persona[] = [
     source: 'Wave 0 — NY persona 1',
     package: 'misdemeanor 2019, sentence done → Clean-Slate-eligible NOW but possibly not yet processed → check via DCJS record review, petition 160.59 as backup? (10-yr wait not met → wait for auto) — the nuanced flagship persona.',
     record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition_date: '2019-06-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false },
+    // Clean Slate runs from sentencing OR release, whichever is LATER. 'sentence
+    // done' in 2019 with no incarceration, so the two coincide.
+    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2019-06-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -208,7 +212,8 @@ const NY: Persona[] = [
     source: 'Wave 0 — NY persona 2',
     package: 'drug Class A felony, released 2015 → Clean-Slate-eligible (the surprise).',
     record: { title: 'Class A Drug Felony', charge_type: 'felony', disposition_date: '2015-01-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false },
+    // 'released 2015' — release is the later event, so it is the anchor.
+    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -222,7 +227,7 @@ const NY: Persona[] = [
     source: 'Wave 0 — NY persona 3',
     package: 'violent felony → excluded both paths; honest-no.',
     record: { title: 'Robbery (violent felony)', charge_type: 'felony', disposition_date: '2015-01-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false },
+    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_felony: '2015-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -241,7 +246,7 @@ const NY: Persona[] = [
     source: 'Wave 0 — NY persona 4',
     package: 'two misdemeanors 2010 → 160.59 petition now OR wait for auto — cost/speed tradeoff copy.',
     record: { title: 'Misdemeanor (one of two)', charge_type: 'misdemeanor', disposition_date: '2010-01-01' },
-    answers: { excluded_offense_ny: false, supervision_status: false },
+    answers: { excluded_offense_ny: false, supervision_status: false, clean_slate_date_misd: '2010-01-01' },
     expect: {
       resultKey: 'eligible_clean_slate',
       reading:
@@ -268,7 +273,9 @@ const TX: Persona[] = [
   {
     source: 'Wave 0 — TX persona 1',
     package: 'arrest, no charges, felony-level, 2022 → 3-yr wait → eligible 2025 (or SOL).',
-    record: { title: 'Arrest, no charges', charge_type: 'felony', disposition: 'dismissed', disposition_date: '2022-01-01' },
+    // TX expunction runs from the ARREST date, which precedes disposition.
+    answers: { arrest_date_tx_felony: '2022-01-01' },
+    record: { title: 'Arrest, no charges', charge_type: 'felony', disposition: 'dismissed', disposition_date: '2022-06-01' },
     expect: { resultKey: 'eligible_expunction', reading: 'Felony-level arrest, 3 years from arrest, 2022 + 3 = 2025 < 2026 → eligible. Exact, and the date claim is why now is pinned.' },
     now: NOW,
   },

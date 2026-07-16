@@ -78,9 +78,13 @@ export function elapsedSince(
 /**
  * Can this node be answered from the record, or must a person answer it?
  * A node with no `field` is asked; the tree supplies its own answers.
+ *
+ * Date nodes included. The form collects one date, and most waiting periods do
+ * not run from it — so a date node whose clock runs from an absolute discharge,
+ * or a release, or an arrest, asks for THAT date in its own words.
  */
 export function isAsked(node: RuleNode): boolean {
-  return node.field === undefined && node.type !== 'date' && node.type !== 'checkpoint';
+  return node.field === undefined && node.type !== 'checkpoint';
 }
 
 /** The answer for `nodeId`, from the record if the node is record-backed. */
@@ -131,7 +135,15 @@ export function nextFrom(
       // the only thing a null period can do.
       if ('nextUnknown' in v) return v.nextUnknown;
 
-      const elapsed = elapsedSince(record.disposition_date, v.period.unit, now);
+      // The date the clock runs FROM. Read it from the record only when the node
+      // says its anchor IS the disposition date; otherwise the person supplies
+      // it, because the anchor is a different event. Reading disposition_date
+      // regardless of anchor is what told AZ and NY users they were eligible
+      // years early.
+      const from = node.field ? readField(record, node.field) : answers[nodeId];
+      if (typeof from !== 'string' || !from) return null; // unanswered: hedge, never guess
+
+      const elapsed = elapsedSince(from, v.period.unit, now);
       if (elapsed === null) return v.nextFail;
       return elapsed >= v.period.amount ? v.nextPass : v.nextFail;
     }

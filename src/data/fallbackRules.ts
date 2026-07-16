@@ -348,6 +348,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         auto_relief_date_ca: {
           type: 'date',
+          // Reads the record: California's clock runs from judgment, which IS
+          // the date the form collects. Contrast AZ/NY/TX, whose clocks run
+          // from other events and therefore ask.
+          field: 'disposition_date',
           text: 'When was judgment pronounced (your sentencing date)?',
           validation: {
             period: {
@@ -364,6 +368,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // upon completion with no additional waiting period.
         judgment_date: {
           type: 'date',
+          field: 'disposition_date',
           text: 'When was judgment pronounced (your sentencing date)?',
           validation: {
             period: {

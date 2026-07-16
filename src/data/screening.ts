@@ -37,7 +37,8 @@ export type RecordField =
   | 'disposition'
   | 'probation_status'
   | 'prison_sentenced'
-  | 'restitution_paid';
+  | 'restitution_paid'
+  | 'disposition_date';
 
 /**
  * Every value each field can actually hold — i.e. everything the screening form
@@ -52,10 +53,28 @@ export const FIELD_DOMAINS: Record<RecordField, readonly string[]> = {
   probation_status: ['completed', 'failed', 'active', 'none'],
   prison_sentenced: ['true', 'false'],
   restitution_paid: ['true', 'false'],
+  // A date has no enumerable domain; it is checked by type, not by value.
+  disposition_date: [],
 };
 
 /** Which fields hold a yes/no, and so back a `boolean` node rather than a `choice`. */
 export const BOOLEAN_FIELDS: readonly RecordField[] = ['prison_sentenced', 'restitution_paid'];
+
+/**
+ * Which fields hold a date, and so may back a `date` node.
+ *
+ * The form collects exactly ONE date, labelled "Disposition / Sentence Date".
+ * That is the ONLY date any node may read — and most waiting periods do not run
+ * from it. Arizona's runs from absolute discharge, which for a probation case
+ * lands years after sentencing; New York's from sentencing-or-release whichever
+ * is later; Texas expunction from the date of arrest, which precedes everything.
+ *
+ * A date node whose clock runs from anything other than the disposition date
+ * MUST ask for its own date. It used to silently read this field regardless of
+ * its declared anchor, which told Arizona and New York users they were eligible
+ * years before they were. The validator now refuses that.
+ */
+export const DATE_FIELDS: readonly RecordField[] = ['disposition_date'];
 
 /**
  * Read a field off a record as the string a node matches against.

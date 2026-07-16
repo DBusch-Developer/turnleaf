@@ -35,6 +35,9 @@ describe('dispatch is by node shape, not node id', () => {
       dui_offense: false,
       sentence_completed: true,
       offense_level: 'felony_low', // class 4/5/6 — ASKED, since the form has no classes
+      // The § 13-911 clock runs from ABSOLUTE DISCHARGE, so the node asks for
+      // that date rather than reading the form's disposition date.
+      discharge_date_f456: '2015-01-01',
     });
 
     expect(result.title).not.toBe('Complex Analysis Required');
@@ -65,10 +68,13 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
     // The deleted ResultsDisplay table said AZ felonies waited 2 years. The
     // rules say 10 for class 2/3. A 5-years-ago discharge is still waiting.
     const answers = { excluded_offense: false, marijuana_offense: false, dui_offense: false, sentence_completed: true, offense_level: 'felony_high' };
-    const waiting = walk('AZ', rec({ disposition_date: '2021-01-01' }), answers, new Date('2026-07-15'));
+    const now = new Date('2026-07-15');
+
+    // Discharged 2021: five years back, and class 2/3 needs ten.
+    const waiting = walk('AZ', rec(), { ...answers, discharge_date_f23: '2021-01-01' }, now);
     expect(waiting.status).toBe('waiting');
 
-    const eligible = walk('AZ', rec({ disposition_date: '2010-01-01' }), answers, new Date('2026-07-15'));
+    const eligible = walk('AZ', rec(), { ...answers, discharge_date_f23: '2010-01-01' }, now);
     expect(eligible.status).toBe('eligible');
   });
 
@@ -76,11 +82,31 @@ describe('waiting periods come from the data, with the data\'s own units', () =>
     const answers = { excluded_offense_ny: false, supervision_status: false };
     const now = new Date('2026-07-15');
 
-    const misd = walk('NY', rec({ charge_type: 'misdemeanor', disposition_date: '2022-01-01' }), answers, now);
+    const misd = walk('NY', rec({ charge_type: 'misdemeanor' }), { ...answers, clean_slate_date_misd: '2022-01-01' }, now);
     expect(misd.status).toBe('eligible'); // 4 years > 3
 
-    const felony = walk('NY', rec({ charge_type: 'felony', disposition_date: '2022-01-01' }), answers, now);
+    const felony = walk('NY', rec({ charge_type: 'felony' }), { ...answers, clean_slate_date_felony: '2022-01-01' }, now);
     expect(felony.status).toBe('waiting'); // 4 years < 8
+  });
+
+  test('a waiting period runs from ITS OWN anchor, not from the disposition date', () => {
+    // THE HARM BUG. Arizona's § 13-911 clock runs from absolute discharge. The
+    // engine used to read record.disposition_date for every date node whatever
+    // its declared anchor said, so someone convicted in 2020 with five years'
+    // probation — discharged 2025, eligible 2030 — was told they were eligible
+    // NOW, four years early. They would have filed, paid, and been denied.
+    const answers = {
+      excluded_offense: false, marijuana_offense: false, dui_offense: false,
+      sentence_completed: true, offense_level: 'felony_low',
+    };
+    const now = new Date('2026-07-15');
+
+    // Sentenced 2020 (what the form collects) but discharged 2025 (the anchor).
+    const record = rec({ disposition_date: '2020-01-01' });
+    const result = walk('AZ', record, { ...answers, discharge_date_f456: '2025-01-01' }, now);
+
+    // Six years since sentencing, but only one since discharge. Five are needed.
+    expect(result.status).toBe('waiting');
   });
 
   test('elapsedSince counts calendar steps, not 365.25-day approximations', () => {
@@ -117,7 +143,7 @@ describe('an answer we do not have is never invented', () => {
   test('a dismissed Texas case is never called an ineligible conviction', () => {
     // The harm bug: 'dismissed' vs the encoded 'dropped' fell through to
     // ineligible_conviction, telling people with no conviction they had one.
-    const result = walk('TX', rec({ disposition: 'dismissed', charge_type: 'felony', disposition_date: '2015-01-01' }));
+    const result = walk('TX', rec({ disposition: 'dismissed', charge_type: 'felony' }), { arrest_date_tx_felony: '2015-01-01' });
     expect(result.title).not.toBe('Conviction Generally Ineligible');
     expect(result.status).toBe('eligible');
   });

@@ -25,7 +25,7 @@
 // ============================================================================
 
 import type { StateRuleConfig, RuleNode } from './fallbackRules';
-import { FIELD_DOMAINS, BOOLEAN_FIELDS } from './screening';
+import { FIELD_DOMAINS, BOOLEAN_FIELDS, DATE_FIELDS } from './screening';
 
 export type ValidationRule =
   | 'missing-field'
@@ -122,6 +122,26 @@ function checkProducibility(config: StateRuleConfig, err: (r: ValidationRule, p:
     if (node.type === 'boolean' && !BOOLEAN_FIELDS.includes(node.field)) {
       err('bad-shape', `nodes.${id}.field`,
         `boolean node '${id}' reads '${node.field}', which is not a yes/no field`);
+    }
+
+    // A date node may only read a DATE field, and the form holds exactly one:
+    // the disposition date. So a date node may read the record ONLY when its
+    // clock genuinely runs from that date — otherwise it must ask.
+    //
+    // This is the anchor-vs-field contract. Every date node declares what its
+    // clock runs from; the engine used to ignore that and read disposition_date
+    // regardless, so Arizona (absolute discharge, often years after sentencing)
+    // and New York (sentencing-or-release, whichever LATER) told people they
+    // were eligible years early. Wave 1's own cross-state flag 3 warned about
+    // this before the code review found it.
+    if (node.type === 'date' && !DATE_FIELDS.includes(node.field)) {
+      err('bad-shape', `nodes.${id}.field`,
+        `date node '${id}' reads '${node.field}', which is not a date field — a date node reads ` +
+        `${DATE_FIELDS.join(' | ')} or nothing at all, in which case it asks for its own date`);
+    }
+    if (node.type !== 'date' && DATE_FIELDS.includes(node.field)) {
+      err('bad-shape', `nodes.${id}.field`,
+        `${node.type} node '${id}' reads the date field '${node.field}'`);
     }
 
     node.options?.forEach((opt, i) => {

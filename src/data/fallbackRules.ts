@@ -2234,6 +2234,372 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Safe & Just Michigan', url: 'https://safeandjustmi.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // PENNSYLVANIA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave1_Draft_Package.md
+  //
+  // THREE remedies that must not be blurred:
+  //   1. EXPUNGEMENT (18 Pa.C.S. § 9122) — destruction, and NARROW: chiefly
+  //      non-convictions, summary offences after 5 arrest-free years, people
+  //      aged 70+, pardoned offences, and completed ARD.
+  //   2. PETITION SEALING / "Order for Limited Access" (§ 9122.1, Rule 791) —
+  //      misdemeanours after 7 conviction-free years; certain low-level
+  //      drug/property felonies (total sentence under 7 years) after 10.
+  //   3. AUTOMATIC CLEAN SLATE SEALING (§ 9122.2) — no petition, no fee.
+  //
+  // THE CONFLICT — and the first live use of a null period. Clean Slate 3.0
+  // changed the automatic misdemeanour period and Wave 1's sources SPLIT on the
+  // result: "7 for petition only" vs "7 for both". The package calls reading
+  // § 9122.2 directly the #1 verify item for PA. A period whose sources
+  // disagree is exactly the case where the value stays OUT: auto_misd_unknown_pa
+  // carries `amount: null`, which the type forbids from having a pass/fail
+  // branch, so the only route is nextUnknown → a result that says we do not know
+  // and tells the person how to find out. The petition period (7 years) is NOT
+  // in conflict, so it is encoded and the person is told they can file now.
+  //
+  // Fines/costs vs restitution: Wave 1 found a conflict (Clean Slate 2.0 removed
+  // unpaid fines/costs as a barrier; one current source says restitution still
+  // blocks) and says to encode the split ONLY if the statute confirms it. It
+  // does not, yet — so NOTHING gates on it here. It is disclosed in prose and
+  // held as an open question.
+  // ==========================================================================
+  PA: {
+    code: 'PA',
+    name: 'Pennsylvania',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave1_Draft_Package.md',
+    terminology:
+      'Pennsylvania has THREE different remedies and they are not interchangeable. EXPUNGEMENT '
+      + '(18 Pa.C.S. § 9122) destroys the record but is narrow: mostly non-convictions, summary '
+      + 'offences after five arrest-free years, people aged 70 or over, pardoned offences, and '
+      + 'completed ARD. SEALING — formally an "Order for Limited Access" (§ 9122.1) — hides the '
+      + 'record from most employers and landlords but keeps it visible to law enforcement, and you '
+      + 'petition for it. AUTOMATIC CLEAN SLATE SEALING (§ 9122.2) does the same thing with no '
+      + 'petition and no fee, and it runs on its own. Sealing is not expungement: the record still '
+      + 'exists.',
+    keyDates: [
+      {
+        label: 'Automatic sealing of summary convictions began',
+        date: '2024-06',
+        kind: 'operative',
+        note: 'Wave 1 gives month and year only ("started June 2024").',
+      },
+      {
+        label: 'Pardoned offences automatically expunged',
+        date: '2024-06',
+        kind: 'operative',
+        note: 'Wave 1 gives month and year only ("auto-expunged since June 2024").',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'THE #1 PA VERIFY ITEM. What is the AUTOMATIC sealing period for 2nd/3rd-degree misdemeanours and misdemeanours punishable by 2 years or less under 18 Pa.C.S. § 9122.2 — 7 years or 10? Clean Slate 3.0 changed it and Wave 1\'s sources SPLIT: some say 7 applies to the petition only, others say 7 applies to both. Because the sources conflict, no automatic period is encoded — the tree routes to a result that says we do not know. Read § 9122.2\'s text directly rather than any summary.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What does it cost to file for expungement or limited access, and can it be waived? Wave 1 found fees vary BY COUNTY: Montgomery County $176.50 plus $13.50 per extra agency; other counties cited between $132 and $215. Wave 1 calls this Turnleaf\'s phone-verification showcase — verify Philadelphia, Allegheny and Montgomery, then decide whether to display per-county or as a verified range.',
+        // One call answers the fee for both filings — the variance is by county,
+        // not by remedy — so one question blocks all four fields.
+        blocksFields: [
+          'resources.remedies.sealing.fees',
+          'resources.remedies.sealing.feeWaiver',
+          'resources.remedies.expungement.fees',
+          'resources.remedies.expungement.feeWaiver',
+        ],
+      },
+      {
+        question:
+          'Do unpaid fines and costs block AUTOMATIC sealing, and does unpaid restitution block it separately? Wave 1 found a conflict: Clean Slate 2.0 (Act 83 of 2020) removed unpaid fines/costs as a barrier, but at least one current source says unpaid restitution still blocks. Wave 1 says to encode restitution as blocking and fines/costs as not ONLY if § 9122.2\'s condition text confirms that split. It is not confirmed, so NOTHING in the tree gates on it — the results disclose the uncertainty instead.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What does a PSP criminal history record (epatch) cost? Wave 1 gives "~$22, VERIFY". It is needed for a petition, so it is part of the real cost of filing.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the sealing exclusion for anyone with 4 or more misdemeanours of the 2nd degree or higher. The tree asks a person to self-assess this; the record model cannot count it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the "certain drug felonies after 10 years" automatic path added by Clean Slate 3.0, and which drug and property felonies qualify for the 10-year PETITION sealing path (total sentence under 7 years of confinement).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions other than ARD treated? Standing call-sheet question for every state. ARD completion is covered by Wave 1 as an expungement path; nothing else is.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What are the exact effective dates for the June 2024 starts (automatic summary sealing; automatic expungement of pardoned offences)? Wave 1 gives month and year only.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: '18 Pa.C.S. § 9122 (expungement)', url: null, retrievedOn: null },
+      { id: '18 Pa.C.S. § 9122.1 (petition sealing — order for limited access)', url: null, retrievedOn: null },
+      { id: '18 Pa.C.S. § 9122.2 (automatic Clean Slate sealing — period in conflict)', url: null, retrievedOn: null },
+      { id: 'Pa.R.Crim.P. 490 (summary expungement petition)', url: null, retrievedOn: null },
+      { id: 'Pa.R.Crim.P. 790 (court of common pleas expungement petition)', url: null, retrievedOn: null },
+      { id: 'Pa.R.Crim.P. 791 (petition for limited access)', url: null, retrievedOn: null },
+      { id: 'Act 83 of 2020 (Clean Slate 2.0 — fines/costs as a barrier)', url: null, retrievedOn: null },
+      { id: 'Clean Slate 3.0 (misdemeanour period change; drug felony automatic path)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'sealing_excluded_pa' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_pa' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_pa' },
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'ard_pa' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        ard_pa: {
+          type: 'boolean',
+          text: 'Was your case resolved through ARD — Accelerated Rehabilitative Disposition — and did you complete the program?',
+          yes: 'eligible_ard_pa',
+          no: 'unknown_deferred'
+        },
+        sealing_excluded_pa: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a first-degree felony, an offense punishable by 20 or more years, a felony involving danger to a person, a crime against the family, a firearms offense, or a sex offense requiring registration?',
+          yes: 'ineligible_serious_pa',
+          no: 'misd_count_pa'
+        },
+        misd_count_pa: {
+          type: 'boolean',
+          text: 'Counting your whole record: do you have FOUR or more misdemeanor convictions of the second degree or higher?',
+          yes: 'ineligible_misd_count_pa',
+          no: 'grade_pa'
+        },
+        grade_pa: {
+          type: 'choice',
+          text: 'How was the offense graded? (Your court paperwork says — Pennsylvania grades everything, and the grade decides which remedy you get.)',
+          options: [
+            { label: 'Summary offense', value: 'summary', next: 'summary_date_pa' },
+            { label: 'Misdemeanor — 2nd or 3rd degree, or punishable by 2 years or less', value: 'm2_m3', next: 'petition_misd_date_pa' },
+            { label: 'Misdemeanor — 1st degree', value: 'm1', next: 'petition_m1_date_pa' },
+            { label: 'Felony — drug or property, total sentence under 7 years', value: 'felony_eligible', next: 'felony_date_pa' },
+            { label: 'Felony — anything else', value: 'felony_other', next: 'ineligible_felony_pa' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_grade_pa' }
+          ]
+        },
+        summary_date_pa: {
+          type: 'date',
+          text: 'When were you last arrested for anything? (Summary offenses clear after five arrest-free years, so this is the date that matters — not the conviction date.)',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'last arrest — summary offences require five ARREST-free years (§ 9122; automatic under § 9122.2 since June 2024)' },
+            nextPass: 'check_record_first_pa',
+            nextFail: 'waiting_pa'
+          }
+        },
+        petition_misd_date_pa: {
+          type: 'date',
+          text: 'When were you last convicted of anything? (The clock runs conviction-free, so a later conviction restarts it.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'last conviction — seven CONVICTION-free years (§ 9122.1 petition sealing)' },
+            nextPass: 'auto_misd_unknown_pa',
+            nextFail: 'waiting_misd_pa'
+          }
+        },
+        // THE CONFLICT. Clean Slate 3.0 changed the automatic misdemeanour
+        // period and Wave 1's sources split between 7 and 10 years. A period we
+        // cannot pin has no pass/fail to compute — the type forbids it — so the
+        // only route out is nextUnknown.
+        auto_misd_unknown_pa: {
+          type: 'date',
+          text: 'When were you last convicted of anything?',
+          validation: {
+            period: {
+              amount: null,
+              unit: 'years',
+              anchor: 'last conviction — automatic sealing period under § 9122.2, which our sources report as either 7 or 10 years',
+            },
+            nextUnknown: 'check_record_unknown_period_pa'
+          }
+        },
+        petition_m1_date_pa: {
+          type: 'date',
+          text: 'When were you last convicted of anything? (The clock runs conviction-free, so a later conviction restarts it.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'last conviction — seven CONVICTION-free years (§ 9122.1 petition sealing)' },
+            nextPass: 'eligible_petition_pa',
+            nextFail: 'waiting_misd_pa'
+          }
+        },
+        felony_date_pa: {
+          type: 'date',
+          text: 'When were you last convicted of anything? (The clock runs conviction-free, so a later conviction restarts it.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'last conviction — ten CONVICTION-free years (§ 9122.1 for qualifying drug/property felonies)' },
+            nextPass: 'eligible_felony_pa',
+            nextFail: 'waiting_felony_pa'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Pennsylvania has three different remedies and they split on how the case ended: non-convictions are sealed automatically and can also be expunged, ARD completion has its own expungement path, and convictions run through sealing with waiting periods of 5 to 10 years depending on the grade. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your criminal history from the Pennsylvania State Police (epatch), or ask the Clerk of Courts in the county of the case. MyCleanSlatePA.com will also check your eligibility for free.',
+          remedy: 'Get Your Record First (PSP epatch / MyCleanSlatePA)',
+          citation: '18 Pa.C.S. §§ 9122, 9122.1, 9122.2 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Pennsylvania\'s ARD program has a clear expungement path, and this screening covers it. Other kinds of deferral or diversion are not something we have researched yet, and we would rather tell you that than guess. MyCleanSlatePA.com (run by Community Legal Services) checks eligibility for free and will know how your disposition is treated.',
+          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
+          citation: '18 Pa.C.S. § 9122 (ARD expungement); other deferrals not yet researched'
+        },
+        eligible_nonconviction_pa: {
+          status: 'eligible',
+          title: 'Non-Conviction — Sealing Is Automatic, and Expungement Is Available Too',
+          message: 'Good news on two fronts. First, Pennsylvania seals non-convictions AUTOMATICALLY under Clean Slate — there is no waiting period and the sealing runs about monthly, so this may already be done. Second, sealing is not the strongest thing available to you: because there was no conviction, you can also petition to EXPUNGE the record under 18 Pa.C.S. § 9122, which destroys it rather than hiding it. Sealing keeps the record visible to law enforcement; expungement does not leave one. Check your status first with a PSP criminal history (epatch), or let MyCleanSlatePA.com check for free — then decide whether the expungement petition is worth filing on top.',
+          remedy: 'Automatic Clean Slate Sealing (already running) + optional Expungement Petition (§ 9122)',
+          citation: '18 Pa.C.S. §§ 9122, 9122.2'
+        },
+        eligible_ard_pa: {
+          status: 'eligible',
+          title: 'Completed ARD — Expungement Available',
+          message: 'Because you completed ARD, you can petition to EXPUNGE this record under 18 Pa.C.S. § 9122 — expungement, not just sealing, so the record is destroyed rather than hidden. ARD is not a conviction, which is why the stronger remedy is open to you. File the petition in the Court of Common Pleas for the county where the case was heard; the District Attorney has 30 days to respond. MyCleanSlatePA.com will confirm your eligibility for free before you spend anything on filing.',
+          remedy: 'Petition for Expungement after ARD (§ 9122, Pa.R.Crim.P. 790)',
+          citation: '18 Pa.C.S. § 9122'
+        },
+        check_record_first_pa: {
+          status: 'eligible',
+          title: 'Your Summary Offense May Already Be Sealed — Check First',
+          message: 'Start by checking, not by filing. Pennsylvania has been sealing summary convictions AUTOMATICALLY since June 2024, once five arrest-free years have passed — no petition, no fee, and no notification. Based on your dates you are past that, so there is a real chance it is already done. Find out before you spend anything: request a PSP criminal history (epatch), or let MyCleanSlatePA.com check for free. If the automatic system missed you, you can petition to EXPUNGE a summary offense under 18 Pa.C.S. § 9122 — and note that is expungement, which destroys the record, rather than the sealing the automatic system gives you. Filing fees vary by county and are something we are still verifying.',
+          remedy: 'Check your record first — then Summary Expungement (Pa.R.Crim.P. 490) if needed',
+          citation: '18 Pa.C.S. §§ 9122, 9122.2'
+        },
+        // The honest answer when the sources disagree.
+        check_record_unknown_period_pa: {
+          status: 'eligible',
+          title: 'You Can Petition Now — Whether It Is Already Sealed, We Cannot Say',
+          message: 'Two things here, and we are being straight with you about both. The first is solid: you are past seven conviction-free years, so you can petition now for an Order for Limited Access under 18 Pa.C.S. § 9122.1 — that is sealing, and it is available to you today. The second we do not know. Pennsylvania also seals misdemeanors like yours AUTOMATICALLY, and Clean Slate 3.0 changed when that happens — our sources disagree about whether the automatic period is seven years or ten, and we are not going to pick one and let you plan around a coin flip. So: your record may already be sealed, or it may be three years away. Check rather than assume — a PSP criminal history (epatch) will show you, and MyCleanSlatePA.com checks for free. If it is already sealed, you are finished and you owe nobody a filing fee. If it is not, the petition is open to you now. Resolving that period is our top verification item for Pennsylvania.',
+          remedy: 'Check your record — you can petition (Rule 791) now either way',
+          citation: '18 Pa.C.S. §§ 9122.1, 9122.2 (automatic period unresolved — sources conflict)'
+        },
+        eligible_petition_pa: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Petition for Sealing',
+          message: 'Based on your dates you appear potentially eligible to petition for an Order for Limited Access — sealing — under 18 Pa.C.S. § 9122.1, after seven conviction-free years. First-degree misdemeanors are not reached by Pennsylvania\'s automatic sealing, so waiting will not clear this: filing is the route. Use Pa.R.Crim.P. 791, filed in the Court of Common Pleas for the county of conviction; the District Attorney has 30 days to respond. You will need a recent PSP criminal history (epatch). Understand what you are getting: sealing hides the record from most employers and landlords but keeps it visible to law enforcement — it is not expungement. Filing fees vary by county and are something we are still verifying. MyCleanSlatePA.com checks eligibility for free before you file.',
+          remedy: 'Petition for Limited Access (Pa.R.Crim.P. 791, § 9122.1)',
+          citation: '18 Pa.C.S. § 9122.1'
+        },
+        eligible_felony_pa: {
+          status: 'eligible',
+          title: 'Qualifying Felony — Potentially Sealable After 10 Years',
+          message: 'Pennsylvania seals very few felonies, and yours may be one of the exceptions: certain drug and property felonies where the total sentence was under seven years of confinement can be sealed after ten conviction-free years. Based on your dates, that period appears to have passed. Clean Slate 3.0 also added an automatic path for certain drug felonies at ten years — which we are still verifying — so check your record before you file: a PSP criminal history (epatch) will show whether it is already done, and MyCleanSlatePA.com checks for free. If it is not, petition under Pa.R.Crim.P. 791 in the Court of Common Pleas for the county of conviction. Given how narrow the felony path is, this is worth having a person confirm — Community Legal Services runs the free eligibility check.',
+          remedy: 'Check record, then Petition for Limited Access (Rule 791) if needed',
+          citation: '18 Pa.C.S. §§ 9122.1, 9122.2'
+        },
+        waiting_pa: {
+          status: 'waiting',
+          title: 'Five Arrest-Free Years Not Yet Met',
+          message: 'A summary offense clears after five ARREST-free years — note that is arrest-free, not conviction-free, which is a stricter test than the one that applies to misdemeanors. Based on your dates, that period has not run yet. Once it does, Pennsylvania seals summary convictions automatically, so relief may arrive without you filing anything.',
+          remedy: 'Wait for five arrest-free years',
+          citation: '18 Pa.C.S. §§ 9122, 9122.2'
+        },
+        waiting_misd_pa: {
+          status: 'waiting',
+          title: 'Seven Conviction-Free Years Not Yet Met',
+          message: 'Petition sealing for a misdemeanor needs seven conviction-free years — Clean Slate 3.0 cut this from ten. Based on your dates, that period has not run yet, and a new conviction restarts it. Pennsylvania also seals many misdemeanors automatically; the automatic period is the thing we are still verifying, because our sources disagree about whether it is seven years or ten. Either way, staying conviction-free is what gets you there.',
+          remedy: 'Wait for seven conviction-free years',
+          citation: '18 Pa.C.S. §§ 9122.1, 9122.2'
+        },
+        waiting_felony_pa: {
+          status: 'waiting',
+          title: 'Ten Conviction-Free Years Not Yet Met',
+          message: 'Qualifying drug and property felonies — those with a total sentence under seven years of confinement — can be sealed after ten conviction-free years. Based on your dates, that period has not run yet, and a new conviction restarts it.',
+          remedy: 'Wait for ten conviction-free years',
+          citation: '18 Pa.C.S. § 9122.1'
+        },
+        ineligible_serious_pa: {
+          status: 'ineligible',
+          title: 'Excluded From Sealing',
+          message: 'Pennsylvania excludes first-degree felonies, offenses punishable by 20 or more years, felonies involving danger to a person, crimes against the family, firearms offenses, and sex offenses requiring registration from sealing. No waiting period changes that. There is another route, though, and it is a real one in Pennsylvania: a PARDON from the Board of Pardons, which — since June 2024 — carries automatic expungement once granted. Pennsylvania grants more pardons than most states and the application is free. Community Legal Services (MyCleanSlatePA.com) and PALawHelp.org can tell you whether it is worth pursuing.',
+          remedy: 'None (Excluded from Sealing) — consider a Board of Pardons application',
+          citation: '18 Pa.C.S. §§ 9122.1, 9122.2'
+        },
+        ineligible_misd_count_pa: {
+          status: 'ineligible',
+          title: 'Four or More Misdemeanors Blocks Sealing',
+          message: 'Pennsylvania excludes anyone with four or more misdemeanor convictions of the second degree or higher from sealing — it is a limit on the person, not on the offense, so the individual case does not matter. A pardon from the Board of Pardons is a separate path that this limit does not govern, and since June 2024 a pardon carries automatic expungement. Before accepting this as final, it is worth having someone count your record properly: MyCleanSlatePA.com checks eligibility for free, and grading matters here — misdemeanors of the third degree do not count toward this limit.',
+          remedy: 'Consult Legal Aid (Record Exceeds Misdemeanor Limit)',
+          citation: '18 Pa.C.S. § 9122.1'
+        },
+        ineligible_felony_pa: {
+          status: 'ineligible',
+          title: 'Most Felonies Cannot Be Sealed in Pennsylvania',
+          message: 'Pennsylvania seals only a narrow set of felonies: certain drug and property felonies where the total sentence was under seven years of confinement. Other felonies are not sealable, however long ago they were and however clean your record has been since. The real route here is a PARDON from the Board of Pardons — Pennsylvania grants more than most states, the application is free, and since June 2024 a pardon brings automatic expungement with it. If you are 70 or older and have been arrest-free for ten years since completing supervision, there is also an age-based expungement path under § 9122. Community Legal Services (MyCleanSlatePA.com) can advise on both.',
+          remedy: 'Board of Pardons application (or age-70 expungement under § 9122)',
+          citation: '18 Pa.C.S. §§ 9122, 9122.1'
+        },
+        complex_grade_pa: {
+          status: 'complex',
+          title: 'We Need the Grade — It Decides Everything Here',
+          message: 'Pennsylvania grades every offense, and the grade decides which of three remedies you get and how long you wait: a summary clears in five arrest-free years, a 2nd or 3rd degree misdemeanor in seven conviction-free years, a 1st degree misdemeanor also seven but with no automatic path, and most felonies not at all. Guessing at the grade would send you down the wrong path entirely, so we will not. Your court paperwork states it. A PSP criminal history (epatch) shows it. And MyCleanSlatePA.com — run by Community Legal Services — will check your eligibility for free, which is the easiest way to find out.',
+          remedy: 'Get Your Grade First (court paperwork / PSP epatch / MyCleanSlatePA)',
+          citation: '18 Pa.C.S. §§ 9122, 9122.1, 9122.2'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        sealing: {
+          name: 'Petition for Limited Access — sealing (§ 9122.1, Pa.R.Crim.P. 791)',
+          formName: 'Petition for Limited Access (Rule 791)',
+          formUrl: 'https://www.pacourts.us/forms',
+          steps: [
+            'Check first whether Clean Slate already sealed it — MyCleanSlatePA.com checks free, and a PSP criminal history (epatch) shows your current record.',
+            'Obtain a recent PSP criminal history record through epatch.',
+            'Complete the Petition for Limited Access (Rule 791) and file it in the Court of Common Pleas for the county of conviction.',
+            'Serve the District Attorney, who has 30 days to respond.',
+            'Understand what you are getting: sealing hides the record from most employers and landlords, but law enforcement still sees it. It is not expungement.'
+          ],
+          // null: Wave 1 found fees vary BY COUNTY — Montgomery $176.50 plus
+          // $13.50 per extra agency, others cited $132-$215. A range across
+          // counties is not this county's fee.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Court of Common Pleas, county of conviction'
+        },
+        expungement: {
+          name: 'Petition for Expungement (§ 9122) — destroys the record',
+          formName: 'Petition for Expungement (Pa.R.Crim.P. 490 for summary offenses; Rule 790 in the Court of Common Pleas)',
+          formUrl: 'https://www.pacourts.us/forms',
+          steps: [
+            'Confirm you are in one of the narrow categories: a non-conviction, a summary offense after five arrest-free years, completed ARD, a pardoned offense, or aged 70+ with ten arrest-free years since completing supervision.',
+            'Obtain a recent PSP criminal history record through epatch.',
+            'File Rule 490 for a summary offense, or Rule 790 in the Court of Common Pleas otherwise, in the county where the case was heard.',
+            'Serve the District Attorney, who has 30 days to respond.'
+          ],
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Court of Common Pleas (or Magisterial District Court for summary offenses), county of the case'
+        }
+      },
+      legalAid: [
+        { name: 'MyCleanSlatePA (Community Legal Services — free eligibility check)', url: 'https://mycleanslatepa.com' },
+        { name: 'PALawHelp', url: 'https://www.palawhelp.org' }
+      ]
+    }
   }
 };
 

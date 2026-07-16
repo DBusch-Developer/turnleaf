@@ -1,9 +1,9 @@
-# Turnleaf — Call Session 1 (Wave 1: MI · UT)
+# Turnleaf — Call Session 1 (Wave 1: MI · PA · UT)
 
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**13 open questions across 2 states.**
+**21 open questions across 3 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -47,7 +47,42 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 2. UTAH (UT)
+## 2. PENNSYLVANIA (PA)
+
+**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+
+**Contacts (from the data — no phone numbers are stored; see header):**
+- **Petition for Limited Access — sealing (§ 9122.1, Pa.R.Crim.P. 791)** — Court of Common Pleas, county of conviction
+- **Petition for Expungement (§ 9122) — destroys the record** — Court of Common Pleas (or Magisterial District Court for summary offenses), county of the case
+- MyCleanSlatePA (Community Legal Services — free eligibility check) — https://mycleanslatepa.com
+- PALawHelp — https://www.palawhelp.org
+
+**Dates that govern:**
+- 2024-06 — Automatic sealing of summary convictions began (operative) · Wave 1 gives month and year only ("started June 2024").
+- 2024-06 — Pardoned offences automatically expunged (operative) · Wave 1 gives month and year only ("auto-expunged since June 2024").
+
+**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+
+1. THE #1 PA VERIFY ITEM. What is the AUTOMATIC sealing period for 2nd/3rd-degree misdemeanours and misdemeanours punishable by 2 years or less under 18 Pa.C.S. § 9122.2 — 7 years or 10? Clean Slate 3.0 changed it and Wave 1's sources SPLIT: some say 7 applies to the petition only, others say 7 applies to both. Because the sources conflict, no automatic period is encoded — the tree routes to a result that says we do not know. Read § 9122.2's text directly rather than any summary.
+   - *Blocks no single field — affects a branch or wording.*
+2. What does it cost to file for expungement or limited access, and can it be waived? Wave 1 found fees vary BY COUNTY: Montgomery County $176.50 plus $13.50 per extra agency; other counties cited between $132 and $215. Wave 1 calls this Turnleaf's phone-verification showcase — verify Philadelphia, Allegheny and Montgomery, then decide whether to display per-county or as a verified range.
+   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`, `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+3. Do unpaid fines and costs block AUTOMATIC sealing, and does unpaid restitution block it separately? Wave 1 found a conflict: Clean Slate 2.0 (Act 83 of 2020) removed unpaid fines/costs as a barrier, but at least one current source says unpaid restitution still blocks. Wave 1 says to encode restitution as blocking and fines/costs as not ONLY if § 9122.2's condition text confirms that split. It is not confirmed, so NOTHING in the tree gates on it — the results disclose the uncertainty instead.
+   - *Blocks no single field — affects a branch or wording.*
+4. What does a PSP criminal history record (epatch) cost? Wave 1 gives "~$22, VERIFY". It is needed for a petition, so it is part of the real cost of filing.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm the sealing exclusion for anyone with 4 or more misdemeanours of the 2nd degree or higher. The tree asks a person to self-assess this; the record model cannot count it.
+   - *Blocks no single field — affects a branch or wording.*
+6. Confirm the "certain drug felonies after 10 years" automatic path added by Clean Slate 3.0, and which drug and property felonies qualify for the 10-year PETITION sealing path (total sentence under 7 years of confinement).
+   - *Blocks no single field — affects a branch or wording.*
+7. How are completed deferrals/diversions other than ARD treated? Standing call-sheet question for every state. ARD completion is covered by Wave 1 as an expungement path; nothing else is.
+   - *Blocks no single field — affects a branch or wording.*
+8. What are the exact effective dates for the June 2024 starts (automatic summary sealing; automatic expungement of pardoned offences)? Wave 1 gives month and year only.
+   - *Blocks no single field — affects a branch or wording.*
+
+---
+
+## 3. UTAH (UT)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 

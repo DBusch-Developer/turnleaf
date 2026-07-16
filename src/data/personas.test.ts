@@ -511,7 +511,95 @@ const MI: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI]];
+const PA: Persona[] = [
+  {
+    source: 'Wave 1 — PA persona 1',
+    package: 'M2 conviction, 8 yrs conviction-free, fines paid → likely auto-sealed → check-record path.',
+    record: { title: 'M2 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      sealing_excluded_pa: false,
+      misd_count_pa: false,
+      grade_pa: 'm2_m3',
+      petition_misd_date_pa: '2018-07-15',   // 8 conviction-free years
+    },
+    expect: {
+      resultKey: 'check_record_unknown_period_pa',
+      reading:
+        'THE CONFLICT persona. At 8 years the person is past the 7-year PETITION period, so that '
+        + 'much is solid and the result says so. Whether the AUTOMATIC sealing has already fired '
+        + 'depends on a period Wave 1\'s sources split on (7 vs 10) — so the null-period node routes '
+        + 'to nextUnknown and the result says plainly that we cannot tell them, and to check rather '
+        + 'than assume. The package says "likely auto-sealed"; that is only true on the 7-year '
+        + 'reading. Flagged approximate: this resolves the moment § 9122.2 is read.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 2',
+    package: 'M1, 5 yrs → waiting (7y).',
+    record: { title: 'M1 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      sealing_excluded_pa: false,
+      misd_count_pa: false,
+      grade_pa: 'm1',
+      petition_m1_date_pa: '2021-07-15',   // 5 of the 7 needed
+    },
+    expect: { resultKey: 'waiting_misd_pa', reading: 'M1: 7 conviction-free years for petition sealing, and no automatic path reaches a first-degree misdemeanour. 5 years elapsed → waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 3',
+    package: 'F1 → ineligible for sealing → pardon path.',
+    record: { title: 'First-Degree Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: { sealing_excluded_pa: true },
+    expect: {
+      resultKey: 'ineligible_serious_pa',
+      reading:
+        'A first-degree felony is on the sealing exclusion list, so no waiting period helps. The '
+        + 'result routes to the Board of Pardons — which since June 2024 carries automatic '
+        + 'expungement once granted, and which Pennsylvania grants more often than most states. '
+        + 'Exact: the package asks for the pardon path and that is what it gets.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 4',
+    package: 'drug felony, 3-yr sentence, 11 yrs clean → eligible (3.0 automatic — verify).',
+    record: { title: 'Drug Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      sealing_excluded_pa: false,
+      misd_count_pa: false,
+      grade_pa: 'felony_eligible',
+      felony_date_pa: '2015-07-15',   // 11 conviction-free years
+    },
+    expect: {
+      resultKey: 'eligible_felony_pa',
+      reading:
+        'A drug felony with a 3-year sentence is inside the "under 7 years of confinement" window, '
+        + 'and 11 conviction-free years clears the 10-year period. The package flags the Clean Slate '
+        + '3.0 automatic drug-felony path as needing verification, so the result tells the person to '
+        + 'check their record before filing rather than asserting it already happened. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 5',
+    package: 'dismissed charges last year → auto-sealed, expungement available.',
+    record: { title: 'Dismissed Charges', disposition: 'dismissed', disposition_date: '2025-07-15' },
+    expect: {
+      resultKey: 'eligible_nonconviction_pa',
+      reading:
+        'Non-convictions seal automatically with no waiting period, AND expungement is available '
+        + 'because there was no conviction. The result gives both and explains why expungement is '
+        + 'the stronger of the two — sealing keeps the record visible to law enforcement. Exact.',
+    },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

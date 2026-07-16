@@ -97,7 +97,7 @@ const CA: Persona[] = [
     package: 'felony w/ probation completed 2021 → 1203.4 as of right (or auto).',
     record: { title: 'Grand Theft', charge_type: 'felony', disposition_date: '2021-03-01', probation_status: 'completed', prison_sentenced: false },
     answers: { sex_registration: false },
-    expect: { resultKey: 'eligible_expungement', reading: 'Probation completed, no prison, not a registrant → PC 1203.4 as of right. Exact.' },
+    expect: { resultKey: 'check_record_first_ca', reading: 'RESOLVED (Diana, 7/16): PC 1203.425(a)(1)(B)(iv)(I)(ia) makes ANY probation-completed conviction auto-eligible, so a probation-completed felony now leads with check-record-first (which carries the 1203.4 as-of-right backup). Was eligible_expungement under the old misdemeanor-only auto encoding.' },
     now: NOW,
   },
   {
@@ -128,6 +128,31 @@ const CA: Persona[] = [
         + 'and the record review to check it, and puts the § 851.91 petition after that as the '
         + 'backup for when automation missed you. Exact.',
     },
+    now: NOW,
+  },
+  // Diana statute-verification locks (7/16) for the newly-encoded 1203.425 felony tiers.
+  {
+    source: 'Wave 0 — CA persona 6 (Diana statute verification, PC 1203.425(a)(1)(B)(iv)(II))',
+    package: 'non-probation, non-serious/violent felony, all terms completed 2020 → auto-relief at 4 conviction-free years → check record.',
+    record: { title: 'Non-serious felony, no probation', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-01-01', probation_status: 'none', prison_sentenced: false },
+    answers: { sex_registration: false, felony_auto_ca: false, auto_relief_felony_date_ca: '2020-01-01' },
+    expect: { resultKey: 'check_record_first_ca', reading: 'A non-serious/violent/registrable felony with no probation gets automatic relief 4 conviction-free years after completing ALL terms (the 4-year clock ASKS for completion, not judgment); completed 2020 + 4 = 2024 < 2026 -> check-record. Encodes the resolved felony tier.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — CA persona 7 (Diana statute verification, 1203.425 exclusions)',
+    package: 'non-probation serious/violent felony → excluded from auto relief; petition path only.',
+    record: { title: 'Serious felony, no probation', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-01-01', probation_status: 'none', prison_sentenced: false },
+    answers: { sex_registration: false, felony_auto_ca: true },
+    expect: { resultKey: 'eligible_expungement', reading: 'A serious (1192.7(c)) / violent (667.5) / registrable felony is EXCLUDED from 1203.425 auto relief; the felony_auto gate routes it to the petition path (eligible_expungement), not check-record.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — CA persona 8 (Diana statute verification, PC 1203.425(a)(1)(B)(iv)(I)(ib))',
+    package: 'non-probation misdemeanor, 1+ year since judgment → auto-relief → check record.',
+    record: { title: 'Misdemeanor, no probation', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-01-01', probation_status: 'none' },
+    answers: { sex_registration: false },
+    expect: { resultKey: 'check_record_first_ca', reading: 'A non-probation misdemeanor gets automatic relief 1 year after judgment (ib); 2022 + 1 < 2026 -> check-record (the 1-year clock runs from judgment, which the form collects).' },
     now: NOW,
   },
 ];

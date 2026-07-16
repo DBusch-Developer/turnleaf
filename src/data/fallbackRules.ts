@@ -219,11 +219,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   CA: {
     code: 'CA',
     name: 'California',
-    lastReviewed: '2026-07-15',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
-      'California has no true expungement. The petition remedy is a DISMISSAL / SET-ASIDE under PC § 1203.4 (probation cases), § 1203.4a (misdemeanours and infractions where probation was not granted), and §§ 1203.41/.42 (felony and realignment cases) — colloquially called "expungement", but it does not erase anything. Separately, California runs the largest AUTOMATIC relief system in the country: PC § 851.93 (arrests) and § 1203.425 (convictions), under which the Department of Justice reviews statewide databases monthly and grants relief with no petition at all. Since August 2022, courts are barred from disclosing set-asides, which makes them function as sealing. Because the automatic layer is running, the honest first question is not "can I petition" but "is my record already clear" — check first, petition second.',
+      'California has no true expungement. The petition remedy is a DISMISSAL / SET-ASIDE under PC § 1203.4 (probation cases), § 1203.4a (misdemeanours and infractions where probation was not granted), and §§ 1203.41/.42 (felony and realignment cases) — colloquially called "expungement", but it does not erase anything. Separately, California runs the largest AUTOMATIC relief system in the country: PC § 851.93 (arrests) and § 1203.425 (convictions), under which the Department of Justice reviews statewide databases monthly and grants relief with no petition at all. Since August 2022, courts are barred from disclosing set-asides, which makes them function as sealing. Because the automatic layer is running, the honest first question is not "can I petition" but "is my record already clear" — check first, petition second. One rule runs through EVERY California dismissal path and is worth stating up front: unpaid restitution or fines CANNOT be used to deny you relief (PC §§ 1203.4(c)(3), 1203.4a(e), 1203.41(d), 1203.42(c)) — owing money does not stop a dismissal here.',
     keyDates: [
       {
         label: 'Automatic record relief fully operative (PC § 1203.425)',
@@ -241,48 +242,28 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Is there any filing fee for the PC § 1203.4 dismissal petition (Form CR-180)? Recent sources say none statewide following the AB 1076-era fee elimination, but older county fee schedules show roughly $120-150. Wave 0 calls this "a perfect confirm-kill call" — ask an LA Superior Court clerk.',
+          'Is there any filing fee for the PC § 1203.4 dismissal petition (Form CR-180)? Recent sources say none statewide following the AB 1076-era fee elimination, but older county fee schedules show roughly $120-150. Wave 0 calls this "a perfect confirm-kill call" — ask an LA Superior Court clerk. (Practice tier; the statute Diana verified is silent on it.)',
         blocksFields: ['resources.remedies.expungement.fees'],
       },
       {
         question:
-          'Is arrest sealing under PC § 851.91 / § 851.87 genuinely free, and if there is a fee, is a waiver available? The encoded rules asserted "$0, no filing fee under state law", but Wave 0 does not address arrest sealing fees at all and no source is recorded for the claim.',
+          'Is arrest sealing under PC § 851.91 / § 851.87 genuinely free, and if there is a fee, is a waiver available? Diana verified § 851.91\'s eligibility (7/16) but the statute does not settle the filing fee — practice tier.',
         blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
       },
       {
         question:
-          'What are the exact felony tiers for automatic relief under the current PC § 1203.425(b)? Wave 0 gives "generally 4 yrs post-sentence for non-serious/non-violent" but flags the tiers as unverified. The 4-year figure has been removed from user-facing messages until this is confirmed.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the PC § 1203.41 waiting period for felony/realignment cases. Wave 0 gives "2 yrs post-completion" but flags it. The figure has been removed from the complex_prison message until confirmed.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What are the sub-criteria for automatic misdemeanour relief at 1 year after judgment under PC § 1203.425? Wave 0 gives the 1-year period but flags the sub-criteria as unverified.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Verify adjacent-remedy statute references: PC § 4852.01 (Certificate of Rehabilitation), PC § 17(b) (felony reduction), PC § 1203.3 (early termination of probation), and PC § 290.5 (ending registration). These are cited in user-facing messages but appear nowhere in Wave 0 — they entered the rules from outside the research package.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'The automatic relief layer (PC §§ 851.93, 1203.425) is not encoded as a branch — it exists only as prose inside petition results. The "check your record first" posture Wave 0 calls for has no structural representation.',
+          'Adjacent-remedy statutes cited only in result PROSE, not yet human-read: PC § 4852.01 (Certificate of Rehabilitation), § 17(b) (felony reduction), § 1203.3 (early termination of probation), § 290.5 (ending registration). No routing claim traces to them (badge call, 7/16 — CA flipped to statute_cited on the six verified sections + 1203.4 with these retained as unread citations). Read them when convenient to link.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Cal. Penal Code § 1203.4 (dismissal after probation)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 1203.4a (dismissal, probation not granted)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 1203.41 (felony/realignment dismissal)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 1203.42 (felony/realignment dismissal)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 1203.425 (automatic conviction relief)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 851.93 (automatic arrest relief)', url: null, retrievedOn: null },
-      { id: 'Cal. Penal Code § 851.91 (arrest sealing petition)', url: null, retrievedOn: null },
+      { id: 'Cal. Penal Code § 1203.4 (dismissal after probation; (a)(1) as-of-right on probation fulfilled/early discharge; (b) exclusions incl. listed sex offenses + infractions; (c)(3) unpaid restitution cannot deny; (a)(2) no firearm restoration, (a)(1) still disclosable on office/licensure/Lottery, (a)(4) protective orders survive)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=1203.4', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 1203.4a (dismissal, probation not granted; as-of-right at 1 yr with the honest-and-upright-life condition, (b) discretionary otherwise; (d) exclusions misd 288(c)/VC 42002.1/VC 42001 infractions; (e) unpaid restitution cannot deny)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=1203.4a', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 1203.41 (felony/realignment dismissal, SB 731; 1 yr post-completion for mandatory supervision 1170(h)(5)(B), 2 yr for straight jail (h)(5)(A) or state prison; (a)(6) excludes if sex-registration; discretionary; (c) any conviction date; (d) unpaid restitution cannot deny)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=1203.41', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 1203.42 (pre-realignment (pre-2011) would-be-1170(h) felonies; 2 yr; discretionary; (c) unpaid restitution cannot deny)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=1203.42', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 1203.425 (automatic conviction relief; (a)(1)(B)(iv)(I)(ia) any probation-completed-without-revocation conviction, (ib) non-probation misd/infraction at 1 yr; (II) felony = all terms completed + 4 yrs no new felony, excl. serious 1192.7(c)/violent 667.5/registrable; (B)(i)-(iii) gates; post-1973; (b) DA/probation may petition to block up to 90 days pre-eligibility)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=1203.425', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 851.93 (automatic arrest relief; (a)(2) misd arrest+dismissal -> relief, misd never charged -> 1 yr, felony -> 3 yr, felony punishable 8+ yrs -> 6 yr, completed diversions (D list) -> relief; operative Oct 1, 2024)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=851.93', retrievedOn: '2026-07-16' },
+      { id: 'Cal. Penal Code § 851.91 (arrest sealing petition, as-of-right; gates: not still chargeable, murder/no-SOL excluded unless acquitted/factually innocent, evasion bars; DV/child/elder-abuse arrests interests-of-justice only on a pattern of 2+ convictions or 5+ arrests in 3 yrs)', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=851.91', retrievedOn: '2026-07-16' },
       { id: 'Cal. Penal Code § 851.87 (sealing after completed diversion)', url: null, retrievedOn: null },
       { id: 'Cal. Penal Code § 290 (sex offender registration; exclusion)', url: null, retrievedOn: null },
       { id: 'AB 1076 (2019); SB 731; AB 134; AB 168 (automatic relief and its delays)', url: null, retrievedOn: null },
@@ -324,10 +305,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'probation_status',
           text: 'What is your current probation status?',
           options: [
-            { label: 'Successfully completed probation', value: 'completed', next: 'auto_relief_check_ca' },
+            { label: 'Successfully completed probation', value: 'completed', next: 'check_record_first_ca' },
             { label: 'Did not complete probation successfully', value: 'failed', next: 'complex_probation' },
             { label: 'Currently still on probation or supervision', value: 'active', next: 'ineligible_active_probation' },
-            { label: 'No probation was sentenced', value: 'none', next: 'judgment_date' }
+            { label: 'No probation was sentenced', value: 'none', next: 'no_probation_level_ca' }
           ]
         },
         // CHECK-RECORD-FIRST (Wave 0 cross-package flag 2).
@@ -343,29 +324,39 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // Misdemeanours get the 1-year automatic period (§ 1203.425). Felonies
         // do NOT route here: Wave 0 flags the felony tiers as unverified, so we
         // will not tell a felony conviction it is probably already clear.
-        auto_relief_check_ca: {
+        // No probation was sentenced. 1203.425(a)(1)(B)(iv)(I)(ib): a non-probation
+        // misdemeanor or infraction gets automatic relief 1 year after judgment;
+        // (II): a non-probation felony after 4 conviction-free years since
+        // completing ALL terms, if not serious/violent/registrable.
+        no_probation_level_ca: {
           type: 'choice',
           field: 'charge_type',
           text: 'What was the level of the offense?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'auto_relief_date_ca' },
-            { label: 'Infraction', value: 'infraction', next: 'auto_relief_date_ca' },
-            { label: 'Felony', value: 'felony', next: 'eligible_expungement' },
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'judgment_date' },
+            { label: 'Infraction', value: 'infraction', next: 'judgment_date' },
+            { label: 'Felony', value: 'felony', next: 'felony_auto_ca' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'eligible_expungement' }
           ]
         },
-        auto_relief_date_ca: {
+        felony_auto_ca: {
+          type: 'boolean',
+          text: 'Was it a serious felony (PC § 1192.7(c)), a violent felony (PC § 667.5), or a felony requiring sex-offender registration?',
+          yes: 'eligible_expungement',
+          no: 'auto_relief_felony_date_ca'
+        },
+        // ASKS for completion, not judgment: the 4-year clock runs from completing
+        // ALL sentence terms, which is not the date the form collects (contrast the
+        // misdemeanor 1-year clock, which does run from judgment). Same class of
+        // anchor as Arizona's absolute-discharge clock.
+        auto_relief_felony_date_ca: {
           type: 'date',
-          // Reads the record: California's clock runs from judgment, which IS
-          // the date the form collects. Contrast AZ/NY/TX, whose clocks run
-          // from other events and therefore ask.
-          field: 'disposition_date',
-          text: 'When was judgment pronounced (your sentencing date)?',
+          text: 'When did you complete ALL terms of your sentence — incarceration, mandatory supervision, post-release community supervision, and parole?',
           validation: {
             period: {
-              amount: 1,
+              amount: 4,
               unit: 'years',
-              anchor: 'judgment pronounced (PC § 1203.425 automatic relief for misdemeanours)'
+              anchor: 'four conviction-free years since completing ALL sentence terms (PC § 1203.425(a)(1)(B)(iv)(II) — non-serious, non-violent, non-registrable felony)'
             },
             nextPass: 'check_record_first_ca',
             nextFail: 'eligible_expungement'
@@ -382,9 +373,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             period: {
               amount: 1,
               unit: 'years',
-              anchor: 'judgment pronounced (PC § 1203.4a — applies only where probation was not granted)'
+              anchor: 'judgment pronounced (PC § 1203.425(a)(1)(B)(iv)(I)(ib) automatic relief / PC § 1203.4a petition — non-probation misdemeanor or infraction)'
             },
-            nextPass: 'eligible_expungement_no_probation',
+            nextPass: 'check_record_first_ca',
             nextFail: 'waiting_period_ca'
           }
         }
@@ -401,7 +392,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         check_record_first_ca: {
           status: 'eligible',
           title: 'Your Record May Already Be Clear — Check Before You File',
-          message: 'Start here, not with a petition. California\'s Department of Justice reviews state records every month and grants relief automatically under Penal Code § 1203.425 — no petition, no fee, and nobody tells you it happened. Misdemeanors generally qualify one year after judgment, and yours is past that, so there is a real chance this is already done. Find out before you spend anything: request a record review from the CA DOJ (a fingerprint-based review costs about $25), or ask the court that handled your case what your record shows now. If the automatic system did reach you, you are finished. If it missed you, or if you want the extra benefits a petition can add — such as a felony reduction under PC § 17(b) — the dismissal petition under PC § 1203.4 is still there, and completing probation makes it available as of right. We are still verifying which felonies the automatic program reaches and after how long.',
+          message: 'Start here, not with a petition. California\'s Department of Justice reviews state records every month and grants relief automatically under Penal Code § 1203.425 — no petition, no fee, and nobody tells you it happened. Based on your entries you appear to be in a tier the automatic program reaches: any conviction where you completed probation without revocation qualifies; a non-probation misdemeanor or infraction qualifies 1 year after judgment; and a non-probation felony qualifies 4 conviction-free years after you complete ALL sentence terms, as long as it is not a serious, violent, or registrable felony. So there is a real chance this is already done. Find out before you spend anything: request a record review from the CA DOJ (a fingerprint-based review costs about $25), or ask the court what your record shows now. In rare cases a prosecutor can move (up to 90 days before you become eligible) to contest the automatic relief — if that happened, the petition paths below stay open. If the automation missed you, or you want the extra benefits a petition can add (such as a felony reduction under PC § 17(b)), the § 1203.4 dismissal is available as of right once probation is complete — and unpaid restitution or fines cannot block it. Two honest limits: a dismissal does NOT restore firearm rights, and the conviction can still be disclosed on public-office, licensing, and Lottery applications.',
           remedy: 'Check Your Record First (CA DOJ Record Review) — then PC 1203.4 if needed',
           citation: 'California Penal Code §§ 1203.425, 1203.4'
         },
@@ -411,7 +402,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // CHECK-RECORD-FIRST: § 851.93 automation leads, the § 851.91
           // petition follows. Wave 0's CA persona 5 asks for exactly this
           // order and the result used to lead with the petition instead.
-          message: 'Start by checking, not by filing. Arrests that did not lead to a conviction are cleared automatically by the California Department of Justice under Penal Code § 851.93 — the DOJ reviews state databases monthly, grants the relief itself, and does not notify you. So the work may already be done. Request a record review from the CA DOJ (a fingerprint-based review costs about $25) to see where you stand. If the automatic system missed your arrest, you can petition to seal it under Penal Code § 851.91 — sealing is available as a matter of right in many cases where charges were dismissed, you were acquitted, or you were never charged — or under § 851.87 if you completed diversion.',
+          message: 'Start by checking, not by filing. Arrests that did not lead to a conviction are cleared automatically by the California DOJ under Penal Code § 851.93 (operative Oct 1, 2024) — the DOJ reviews state databases monthly and grants relief itself, without notifying you. The tiers: a misdemeanor arrest that was dismissed clears; a misdemeanor where you were never charged clears 1 year after arrest; a felony after 3 years (6 years if it was punishable by 8+ years); and a completed diversion clears. So the work may already be done — request a CA DOJ record review (about $25) to see where you stand. If the automation missed your arrest, you can petition to seal it under § 851.91, which is available as of right when charges were dismissed, you were acquitted, or you were never charged — with a few gates: it is not available while you can still be charged, murder and no-statute-of-limitations charges are excluded unless you were acquitted or found factually innocent, and a pattern of evading arrest bars it. One exception to the as-of-right rule: an arrest for domestic violence, child abuse, or elder abuse is sealable only in the interests of justice (not as of right) if your record shows a pattern — 2 or more convictions or 5 or more arrests in 3 years. Diversion completions can also seal under § 851.87.',
           remedy: 'Check Your Record First (PC 851.93) — then Arrest Sealing (PC 851.91 / 851.87)',
           citation: 'California Penal Code §§ 851.93, 851.91, 851.87'
         },
@@ -422,21 +413,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // flags the § 1203.425(b) felony tiers as unverified. See open
           // questions. The 1-year misdemeanour period is stated unflagged in
           // Wave 0 and stays; only its sub-criteria are in question.
-          message: 'You appear potentially eligible for a dismissal of conviction under Penal Code § 1203.4, available upon successful completion of probation. Also note: under the state\'s automatic record relief program (PC § 1203.425), many misdemeanors (1 year after judgment) and some non-serious, non-violent felonies are dismissed automatically by the DOJ — your conviction may already have relief, so it is worth checking your record before you file anything. We are still verifying which felonies qualify and after how long. Filing the petition can still add benefits, such as felony reduction under PC § 17(b).',
+          message: 'You appear eligible for a dismissal under Penal Code § 1203.4. Once you have fulfilled probation (or been granted early discharge), this relief is available AS OF RIGHT, at any time after probation ends, as long as you are not currently serving a sentence, on probation, or facing charges — and unpaid restitution or fines cannot be used to deny it (§ 1203.4(c)(3)). Check your record first, though: under the automatic program (§ 1203.425) many convictions are dismissed by the DOJ with no petition at all, so yours may already be done. Filing can still add benefits, such as a felony reduction under PC § 17(b). Know the limits of a § 1203.4 dismissal before you rely on it: it does NOT restore firearm rights (§ (a)(2)); the conviction remains disclosable on public-office, professional-licensing, and Lottery questionnaires (§ (a)(1)); any protective orders survive (§ (a)(4)); and the conviction can still be used against you in a later prosecution.',
           remedy: 'Petition for Dismissal (PC 1203.4)',
           citation: 'California Penal Code §§ 1203.4, 1203.425'
-        },
-        eligible_expungement_no_probation: {
-          status: 'eligible',
-          title: 'Potential Dismissal Eligible',
-          message: 'Since probation was not granted and at least one year has passed since judgment, you appear potentially eligible for dismissal under Penal Code § 1203.4a (misdemeanors/infractions without probation). Your conviction may also already have automatic relief under PC § 1203.425.',
-          remedy: 'Petition for Dismissal (PC 1203.4a)',
-          citation: 'California Penal Code §§ 1203.4a, 1203.425'
         },
         waiting_period_ca: {
           status: 'waiting',
           title: 'Waiting Period Not Met',
-          message: 'When probation was not granted, California requires at least 1 year from the date judgment was pronounced before filing for dismissal under PC § 1203.4a. Misdemeanors also become eligible for automatic DOJ relief 1 year after judgment under PC § 1203.425.',
+          message: 'When probation was not granted, the § 1203.4a dismissal becomes available AS OF RIGHT 1 year after judgment — provided you have lived an honest and upright life since (a statutory condition); before the year is up, or without that showing, the court may still grant it as a discretionary matter (§ (b)). The same 1-year mark is when a non-probation misdemeanor or infraction becomes eligible for automatic DOJ relief under § 1203.425. Unpaid restitution or fines cannot be used to deny the dismissal (§ 1203.4a(e)). Based on your dates, the year has not passed yet.',
           remedy: 'Petition for Dismissal (PC 1203.4a)',
           citation: 'California Penal Code §§ 1203.4a, 1203.425'
         },
@@ -446,7 +430,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // Both waiting periods removed: Wave 0 flags the § 1203.41 period
           // ("2 yrs post-completion") and the § 1203.425 felony tiers ("4 yrs")
           // as unverified. Neither number is asserted here. See open questions.
-          message: 'State prison sentences are not eligible under PC § 1203.4, but SB 731 opened PC § 1203.41 to many felonies even where state prison time was served — the court may grant a discretionary dismissal after a waiting period, if no sex-offender registration is required. We are still verifying how long that period runs, so we are not going to put a number on it here; a legal aid attorney or the sentencing court can tell you. Automatic relief under PC § 1203.425 may also reach some non-serious, non-violent felonies. A Certificate of Rehabilitation (PC § 4852.01) is another path. This area is fact-specific — please consult legal aid.',
+          message: 'A state prison sentence is not eligible under PC § 1203.4, but SB 731 opened PC § 1203.41 to many felonies even where prison or jail time was served — a discretionary dismissal (not as of right) the court may grant after a waiting period from when you complete your sentence: 1 year if you were on mandatory supervision (§ 1170(h)(5)(B)), or 2 years for a straight county-jail sentence (§ 1170(h)(5)(A)) or state prison. It is excluded if the felony requires sex-offender registration (§ (a)(6)), and it applies to convictions of any date. Unpaid restitution cannot be used to deny it (§ (d)). Separately, the automatic program (§ 1203.425) may reach a non-serious, non-violent, non-registrable felony 4 conviction-free years after you complete all terms — worth a DOJ record check. A Certificate of Rehabilitation (PC § 4852.01) is another path. This area is fact-specific — please consult legal aid.',
           remedy: 'Discretionary Dismissal (PC 1203.41) / Certificate of Rehabilitation',
           citation: 'California Penal Code §§ 1203.41, 1203.425, 4852.01'
         },

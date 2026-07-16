@@ -29,7 +29,9 @@ export default function Home() {
   const [prepopulatedRecords, setPrepopulatedRecords] = useState<ConvictionRecord[]>([]);
   const [results, setResults] = useState<any[] | null>(null);
   const [showDemoPanel, setShowDemoPanel] = useState(false);
-  const [loadingState, setLoadingState] = useState(false);
+  // Not 'is it loading' — that is derived (see isOpeningState). This is the
+  // one thing the render cannot infer: whether the fetch came back empty.
+  const [loadFailed, setLoadFailed] = useState(false);
   const [showSelector, setShowSelector] = useState(false);
 
   // The state list lives HERE, not in StateSelector, and is fetched once.
@@ -62,20 +64,42 @@ export default function Home() {
     })();
   }, []);
 
+  /**
+   * Is a state still opening?
+   *
+   * DERIVED, not stored. It used to be a useState set inside the effect below,
+   * which runs AFTER the click has already painted — so for exactly one frame
+   * the render saw a selected state with nothing loaded and no loading flag,
+   * fell through every branch, and painted the "Failed to Load Rules" screen.
+   * People saw a red error flash on every single state they clicked. The
+   * spinner used to cover it, which is the only reason it went unnoticed.
+   *
+   * A state is loading when it has been chosen and nothing has come back for it
+   * yet. That is true on the very first render after the click, so there is no
+   * frame for the hole to open in. `loadFailed` is what distinguishes "still
+   * waiting" from "the fetch came back empty", so a real failure still reaches
+   * the error screen instead of spinning forever.
+   */
+  const isOpeningState = Boolean(selectedStateCode) && !stateConfig && !comingSoon && !loadFailed;
+
   // Fetch state config when selected
   useEffect(() => {
     if (!selectedStateCode) {
       setStateConfig(null);
       setComingSoon(null);
+      setLoadFailed(false);
       return;
     }
     
+    let cancelled = false;
     async function fetchStateConfig() {
-      setLoadingState(true);
+      setLoadFailed(false);
       try {
         const res = await fetch(`/api/states/${selectedStateCode}`);
+        if (cancelled) return;
         if (res.ok) {
           const data = await res.json();
+          if (cancelled) return;
           if (data && data.comingSoon) {
             setComingSoon(data as ComingSoonConfig);
             setStateConfig(null);
@@ -83,14 +107,19 @@ export default function Home() {
             setStateConfig(data);
             setComingSoon(null);
           }
+        } else {
+          setLoadFailed(true);
         }
       } catch (err) {
+        if (cancelled) return;
         console.error('Failed to load state config:', err);
-      } finally {
-        setLoadingState(false);
+        setLoadFailed(true);
       }
     }
     fetchStateConfig();
+    // A second choice while the first is in flight must not have its response
+    // land on top of the newer one.
+    return () => { cancelled = true; };
   }, [selectedStateCode]);
 
   // Load a Checkr mock report (FR-22)
@@ -258,7 +287,7 @@ export default function Home() {
            * The outer animate-fade-in went with it: the card already has its
            * own entrance, and two animations on the same element stacking is
            * what read as choppy. */}
-        {!selectedStateCode || loadingState ? (
+        {!selectedStateCode || isOpeningState ? (
           /* Step 1: choose a state */
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <button
@@ -272,7 +301,7 @@ export default function Home() {
               states={states}
               dataSource={dataSource}
               loading={loadingStates}
-              pendingCode={loadingState ? selectedStateCode : null}
+              pendingCode={isOpeningState ? selectedStateCode : null}
               onSelectState={setSelectedStateCode}
             />
           </div>

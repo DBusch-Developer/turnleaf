@@ -200,8 +200,12 @@ export default function StateSelector({
                 }}
               >
                 <div>
-                  <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{state.name}</span>
-                  <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', marginLeft: '0.5rem' }}>({state.code})</span>
+                  {/* The space is a real character, not just margin. Margin
+                      gives the eye a gap but leaves the text content as
+                      "Alabama(AL)" — which is what a screen reader announces
+                      and what you get if you copy the row. */}
+                  <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{state.name}</span>{' '}
+                  <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>({state.code})</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

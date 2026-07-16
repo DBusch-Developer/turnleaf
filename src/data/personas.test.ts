@@ -832,7 +832,238 @@ const CO: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO]];
+const CT: Persona[] = [
+  {
+    source: 'Wave 2 — CT persona 1',
+    package: 'misdemeanor 2016, no convictions since -> likely erased (7 yr, post-Oct-2025 rollout) -> check-record.',
+    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { conviction_era_ct: true, excluded_ct: false, offense_class_ct: 'misdemeanor', auto_date_misd_ct: '2016-06-01' },
+    expect: { resultKey: 'check_record_first_ct', reading: 'Post-2000 misdemeanour, most-recent-conviction 2016, 7yr period met by 2023. Rollout resumed Oct 2025 so it leads with checking. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — CT persona 2',
+    package: 'class D felony 2018 -> waiting (10 yr -> 2028).',
+    record: { title: 'Class D Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: { conviction_era_ct: true, excluded_ct: false, offense_class_ct: 'felony', felony_class_ct: 'low', auto_date_felony_ct: '2018-01-01' },
+    expect: { resultKey: 'waiting_ct', reading: 'Low felony, 10yr from most recent conviction, 2018 + 10 = 2028 > 2026 -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — CT persona 3',
+    package: 'class B felony 2010 -> pardon path (apply-eligible since 2015).',
+    record: { title: 'Class B Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: { conviction_era_ct: true, excluded_ct: false, offense_class_ct: 'felony', felony_class_ct: 'high' },
+    expect: { resultKey: 'pardon_path_ct', reading: 'Class B felony is above the automatic threshold -> CT pardon path, which is full erasure. Encoded as a path, not ineligible. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — CT persona 4',
+    package: 'misdemeanor 2014 + NEW misdemeanor 2023 -> clock reset to 2030 (most-recent-conviction trigger!).',
+    record: { title: 'Misdemeanor (older)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { conviction_era_ct: true, excluded_ct: false, offense_class_ct: 'misdemeanor', auto_date_misd_ct: '2023-01-01' },
+    expect: { resultKey: 'waiting_ct', reading: 'THE CLOCK QUIRK. The wait runs from the MOST RECENT conviction (2023), not the 2014 offence, so 2023 + 7 = 2030 -> waiting. The persona enters 2023 as the most-recent date; the tree gets it right. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — CT persona 5',
+    package: 'family violence misdemeanor -> excluded from automatic -> pardon path.',
+    record: { title: 'Family Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { conviction_era_ct: true, excluded_ct: true },
+    expect: { resultKey: 'pardon_path_ct', reading: 'Family violence is on the exclusion list -> routed to the pardon path (full erasure), not to ineligible. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const DE: Persona[] = [
+  {
+    source: 'Wave 2 — DE persona 1',
+    package: 'dismissed case 2024, has an old felony -> mandatory-immediate (favorable termination works despite other record).',
+    record: { title: 'Dismissed Case', disposition: 'dismissed', disposition_date: '2024-01-01' },
+    expect: { resultKey: 'eligible_favorable_de', reading: 'Favourable termination is mandatory-immediate REGARDLESS of other record - the strong DE rule. Routes straight from dismissed. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — DE persona 2',
+    package: 'single misdemeanor 2019, nothing else ever -> mandatory (5 yr met) / may already be auto-expunged -> check.',
+    record: { title: 'Single Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { excluded_de: false, marijuana_de: false, other_convictions_de: false, offense_level_de: 'misdemeanor', mandatory_misd_date_de: '2019-01-01' },
+    expect: { resultKey: 'check_record_first_de', reading: 'No other convictions, misdemeanour, 5yr met (2019+5=2024<2026). Automatic since Aug 2024 -> check-record. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — DE persona 3',
+    package: 'misdemeanor 2019 + violation 2022 (two cases) -> discretionary 5-yr multiple-case path -> waiting until 2027.',
+    record: { title: 'Misdemeanor (one of two cases)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-01-01' },
+    answers: { excluded_de: false, marijuana_de: false, other_convictions_de: true, has_record_de: 'misd_multi', discretionary_multi_date_de: '2022-01-01' },
+    expect: { resultKey: 'waiting_de', reading: 'Two cases -> discretionary 5yr from most recent (2022). 2022+5=2027>2026 -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — DE persona 4',
+    package: 'DUI -> ineligible (Title 21) -> pardon path only.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_de: true, excluded_path_de: true },
+    expect: { resultKey: 'ineligible_title21_de', reading: 'DUI is a Title 21 motor-vehicle offence -> mostly ineligible, pardon/narrow-exception noted. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — DE persona 5',
+    package: 'listed felony 2013, clean since -> mandatory 10-yr path -> verify felony is on the § 4373 list.',
+    record: { title: 'Listed Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2013-01-01' },
+    answers: { excluded_de: false, marijuana_de: false, other_convictions_de: false, offense_level_de: 'felony', mandatory_felony_date_de: '2013-01-01' },
+    expect: { resultKey: 'eligible_felony_list_de', reading: 'Felony, no other convictions, 10yr met (2013+10=2023<2026). The result flags that § 4373 list membership needs confirming (the source cut off). Exact for the routing; the list is the open question.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const OK: Persona[] = [
+  {
+    source: 'Wave 2 — OK persona 1',
+    package: 'misdemeanor deferred, dismissed 2023 -> eligible-now (1 yr) + 991(c).',
+    record: { title: 'Deferred Misdemeanor', charge_type: 'misdemeanor', disposition: 'deferred', disposition_date: '2023-01-01' },
+    expect: { resultKey: 'eligible_deferred_ok', reading: 'Deferred, dismissed 2023, 1yr met. Result pairs 991(c) disposition cleanup with 18 arrest sealing. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — OK persona 2',
+    package: 'fine-only misdemeanor $400, paid -> eligible-immediate.',
+    record: { title: 'Fine-Only Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { felony_or_misd_ok: 'misdemeanor', misd_sentence_ok: 'fine_only' },
+    expect: { resultKey: 'eligible_fine_only_ok', reading: 'Fine-only under $501, paid -> immediate § 18. Current-law threshold (HB 3037 not assumed passed). Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — OK persona 3',
+    package: 'single nonviolent felony done 2019 -> eligible (5 yr).',
+    record: { title: 'Nonviolent Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { felony_or_misd_ok: 'felony', felony_violent_ok: false, felony_count_ok: 'one', felony_one_date_ok: '2019-01-01' },
+    expect: { resultKey: 'eligible_felony_ok', reading: 'One nonviolent felony, 5yr from completion (2019+5=2024<2026) -> eligible. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — OK persona 4',
+    package: 'two nonviolent felonies, last done 2020 -> waiting (10 yr -> 2030).',
+    record: { title: 'Second Nonviolent Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-01-01' },
+    answers: { felony_or_misd_ok: 'felony', felony_violent_ok: false, felony_count_ok: 'two', felony_two_date_ok: '2020-01-01' },
+    expect: { resultKey: 'waiting_ok', reading: 'Two nonviolent felonies, 10yr from most recent completion (2020+10=2030>2026) -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — OK persona 5',
+    package: 'OK misdemeanor + old California arrest -> petition-eligible but NOT single-source -> automatic path blocked, petition path open.',
+    record: { title: 'Dismissed Misdemeanor', disposition: 'dismissed' },
+    answers: { single_source_ok: true },
+    expect: { resultKey: 'eligible_dismissal_petition_ok', reading: 'THE SINGLE-SOURCE RULE. An out-of-state (CA) record blocks the AUTOMATIC path (SB 1770) but not the petition path. The result says exactly that. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const VA: Persona[] = [
+  {
+    source: 'Wave 2 — VA persona 1',
+    package: 'petit larceny misdemeanor 2017, clean since -> automatic-eligible NOW (7 yr) -> check-record/status.',
+    record: { title: 'Petit Larceny', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2017-01-01' },
+    answers: { offense_1986_va: true, excluded_va: false, offense_class_va: 'auto_misd', auto_date_va: '2017-01-01' },
+    expect: { resultKey: 'check_record_first_va', reading: 'Petit larceny is on the automatic list, 7yr met (2017+7=2024<2026). Result leads with checking VSP because the law is weeks old. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — VA persona 2',
+    package: 'Class 6 felony 2014, released 2015, clean -> eligible to petition (10 yr clean met).',
+    record: { title: 'Class 6 Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-01-01' },
+    answers: { offense_1986_va: true, excluded_va: false, offense_class_va: 'low_felony', felony_history_va: 'clear', felony_date_va: '2015-01-01' },
+    expect: { resultKey: 'eligible_petition_felony_va', reading: 'Class 6 felony, clean felony history, 10yr from release (2015+10=2025<2026) -> eligible to petition. The remedy did not exist before July 2026. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — VA persona 3',
+    package: 'DUI misdemeanor -> ineligible for sealing.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { offense_1986_va: true, excluded_va: true },
+    expect: { resultKey: 'ineligible_excluded_va', reading: 'DUI is on the exclusion list -> ineligible for sealing. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — VA persona 4',
+    package: 'felony charge acquitted last month -> sealable at conclusion w/ CA concurrence, else old-regime expungement petition.',
+    record: { title: 'Acquitted Felony Charge', charge_type: 'felony', disposition: 'acquitted' },
+    expect: { resultKey: 'nonconviction_va', reading: 'Acquittal (non-conviction) -> the result explains felony non-conviction needs CA concurrence at conclusion, else the old expungement petition. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — VA persona 5',
+    package: 'grand larceny 2010 + Class 4 felony 2012 -> the Class 4 within 20 yrs blocks -> not eligible until 2032.',
+    record: { title: 'Grand Larceny', charge_type: 'felony', disposition: 'convicted' },
+    answers: { offense_1986_va: true, excluded_va: false, offense_class_va: 'low_felony', felony_history_va: 'blocked' },
+    expect: { resultKey: 'ineligible_felony_history_va', reading: 'Grand larceny is petition-eligible in principle, but the Class 4 felony (2012) within the 20-year window fails the felony-history gate. The persona answers "blocked". Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const MN: Persona[] = [
+  {
+    source: 'Wave 2 — MN persona 1',
+    package: 'misdemeanor theft, discharged 2021, clean -> likely already auto-expunged -> check-record.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-01-01' },
+    answers: { registration_mn: false, excluded_mn: false, level_mn: 'misd', misd_date_mn: '2021-01-01' },
+    expect: { resultKey: 'check_record_first_mn', reading: 'Misdemeanour, 2yr from discharge (2021+2=2023<2026). ~94% done by spring 2026 -> the strongest check-record copy. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — MN persona 2',
+    package: 'gross misdemeanor discharged 2024 -> waiting (2027).',
+    record: { title: 'Gross Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-01-01' },
+    answers: { registration_mn: false, excluded_mn: false, level_mn: 'gross', gross_date_mn: '2024-01-01' },
+    expect: { resultKey: 'waiting_mn', reading: 'Gross misdemeanour, 3yr from discharge (2024+3=2027>2026) -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — MN persona 3',
+    package: '5th-degree drug felony discharged 2023 -> waiting (2027, 4-yr).',
+    record: { title: '5th-Degree Drug Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-01-01' },
+    answers: { registration_mn: false, excluded_mn: false, level_mn: 'drug5', drug5_date_mn: '2023-01-01' },
+    expect: { resultKey: 'waiting_mn', reading: '5th-degree drug felony, 4yr from discharge (2023+4=2027>2026) -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — MN persona 4',
+    package: 'DWI misdemeanor -> excluded from automatic -> verify whether excluded from petition too -> likely "not eligible / legal aid".',
+    record: { title: 'DWI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { registration_mn: false, excluded_mn: true },
+    expect: {
+      resultKey: 'complex_excluded_mn',
+      reading:
+        'DWI is out of the automatic path; whether the petition path reaches it is exactly what Wave 2 '
+        + 'flags as unverified. The tree routes to a hedge that says automatic is out, petition being '
+        + 'confirmed, consult legal aid - rather than guessing eligible or ineligible. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 2 — MN persona 5',
+    package: 'eligible-list felony discharged 2020, new misdemeanor 2023 -> clock broken -> recompute from 2023 discharge.',
+    record: { title: 'Eligible-List Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-01-01' },
+    answers: { registration_mn: false, excluded_mn: false, level_mn: 'felony', felony_eligible_mn: true, felony_date_mn: '2023-01-01' },
+    expect: {
+      resultKey: 'waiting_mn',
+      reading:
+        'THE CLOCK-BREAK QUIRK, and it resolves cleanly. A new non-petty offence resets the 5-year '
+        + 'eligible-felony clock to the newer discharge (2023). 2023 + 5 = 2028, and it is 2026, so '
+        + 'the honest answer is WAITING — which is exactly what the tree returns once the recomputed '
+        + '2023 date is used. My first reading guessed check-record; the tree was right and I was '
+        + 'wrong, which is the fixture working. Exact.',
+    },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

@@ -3510,8 +3510,1489 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Colorado Legal Services', url: 'https://www.coloradolegalservices.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // CONNECTICUT — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  //
+  // CT says ERASURE, and it means the strong thing: an erased record may be
+  // lawfully sworn never to have happened. Three tracks, and the structurally
+  // unusual one is the pardon: in Connecticut an ABSOLUTE PARDON from the Board
+  // of Pardons and Paroles IS the expungement mechanism for the serious
+  // felonies the automatic and petition paths do not reach — so it is encoded
+  // as a path, never as "ineligible".
+  //
+  // THE CLOCK QUIRK, and the thing generic tools get wrong: the automatic
+  // waiting period runs from the person's MOST RECENT conviction of ANY crime,
+  // not from this offence's own date. A new conviction resets everyone's clock.
+  // The date node asks for that date in those words.
+  //
+  // ROLLOUT: Clean Slate erasures were delayed for years and RESUMED October
+  // 2025 (~50k done, 100k+ expected). Every automatic result says "may have
+  // been or will be erased — check", never "done".
+  // ==========================================================================
+  CT: {
+    code: 'CT',
+    name: 'Connecticut',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
+    terminology:
+      'Connecticut says ERASURE — its single word for what other states split into expungement and '
+      + 'sealing. An erased record is treated as never having existed, and you may lawfully deny it. '
+      + 'Three routes. AUTOMATIC "Clean Slate" erasure clears many post-2000 convictions with no '
+      + 'petition. PETITION erasure (form JD-CR-202, free) covers pre-2000 convictions and cannabis. '
+      + 'And an ABSOLUTE PARDON from the Board of Pardons and Paroles — which in Connecticut is not '
+      + 'just clemency but a full erasure of your entire record, and is the route for the serious '
+      + 'felonies the other two do not reach.',
+    keyDates: [
+      {
+        label: 'Clean Slate automatic erasures resumed after delays',
+        date: '2025-10',
+        kind: 'operative',
+        note: 'Wave 2 gives month and year only. Delayed for years by data-system problems; ~50,000 convictions erased so far, 100,000+ expected. "Eligible" does not yet mean "erased".',
+      },
+      {
+        label: 'Clean Slate Act (Public Act 21-42) — automatic erasure of post-2000 convictions',
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 2 gives the year only.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What is the current Clean Slate rollout status, and how does a person check whether their own record has been erased yet? Wave 2 says erasures resumed October 2025 with ~50k of 100k+ done, and that individuals are not notified. Confirm the status page (portal.ct.gov/cleanslate) and the record-check process before any UI copy claims completeness.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'DUI CONFLICT: is a DUI (Conn. Gen. Stat. § 14-227a) eligible for automatic erasure? One attorney source says DUIs are eligible; the state\'s own petition-form guidance blocks § 14-227a where there is a repeat within 10 years — which reads as first-offence eligible, repeat blocked. Read § 54-142a(e)(2)(C) and encode exactly what it says. The tree currently routes DUI to the exclusion gate as a question rather than assuming.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 54-142a(e)(2)(C) exclusion list in full: family violence crimes (§ 46b-38a), sex offences requiring registration, and crimes with a maximum sentence over 5 years even where the actual sentence was less. The tree asks a person to self-assess this; the exact list needs confirming against the statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the automatic erasure waiting periods against § 54-142a(e): misdemeanours 7 years, and class D/E and unclassified felonies with maximum terms of 5 years or less at 10 years — both measured from the person\'s MOST RECENT conviction of any crime.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions (including accelerated rehabilitation) treated for erasure? Not covered in Wave 2 — standing call-sheet question for every state.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Is petition erasure (form JD-CR-202) and cannabis erasure genuinely free, and pardon applications too? Wave 2 says all three are free; confirm at the counter and on the Board of Pardons page.',
+        blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
+      },
+      {
+        question:
+          'What is the exact effective date of the resumed automatic erasures and of Public Act 21-42? Wave 2 gives month/year and year only.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Conn. Gen. Stat. § 54-142a (erasure of criminal records)', url: null, retrievedOn: null },
+      { id: 'Conn. Gen. Stat. § 54-142a(e) (automatic Clean Slate erasure; periods; exclusions (e)(2)(C))', url: null, retrievedOn: null },
+      { id: 'Conn. Gen. Stat. § 54-130a (absolute pardon — Board of Pardons and Paroles)', url: null, retrievedOn: null },
+      { id: 'Conn. Gen. Stat. § 46b-38a (family violence crimes — automatic-erasure exclusion)', url: null, retrievedOn: null },
+      { id: 'Conn. Gen. Stat. § 14-227a (DUI — erasure eligibility in conflict)', url: null, retrievedOn: null },
+      { id: 'Public Act 21-42 (Clean Slate Act)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conviction_era_ct' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_ct' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_ct' },
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        conviction_era_ct: {
+          type: 'boolean',
+          text: 'Was this conviction entered on or after January 1, 2000?',
+          yes: 'excluded_ct',
+          no: 'pre2000_ct'
+        },
+        pre2000_ct: {
+          type: 'boolean',
+          text: 'Was this a cannabis possession offense?',
+          yes: 'eligible_cannabis_ct',
+          no: 'eligible_petition_ct'
+        },
+        excluded_ct: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a family violence crime, an offense requiring sex offender registration, a DUI, or any offense whose MAXIMUM possible sentence was more than 5 years — even if the sentence you actually received was shorter?',
+          yes: 'pardon_path_ct',
+          no: 'offense_class_ct'
+        },
+        offense_class_ct: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'auto_date_misd_ct' },
+            { label: 'Felony', value: 'felony', next: 'felony_class_ct' },
+            { label: 'Infraction', value: 'infraction', next: 'auto_date_misd_ct' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_class_ct' }
+          ]
+        },
+        felony_class_ct: {
+          type: 'choice',
+          text: 'What class of felony was it? (Your sentencing paperwork says. Connecticut automatically erases only the lower-level felonies.)',
+          options: [
+            { label: 'Class D or E felony, or an unclassified felony with a maximum term of 5 years or less', value: 'low', next: 'auto_date_felony_ct' },
+            { label: 'Class A, B, or C felony (or maximum term over 5 years)', value: 'high', next: 'pardon_path_ct' },
+            { label: 'I don\'t know the class', value: 'unsure', next: 'complex_class_ct' }
+          ]
+        },
+        // THE CLOCK QUIRK. Both automatic date nodes ask for the MOST RECENT
+        // conviction date, not this offence's date — that is the § 54-142a(e)
+        // trigger, and it is what generic tools miss.
+        auto_date_misd_ct: {
+          type: 'date',
+          text: 'What is the date of your MOST RECENT conviction of any crime — not just this case, but the latest conviction on your whole record? (Connecticut measures the wait from that date, and a newer conviction restarts it.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'the person\'s most recent conviction of any crime (Conn. Gen. Stat. § 54-142a(e) — misdemeanours)' },
+            nextPass: 'check_record_first_ct',
+            nextFail: 'waiting_ct'
+          }
+        },
+        auto_date_felony_ct: {
+          type: 'date',
+          text: 'What is the date of your MOST RECENT conviction of any crime — not just this case, but the latest conviction on your whole record? (Connecticut measures the wait from that date, and a newer conviction restarts it.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the person\'s most recent conviction of any crime (Conn. Gen. Stat. § 54-142a(e) — class D/E and low unclassified felonies)' },
+            nextPass: 'check_record_first_ct',
+            nextFail: 'waiting_ct'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Connecticut\'s erasure rules split on how the case ended: dismissals, acquittals and nolles are already erased automatically, while convictions run through the Clean Slate clock, a petition, or a pardon depending on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your conviction record through the Connecticut Judicial Branch, or ask the clerk of the sentencing court. Clean Slate CT (cleanslatect.org) also has an eligibility-date calculator.',
+          remedy: 'Get Your Record First (CT Judicial Branch / Clean Slate CT)',
+          citation: 'Conn. Gen. Stat. § 54-142a (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Connecticut\'s erasure rules are screened here for convictions, dismissals, and acquittals. How a completed diversion — including accelerated rehabilitation — is treated for erasure is not something this screening has researched yet, and we would rather tell you that than guess. Clean Slate CT and Connecticut Legal Services can confirm how your disposition is treated.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
+          citation: 'Conn. Gen. Stat. § 54-142a (treatment of diversions not yet researched)'
+        },
+        eligible_nonconviction_ct: {
+          status: 'eligible',
+          title: 'Non-Conviction — Already Erased',
+          message: 'Because your case ended without a conviction, Connecticut has almost certainly already erased it — dismissals and acquittals erase automatically, and a nolle erases 13 months after it is entered. This is long-standing law, not the new Clean Slate program, so it does not depend on the current rollout. You do not need to file anything. If your record still shows the case, request your conviction record through the Connecticut Judicial Branch to confirm the erasure went through, and if it did not, the clerk of the court that heard the case can correct it. Once erased, you may lawfully state the case never happened.',
+          remedy: 'Automatic Erasure of Non-Convictions (already applied) — confirm with the Judicial Branch',
+          citation: 'Conn. Gen. Stat. § 54-142a'
+        },
+        check_record_first_ct: {
+          status: 'eligible',
+          title: 'Your Record May Already Be Erased — Check Before Anything Else',
+          message: 'Start by checking. Connecticut erases eligible convictions AUTOMATICALLY under Clean Slate — no petition, no fee, and no notification. Based on your dates you are past the waiting period for your offense (7 years for a misdemeanor, 10 for a low-level felony, both measured from your most recent conviction of any crime). The program was delayed for years and only resumed in October 2025, so it is working through a backlog and "eligible" does not yet guarantee "done" — but there is a real chance yours is erased or soon will be. Check your status on the state\'s Clean Slate page (portal.ct.gov/cleanslate) or by requesting your conviction record through the Judicial Branch. Clean Slate CT (cleanslatect.org) has a calculator for the dates. If yours has not been reached, there is nothing to file — the erasure is automatic once the program gets to it; court debt does not block it, though the debt itself survives.',
+          remedy: 'Check your Clean Slate status (portal.ct.gov/cleanslate) — erasure is automatic',
+          citation: 'Conn. Gen. Stat. § 54-142a(e)'
+        },
+        eligible_petition_ct: {
+          status: 'eligible',
+          title: 'Pre-2000 Conviction — Petition to Erase (Free)',
+          message: 'Because your conviction is from before January 1, 2000, it falls outside the automatic Clean Slate program, but you can petition to erase it — and it is free. File form JD-CR-202 in the court where you were sentenced, one form per docket number. There is no filing fee. If your record has more than one old case, you file for each separately.',
+          remedy: 'Petition for Erasure (form JD-CR-202) — free',
+          citation: 'Conn. Gen. Stat. § 54-142a'
+        },
+        eligible_cannabis_ct: {
+          status: 'eligible',
+          title: 'Cannabis Possession — Free Erasure, No Waiting Period',
+          message: 'Cannabis possession offenses have their own erasure path in Connecticut, and it is the easiest one: no waiting period and no fee. This covers possession of up to 4 ounces from October 2015 to January 2021, and pre-2000 cannabis possession. Many qualifying cannabis records were already erased automatically, so check your record first through the Judicial Branch — if yours was not, the petition is free.',
+          remedy: 'Cannabis Erasure — free, no waiting period',
+          citation: 'Conn. Gen. Stat. § 54-142a'
+        },
+        pardon_path_ct: {
+          status: 'complex',
+          title: 'Your Path Is a Pardon — And in Connecticut That Means Full Erasure',
+          message: 'Connecticut does not automatically erase this offense — but do not read that as a dead end, because Connecticut\'s pardon is unusual and strong. An ABSOLUTE PARDON from the Board of Pardons and Paroles erases your ENTIRE record, and it is how the state clears serious felonies, family violence offenses, and anything with a maximum sentence over 5 years. You can apply 3 years after a misdemeanor conviction or 5 years after a felony, as long as you have no pending charges, are not on probation or parole, and have had no nolle in the last 13 months. It is free, and hearings are held virtually. This is a real route that most people do not know exists — the Board of Pardons and Paroles (ct.gov/bopp) has pre-screening resources, and Connecticut Legal Services can help you prepare.',
+          remedy: 'Absolute Pardon Application (Board of Pardons and Paroles) — free, full erasure',
+          citation: 'Conn. Gen. Stat. § 54-130a'
+        },
+        waiting_ct: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Connecticut\'s automatic erasure comes 7 years after a misdemeanor conviction, or 10 years after a low-level felony — but here is the part that catches people out, and it is worth understanding: the clock runs from your MOST RECENT conviction of any crime, not from this case. A newer conviction restarts it for everything. Based on the date you gave, the period has not run yet. Staying conviction-free is what gets you there, and once the period runs the erasure is automatic — court debt does not block it. If you would rather not wait, an absolute pardon from the Board of Pardons and Paroles is available to apply for sooner (3 years for a misdemeanor, 5 for a felony).',
+          remedy: 'Wait for the automatic period, or apply for a pardon sooner',
+          citation: 'Conn. Gen. Stat. §§ 54-142a(e), 54-130a'
+        },
+        complex_class_ct: {
+          status: 'complex',
+          title: 'We Need the Offense Class',
+          message: 'In Connecticut the class of the offense decides which erasure path you take and how long you wait — a misdemeanor is 7 years, a class D/E or low-level felony is 10, and the more serious felonies go through a pardon instead. Guessing would send you down the wrong path, so we will not. Your sentencing paperwork states the class, and Clean Slate CT (cleanslatect.org) can read your record with you. Connecticut Legal Services also helps for free.',
+          remedy: 'Get Your Offense Class First (sentencing paperwork / Clean Slate CT)',
+          citation: 'Conn. Gen. Stat. § 54-142a(e)'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        petition: {
+          name: 'Petition for Erasure (pre-2000 convictions and cannabis)',
+          formName: 'Form JD-CR-202',
+          formUrl: 'https://portal.ct.gov/cleanslate',
+          steps: [
+            'For a post-2000 conviction, there is nothing to file — erasure is automatic once the Clean Slate program reaches it. Check your status at portal.ct.gov/cleanslate first.',
+            'For a pre-2000 conviction or a cannabis offense, complete form JD-CR-202.',
+            'File it in the court where you were sentenced — one form per docket number.',
+            'There is no filing fee.'
+          ],
+          // null: Wave 2 says petition, cannabis and pardon applications are all
+          // free, but flags it for confirmation at the counter.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court where you were sentenced'
+        },
+        pardon: {
+          name: 'Absolute Pardon (Board of Pardons and Paroles) — full erasure',
+          formName: 'Absolute Pardon Application',
+          formUrl: 'https://www.ct.gov/bopp',
+          steps: [
+            'Confirm you are eligible to apply: 3 years since a misdemeanor conviction or 5 years since a felony, no pending charges, not on probation or parole, no nolle in the last 13 months.',
+            'Apply through the Board of Pardons and Paroles (ct.gov/bopp) — the application is free.',
+            'Use the Board\'s pre-screening resources before applying.',
+            'Hearings are held virtually. An absolute pardon erases your entire record.'
+          ],
+          fees: '$0 — the pardon application is free.',
+          feeWaiver: 'Not applicable',
+          courtContact: 'Connecticut Board of Pardons and Paroles'
+        }
+      },
+      legalAid: [
+        { name: 'Clean Slate CT (eligibility-date calculator)', url: 'https://www.cleanslatect.org' },
+        { name: 'Connecticut Legal Services', url: 'https://www.ctlegal.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // DELAWARE — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  //
+  // Two petition tracks with statutory names the UI keeps, plus automatic.
+  //   MANDATORY (SBI, 11 Del. C. § 4373): if you fit a category, the State
+  //     Bureau of Identification MUST expunge — no judicial discretion.
+  //   DISCRETIONARY (court, § 4374): a judge weighs "manifest injustice"; the
+  //     AG gets 120 days to object.
+  //   AUTOMATIC Clean Slate (SB 111/112 of 2021, processing since Aug 2024)
+  //     covers the mandatory-eligible universe with no application — but the
+  //     statute preserves the right to APPLY if it has not happened yet, which
+  //     is the user's action path.
+  //
+  // The favourable-termination rule is the branch worth getting right: a case
+  // terminated in the accused's favour is mandatory-expungeable IMMEDIATELY,
+  // even with other ineligible convictions on the record (§ 4373).
+  // ==========================================================================
+  DE: {
+    code: 'DE',
+    name: 'Delaware',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
+    terminology:
+      'Delaware says EXPUNGEMENT, and it has two petition versions plus an automatic one. MANDATORY '
+      + 'expungement runs through the State Bureau of Identification (SBI): if your case fits a '
+      + 'listed category, they MUST expunge it — a judge is not involved. DISCRETIONARY expungement '
+      + 'runs through the court, where a judge decides whether keeping the record would be a '
+      + '"manifest injustice". AUTOMATIC "Clean Slate" expungement has, since August 2024, been '
+      + 'clearing the mandatory-eligible cases with no application at all — and if it has not reached '
+      + 'yours yet, you keep the right to apply for the mandatory expungement yourself.',
+    keyDates: [
+      {
+        label: 'Automatic Clean Slate expungement processing began',
+        date: '2024-08',
+        kind: 'operative',
+        note: 'Wave 2 gives month and year only. Covers the mandatory-eligible universe; rollout completeness is an open question.',
+      },
+      {
+        label: 'Clean Slate Act (SB 111 / SB 112) enacted',
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 2 gives the year only.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'WHICH felonies are on the § 4373 mandatory felony list (the 10-year path)? Wave 2 flags that the source text cut off here — the felony list itself was not captured. The tree routes an eligible-list felony to a result that says its dates but flags that the list membership needs confirming against § 4373.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the current fingerprinting fee for mandatory expungement through SBI? Wave 2 gives "$52 (ACLU-DE figure)" and marks it for verification. And is there any waiver? Ask SBI/DSP directly.',
+        blocksFields: ['resources.remedies.mandatory.fees', 'resources.remedies.mandatory.feeWaiver'],
+      },
+      {
+        question:
+          'What is the court fee for a discretionary expungement petition? § 4374(j) authorises a "reasonable fee" but does not state an amount. And can it be waived? Get the number from a Superior Court clerk.',
+        blocksFields: ['resources.remedies.discretionary.fees', 'resources.remedies.discretionary.feeWaiver'],
+      },
+      {
+        question:
+          'What is the current status and completeness of the automatic Clean Slate rollout? Wave 2 says processing began August 2024 and to verify completeness on delaware.gov before any UI copy claims records are already done.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 4372(f) exclusion list: Title 21 motor-vehicle offences including DUI (with narrow § 4374(i)(2) exceptions), violent felonies (§ 4201(c) list), and DV / child-victim / vulnerable-adult crimes (barred from mandatory, 7-year discretionary or pardon instead). Also confirm the prior-expungement-within-10-years and felony-after-felony-expungement bars.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed deferrals/diversions (including Probation Before Judgment) treated for expungement? Standing call-sheet question for every state — Wave 2 does not cover it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What are the exact effective dates for the August 2024 automatic-processing start and the 2021 Clean Slate Act? Wave 2 gives month/year and year only.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: '11 Del. C. § 4372 (definitions; exclusions at (f))', url: null, retrievedOn: null },
+      { id: '11 Del. C. § 4373 (mandatory expungement — SBI)', url: null, retrievedOn: null },
+      { id: '11 Del. C. § 4374 (discretionary expungement — court; (j) reasonable fee)', url: null, retrievedOn: null },
+      { id: '11 Del. C. § 4375 (post-pardon expungement)', url: null, retrievedOn: null },
+      { id: '11 Del. C. § 4201(c) (violent felony list — exclusion)', url: null, retrievedOn: null },
+      { id: 'SB 111 / SB 112 of 2021 (Clean Slate — automatic expungement)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_de' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_favorable_de' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_favorable_de' },
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_de: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a motor-vehicle offense under Title 21 including DUI, a violent felony, or a crime involving domestic violence, a child victim, or a vulnerable adult?',
+          yes: 'excluded_path_de',
+          no: 'marijuana_de'
+        },
+        excluded_path_de: {
+          type: 'boolean',
+          text: 'Was it specifically a Title 21 motor-vehicle offense or a DUI?',
+          yes: 'ineligible_title21_de',
+          no: 'discretionary_de'
+        },
+        marijuana_de: {
+          type: 'boolean',
+          text: 'Was this a marijuana or paraphernalia possession offense, or an underage-alcohol offense?',
+          yes: 'eligible_immediate_de',
+          no: 'other_convictions_de'
+        },
+        other_convictions_de: {
+          type: 'boolean',
+          text: 'Apart from this case, do you have ANY other conviction on your record — anywhere, ever?',
+          yes: 'has_record_de',
+          no: 'offense_level_de'
+        },
+        offense_level_de: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'mandatory_misd_date_de' },
+            { label: 'Felony', value: 'felony', next: 'mandatory_felony_date_de' },
+            { label: 'Infraction', value: 'infraction', next: 'mandatory_violation_date_de' }
+          ]
+        },
+        // No other convictions at all -> the clean mandatory path (5yr misd).
+        mandatory_misd_date_de: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction (11 Del. C. § 4373 — misdemeanour mandatory expungement, no other convictions)' },
+            nextPass: 'check_record_first_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        mandatory_violation_date_de: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction (11 Del. C. § 4373 — violation mandatory expungement)' },
+            nextPass: 'check_record_first_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        mandatory_felony_date_de: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or released — whichever was later?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'conviction or release, whichever later (11 Del. C. § 4373 — listed-felony mandatory expungement)' },
+            nextPass: 'eligible_felony_list_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        // Has other convictions -> discretionary (court) path.
+        has_record_de: {
+          type: 'choice',
+          text: 'Roughly how much else is on your record?',
+          options: [
+            { label: 'One or more other misdemeanors or violations, no felonies', value: 'misd_multi', next: 'discretionary_multi_date_de' },
+            { label: 'A felony', value: 'felony', next: 'discretionary_de' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_record_de' }
+          ]
+        },
+        discretionary_multi_date_de: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your MOST RECENT case resolved?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'most recent case (11 Del. C. § 4374 — multiple violations/misdemeanours, discretionary)' },
+            nextPass: 'eligible_discretionary_de',
+            nextFail: 'waiting_de'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Delaware\'s expungement rules split sharply on how the case ended: a case that ended in your favor is expungeable immediately even if you have other convictions, while a conviction runs through the mandatory or discretionary path depending on your record. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. Request a Certified Delaware Criminal History from SBI, or ask the court that handled the case. The ACLU of Delaware runs free expungement workshops.',
+          remedy: 'Get Your Record First (SBI / court clerk)',
+          citation: '11 Del. C. §§ 4373, 4374 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Delaware\'s expungement rules are screened here for convictions, dismissals, and acquittals. How a completed diversion — including Probation Before Judgment — is treated is not something this screening has researched yet, and we would rather tell you that than guess. The ACLU of Delaware and the Delaware Center for Justice can confirm how your disposition is treated.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
+          citation: '11 Del. C. §§ 4373, 4374 (treatment of diversions not yet researched)'
+        },
+        eligible_favorable_de: {
+          status: 'eligible',
+          title: 'Case Ended in Your Favor — Expungeable Now, Whatever Else Is on Your Record',
+          message: 'This is Delaware\'s strongest rule and it works in your favor: because the case ended without a conviction — dismissed or acquitted — you are entitled to a MANDATORY expungement immediately, and it does not matter what else is on your record. Other convictions, even ineligible ones, do not block this. It may already have happened automatically since August 2024, so check first: request a Certified Delaware Criminal History from the State Bureau of Identification. If it has not been done, you can apply to SBI for the mandatory expungement yourself.',
+          remedy: 'Mandatory Expungement — favorable termination (11 Del. C. § 4373), check SBI first',
+          citation: '11 Del. C. § 4373'
+        },
+        eligible_immediate_de: {
+          status: 'eligible',
+          title: 'Marijuana or Underage-Alcohol Offense — Immediate Mandatory Expungement',
+          message: 'Marijuana and paraphernalia possession, and underage-alcohol offenses, get a mandatory expungement in Delaware with no waiting period. This may already have happened automatically since August 2024 — check by requesting a Certified Delaware Criminal History from SBI. If it has not, you can apply to SBI for the mandatory expungement.',
+          remedy: 'Mandatory Expungement — immediate (11 Del. C. § 4373), check SBI first',
+          citation: '11 Del. C. § 4373'
+        },
+        check_record_first_de: {
+          status: 'eligible',
+          title: 'Your Record May Already Be Expunged — Check Before You Apply',
+          message: 'Start by checking. Since August 2024, Delaware has been expunging mandatory-eligible cases AUTOMATICALLY under Clean Slate — no application and no fee. Based on your dates you appear to be in that eligible group (a misdemeanor with no other convictions after 5 years, or a violation after 3), so there is a real chance it is already done. Request a Certified Delaware Criminal History from the State Bureau of Identification to see. If the automatic system has not reached you yet, you keep the right to apply for the mandatory expungement yourself — SBI must grant it if you fit the category. That route involves fingerprinting and an SBI application, and the fee is one of the things we are still confirming.',
+          remedy: 'Check with SBI first — apply for mandatory expungement if it has not happened',
+          citation: '11 Del. C. § 4373'
+        },
+        eligible_felony_list_de: {
+          status: 'eligible',
+          title: 'Possible Mandatory Felony Expungement — One Thing to Confirm',
+          message: 'Based on your dates — 10 years since conviction or release, with no other convictions — you may qualify for a mandatory expungement of this felony under 11 Del. C. § 4373. There is one thing we cannot confirm for you: § 4373 lists which specific felonies are eligible for this path, and we have not been able to verify the full list, so whether YOUR felony is on it is the open question. That is exactly what the State Bureau of Identification checks, so applying will answer it, and the ACLU of Delaware\'s expungement workshops can check before you file. Do not assume either way until the offense is confirmed against the § 4373 list.',
+          remedy: 'Mandatory Expungement if the felony is on the § 4373 list — confirm with SBI',
+          citation: '11 Del. C. § 4373'
+        },
+        eligible_discretionary_de: {
+          status: 'eligible',
+          title: 'Discretionary Expungement — A Judge Decides',
+          message: 'Because you have more than one case on your record, your route is a DISCRETIONARY expungement through the court rather than the automatic mandatory one. Based on your dates — 5 years since your most recent case — you are eligible to petition. Understand what "discretionary" means: a judge decides whether keeping the record would be a "manifest injustice", so this is an argument you make rather than a box you tick, and how you present it matters. File the petition in the Superior Court for the county of your most recent case; you MUST attach your criminal history or the petition is rejected outright. The Attorney General gets 120 days to object, and any victim is consulted. The court fee is set by the court and is something we are still confirming. The ACLU of Delaware runs free expungement workshops and this is a good one to bring to them.',
+          remedy: 'Discretionary Expungement Petition (11 Del. C. § 4374) — Superior Court',
+          citation: '11 Del. C. § 4374'
+        },
+        discretionary_de: {
+          status: 'complex',
+          title: 'Discretionary Expungement — And Worth a Person\'s Help',
+          message: 'Your record includes a felony, which puts you on the DISCRETIONARY path: a court, not SBI, decides, and it weighs whether keeping the record would be a "manifest injustice". The waiting periods here are longer — generally 7 years for a felony, or for misdemeanors on the excluded list — and the exact eligibility depends on which offenses are involved. This is fact-specific enough that we are not going to finish the screening for you and risk getting it wrong. Two routes worth knowing: if you were unconditionally pardoned, § 4375 opens discretionary expungement for almost anything. And the ACLU of Delaware runs free expungement workshops built for exactly this. Bring your criminal history — you will need it either way.',
+          remedy: 'Discretionary Expungement or Post-Pardon (11 Del. C. §§ 4374, 4375) — consult legal aid',
+          citation: '11 Del. C. §§ 4374, 4375'
+        },
+        ineligible_title21_de: {
+          status: 'ineligible',
+          title: 'Title 21 Motor-Vehicle Offenses Are Mostly Not Expungeable',
+          message: 'Motor-vehicle offenses under Title 21 — including DUI — are largely excluded from expungement in Delaware, whether mandatory or discretionary. There are a couple of narrow exceptions in § 4374(i)(2), but they are narrow. If you were unconditionally pardoned, § 4375 may open a discretionary expungement even here. A DUI is also a driving-record matter separate from your criminal record. If you are not certain your offense is a Title 21 offense rather than a criminal-code one, it is worth checking — the ACLU of Delaware runs free expungement workshops.',
+          remedy: 'Generally None (Title 21) — ask about the § 4374(i)(2) exceptions or a pardon',
+          citation: '11 Del. C. §§ 4372(f), 4374(i)(2)'
+        },
+        waiting_de: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Delaware\'s expungement waiting periods depend on the path: a mandatory misdemeanor expungement comes 5 years after conviction (with no other convictions at all), a violation after 3 years, and a listed felony 10 years after conviction or release. Based on your dates, yours has not run yet. Delaware also expunges mandatory-eligible cases automatically now, so once your period runs relief may arrive without you filing. If your record has more than one case, a discretionary path with different timing may apply instead.',
+          remedy: 'Wait for the period to run, then check with SBI',
+          citation: '11 Del. C. §§ 4373, 4374'
+        },
+        complex_record_de: {
+          status: 'complex',
+          title: 'Your Record Needs Sorting Out — By a Person',
+          message: 'Which Delaware path you take depends on exactly what else is on your record: a clean record points to the mandatory (SBI) path, other misdemeanors or violations point to a 5-year discretionary path, and a felony changes the analysis again. Since you are not sure what your record holds, we are not going to guess — and the good news is that finding out is a concrete step. Request a Certified Delaware Criminal History from SBI; you need it for any petition anyway. The ACLU of Delaware runs free expungement workshops where someone will read it with you.',
+          remedy: 'Get Your Criminal History First (SBI) — then reassess',
+          citation: '11 Del. C. §§ 4373, 4374'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        mandatory: {
+          name: 'Mandatory Expungement (State Bureau of Identification, 11 Del. C. § 4373)',
+          formName: 'SBI Mandatory Expungement Application',
+          formUrl: 'https://courts.delaware.gov/help/expungement/',
+          steps: [
+            'Check first whether Clean Slate already did it — request a Certified Delaware Criminal History from SBI.',
+            'If not, complete fingerprinting and obtain your Certified Delaware Criminal History through SBI.',
+            'Submit the SBI mandatory expungement application. If you fit the category, SBI must grant it.',
+            'The courts.delaware.gov expungement packet is the full how-to.'
+          ],
+          // null: Wave 2 gives "$52 fingerprinting (ACLU-DE figure)" and flags it.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Delaware State Bureau of Identification (SBI)'
+        },
+        discretionary: {
+          name: 'Discretionary Expungement (Superior Court, 11 Del. C. § 4374)',
+          formName: 'Petition for Discretionary Expungement',
+          formUrl: 'https://courts.delaware.gov/help/expungement/',
+          steps: [
+            'Obtain your Certified Delaware Criminal History — you MUST attach it or the petition is summarily rejected.',
+            'File the petition in the Superior Court for the county of your most recent case (Family Court if all charges were Family Court; it accepts email filing at FC_Expungement@delaware.gov).',
+            'The Attorney General has 120 days to object, and any victim is consulted.',
+            'Be ready to show that keeping the record would be a "manifest injustice" — this path is discretionary.'
+          ],
+          // null: § 4374(j) authorises a "reasonable fee" without an amount.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Superior Court (or Family Court), county of the most recent case'
+        }
+      },
+      legalAid: [
+        { name: 'ACLU of Delaware (free expungement workshops)', url: 'https://www.aclu-de.org' },
+        { name: 'Delaware Center for Justice', url: 'https://www.dcjustice.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // OKLAHOMA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  //
+  // TWO different things are called expungement and the UI must keep them apart:
+  //   SECTION 18 (22 O.S. § 18) — seals the arrest AND the court record. The
+  //     real one.
+  //   SECTION 991(c) — a deferred-sentence cleanup that updates the disposition
+  //     to "pled not guilty, case dismissed" but does NOT seal the arrest
+  //     record. Weaker, and often paired with § 18.
+  //
+  // THE SINGLE-SOURCE RULE is the branch generic tools miss. Automatic Clean
+  // Slate (HB 3316, § 18(B)-(C); processing legally began Nov 1, 2025) covers 11
+  // of the § 18(A) categories — BUT 2024's SB 1770 limited the automatic path
+  // for dismissals/misdemeanours to SINGLE-SOURCE records: any out-of-state or
+  // federal arrest kills the AUTOMATIC path (not the petition path). One node.
+  //
+  // Honesty note the package asks for: a conviction expunges to "partially
+  // sealed" — law enforcement can still see and use it. Said in the results.
+  // ==========================================================================
+  OK: {
+    code: 'OK',
+    name: 'Oklahoma',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
+    terminology:
+      'In Oklahoma "expungement" means sealing — the records survive but are hidden. Two different '
+      + 'things share the name, and they are not the same: a SECTION 18 expungement seals both the '
+      + 'arrest record and the court record (this is the real one), while a SECTION 991(c) '
+      + 'expungement only cleans up a deferred sentence — it changes the disposition to show the '
+      + 'case was dismissed but does NOT seal the arrest record. There is also an automatic "Clean '
+      + 'Slate" path now rolling out. One honesty point: a conviction that is expunged becomes '
+      + '"partially sealed", which means law enforcement can still see and use it.',
+    keyDates: [
+      {
+        label: 'Automatic Clean Slate processing legally began',
+        date: '2025-11-01',
+        kind: 'operative',
+        note: 'Effective Nov 1, 2022; automatic processing began Nov 1, 2025. OSBI is mid-implementation with a phased bridge plan — rollout status is an open question.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What is the current OSBI Clean Slate rollout status? Automatic processing legally began Nov 1, 2025 but OSBI is mid-implementation with a phased bridge. Verify on oklahoma.gov/osbi before any UI copy claims records are being processed now. OSBI answers email at expungements@osbi.ok.gov and phone (405) 879-2641.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Did HB 3037 pass? Wave 2 flags a proposed change raising the fine-only misdemeanor threshold to $1,000 and cutting waits. Encode CURRENT law only — the tree uses the existing under-$501 fine-only threshold. Check the legislature site for HB 3037\'s fate before updating.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the current § 18(A)(12)-(13) text on single-nonviolent-felony expungement, specifically any pardon prerequisites. Wave 2 flags this. The tree encodes the 5-year (one felony) and 10-year (two felonies) periods but the pardon-prerequisite detail is unverified.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the OSBI arrest-record processing fee. Wave 2 gives "$150 (their own page)"; the court-record expungement is free. Confirm the $150 and whether any waiver exists.',
+        blocksFields: ['resources.remedies.section18.fees', 'resources.remedies.section18.feeWaiver', 'resources.remedies.section991c.fees', 'resources.remedies.section991c.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the SB 1770 single-source rule: any out-of-state or federal arrest disqualifies the AUTOMATIC path for dismissals and misdemeanours (not the petition path). The tree gates on this; confirm it applies only to the automatic path and only to those categories.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the 57 O.S. § 571 violent-offense list that separates a "nonviolent felony" (expungeable) from a violent one (not). The tree asks a person whether their felony was violent; the list itself needs confirming.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: '22 O.S. § 18 (expungement categories; (A) petition; (B)-(C) automatic; (D) same-transaction)', url: null, retrievedOn: null },
+      { id: '22 O.S. § 19 (expungement procedure)', url: null, retrievedOn: null },
+      { id: '22 O.S. § 991(c) (deferred-sentence expungement)', url: null, retrievedOn: null },
+      { id: '57 O.S. § 571 (violent-offense list — separates nonviolent felony from violent)', url: null, retrievedOn: null },
+      { id: 'HB 3316 (Clean Slate — automatic expungement)', url: null, retrievedOn: null },
+      { id: 'SB 1770 of 2024 (single-source limitation on the automatic path)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'felony_or_misd_ok' },
+            { label: 'Dismissed', value: 'dismissed', next: 'single_source_ok' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_acquittal_ok' },
+            { label: 'Deferred Adjudication / Deferred sentence (Completed)', value: 'deferred', next: 'deferred_date_ok' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // THE SINGLE-SOURCE RULE — for dismissals (an automatic category).
+        single_source_ok: {
+          type: 'boolean',
+          text: 'Do you have any arrest or criminal record OUTSIDE Oklahoma — in another state, or a federal case?',
+          yes: 'eligible_dismissal_petition_ok',
+          no: 'eligible_dismissal_auto_ok'
+        },
+        felony_or_misd_ok: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_sentence_ok' },
+            { label: 'Felony', value: 'felony', next: 'felony_violent_ok' },
+            { label: 'Infraction', value: 'infraction', next: 'misd_sentence_ok' }
+          ]
+        },
+        misd_sentence_ok: {
+          type: 'choice',
+          text: 'What was the sentence for the misdemeanor?',
+          options: [
+            { label: 'A fine only, under $501, and it is paid', value: 'fine_only', next: 'eligible_fine_only_ok' },
+            { label: 'Jail time or a suspended sentence', value: 'jail', next: 'misd_jail_date_ok' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_misd_ok' }
+          ]
+        },
+        misd_jail_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — misdemeanour with jail/suspended sentence; no felony convictions, no pending charges)' },
+            nextPass: 'eligible_misd_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        felony_violent_ok: {
+          type: 'boolean',
+          text: 'Was the felony a violent offense on Oklahoma\'s list (57 O.S. § 571)?',
+          yes: 'ineligible_violent_ok',
+          no: 'felony_count_ok'
+        },
+        felony_count_ok: {
+          type: 'choice',
+          text: 'Counting your whole record: how many felony convictions do you have?',
+          options: [
+            { label: 'This is my only felony', value: 'one', next: 'felony_one_date_ok' },
+            { label: 'Two felonies total', value: 'two', next: 'felony_two_date_ok' },
+            { label: 'Three or more felonies', value: 'three_plus', next: 'ineligible_felony_count_ok' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felony_ok' }
+          ]
+        },
+        felony_one_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — single nonviolent felony; no other convictions)' },
+            nextPass: 'eligible_felony_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        felony_two_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the more recent sentence?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — two nonviolent felonies)' },
+            nextPass: 'eligible_felony_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        deferred_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed at the end of your deferred sentence?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'dismissal after a deferred sentence (22 O.S. § 18(A) — 1 year)' },
+            nextPass: 'eligible_deferred_ok',
+            nextFail: 'waiting_ok'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Oklahoma\'s expungement rules split on how the case ended: an acquittal or a dismissal with no prior felony is eligible with little or no wait, a deferred sentence clears a year after dismissal, and a conviction runs through waiting periods of up to 10 years. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. OSBI answers questions by email (expungements@osbi.ok.gov) and phone ((405) 879-2641), and Legal Aid Services of Oklahoma can help.',
+          remedy: 'Get Your Record First (OSBI)',
+          citation: '22 O.S. § 18 (which path applies depends on the disposition)'
+        },
+        eligible_acquittal_ok: {
+          status: 'eligible',
+          title: 'Acquitted — Eligible to Expunge',
+          message: 'Because you were acquitted, you are eligible for a Section 18 expungement — the strong kind that seals both the arrest and the court record. File the petition in the district court of the county of arrest, with notice to the district attorney, the arresting agency, and OSBI. The court-record part is free; OSBI charges a processing fee for the arrest record that we are still confirming. Legal Aid Services of Oklahoma and the OU/TU law-school expungement clinics can help you file.',
+          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
+          citation: '22 O.S. § 18'
+        },
+        eligible_dismissal_auto_ok: {
+          status: 'eligible',
+          title: 'Dismissed, Oklahoma-Only Record — May Expunge Automatically',
+          message: 'Your case was dismissed and your record is Oklahoma-only, which matters: Oklahoma\'s automatic Clean Slate program covers dismissals, but a 2024 law (SB 1770) limits the AUTOMATIC path to "single-source" records — Oklahoma-only. Since yours qualifies, automatic processing may reach it without you filing anything. Automatic processing legally began November 1, 2025 and OSBI is still ramping up, so check your status with OSBI (expungements@osbi.ok.gov) rather than assume it is done. If you would rather not wait, the Section 18 petition path is always open — it seals both the arrest and court record. Note one thing: if this was a conviction rather than a true dismissal, an expunged conviction is only "partially sealed", meaning law enforcement can still see it.',
+          remedy: 'Automatic Clean Slate (check OSBI) or Section 18 petition',
+          citation: '22 O.S. § 18(A)-(C)'
+        },
+        eligible_dismissal_petition_ok: {
+          status: 'eligible',
+          title: 'Dismissed — Eligible to Petition (Automatic Path Blocked by an Out-of-State Record)',
+          message: 'Your case was dismissed, so you are eligible for a Section 18 expungement. Here is the wrinkle worth knowing: because you have a record outside Oklahoma, the AUTOMATIC Clean Slate path is not open to you — a 2024 law (SB 1770) limits automatic processing to "single-source", Oklahoma-only records. That does NOT affect your right to petition; the out-of-state record blocks only the automatic route, not the manual one. So file the Section 18 petition in the district court of the county of arrest, with notice to the DA, the arresting agency, and OSBI. Legal Aid Services of Oklahoma can help.',
+          remedy: 'Section 18 Expungement Petition (22 O.S. § 18) — automatic path blocked by out-of-state record',
+          citation: '22 O.S. §§ 18(A), 18(B)-(C)'
+        },
+        eligible_fine_only_ok: {
+          status: 'eligible',
+          title: 'Fine-Only Misdemeanor — Eligible Now',
+          message: 'A misdemeanor that ended in a fine only of less than $501, with the fine paid, is eligible for a Section 18 expungement immediately — no waiting period. File the petition in the district court of the county of arrest. The court-record expungement is free; OSBI charges a processing fee for the arrest record that we are still confirming. (Note: a bill was proposed to raise this fine threshold and cut waiting periods, but this reflects current law — check with OSBI if your fine was higher.)',
+          remedy: 'Section 18 Expungement Petition (22 O.S. § 18) — immediate',
+          citation: '22 O.S. § 18(A)'
+        },
+        eligible_misd_ok: {
+          status: 'eligible',
+          title: 'Misdemeanor — Eligible to Expunge',
+          message: 'Based on your dates — 5 years since you completed the sentence, with no felony convictions and no pending charges — you are eligible for a Section 18 expungement of this misdemeanor. File the petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI; a hearing is typical. The court-record part is free; the OSBI arrest-record processing fee is something we are still confirming. An expunged conviction becomes "partially sealed" — hidden from the public, but law enforcement can still see it.',
+          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
+          citation: '22 O.S. § 18(A)'
+        },
+        eligible_felony_ok: {
+          status: 'eligible',
+          title: 'Nonviolent Felony — Eligible to Expunge',
+          message: 'Based on your dates and record, you appear eligible for a Section 18 expungement of this nonviolent felony — 5 years after completing the sentence for a single felony, or 10 years where you have two. File the petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. There is one detail we are still confirming: § 18 has pardon-related prerequisites for some felony expungements, so a legal aid clinic is worth using to make sure yours is not one of them. The court-record part is free; the OSBI processing fee is separate. An expunged conviction becomes "partially sealed" — law enforcement can still see it.',
+          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
+          citation: '22 O.S. § 18(A)'
+        },
+        eligible_deferred_ok: {
+          status: 'eligible',
+          title: 'Completed Deferred Sentence — Two Steps Worth Taking',
+          message: 'Because your deferred sentence ended in dismissal more than a year ago, you have two things available and they do different jobs. A Section 991(c) expungement updates the court record to show you "pled not guilty, case dismissed" — but it does NOT seal the arrest record, so on its own it is only half the picture. A Section 18 expungement (available a year after the dismissal) seals both the arrest and the court record. Most people want both: 991(c) to correct the disposition and § 18 to seal the arrest. File in the district court of the county of arrest. Legal Aid Services of Oklahoma and the law-school clinics handle exactly this pairing.',
+          remedy: 'Section 991(c) + Section 18 Expungement (22 O.S. §§ 991(c), 18)',
+          citation: '22 O.S. §§ 991(c), 18(A)'
+        },
+        waiting_ok: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Oklahoma\'s Section 18 waiting periods depend on the offense: a misdemeanor with a jail or suspended sentence is 5 years after completion, a single nonviolent felony is 5 years, two nonviolent felonies are 10, and a deferred sentence clears 1 year after dismissal. Based on your dates, yours has not run yet, and it also requires no new convictions and no pending charges in the meantime. Once your period runs, Oklahoma\'s automatic Clean Slate program may reach an eligible case without you filing — though for now that path is still ramping up.',
+          remedy: 'Wait for the period to run, then petition or check OSBI',
+          citation: '22 O.S. § 18(A)'
+        },
+        ineligible_violent_ok: {
+          status: 'ineligible',
+          title: 'Violent Felonies Are Not Expungeable',
+          message: 'Felonies on Oklahoma\'s violent-offense list (57 O.S. § 571) cannot be expunged under Section 18. No waiting period changes that. Two things worth knowing before you take this as final: the § 571 list is specific, and whether an offense counts as "violent" is a legal classification rather than a description of what happened — so if you are not certain, it is worth confirming. And a pardon is a separate route. OSBI answers questions directly, and Legal Aid Services of Oklahoma can check the classification against § 571.',
+          remedy: 'None (Violent Felony under § 571) — confirm the classification; ask about a pardon',
+          citation: '22 O.S. § 18(A); 57 O.S. § 571'
+        },
+        ineligible_felony_count_ok: {
+          status: 'ineligible',
+          title: 'Three or More Felonies Blocks Section 18 Expungement',
+          message: 'Oklahoma\'s Section 18 expungement is not available once you have three or more felony convictions. There is one thing that can change this count, and it is worth checking: under § 18(D), multiple offenses arising from the SAME transaction count as a single conviction — so a record that looks like three felonies may legally be fewer. A pardon is also a separate route these limits do not govern. Legal Aid Services of Oklahoma and the law-school clinics can count your record properly and tell you whether the same-transaction rule brings you back under the limit.',
+          remedy: 'Consult Legal Aid (Felony Count) — the same-transaction rule may help',
+          citation: '22 O.S. §§ 18(A), 18(D)'
+        },
+        complex_misd_ok: {
+          status: 'complex',
+          title: 'We Need to Know the Sentence',
+          message: 'For a misdemeanor, Oklahoma\'s timing turns on the sentence: a fine only under $501 is immediate, while a jail or suspended sentence is 5 years after completion. Since you are not sure which yours was, we are not going to guess. Your court paperwork states the sentence, and OSBI answers questions by email (expungements@osbi.ok.gov) and phone. Legal Aid Services of Oklahoma can also read your record with you.',
+          remedy: 'Get Your Sentence Details First (court paperwork / OSBI)',
+          citation: '22 O.S. § 18(A)'
+        },
+        complex_felony_ok: {
+          status: 'complex',
+          title: 'We Need Your Felony Count',
+          message: 'For a nonviolent felony, Oklahoma\'s timing depends on how many felonies are on your record: one is 5 years after completion, two is 10, and three or more is not eligible. And the same-transaction rule (§ 18(D)) can reduce that count, since offenses from a single incident count as one. Since you are not sure of your count, we are not going to guess — getting it wrong here changes the answer entirely. OSBI can tell you what your record shows, and Legal Aid Services of Oklahoma can apply the same-transaction rule for you.',
+          remedy: 'Get Your Felony Count First (OSBI / legal aid)',
+          citation: '22 O.S. §§ 18(A), 18(D)'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        section18: {
+          name: 'Section 18 Expungement (seals arrest + court record)',
+          formName: 'Petition for Expungement (22 O.S. § 18)',
+          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          steps: [
+            'Check first whether the automatic Clean Slate path applies — OSBI answers at expungements@osbi.ok.gov and (405) 879-2641. It only reaches Oklahoma-only ("single-source") records.',
+            'File the Section 18 petition in the district court of the county of arrest (one petition per county; multiple arrests in the same county can be combined).',
+            'Give notice to the district attorney, the arresting agency, and OSBI. A hearing is typical.',
+            'The court-record expungement is free; OSBI charges a processing fee for the arrest record.'
+          ],
+          // null: Wave 2 gives OSBI arrest-record processing fee "$150 (their
+          // own page)"; court-record expungement free. Flagged for confirmation.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'District court of the county of arrest; OSBI for the arrest record'
+        },
+        section991c: {
+          name: 'Section 991(c) Expungement (deferred-sentence disposition cleanup)',
+          formName: 'Motion under 22 O.S. § 991(c)',
+          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          steps: [
+            'Confirm your deferred sentence ended in dismissal.',
+            'File the § 991(c) motion in the court that handled the case — it updates the disposition to "pled not guilty, case dismissed".',
+            'Understand its limit: § 991(c) does NOT seal the arrest record. Pair it with a Section 18 expungement (available 1 year after dismissal) to seal the arrest too.'
+          ],
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid Services of Oklahoma', url: 'https://oklaw.org' },
+        { name: 'OSBI Expungements (answers by email and phone)', url: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // VIRGINIA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  //
+  // HANDLE WITH CARE: the sealing regime took effect July 1, 2026 — two weeks
+  // before the package was drafted. Before it, Virginia had essentially NO
+  // conviction relief. Automatic processes are only spinning up, so every
+  // automatic result carries a rollout caveat, and secondary sources are full
+  // of stale 2025 effective dates.
+  //
+  // TWO regimes coexist: SEALING (new, convictions, § 19.2-392.5 et seq.) and
+  // EXPUNGEMENT (old, non-convictions, § 19.2-392.2 — still exists). Only
+  // offences on/after Jan 1, 1986 are sealable — a boolean gate, because the
+  // offence date predates the disposition date the form collects.
+  //
+  // The felony petition gate is a whole-record test (no Class 1-2 ever; no
+  // Class 3-4 in 20 years; no felony in 10 years) that the record model cannot
+  // compute — asked, unsure -> hedge. FIFTH state on the count-logic backlog.
+  // ==========================================================================
+  VA: {
+    code: 'VA',
+    name: 'Virginia',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
+    terminology:
+      'Virginia now has two different remedies. SEALING is the new one (effective July 1, 2026, '
+      + 'Va. Code § 19.2-392.5 and following) and it is what covers convictions — before this law, '
+      + 'Virginia had almost no way to clear a conviction at all. EXPUNGEMENT is the older remedy '
+      + '(§ 19.2-392.2) and still exists, but only for non-convictions. Because the sealing law is '
+      + 'brand new, its automatic parts are still being switched on: eligible does not yet mean '
+      + 'sealed, and any date you see on another website may be wrong. Only records with offense '
+      + 'dates on or after January 1, 1986 can be sealed.',
+    keyDates: [
+      {
+        label: 'Comprehensive sealing regime took effect (SB 1466 / HB 2723)',
+        date: '2026-07-01',
+        kind: 'effective',
+        note: 'Two weeks old as of the Wave 2 draft. The biggest recent second-chance-law change in the country. Automatic processes are spinning up — verify rollout status before any UI copy claims sealing is happening automatically now.',
+      },
+      {
+        label: 'Earliest sealable offense date',
+        date: '1986-01-01',
+        kind: 'effective',
+        note: 'Only records with offense dates on or after this date can be sealed.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What is the current automatic-sealing rollout status? The regime took effect July 1, 2026 and automatic processes are only spinning up. Verify on vsp.virginia.gov (the State Police petition-based-record-sealing page) and vscc.virginia.gov before any UI copy claims records are being sealed automatically now. Trust only VSP, the Crime Commission, and the statute — secondary sources carry stale 2025 dates.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Are petition sealing filings genuinely free with no fingerprint card, per the 2025 amendments? Wave 2 says yes and calls it a UI headline if confirmed — verify on the Circuit Court\'s own instructions and by phone. This is one of the most user-relevant facts in the state.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver', 'resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the exact lifetime-limit mechanics in § 19.2-392.12: Wave 2 says 2 lifetime sealing petitions but flags the precise mechanics. The tree discloses the limit in prose but cannot count a person\'s prior petitions.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the automatic misdemeanor list in § 19.2-392.7: petit larceny, shoplifting, trespass variants, disorderly conduct, misdemeanor marijuana distribution — sealed 7 years after conviction if no other CCRE-reportable conviction in that window (traffic infractions do not count against). The tree asks a person whether their offense is on this list.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the full § 19.2-392.12 petition exclusion list and the felony gating: no Class 1-2 felony ever, no Class 3-4 felony in 20 years, no felony of any kind in 10 years, 10 years clean, drug/alcohol convictions require a rehabilitation showing. The tree asks a person to self-assess the felony-history gate; the exact provisions need confirming.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are DEFERRED dispositions treated under the new sealing regime? Not covered in Wave 2 — standing call-sheet question. The tree hedges deferrals.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the felony non-conviction path: Wave 2 says a felony charge that ended without conviction is sealable at conclusion WITH the defendant\'s request and the Commonwealth\'s Attorney\'s concurrence, or via old-regime expungement otherwise. The tree routes felony non-convictions to a result that explains both; confirm the concurrence requirement.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Va. Code § 19.2-392.5 et seq. (record sealing — new regime, eff. July 1, 2026)', url: null, retrievedOn: null },
+      { id: 'Va. Code § 19.2-392.7 (automatic sealing — misdemeanour list; 7-year rule)', url: null, retrievedOn: null },
+      { id: 'Va. Code § 19.2-392.11 (automatic sealing provisions)', url: null, retrievedOn: null },
+      { id: 'Va. Code § 19.2-392.12 (petition sealing; felony gating; exclusions; lifetime limit)', url: null, retrievedOn: null },
+      { id: 'Va. Code § 19.2-392.2 (expungement — old regime, non-convictions)', url: null, retrievedOn: null },
+      { id: 'SB 1466 / HB 2723 (comprehensive sealing regime)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'offense_1986_va' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconviction_va' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_va' },
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        offense_1986_va: {
+          type: 'boolean',
+          text: 'Was the offense committed on or after January 1, 1986?',
+          yes: 'excluded_va',
+          no: 'ineligible_pre1986_va'
+        },
+        excluded_va: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a Class 1, 2, 3, or 4 felony; a sex offense; a violent felony; a firearm felony; a DUI; an assault and battery against a family member; a protective-order violation; or a hate crime?',
+          yes: 'ineligible_excluded_va',
+          no: 'offense_class_va'
+        },
+        offense_class_va: {
+          type: 'choice',
+          text: 'Which best describes the offense? (Your court paperwork has the details — Virginia\'s new sealing law treats these groups differently.)',
+          options: [
+            { label: 'A specific automatic-list misdemeanor: petit larceny, shoplifting, trespass, disorderly conduct, or misdemeanor marijuana distribution', value: 'auto_misd', next: 'auto_date_va' },
+            { label: 'Any other misdemeanor', value: 'other_misd', next: 'petition_misd_date_va' },
+            { label: 'A Class 5 or 6 felony, or grand larceny', value: 'low_felony', next: 'felony_history_va' },
+            { label: 'I\'m not sure which group', value: 'unsure', next: 'complex_class_va' }
+          ]
+        },
+        auto_date_va: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'conviction (Va. Code § 19.2-392.7 — automatic misdemeanour sealing; no other CCRE-reportable conviction in the window)' },
+            nextPass: 'check_record_first_va',
+            nextFail: 'waiting_auto_va'
+          }
+        },
+        petition_misd_date_va: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted? (The clock runs conviction-free, so a later conviction restarts it.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'conviction, conviction-free (Va. Code § 19.2-392.12 — petition sealing, misdemeanours)' },
+            nextPass: 'eligible_petition_va',
+            nextFail: 'waiting_petition_va'
+          }
+        },
+        // The whole-record felony gate — asked, unsure -> hedge. Fifth state on
+        // the count-logic backlog (UT, NY, MI, NJ, VA).
+        felony_history_va: {
+          type: 'choice',
+          text: 'This one is about your WHOLE record, not just this case. Do ALL of these describe you: you have never been convicted of a Class 1 or 2 felony; you have no Class 3 or 4 felony in the last 20 years; and you have no felony of any kind in the last 10 years?',
+          options: [
+            { label: 'Yes — all three are true of me', value: 'clear', next: 'felony_date_va' },
+            { label: 'No — at least one is not true', value: 'blocked', next: 'ineligible_felony_history_va' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felony_history_va' }
+          ]
+        },
+        felony_date_va: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'Which came LATEST: your conviction, your release, or the end of any supervision for this case? Enter that date. (The clock runs conviction-free from then.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the latest of conviction, release, or violation events, conviction-free (Va. Code § 19.2-392.12 — petition sealing, felonies)' },
+            nextPass: 'eligible_petition_felony_va',
+            nextFail: 'waiting_petition_felony_va'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Virginia has two different remedies that split on how the case ended: non-convictions go through expungement, while convictions go through the new sealing law. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Virginia State Police (vsp.virginia.gov) can provide your record, and Justice Forward Virginia\'s sealing explainer is a good plain-language guide.',
+          remedy: 'Get Your Record First (Virginia State Police)',
+          citation: 'Va. Code §§ 19.2-392.2, 19.2-392.5 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred and Diverted Cases Need a Person',
+          message: 'Virginia\'s new sealing law is screened here for convictions, and its expungement law for non-convictions. How a deferred or diverted disposition is treated under the new sealing regime is not something we have researched yet — the law is only weeks old — and we would rather tell you that than guess. The Legal Aid Justice Center and Justice Forward Virginia are tracking the new law closely.',
+          remedy: 'Consult Legal Aid (Deferral Under the New Law — Not Yet Screened)',
+          citation: 'Va. Code § 19.2-392.5 et seq. (treatment of deferrals not yet researched)'
+        },
+        nonconviction_va: {
+          status: 'eligible',
+          title: 'No Conviction — Sealing or Expungement Should Be Available',
+          message: 'Because your case ended without a conviction, Virginia has a route for you — and which one depends on the level. A misdemeanor non-conviction seals at the conclusion of the case for new cases, or through an annual State Police sweep for older ones once you have been 3 years clean. A FELONY non-conviction is sealable at conclusion too, but it needs your request and the Commonwealth\'s Attorney\'s agreement — if that is not given, the older expungement law (§ 19.2-392.2) is still open to you as a petition. Because the new sealing law only took effect on July 1, 2026 and its automatic parts are still starting up, check your record with the Virginia State Police rather than assume it is done. If you need the petition route, the Legal Aid Justice Center can help.',
+          remedy: 'Automatic/at-conclusion sealing, or expungement petition (§ 19.2-392.2) — check with VSP',
+          citation: 'Va. Code §§ 19.2-392.7, 19.2-392.2'
+        },
+        check_record_first_va: {
+          status: 'eligible',
+          title: 'Your Record May Be Sealed Automatically — Check, Because the Law Is New',
+          message: 'Good news, with one honest caveat. Your offense is on Virginia\'s automatic-sealing list, and based on your dates — 7 years since conviction with no other reportable conviction in that window — it qualifies to be sealed with no petition and no fee. The caveat: Virginia\'s sealing law only took effect on July 1, 2026, so the automatic machinery is still being switched on. "Eligible" does not yet mean "done", and you should not assume it has happened. Check your status with the Virginia State Police (vsp.virginia.gov) rather than a third-party site — secondary sources have this law wrong. If the automatic process has not reached you yet, it is coming; there is nothing you need to file for the automatic path.',
+          remedy: 'Check with Virginia State Police — automatic sealing (Va. Code § 19.2-392.7)',
+          citation: 'Va. Code § 19.2-392.7'
+        },
+        eligible_petition_va: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Petition to Seal',
+          message: 'Based on your dates — 7 conviction-free years — you appear eligible to petition to seal this misdemeanor under Virginia\'s new law (§ 19.2-392.12). File the petition in the Circuit Court where the charge originated. Two things worth knowing. Per the 2025 amendments, there are reportedly no filing fees and no fingerprint card required — we are confirming that, and if it holds it makes this one of the easiest petitions in the country. And there is a lifetime limit of two sealing petitions, so if you have records you might seal, it is worth thinking about which to use a petition on. Because the law is brand new, the Legal Aid Justice Center and Justice Forward Virginia are the best current guides.',
+          remedy: 'Petition to Seal (Va. Code § 19.2-392.12) — Circuit Court',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        eligible_petition_felony_va: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Petition to Seal This Felony',
+          message: 'This is new for Virginia: until July 2026 a felony like yours — a Class 5 or 6 felony, or grand larceny — could not be cleared at all. Now it can be sealed by petition. Based on what you told us, you clear the record requirements (no Class 1-2 felony ever, none Class 3-4 in 20 years, no felony in 10 years) and you are past 10 conviction-free years. File the petition in the Circuit Court where the charge originated. A few things to plan around: if this was a drug- or alcohol-related conviction, the court will want to see a showing of rehabilitation; there is a lifetime limit of two sealing petitions; and the court weighs statutory criteria rather than granting automatically. Per the 2025 amendments, filing is reportedly free with no fingerprint card, which we are confirming. Given how new this is, use the Legal Aid Justice Center — they are tracking it closely.',
+          remedy: 'Petition to Seal a Felony (Va. Code § 19.2-392.12) — Circuit Court',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        waiting_auto_va: {
+          status: 'waiting',
+          title: 'Automatic Sealing — Seven-Year Mark Not Yet Reached',
+          message: 'Your offense is on Virginia\'s automatic-sealing list, which is the easy path — but it seals 7 years after conviction, and only if you have no other reportable conviction in that window (traffic infractions do not count against you). Based on your dates, that has not run yet. Once it does, and if you stay conviction-free, the sealing is automatic — nothing to file. Because the law is only weeks old, check your status with the Virginia State Police as the date approaches rather than relying on other sites.',
+          remedy: 'Wait for the 7-year automatic mark (Va. Code § 19.2-392.7)',
+          citation: 'Va. Code § 19.2-392.7'
+        },
+        waiting_petition_va: {
+          status: 'waiting',
+          title: 'Seven Conviction-Free Years Not Yet Met',
+          message: 'Petition sealing for a misdemeanor under Virginia\'s new law needs 7 conviction-free years. Based on your dates, that has not run yet, and a new conviction restarts it. Staying conviction-free is what gets you there.',
+          remedy: 'Wait for 7 conviction-free years (Va. Code § 19.2-392.12)',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        waiting_petition_felony_va: {
+          status: 'waiting',
+          title: 'Ten Conviction-Free Years Not Yet Met',
+          message: 'Petition sealing for a Class 5 or 6 felony or grand larceny needs 10 conviction-free years, measured from the latest of your conviction, release, or the end of supervision. Based on your dates, that has not run yet, and a new conviction restarts it. This route only became possible in July 2026, so it is worth knowing it is there for when your date arrives.',
+          remedy: 'Wait for 10 conviction-free years (Va. Code § 19.2-392.12)',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        ineligible_pre1986_va: {
+          status: 'ineligible',
+          title: 'Offenses Before 1986 Cannot Be Sealed',
+          message: 'Virginia\'s sealing law reaches only offenses committed on or after January 1, 1986, so this conviction falls outside it. That is a hard line in the statute, not a waiting period. If the case actually ended without a conviction, the older expungement law (§ 19.2-392.2) may still help regardless of date. Given how specific this is, it is worth confirming with someone: the Legal Aid Justice Center can tell you whether any route fits.',
+          remedy: 'None under the sealing law (pre-1986) — ask about old-regime expungement',
+          citation: 'Va. Code § 19.2-392.5 et seq.'
+        },
+        ineligible_excluded_va: {
+          status: 'ineligible',
+          title: 'Excluded From Sealing',
+          message: 'Virginia\'s sealing law excludes a specific set of offenses: Class 1 through 4 felonies, sex offenses, violent felonies, firearm felonies, DUI, assault and battery against a family member, protective-order violations, and hate crimes. No waiting period changes that. Two things worth knowing before you accept this: the categories are legal classifications, so whether your offense counts as, say, a "violent felony" is something worth confirming rather than assuming from what happened. And if the case actually ended without a conviction, a different route (expungement) may apply. The Legal Aid Justice Center and Justice Forward Virginia can check where your offense falls.',
+          remedy: 'None (Statutorily Excluded from Sealing) — confirm the classification',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        ineligible_felony_history_va: {
+          status: 'ineligible',
+          title: 'Your Felony History Blocks This Petition',
+          message: 'Sealing a Class 5 or 6 felony or grand larceny requires a clean-enough felony history: no Class 1 or 2 felony ever, no Class 3 or 4 felony in the last 20 years, and no felony of any kind in the last 10. Based on what you told us, one of those is not met, so this petition is not available right now. Some of this can change with time — the 10-year and 20-year windows move — so it may be worth revisiting later. And because these rules are brand new and the counting is intricate, it is worth having someone confirm it: the Legal Aid Justice Center is tracking the new law and can check your specific history.',
+          remedy: 'Not eligible now (felony history) — the time windows may open later',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        complex_class_va: {
+          status: 'complex',
+          title: 'We Need to Know Which Group the Offense Falls In',
+          message: 'Virginia\'s new sealing law treats offenses very differently depending on the group: a specific list of misdemeanors seals automatically, other misdemeanors go by petition at 7 years, and only Class 5 or 6 felonies and grand larceny are sealable among felonies — everything Class 4 and up is excluded. Since you are not sure which group yours is in, we are not going to guess. Your court paperwork has the offense and its class, and because the law is only weeks old, the Legal Aid Justice Center and Justice Forward Virginia are the best places to have it read.',
+          remedy: 'Get Your Offense and Its Class First (court paperwork / legal aid)',
+          citation: 'Va. Code § 19.2-392.12'
+        },
+        complex_felony_history_va: {
+          status: 'complex',
+          title: 'Your Felony History Needs Checking — By a Person',
+          message: 'Whether you can seal this felony depends on your whole felony history: no Class 1 or 2 felony ever, no Class 3 or 4 in the last 20 years, no felony of any kind in the last 10. Since you are not sure whether all of that is true of you, we are not going to guess — getting it wrong points you the wrong way on a route that is brand new. The Virginia State Police can give you your full record, and the Legal Aid Justice Center, which is tracking this law closely, can apply the rules to it with you.',
+          remedy: 'Get Your Full Record Checked (VSP / Legal Aid Justice Center)',
+          citation: 'Va. Code § 19.2-392.12'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        sealing: {
+          name: 'Petition to Seal (new regime, Va. Code § 19.2-392.12)',
+          formName: 'Petition for Sealing of Criminal Records',
+          formUrl: 'https://vsp.virginia.gov/sealing/',
+          steps: [
+            'Confirm your offense is not on the exclusion list and that your dates and felony history qualify — the Virginia State Police can provide your record.',
+            'File the petition in the Circuit Court where the charge originated.',
+            'Per the 2025 amendments there are reportedly no filing fees and no fingerprint card required — confirm on the court\'s own instructions.',
+            'Remember the lifetime limit of two sealing petitions, and that the court weighs statutory criteria before granting.'
+          ],
+          // null: Wave 2 says no fees / no fingerprint card per 2025 amendments,
+          // but flags both for confirmation — and calls it a headline if true.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Circuit Court where the charge originated'
+        },
+        expungement: {
+          name: 'Expungement (old regime, non-convictions, Va. Code § 19.2-392.2)',
+          formName: 'Petition for Expungement',
+          formUrl: 'https://www.vacourts.gov/',
+          steps: [
+            'This route is for non-convictions — dismissals, acquittals, and charges that did not result in a conviction.',
+            'File the petition in the Circuit Court where the charge was heard.',
+            'For a felony non-conviction, sealing at conclusion may be faster if the Commonwealth\'s Attorney concurs — ask about that first.'
+          ],
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Circuit Court where the charge was heard'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid Justice Center', url: 'https://www.justice4all.org' },
+        { name: 'Justice Forward Virginia (sealing explainer)', url: 'https://justiceforwardva.com' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // MINNESOTA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  //
+  // "Expungement" here means court-ordered SEALING — the statute explicitly
+  // prohibits destruction. Multiple tracks; the automatic one is the headline:
+  // § 609A.015, live Jan 1, 2025, and NEARLY DONE — the BCA reported ~94% of
+  // ~2 million eligible records expunged by spring 2026. So Minnesota gets the
+  // strongest check-record-first copy of any state in Waves 1-2: "most eligible
+  // records have already been expunged — check yours."
+  //
+  // The clock quirk worth encoding: automatic periods run from discharge of
+  // sentence, and a new NON-PETTY offence during the wait breaks the clock and
+  // it recomputes from the newer discharge (persona 5).
+  //
+  // Individuals are NOT notified when expunged — checking is on them.
+  // ==========================================================================
+  MN: {
+    code: 'MN',
+    name: 'Minnesota',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
+    terminology:
+      'In Minnesota "expungement" means the court orders your record SEALED — the statute '
+      + 'specifically forbids destroying it, so sealing is as far as it goes. There are several '
+      + 'routes. AUTOMATIC "Clean Slate" expungement (§ 609A.015) went live January 1, 2025 and is '
+      + 'nearly finished — most eligible records are already sealed. A PETITION route (§§ 609A.02 / '
+      + '609A.03) covers what the automatic process misses and reaches records the automatic one '
+      + 'cannot, such as those held by health-licensing boards. A prosecutor can also agree to '
+      + 'sealing without a petition (§ 609A.025). Cannabis has its own tracks.',
+    keyDates: [
+      {
+        label: 'Automatic Clean Slate expungement (§ 609A.015) live',
+        date: '2025-01-01',
+        kind: 'effective',
+        note: 'The BCA began sending records April 2025 and sealing from June 2025; ~94% of ~2 million eligible records expunged by spring 2026, remainder in judicial review. The strongest automatic-track status of any state in Waves 1-2.',
+      },
+      {
+        label: 'Automatic petty-cannabis expungement (§ 609A.055) completed',
+        date: '2024-05',
+        kind: 'operative',
+        note: 'Wave 2 gives month and year only.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the exact § 609A.015 subd. 3(b) exclusion lists and the § 609A.02 subd. 3 lists — secondary sources paraphrase them loosely. Wave 2 flags DWI, domestic assault, harassment/stalking, and 4th-degree assault as carve-outs; the precise lists need pulling from the statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Is DWI excluded from the PETITION track as well as the automatic one? Wave 2 flags this specifically — read § 609A.02 subd. 3 against § 609A.015 subd. 3(b). The tree currently routes DWI to a hedge that says the automatic path is out and the petition path is unconfirmed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the current petition filing fee? Wave 2 gives "~$300-ish, in-forma-pauperis waiver available" and flags it. Confirm the current amount with a district court.',
+        blocksFields: ['resources.remedies.petition.fees'],
+      },
+      {
+        question:
+          'Confirm the § 609.13 quirk: a felony deemed a misdemeanor via stay of imposition does NOT become automatic-eligible through the demotion — separate petition rules with 4/5-year splits apply. The tree does not currently special-case this; it is disclosed as an open question.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 609A.015 rollout is as complete as reported (~94% by spring 2026) and the BCA record-check path. This is the strongest automatic-track claim in the app, so it is worth confirming before the copy leans on it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions and stays of adjudication treated beyond the 1-year automatic period Wave 2 gives? The tree encodes the 1-year automatic diversion period; confirm the boundaries.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Minn. Stat. § 609A.015 (automatic Clean Slate expungement; periods; exclusions subd. 3(b))', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.02 (petition expungement; eligible-felony list subd. 3(b); exclusions subd. 3)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.03 (petition expungement procedure)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.025 (prosecutor-agreed sealing — no petition)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.055 (automatic petty-cannabis expungement)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.06 (Cannabis Expungement Board — felony cannabis)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609.13 (felony deemed misdemeanour — stay of imposition quirk)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 243.166 (predatory-offender registration — never expungable)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'registration_mn' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_mn' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_mn' },
+            { label: 'Diversion / Stay of adjudication (Completed)', value: 'deferred', next: 'diversion_date_mn' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        registration_mn: {
+          type: 'boolean',
+          text: 'Does the offense require you to register as a predatory offender?',
+          yes: 'ineligible_registration_mn',
+          no: 'excluded_mn'
+        },
+        excluded_mn: {
+          type: 'boolean',
+          text: 'Was the offense a DWI, a domestic assault, a harassment or stalking offense, or a 4th-degree assault?',
+          yes: 'complex_excluded_mn',
+          no: 'level_mn'
+        },
+        level_mn: {
+          type: 'choice',
+          text: 'How was the offense classified? (Your court paperwork says — Minnesota\'s waiting period depends on it.)',
+          options: [
+            { label: 'Petty misdemeanor or misdemeanor', value: 'misd', next: 'misd_date_mn' },
+            { label: 'Gross misdemeanor', value: 'gross', next: 'gross_date_mn' },
+            { label: '5th-degree drug (controlled substance) felony', value: 'drug5', next: 'drug5_date_mn' },
+            { label: 'Another felony', value: 'felony', next: 'felony_eligible_mn' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_mn' }
+          ]
+        },
+        misd_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — petty misdemeanours and misdemeanours; no new non-petty offence during the wait)' },
+            nextPass: 'check_record_first_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        gross_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — gross misdemeanours; no new non-petty offence during the wait)' },
+            nextPass: 'check_record_first_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        drug5_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — 5th-degree drug felony; no new non-petty offence during the wait)' },
+            nextPass: 'check_record_first_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        felony_eligible_mn: {
+          type: 'boolean',
+          text: 'Is this offense on Minnesota\'s list of expungement-eligible felonies (roughly 50 offenses — drug possession, theft, forgery, and financial crimes)? If you are not sure, answer no.',
+          yes: 'felony_date_mn',
+          no: 'complex_felony_mn'
+        },
+        felony_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — listed eligible felonies; no new non-petty offence during the wait)' },
+            nextPass: 'check_record_first_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        diversion_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the diversion or the stay of adjudication?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'completion of diversion or stay of adjudication (Minn. Stat. § 609A.015 — non-felony)' },
+            nextPass: 'check_record_first_mn',
+            nextFail: 'waiting_mn'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Minnesota\'s expungement timing depends on how the case ended: dismissals resolve with no wait, a completed diversion after 1 year, and convictions from 2 to 5 years depending on the level. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. A BCA criminal history search will show you your record, and the Volunteer Lawyers Network runs expungement clinics.',
+          remedy: 'Get Your Record First (BCA)',
+          citation: 'Minn. Stat. § 609A.015 (which path applies depends on the disposition)'
+        },
+        eligible_nonconviction_mn: {
+          status: 'eligible',
+          title: 'No Conviction — Likely Already Expunged, No Wait',
+          message: 'Because your case ended without a conviction, it is eligible for expungement with no waiting period — and Minnesota\'s automatic Clean Slate program, which is nearly complete, has very likely already sealed it. Nobody is notified when this happens, so the way to know is to check: run a BCA criminal history search. If it has not been sealed, the petition route is available, and a prosecutor can also agree to sealing without a petition (§ 609A.025).',
+          remedy: 'Automatic expungement (check BCA) — no waiting period',
+          citation: 'Minn. Stat. §§ 609A.015, 609A.025'
+        },
+        check_record_first_mn: {
+          status: 'eligible',
+          title: 'Most Eligible Records Are Already Sealed — Check Yours',
+          message: 'This is the strongest starting point of any state we cover. Minnesota\'s automatic Clean Slate program went live in January 2025 and by spring 2026 had already expunged about 94% of the roughly two million eligible records. Based on your dates you are past the waiting period for your offense, so there is a very good chance yours is already sealed. The catch is that nobody is notified when it happens — so you have to check. Run a BCA criminal history search to see. If yours is in the small remainder still in judicial review, it is on its way and there is nothing to file for the automatic path. If for some reason it was missed, the petition route (§§ 609A.02/609A.03) reaches records the automatic process cannot — including those held by health-licensing boards — and a prosecutor can agree to sealing without a petition at all (§ 609A.025).',
+          remedy: 'Check your record with the BCA — automatic expungement is nearly complete',
+          citation: 'Minn. Stat. § 609A.015'
+        },
+        waiting_mn: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Minnesota\'s automatic expungement comes after a wait that depends on the level: 1 year for a completed diversion, 2 years for a misdemeanor, 3 for a gross misdemeanor, 4 for a 5th-degree drug felony, and 5 for other eligible felonies — all measured from discharge of your sentence. Based on your dates, yours has not run yet. One thing worth knowing: a new non-petty offense during the wait breaks the clock, and it restarts from the newer discharge. Once your period runs, the sealing is automatic — Minnesota is doing this without petitions for eligible records — so check your BCA record when the time comes.',
+          remedy: 'Wait for the period to run, then check the BCA',
+          citation: 'Minn. Stat. § 609A.015'
+        },
+        ineligible_registration_mn: {
+          status: 'ineligible',
+          title: 'Predatory-Offender Registration Blocks Expungement',
+          message: 'An offense that requires predatory-offender registration under Minn. Stat. § 243.166 cannot be expunged in Minnesota — not automatically and not by petition. This is a hard bar in the statute. If you are uncertain whether your offense actually carries a registration requirement, that is worth confirming rather than assuming, and the Volunteer Lawyers Network expungement clinics can check.',
+          remedy: 'None (Registration Offense) — confirm the registration requirement',
+          citation: 'Minn. Stat. § 243.166'
+        },
+        complex_excluded_mn: {
+          status: 'complex',
+          title: 'DWI and Certain Assaults Need a Closer Look',
+          message: 'DWI, domestic assault, harassment and stalking offenses, and 4th-degree assault are carved out of Minnesota\'s AUTOMATIC expungement — so the Clean Slate program will not seal them on its own. What we cannot yet tell you cleanly is whether the PETITION route is open to them: the exclusion lists for the automatic and petition tracks are not identical, and we are still confirming exactly where DWI in particular falls. Rather than guess in either direction, this is one to take to a person: the Volunteer Lawyers Network runs free expungement clinics, and a petition under § 609A.02 may well be available even though the automatic path is not.',
+          remedy: 'Consult Legal Aid (Automatic Path Excluded; Petition Path Being Confirmed)',
+          citation: 'Minn. Stat. §§ 609A.015 subd. 3(b), 609A.02 subd. 3'
+        },
+        complex_level_mn: {
+          status: 'complex',
+          title: 'We Need the Offense Classification',
+          message: 'In Minnesota the waiting period depends on the level: 2 years for a misdemeanor, 3 for a gross misdemeanor, 4 for a 5th-degree drug felony, 5 for other eligible felonies. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, a BCA criminal history search shows it, and the Volunteer Lawyers Network can read your record with you.',
+          remedy: 'Get Your Offense Classification First (court paperwork / BCA)',
+          citation: 'Minn. Stat. § 609A.015'
+        },
+        complex_felony_mn: {
+          status: 'complex',
+          title: 'Whether This Felony Is Eligible Needs Checking',
+          message: 'Minnesota expunges only a specific list of about 50 felonies — drug possession, theft, forgery, financial crimes, and similar — and not felonies generally. Whether yours is on that list decides everything, and it is not something to guess at. The list is in § 609A.02 subd. 3(b); a BCA record will identify your exact offense, and the Volunteer Lawyers Network expungement clinics can check it against the list. One more wrinkle worth mentioning to them: a felony that was reduced to a misdemeanor by a stay of imposition does NOT automatically become expungement-eligible through that reduction — it has its own petition rules.',
+          remedy: 'Check the Felony List (§ 609A.02 subd. 3(b)) with legal aid',
+          citation: 'Minn. Stat. §§ 609A.02, 609.13'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        petition: {
+          name: 'Petition Expungement (Minn. Stat. §§ 609A.02 / 609A.03)',
+          formName: 'MN Judicial Branch Expungement forms packet',
+          formUrl: 'https://www.mncourts.gov/Help-Topics/Expungement.aspx',
+          steps: [
+            'Check first whether the automatic program already sealed it — run a BCA criminal history search. Most eligible records are already done.',
+            'If you need to petition, complete the MN Judicial Branch expungement packet and file in the district court of the case.',
+            'Serve the agencies. The petition route reaches records the automatic process cannot, including those held by health-licensing boards.',
+            'Before petitioning, it can be worth asking the prosecutor about agreed sealing under § 609A.025 — it skips the petition entirely.'
+          ],
+          // null: Wave 2 gives "~$300-ish, in-forma-pauperis waiver available".
+          fees: null,
+          // NOT null: the waiver mechanism is named independently of the amount.
+          feeWaiver: 'A fee waiver (in forma pauperis) is available if you cannot afford the filing fee.',
+          courtContact: 'District court of the case'
+        }
+      },
+      legalAid: [
+        { name: 'Volunteer Lawyers Network (expungement clinics)', url: 'https://www.vlnmn.org' },
+        { name: 'Until We Are All Free (Clean Slate implementation tracking)', url: 'https://www.uwaaf.org' }
+      ]
+    }
   }
 };
+
+
+
+
 
 // Directory of all 50 states for the selector. A state appears in the app as
 // soon as it exists here; it only has RULES once it has been researched, encoded,

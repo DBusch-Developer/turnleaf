@@ -74,12 +74,27 @@ export default function Home() {
     setResults(screeningResults);
   };
 
+  /**
+   * Back to the state list — NOT to the landing page.
+   *
+   * This is what "Change State", "Choose another state" and "New Screening" all
+   * mean: the person has already decided to screen something, they just want a
+   * different state. Dropping them back to the hero made them click through
+   * "Start Step 1" again to get to a list they were looking at a second ago.
+   * `showSelector` stays true so the list is what they land on.
+   */
   const handleReset = () => {
     setSelectedStateCode(null);
     setStateConfig(null);
     setComingSoon(null);
     setPrepopulatedRecords([]);
     setResults(null);
+    setShowSelector(true);
+  };
+
+  /** All the way out to the landing page. Only the error fallback wants this. */
+  const handleReturnHome = () => {
+    handleReset();
     setShowSelector(false);
   };
 
@@ -248,7 +263,7 @@ export default function Home() {
             <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
               We encountered an issue downloading the rules configuration for this state.
             </p>
-            <button className="btn btn-primary" onClick={handleReset}>
+            <button className="btn btn-primary" onClick={handleReturnHome}>
               <ArrowLeft size={16} /> Return to Home
             </button>
           </div>

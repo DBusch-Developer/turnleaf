@@ -1,3 +1,29 @@
+// ============================================================================
+// SEED — mirrors src/data/fallbackRules.ts (source of truth) into Neon.
+//
+// THIS SCRIPT ALTERS A LIVE SCHEMA. It swaps the verification_status CHECK
+// constraint and adds five columns. Run it in this order, every time:
+//
+//   1. SNAPSHOT FIRST. Take a Neon branch/backup of the current database
+//      before anything else. The constraint swap is not reversible by re-running
+//      this script, and step 1 of the migration rewrites rows (any retired
+//      status becomes 'draft' — the old value is gone).
+//   2. RUN AGAINST A DEV BRANCH. Point DATABASE_URL at a Neon dev branch and
+//      seed there first.
+//   3. VERIFY THE DEV BRANCH. Check that every state landed, that
+//      verification_status is 'draft' across the board, and that the new
+//      columns (source_package, terminology, key_dates, open_questions,
+//      sources) are populated — not defaulted to '[]'.
+//   4. ONLY THEN MAIN. Repoint DATABASE_URL and run again.
+//
+// This has never been run against a live database. The migration is reviewed
+// but unexecuted; treat the first run as the test it is.
+//
+// Seeding writes whatever the source of truth says, and the source of truth
+// only ever says 'draft' until a human changes it by hand after a verification
+// call. Nothing here promotes a state.
+// ============================================================================
+
 import { neon } from '@neondatabase/serverless';
 import { fallbackRules } from '../data/fallbackRules';
 import { validateAll, formatErrors } from '../data/validateState';

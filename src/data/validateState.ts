@@ -8,6 +8,16 @@
 // citation is real, or that a waiting period is accurate — no automated check
 // can. See RULES.md.
 //
+// BACKLOG — a question should ASK for everything it BLOCKS.
+// Four questions once blocked `feeWaiver` while asking only about the fee. The
+// call sheet generates from the question TEXT, so the waiver would have gone
+// unasked on the call and stayed null forever, with a question standing against
+// it that nobody could close. Caught by diffing the generated sheet against the
+// hand-written one, which asked the waiver explicitly.
+// Only a weak proxy is automatable (does the text mention the concept the field
+// names?) and it false-positives easily. Until then it is a reviewer's check:
+// for every blocksFields entry, does the question actually ask for it?
+//
 // Why it matters: the rules engine caps traversal at 30 steps and then returns
 // a hardcoded 'Complex Analysis Required' result. A malformed tree therefore
 // never crashes — it silently produces a plausible-looking answer for a real

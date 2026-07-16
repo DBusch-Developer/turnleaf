@@ -45,6 +45,16 @@ export type VerificationStatus = 'draft' | 'statute_cited' | 'phone_verified';
 export interface OpenQuestion {
   question: string;
   blocksFields: string[];
+  /**
+   * Which call session closes this question. OMIT IT.
+   *
+   * Session N = Wave N, so the session is derived from the state's
+   * sourcePackage (see sessionOf) and does not need saying twice. Set this only
+   * when a question deliberately moves to a different session than its state's
+   * — a field stored in two places is a field that drifts, and the prose
+   * already went stale once when the sessions were renumbered.
+   */
+  session?: number;
 }
 
 /**
@@ -157,6 +167,21 @@ export interface StateRuleConfig {
   };
 }
 
+/**
+ * Which call session a state belongs to. Session N = Wave N — the research
+ * package IS the session, so the number is read off `sourcePackage` rather than
+ * stored a second time. Returns null if the package name carries no wave.
+ */
+export function sessionOf(config: StateRuleConfig): number | null {
+  const match = /Wave(\d+)/i.exec(config.sourcePackage);
+  return match ? Number(match[1]) : null;
+}
+
+/** Which session closes this question — its own, or its state's by default. */
+export function sessionOfQuestion(config: StateRuleConfig, q: OpenQuestion): number | null {
+  return q.session ?? sessionOf(config);
+}
+
 export const fallbackRules: Record<string, StateRuleConfig> = {
   // ==========================================================================
   // CALIFORNIA
@@ -196,7 +221,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       },
       {
         question:
-          'Is arrest sealing under PC § 851.91 / § 851.87 genuinely free? The encoded rules asserted "$0, no filing fee under state law", but Wave 0 does not address arrest sealing fees at all and no source is recorded for the claim.',
+          'Is arrest sealing under PC § 851.91 / § 851.87 genuinely free, and if there is a fee, is a waiver available? The encoded rules asserted "$0, no filing fee under state law", but Wave 0 does not address arrest sealing fees at all and no source is recorded for the claim.',
         blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
       },
       {
@@ -216,7 +241,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       },
       {
         question:
-          'Verify adjacent-remedy statute references on the Session 0 call: PC § 4852.01 (Certificate of Rehabilitation), PC § 17(b) (felony reduction), PC § 1203.3 (early termination of probation), and PC § 290.5 (ending registration). These are cited in user-facing messages but appear nowhere in Wave 0 — they entered the rules from outside the research package.',
+          'Verify adjacent-remedy statute references: PC § 4852.01 (Certificate of Rehabilitation), PC § 17(b) (felony reduction), PC § 1203.3 (early termination of probation), and PC § 290.5 (ending registration). These are cited in user-facing messages but appear nowhere in Wave 0 — they entered the rules from outside the research package.',
         blocksFields: [],
       },
       {
@@ -467,12 +492,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Is there a filing fee to apply for a set-aside under ARS § 13-905? The Maricopa County packet appears to show none, but that is one county and it is not confirmed. Ask on the Session 1 call.',
+          'Is there a filing fee to apply for a set-aside under ARS § 13-905, and if there is, is a waiver or deferral available? The Maricopa County packet appears to show none, but that is one county and it is not confirmed. Ask both halves: the waiver answer is only knowable once the fee is.',
         blocksFields: ['resources.remedies.set_aside.fees', 'resources.remedies.set_aside.feeWaiver'],
       },
       {
         question:
-          'Is there a filing fee to petition for sealing under ARS § 13-911? The encoded rules claimed "the legislature removed filing fees", but Wave 0 does not state this and no source is recorded for it. Ask on the Session 1 call.',
+          'Is there a filing fee to petition for sealing under ARS § 13-911, and if there is, is a waiver or deferral available? The encoded rules claimed "the legislature removed filing fees", but Wave 0 does not state this and no source is recorded for it.',
         blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
       },
       {
@@ -513,6 +538,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       {
         question:
           'What is the exact effective date of the Certificate of Second Chance addition to ARS § 13-905? Wave 0 gives only the year (2021), so it is recorded in no keyDate rather than guessed at.',
+        blocksFields: [],
+      },
+      {
+        // Blocks no field, but it is not call-craft: "Arizona has no automatic
+        // relief of any kind" is asserted flatly in this state's terminology
+        // and in UI copy. An asserted claim is a verifiable claim, whether or
+        // not a field holds it — a sentence can be as wrong as a number.
+        question:
+          'Confirm plainly: there is no automatic record-clearing in Arizona — every remedy is petition-based, correct? Wave 0 says so and the app states it as fact in its terminology and its user-facing copy, so it needs the same confirmation any other asserted claim gets. Users arrive expecting "clean slate" automation because other states have it.',
         blocksFields: [],
       },
     ],
@@ -759,7 +793,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'Is there a filing fee for the CPL § 160.59 sealing motion? Wave 0 says "No filing fee" but flags it for verification.',
+          'Is there a filing fee for the CPL § 160.59 sealing motion, and if there is, is a waiver available? Wave 0 says "No filing fee" but flags it for verification.',
         blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
       },
       {

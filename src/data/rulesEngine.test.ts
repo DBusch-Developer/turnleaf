@@ -217,9 +217,24 @@ describe('an answer we do not have is never invented', () => {
   test('a dismissed Texas case is never called an ineligible conviction', () => {
     // The harm bug: 'dismissed' vs the encoded 'dropped' fell through to
     // ineligible_conviction, telling people with no conviction they had one.
-    const result = walk('TX', rec({ disposition: 'dismissed', charge_type: 'felony' }), { arrest_date_tx_felony: '2015-01-01' });
+    // Post 55A.052/053 split (7/16): no charges filed puts this on the ladder.
+    const result = walk('TX', rec({ disposition: 'dismissed', charge_type: 'felony' }), {
+      supervision_tx: false, charges_filed_tx: false, arrest_date_tx_felony: '2015-01-01',
+    });
     expect(result.title).not.toBe('Conviction Generally Ineligible');
     expect(result.status).toBe('eligible');
+  });
+
+  test('TX: charged-then-dismissed for an ordinary reason is NOT told to file (55A.053)', () => {
+    // The overstatement the split fixed. Charges filed + a non-entitling
+    // dismissal reason is ineligible under 55A.053 — the old tree routed every
+    // dismissal to the 55A.052 ladder and told this person to wait then file for
+    // relief they cannot get.
+    const result = walk('TX', rec({ disposition: 'dismissed', charge_type: 'misdemeanor' }), {
+      supervision_tx: false, charges_filed_tx: true, dismissal_reason_tx: 'other',
+    });
+    expect(result.status).toBe('ineligible');
+    expect(result.citation).toContain('55A.053');
   });
 });
 

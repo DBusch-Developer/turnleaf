@@ -1300,8 +1300,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   TX: {
     code: 'TX',
     name: 'Texas',
-    lastReviewed: '2026-07-15',
-    verificationStatus: 'draft',
+    // Statute-verified by Diana against statutes.capitol.texas.gov on
+    // 2026-07-16: Ch. 55A read article by article, and the Gov't Code 411
+    // nondisclosure sections (411.0725 corrected, .0735, .0736, .074) checked.
+    // See sources[].retrievedOn. NOT phone_verified: the base county civil
+    // filing fee, forms and processing times are still counter questions, and
+    // 411.0735's 2-vs-5-year period is still in conflict (see open questions).
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'statute_cited',
     sourcePackage: 'research/waves/Turnleaf_Wave0_Draft_Package.md',
     terminology:
       'Texas has two remedies and they are not the same thing. EXPUNCTION (Code of Criminal Procedure Ch. 55A — recodified from Ch. 55 effective Jan 1, 2025, so any form or guide still citing Ch. 55 is stale) DESTROYS the records: you can lawfully deny the arrest ever happened. An ORDER OF NONDISCLOSURE (Government Code Ch. 411, Subch. E-1) only SEALS: the record survives and stays visible to law enforcement and some licensing bodies. The bright line that governs almost every Texas screening: CONVICTIONS ARE ESSENTIALLY NEVER EXPUNGABLE (a pardon aside). If you were convicted, nondisclosure is the only route, and only for certain offences. Nondisclosure is not one rule but a lattice of per-section rules under § 411.0725 and its neighbours.',
@@ -1315,8 +1321,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     ],
     openQuestions: [
       {
+        // NARROWED 7/16 by the statute check. The per-agency half is answered:
+        // Art. 55A.254(e)-(f) as amended 2025 makes electronic service FREE and
+        // charges $25 only per entity that cannot receive it — so the
+        // "~$280-$400 plus per-agency service costs" framing was describing a
+        // cost structure the legislature has since changed. Art. 55A.203(c) can
+        // make a specialty-court expunction free outright. What is left is the
+        // base civil filing fee, which the statute leaves to the county.
         question:
-          'What does an expunction actually cost? Wave 0 gives "civil filing fee, county-set, ~$280-$400 range commonly cited, plus per-agency service costs" — "commonly cited" is not a source. The encoded rules said $300-$450, which does not even match. Ask a Harris County district clerk for both fee stacks.',
+          'What is the base civil filing fee for an expunction petition in a given county? The statute answers the rest: electronic service on the listed entities is free, $25 per entity that cannot receive electronic transmission (Art. 55A.254(e)-(f), 2025 amendment), and a specialty-court expunction may carry no fee at all (Art. 55A.203(c)). Ask a Harris County district clerk for the base filing fee, and confirm they are applying the 2025 electronic-service rule rather than the old per-agency charges.',
         blocksFields: ['resources.remedies.expunction.fees'],
       },
       {
@@ -1330,13 +1343,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: [],
       },
       {
+        // ANSWERED 7/16 by Art. 55A.201 — replaced with what the answer opened up.
+        // The bars below are real and cited, but the tree only gates 55A.151;
+        // the other two are disclosed in prose because they turn on facts the
+        // screening does not ask for.
         question:
-          'Does CCP Ch. 55A create AUTOMATIC expunction at acquittal — the trial court ordering it then and there? Wave 0 flags this as new and unverified. It matters directly: if true, an acquitted person may already have relief and should confirm it happened rather than petition. The eligible_expunction message now says both.',
+          'Two Ch. 55A bars are disclosed in the results but NOT gated by the tree, because each turns on a fact we do not ask about. Art. 55A.153: an arrest for violating community supervision is never expungable. Art. 55A.154: absconding bars expunction. Ask legal aid how often each actually bites in practice, and whether a person can tell from their own paperwork that one applies — if they can, both should become questions rather than paragraphs.',
         blocksFields: [],
       },
       {
+        // RESOLVED 7/16 in structure by Art. 55A.053 — the tree now asks the
+        // reason. What is left is whether a person can identify their own reason
+        // from the order they were given.
         question:
-          'Which dismissals qualify for expunction without community supervision, and what are the "certain automatic-dismissal pathways" Wave 0 flags?',
+          'Can a person actually tell which Art. 55A.053 dismissal reason applies to them from their own paperwork? The tree asks them to pick one — veterans court, mental health court, pretrial intervention, no probable cause / mistake / false information, or void indictment — and routes "I don\'t know" to a hedge that says to get the dismissal order. Ask a district clerk what the order typically says, and whether the recorded reason is legible to a non-lawyer.',
         blocksFields: [],
       },
       {
@@ -1363,14 +1383,33 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: [],
       },
     ],
+    // Ch. 55A read in full against the official text at
+    // statutes.capitol.texas.gov on 2026-07-16, article by article — which is
+    // why these carry a retrievedOn and the sub-articles are listed separately.
+    // A citation we have read is a different thing from one we wrote down.
     sources: [
-      { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: null, retrievedOn: null },
-      { id: 'Tex. Code Crim. Proc. art. 55A.002 (expunction after acquittal)', url: null, retrievedOn: null },
-      { id: 'Tex. Gov\'t Code ch. 411, subch. E-1 (orders of nondisclosure)', url: null, retrievedOn: null },
+      { id: 'Tex. Code Crim. Proc. ch. 55A (expunction; recodified from ch. 55 eff. Jan 1, 2025)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.002 (entitlement after acquittal)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. arts. 55A.003, 55A.004 (pardon-based expunction)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.051(3) (community-supervision bar; Class C excepted)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.052 (no-charge ladder: 180d / 1y / 3y from arrest; (a)(4) prosecutor certification; (b) entitlement regardless of limitations)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.053 (charged-then-dismissed: entitling dismissal reasons)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.054 (expunction on expiry of limitations)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.151 (same-criminal-episode bar on acquittal expunction)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.153 (arrests for supervision violations never expungable)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.154 (absconding bar)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.201 (order entered within 30 days of acquittal, on request; court must advise of the right)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.203(c) (specialty-court expunction may carry no fee)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.253 (petition information required)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.254(e)-(f) (2025: electronic service free; $25 per non-electronic entity)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Code Crim. Proc. art. 55A.401 (effect of expunction — lawful denial)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code ch. 411, subch. E-1 (orders of nondisclosure)', url: null, retrievedOn: '2026-07-16' },
       { id: 'Tex. Gov\'t Code § 411.072 (deferred adjudication nondisclosure, certain misdemeanours)', url: null, retrievedOn: null },
-      { id: 'Tex. Gov\'t Code § 411.0725 (deferred adjudication nondisclosure)', url: null, retrievedOn: null },
-      { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period in conflict)', url: null, retrievedOn: null },
-      { id: 'Tex. Gov\'t Code §§ 411.0726, 411.0731, 411.0736 (DWI nondisclosure paths)', url: null, retrievedOn: null },
+      { id: 'Tex. Gov\'t Code § 411.0725 (deferred adjudication nondisclosure)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0735 (certain misdemeanour convictions — period still in conflict; see open questions)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.0736 (DWI nondisclosure)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code § 411.074 (nondisclosure — required conditions)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Tex. Gov\'t Code §§ 411.0726, 411.0731 (DWI nondisclosure paths)', url: null, retrievedOn: null },
       { id: 'HB 4504 (recodification of ch. 55 to ch. 55A)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -1381,19 +1420,67 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of your Texas case?',
           options: [
-            // CHECK-RECORD-FIRST: 55A may have had the trial court order the
-            // expunction on the spot, so an acquittal gets its own result that
-            // says "check whether it already happened" BEFORE petition advice.
-            // Wave 0's TX persona 5 asks for exactly this.
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'check_record_first_tx' },
+            // 55A.201 (verified 7/16): on an acquittal the court enters the
+            // expunction order within 30 days AT THE PERSON'S REQUEST — not on
+            // its own. So this is streamlined-on-request, not automatic, and
+            // the copy says so. 55A.151 gates it first.
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'acquittal_episode_tx' },
             // 'dismissed', not 'dropped': option values are matched against the
             // screening form's vocabulary (ConvictionRecord['disposition']).
             // 'dropped' matched nothing, so every dismissed Texas case fell
             // through to this node's old default — 'ineligible_conviction'.
-            { label: 'Dismissed / Never charged / No-billed by grand jury', value: 'dismissed', next: 'dismissal_offense_level' },
+            //
+            // This used to go straight to the 55A.052 waiting ladder, which was
+            // wrong for anyone actually charged — see supervision_tx below.
+            { label: 'Dismissed / Never charged / No-billed by grand jury', value: 'dismissed', next: 'supervision_tx' },
             { label: 'Deferred Adjudication (Completed)', value: 'deferred', next: 'offense_level' },
             { label: 'Convicted (Jail / Prison / Standard Probation)', value: 'convicted', next: 'ineligible_conviction' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // 55A.151 (verified 7/16). The same-criminal-episode bar: an acquittal
+        // does not entitle you to expunction if you were convicted of, or are
+        // still facing, another offence from the same episode.
+        acquittal_episode_tx: {
+          type: 'boolean',
+          text: 'Thinking about the events that led to this charge — were you convicted of any OTHER offense arising out of the same incident, or are you still facing one?',
+          yes: 'ineligible_episode_tx',
+          no: 'check_record_first_tx'
+        },
+        // 55A.051(3) (verified 7/16). This gates the WHOLE subchapter — both the
+        // no-charge ladder and the dismissal-reason path — so it is asked before
+        // either. Class C community supervision is the exception.
+        supervision_tx: {
+          type: 'boolean',
+          text: 'Were you placed on court-ordered community supervision (probation) for this charge? Answer no if it was for a Class C misdemeanor, which does not count here.',
+          yes: 'ineligible_supervision_tx',
+          no: 'charges_filed_tx'
+        },
+        // THE SPLIT. 55A.052 and 55A.053 are different regimes and the tree used
+        // to send every dismissal down 55A.052's waiting ladder — which only
+        // applies where NO indictment or information was ever presented. A charge
+        // that was filed and then dismissed is governed by 55A.053, which
+        // entitles expunction only for specific dismissal REASONS. Conflating
+        // them told charged-then-dismissed people to wait a year and then file
+        // for something they may have no entitlement to at all.
+        charges_filed_tx: {
+          type: 'boolean',
+          text: 'Were formal charges ever filed with the court — an indictment or an information presented against you? (Answer no if you were arrested but the case never got that far, or if a grand jury no-billed it.)',
+          yes: 'dismissal_reason_tx',
+          no: 'dismissal_offense_level'
+        },
+        // 55A.053: the reason the case was dismissed decides entitlement.
+        dismissal_reason_tx: {
+          type: 'choice',
+          text: 'Why was the case dismissed? This decides whether Texas entitles you to an expunction — under Article 55A.053 only certain reasons do.',
+          options: [
+            { label: 'I completed a veterans treatment court program', value: 'veterans_court', next: 'eligible_specialty_tx' },
+            { label: 'I completed a mental health court program', value: 'mental_health_court', next: 'eligible_specialty_tx' },
+            { label: 'I completed pretrial intervention', value: 'pretrial_intervention', next: 'eligible_expunction_053_tx' },
+            { label: 'It was dismissed for lack of probable cause, a mistake, or false information', value: 'no_probable_cause', next: 'eligible_expunction_053_tx' },
+            { label: 'The indictment or information was void', value: 'void_indictment', next: 'eligible_expunction_053_tx' },
+            { label: 'Some other reason', value: 'other', next: 'ineligible_dismissal_reason_tx' },
+            { label: 'I don\'t know why it was dismissed', value: 'unsure', next: 'complex_dismissal_reason_tx' }
           ]
         },
         dismissal_offense_level: {
@@ -1465,13 +1552,61 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Certified Disposition from the Clerk)',
           citation: 'Texas Code of Criminal Procedure Chapter 55A; Texas Government Code Chapter 411, Subchapter E-1 (which path applies depends on the disposition)'
         },
-        // CHECK-RECORD-FIRST for acquittals.
+        // ACQUITTALS. Corrected 7/16 against 55A.201: the order goes in within
+        // 30 days AT THE PERSON'S REQUEST, and the court must advise them of the
+        // right. Streamlined-on-request — NOT automatic-with-no-action, which is
+        // what the earlier hedge guessed at. Petition information under 55A.253
+        // is still required either way.
         check_record_first_tx: {
           status: 'eligible',
           title: 'It May Already Be Done — Check Before You File',
-          message: 'Start with a phone call, not a petition. Since January 1, 2025, Texas expunction lives in Chapter 55A of the Code of Criminal Procedure, and that chapter may direct the trial court to order an expunction at the time of an acquittal — then and there, without you asking. If that happened in your case, it is finished and you owe nobody a filing fee. Ask the clerk of the court that tried your case whether an expunction order was entered. We are still verifying how far this reaches, so do not assume either way. If no order was entered, you appear potentially eligible to petition for an Expunction under Chapter 55A: an expunction destroys the records, and afterwards you can generally deny the arrest ever occurred.',
-          remedy: 'Ask the Court Whether It Was Already Ordered — then Petition for Expunction (CCP Ch. 55A)',
-          citation: 'Texas Code of Criminal Procedure Chapter 55A (Art. 55A.002 for acquittals)'
+          message: 'Start with a phone call, not a petition. Because you were acquitted, Texas entitles you to an expunction (Art. 55A.002), and there is a fast route to it: the court enters the order within 30 days of the acquittal IF you or your attorney asked for it, and the court is supposed to have advised you of that right (Art. 55A.201). So the first question is whether that already happened. Ask the clerk of the court that tried your case whether an expunction order was entered. If it was, you are finished. If nobody asked at the time — which is common — you have lost nothing: you can still file, and the entitlement does not expire. You will need to provide the petition information Art. 55A.253 requires. An expunction destroys the records, and afterwards you can lawfully deny the arrest ever happened (Art. 55A.401).',
+          remedy: 'Ask the court whether the order was entered — if not, petition (CCP Ch. 55A)',
+          citation: 'Texas Code of Criminal Procedure Arts. 55A.002, 55A.201, 55A.253, 55A.401'
+        },
+        ineligible_episode_tx: {
+          status: 'ineligible',
+          title: 'Another Offense From the Same Incident Blocks This',
+          message: 'An acquittal normally entitles you to an expunction — but not when another offense arising out of the same criminal episode ended in a conviction, or is still pending (Art. 55A.151). Texas treats the episode as a whole rather than charge by charge, so being acquitted of one part of it does not clear the arrest. If the other case is still pending, this is a timing bar rather than a permanent one: how that case ends changes the answer, so it is worth revisiting once it resolves. If you are not sure whether the offenses count as the same episode — that is a legal judgment, not a description of what happened — the Texas State Law Library answers questions like this by phone, and legal aid can look at the file.',
+          remedy: 'None (Same-Episode Bar) — reassess if the other case is still pending',
+          citation: 'Texas Code of Criminal Procedure Art. 55A.151'
+        },
+        ineligible_supervision_tx: {
+          status: 'ineligible',
+          title: 'Community Supervision Blocks Expunction',
+          message: 'Court-ordered community supervision — probation — blocks expunction under this part of Chapter 55A (Art. 55A.051(3)). The one exception is supervision for a Class C misdemeanor, which does not count against you. This is a hard bar rather than a waiting period, so time does not fix it. There may be another route, though: if the supervision was DEFERRED adjudication that you completed, that is a different thing entirely, and an Order of Nondisclosure under Government Code Chapter 411 may be open to you — it seals rather than destroys, but it is real relief. Run this screening again and choose "Deferred Adjudication (Completed)" if that describes your case, or ask the Texas State Law Library, which answers exactly these questions by phone.',
+          remedy: 'None under Ch. 55A — ask about nondisclosure if it was deferred adjudication',
+          citation: 'Texas Code of Criminal Procedure Art. 55A.051(3)'
+        },
+        // 55A.053 dismissal reasons that DO entitle.
+        eligible_expunction_053_tx: {
+          status: 'eligible',
+          title: 'Potential Expunction Eligible — Dismissal Reason Qualifies',
+          message: 'Charges were filed and then dismissed, and the reason you gave is one of the specific reasons Texas entitles you to an expunction for (Art. 55A.053) — pretrial intervention you completed, a dismissal for lack of probable cause or because of a mistake or false information, or a void indictment. That matters, because a dismissal on its own is not enough in Texas: when charges were actually filed, the REASON decides. There is no waiting period to serve on this route. File the petition in a district court in the county of the arrest, listing every agency that may hold records. On cost: since 2025, serving the petition electronically on the listed entities is free, and $25 is charged only per entity that cannot receive electronic transmission (Art. 55A.254(e)-(f)). The county-set civil filing fee is separate and is something we are still confirming. An expunction destroys the records — afterwards you can lawfully deny the arrest ever happened (Art. 55A.401).',
+          remedy: 'Petition for Expunction (CCP Art. 55A.053)',
+          citation: 'Texas Code of Criminal Procedure Arts. 55A.053, 55A.254(e)-(f), 55A.401'
+        },
+        // Veterans / mental health court — once-ever, affidavit, and possibly free.
+        eligible_specialty_tx: {
+          status: 'eligible',
+          title: 'Specialty Court Completion — Expunction Available, and Possibly Free',
+          message: 'Completing a veterans treatment court or mental health court program is one of the specific dismissal reasons that entitles you to an expunction under Art. 55A.053. Three things worth knowing before you file. It is once in a lifetime on this ground, so if you have more than one case, think about which one to use it on. You will need to file an affidavit stating you have not previously used this route. And the cost may be nothing at all: a court may charge NO fee for an expunction granted on a specialty-court completion (Art. 55A.203(c)) — say which program you completed when you file, because that is what triggers it. Serving the petition electronically is also free, with $25 charged only per entity that cannot receive electronic transmission (Art. 55A.254(e)-(f)). An expunction destroys the records; afterwards you can lawfully deny the arrest ever happened (Art. 55A.401).',
+          remedy: 'Petition for Expunction after specialty-court completion (CCP Art. 55A.053) — once per lifetime',
+          citation: 'Texas Code of Criminal Procedure Arts. 55A.053, 55A.203(c), 55A.254(e)-(f), 55A.401'
+        },
+        ineligible_dismissal_reason_tx: {
+          status: 'ineligible',
+          title: 'Dismissed — But Not for a Reason Texas Expunges',
+          message: 'This is the part of Texas law that surprises people most, so here it is plainly: once charges have actually been filed, a dismissal on its own does not entitle you to an expunction. Article 55A.053 lists the reasons that do — completing a veterans treatment court or mental health court program, completing pretrial intervention, a dismissal for lack of probable cause or because of a mistake or false information, or a void indictment — and a dismissal for any other reason is not on that list. Two things worth doing rather than stopping here. First, the reason recorded on your dismissal order may not be the reason you remember; it is worth reading the order itself, because the wording is what counts. Second, there are other routes: if the statute of limitations has since expired, Art. 55A.054 may open expunction anyway, and a pardon route exists under Arts. 55A.003 and 55A.004. The Texas State Law Library answers questions like this by phone, and they are good at it.',
+          remedy: 'None under Art. 55A.053 — read the dismissal order, and ask about limitations expiry or a pardon',
+          citation: 'Texas Code of Criminal Procedure Arts. 55A.053, 55A.054, 55A.003, 55A.004'
+        },
+        complex_dismissal_reason_tx: {
+          status: 'complex',
+          title: 'We Need to Know Why It Was Dismissed',
+          message: 'In Texas, once charges have been filed, the REASON for the dismissal decides whether you are entitled to an expunction — not the dismissal itself. Article 55A.053 entitles you if you completed a veterans treatment court or mental health court program, completed pretrial intervention, or the case was dismissed for lack of probable cause, because of a mistake or false information, or on a void indictment. Anything else is not on the list. Since you are not sure which applies, we are not going to guess: the difference is between an entitlement and no route at all. The dismissal order itself states the reason, and the district clerk in the county of the case can give you a copy. The Texas State Law Library also answers reference questions like this by phone — call (844) 829-2843 — and TexasLawHelp has the forms once you know.',
+          remedy: 'Get the dismissal order and read the reason (district clerk / Texas State Law Library)',
+          citation: 'Texas Code of Criminal Procedure Art. 55A.053'
         },
         eligible_expunction: {
           status: 'eligible',

@@ -283,10 +283,12 @@ const TX: Persona[] = [
   {
     source: 'Wave 0 — TX persona 1',
     package: 'arrest, no charges, felony-level, 2022 → 3-yr wait → eligible 2025 (or SOL).',
-    // TX expunction runs from the ARREST date, which precedes disposition.
-    answers: { arrest_date_tx_felony: '2022-01-01' },
+    // "No charges" is the whole point: no supervision, charges never filed, so
+    // the case is on the 55A.052 ladder — 3 years from the ARREST date, which
+    // precedes disposition. Verified 7/16.
+    answers: { supervision_tx: false, charges_filed_tx: false, arrest_date_tx_felony: '2022-01-01' },
     record: { title: 'Arrest, no charges', charge_type: 'felony', disposition: 'dismissed', disposition_date: '2022-06-01' },
-    expect: { resultKey: 'eligible_expunction', reading: 'Felony-level arrest, 3 years from arrest, 2022 + 3 = 2025 < 2026 → eligible. Exact, and the date claim is why now is pinned.' },
+    expect: { resultKey: 'eligible_expunction', reading: 'No charges filed -> 55A.052 ladder. Felony-level, 3 years from arrest, 2022 + 3 = 2025 < 2026 -> eligible. Exact.' },
     now: NOW,
   },
   {
@@ -323,14 +325,56 @@ const TX: Persona[] = [
     source: 'Wave 0 — TX persona 5',
     package: 'acquitted last month → automatic expunction at acquittal ⚠️ — confirm it actually happened; if not, petition.',
     record: { title: 'Acquitted Charge', disposition: 'acquitted', disposition_date: '2026-06-15' },
+    // 55A.151 episode gate: no other offence from the same incident.
+    answers: { acquittal_episode_tx: false },
     expect: {
       resultKey: 'check_record_first_tx',
       reading:
-        'The package wants CONFIRM-FIRST: 55A may have had the trial court order the expunction on '
-        + 'the spot, so telling this person to petition could be wrong advice. Acquittals now route '
-        + 'to their own result that leads with "ask the clerk whether it was already ordered" and '
-        + 'puts the petition after. Exact.',
+        'RESOLVED 7/16 against 55A.201: NOT automatic. The court enters the order within 30 days AT '
+        + 'THE PERSON\'S REQUEST, and must advise them of the right. check_record_first_tx now says '
+        + 'exactly that — ask whether it was entered, and if nobody asked you can still file, the '
+        + 'entitlement does not expire. The ⚠ hedge is gone and 55A.201 is cited. Exact.',
     },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — TX (new, from the 7/16 55A.052 vs 55A.053 split)',
+    package: 'charged then dismissed via completed pretrial intervention -> entitled under 55A.053.',
+    record: { title: 'Dismissed after PTI', charge_type: 'misdemeanor', disposition: 'dismissed' },
+    answers: { supervision_tx: false, charges_filed_tx: true, dismissal_reason_tx: 'pretrial_intervention' },
+    expect: { resultKey: 'eligible_expunction_053_tx', reading: '55A.053: charges filed, so the REASON decides. Completed pretrial intervention is an entitling reason. No waiting period. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — TX (new, 55A.053 specialty court)',
+    package: 'charged then dismissed via veterans court completion -> entitled, once-ever, possibly free (55A.203(c)).',
+    record: { title: 'Dismissed after veterans court', charge_type: 'felony', disposition: 'dismissed' },
+    answers: { supervision_tx: false, charges_filed_tx: true, dismissal_reason_tx: 'veterans_court' },
+    expect: { resultKey: 'eligible_specialty_tx', reading: 'Veterans court completion is an entitling 55A.053 reason with its own result: once per lifetime, affidavit required, and possibly no fee under 55A.203(c). Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — TX (new, 55A.053 the harm case)',
+    package: 'charged then dismissed for an ordinary reason -> NOT entitled. The overstatement the split fixed.',
+    record: { title: 'Dismissed, ordinary reason', charge_type: 'misdemeanor', disposition: 'dismissed' },
+    answers: { supervision_tx: false, charges_filed_tx: true, dismissal_reason_tx: 'other' },
+    expect: { resultKey: 'ineligible_dismissal_reason_tx', reading: 'THE FIX. Charges filed, dismissed for a reason not on the 55A.053 list -> no entitlement. The old tree sent this person to the 55A.052 waiting ladder and told them to file for something they cannot get. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — TX (new, 55A.051(3) supervision bar)',
+    package: 'dismissed but was on community supervision (not Class C) -> barred by 55A.051(3).',
+    record: { title: 'Dismissed, was on probation', charge_type: 'felony', disposition: 'dismissed' },
+    answers: { supervision_tx: true },
+    expect: { resultKey: 'ineligible_supervision_tx', reading: '55A.051(3) gates the whole subchapter: court-ordered community supervision (Class C excepted) bars expunction, before any 052/053 question. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 0 — TX (new, 55A.151 episode bar)',
+    package: 'acquitted but convicted of another offence from the same incident -> barred by 55A.151.',
+    record: { title: 'Acquitted, but another episode offence', disposition: 'acquitted' },
+    answers: { acquittal_episode_tx: true },
+    expect: { resultKey: 'ineligible_episode_tx', reading: '55A.151 same-criminal-episode bar: acquittal does not entitle when another offence from the episode was a conviction or is pending. Exact.' },
     now: NOW,
   },
 ];

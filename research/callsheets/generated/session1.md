@@ -1,9 +1,9 @@
-# Turnleaf — Call Session 1 (Wave 1: MI · NJ · PA · UT)
+# Turnleaf — Call Session 1 (Wave 1: CO · MI · NJ · PA · UT)
 
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**29 open questions across 4 states.**
+**37 open questions across 5 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -14,7 +14,42 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 1. MICHIGAN (MI)
+## 1. COLORADO (CO)
+
+**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+
+**Contacts (from the data — no phone numbers are stored; see header):**
+- **Motion to Seal Conviction Records (C.R.S. 24-72-704 to -710)** — The court that handled your criminal case
+- Expunge Colorado (free pro bono sealing clinics) — https://expungecolorado.org
+- Colorado Legal Services — https://www.coloradolegalservices.org
+
+**Dates that govern:**
+- 2024-07-01 — Automatic Clean Slate sealing (SB22-099, C.R.S. 13-3-117) effective (effective) · Over 100,000 records were sealed in the first batch in August 2024.
+- 2022 — Sealing moved into the criminal case — no separate civil action (effective) · Wave 1 gives the year only. This is why an older packet quotes a $224 civil filing fee that may no longer apply.
+- 2025 — HB24-1133 expanded non-conviction automation (operative) · Wave 1 gives the year only ("implemented 2025").
+
+**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+
+1. CONFLICT: what is the petition sealing waiting period for eligible felonies (class 4-6, drug levels 2-4) under C.R.S. 24-72-706? Wave 1 records that one source says 3 years for most felonies and 5 for others, and says to read § 706 and encode the statute's own table. Because the sources disagree, no felony period is encoded — the tree routes to a result that says we do not know and tells the person how to find out. This is the top verification item for Colorado.
+   - *Blocks no single field — affects a branch or wording.*
+2. CONFLICT: what does it cost to file a Motion to Seal (JDF 612), and can it be waived? Wave 1 gives $65 from statute-based sources versus $224 in an older judicial-district packet, and reads the $224 as the pre-2022 separate-civil-action fee that the 2022 simplification removed. Probably stale rather than wrong — but "probably" is not a fee. Ask a district court clerk. Confirm also that sealing a record which should have auto-sealed is free, and ask about the fee waiver (JDF 205) at the same time.
+   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
+3. Confirm the exact class split for the 2-year petition period in § 706(1)(b): Wave 1 gives "class 2/3 misdemeanors, drug misdemeanors" but flags the split as needing verification against the statute text.
+   - *Blocks no single field — affects a branch or wording.*
+4. Confirm the sealing exclusion list against § 706(2), and specifically check theft. Wave 1's own persona 1 raises it: the rule of thumb is that eligible offences are those without a named victim, but theft HAS a victim and is nonetheless commonly listed as eligible. The tree does not encode the rule of thumb — it asks the statutory list — but the list itself needs confirming.
+   - *Blocks no single field — affects a branch or wording.*
+5. What does a CBI criminal history report cost? Wave 1 gives "~$12.50 verify". It must be attached to the motion, so it is part of the real cost of filing.
+   - *Blocks no single field — affects a branch or wording.*
+6. How often does the DA object to automatic sealing on public-safety grounds, and what happens when they do? Wave 1 notes the DA can object; a person told "your record may already be sealed" needs to know that is not guaranteed.
+   - *Blocks no single field — affects a branch or wording.*
+7. Confirm the non-conviction paths: arrests without charges auto-seal after 1 year for post-2022 offences, and acquittals/dismissals/completed deferred judgments seal through a simplified in-case process expanded by HB24-1133. What does a person actually do if it has not happened?
+   - *Blocks no single field — affects a branch or wording.*
+8. What are the exact effective dates for the 2022 in-case simplification and the 2025 HB24-1133 implementation? Wave 1 gives years only.
+   - *Blocks no single field — affects a branch or wording.*
+
+---
+
+## 2. MICHIGAN (MI)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
@@ -47,7 +82,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 2. NEW JERSEY (NJ)
+## 3. NEW JERSEY (NJ)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
@@ -81,7 +116,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 3. PENNSYLVANIA (PA)
+## 4. PENNSYLVANIA (PA)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
@@ -116,7 +151,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 4. UTAH (UT)
+## 5. UTAH (UT)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 

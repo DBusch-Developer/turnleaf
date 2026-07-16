@@ -694,7 +694,91 @@ const NJ: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ]];
+const CO: Persona[] = [
+  {
+    source: 'Wave 1 — CO persona 1',
+    package: 'class 5 felony theft (no named victim? theft has a victim — good edge case: theft IS listed as commonly eligible ⚠️ verify against § 706\'s actual list), 11 yrs clean → likely auto-sealed → check-record.',
+    record: { title: 'Theft (class 5 felony)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      excluded_co: false,   // theft is not on the § 706(2) list
+      intervening_co: false,
+      level_co: 'felony_eligible',
+      felony_unknown_co: '2015-07-15',   // 11 years — irrelevant, the period is null
+    },
+    expect: {
+      resultKey: 'complex_felony_period_co',
+      reading:
+        'The package wants a check-record answer at 11 years, past the 10-year automatic period. It '
+        + 'lands on the felony-period conflict instead, because the tree cannot compute a period its '
+        + 'sources disagree on (3 vs 5 years) and the null period has only one route. The result is '
+        + 'still useful — it says the offence IS sealable, tells them to check with CBI since 11 '
+        + 'years is past the automatic mark, and names the conflict. But it is not the clean '
+        + '"already sealed, go check" the package asks for. Flagged approximate: resolving § 706 '
+        + 'lets the felony path split properly into check-record vs petition-faster.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — CO persona 2',
+    package: 'class 2 misdemeanor, 3 yrs clean → eligible-petition.',
+    record: { title: 'Class 2 Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      excluded_co: false,
+      intervening_co: false,
+      level_co: 'misd_23',
+      date_2_co: '2023-07-15',        // 3 yrs — past the 2-yr petition period
+      date_2_auto_co: '2023-07-15',   // but short of the 7-yr automatic one
+    },
+    expect: {
+      resultKey: 'eligible_petition_faster_co',
+      reading:
+        'Past the 2-year petition threshold, four years short of the 7-year automatic one. So the '
+        + 'honest answer is the inversion: filing now beats waiting by four years. The package says '
+        + '"eligible-petition", which is what this is — the result just also explains WHY petitioning '
+        + 'rather than waiting. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — CO persona 3',
+    package: 'DUI → ineligible.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_co: true },
+    expect: {
+      resultKey: 'ineligible_serious_co',
+      reading:
+        'DUI and DWAI are on Colorado\'s § 706(2) exclusion list — never sealable, however long ago. '
+        + 'The result calls it out as the one that surprises people most, and points at a pardon as '
+        + 'the separate path the exclusions do not govern. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — CO persona 4',
+    package: 'DV misdemeanor → ineligible.',
+    record: { title: 'Domestic Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_co: true },
+    expect: { resultKey: 'ineligible_serious_co', reading: 'Domestic violence is on the § 706(2) exclusion list regardless of classification. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — CO persona 5',
+    package: 'dismissed case 2023 → simplified/auto path.',
+    record: { title: 'Dismissed Case', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    expect: {
+      resultKey: 'eligible_nonconviction_co',
+      reading:
+        'Dismissals seal through the simplified in-case process with no waiting period, and HB24-1133 '
+        + 'expanded the automation from 2025 — so it may already be done. The result leads with '
+        + 'checking CBI and notes that sealing a record which should have auto-sealed is free. Exact.',
+    },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

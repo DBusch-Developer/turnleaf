@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
+import SourcesList from './SourcesList';
 import { generateReportPDF } from '../utils/pdfGenerator';
 import { FileDown, FileText, Landmark, ShieldCheck, RefreshCw, HelpCircle } from 'lucide-react';
 
@@ -336,7 +337,11 @@ export default function ResultsDisplay({
           ))}
         </div>
       </div>
-      
+
+      {/* The statutes behind the rules — linked where a human read the official
+          text, plain citation where not. */}
+      <SourcesList sources={stateConfig.sources} stateName={stateConfig.name} />
+
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ArrowLeft, BookOpen, ExternalLink } from 'lucide-react';
+import SourcesList, { SourceItem } from './SourcesList';
 
 export interface ComingSoonConfig {
   comingSoon: true;
@@ -16,6 +17,10 @@ export interface ComingSoonConfig {
   name: string;
   openQuestionCount?: number;
   referrals: Array<{ name: string; url: string }>;
+  /** The state's cited statutes. On a draft state these are all unlinked (the
+   *  validator forbids a verified url on unverified rules), so they render as
+   *  plain citations — showing what was read without claiming it was confirmed. */
+  sources?: SourceItem[];
 }
 
 interface ComingSoonPanelProps {
@@ -76,6 +81,12 @@ export default function ComingSoonPanel({ config, onReset }: ComingSoonPanelProp
           </a>
         ))}
       </div>
+
+      {config.sources && config.sources.length > 0 && (
+        <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
+          <SourcesList sources={config.sources} stateName={config.name} />
+        </div>
+      )}
 
       <button className="btn btn-primary" onClick={onReset} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
         <ArrowLeft size={16} /> Choose another state

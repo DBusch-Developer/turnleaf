@@ -39,6 +39,10 @@ export async function GET(
         name: entry.name,
         openQuestionCount: stateConfig?.openQuestions.length ?? 0,
         referrals: nationalReferrals,
+        // Draft states carry their cited statutes so the panel can show what was
+        // read. They will all render as plain citations — a draft state can hold
+        // no verified url (the validator forbids it), which is the point.
+        sources: stateConfig?.sources ?? [],
       });
     }
 

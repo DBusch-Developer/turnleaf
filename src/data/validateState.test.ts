@@ -417,6 +417,41 @@ describe('validateState — node shape', () => {
   });
 });
 
+describe('validateState — statute-link integrity', () => {
+  test('flags a source url that has no retrievedOn (a link nobody recorded reading)', () => {
+    const c = validConfig();
+    c.verificationStatus = 'statute_cited';
+    c.sources[0] = { id: 'Test Code § 1', url: 'https://leg.zz.gov/1', retrievedOn: null };
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'source-url-integrity' && e.path === 'sources[0].retrievedOn')).toBe(true);
+  });
+
+  test('flags a source url on a state still marked draft (unverified rules)', () => {
+    const c = validConfig(); // draft
+    c.sources[0] = { id: 'Test Code § 1', url: 'https://leg.zz.gov/1', retrievedOn: '2026-07-16' };
+    const errors = validateState(c);
+
+    expect(errors.some(e => e.rule === 'source-url-integrity' && e.path === 'sources[0].url')).toBe(true);
+  });
+
+  test('accepts a url with a retrievedOn on a human-verified state', () => {
+    const c = validConfig();
+    c.verificationStatus = 'statute_cited';
+    c.sources[0] = { id: 'Test Code § 1', url: 'https://leg.zz.gov/1', retrievedOn: '2026-07-16' };
+
+    expect(validateState(c).filter(e => e.rule === 'source-url-integrity')).toEqual([]);
+  });
+
+  test('accepts a read-but-unlinked source (retrievedOn set, url still null)', () => {
+    const c = validConfig();
+    c.verificationStatus = 'statute_cited';
+    c.sources[0] = { id: 'Test Code § 1', url: null, retrievedOn: '2026-07-16' };
+
+    expect(validateState(c).filter(e => e.rule === 'source-url-integrity')).toEqual([]);
+  });
+});
+
 describe('validateState — error reporting', () => {
   test('reports every error, not just the first', () => {
     const c = validConfig();

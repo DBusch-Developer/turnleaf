@@ -10972,6 +10972,2036 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Idaho Courts — Self-Help', url: 'https://www.courtselfhelp.idaho.gov' }
       ]
     }
+  },
+  NH: {
+    code: 'NH',
+    name: 'New Hampshire',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'New Hampshire calls it ANNULMENT (RSA 651:5), filed in the court that handled the case — a separate '
+      + 'petition for each charge. The single most important thing to know is a procedural trap: if you file '
+      + 'before your waiting period has fully run, the petition is denied AND you are barred from filing a new '
+      + 'one for THREE YEARS. So the rule here is simple and strict — do not file early. Waiting periods run '
+      + 'from completion of ALL sentence terms, including fines and fees, and they vary a lot by offense. '
+      + 'Dismissals and acquittals since January 1, 2019 are annulled automatically 30 days after disposition, '
+      + 'so those usually need no petition at all.',
+    keyDates: [
+      {
+        label: 'Automatic annulment of dismissals/acquittals begins (RSA 651:5)',
+        date: '2019-01-01',
+        kind: 'operative',
+        note: 'Dismissals and acquittals on or after this date are annulled automatically 30 days after disposition — no petition. A streamlined post-2019 process also applies to violations and Class B misdemeanors (20-day prosecutor objection, no DOC investigation).',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the Class B misdemeanor waiting period against current RSA 651:5(III). Wave 7 flags a conflict: the statute historically said 3 years, but some current summaries say 1 year. Because the value conflicts, the tree routes Class B misdemeanors to an "exact wait needs confirming" result rather than guess — do not resolve from a model reading. Confirm the current statutory text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the court filing fee. Wave 7 gives $125 per court location from the official Judicial Branch checklist, but notes some guides say $100. The fees field encodes $125 (the official checklist) and flags the conflict; confirm with courts.nh.gov. Also confirm the DOC investigation fee amount and the ~$25 record-copy fee.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the multi-conviction sequencing rule. Wave 7 says annulment is barred until the time requirement is met for ALL offenses of record, and barred entirely if any conviction is in a never-eligible class — but State v. Williams (2020) lets a person petition the latest-occurring offense first and work backwards. The tree routes people with more than one conviction to a "get sequencing help" result; confirm the Williams approach and how courts apply it.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.H. Rev. Stat. Ann. § 651:5 (annulment; waiting periods; 3-year early-filing bar (IV); automatic annulment; multi-conviction rule)', url: null, retrievedOn: null },
+      { id: 'N.H. Rev. Stat. Ann. §§ 651:5-b, 651:5-c (cannabis annulment — anytime paths)', url: null, retrievedOn: null },
+      { id: 'N.H. Rev. Stat. Ann. § 318-B:26, II (drug-felony 2-year annulment wait)', url: null, retrievedOn: null },
+      { id: 'State v. Williams (N.H. 2020) (petition latest-occurring offense first)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nh' },
+            { label: 'Dismissed', value: 'dismissed', next: 'auto_annul_nh' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'auto_annul_nh' },
+            { label: 'Diversion / deferred completed and dismissed', value: 'deferred', next: 'auto_annul_nh' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        auto_annul_nh: {
+          type: 'boolean',
+          text: 'Did the case end (the dismissal or acquittal) on or after January 1, 2019?',
+          yes: 'check_autoannul_nh',
+          no: 'petition_nonconv_nh'
+        },
+        excluded_nh: {
+          type: 'boolean',
+          text: 'Was the offense any of these never-eligible crimes — murder, first-degree assault, aggravated or felonious sexual assault, kidnapping, robbery, Class A arson, incest, a felony child-sexual-abuse-image offense, or felony obstruction of justice — or did you receive an extended-term sentence?',
+          yes: 'ineligible_excluded_nh',
+          no: 'multi_nh'
+        },
+        multi_nh: {
+          type: 'boolean',
+          text: 'Do you have more than one conviction on your record?',
+          yes: 'complex_multi_nh',
+          no: 'level_nh'
+        },
+        level_nh: {
+          type: 'choice',
+          text: 'How would you describe the offense?',
+          options: [
+            { label: 'A violation', value: 'violation', next: 'mv_predicate_nh' },
+            { label: 'A Class B misdemeanor', value: 'misdB', next: 'complex_classBmisd_nh' },
+            { label: 'A Class A misdemeanor', value: 'misdA', next: 'misd_dv_nh' },
+            { label: 'A Class B felony', value: 'felonyB', next: 'felonyB_drug_nh' },
+            { label: 'A Class A felony', value: 'felonyA', next: 'date10_nh' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nh' }
+          ]
+        },
+        mv_predicate_nh: {
+          type: 'boolean',
+          text: 'Is this a motor-vehicle offense that counts as a habitual-offender predicate?',
+          yes: 'date7_nh',
+          no: 'date1_nh'
+        },
+        misd_dv_nh: {
+          type: 'boolean',
+          text: 'Was this a domestic-violence misdemeanor?',
+          yes: 'date10_nh',
+          no: 'date3_nh'
+        },
+        felonyB_drug_nh: {
+          type: 'boolean',
+          text: 'Was this a drug felony under RSA 318-B:26, II?',
+          yes: 'date2_nh',
+          no: 'date5_nh'
+        },
+        date1_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — violation)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date2_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 318-B:26, II — drug felony)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date3_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class A misdemeanor)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date5_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class B felony)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date7_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — motor-vehicle habitual-offender predicate)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        },
+        date10_nh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete ALL terms of your sentence, including fines and fees?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from completion of all sentence terms including LFOs (RSA 651:5 — Class A felony, DV misdemeanor, sexual assault under 632-A:4, or felony indecent exposure)' },
+            nextPass: 'eligible_nh',
+            nextFail: 'waiting_nh'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'New Hampshire handles convictions and non-convictions very differently — non-convictions since 2019 are automatic, while convictions require a petition and a waiting period, with a costly trap for filing early. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a State Police record check will show the disposition; New Hampshire Legal Assistance can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / State Police)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5 (the route depends on the disposition)'
+        },
+        check_autoannul_nh: {
+          status: 'eligible',
+          title: 'Likely Already Auto-Annulled — Check Your Record',
+          message: 'Because your case was a dismissal or acquittal that ended on or after January 1, 2019, New Hampshire annuls it AUTOMATICALLY — 30 days after disposition, with no petition. So the honest first step is not to file anything but to CHECK whether it has already come off: request your State Police record and look. If it is still showing well past 30 days, New Hampshire Legal Assistance or the court can help you follow up.',
+          remedy: 'Check your record — it should already be auto-annulled (§ 651:5)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5'
+        },
+        petition_nonconv_nh: {
+          status: 'eligible',
+          title: 'No Conviction — Annullable by Petition',
+          message: 'Because your case ended without a conviction but before the 2019 automatic-annulment date, you can petition to annul it. For non-convictions the $100 State Police record-correction fee is waived (a court filing fee still applies). You file in the court that handled the case. New Hampshire Legal Assistance can help with the petition and forms.',
+          remedy: 'Non-conviction annulment petition (§ 651:5) — State Police fee waived',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5'
+        },
+        eligible_nh: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Annulment Available',
+          message: 'Based on your dates, the waiting period for your offense has passed, measured from when you completed ALL sentence terms including fines and fees. You petition the court that handled the case (a separate petition per charge). Budget for the fee stack: a $125 court filing fee and, on grant, a $100 State Police record-correction fee, plus a record copy and a Department of Corrections investigation fee for most conviction annulments. It typically takes 3-6 months. If your offense was a drug felony, note the wait is only 2 years — unusually short. New Hampshire Legal Assistance can help.',
+          remedy: 'Annulment petition (§ 651:5)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5'
+        },
+        waiting_nh: {
+          status: 'waiting',
+          title: 'Not Yet — And Do NOT File Early',
+          message: 'This is the most important warning in New Hampshire: DO NOT FILE YET. Your waiting period has not passed, and New Hampshire is one of the very few states that punishes filing early — if you petition before the full period has run, the court denies it AND bars you from filing a new petition for THREE YEARS (RSA 651:5(IV)). So even if you are eager, wait until your date has clearly passed. The period runs from when you completed all sentence terms including fines and fees. Mark the date, and if you are unsure exactly when it lands, New Hampshire Legal Assistance can help you calculate it before you file. (Cannabis possession has its own anytime paths and is not subject to this.)',
+          remedy: 'WAIT — filing before your date bars you for 3 years (§ 651:5(IV))',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5(IV)'
+        },
+        ineligible_excluded_nh: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Annulled',
+          message: 'New Hampshire never annuls a set of serious crimes: murder, first-degree assault, aggravated or felonious sexual assault, kidnapping, robbery, Class A arson, incest, felony child-sexual-abuse-image offenses, and felony obstruction of justice — and extended-term sentences are also excluded. No waiting period changes that. For an offense like this, executive clemency is the remaining route. New Hampshire Legal Assistance can help you confirm where yours falls.',
+          remedy: 'None (Never-Eligible Offense) — clemency is the remaining route',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5'
+        },
+        complex_multi_nh: {
+          status: 'complex',
+          title: 'Multiple Convictions — Sequence Matters, Get Help',
+          message: 'New Hampshire has a tricky rule when you have more than one conviction: annulment is barred until the waiting period is met for ALL of your offenses, and barred entirely if any one of them is in a never-eligible class. A 2020 case (State v. Williams) softened this by letting you petition the latest-occurring offense first and work backwards. Because getting the sequence right matters and a wrong early filing carries a 3-year penalty, this is exactly the situation to handle with help rather than guess at. New Hampshire Legal Assistance can map out the order for your specific record.',
+          remedy: 'Get Multi-Conviction Sequencing Help (NH Legal Assistance)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5; State v. Williams (2020)'
+        },
+        complex_classBmisd_nh: {
+          status: 'complex',
+          title: 'Class B Misdemeanor — We Need to Confirm the Exact Wait',
+          message: 'Your offense is annullable, but the waiting period for a Class B misdemeanor is exactly the kind of detail we will not guess on: the statute historically said 3 years, while some current summaries say 1 year, and getting it wrong matters here because filing early bars you for 3 years. So rather than risk that, we are flagging it for a precise answer from the current RSA 651:5(III) text. A court clerk or New Hampshire Legal Assistance can confirm the exact wait before you file. The route exists; it is the timing we want to pin down.',
+          remedy: 'Confirm the exact Class B misdemeanor wait before filing (court clerk / NHLA)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5(III)'
+        },
+        complex_level_nh: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'New Hampshire\'s waiting period depends closely on the exact level — anywhere from 1 year for a violation to 10 years for a Class A felony or a DV misdemeanor. Because filing early carries a 3-year penalty, we will not guess at which applies. Your court paperwork states the level, and a State Police record check will show it. New Hampshire Legal Assistance can help you read it.',
+          remedy: 'Get the Offense Level First (court paperwork / State Police)',
+          citation: 'N.H. Rev. Stat. Ann. § 651:5'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Annulment (N.H. Rev. Stat. Ann. § 651:5)',
+          formName: 'NHJB-2202 / NHJB-3057 annulment forms',
+          formUrl: 'https://www.courts.nh.gov/self-help/annulments',
+          steps: [
+            'Confirm your waiting period has FULLY passed before filing — filing early bars a new petition for 3 years (RSA 651:5(IV)).',
+            'For a non-conviction since January 1, 2019, do not file — it should already be auto-annulled; check your State Police record.',
+            'File a separate petition per charge in the court that handled the case, with the court filing fee; on grant, pay the $100 State Police record-correction fee (waived for non-convictions).',
+            'Expect 3-6 months and a DOC investigation for most conviction annulments. New Hampshire Legal Assistance can help.'
+          ],
+          // NOT null: Wave 7 gives the fee stack from the official checklist. The
+          // $100-vs-$125 court-fee conflict and the DOC fee amount are open questions.
+          fees: '$125 court filing fee per court location (official checklist; some guides say $100), plus a $100 State Police record-correction fee on grant (waived for non-convictions), a ~$25 record copy, and a Department of Corrections investigation fee for most conviction annulments.',
+          feeWaiver: 'The $100 State Police record-correction fee is waived for non-conviction annulments.',
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'New Hampshire Legal Assistance', url: 'https://www.nhla.org' },
+        { name: 'New Hampshire Judicial Branch — Annulments Self-Help', url: 'https://www.courts.nh.gov/self-help/annulments' }
+      ]
+    }
+  },
+  HI: {
+    code: 'HI',
+    name: 'Hawaii',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Hawaii\'s expungement is ADMINISTRATIVE — you apply to the Attorney General\'s Hawaii Criminal Justice '
+      + 'Data Center (HCJDC), not a court (HRS § 831-3.2). The Center "shall issue" for arrests and charges '
+      + 'that did not end in a conviction, which is most of what it does. Convictions almost never qualify — '
+      + 'only a few narrow categories (under-21 DUI, first-time drug offenders, first-time property offenders), '
+      + 'and even a PARDON does not make a conviction expungeable (it stays on the record with a pardon '
+      + 'notation). Since July 1, 2025 (Act 003), an expungement order is auto-transmitted to the courts to '
+      + 'seal the court record too — but for older certificates that court step is separate, so it is worth '
+      + 'thinking of it as two systems: the state criminal history, and the court record.',
+    keyDates: [
+      {
+        label: 'Act 003 auto-transmit for court-record sealing begins (HRS ch. 831)',
+        date: '2025-07-01',
+        kind: 'operative',
+        note: 'HCJDC now auto-transmits expungement orders to the Judiciary to seal the court record on eCourt Kokua. Certificates issued before July 2025 still require a separate request to the court; sealing can be denied if co-defendants or non-expunged charges share the case.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Resolve the prostitution-deferral waiting period. Wave 7 flags a one-digit conflict: the HCJDC application PDF says 3 years, while HCJDC\'s current web page says 4 years, for expunging a prostitution (HRS 712-1200) deferred plea. The tree uses the general 1-year deferred-plea wait and notes prostitution deferrals are a special longer case; resolve the 3-vs-4 by phone.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm Act 003 auto-transmit is working in practice. Wave 7 says that since July 1, 2025 HCJDC auto-transmits expungement orders to the Judiciary for court-record sealing, but flags whether this is actually operational. The tree tells post-July-2025 applicants the court step is automatic and pre-July-2025 certificate-holders to make a separate court request; confirm the handoff works.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether HCJDC offers any fee reduction or waiver for the $35 (first-time) / $50 (repeat) administrative fee. Wave 7 gives the fee amounts but says nothing about a waiver; the feeWaiver field is null pending confirmation with the Expungement Section ((808) 587-3348).',
+        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Haw. Rev. Stat. § 831-3.2 (administrative expungement via HCJDC)', url: null, retrievedOn: null },
+      { id: 'Haw. Rev. Stat. ch. 853 (deferred acceptance pleas — DAG/DANC; 1-year expungement)', url: null, retrievedOn: null },
+      { id: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64 (narrow conviction-expungement categories)', url: null, retrievedOn: null },
+      { id: 'Act 003 (2025) (auto-transmit of expungement orders for court-record sealing, eff. Jul 1, 2025)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'already_expunged_hi',
+      nodes: {
+        already_expunged_hi: {
+          type: 'boolean',
+          text: 'Have you ALREADY received an expungement from the Attorney General (HCJDC), but the case still shows up on the court\'s online system (eCourt Kokua)?',
+          yes: 'sealing_request_hi',
+          no: 'disposition'
+        },
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_hi' },
+            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'eligible_nonconv_hi' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_hi' },
+            { label: 'Deferred plea (DAG/DANC) completed and dismissed', value: 'deferred', next: 'deferred_date_hi' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        conv_type_hi: {
+          type: 'choice',
+          text: 'Convictions can be expunged in Hawaii only in a few narrow situations. Which describes yours?',
+          options: [
+            { label: 'An under-21 DUI (§ 291E-64)', value: 'dui21', next: 'eligible_conv_hi' },
+            { label: 'A first-time drug offender sentence (§§ 706-622.5/.8)', value: 'drug', next: 'eligible_conv_hi' },
+            { label: 'A first-time property offender sentence (§ 706-622.9)', value: 'property', next: 'eligible_conv_hi' },
+            { label: 'None of these / an ordinary conviction', value: 'ordinary', next: 'ineligible_conviction_hi' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_hi' }
+          ]
+        },
+        deferred_date_hi: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the deferred plea discharged and the case dismissed?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'after discharge and dismissal of a DAG/DANC deferred plea (Haw. Rev. Stat. ch. 853; prostitution deferrals are a longer special case)' },
+            nextPass: 'eligible_deferred_hi',
+            nextFail: 'waiting_deferred_hi'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Hawaii expunges non-convictions readily but convictions almost never, so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an HCJDC record request will show the disposition; the HCJDC Expungement Section ((808) 587-3348) can help.',
+          remedy: 'Get Your Record First (court paperwork / HCJDC)',
+          citation: 'Haw. Rev. Stat. § 831-3.2 (the route depends on the disposition)'
+        },
+        sealing_request_hi: {
+          status: 'complex',
+          title: 'Ask the Court to Seal — the Second Step',
+          message: 'This is Hawaii\'s two-system quirk. You already have an HCJDC expungement (the state criminal history is cleared), but the case still shows on the court\'s eCourt Kokua system — because your certificate predates July 1, 2025, when the auto-transmit to the courts began. For older certificates, sealing the COURT record is a separate request you make to the court. One caution: the court can decline if co-defendants or non-expunged charges share the same case. The HCJDC Expungement Section ((808) 587-3348) can point you to the right court request.',
+          remedy: 'Make a separate court-record sealing request (pre-Act-003 certificate)',
+          citation: 'Act 003 (2025); Haw. Rev. Stat. § 831-3.2'
+        },
+        eligible_nonconv_hi: {
+          status: 'eligible',
+          title: 'No Conviction — Apply Now, It Is Administrative',
+          message: 'Because your case ended without a conviction, Hawaii "shall issue" an expungement — and it is administrative, so you apply directly to the Attorney General\'s HCJDC, not a court. The fee is $35 (first-time) or $50 (repeat), paid by cashier\'s check or money order, and it takes about 120 days with no expediting. A few non-convictions are excluded (bail forfeitures, absconders, and chapter 704 mental-disease acquittals), so if yours was one of those, check first. Since July 2025 the court record is sealed automatically too. The HCJDC Expungement Section ((808) 587-3348) can help.',
+          remedy: 'HCJDC administrative expungement (§ 831-3.2)',
+          citation: 'Haw. Rev. Stat. § 831-3.2'
+        },
+        eligible_deferred_hi: {
+          status: 'eligible',
+          title: 'Deferred Plea, 1+ Year — Expungeable',
+          message: 'Because you completed a deferred plea (DAG or DANC) and the case was dismissed at least a year ago, it is expungeable through the HCJDC. The fee is $35 (first-time) or $50 (repeat), and processing takes about 120 days. One thing to confirm if yours was a prostitution-related deferral: the waiting period there is longer (the sources say 3 or 4 years — worth a call to pin down). The HCJDC Expungement Section ((808) 587-3348) can help.',
+          remedy: 'HCJDC expungement of a deferred plea (ch. 853)',
+          citation: 'Haw. Rev. Stat. ch. 853'
+        },
+        waiting_deferred_hi: {
+          status: 'waiting',
+          title: 'Not Yet One Year Since Dismissal',
+          message: 'A deferred plea (DAG/DANC) becomes expungeable one year after it is discharged and dismissed. Based on your date, that year has not passed yet. Once it does, you apply administratively to the HCJDC. (If yours was a prostitution-related deferral, the wait is longer — 3 or 4 years, worth confirming by phone.) The HCJDC Expungement Section ((808) 587-3348) can help you time it.',
+          remedy: 'Wait until 1 year after dismissal, then apply (ch. 853)',
+          citation: 'Haw. Rev. Stat. ch. 853'
+        },
+        eligible_conv_hi: {
+          status: 'eligible',
+          title: 'A Qualifying Conviction — Court Order First, Then HCJDC',
+          message: 'Yours is one of the few conviction types Hawaii will expunge (under-21 DUI, first-time drug offender, or first-time property offender). The process has two steps: you first get a court ORDER, then apply to the HCJDC to carry out the expungement. The fee is $35 (first-time) or $50 (repeat), about 120 days to process. The HCJDC Expungement Section ((808) 587-3348) can explain the court-order step for your specific category.',
+          remedy: 'Court order, then HCJDC expungement (§§ 706-622.5/.9, 291E-64)',
+          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64'
+        },
+        ineligible_conviction_hi: {
+          status: 'ineligible',
+          title: 'This Conviction Cannot Be Expunged',
+          message: 'Hawaii expunges convictions only in a few narrow categories (under-21 DUI, first-time drug offender, first-time property offender), and yours is not one of them, so there is no expungement route. One counterintuitive thing worth knowing: even a PARDON does not make a Hawaii conviction expungeable — a pardoned conviction stays on the record with a pardon notation. So the honest answer here is that the record remains. If any part of your case ended without a conviction, that piece may still be expungeable separately. The HCJDC Expungement Section ((808) 587-3348) can confirm.',
+          remedy: 'None (conviction outside the narrow categories) — a pardon does not expunge it here',
+          citation: 'Haw. Rev. Stat. § 831-3.2'
+        },
+        complex_convtype_hi: {
+          status: 'complex',
+          title: 'We Need to Match Your Conviction to the Categories',
+          message: 'Hawaii will expunge a conviction only if it fits one of three narrow categories: under-21 DUI, first-time drug offender (§§ 706-622.5/.8), or first-time property offender (§ 706-622.9). Whether yours qualifies depends on exactly how you were sentenced, which we will not guess at. Your court paperwork shows the sentencing statute. The HCJDC Expungement Section ((808) 587-3348) can help you check it against the categories.',
+          remedy: 'Match Your Sentence to the Categories (court paperwork / HCJDC)',
+          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Administrative Expungement (Haw. Rev. Stat. § 831-3.2)',
+          formName: 'HCJDC expungement application',
+          formUrl: 'https://ag.hawaii.gov/hcjdc/expungement/',
+          steps: [
+            'Apply to the Attorney General\'s HCJDC (not a court) — it "shall issue" for non-convictions and completed deferred pleas.',
+            'For a qualifying conviction (under-21 DUI, first-time drug, first-time property), get a court order first, then apply to HCJDC.',
+            'Pay $35 (first-time) or $50 (repeat) by cashier\'s check or money order; expect about 120 days, with no expediting.',
+            'Since July 2025 the court record is sealed automatically; for a certificate issued before then, make a separate court request to seal on eCourt Kokua.'
+          ],
+          // NOT null: Wave 7 gives the fee ($35 first-time / $50 repeat, incl. $10 nonrefundable).
+          fees: '$35 first-time / $50 repeat administrative fee (includes a $10 nonrefundable portion), by cashier\'s check or money order only.',
+          // null: Wave 7 gives no waiver information for the HCJDC fee.
+          feeWaiver: null,
+          courtContact: 'HCJDC Expungement Section, (808) 587-3348, 465 S. King St. Rm 102, Honolulu (and the sentencing court for a conviction order)'
+        }
+      },
+      legalAid: [
+        { name: 'HCJDC Expungement Section — (808) 587-3348', url: 'https://ag.hawaii.gov/hcjdc/expungement/' },
+        { name: 'Legal Aid Society of Hawaii', url: 'https://www.legalaidhawaii.org' }
+      ]
+    }
+  },
+  ME: {
+    code: 'ME',
+    name: 'Maine',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Maine has NO expungement. The remedy is a post-judgment MOTION TO SEAL (15 M.R.S. ch. 310-A, '
+      + '§§ 2261-2265). Two things make Maine distinctive. First, a structural quirk: most non-conviction '
+      + 'information is already confidential by law (16 M.R.S. § 703), so dismissals and acquittals are '
+      + 'generally non-public WITHOUT any petition — you often do not need to file. Second, a 2024 change '
+      + 'that most guides have not caught up to: the old rule limiting sealing to convictions from ages 18-27 '
+      + 'was REMOVED, so now ALL Class E convictions (the lowest level) except sexual assault can be sealed, '
+      + 'at any age, four years after the sentence is satisfied. Filing is about $5 — among the cheapest in '
+      + 'the country.',
+    keyDates: [
+      {
+        label: 'Age cap (18-27) for Class E sealing removed (HP1435)',
+        date: '2024',
+        kind: 'effective',
+        note: 'Wave 7 gives the year only. The old 18-to-27 age limitation was removed in 2024; ALL Class E convictions except sexual assault are now sealable regardless of age. Most online guides still state the age cap — encode from the current statute.',
+      },
+      {
+        label: 'Sealing for sex-trafficking/exploitation-related convictions (LD 1871)',
+        date: '2026-01-11',
+        kind: 'effective',
+        note: 'Enacted Jan 11, 2026. Any conviction substantially resulting from sex trafficking or sexual exploitation is sealable anytime, no waiting period; documentation creates a presumption. Two weeks old in legislative terms — confirm operative status.',
+      },
+      {
+        label: 'Marijuana-sealing cutoff (Class D/E convictions before this date)',
+        date: '2017-01-30',
+        kind: 'effective',
+        note: 'Class D and E marijuana convictions from BEFORE January 30, 2017 are sealable.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the 2024 removal of the age cap for Class E sealing (HP1435) against the current 15 M.R.S. § 2261 text. Wave 7 calls this "discrepancy gold" — most online guides and both major court-records sites still state the old 18-to-27 age limitation. The tree encodes the repeal (no age question); confirm it against the statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the ~$5 filing fee is current. Wave 7 gives it as the cheapest in the nation (Motion CR-218) but flags it for confirmation. The fees field encodes ~$5 and flags this; courts.maine.gov is the check.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm LD 1871 (sex-trafficking/exploitation sealing, enacted Jan 11, 2026) is operative, and confirm whether any indigency fee waiver applies to the sealing motion. Wave 7 gives LD 1871 as two weeks old and gives no waiver information; the feeWaiver field is null pending confirmation.',
+        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Me. Rev. Stat. tit. 15, §§ 2261-2265 (motion to seal; 4-year prerequisite)', url: null, retrievedOn: null },
+      { id: 'Me. Rev. Stat. tit. 16, § 703 (records classification — non-conviction confidentiality)', url: null, retrievedOn: null },
+      { id: 'HP1435 (2024) (removed the 18-27 age cap for Class E sealing)', url: null, retrievedOn: null },
+      { id: 'LD 1871 (2026) (sealing for sex-trafficking/exploitation-related convictions)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_me' },
+            { label: 'Dismissed', value: 'dismissed', next: 'already_confidential_me' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'already_confidential_me' },
+            { label: 'Deferred disposition dismissed', value: 'deferred', next: 'already_confidential_me' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        conv_type_me: {
+          type: 'choice',
+          text: 'What kind of conviction is it?',
+          options: [
+            { label: 'A Class E offense (the lowest level — max 6 months / $1,000)', value: 'classE', next: 'classE_sexual_me' },
+            { label: 'A Class D or E marijuana conviction from before January 30, 2017', value: 'marijuana', next: 'eligible_marijuana_me' },
+            { label: 'A conviction resulting from sex trafficking or sexual exploitation', value: 'trafficking', next: 'eligible_trafficking_me' },
+            { label: 'An OUI (operating under the influence)', value: 'oui', next: 'ineligible_oui_me' },
+            { label: 'Another Class A, B, C, or D conviction', value: 'other', next: 'ineligible_conviction_me' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_me' }
+          ]
+        },
+        classE_sexual_me: {
+          type: 'boolean',
+          text: 'Was the offense a sexual assault?',
+          yes: 'ineligible_conviction_me',
+          no: 'classE_date_me'
+        },
+        classE_date_me: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your sentence satisfied, including all fines and fees?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'since sentence satisfied incl. LFOs, no other convictions (15 M.R.S. § 2262 — Class E sealing)' },
+            nextPass: 'eligible_classE_me',
+            nextFail: 'waiting_me'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Maine seals a narrow set of convictions, but most non-convictions are already confidential by law without any filing — so the outcome matters a lot. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Maine State Bureau of Identification record request will show the disposition; Pine Tree Legal Assistance can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / SBI)',
+          citation: '15 M.R.S. ch. 310-A (the route depends on the disposition)'
+        },
+        already_confidential_me: {
+          status: 'eligible',
+          title: 'Likely Already Confidential — You May Not Need to File',
+          message: 'Here is a Maine-specific piece of good news: because your case ended without a conviction, the information is generally CONFIDENTIAL by law already (16 M.R.S. § 703) — non-public without you filing anything. So in most cases you do not need a sealing motion for a dismissal or acquittal; it should already be off public view. If you find it is still appearing somewhere it should not, Pine Tree Legal Assistance can help you address that specific record. But the default answer is reassuring: you likely do not need to do anything.',
+          remedy: 'Usually nothing to file — non-convictions are confidential by classification (§ 703)',
+          citation: 'Me. Rev. Stat. tit. 16, § 703'
+        },
+        eligible_classE_me: {
+          status: 'eligible',
+          title: 'Class E Conviction, 4+ Years — Sealable (Age No Longer Matters)',
+          message: 'Based on your dates — 4 years since your sentence was satisfied, with no other convictions — this Class E conviction is sealable under 15 M.R.S. § 2262. The important update: Maine REMOVED the old rule that limited this to ages 18-27, so your age does not matter anymore — most guides still show the old age cap, but it is gone as of 2024. You file a Motion to Seal (CR-218); the fee is about $5, among the lowest anywhere. Once sealed, the record is deniable except to criminal-justice agencies and a few listed entities. Pine Tree Legal Assistance can help.',
+          remedy: 'Motion to seal a Class E conviction (§ 2262)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262'
+        },
+        waiting_me: {
+          status: 'waiting',
+          title: 'Not Yet Four Years',
+          message: 'Maine lets you seal a Class E conviction 4 years after the sentence is satisfied (including all fines and fees), with no other convictions in the window. Based on your dates, that has not passed yet. When it does, the motion (CR-218) costs about $5 to file. Pine Tree Legal Assistance can help you time it.',
+          remedy: 'Wait for the 4-year period (§ 2262)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262'
+        },
+        eligible_marijuana_me: {
+          status: 'eligible',
+          title: 'Pre-2017 Marijuana Conviction — Sealable',
+          message: 'Because this is a Class D or E marijuana conviction from before January 30, 2017, Maine allows it to be sealed. You file a Motion to Seal (CR-218) — filing is about $5. Pine Tree Legal Assistance can help you prepare it.',
+          remedy: 'Motion to seal a pre-2017 marijuana conviction',
+          citation: 'Me. Rev. Stat. tit. 15, ch. 310-A'
+        },
+        eligible_trafficking_me: {
+          status: 'eligible',
+          title: 'Trafficking-Related Conviction — Sealable Anytime (New Law)',
+          message: 'Because your conviction substantially resulted from sex trafficking or sexual exploitation, Maine\'s new law (LD 1871, enacted January 2026) lets you seal it ANYTIME — no waiting period — and documentation of the trafficking creates a presumption in your favor. This law is very new, so it is worth filing with help. Pine Tree Legal Assistance can guide the motion and the documentation.',
+          remedy: 'Motion to seal a trafficking-related conviction (LD 1871) — no wait',
+          citation: 'LD 1871 (2026)'
+        },
+        ineligible_conviction_me: {
+          status: 'ineligible',
+          title: 'This Conviction Cannot Be Sealed',
+          message: 'Maine seals only Class E convictions (except sexual assault), pre-2017 marijuana convictions, and trafficking-related convictions. A Class A, B, C, or D conviction (or a Class E sexual assault) is not sealable. No waiting period changes that. The remaining route is a pardon: eligible 5 years after your sentence, and a full-and-free pardon makes the record confidential. Pine Tree Legal Assistance can explain the pardon process.',
+          remedy: 'None (not a sealable class) — a pardon (5 yrs) is the remaining route',
+          citation: 'Me. Rev. Stat. tit. 15, § 2261'
+        },
+        ineligible_oui_me: {
+          status: 'ineligible',
+          title: 'OUI — No Sealing, and the Pardon Board Will Not Take It',
+          message: 'This one is a double no, and it is better to know it up front. An OUI (operating under the influence) is not a sealable class in Maine — and unlike other convictions, it does not even have a pardon fallback, because the Board of Pardons will not consider OUI applications (nor registry-removal or firearms-motivated ones). So there is no record-clearing route for an OUI here. If you have OTHER, sealable convictions on your record, those may still qualify separately. Pine Tree Legal Assistance can help you check the rest of your record.',
+          remedy: 'None — OUI is neither sealable nor pardonable in Maine',
+          citation: 'Me. Rev. Stat. tit. 15, § 2261'
+        },
+        complex_convtype_me: {
+          status: 'complex',
+          title: 'We Need the Conviction Class',
+          message: 'Maine seals only Class E convictions (except sexual assault), pre-2017 marijuana, and trafficking-related convictions — so the class matters. Since you are not sure which yours is, we are not going to guess. Your court paperwork states the class, and a Maine SBI record request will show it. Pine Tree Legal Assistance can help you read it.',
+          remedy: 'Get the Conviction Class First (court paperwork / SBI)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2265)',
+          formName: 'Motion to Seal (CR-218)',
+          formUrl: 'https://www.courts.maine.gov/fees-forms/forms.html',
+          steps: [
+            'For a dismissal or acquittal, you likely do not need to file — the information is confidential by classification (16 M.R.S. § 703).',
+            'For a Class E conviction (except sexual assault), confirm 4 years have passed since your sentence was satisfied, with no other convictions — the old age cap no longer applies.',
+            'File a Motion to Seal (CR-218) in the court of conviction; the fee is about $5.',
+            'For a pre-2017 marijuana or a trafficking-related conviction, the same motion applies (trafficking-related has no waiting period). Pine Tree Legal Assistance can help.'
+          ],
+          // NOT null: Wave 7 gives ~$5 (flagged to confirm current).
+          fees: 'About $5 to file the Motion to Seal (CR-218) — among the lowest in the nation (confirm current).',
+          // null: Wave 7 gives no indigency-waiver information for the sealing motion.
+          feeWaiver: null,
+          courtContact: 'The court of conviction'
+        }
+      },
+      legalAid: [
+        { name: 'Pine Tree Legal Assistance', url: 'https://www.ptla.org' },
+        { name: 'Maine Judicial Branch — Fees & Forms', url: 'https://www.courts.maine.gov/fees-forms/forms.html' }
+      ]
+    }
+  },
+  MT: {
+    code: 'MT',
+    name: 'Montana',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Montana offers TRUE expungement of MISDEMEANORS — permanent destruction from the state criminal-history '
+      + 'system — filed in district court (§§ 46-18-1102 to -1111). It is presumed ("shall grant") after 5 '
+      + 'conviction-free years since you completed your sentence, or immediately for a military applicant '
+      + 'whose record is blocking enlistment. But it is ONCE PER LIFETIME: a single order, though that one '
+      + 'order can cover several misdemeanors, so bundle everything into it. Felonies cannot be expunged at '
+      + 'all (only a deferred-imposition dismissal or a rare pardon). Note the statute was renumbered in 2019 '
+      + '(HB 543 repealed the old § 46-18-1101), and many sources still cite the dead section.',
+    keyDates: [
+      {
+        label: 'Misdemeanor Expungement Clarification Act renumbers the statute (HB 543)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. HB 543 repealed § 46-18-1101 and recodified the misdemeanor-expungement law into §§ 46-18-1102 through -1111. The DOJ page and most attorneys still cite 1101 — cite the live sections.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the live statutory sections. Wave 7 flags that the 2019 Misdemeanor Expungement Clarification Act (HB 543) repealed § 46-18-1101 and recodified into §§ 46-18-1102 to -1111, but sources (including the DOJ\'s own page and most attorneys) still cite the dead 1101 section. The tree cites the live sections with a "recodified 2019" note; confirm against current MCA text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the multiple-misdemeanor bundling practice. Wave 7 says a single lifetime order may cover multiple misdemeanors (the court may grant all, some, or none per § 46-18-1110), but flags practitioner-reported inconsistency between jurisdictions on whether bundling is allowed — a call question. The tree tells people to bundle everything into the one petition; confirm the practice with a district clerk.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the district court filing fee. Wave 7 flags it as a phone target (a Yellowstone or Missoula clerk). The fees and feeWaiver fields are null pending this; courts.mt.gov publishes the self-help forms packet.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Mont. Code Ann. §§ 46-18-1102 to -1111 (misdemeanor expungement; recodified 2019 by HB 543)', url: null, retrievedOn: null },
+      { id: 'Mont. Code Ann. § 46-18-1110 (one order may cover multiple misdemeanors)', url: null, retrievedOn: null },
+      { id: '2019 HB 47 (non-conviction return/expungement of prints and photos)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_mt' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_mt' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_mt' },
+            { label: 'Deferred imposition completed and dismissed', value: 'deferred', next: 'eligible_deferred_mt' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        level_mt: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_prioruse_mt' },
+            { label: 'Felony', value: 'felony', next: 'ineligible_felony_mt' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_mt' }
+          ]
+        },
+        misd_prioruse_mt: {
+          type: 'boolean',
+          text: 'Have you already used Montana\'s once-in-a-lifetime misdemeanor expungement?',
+          yes: 'ineligible_prioruse_mt',
+          no: 'misd_military_mt'
+        },
+        misd_military_mt: {
+          type: 'boolean',
+          text: 'Are you a military applicant or enlistee, and this conviction is blocking your service?',
+          yes: 'eligible_military_mt',
+          no: 'misd_discretionary_mt'
+        },
+        misd_discretionary_mt: {
+          type: 'boolean',
+          text: 'Was the offense any of these: assault, partner or family-member assault, stalking, sexual assault, a protective-order violation, or DUI?',
+          yes: 'misd_disc_date_mt',
+          no: 'misd_presumed_date_mt'
+        },
+        misd_presumed_date_mt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including all fines, fees, and any court-ordered treatment?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction-free since sentence completion incl. LFOs and treatment (Mont. Code Ann. § 46-18-1104 — presumed misdemeanor expungement)' },
+            nextPass: 'eligible_presumed_mt',
+            nextFail: 'waiting_mt'
+          }
+        },
+        misd_disc_date_mt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including all fines, fees, and any court-ordered treatment?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction-free since sentence completion incl. LFOs and treatment (Mont. Code Ann. § 46-18-1104 — discretionary misdemeanor expungement)' },
+            nextPass: 'eligible_discretionary_mt',
+            nextFail: 'waiting_mt'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Montana expunges misdemeanors (a true, permanent destruction) but not felonies, and non-convictions have their own path — so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Montana DOJ criminal-history request will show the disposition; the Montana Legal Services Association can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / Montana DOJ)',
+          citation: 'Mont. Code Ann. §§ 46-18-1102 to -1111 (the route depends on the disposition)'
+        },
+        nonconv_mt: {
+          status: 'eligible',
+          title: 'No Conviction — Records Returned/Expunged',
+          message: 'Because your case ended without a conviction, Montana\'s process (2019 HB 47) provides for the return or expungement of your fingerprints and photos through the state repository — a semi-automatic step for no-charge releases and invalidated convictions. The Montana Legal Services Association can help you make sure it happens for your record.',
+          remedy: 'Non-conviction record return/expungement (2019 HB 47)',
+          citation: '2019 HB 47'
+        },
+        eligible_deferred_mt: {
+          status: 'eligible',
+          title: 'Deferred Imposition Completed — Dismissed',
+          message: 'Because you completed a deferred imposition of sentence, the charge is dismissed — the standard Montana path for a case handled that way at sentencing. If it was a felony handled by deferred imposition, this dismissal is the relief available (felonies cannot otherwise be expunged). The Montana Legal Services Association can confirm your record reflects the dismissal and explain any remaining steps.',
+          remedy: 'Deferred-imposition dismissal',
+          citation: 'Mont. Code Ann. § 46-18-1102'
+        },
+        eligible_presumed_mt: {
+          status: 'eligible',
+          title: 'Misdemeanor, 5+ Years — Presumed Eligible (Bundle Them)',
+          message: 'Based on your dates — 5 conviction-free years since completing your sentence, including fines, fees, and any treatment — your misdemeanor expungement is PRESUMED, meaning the court "shall grant" it. And this is a true expungement: permanent destruction from the state criminal-history system. One important thing to plan around: it is ONCE PER LIFETIME, but a single order can cover several misdemeanors, so bundle everything you want cleared into this one petition. After the grant, you mail the order plus a fingerprint card and a DOJ form to CRISS in Helena. The Montana Legal Services Association can help.',
+          remedy: 'Presumed misdemeanor expungement (§ 46-18-1104) — bundle all misdemeanors',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        },
+        eligible_discretionary_mt: {
+          status: 'eligible',
+          title: 'Eligible, But Discretionary — Come Prepared',
+          message: 'Based on your dates, 5 conviction-free years have passed, so you can petition — but for your offense type (assault, partner/family-member assault, stalking, sexual assault, protective-order violation, or DUI) the grant is NOT presumed. It is discretionary: the court balances factors, with victim notification and a prosecutor response. That means it is possible, just uphill, so it helps to come prepared. Remember it is once per lifetime, and one order can bundle multiple misdemeanors. The Montana Legal Services Association can help you make the strongest case.',
+          remedy: 'Discretionary misdemeanor expungement (§ 46-18-1104) — possible but uphill',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        },
+        waiting_mt: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Montana requires 5 conviction-free years since you completed your sentence (including fines, fees, and any court-ordered treatment) before a misdemeanor expungement. Based on your dates, that has not passed yet. When it does, remember it is once per lifetime — so bundle every misdemeanor you want cleared into the single petition. The Montana Legal Services Association can help you plan. (A military applicant blocked by a record can petition immediately, without the wait.)',
+          remedy: 'Wait for the 5-year period (§ 46-18-1104)',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        },
+        eligible_military_mt: {
+          status: 'eligible',
+          title: 'Military Applicant — Petition Now, No Wait',
+          message: 'Because you are a military applicant or enlistee and a misdemeanor conviction is blocking your service, Montana lets you petition for expungement IMMEDIATELY — no 5-year wait. This is a specific, unusual provision worth using. It is still once per lifetime, and one order can cover multiple misdemeanors, so include everything relevant. The Montana Legal Services Association can help you file quickly.',
+          remedy: 'Immediate misdemeanor expungement for military applicants (§ 46-18-1104)',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        },
+        ineligible_felony_mt: {
+          status: 'ineligible',
+          title: 'Felony — No Expungement in Montana',
+          message: 'Montana does not expunge felonies at all. Two things can still help, depending on your case: if the felony was handled with a deferred imposition of sentence, completing it results in a dismissal; and a pardon remains theoretically available, though it is rare (only a handful of recommendations a year). For marijuana convictions there is a separate legalization-era path with resources through the Office of Court Administrator. The Montana Legal Services Association can explain which applies to you.',
+          remedy: 'None (no felony expungement) — deferred-imposition dismissal or a rare pardon',
+          citation: 'Mont. Code Ann. § 46-18-1102'
+        },
+        ineligible_prioruse_mt: {
+          status: 'ineligible',
+          title: 'Your One Lifetime Expungement Has Been Used',
+          message: 'Montana allows only one misdemeanor expungement in a lifetime, and because you have already used it, another is not available — no waiting period changes that. If any NON-conviction is on your record, that has its own return/expungement path; and a pardon, though rare, remains theoretically possible. The Montana Legal Services Association can help you look at what is left.',
+          remedy: 'None (one-time expungement used) — check non-convictions or a rare pardon',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        },
+        complex_level_mt: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'It matters a great deal in Montana: a misdemeanor can be expunged (once per lifetime), but a felony cannot be expunged at all. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a Montana DOJ criminal-history request will show it. The Montana Legal Services Association can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / Montana DOJ)',
+          citation: 'Mont. Code Ann. § 46-18-1104'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111; recodified 2019)',
+          formName: 'Montana Judicial Branch self-help expungement forms packet',
+          formUrl: 'https://courts.mt.gov/selfhelp/',
+          steps: [
+            'Confirm it is a misdemeanor — felonies cannot be expunged (deferred-imposition dismissal or a rare pardon are the only felony routes).',
+            'Wait until 5 conviction-free years after completing your sentence (or petition immediately if a military applicant blocked by the record).',
+            'File one petition in district court, bundling every misdemeanor you want cleared — it is once per lifetime.',
+            'After the grant, mail the order plus an FD-258 fingerprint card and the DOJ form to CRISS in Helena. Montana Legal Services Association offers free help.'
+          ],
+          // null: Wave 7 flags the district court filing fee as a phone target — the
+          // amount and any waiver are unknown.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The district court where the case was handled'
+        }
+      },
+      legalAid: [
+        { name: 'Montana Legal Services Association', url: 'https://www.mtlsa.org' },
+        { name: 'Montana Judicial Branch — Self-Help', url: 'https://courts.mt.gov/selfhelp/' }
+      ]
+    }
+  },
+  RI: {
+    code: 'RI',
+    name: 'Rhode Island',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Rhode Island uses EXPUNGEMENT for convictions (§ 12-1.3) and SEALING for non-convictions (§ 12-1-12). '
+      + 'It is discretionary — even when your timing is met, a judge must find good moral character and '
+      + 'rehabilitation. The core is a first-offender rule (a single conviction, nothing else ever): 5 years '
+      + 'for a misdemeanor, 10 for a felony. A 2017 reform added a multi-misdemeanor lane (more than one but '
+      + 'fewer than six misdemeanors, no felony) at 10 years from the last. One practical thing to remember: '
+      + 'the record is not really gone until, after the grant, certified orders are delivered to the state '
+      + 'Bureau of Criminal Identification and the arresting agency.',
+    keyDates: [
+      {
+        label: 'Multi-misdemeanor expungement lane created (2017 reform, § 12-1.3-2)',
+        date: '2017',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. Allows expunging more than one but fewer than six misdemeanors (no felony) at 10 years from the last sentence; excludes DV, DUI, and chemical-test refusal.',
+      },
+      {
+        label: 'Rule 48(a) dismissals auto-seal (§ 12-1-12.1(a)(1))',
+        date: '2023-01-01',
+        kind: 'operative',
+        note: 'Rule 48(a) dismissals on or after this date are sealed automatically; older dismissals are sealed on petition.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the multi-misdemeanor exclusion nuance. Wave 7 says the multi-misdemeanor lane excludes DV (ch. 12-29), DUI, and chemical-test refusal, but that per practitioners those offenses remain INDIVIDUALLY expungable on the single-misdemeanor path if the person otherwise qualifies. The tree routes a multi-misdemeanor record containing one of those to a "get help — this is nuanced" result; confirm the individual-path availability.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the status of marijuana auto-expungement (§ 12-1.3-5). Wave 7 flags its operational status. The tree does not assert automatic marijuana clearing; confirm whether the automation is running and how someone checks.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'R.I. Gen. Laws § 12-1.3-2 (expungement; first-offender and multi-misdemeanor paths)', url: null, retrievedOn: null },
+      { id: 'R.I. Gen. Laws §§ 12-1-12, 12-1-12.1 (non-conviction sealing; Rule 48(a) auto-seal)', url: null, retrievedOn: null },
+      { id: 'R.I. Gen. Laws § 12-1.3-5 (marijuana auto-expungement)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_count_ri' },
+            { label: 'Dismissed', value: 'dismissed', next: 'dismissal_ri' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'dismissal_ri' },
+            { label: 'Deferred sentence completed', value: 'deferred', next: 'eligible_deferred_ri' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        dismissal_ri: {
+          type: 'boolean',
+          text: 'Was the case a dismissal (Rule 48(a)) on or after January 1, 2023?',
+          yes: 'check_autoseal_ri',
+          no: 'petition_seal_ri'
+        },
+        conv_count_ri: {
+          type: 'choice',
+          text: 'How would you describe your record?',
+          options: [
+            { label: 'A single conviction, and nothing else on my record ever', value: 'first', next: 'firstoffender_level_ri' },
+            { label: 'More than one but fewer than six misdemeanors, and no felony', value: 'multimisd', next: 'multimisd_dv_ri' },
+            { label: 'Multiple felony convictions', value: 'multifelony', next: 'ineligible_multifelony_ri' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_ri' }
+          ]
+        },
+        firstoffender_level_ri: {
+          type: 'choice',
+          text: 'Was that single conviction a misdemeanor or a felony?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'fo_violence_misd_ri' },
+            { label: 'Felony', value: 'felony', next: 'fo_violence_felony_ri' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_ri' }
+          ]
+        },
+        fo_violence_misd_ri: {
+          type: 'boolean',
+          text: 'Was the offense a crime of violence? (Rhode Island\'s list of crimes of violence includes burglary.)',
+          yes: 'ineligible_violence_ri',
+          no: 'fo_misd_date_ri'
+        },
+        fo_violence_felony_ri: {
+          type: 'boolean',
+          text: 'Was the offense a crime of violence? (Rhode Island\'s list of crimes of violence includes burglary.)',
+          yes: 'ineligible_violence_ri',
+          no: 'fo_felony_date_ri'
+        },
+        multimisd_dv_ri: {
+          type: 'boolean',
+          text: 'Do any of these misdemeanors involve domestic violence, DUI, or chemical-test refusal? (Those are excluded from the multi-misdemeanor lane, though they may qualify individually.)',
+          yes: 'complex_multimisd_excluded_ri',
+          no: 'multimisd_date_ri'
+        },
+        fo_misd_date_ri: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including all court fines and fees?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from sentence completion with LFOs paid (R.I. Gen. Laws § 12-1.3-2 — first-offender misdemeanor)' },
+            nextPass: 'eligible_firstoffender_ri',
+            nextFail: 'waiting_ri'
+          }
+        },
+        fo_felony_date_ri: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including all court fines and fees?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from sentence completion with LFOs paid (R.I. Gen. Laws § 12-1.3-2 — first-offender felony)' },
+            nextPass: 'eligible_firstoffender_ri',
+            nextFail: 'waiting_ri'
+          }
+        },
+        multimisd_date_ri: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the LAST of the sentences?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from completion of the last sentence (R.I. Gen. Laws § 12-1.3-2 — multi-misdemeanor lane)' },
+            nextPass: 'eligible_multimisd_ri',
+            nextFail: 'waiting_ri'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Rhode Island expunges convictions and seals non-convictions on different tracks, and the conviction rules depend on how many convictions you have. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record from the Attorney General ($5, 4 Howard Ave, Cranston) will show the disposition; the Rhode Island Public Defender resource guide can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / BCI)',
+          citation: 'R.I. Gen. Laws §§ 12-1.3-2, 12-1-12 (the route depends on the disposition)'
+        },
+        check_autoseal_ri: {
+          status: 'eligible',
+          title: 'Likely Already Auto-Sealed — Check',
+          message: 'Because your case was a Rule 48(a) dismissal on or after January 1, 2023, Rhode Island seals it AUTOMATICALLY. So the honest first step is to CHECK whether it is already sealed — pull a BCI record from the Attorney General ($5) and look. If it is still showing, the courts.ri.gov expungement information or the Public Defender can help you follow up. Sealing non-convictions is free.',
+          remedy: 'Check your record — a post-2023 Rule 48(a) dismissal should be auto-sealed (§ 12-1-12.1)',
+          citation: 'R.I. Gen. Laws § 12-1-12.1'
+        },
+        petition_seal_ri: {
+          status: 'eligible',
+          title: 'No Conviction — Sealable, Free',
+          message: 'Because your case ended without a conviction and before the 2023 auto-seal date, you can petition to seal it — sealing non-convictions is free. You file in the court of the case; the Attorney General and police are served. A BCI record from the AG ($5) helps you confirm what is on file. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Non-conviction sealing petition (§ 12-1-12) — free',
+          citation: 'R.I. Gen. Laws § 12-1-12'
+        },
+        eligible_deferred_ri: {
+          status: 'eligible',
+          title: 'Deferred Sentence Completed — Expungeable',
+          message: 'Because you completed a deferred sentence, Rhode Island allows expungement on completion (§ 12-1.3-2(e)). It is still discretionary — a judge weighs good moral character and rehabilitation — and the $100 fee applies on grant (waivable for indigency). After the grant, make sure certified orders reach the BCI and the arresting agency, or the record is not fully cleared. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Expungement of a completed deferred sentence (§ 12-1.3-2(e))',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        eligible_firstoffender_ri: {
+          status: 'eligible',
+          title: 'First Offender, Waiting Period Met — Expungeable',
+          message: 'Based on your dates, you meet the first-offender waiting period (5 years for a misdemeanor, 10 for a felony) from completing your sentence with all court fines and fees paid. One honest caveat: it is discretionary, so even with the timing met a judge must find good moral character and rehabilitation. The fee is $100, payable on grant and waivable for indigency. After the grant, deliver certified orders to the BCI and the arresting agency — the record is not truly gone until that is done. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'First-offender expungement (§ 12-1.3-2)',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        eligible_multimisd_ri: {
+          status: 'eligible',
+          title: 'Multiple Misdemeanors, 10+ Years — Expungeable',
+          message: 'Because you have more than one but fewer than six misdemeanors (and no felony), Rhode Island\'s 2017 multi-misdemeanor lane lets you expunge any or all of them 10 years after your last sentence — and based on your dates, that has passed. It is still discretionary (good moral character and rehabilitation), and the $100 fee applies on grant (waivable for indigency). After the grant, deliver certified orders to the BCI and the arresting agency. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Multi-misdemeanor expungement (§ 12-1.3-2) — 10 years from the last',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        waiting_ri: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Rhode Island\'s waiting periods run from sentence completion with all court fines and fees paid: 5 years for a first-offender misdemeanor, 10 for a first-offender felony, and 10 years from the last for the multi-misdemeanor lane. Based on your dates, yours has not passed yet. When it does, remember it is discretionary and the $100 fee (waivable) is due on grant. The Rhode Island Public Defender resource guide can help you plan.',
+          remedy: 'Wait for the period (§ 12-1.3-2)',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        ineligible_violence_ri: {
+          status: 'ineligible',
+          title: 'Crime of Violence — Not Expungeable',
+          message: 'Rhode Island never expunges a crime of violence, and its list is broader than you might expect — it includes burglary. No waiting period changes that. For an offense on that list, a pardon is the remaining route. The Rhode Island Public Defender resource guide can help you confirm whether yours is classified as a crime of violence and explain the pardon process.',
+          remedy: 'None (Crime of Violence) — a pardon is the remaining route',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        complex_multimisd_excluded_ri: {
+          status: 'complex',
+          title: 'DV, DUI, or Refusal in the Mix — Get Help',
+          message: 'Here is a Rhode Island nuance worth getting right. The multi-misdemeanor lane specifically excludes domestic violence, DUI, and chemical-test refusal — so those cannot ride along in a multi-misdemeanor expungement. BUT practitioners note they may still be expungable INDIVIDUALLY on the single-misdemeanor path, if you otherwise qualify. Because sorting out which of your offenses can go which way is exactly the kind of thing worth doing with help, we are routing you to it rather than guessing. The Rhode Island Public Defender resource guide and a District Court clerk can map it out.',
+          remedy: 'Get Help Sorting the Excluded Offenses (RI Public Defender)',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        ineligible_multifelony_ri: {
+          status: 'ineligible',
+          title: 'Multiple Felonies — Not Expungeable',
+          message: 'Rhode Island\'s expungement is built around first offenders: you can expunge one first-offender felony, but multiple felony convictions cannot be expunged. No waiting period changes that. A pardon remains the route for felony convictions beyond the first. If any part of your record was a non-conviction, that can still be sealed separately. The Rhode Island Public Defender resource guide can help you check.',
+          remedy: 'None (multiple felonies) — a pardon is the remaining route',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        complex_count_ri: {
+          status: 'complex',
+          title: 'We Need to Know Your Record',
+          message: 'Rhode Island\'s expungement rules turn on exactly how many convictions you have and whether any are felonies — a single first offense, a handful of misdemeanors, or multiple felonies all lead different places. Since you are not sure, we are not going to guess. A BCI record from the Attorney General ($5) will show your full record. The Rhode Island Public Defender resource guide can help you read it.',
+          remedy: 'Get Your Full Record First (BCI)',
+          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12)',
+          formName: 'Rhode Island courts expungement/sealing motion',
+          formUrl: 'https://www.courts.ri.gov',
+          steps: [
+            'Figure out your path: first offender (single conviction), the multi-misdemeanor lane (2-5 misdemeanors, no felony), or non-conviction sealing.',
+            'Confirm your waiting period is met and all court fines and fees are paid; note the grant is discretionary (good moral character + rehabilitation).',
+            'File the motion in the court of conviction; the Attorney General and police are served. Get a BCI record from the AG ($5) to confirm your record.',
+            'The $100 fee is payable on grant (waivable for indigency); after the grant, deliver certified orders to the BCI and the arresting agency to complete it.'
+          ],
+          // NOT null: Wave 7 gives $100 on grant (waivable) plus the $5 BCI record.
+          fees: '$100 fee payable on grant (waivable for indigency), plus a $5 BCI record from the Attorney General. Non-conviction sealing is free.',
+          feeWaiver: 'The $100 fee is waivable for indigency.',
+          courtContact: 'The court of conviction (AG BCI at 4 Howard Ave, Cranston for records)'
+        }
+      },
+      legalAid: [
+        { name: 'Rhode Island Public Defender — Expungement Resource Guide', url: 'https://ripd.org' },
+        { name: 'Rhode Island Judiciary — Expungement Information', url: 'https://www.courts.ri.gov' }
+      ]
+    }
+  },
+  SD: {
+    code: 'SD',
+    name: 'South Dakota',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'South Dakota is restrictive, and it is best to be plain about it: expungement (§§ 23A-3-26 to -37) is '
+      + 'for NON-CONVICTIONS — arrests without a charge (1 year), dismissed cases (1 year, or sooner on '
+      + '"compelling necessity"), and acquittals (anytime). For CONVICTIONS there is no general path; the '
+      + 'exceptions are the whole story: petty offenses, municipal violations, and Class 2 misdemeanors come '
+      + 'off the public record automatically after conditions are met; a suspended imposition of sentence is '
+      + 'sealed on successful completion; and diversion completions are auto-expunged. DUI and other '
+      + 'motor-vehicle convictions are excluded entirely. The state\'s online self-help (Guide & File) is '
+      + 'unusually friendly for such a narrow law.',
+    keyDates: [
+      {
+        label: 'Diversion completions auto-expunged (§§ 23A-3-35 to -37)',
+        date: '2018',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. Completed diversions are expunged automatically — no motion needed.',
+      },
+      {
+        label: 'Early dismissal expungement on "compelling necessity"',
+        date: '2022',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. A dismissed case can be expunged sooner than the usual 1 year on a showing of compelling necessity.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Resolve the automatic-removal waiting period. Wave 7 flags that sources split 5 vs 10 years for § 23A-3-34 automatic removal of petty offenses, municipal violations, and Class 2 misdemeanors — encode from current statute text only. The tree routes those to a "check whether it is already off your record" result without asserting a specific year; confirm the exact period against the current statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the circuit court filing fee, and whether any fee waiver applies. Wave 7 gives the DCI record check as $24 (Pierre, (605) 773-3331) but flags the circuit court filing fee as a per-clerk phone target and gives no waiver information. The fees and feeWaiver fields are null pending both.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'S.D. Codified Laws §§ 23A-3-26 to -37 (non-conviction expungement)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws § 23A-3-34 (automatic removal of petty/ordinance/Class-2 offenses)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws § 23A-27-13 (suspended imposition of sentence)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_sd' },
+            { label: 'Dismissed / Arrested but never charged', value: 'dismissed', next: 'dismissal_date_sd' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_acquittal_sd' },
+            { label: 'Suspended imposition or diversion completed', value: 'deferred', next: 'check_deferred_sd' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        dismissal_date_sd: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed (or the arrest made, if no charge was ever filed)?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'after dismissal or an arrest with no charging instrument (S.D. Codified Laws §§ 23A-3-27 — sooner on compelling necessity)' },
+            nextPass: 'eligible_dismissal_sd',
+            nextFail: 'waiting_sd'
+          }
+        },
+        conv_type_sd: {
+          type: 'choice',
+          text: 'What kind of conviction is it?',
+          options: [
+            { label: 'A petty offense, municipal ordinance violation, or Class 2 misdemeanor (as the highest charge)', value: 'auto', next: 'check_autoremoval_sd' },
+            { label: 'A DUI or other motor-vehicle conviction', value: 'dui', next: 'ineligible_dui_sd' },
+            { label: 'Any other conviction (Class 1 misdemeanor or higher)', value: 'other', next: 'ineligible_conviction_sd' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_sd' }
+          ]
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'South Dakota expunges non-convictions but almost no convictions, so the outcome decides nearly everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. A DCI record check ($24, Pierre, (605) 773-3331) or your court paperwork will show the disposition; the ujs.sd.gov expungement self-help (Guide & File) can help you read it.',
+          remedy: 'Get Your Record First (DCI / court paperwork)',
+          citation: 'S.D. Codified Laws §§ 23A-3-26 to -37 (the route depends on the disposition)'
+        },
+        eligible_dismissal_sd: {
+          status: 'eligible',
+          title: 'No Conviction, 1+ Year — Expungeable',
+          message: 'Because your case was dismissed (or was an arrest that never led to a charge) and at least a year has passed, you can petition to expunge it. The standard is a discretionary "ends of justice" one; the prosecutor gets notice, and a hearing can be waived if everyone consents. The ujs.sd.gov Guide & File online interview walks you through forms UJS-391/-394. (A dismissal can sometimes be expunged sooner than a year on a showing of compelling necessity.)',
+          remedy: 'Non-conviction expungement petition (§ 23A-3-27)',
+          citation: 'S.D. Codified Laws § 23A-3-27'
+        },
+        waiting_sd: {
+          status: 'waiting',
+          title: 'Not Yet One Year',
+          message: 'For a dismissal or a no-charge arrest, South Dakota generally requires 1 year before you can petition to expunge (though a dismissal can sometimes go sooner on a showing of compelling necessity). Based on your date, the year has not passed yet. When it does, the ujs.sd.gov Guide & File self-help will walk you through it.',
+          remedy: 'Wait until 1 year (or show compelling necessity) — § 23A-3-27',
+          citation: 'S.D. Codified Laws § 23A-3-27'
+        },
+        eligible_acquittal_sd: {
+          status: 'eligible',
+          title: 'Acquitted — Expungeable Anytime',
+          message: 'Because you were acquitted (found not guilty), South Dakota lets you petition to expunge the record ANYTIME, with no waiting period. The standard is a discretionary "ends of justice" one, and the prosecutor gets notice. The ujs.sd.gov Guide & File online interview walks you through the forms. A DCI record check ($24) helps confirm what is on file.',
+          remedy: 'Non-conviction expungement after acquittal (§ 23A-3-27) — no wait',
+          citation: 'S.D. Codified Laws § 23A-3-27'
+        },
+        check_deferred_sd: {
+          status: 'eligible',
+          title: 'Suspended Imposition or Diversion — Likely Already Sealed, Check',
+          message: 'Good news, and it may already be done. If you successfully completed a suspended imposition of sentence, the record is sealed on completion; and completed diversions are auto-expunged (no motion needed). So the honest first step is to CHECK — pull a DCI record ($24) or look at your court record to confirm it happened. If it did not, the ujs.sd.gov self-help or a clerk can help you follow up. Either way, you may not need to file anything new.',
+          remedy: 'Check your record — suspended imposition/diversion should already be sealed',
+          citation: 'S.D. Codified Laws § 23A-27-13'
+        },
+        check_autoremoval_sd: {
+          status: 'eligible',
+          title: 'Minor Conviction — May Be Auto-Removed, Check',
+          message: 'Because your highest charge was a petty offense, municipal ordinance violation, or Class 2 misdemeanor, South Dakota removes it from the public record AUTOMATICALLY once the conditions are satisfied (§ 23A-3-34) — this is the state\'s quiet automation. So the first step is to CHECK whether it has already come off, rather than assume you must file. One honest caveat: our sources disagree on exactly how long the wait is (5 versus 10 years), so we are not asserting a specific date — a DCI record check ($24) or the ujs.sd.gov self-help will show your current status.',
+          remedy: 'Check your record — minor convictions auto-remove (§ 23A-3-34; exact wait being confirmed)',
+          citation: 'S.D. Codified Laws § 23A-3-34'
+        },
+        ineligible_dui_sd: {
+          status: 'ineligible',
+          title: 'DUI / Motor-Vehicle Conviction — Excluded',
+          message: 'South Dakota excludes DUI and other motor-vehicle convictions from expungement entirely. No waiting period changes that. A pardon from the Governor remains a route (a pardoned conviction is then sealed), and there is an exceptional-pardon path 5 years out. The ujs.sd.gov self-help and a pardon application through the Board of Pardons and Paroles are where to look next.',
+          remedy: 'None (DUI/MV excluded) — a pardon is the remaining route',
+          citation: 'S.D. Codified Laws § 23A-3-34'
+        },
+        ineligible_conviction_sd: {
+          status: 'ineligible',
+          title: 'This Conviction Has No General Expungement Path',
+          message: 'South Dakota has no general expungement for convictions above the minor level (petty offenses, municipal violations, and Class 2 misdemeanors auto-remove; a Class 1 misdemeanor or any felony does not). So for this conviction, the honest answer is that there is no expungement route. A pardon from the Governor remains available (a pardoned conviction is then sealed), with an exceptional-pardon path 5 years out. The ujs.sd.gov self-help can point you toward the pardon process.',
+          remedy: 'None (no general conviction expungement) — a pardon is the route',
+          citation: 'S.D. Codified Laws §§ 23A-3-26 to -37'
+        },
+        complex_convtype_sd: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'South Dakota\'s conviction rules turn on the exact level — petty offenses, municipal violations, and Class 2 misdemeanors auto-remove, but a Class 1 misdemeanor or a felony has no general path, and DUI is excluded. Since you are not sure which yours is, we are not going to guess. A DCI record check ($24) or your court paperwork will show it. The ujs.sd.gov self-help can help you read it.',
+          remedy: 'Get the Conviction Level First (DCI / court paperwork)',
+          citation: 'S.D. Codified Laws § 23A-3-34'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (S.D. Codified Laws §§ 23A-3-26 to -37)',
+          formName: 'UJS-391 / UJS-394 (Guide & File online interview)',
+          formUrl: 'https://ujs.sd.gov/Forms/',
+          steps: [
+            'For a non-conviction, petition after 1 year (dismissal/no-charge arrest) or anytime (acquittal); use the ujs.sd.gov Guide & File interview.',
+            'For a minor conviction (petty offense, municipal violation, Class 2 misdemeanor), check whether it has already auto-removed under § 23A-3-34.',
+            'For a suspended imposition or completed diversion, check your record — it should already be sealed/expunged.',
+            'Get a DCI record check ($24, Pierre, (605) 773-3331) to confirm your status. DUI/motor-vehicle convictions are excluded; a pardon is the route there.'
+          ],
+          // null: Wave 7 gives the $24 DCI record fee (in steps) but flags the circuit
+          // court filing fee as a per-clerk unknown and gives no waiver information.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The circuit court where the case was handled (DCI in Pierre for records, (605) 773-3331)'
+        }
+      },
+      legalAid: [
+        { name: 'South Dakota Unified Judicial System — Expungement Self-Help', url: 'https://ujs.sd.gov' },
+        { name: 'East River Legal Services', url: 'https://www.erlservices.org' }
+      ]
+    }
+  },
+  ND: {
+    code: 'ND',
+    name: 'North Dakota',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'North Dakota is quietly one of the friendlier small states. It SEALS convictions (ch. 12-60.1, 2019): '
+      + 'misdemeanors 3 years, felonies 5 years, conviction-free from completing incarceration, probation, or '
+      + 'parole — and there is NO FILING FEE, because the statute forbids charging one. DUI is sealable here, '
+      + 'which is rare. A 2025 law (HB 1166) added automatic closure of non-conviction court records 61 days '
+      + 'after the order, for non-convictions entered on or after August 1, 2025; older non-convictions are '
+      + 'petitioned with a mandatory 10-day grant if the requirements are met. Deferred impositions are '
+      + 'auto-sealed 61 days after probation ends.',
+    keyDates: [
+      {
+        label: 'Sealing law enacted (N.D. Cent. Code ch. 12-60.1)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. Misdemeanors 3 years / felonies 5 years, conviction-free from completion; no filing fee (the statute forbids charging one).',
+      },
+      {
+        label: 'Non-conviction court records auto-close (HB 1166)',
+        date: '2025-08-01',
+        kind: 'operative',
+        note: 'Non-conviction court records auto-close 61 days after a non-conviction order entered on or after this date; older non-convictions are petitioned with a mandatory 10-day grant if requirements are met (§ 12-60.1-05).',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm HB 1166 (2025) operative details. Wave 7 says non-conviction court records auto-close 61 days after a non-conviction order entered on or after August 1, 2025, and that older non-convictions are petitioned with a mandatory 10-day grant. The tree routes post-Aug-2025 non-convictions to an auto-close "wait, do not file" result and older ones to a petition result; confirm the mechanics against ndcourts.gov.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the no-fee statutory line (ch. 12-60.1 forbids charging a filing fee) and the 61-day auto-seal of completed deferred impositions (§ 12.1-32-07.1). Wave 7 says the ndlegis.gov PDF confirms the no-fee line; confirm both against current text.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.D. Cent. Code ch. 12-60.1 (sealing of convictions; 3/5-year waits; no filing fee)', url: null, retrievedOn: null },
+      { id: 'N.D. Cent. Code § 12.1-32-07.1 (deferred imposition; 61-day auto-seal)', url: null, retrievedOn: null },
+      { id: 'HB 1166 (2025) (non-conviction court-record auto-close; mandatory 10-day grant for older non-convictions)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nd' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_cutoff_nd' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_cutoff_nd' },
+            { label: 'Deferred imposition completed', value: 'deferred', next: 'check_deferred_nd' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        nonconv_cutoff_nd: {
+          type: 'boolean',
+          text: 'Did the case end (the non-conviction order) on or after August 1, 2025?',
+          yes: 'check_autoclose_nd',
+          no: 'petition_nonconv_nd'
+        },
+        excluded_nd: {
+          type: 'boolean',
+          text: 'Are you a registrable sex offender or offender against children, or was this a violent or intimidation felony still within its 10-year firearm-prohibition window?',
+          yes: 'ineligible_excluded_nd',
+          no: 'level_nd'
+        },
+        level_nd: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_nd' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_nd' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nd' }
+          ]
+        },
+        misd_date_nd: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete incarceration, probation, or parole for this case?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction-free from completion of incarceration/probation/parole (N.D. Cent. Code ch. 12-60.1 — misdemeanor)' },
+            nextPass: 'eligible_nd',
+            nextFail: 'waiting_nd'
+          }
+        },
+        felony_date_nd: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete incarceration, probation, or parole for this case?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction-free from completion of incarceration/probation/parole (N.D. Cent. Code ch. 12-60.1 — felony)' },
+            nextPass: 'eligible_nd',
+            nextFail: 'waiting_nd'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'North Dakota seals convictions and (since 2025) auto-closes many non-conviction records, so the outcome decides the route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record check will show the disposition; the ndcourts.gov sealing instructions can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / BCI)',
+          citation: 'N.D. Cent. Code ch. 12-60.1 (the route depends on the disposition)'
+        },
+        check_autoclose_nd: {
+          status: 'eligible',
+          title: 'Non-Conviction Since Aug 2025 — Auto-Closes, Do Not File',
+          message: 'Good news, and it means you should NOT file. Because your non-conviction order was entered on or after August 1, 2025, North Dakota\'s new law (HB 1166) closes the court record AUTOMATICALLY — 61 days after the order. So you do not need to petition; you just wait for the 61 days to run, then confirm it closed. If it is still showing well after that, the ndcourts.gov instructions or a clerk can help you follow up. Filing a petition you do not need would only cost you effort.',
+          remedy: 'Wait — the record auto-closes 61 days after the order (HB 1166)',
+          citation: 'HB 1166 (2025)'
+        },
+        petition_nonconv_nd: {
+          status: 'eligible',
+          title: 'Older Non-Conviction — Petition, Mandatory 10-Day Grant',
+          message: 'Because your non-conviction ended before the August 1, 2025 auto-close date, you petition to seal it — but with a nice feature: if you meet the requirements, the grant is MANDATORY within 10 days (§ 12-60.1-05). And filing is FREE — North Dakota law forbids charging a fee. You name the arresting agency and prosecutor as respondents. The ndcourts.gov sealing instructions walk you through it.',
+          remedy: 'Non-conviction sealing petition — mandatory 10-day grant, free (§ 12-60.1-05)',
+          citation: 'N.D. Cent. Code § 12-60.1-05'
+        },
+        check_deferred_nd: {
+          status: 'eligible',
+          title: 'Deferred Imposition Completed — Auto-Sealed, Check',
+          message: 'Because you completed a deferred imposition of sentence, it results in a set-aside and dismissal, and the record is auto-sealed 61 days after probation ends (for misdemeanors and infractions, by court rule). So the honest first step is to CHECK — confirm it sealed rather than assume you must file. If it did not, the ndcourts.gov instructions or a clerk can help you follow up. Filing is free either way.',
+          remedy: 'Check your record — a completed deferred imposition auto-seals (§ 12.1-32-07.1)',
+          citation: 'N.D. Cent. Code § 12.1-32-07.1'
+        },
+        eligible_nd: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Sealable, Free',
+          message: 'Based on your dates, the waiting period has passed — 3 years for a misdemeanor, 5 for a felony, conviction-free from completing incarceration, probation, or parole. You petition to seal, naming the arresting agency and prosecutor as respondents; it is discretionary (the court balances risk, rehabilitation, and any victim input). And here is North Dakota\'s standout feature: there is NO FILING FEE — the statute forbids charging one. DUI is sealable here, which is unusual. The ndcourts.gov sealing instructions can help.',
+          remedy: 'Sealing petition (ch. 12-60.1) — no filing fee',
+          citation: 'N.D. Cent. Code ch. 12-60.1'
+        },
+        waiting_nd: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'North Dakota\'s sealing waiting periods run conviction-free from when you complete incarceration, probation, or parole: 3 years for a misdemeanor, 5 for a felony. Based on your dates, yours has not passed yet. When it does, the good news is that filing is free (the statute forbids a fee), and DUI is sealable here. The ndcourts.gov sealing instructions can help you plan. (A denial carries a 3-year re-petition bar, so it is worth waiting until you clearly qualify.)',
+          remedy: 'Wait for the period, then seal for free (ch. 12-60.1)',
+          citation: 'N.D. Cent. Code ch. 12-60.1'
+        },
+        ineligible_excluded_nd: {
+          status: 'ineligible',
+          title: 'This Offense Is Not Yet Sealable',
+          message: 'North Dakota does not seal for registrable sex offenders or offenders against children, and a violent or intimidation felony cannot be sealed until it clears its 10-year firearm-prohibition window. If a registration requirement or that firearm window is the barrier, this may become a "not yet" once it ends; for a permanently ineligible offense, a pardon is the remaining route. The ndcourts.gov instructions and North Dakota Legal Self Help Center can help you check.',
+          remedy: 'None for now (registration / firearm window) — reassess when it ends, or a pardon',
+          citation: 'N.D. Cent. Code ch. 12-60.1'
+        },
+        complex_level_nd: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'North Dakota\'s waiting period is 3 years for a misdemeanor and 5 for a felony, so the level matters. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a BCI record check will show it. The ndcourts.gov instructions can help you read it — and remember, sealing here is free.',
+          remedy: 'Get the Conviction Level First (court paperwork / BCI)',
+          citation: 'N.D. Cent. Code ch. 12-60.1'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Sealing (N.D. Cent. Code ch. 12-60.1)',
+          formName: 'North Dakota Courts sealing petition',
+          formUrl: 'https://www.ndcourts.gov/legal-self-help',
+          steps: [
+            'For a non-conviction entered on or after August 1, 2025, do not file — it auto-closes 61 days after the order (HB 1166).',
+            'For an older non-conviction, petition — the grant is mandatory within 10 days if you meet the requirements.',
+            'For a conviction, wait 3 years (misdemeanor) or 5 years (felony) conviction-free from completing incarceration/probation/parole, then petition, naming the arresting agency and prosecutor.',
+            'There is no filing fee — the statute forbids one. The ndcourts.gov self-help has the petition instructions.'
+          ],
+          // NOT null: Wave 7 states the statute forbids charging a filing fee.
+          fees: 'No filing fee — North Dakota law (ch. 12-60.1) forbids charging one to petition for sealing.',
+          feeWaiver: 'Not needed — the statute prohibits any filing fee.',
+          courtContact: 'The court where the case was handled'
+        }
+      },
+      legalAid: [
+        { name: 'North Dakota Legal Self Help Center', url: 'https://www.ndcourts.gov/legal-self-help' },
+        { name: 'Legal Services of North Dakota', url: 'https://www.legalassist.org' }
+      ]
+    }
+  },
+  AK: {
+    code: 'AK',
+    name: 'Alaska',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Alaska requires the most honest answer of any state: there is NO expungement law. Sealing (§ 12.62.180) '
+      + 'exists only for records proven to result from mistaken identity or a false accusation. For a valid '
+      + 'conviction, Alaska law makes essentially no provision to seal or expunge it. What Alaska CAN offer is '
+      + 'narrower and worth knowing precisely: if your ENTIRE case ended in dismissal or acquittal, you can '
+      + 'remove it from the public online court index (CourtView); a suspended imposition of sentence can be '
+      + 'set aside on completion, though the public record still shows the conviction and the set-aside; and a '
+      + 'newer tool avoids a conviction entering at all. Pardons are effectively unavailable — about 188 in '
+      + 'the state\'s history, and none since 2006.',
+    keyDates: [
+      {
+        label: 'Marijuana decriminalized-possession non-publication (2024)',
+        date: '2024',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. Decriminalized marijuana-possession convictions are barred from release/publication; scope and mechanics flagged for verification.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the 2024 marijuana provision\'s scope and mechanics. Wave 7 says decriminalized marijuana-possession convictions are barred from release/publication but flags scope/mechanics for verification. The tree routes an old marijuana-possession conviction to a "non-publication may apply" result; confirm what it covers and how it works.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm any fees for the CourtView removal (Form TF-810 / Admin Rule 40) and the § 12.62.180 sealing request, and whether waivers apply. Wave 7 gives the forms/processes but no fee information; the fees and feeWaiver fields are null pending confirmation with courts.alaska.gov and the DPS record-sealing process.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Alaska Stat. § 12.62.180 (sealing — mistaken identity / false accusation only)', url: null, retrievedOn: null },
+      { id: 'Alaska Stat. § 12.55.085 (suspended imposition of sentence — set-aside)', url: null, retrievedOn: null },
+      { id: 'Alaska Stat. § 12.55.078 (suspended entry of judgment)', url: null, retrievedOn: null },
+      { id: 'Alaska R. Admin. P. 40 / Alaska Stat. § 22.35.030 (CourtView removal; Form TF-810)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_marijuana_ak' },
+            { label: 'Dismissed', value: 'dismissed', next: 'mistaken_ak' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'mistaken_ak' },
+            { label: 'Suspended imposition / suspended entry of judgment completed', value: 'deferred', next: 'sis_setaside_ak' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        mistaken_ak: {
+          type: 'boolean',
+          text: 'Was the arrest or charge the result of mistaken identity or a false accusation — something you could prove to the state?',
+          yes: 'eligible_sealing_ak',
+          no: 'courtview_ak'
+        },
+        courtview_ak: {
+          type: 'boolean',
+          text: 'Did the ENTIRE case end without any conviction (every charge in it dismissed or acquitted)?',
+          yes: 'eligible_courtview_ak',
+          no: 'complex_partial_ak'
+        },
+        conv_marijuana_ak: {
+          type: 'boolean',
+          text: 'Was this a marijuana-possession conviction that has since been decriminalized?',
+          yes: 'marijuana_ak',
+          no: 'conv_sis_ak'
+        },
+        conv_sis_ak: {
+          type: 'boolean',
+          text: 'Was this a suspended imposition of sentence (SIS) that you completed, or a suspended entry of judgment?',
+          yes: 'sis_setaside_ak',
+          no: 'ineligible_conviction_ak'
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Alaska\'s options are narrow and depend entirely on the outcome — a fully dismissed case can come off the online index, but a conviction almost never can. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork (CourtView) or a DPS record will show the disposition; the Alaska Court System self-help and Alaska Legal Services can help you read it.',
+          remedy: 'Get Your Record First (CourtView / DPS)',
+          citation: 'Alaska Stat. §§ 12.62.180, 22.35.030 (the route depends on the disposition)'
+        },
+        eligible_sealing_ak: {
+          status: 'eligible',
+          title: 'Mistaken Identity / False Accusation — Sealing Available',
+          message: 'This is the one situation Alaska allows sealing: if the record resulted from mistaken identity or a false accusation, you can apply to have it sealed (§ 12.62.180). The catch is the standard — you have to prove it to the agency, essentially beyond a reasonable doubt — so documentation matters. The Department of Public Safety has a record-sealing request process. Alaska Legal Services can help you put the strongest showing together.',
+          remedy: 'Sealing for mistaken identity / false accusation (§ 12.62.180)',
+          citation: 'Alaska Stat. § 12.62.180'
+        },
+        eligible_courtview_ak: {
+          status: 'eligible',
+          title: 'Entire Case Dismissed/Acquitted — Remove It From CourtView',
+          message: 'Because your ENTIRE case ended without a conviction, you can have it removed from the public online court index (CourtView) 60 days after disposition, using Form TF-810 (Admin Rule 40). This is the one clean win Alaska offers — the case stops showing up in the online search. Note it removes the online listing; it is not a full sealing of every record. The Alaska Court System self-help pages have the form and instructions.',
+          remedy: 'CourtView removal (Form TF-810 / Admin Rule 40) — 60 days after disposition',
+          citation: 'Alaska Stat. § 22.35.030'
+        },
+        complex_partial_ak: {
+          status: 'complex',
+          title: 'A Partial Win Does Not Qualify — Let\'s Confirm',
+          message: 'Here is an Alaska limitation worth being precise about: CourtView removal only works if the ENTIRE case ended without a conviction. If your case had any conviction in it, a dismissed or acquitted charge WITHIN that case stays visible online — a partial win does not qualify. Because the details of what was and was not convicted matter here, it is worth confirming exactly how your case is recorded before assuming anything. The Alaska Court System self-help and Alaska Legal Services can check it against the Rule 40 requirements.',
+          remedy: 'Confirm the full case disposition (a partial dismissal does not qualify for removal)',
+          citation: 'Alaska Stat. § 22.35.030'
+        },
+        marijuana_ak: {
+          status: 'eligible',
+          title: 'Old Marijuana Possession — Non-Publication May Apply',
+          message: 'Because this was a marijuana-possession conviction that has since been decriminalized, Alaska\'s 2024 law bars it from being released or published — a meaningful protection in a state that otherwise does not clear convictions. Because the law is new, the exact scope and how you invoke it are things worth confirming rather than assuming. Alaska Legal Services can help you check whether and how it applies to your specific conviction.',
+          remedy: 'Marijuana non-publication (2024 law) — confirm scope/mechanics',
+          citation: 'Alaska Stat. § 12.62.180'
+        },
+        sis_setaside_ak: {
+          status: 'eligible',
+          title: 'Set Aside — But Know It Stays Visible',
+          message: 'Because you completed a suspended imposition of sentence (SIS), the conviction can be set aside as a matter of right, absent good cause (§ 12.55.085) — and a suspended entry of judgment means no conviction entered in the first place. Worth doing, but here is the honest caveat for SIS: per the Alaska courts (Journey v. State), the public record REMAINS and shows both the conviction and the set-aside. So it clears the legal effect, not the visibility. (SIS excludes DUI/refusal, sex offenses, felony crimes against a person, firearm use, and prior DV.) Alaska Legal Services can confirm which applies to you.',
+          remedy: 'SIS set-aside (§ 12.55.085) — nullifies the conviction, but it stays visible',
+          citation: 'Alaska Stat. § 12.55.085'
+        },
+        ineligible_conviction_ak: {
+          status: 'ineligible',
+          title: 'No Path to Clear This Conviction',
+          message: 'This is the hardest honest answer in the country, and you deserve it straight: Alaska has no expungement law, and for an ordinary valid conviction there is essentially no way to seal or remove it. A pardon is technically the only route, but it is effectively unavailable — there have been about 188 pardons in Alaska\'s entire history, and none since 2006. So we are not going to point you toward a door that does not really open. What CAN sometimes help: if any charge in your history ended without a conviction, that piece may be removable; and if a record ever resulted from mistaken identity, that can be sealed. Alaska Legal Services can review your full record for anything that qualifies.',
+          remedy: 'None realistically (no expungement; pardons effectively unavailable) — check non-convictions',
+          citation: 'Alaska Stat. § 12.62.180'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Record relief in Alaska (CourtView removal; SIS set-aside; § 12.62.180 sealing)',
+          formName: 'CourtView removal request (Form TF-810)',
+          formUrl: 'https://courts.alaska.gov/shc/records/records-removal.htm',
+          steps: [
+            'If your ENTIRE case ended without a conviction, file Form TF-810 (Admin Rule 40) to remove it from the online CourtView index 60 days after disposition.',
+            'If a record resulted from mistaken identity or a false accusation, apply for sealing under § 12.62.180 (a high proof standard).',
+            'If you completed a suspended imposition of sentence, seek a set-aside (§ 12.55.085) — but know the public record still shows the conviction and set-aside.',
+            'For an ordinary conviction, be aware there is no expungement and pardons are effectively unavailable. Alaska Legal Services can review your record for anything that qualifies.'
+          ],
+          // null: Wave 7 gives no fee information for the TF-810 removal or § 12.62.180
+          // sealing — the fee and any waiver are unknown.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The Alaska Court System (CourtView removal) and Department of Public Safety (sealing)'
+        }
+      },
+      legalAid: [
+        { name: 'Alaska Legal Services Corporation', url: 'https://www.alsc-law.org' },
+        { name: 'Alaska Court System — Self-Help / Records Removal', url: 'https://courts.alaska.gov/shc/' }
+      ]
+    }
+  },
+  VT: {
+    code: 'VT',
+    name: 'Vermont',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Vermont rewrote its entire record-clearing system with Act 60 (2025), effective July 1, 2025 — so any '
+      + 'guide older than that is wrong. Under the new architecture (13 V.S.A. ch. 230), EXPUNGEMENT (record '
+      + 'destroyed, "no criminal record exists") is now reserved for conduct that is no longer a crime. '
+      + 'SEALING is the primary remedy: most qualifying misdemeanors after 3 years, most qualifying '
+      + 'non-violent felonies after 7 years, and a misdemeanor DUI after 10 years. Two features are unusually '
+      + 'favorable: the court "shall grant" without a hearing unless the state objects and shows sealing is '
+      + 'against the interests of justice (the burden is on the STATE), and people who were 18-21 at the time '
+      + 'of the offense can petition after just 30 days.',
+    keyDates: [
+      {
+        label: 'Act 60 restructures record-clearing (13 V.S.A. ch. 230)',
+        date: '2025-07-01',
+        kind: 'effective',
+        note: 'Total rewrite. Sealing is now primary: misdemeanors 3 yrs (down from 5), non-violent felonies 7 yrs, misdemeanor DUI 10 yrs; the burden to oppose sits on the state; the old no-new-convictions-during-the-wait rule was removed; ages 18-21 petition after 30 days. Any pre-July-2025 source is wrong.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the post-Act-60 statute against the current text. Wave 7 stresses that Act 60 (eff. July 1, 2025) rewrote everything and nearly every online guide predates it. Confirm the 3/7/10-year waits, the burden-flip (state must show sealing is contrary to the interests of justice), the removal of the no-new-convictions-during-the-wait rule, and the 18-21 30-day petition, against legislature.vermont.gov and vtcourts.gov/criminal/expungement.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the qualifying-crimes list in 13 V.S.A. § 7601(4). Wave 7 says qualifying felonies include non-violent offenses such as burglary of unoccupied dwellings, listed property crimes, drug offenses (including trafficking), and pardoned convictions, while listed violent crimes and sexual misconduct are excluded. The tree asks these; confirm the exact list.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: '13 V.S.A. §§ 7601, 7602 (expungement/sealing; Act 60 of 2025 architecture)', url: null, retrievedOn: null },
+      { id: '13 V.S.A. § 7603 (non-conviction sealing)', url: null, retrievedOn: null },
+      { id: 'Act 60 (2025) (restructure of record-clearing, eff. Jul 1, 2025)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'nolonger_crime_vt' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_vt' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_vt' },
+            { label: 'Diversion / deferred completed', value: 'deferred', next: 'nonconv_vt' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        nolonger_crime_vt: {
+          type: 'boolean',
+          text: 'Is the conduct you were convicted of no longer a crime in Vermont (for example, since decriminalized)?',
+          yes: 'eligible_expunge_vt',
+          no: 'age_vt'
+        },
+        age_vt: {
+          type: 'boolean',
+          text: 'Were you between 18 and 21 years old at the time of the offense?',
+          yes: 'age_date_vt',
+          no: 'level_vt'
+        },
+        age_date_vt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 30, unit: 'days', anchor: 'from sentence completion for an offense committed at age 18-21 (13 V.S.A. ch. 230 — 30-day petition)' },
+            nextPass: 'eligible_seal_vt',
+            nextFail: 'waiting_vt'
+          }
+        },
+        level_vt: {
+          type: 'choice',
+          text: 'How would you describe the conviction?',
+          options: [
+            { label: 'A qualifying misdemeanor (most, except listed violent crimes and sexual misconduct)', value: 'misd', next: 'misd_dui_vt' },
+            { label: 'A qualifying non-violent felony (incl. burglary of an unoccupied dwelling, listed property crimes, or drug offenses including trafficking)', value: 'felony', next: 'felony_date_vt' },
+            { label: 'A listed violent crime or a sexual-misconduct offense', value: 'excluded', next: 'ineligible_excluded_vt' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_vt' }
+          ]
+        },
+        misd_dui_vt: {
+          type: 'boolean',
+          text: 'Was this a misdemeanor DUI?',
+          yes: 'dui_date_vt',
+          no: 'misd_date_vt'
+        },
+        misd_date_vt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — qualifying misdemeanor; down from 5 under Act 60)' },
+            nextPass: 'eligible_seal_vt',
+            nextFail: 'waiting_vt'
+          }
+        },
+        felony_date_vt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — qualifying non-violent felony)' },
+            nextPass: 'eligible_seal_vt',
+            nextFail: 'waiting_vt'
+          }
+        },
+        dui_date_vt: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — misdemeanor DUI, excluding injury/death, school-bus, CDL)' },
+            nextPass: 'eligible_seal_vt',
+            nextFail: 'waiting_vt'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Vermont\'s Act 60 (2025) rewrite handles convictions and non-convictions differently, and even the conviction rules depend on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a VCIC record check will show the disposition; Vermont Legal Aid (1-800-917-7787, vtlawhelp.org/expungement) runs free clinics and can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / VCIC)',
+          citation: '13 V.S.A. ch. 230 (the route depends on the disposition)'
+        },
+        nonconv_vt: {
+          status: 'eligible',
+          title: 'No Conviction — Sealable',
+          message: 'Because your case ended without a conviction, Vermont lets you seal it under 13 V.S.A. § 7603. Under the Act 60 framework the court "shall grant" absent a government objection showing it is against the interests of justice — a favorable posture. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you file. The fees are $90 per docket plus a $30 VCIC record check, with waivers available.',
+          remedy: 'Non-conviction sealing (§ 7603)',
+          citation: '13 V.S.A. § 7603'
+        },
+        eligible_expunge_vt: {
+          status: 'eligible',
+          title: 'Conduct No Longer a Crime — Immediate Expungement',
+          message: 'Because you were convicted of conduct that is no longer a crime in Vermont, you qualify for full EXPUNGEMENT under Act 60 — immediate once your sentence and any restitution and surcharges are paid, with the record destroyed so that, in the law\'s words, "no criminal record exists." This is the strongest relief Vermont offers. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you file.',
+          remedy: 'Expungement for conduct no longer criminal (13 V.S.A. ch. 230) — record destroyed',
+          citation: '13 V.S.A. § 7601'
+        },
+        eligible_seal_vt: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Sealable',
+          message: 'Based on your dates, your Act 60 waiting period has passed — 3 years for a qualifying misdemeanor, 7 for a qualifying non-violent felony, 10 for a misdemeanor DUI, or just 30 days if you were 18-21 at the time of the offense. Two things work in your favor: the court "shall grant" without a hearing unless the state objects and shows sealing is against the interests of justice (the burden is on the state), and the old rule barring you for new convictions during the wait was removed in 2025. A pending charge would pause the petition. Fees are $90 per docket plus a $30 VCIC record check (waivers available). Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Sealing petition (13 V.S.A. ch. 230)',
+          citation: '13 V.S.A. § 7602'
+        },
+        waiting_vt: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Vermont\'s Act 60 sealing waits run from sentence completion: 3 years for a qualifying misdemeanor, 7 for a qualifying non-violent felony, 10 for a misdemeanor DUI — or just 30 days if you were 18-21 at the time of the offense. Based on your dates, yours has not passed yet. When it does, the process is favorable: the state bears the burden to oppose. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you plan.',
+          remedy: 'Wait for the Act 60 period (13 V.S.A. ch. 230)',
+          citation: '13 V.S.A. § 7602'
+        },
+        ineligible_excluded_vt: {
+          status: 'ineligible',
+          title: 'A Listed Violent or Sexual-Misconduct Offense — Not Sealable',
+          message: 'Even under Act 60\'s broadened rules, Vermont excludes listed violent crimes and sexual-misconduct offenses from sealing. No waiting period changes that. A pardon remains a route for an otherwise-excluded offense (and a pardoned conviction can then be sealed). Vermont Legal Aid (1-800-917-7787) can help you confirm whether yours is on the excluded list and explain the pardon process.',
+          remedy: 'None (listed violent / sexual-misconduct offense) — a pardon is the remaining route',
+          citation: '13 V.S.A. § 7601'
+        },
+        complex_level_vt: {
+          status: 'complex',
+          title: 'We Need the Offense Details',
+          message: 'Under Act 60 the wait depends on whether your offense is a qualifying misdemeanor (3 years), a qualifying non-violent felony (7 years), or a misdemeanor DUI (10 years) — and some violent and sexual-misconduct offenses are excluded entirely. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a VCIC record check will show it. Vermont Legal Aid (1-800-917-7787) can help you read it.',
+          remedy: 'Get the Offense Details First (court paperwork / VCIC)',
+          citation: '13 V.S.A. § 7601'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement / Sealing (13 V.S.A. ch. 230; Act 60 of 2025)',
+          formName: 'Vermont Judiciary expungement/sealing forms',
+          formUrl: 'https://www.vermontjudiciary.org/criminal/expungement',
+          steps: [
+            'Note Act 60 (July 1, 2025) rewrote everything — use only current forms and statute, not older guides.',
+            'If the conduct is no longer a crime, seek expungement (record destroyed) — immediate once your sentence and restitution/surcharges are paid.',
+            'Otherwise seek sealing: 3 years (qualifying misdemeanor), 7 (qualifying non-violent felony), 10 (misdemeanor DUI), or 30 days if you were 18-21 at the offense.',
+            'File with the $90-per-docket fee plus a $30 VCIC record check (waivers available). Vermont Legal Aid (1-800-917-7787) runs free clinics.'
+          ],
+          // NOT null: Wave 7 gives $90 per docket + $30 VCIC record check.
+          fees: '$90 per docket plus a $30 VCIC record check.',
+          feeWaiver: 'Fee waivers are available.',
+          courtContact: 'The court where the case was decided'
+        }
+      },
+      legalAid: [
+        { name: 'Vermont Legal Aid — Expungement Clinics (1-800-917-7787)', url: 'https://vtlawhelp.org/expungement' },
+        { name: 'Vermont Judiciary — Expungement', url: 'https://www.vermontjudiciary.org/criminal/expungement' }
+      ]
+    }
+  },
+  WY: {
+    code: 'WY',
+    name: 'Wyoming',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    terminology:
+      'Wyoming expunges MISDEMEANORS (§ 7-13-1501) 5 years after sentence and FELONIES (§ 7-13-1502) 10 years '
+      + 'after sentence, and both are ONCE PER LIFETIME under their sections — so bundle everything you can '
+      + 'into the single petition. The fee is priced by tier: $100 for a misdemeanor, $300 for a felony. Two '
+      + 'Wyoming-specific points matter: domestic-violence misdemeanors ARE expungeable, and expungement lifts '
+      + 'the federal firearm bar (for felonies, § (m) restores the rights the conviction removed, including '
+      + 'firearms). The felony path is narrow — only felonies from a SINGLE occurrence, with no other felony '
+      + 'history. Non-convictions can be expunged 180 days after arrest or dismissal.',
+    keyDates: [
+      {
+        label: 'Under-21 nicotine offenses auto-expunged',
+        date: '2020',
+        kind: 'effective',
+        note: 'Wave 7 gives the year. Under-21 nicotine offenses are auto-expunged 6 months after the fine is paid.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the full felony exclusion list under § 7-13-1502. Wave 7 gives violent felonies (§ 6-1-104(a)(xii)), firearm felonies (except wildlife-code), sex crimes, child endangerment, felony DUI, and drug-distribution, and flags the full list for the statute. The tree asks these as exclusions; confirm the complete set.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the non-conviction expungement fee (§ 7-13-1401). Wave 7 gives the 180-day non-conviction path but flags the fee for confirmation. The tree routes non-convictions to a 180-day result; confirm the fee with a circuit clerk (Laramie or Natrona).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. Wave 7 gives the fee amounts but no waiver information; the feeWaiver field is null pending confirmation with a circuit clerk.',
+        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Wyo. Stat. § 7-13-1501 (misdemeanor expungement; 5-yr / 1-yr status; once per lifetime; DV + firearm restoration)', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 7-13-1502 (felony expungement; 10-yr; same-occurrence only; rights restoration incl. firearms)', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 7-13-1401 (non-conviction expungement; 180 days)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_wy' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_date_wy' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_wy' },
+            { label: 'First-offender deferral (§ 7-13-301) completed', value: 'deferred', next: 'eligible_deferral_wy' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        level_wy: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_prioruse_wy' },
+            { label: 'Felony', value: 'felony', next: 'felony_excluded_wy' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wy' }
+          ]
+        },
+        misd_prioruse_wy: {
+          type: 'boolean',
+          text: 'Have you already used Wyoming\'s once-in-a-lifetime misdemeanor expungement?',
+          yes: 'ineligible_prioruse_wy',
+          no: 'misd_status_wy'
+        },
+        misd_status_wy: {
+          type: 'boolean',
+          text: 'Was this a "status offense" — something illegal only because of your age, like underage possession (MIP)?',
+          yes: 'misd_status_date_wy',
+          no: 'misd_excluded_wy'
+        },
+        misd_excluded_wy: {
+          type: 'boolean',
+          text: 'Did the offense involve use of a firearm, or was it a healthcare provider\'s patient-care offense?',
+          yes: 'ineligible_excluded_misd_wy',
+          no: 'misd_date_wy'
+        },
+        misd_status_date_wy: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'post-sentence (Wyo. Stat. § 7-13-1501 — status offense)' },
+            nextPass: 'eligible_misd_wy',
+            nextFail: 'waiting_wy'
+          }
+        },
+        misd_date_wy: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'post-sentence (Wyo. Stat. § 7-13-1501 — misdemeanor)' },
+            nextPass: 'eligible_misd_wy',
+            nextFail: 'waiting_wy'
+          }
+        },
+        felony_excluded_wy: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a violent felony, a firearm felony (other than wildlife-code), a sex crime, child endangerment, felony DUI, or drug distribution?',
+          yes: 'ineligible_excluded_felony_wy',
+          no: 'felony_history_wy'
+        },
+        felony_history_wy: {
+          type: 'boolean',
+          text: 'Do you have any OTHER felony conviction, or felonies from a DIFFERENT occurrence? (Wyoming expunges only felonies from a single occurrence, with no other felony history.)',
+          yes: 'ineligible_felonyhistory_wy',
+          no: 'felony_date_wy'
+        },
+        felony_date_wy: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, with restitution paid in full?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'post-sentence with restitution paid in full (Wyo. Stat. § 7-13-1502 — felony, same occurrence, no other felony history)' },
+            nextPass: 'eligible_felony_wy',
+            nextFail: 'waiting_wy'
+          }
+        },
+        nonconv_date_wy: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you arrested, or when was the case dismissed?',
+          validation: {
+            period: { amount: 180, unit: 'days', anchor: 'after arrest or dismissal, no charges pending (Wyo. Stat. § 7-13-1401 — non-conviction)' },
+            nextPass: 'eligible_nonconv_wy',
+            nextFail: 'waiting_wy'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Wyoming expunges misdemeanors, felonies, and non-convictions on different timelines, and the conviction paths are once per lifetime — so the outcome matters. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a DCI record check will show the disposition; the wyocourts.gov expungement self-help can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / DCI)',
+          citation: 'Wyo. Stat. §§ 7-13-1401/1501/1502 (the route depends on the disposition)'
+        },
+        eligible_nonconv_wy: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable After 180 Days',
+          message: 'Because your case ended without a conviction, Wyoming lets you expunge it 180 days after the arrest or dismissal, as long as no charges are pending — and based on your date, that window has passed. You file in the court that handled the case. The wyocourts.gov expungement self-help has the forms; a circuit clerk can confirm the non-conviction fee.',
+          remedy: 'Non-conviction expungement (§ 7-13-1401)',
+          citation: 'Wyo. Stat. § 7-13-1401'
+        },
+        eligible_deferral_wy: {
+          status: 'eligible',
+          title: 'First-Offender Deferral Completed — No Conviction',
+          message: 'Because you completed a first-offender deferral (§ 7-13-301), Wyoming treats the case as never resulting in a conviction — which is often the best outcome of all, since there is no conviction to expunge. Confirm your record reflects the dismissal; the wyocourts.gov self-help pages can help, and if any related non-conviction record remains, it can be expunged 180 days out.',
+          remedy: 'First-offender deferral (§ 7-13-301) — avoids a conviction',
+          citation: 'Wyo. Stat. § 7-13-301'
+        },
+        eligible_misd_wy: {
+          status: 'eligible',
+          title: 'Misdemeanor Waiting Period Met — Expungeable (One Shot)',
+          message: 'Based on your dates, your misdemeanor waiting period has passed (5 years post-sentence, or 1 year for an age-based status offense). The fee is $100, with a 30-day prosecutor-objection window and then a possible summary grant. Two Wyoming points worth knowing: domestic-violence misdemeanors ARE expungeable here, and expungement lifts the federal firearm bar. One important caveat: this is ONCE PER LIFETIME under this section, so bundle every misdemeanor you want cleared into the single petition. The wyocourts.gov expungement self-help can help.',
+          remedy: 'Misdemeanor expungement (§ 7-13-1501) — once per lifetime, bundle everything',
+          citation: 'Wyo. Stat. § 7-13-1501'
+        },
+        eligible_felony_wy: {
+          status: 'eligible',
+          title: 'Felony Waiting Period Met — Expungeable (One Shot)',
+          message: 'Based on your dates — 10 years post-sentence with restitution paid in full — your felony appears expungeable under § 7-13-1502, provided these are felonies from a single occurrence and you have no other felony history. The fee is $300, with a 90-day objection window. A meaningful benefit: expungement restores the rights the conviction removed, including firearms (§ (m)). This is once per lifetime, so include everything from that occurrence. The wyocourts.gov expungement self-help can help.',
+          remedy: 'Felony expungement (§ 7-13-1502) — once per lifetime, restores rights',
+          citation: 'Wyo. Stat. § 7-13-1502'
+        },
+        waiting_wy: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Wyoming\'s waiting periods run post-sentence: 5 years for a misdemeanor (1 year for an age-based status offense), 10 years for a felony (with restitution paid), and 180 days for a non-conviction. Based on your dates, yours has not passed yet. When it does, remember the conviction paths are once per lifetime, so it is worth bundling everything. The wyocourts.gov expungement self-help can help you plan.',
+          remedy: 'Wait for the period (§§ 7-13-1401/1501/1502)',
+          citation: 'Wyo. Stat. §§ 7-13-1501, 7-13-1502'
+        },
+        ineligible_prioruse_wy: {
+          status: 'ineligible',
+          title: 'Your One Lifetime Misdemeanor Expungement Has Been Used',
+          message: 'Wyoming\'s misdemeanor expungement is once per lifetime, and because you have already used it, another is not available under this section — no waiting period changes that. If you have a felony from a single occurrence that qualifies, that is a separate once-per-lifetime path (§ 7-13-1502); and any non-conviction can still be expunged. The wyocourts.gov self-help can help you check what remains.',
+          remedy: 'None (misdemeanor one-shot used) — check the felony path or non-convictions',
+          citation: 'Wyo. Stat. § 7-13-1501'
+        },
+        ineligible_excluded_misd_wy: {
+          status: 'ineligible',
+          title: 'This Misdemeanor Is Excluded',
+          message: 'Wyoming does not expunge misdemeanors that involved the use of a firearm, and there are patient-care exclusions for healthcare providers. No waiting period changes that. If this is the only barrier and you have other, eligible offenses, those can still be bundled and expunged; otherwise a pardon is the remaining route. The wyocourts.gov self-help can help you confirm.',
+          remedy: 'None (firearm-use / patient-care exclusion) — a pardon is the remaining route',
+          citation: 'Wyo. Stat. § 7-13-1501'
+        },
+        ineligible_excluded_felony_wy: {
+          status: 'ineligible',
+          title: 'This Felony Is Excluded',
+          message: 'Wyoming excludes a set of felonies from expungement: violent felonies, firearm felonies (other than wildlife-code), sex crimes, child endangerment, felony DUI, and drug distribution. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-excluded felony. The wyocourts.gov self-help can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Felony) — a pardon is the remaining route',
+          citation: 'Wyo. Stat. § 7-13-1502'
+        },
+        ineligible_felonyhistory_wy: {
+          status: 'ineligible',
+          title: 'Other Felony History — Not Expungeable',
+          message: 'Wyoming\'s felony expungement is narrow: it reaches only felonies from a SINGLE occurrence, and only if you have no other felony history. Because you have another felony conviction or felonies from a different occurrence, this path is not available — no waiting period changes that. A pardon from the Governor remains the route for felony convictions here. If any part of your record was a non-conviction, that can still be expunged separately. The wyocourts.gov self-help can help you check.',
+          remedy: 'None (other felony history) — a pardon is the remaining route',
+          citation: 'Wyo. Stat. § 7-13-1502'
+        },
+        complex_level_wy: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'Wyoming\'s waiting period and fee depend on whether it is a misdemeanor (5 years, $100) or a felony (10 years, $300), and both are once per lifetime. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a DCI record check will show it. The wyocourts.gov expungement self-help can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / DCI)',
+          citation: 'Wyo. Stat. §§ 7-13-1501, 7-13-1502'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (Wyo. Stat. §§ 7-13-1401, 7-13-1501, 7-13-1502)',
+          formName: 'Wyoming Judicial Branch expungement forms',
+          formUrl: 'https://www.courts.state.wy.us/expungement/',
+          steps: [
+            'Confirm your path: misdemeanor (5 years, $100), felony (10 years, $300, single occurrence, no other felony history), or non-conviction (180 days).',
+            'Bundle everything into the single petition — the conviction paths are once per lifetime.',
+            'For a felony, confirm restitution is paid in full and the offense is not excluded (violent, firearm, sex, child-endangerment, felony DUI, drug-distribution).',
+            'File in the court that handled the case; expungement can restore firearm rights (and lifts the federal bar for a DV misdemeanor). The wyocourts.gov self-help has the forms.'
+          ],
+          // NOT null: Wave 7 gives $100 (misdemeanor) / $300 (felony). The non-conviction
+          // fee and any waiver are open questions.
+          fees: '$100 filing fee for a misdemeanor expungement (§ 7-13-1501); $300 for a felony (§ 7-13-1502). The non-conviction (§ 7-13-1401) fee is being confirmed.',
+          // null: Wave 7 gives no indigency-waiver information for the filing fees.
+          feeWaiver: null,
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Wyoming Judicial Branch — Expungement Self-Help', url: 'https://www.courts.state.wy.us/expungement/' },
+        { name: 'Legal Aid of Wyoming', url: 'https://www.lawyoming.org' }
+      ]
+    }
   }
 };
 

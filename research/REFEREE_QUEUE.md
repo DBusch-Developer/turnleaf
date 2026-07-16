@@ -50,3 +50,72 @@ court still weighs it in its discretion — if so, the branch becomes an
 node. Until confirmed, the hedge stands.
 
 **Blocks:** no field — it blocks a branch. Tracked as an openQuestion on IL too.
+
+---
+
+## NH — the Class B misdemeanor annulment waiting period (1 vs 3 years)
+
+**Wave 7, New Hampshire. Hedged: `complex_classBmisd_nh`.**
+**STATUS: OPEN — tagged for Diana's statute pass (verify against current
+RSA 651:5(III) text on gc.nh.gov). Do NOT resolve from a model reading.**
+
+New Hampshire's annulment statute sets a waiting period per offense class. For a
+Class B misdemeanor the sources conflict: the statute historically said **3
+years**, but some current summaries say **1 year**. Wave 7 says to "encode from
+the current RSA 651:5(III) text" and does not say which value wins.
+
+**Why it is a fight, not an open question:** this is not a fee or a rollout date
+— it is the substantive eligibility clock for a common offense class, and in New
+Hampshire getting it wrong is uniquely dangerous. Filing before the period has
+run is denied AND triggers a **3-year bar on any new petition** (RSA 651:5(IV)).
+So a guessed "1 year" that is really "3 years" would push someone to file two
+years early and lose their eligibility for three more. Guessing either number is
+harmful; the honest move is to refuse to guess.
+
+**Hedge in place:** a Class B misdemeanor routes to `complex_classBmisd_nh`,
+which says the offense is annullable but the exact wait is unresolved (3 vs 1),
+explains why filing early is catastrophic here, and tells the person to confirm
+the precise period from the current statute with a clerk or NH Legal Assistance
+before filing. No user gets a computed eligibility date. Encoded as a null-period
+date node (`nextUnknown`), so the structure cannot carry a pass/fail guess.
+
+**Recommendation:** confirm the Class B misdemeanor wait against the current
+RSA 651:5(III) text. Once known, the branch becomes an ordinary date node at that
+period (1 or 3 years) routing to `eligible_nh` / `waiting_nh`. Until confirmed,
+the hedge stands.
+
+**Blocks:** no field — it blocks a branch. Tracked as an openQuestion on NH too.
+
+---
+
+## SD — automatic-removal waiting period for minor convictions (5 vs 10 years)
+
+**Wave 7, South Dakota. Hedged: `check_autoremoval_sd` (no year asserted).**
+**STATUS: OPEN — tagged for Diana's statute pass (verify against current
+§ 23A-3-34 text on sdlegislature.gov). Do NOT resolve from a model reading.
+Wave 7 calls this "the wave's ugliest source conflict."**
+
+South Dakota automatically removes petty offenses, municipal ordinance
+violations, and Class 2 misdemeanors from the public record after conditions are
+satisfied (§ 23A-3-34) — the state's quiet automation. But the sources split on
+the waiting period: **5 years vs 10 years**, and Wave 7 says to "encode from
+current statute text only," without saying which wins.
+
+**Why it is a fight, not an open question:** it is a substantive eligibility
+clock for a broad class of the most common minor convictions, and the two
+candidate values differ by a factor of two. A guessed "5 years" that is really
+"10" would tell someone their record is clear when it is not.
+
+**Hedge in place:** rather than assert a year, `check_autoremoval_sd` tells the
+person this is automatic and routes them to CHECK their actual record (DCI
+record / UJS self-help), stating plainly that the sources disagree (5 vs 10) and
+that we are not asserting a date. Because the relief is automatic, "check whether
+it already happened" is both honest and more useful than a computed date — no
+user receives a guessed eligibility year.
+
+**Recommendation:** confirm the § 23A-3-34 period against the current statute.
+Once known, `check_autoremoval_sd` can name the actual wait while keeping the
+check-your-record framing (automation means the person should still verify
+status). Until confirmed, the no-year hedge stands.
+
+**Blocks:** no field — it blocks a branch. Tracked as an openQuestion on SD too.

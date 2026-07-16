@@ -2395,7 +2395,441 @@ const WV: Persona[] = [
 ];
 
 
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO], ['MD', MD], ['WI', WI], ['SC', SC], ['AL', AL], ['LA', LA], ['KY', KY], ['OR', OR], ['IA', IA], ['NV', NV], ['AR', AR], ['MS', MS], ['KS', KS], ['NM', NM], ['NE', NE], ['ID', ID], ['WV', WV]];
+// ---------------------------------------------------------------------------
+// WAVE 7 — HI, NH, ME, MT, RI, SD, ND, AK, VT, WY (the final ten, completing 50)
+// ---------------------------------------------------------------------------
+const HI: Persona[] = [
+  {
+    source: 'Wave 7 — HI persona 1',
+    package: 'arrested, charges dropped 2023 -> apply now, $35, 120 days.',
+    record: { title: 'Arrest, charges dropped', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: { already_expunged_hi: false },
+    expect: { resultKey: 'eligible_nonconv_hi', reading: 'A non-conviction gets an administrative "shall issue" HCJDC expungement -> the apply-now result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — HI persona 2',
+    package: 'DANC plea, dismissed 2024 -> eligible 2025.',
+    record: { title: 'DANC deferred plea', disposition: 'deferred', disposition_date: '2024-06-01' },
+    answers: { already_expunged_hi: false },
+    expect: { resultKey: 'eligible_deferred_hi', reading: 'A DANC deferred plea is expungeable 1 year after dismissal; 2024 -> eligible 2025, met at 2026.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — HI persona 3',
+    package: 'misdemeanor conviction (ordinary) -> no path; honest-no + pardon note.',
+    record: { title: 'Ordinary misdemeanor conviction', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { already_expunged_hi: false, conv_type_hi: 'ordinary' },
+    expect: { resultKey: 'ineligible_conviction_hi', reading: 'An ordinary conviction is outside the narrow categories; the tree routes it to the honest-no (with the pardon-does-not-expunge note).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — HI persona 4',
+    package: 'first-time drug offender sentenced under 706-622.5 -> court order -> HCJDC.',
+    record: { title: 'First-time drug offender (706-622.5)', disposition: 'convicted', disposition_date: '2019-06-01' },
+    answers: { already_expunged_hi: false, conv_type_hi: 'drug' },
+    expect: { resultKey: 'eligible_conv_hi', reading: 'A first-time drug offender sentence is one of the three qualifying conviction categories -> court order then HCJDC.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — HI persona 5',
+    package: 'expunged in 2023 but still on eCourt Kokua -> the pre-Act-003 sealing-request branch.',
+    record: { title: 'Already expunged, still on eCourt Kokua', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: { already_expunged_hi: true },
+    expect: { resultKey: 'sealing_request_hi', reading: 'A pre-Act-003 certificate needs a separate court-record sealing request; the opening gate routes it to sealing_request_hi.' },
+    now: NOW,
+  },
+];
+
+const NH: Persona[] = [
+  {
+    source: 'Wave 7 — NH persona 1',
+    package: 'Class A misd 2020, done 2021 -> eligible 2024.',
+    record: { title: 'Class A misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_nh: false, multi_nh: false, level_nh: 'misdA', misd_dv_nh: false },
+    expect: { resultKey: 'eligible_nh', reading: 'A Class A misdemeanor clears the 3-year wait (done 2021 -> eligible 2024, met at 2026) -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — NH persona 2',
+    package: 'B felony drug possession, done 2023 -> the 2-yr drug wait -> eligible 2025 — surprise-fast.',
+    record: { title: 'Class B felony drug possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { excluded_nh: false, multi_nh: false, level_nh: 'felonyB', felonyB_drug_nh: true },
+    expect: { resultKey: 'eligible_nh', reading: 'A drug felony under RSA 318-B:26 has an unusually short 2-year wait; done 2023 -> eligible 2025, met at 2026.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — NH persona 3',
+    package: 'eligible in 8 months, eager -> the DON\'T-FILE-YET warning persona.',
+    record: { title: 'Class A misdemeanor, not yet eligible', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed' },
+    answers: { excluded_nh: false, multi_nh: false, level_nh: 'misdA', misd_dv_nh: false },
+    expect: { resultKey: 'waiting_nh', reading: 'A Class A misdemeanor done 2024 has not cleared the 3-year wait at 2026; the tree routes it to waiting_nh, which carries the red-letter do-not-file-early warning.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — NH persona 4',
+    package: 'DV misdemeanor 2018 -> 10-yr wait -> 2028.',
+    record: { title: 'Domestic-violence misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { excluded_nh: false, multi_nh: false, level_nh: 'misdA', misd_dv_nh: true },
+    expect: { resultKey: 'waiting_nh', reading: 'A DV misdemeanor carries a 10-year wait; 2018 -> 2028, not met at 2026 -> waiting (do not file early).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — NH persona 5',
+    package: 'dismissal 2024 -> already auto-annulled — check.',
+    record: { title: 'Dismissal', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: { auto_annul_nh: true },
+    expect: { resultKey: 'check_autoannul_nh', reading: 'A dismissal on/after Jan 1, 2019 is auto-annulled 30 days after disposition; the tree routes it to the check-your-record result.' },
+    now: NOW,
+  },
+];
+
+const ME: Persona[] = [
+  {
+    source: 'Wave 7 — ME persona 1',
+    package: 'Class E theft 2019 at age 45, done 2020 -> eligible 2024 under the new law — the age-cap-repeal persona.',
+    record: { title: 'Class E theft (age 45)', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { conv_type_me: 'classE', classE_sexual_me: false },
+    expect: { resultKey: 'eligible_classE_me', reading: 'The 2024 repeal removed the 18-27 age cap, so a Class E conviction 4 years past sentence (done 2020 -> 2024) is sealable regardless of age; the tree asks no age question.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ME persona 2',
+    package: 'Class D assault -> no sealing; pardon path.',
+    record: { title: 'Class D assault', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { conv_type_me: 'other' },
+    expect: { resultKey: 'ineligible_conviction_me', reading: 'A Class D conviction is not a sealable class in Maine; the tree routes it to the no-sealing/pardon result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ME persona 3',
+    package: 'pre-2017 Class D marijuana -> sealable.',
+    record: { title: 'Pre-2017 Class D marijuana', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { conv_type_me: 'marijuana' },
+    expect: { resultKey: 'eligible_marijuana_me', reading: 'Class D/E marijuana convictions from before Jan 30, 2017 are sealable; the tree routes them there.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ME persona 4',
+    package: 'dismissal -> already confidential by classification — explain, don\'t file.',
+    record: { title: 'Dismissal', disposition: 'dismissed', disposition_date: '2022-06-01' },
+    answers: {},
+    expect: { resultKey: 'already_confidential_me', reading: 'Non-convictions are confidential by classification (16 M.R.S. § 703); the tree explains you likely need not file.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ME persona 5',
+    package: 'OUI -> no sealing, no pardon — the double honest-no.',
+    record: { title: 'OUI', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { conv_type_me: 'oui' },
+    expect: { resultKey: 'ineligible_oui_me', reading: 'OUI is neither a sealable class nor one the Board of Pardons will consider; the tree routes it to the double honest-no.' },
+    now: NOW,
+  },
+];
+
+const MT: Persona[] = [
+  {
+    source: 'Wave 7 — MT persona 1',
+    package: 'two misdemeanors 2017, done 2018, clean -> presumed-eligible for the one lifetime shot — bundle both.',
+    record: { title: 'Two misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: false, misd_discretionary_mt: false },
+    expect: { resultKey: 'eligible_presumed_mt', reading: 'Non-listed misdemeanors 5 conviction-free years past completion (2018 -> 2023) are presumed eligible; the result says to bundle both into the one lifetime order.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — MT persona 2',
+    package: 'DUI misdemeanor -> discretionary branch, not barred.',
+    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: false, misd_discretionary_mt: true },
+    expect: { resultKey: 'eligible_discretionary_mt', reading: 'DUI is not presumed but not barred — it routes to the discretionary branch, and with the 5-year wait met (2018) reaches the discretionary-eligible result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — MT persona 3',
+    package: 'enlisting in the Guard, conviction blocking -> immediate petition — the military persona.',
+    record: { title: 'Conviction blocking enlistment', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01' },
+    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: true },
+    expect: { resultKey: 'eligible_military_mt', reading: 'A military applicant blocked by the record may petition immediately with no wait; the military gate routes to eligible_military_mt.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — MT persona 4',
+    package: 'felony -> honest-no (deferred/pardon notes).',
+    record: { title: 'Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_mt: 'felony' },
+    expect: { resultKey: 'ineligible_felony_mt', reading: 'Montana does not expunge felonies; the tree routes them to the honest-no (deferred-imposition dismissal / rare pardon).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — MT persona 5',
+    package: 'already used the lifetime shot -> done forever.',
+    record: { title: 'Lifetime expungement already used', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_mt: 'misd', misd_prioruse_mt: true },
+    expect: { resultKey: 'ineligible_prioruse_mt', reading: 'The once-per-lifetime misdemeanor expungement, once used, bars another; the prior-use gate routes to the ineligible result.' },
+    now: NOW,
+  },
+];
+
+const RI: Persona[] = [
+  {
+    source: 'Wave 7 — RI persona 1',
+    package: 'single misdemeanor 2018, done -> 5-yr met -> eligible (judge discretion caveat).',
+    record: { title: 'Single misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { conv_count_ri: 'first', firstoffender_level_ri: 'misd', fo_violence_misd_ri: false },
+    expect: { resultKey: 'eligible_firstoffender_ri', reading: 'A first-offender misdemeanor 5 years past completion (2018 -> 2023) is eligible; the result names the discretionary good-character caveat.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — RI persona 2',
+    package: 'three misdemeanors, last sentence done 2015 -> 10-yr multi path -> eligible 2025.',
+    record: { title: 'Three misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { conv_count_ri: 'multimisd', multimisd_dv_ri: false },
+    expect: { resultKey: 'eligible_multimisd_ri', reading: 'The multi-misdemeanor lane expunges any/all 10 years after the last sentence (2015 -> 2025, met at 2026) -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — RI persona 3',
+    package: 'single felony larceny 2012, clean -> eligible 2022+; but burglary -> never.',
+    record: { title: 'Single felony larceny', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-06-01', probation_status: 'completed' },
+    answers: { conv_count_ri: 'first', firstoffender_level_ri: 'felony', fo_violence_felony_ri: false },
+    expect: { resultKey: 'eligible_firstoffender_ri', reading: 'A first-offender non-violence felony (larceny) 10 years past completion (2012 -> 2022) is eligible; burglary would answer the violence gate "yes" and be barred.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — RI persona 4',
+    package: 'dismissal March 2023 -> should be auto-sealed — check.',
+    record: { title: 'Rule 48(a) dismissal', disposition: 'dismissed', disposition_date: '2023-03-01' },
+    answers: { dismissal_ri: true },
+    expect: { resultKey: 'check_autoseal_ri', reading: 'A Rule 48(a) dismissal on/after Jan 1, 2023 auto-seals; the cutoff gate routes it to the check-your-record result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — RI persona 5',
+    package: 'DUI misdemeanor + 2 others -> DUI blocked from the multi path — the nuance persona.',
+    record: { title: 'DUI plus two other misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { conv_count_ri: 'multimisd', multimisd_dv_ri: true },
+    expect: { resultKey: 'complex_multimisd_excluded_ri', reading: 'DUI is excluded from the multi-misdemeanor lane but may qualify individually; the tree routes the mixed record to the nuance/get-help result.' },
+    now: NOW,
+  },
+];
+
+const SD: Persona[] = [
+  {
+    source: 'Wave 7 — SD persona 1',
+    package: 'arrested 2023, never charged -> eligible 2024.',
+    record: { title: 'Arrested, never charged', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: {},
+    expect: { resultKey: 'eligible_dismissal_sd', reading: 'A no-charge arrest is expungeable 1 year later (2023 -> 2024, met at 2026) -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — SD persona 2',
+    package: 'Class 2 misdemeanor 2018, conditions done -> possibly auto-removed already — check-record branch (and the 5-vs-10 ⚠️).',
+    record: { title: 'Class 2 misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { conv_type_sd: 'auto' },
+    expect: { resultKey: 'check_autoremoval_sd', reading: 'Petty/ordinance/Class-2 offenses auto-remove under § 23A-3-34; the tree routes to a check-record result and does not assert the 5-vs-10-year wait.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — SD persona 3',
+    package: 'Class 1 misdemeanor conviction -> honest-no (pardon note).',
+    record: { title: 'Class 1 misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { conv_type_sd: 'other' },
+    expect: { resultKey: 'ineligible_conviction_sd', reading: 'A Class 1 misdemeanor is above the auto-remove level and has no general path; the tree routes it to the honest-no (pardon note).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — SD persona 4',
+    package: 'suspended imposition completed -> sealed — confirm it happened.',
+    record: { title: 'Suspended imposition completed', disposition: 'deferred', disposition_date: '2019-06-01' },
+    answers: {},
+    expect: { resultKey: 'check_deferred_sd', reading: 'A completed suspended imposition is sealed on completion; the tree routes it to the confirm-it-happened result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — SD persona 5',
+    package: 'felony -> pardon only.',
+    record: { title: 'Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { conv_type_sd: 'other' },
+    expect: { resultKey: 'ineligible_conviction_sd', reading: 'A felony has no general conviction expungement in South Dakota; the tree routes it to the pardon-only honest-no.' },
+    now: NOW,
+  },
+];
+
+const ND: Persona[] = [
+  {
+    source: 'Wave 7 — ND persona 1',
+    package: 'misdemeanor 2020, probation done 2021 -> 3-yr met -> eligible, free.',
+    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_nd: false, level_nd: 'misd' },
+    expect: { resultKey: 'eligible_nd', reading: 'A misdemeanor 3 conviction-free years past completion (2021 -> 2024) is sealable; the result notes filing is free.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ND persona 2',
+    package: 'C felony theft 2017, done 2019 -> 5-yr met -> eligible.',
+    record: { title: 'Class C felony theft', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { excluded_nd: false, level_nd: 'felony' },
+    expect: { resultKey: 'eligible_nd', reading: 'A felony 5 conviction-free years past completion (2019 -> 2024) is sealable -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ND persona 3',
+    package: 'DUI misdemeanor 2021 -> sealable 2024+ — the surprise-yes.',
+    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_nd: false, level_nd: 'misd' },
+    expect: { resultKey: 'eligible_nd', reading: 'DUI is not excluded in North Dakota (rare); as a misdemeanor 3 years past completion (2021 -> 2024) it is sealable -> the surprise-yes.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ND persona 4',
+    package: 'dismissal September 2025 -> auto-closes in 61 days — wait, don\'t file.',
+    record: { title: 'Dismissal, Sept 2025', disposition: 'dismissed', disposition_date: '2025-09-01' },
+    answers: { nonconv_cutoff_nd: true },
+    expect: { resultKey: 'check_autoclose_nd', reading: 'A non-conviction order on/after Aug 1, 2025 auto-closes 61 days later (HB 1166); the cutoff gate routes it to the wait-do-not-file result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — ND persona 5',
+    package: 'old 2018 dismissal -> petition, 10-day mandatory grant.',
+    record: { title: 'Old 2018 dismissal', disposition: 'dismissed', disposition_date: '2018-06-01' },
+    answers: { nonconv_cutoff_nd: false },
+    expect: { resultKey: 'petition_nonconv_nd', reading: 'A pre-Aug-2025 non-conviction is petitioned with a mandatory 10-day grant; the cutoff gate routes it to the petition result.' },
+    now: NOW,
+  },
+];
+
+const AK: Persona[] = [
+  {
+    source: 'Wave 7 — AK persona 1',
+    package: 'entire case dismissed 2023 -> TF-810 CourtView removal — the one real win.',
+    record: { title: 'Entire case dismissed', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: { mistaken_ak: false, courtview_ak: true },
+    expect: { resultKey: 'eligible_courtview_ak', reading: 'An entire case ending without a conviction qualifies for CourtView removal (TF-810); the tree routes it there — the one real win.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — AK persona 2',
+    package: 'misdemeanor conviction, probation done under SIS -> set aside, still visible — expectation-setting.',
+    record: { title: 'SIS completed', disposition: 'deferred', disposition_date: '2019-06-01' },
+    answers: {},
+    expect: { resultKey: 'sis_setaside_ak', reading: 'A completed SIS is set aside as of right, but per Journey the record stays visible; the tree routes it to the set-aside-but-visible result.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — AK persona 3',
+    package: 'any ordinary conviction -> no path; pardon effectively unavailable.',
+    record: { title: 'Ordinary conviction', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { conv_marijuana_ak: false, conv_sis_ak: false },
+    expect: { resultKey: 'ineligible_conviction_ak', reading: 'An ordinary conviction has no path (no expungement law; pardons effectively unavailable, ~188 ever, none since 2006) -> the deepest honest-no.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — AK persona 4',
+    package: 'mistaken-identity arrest -> § 12.62.180 sealing.',
+    record: { title: 'Mistaken-identity arrest', disposition: 'dismissed', disposition_date: '2022-06-01' },
+    answers: { mistaken_ak: true },
+    expect: { resultKey: 'eligible_sealing_ak', reading: 'A record from mistaken identity/false accusation is the one sealing path (§ 12.62.180); the mistaken-ID gate routes it there.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — AK persona 5',
+    package: 'old marijuana possession -> the 2024 non-publication branch ⚠️.',
+    record: { title: 'Old marijuana possession', disposition: 'convicted', disposition_date: '2013-06-01' },
+    answers: { conv_marijuana_ak: true },
+    expect: { resultKey: 'marijuana_ak', reading: 'A decriminalized marijuana-possession conviction routes to the 2024 non-publication branch (scope flagged).' },
+    now: NOW,
+  },
+];
+
+const VT: Persona[] = [
+  {
+    source: 'Wave 7 — VT persona 1',
+    package: 'misdemeanor possession 2021, done 2022 -> sealed 2025 under the NEW 3-yr rule (old law said 2027 — show the delta).',
+    record: { title: 'Misdemeanor possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-06-01', probation_status: 'completed' },
+    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'misd', misd_dui_vt: false },
+    expect: { resultKey: 'eligible_seal_vt', reading: 'Act 60 dropped the qualifying-misdemeanor wait to 3 years; done 2022 -> sealed 2025 (old 5-year rule said 2027) -> eligible at 2026.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — VT persona 2',
+    package: 'felony grand larceny 2016, done 2018 -> 7-yr -> eligible 2025.',
+    record: { title: 'Felony grand larceny', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'felony' },
+    expect: { resultKey: 'eligible_seal_vt', reading: 'A qualifying non-violent felony has a 7-year wait; done 2018 -> eligible 2025, met at 2026.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — VT persona 3',
+    package: '19-yr-old, qualifying misdemeanor, sentence done last month -> 30-day petition — fastest conviction relief in the nation.',
+    record: { title: '19-year-old qualifying misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2026-05-01', probation_status: 'completed' },
+    answers: { nolonger_crime_vt: false, age_vt: true },
+    expect: { resultKey: 'eligible_seal_vt', reading: 'An 18-21 offender can petition after just 30 days; sentence done ~2 months ago clears 30 days -> eligible (the fastest conviction relief).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — VT persona 4',
+    package: 'DUI misdemeanor 2014 -> 10-yr -> eligible.',
+    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2014-06-01', probation_status: 'completed' },
+    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'misd', misd_dui_vt: true },
+    expect: { resultKey: 'eligible_seal_vt', reading: 'A misdemeanor DUI has a 10-year wait; 2014 -> eligible 2024, met at 2026.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — VT persona 5',
+    package: 'conduct no longer criminal -> immediate expungement.',
+    record: { title: 'Conduct no longer criminal', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { nolonger_crime_vt: true },
+    expect: { resultKey: 'eligible_expunge_vt', reading: 'Conviction for conduct no longer a crime gets immediate full expungement (record destroyed) under Act 60.' },
+    now: NOW,
+  },
+];
+
+const WY: Persona[] = [
+  {
+    source: 'Wave 7 — WY persona 1',
+    package: 'misdemeanor 2018, done 2019 -> 5-yr met -> the one lifetime misdemeanor shot — bundle.',
+    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { level_wy: 'misd', misd_prioruse_wy: false, misd_status_wy: false, misd_excluded_wy: false },
+    expect: { resultKey: 'eligible_misd_wy', reading: 'A non-excluded misdemeanor 5 years past sentence (2019 -> 2024) is eligible; the result names the once-per-lifetime bundle advice.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — WY persona 2',
+    package: 'same-occurrence C felonies 2012, restitution paid -> 10-yr met -> $300, 90 days.',
+    record: { title: 'Same-occurrence Class C felonies', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-06-01', probation_status: 'completed', restitution_paid: true },
+    answers: { level_wy: 'felony', felony_excluded_wy: false, felony_history_wy: false },
+    expect: { resultKey: 'eligible_felony_wy', reading: 'Non-excluded felonies from a single occurrence with no other felony history, 10 years past sentence with restitution paid (2012 -> 2022), are eligible ($300, 90 days).' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — WY persona 3',
+    package: 'MIP at 19 (status) -> 1-yr wait.',
+    record: { title: 'MIP (status offense)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { level_wy: 'misd', misd_prioruse_wy: false, misd_status_wy: true },
+    expect: { resultKey: 'eligible_misd_wy', reading: 'A status offense (MIP) has a 1-year wait; 2023 -> 2024, met at 2026 -> eligible.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — WY persona 4',
+    package: 'DV misdemeanor 2017 -> expungable + firearms restoration — the WY-specific persona.',
+    record: { title: 'DV misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2017-06-01', probation_status: 'completed' },
+    answers: { level_wy: 'misd', misd_prioruse_wy: false, misd_status_wy: false, misd_excluded_wy: false },
+    expect: { resultKey: 'eligible_misd_wy', reading: 'DV misdemeanors ARE expungable in Wyoming (not a firearm-use exclusion); 5 years past sentence (2017 -> 2022) -> eligible, and expungement lifts the federal firearm bar.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 7 — WY persona 5',
+    package: 'two felony convictions from different years -> never; honest-no.',
+    record: { title: 'Two felonies, different years', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-06-01' },
+    answers: { level_wy: 'felony', felony_excluded_wy: false, felony_history_wy: true },
+    expect: { resultKey: 'ineligible_felonyhistory_wy', reading: 'Wyoming expunges only single-occurrence felonies with no other felony history; two felonies from different years -> never (honest-no).' },
+    now: NOW,
+  },
+];
+
+
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO], ['MD', MD], ['WI', WI], ['SC', SC], ['AL', AL], ['LA', LA], ['KY', KY], ['OR', OR], ['IA', IA], ['NV', NV], ['AR', AR], ['MS', MS], ['KS', KS], ['NM', NM], ['NE', NE], ['ID', ID], ['WV', WV], ['HI', HI], ['NH', NH], ['ME', ME], ['MT', MT], ['RI', RI], ['SD', SD], ['ND', ND], ['AK', AK], ['VT', VT], ['WY', WY]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

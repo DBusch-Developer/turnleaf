@@ -1283,7 +1283,232 @@ const NC: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC]];
+const WA: Persona[] = [
+  {
+    source: 'Wave 4 - WA persona 1',
+    package: 'misdemeanor theft, sentenced 2020, LFOs still owed -> eligible NOW under 2024 rule (old guides say no) - fresh-rule persona.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: false },
+    answers: { excluded_wa: false, violent_wa: false, level_wa: 'misdemeanor', dv_wa: false, misd_date_wa: '2020-01-01' },
+    expect: { resultKey: 'eligible_vacate_wa', reading: 'Misdemeanour, 3yr from sentencing (2020+3=2023<2026), no new convictions. Restitution unpaid but 2024 rule says LFOs do NOT delay the clock - date node is asked, not restitution-gated. Old guides would say wait. Exact - fresh-rule persona.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - WA persona 2',
+    package: 'Class C felony possession, discharged 2019, clean -> eligible.',
+    record: { title: 'Class C Felony Possession', charge_type: 'felony', disposition: 'convicted' },
+    answers: { excluded_wa: false, violent_wa: false, level_wa: 'felony', felony_class_wa: 'c', felony_c_date_wa: '2019-01-01' },
+    expect: { resultKey: 'eligible_vacate_felony_wa', reading: 'Class C, 5yr from Certificate of Discharge (2019+5=2024<2026) -> eligible to vacate. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - WA persona 3',
+    package: 'Class B felony 2018 -> 2028.',
+    record: { title: 'Class B Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: { excluded_wa: false, violent_wa: false, level_wa: 'felony', felony_class_wa: 'b', felony_b_date_wa: '2018-01-01' },
+    expect: { resultKey: 'waiting_wa', reading: 'Class B, 10yr from discharge (2018+10=2028>2026) -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - WA persona 4',
+    package: 'DUI -> never; honest-no.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_wa: true },
+    expect: { resultKey: 'ineligible_excluded_wa', reading: 'DUI never vacatable in WA -> honest-no. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - WA persona 5',
+    package: 'Assault 2, no enhancement, discharged 2015 -> eligible under the 2019 carve-out - the surprise-yes persona.',
+    record: { title: 'Assault 2 (no enhancement)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { excluded_wa: false, violent_wa: true, violent_carveout_wa: true, level_wa: 'felony', felony_class_wa: 'c', felony_c_date_wa: '2015-01-01' },
+    expect: { resultKey: 'eligible_vacate_felony_wa', reading: 'Assault 2 is violent, but the 2019 carve-out (no firearm/weapon/sexual-motivation enhancement) makes it vacatable. Class C, 5yr from discharge (2015+5=2020<2026). The surprise-yes. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const TN: Persona[] = [
+  {
+    source: 'Wave 4 - TN persona 1',
+    package: 'dismissed charge 2021 -> free expunction now.',
+    record: { title: 'Dismissed Charge', disposition: 'dismissed', disposition_date: '2021-01-01' },
+    expect: { resultKey: 'eligible_nonconviction_tn', reading: 'Dismissal -> free expunction, anytime, no TBI certificate. Notes the same-episode trap. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - TN persona 2',
+    package: 'misdemeanor theft, sentence done 2019, paid -> (g) eligible.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { excluded_tn: false, other_convictions_tn: false, conv_level_tn: 'misd' },
+    expect: { resultKey: 'eligible_conviction_tn', reading: 'Single eligible misdemeanour, 5yr (2019+5=2024<2026), paid -> eligible. Result leads with the 2024 TBI certificate step. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - TN persona 3',
+    package: 'Class E theft + misdemeanor, both done 2015 -> (k) two-offense path - once ever.',
+    record: { title: 'Class E Theft (with a misdemeanor)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { excluded_tn: false, other_convictions_tn: true },
+    expect: { resultKey: 'complex_multi_tn', reading: 'More than one conviction -> the (k) two-conviction path, once per lifetime, routed to legal aid because timing/selection matters. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - TN persona 4',
+    package: 'DUI -> never.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_tn: true },
+    expect: { resultKey: 'ineligible_excluded_tn', reading: 'DUI excluded from TN expunction -> honest-no. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - TN persona 5',
+    package: 'Class D felony, done 2013 -> the new 10-yr tier - resolve during verification.',
+    record: { title: 'Class D Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2013-01-01' },
+    answers: { excluded_tn: false, other_convictions_tn: false, conv_level_tn: 'cd' },
+    expect: { resultKey: 'eligible_conviction_cd_tn', reading: 'Class D, 10yr (2013+10=2023<2026). The newer C/D tier - result routes to the TBI certificate (which confirms the offence is on the list, the open question). NOT a REFEREE fight: the package gives the rule (10yr for C/D), only the exact list is unverified. Exact for the routing.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const MA: Persona[] = [
+  {
+    source: 'Wave 4 - MA persona 1',
+    package: 'misdemeanor conviction 2020, clean -> mail the form NOW - the flagship persona.',
+    record: { title: 'Misdemeanor Conviction', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-01-01' },
+    answers: { seal_ineligible_ma: false, seal_level_ma: 'misdemeanor', misd_date_ma: '2020-01-01' },
+    expect: { resultKey: 'eligible_seal_ma', reading: 'Misdemeanour, 3yr (2020+3=2023<2026) -> administrative sealing: one form, by mail, free, non-discretionary. The flagship. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MA persona 2',
+    package: 'felony conviction 2017, clean -> mail the form.',
+    record: { title: 'Felony Conviction', charge_type: 'felony', disposition: 'convicted', disposition_date: '2017-01-01' },
+    answers: { seal_ineligible_ma: false, seal_level_ma: 'felony', felony_date_ma: '2017-01-01' },
+    expect: { resultKey: 'eligible_seal_ma', reading: 'Felony, 7yr (2017+7=2024<2026) -> mail-in administrative sealing. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MA persona 3',
+    package: 'dismissal last month -> court petition under 100C, no wait.',
+    record: { title: 'Dismissed Case', disposition: 'dismissed', disposition_date: '2026-06-15' },
+    expect: { resultKey: 'eligible_court_seal_ma', reading: 'Dismissal -> 100C court sealing, no wait. Distinct from the mail-in 100A path. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MA persona 4',
+    package: 'offense at 19, now 26, one record -> expungement candidate.',
+    record: { title: 'Offense at 19', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { seal_ineligible_ma: false, seal_level_ma: 'misdemeanor', misd_date_ma: '2019-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_ma',
+      reading:
+        'The package flags this as an EXPUNGEMENT candidate (offence before 21, narrow 100E-100U path). '
+        + 'The tree does not branch expungement - it is disclosed in terminology/open questions as the '
+        + 'exception, sealing being the product. So this persona routes to the sealing result (also '
+        + 'true: a 2019 misdemeanour is sealable at 3yr). Flagged approximate: the package wants the '
+        + 'expungement path surfaced, which the tree does not yet branch.',
+    },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MA persona 5',
+    package: 'registry-required sex offense -> can\'t seal; honest-no.',
+    record: { title: 'Registry Sex Offense', charge_type: 'felony', disposition: 'convicted' },
+    answers: { seal_ineligible_ma: true },
+    expect: { resultKey: 'complex_ineligible_ma', reading: 'Registry-required -> cannot seal while registration continues; routed to legal aid rather than a flat no, since sex offences have a 15yr track when the duty ends. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const IN: Persona[] = [
+  {
+    source: 'Wave 4 - IN persona 1',
+    package: 'arrest, charges dismissed 2024 -> free petition now (or already auto-expunged - check).',
+    record: { title: 'Dismissed Arrest', disposition: 'dismissed', disposition_date: '2024-01-01' },
+    expect: { resultKey: 'eligible_arrest_in', reading: 'Non-conviction -> free arrest expungement, 1yr; result says check whether already automatic (post-2022). Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - IN persona 2',
+    package: 'misdemeanor 2018, paid, clean -> MANDATORY grant - but counsel-the-timing if they also have a 2021 Level 6 (waiting lets one petition catch both; filing now burns the shot).',
+    record: { title: 'Misdemeanor (with other records)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { excluded_in: false, level_in: 'misd', misd_date_in: '2018-01-01', other_records_mand_in: true },
+    expect: { resultKey: 'complex_timing_in', reading: 'THE WAIT-DONT-FILE BRANCH. Misdemeanour eligible at 5yr (2018+5=2023<2026), but the person has other records -> complex_timing_in advises NOT filing yet so the one lifetime petition can catch everything. This is the design shown before writing. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - IN persona 3',
+    package: 'Level 6 felony 2015, clean -> eligible, mandatory.',
+    record: { title: 'Level 6 Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-01-01' },
+    answers: { excluded_in: false, level_in: 'l6', l6_excluded_in: false, l6_date_in: '2015-01-01', other_records_mand_in: false },
+    expect: { resultKey: 'eligible_mandatory_in', reading: 'Level 6, not bodily-injury, 8yr (2015+8=2023<2026), no other records -> mandatory grant, clean file-now result. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - IN persona 4',
+    package: 'Level 4 felony 2014, clean -> discretionary, marked-public - expectation-setting copy.',
+    record: { title: 'Level 4 Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2014-01-01' },
+    answers: { excluded_in: false, level_in: 'l45', l45_date_in: '2014-01-01', other_records_disc_in: false },
+    expect: { resultKey: 'eligible_discretionary_in', reading: 'Level 4, 8yr (2014+8=2022<2026), no other records -> discretionary result that sets expectations: a judge decides, and the record stays publicly MARKED not hidden. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - IN persona 5',
+    package: 'serious-bodily-injury felony -> 10 yrs + prosecutor consent; honest-maybe.',
+    record: { title: 'Serious Bodily Injury Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2013-01-01' },
+    answers: { excluded_in: false, level_in: 'serious', serious_in: '2013-01-01', other_records_disc_in: false },
+    expect: { resultKey: 'eligible_discretionary_in', reading: 'Serious felony, 10yr (2013+10=2023<2026), no other records -> discretionary result (also flags prosecutor consent, marked-public). The honest-maybe. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const MO: Persona[] = [
+  {
+    source: 'Wave 4 - MO persona 1',
+    package: 'misdemeanor stealing 2022, paid -> eligible now.',
+    record: { title: 'Misdemeanor Stealing', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-01-01' },
+    answers: { dwi_mo: false, excluded_mo: false, count_mo: 'within', conv_level_mo: 'misdemeanor', misd_date_mo: '2022-01-01' },
+    expect: { resultKey: 'eligible_mo', reading: 'Misdemeanour, 1yr (2022+1=2023<2026), within limits, not excluded -> eligible, presumption in favour. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MO persona 2',
+    package: 'two felonies (2015, 2018 possession), clean -> BOTH expungable under the 2025 limits (impossible under old law) - fresh-law persona.',
+    record: { title: 'Felony Possession (second)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-01-01' },
+    answers: { dwi_mo: false, excluded_mo: false, count_mo: 'within', conv_level_mo: 'felony', felony_date_mo: '2018-01-01' },
+    expect: { resultKey: 'eligible_mo', reading: 'Two felonies is WITHIN the 2025 limit of 2 felonies (was 1 - impossible under old law). Felony 3yr (2018+3=2021<2026) -> eligible. Fresh-law persona. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MO persona 3',
+    package: 'domestic assault misdemeanor -> excluded; honest-no.',
+    record: { title: 'Domestic Assault Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { dwi_mo: false, excluded_mo: true },
+    expect: { resultKey: 'ineligible_excluded_mo', reading: 'ANY domestic assault is on the exclusion list -> honest-no. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MO persona 4',
+    package: 'first DWI 2012, nothing since -> the 10-yr DWI track - surprise-yes.',
+    record: { title: 'First DWI', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2012-01-01' },
+    answers: { dwi_mo: true, dwi_first_mo: true, dwi_date_mo: '2012-01-01' },
+    expect: { resultKey: 'eligible_dwi_mo', reading: 'First DWI, 10yr clean (2012+10=2022<2026) -> the first-DWI carve-out. Checked before the general exclusion gate. Surprise-yes. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 4 - MO persona 5',
+    package: 'arrest 2025, no charges -> 18-month track mid-2026.',
+    record: { title: 'Arrest, no charges', disposition: 'dismissed', disposition_date: '2025-01-01' },
+    expect: { resultKey: 'eligible_arrest_mo', reading: 'Arrest 2025-01, 18-month track -> eligible mid-2026 (2025-01 + 18mo = 2026-07). At NOW=2026-07-15 the 18 months just met -> eligible. Exact, and the date is why now is pinned.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

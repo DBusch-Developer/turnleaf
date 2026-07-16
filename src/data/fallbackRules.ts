@@ -6228,8 +6228,1298 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'NC Justice Center (Summary of NC Expunctions)', url: 'https://www.ncjustice.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // WASHINGTON — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  //
+  // THE QUIRK: Washington VACATES, it does not expunge or (generally) seal.
+  // After a vacation you may lawfully say you were never convicted and WSP stops
+  // reporting it — BUT THE COURT FILE STAYS PUBLIC. Sealing (GR 15) is separate
+  // and rare. Every WA result says this plainly; competitors blur it.
+  //
+  // The 2024 New Hope Act change is the fresh-rule persona: the waiting clock no
+  // longer waits for LFO (fines/fees) payoff — it runs from release/sentencing,
+  // and courts can waive outstanding LFOs on motion. Older guides still say "pay
+  // everything first". The tree does NOT gate on LFOs.
+  //
+  // The 2019 surprise-yes: Assault 2, Assault 3 (non-officer), and Robbery 2 are
+  // vacatable if there was no firearm/deadly-weapon/sexual-motivation
+  // enhancement — a real carve-out from the "violent = never" rule.
+  // ==========================================================================
+  WA: {
+    code: 'WA',
+    name: 'Washington',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
+    terminology:
+      'Washington does not expunge or, in most cases, seal. Instead it VACATES a conviction — the '
+      + 'plea is withdrawn or the verdict set aside and the charge dismissed. After a vacation you '
+      + 'may legally state you were never convicted, and the State Patrol stops reporting it. But '
+      + 'there is one honest catch that matters: the COURT FILE itself stays public. Vacating is '
+      + 'strong relief, but it is not the same as the record disappearing. A 2024 change (the New '
+      + 'Hope Act) also means unpaid fines and fees no longer delay your eligibility — the clock '
+      + 'runs from your release or sentencing, and the court can even reduce what you owe.',
+    keyDates: [
+      {
+        label: 'New Hope Act — waiting clock no longer waits for LFO payoff',
+        date: '2024',
+        kind: 'effective',
+        note: 'Wave 4 gives the year only. The clock runs from release/sentencing; courts can waive or reduce outstanding legal financial obligations on motion. Older guides still say "pay all fines first". Verify the session-law cite.',
+      },
+      {
+        label: 'New Hope Act — Assault 2/3 and Robbery 2 carve-out from the violent-offence bar',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 4 gives the year only. Vacatable if no firearm/deadly-weapon/sexual-motivation enhancement.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the 2024 New Hope Act session-law cite for the rule that the waiting clock no longer waits for LFO (legal financial obligation) payoff. Wave 4 says the clock runs from release/sentencing and courts can waive LFOs on motion — but flags the exact cite. The tree encodes this rule; confirm it against the current RCW 9.96.060 / 9.94A.640 text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the DV-related misdemeanour subsection: Wave 4 gives a 5-year track with extra conditions (no restraining-order violations in the prior 5 years; fewer than two separate-incident DV convictions) but flags the exact DV subsection. The tree asks whether the offence was DV-related and applies the 5-year track.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the filing fee for a vacation motion? Wave 4 says one guide reports generally none but counties may differ — phone target. A WSP WATCH self-check is $11 online, free in person.',
+        blocksFields: ['resources.remedies.vacation.fees', 'resources.remedies.vacation.feeWaiver'],
+      },
+      {
+        question:
+          'How are completed diversions treated? Wave 4 details special tracks (trafficking/DV-victim convictions under 9.96.080 / 9.94A.648, marijuana misdemeanours, pre-1975 treaty-fishing) but not general diversion. Standing call-sheet question.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Wash. Rev. Code § 9.96.060 (vacating misdemeanour convictions)', url: null, retrievedOn: null },
+      { id: 'Wash. Rev. Code § 9.94A.640 (vacating felony convictions)', url: null, retrievedOn: null },
+      { id: 'Wash. Rev. Code § 9.94A.637 (Certificate of Discharge — felony prerequisite)', url: null, retrievedOn: null },
+      { id: 'Wash. Rev. Code § 46.61.502/.504 (DUI/physical control — never vacatable)', url: null, retrievedOn: null },
+      { id: 'New Hope Act (2019, amended 2021/2024 — broadened offences; LFO change)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_wa' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_wa' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_wa' },
+            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_wa: {
+          type: 'boolean',
+          text: 'Was the offense a DUI or physical-control offense, a sex offense, or an obscenity/child-exploitation offense?',
+          yes: 'ineligible_excluded_wa',
+          no: 'violent_wa'
+        },
+        violent_wa: {
+          type: 'boolean',
+          text: 'Was it a violent offense or a crime against a person?',
+          yes: 'violent_carveout_wa',
+          no: 'level_wa'
+        },
+        // The 2019 surprise-yes carve-out.
+        violent_carveout_wa: {
+          type: 'boolean',
+          text: 'Was it specifically Assault in the 2nd degree, Assault in the 3rd degree (not against an officer), or Robbery in the 2nd degree — AND with no firearm, deadly-weapon, or sexual-motivation enhancement?',
+          yes: 'level_wa',
+          no: 'ineligible_violent_wa'
+        },
+        level_wa: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'dv_wa' },
+            { label: 'Felony', value: 'felony', next: 'felony_class_wa' },
+            { label: 'Infraction', value: 'infraction', next: 'dv_wa' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_wa' }
+          ]
+        },
+        dv_wa: {
+          type: 'boolean',
+          text: 'Was the misdemeanor a domestic-violence-related offense?',
+          yes: 'misd_dv_date_wa',
+          no: 'misd_date_wa'
+        },
+        misd_date_wa: {
+          type: 'date',
+          text: 'Which came LATER: your release from confinement or supervision, or your sentencing? Enter that date. (Unpaid fines do NOT delay this — the 2024 law changed that.)',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'the later of release or sentencing (RCW 9.96.060 — misdemeanours; LFOs no longer delay the clock per the 2024 New Hope Act)' },
+            nextPass: 'eligible_vacate_wa',
+            nextFail: 'waiting_wa'
+          }
+        },
+        misd_dv_date_wa: {
+          type: 'date',
+          text: 'Which came LATER: your release from confinement or supervision, or your sentencing? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of release or sentencing (RCW 9.96.060 — DV-related misdemeanours; extra conditions apply)' },
+            nextPass: 'eligible_vacate_dv_wa',
+            nextFail: 'waiting_wa'
+          }
+        },
+        felony_class_wa: {
+          type: 'choice',
+          text: 'What class of felony was it? (Your sentencing paperwork says. Washington vacates lower felony classes only.)',
+          options: [
+            { label: 'Class C felony', value: 'c', next: 'felony_c_date_wa' },
+            { label: 'Class B felony', value: 'b', next: 'felony_b_date_wa' },
+            { label: 'Class A felony', value: 'a', next: 'ineligible_class_a_wa' },
+            { label: 'I don\'t know the class', value: 'unsure', next: 'complex_level_wa' }
+          ]
+        },
+        felony_c_date_wa: {
+          type: 'date',
+          text: 'When did you receive your Certificate of Discharge? (Washington requires this before vacating a felony.)',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'Certificate of Discharge (RCW 9.94A.640 — Class C felony; no new crime in the prior 5 years)' },
+            nextPass: 'eligible_vacate_felony_wa',
+            nextFail: 'waiting_wa'
+          }
+        },
+        felony_b_date_wa: {
+          type: 'date',
+          text: 'When did you receive your Certificate of Discharge?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'Certificate of Discharge (RCW 9.94A.640 — Class B felony; no new crime in the prior 10 years)' },
+            nextPass: 'eligible_vacate_felony_wa',
+            nextFail: 'waiting_wa'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Washington treats a conviction (which can be vacated) very differently from a case that ended without one. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. A WSP WATCH self-check ($11 online, free in person) will show your record, and WashingtonLawHelp.org has plain-language vacate guides updated for the 2024 changes.',
+          remedy: 'Get Your Record First (WSP WATCH)',
+          citation: 'RCW 9.96.060, 9.94A.640 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Washington\'s vacation rules are screened here for convictions, dismissals, and acquittals. How a completed diversion is treated is not something this screening has researched in detail, and Washington also has special expedited tracks — for trafficking and domestic-violence victims (RCW 9.96.080 / 9.94A.648) and mandatory marijuana-misdemeanor vacation. We would rather point you to someone than guess. WashingtonLawHelp.org can tell you which track fits.',
+          remedy: 'Consult Legal Aid (Diversion / Special Tracks Not Yet Screened)',
+          citation: 'RCW 9.96.060 (treatment of diversions not yet detailed)'
+        },
+        eligible_nonconviction_wa: {
+          status: 'eligible',
+          title: 'No Conviction — Likely Nothing to Vacate',
+          message: 'Because your case ended without a conviction — dismissed or acquitted — there is generally no conviction on your record to vacate, which is good news. Your record should already reflect that no conviction resulted. If you want to confirm what shows, a WSP WATCH self-check ($11 online, free in person) will tell you. If a non-conviction is still appearing incorrectly, WashingtonLawHelp.org can help you get it corrected.',
+          remedy: 'Confirm your record (WSP WATCH) — generally no conviction to vacate',
+          citation: 'RCW 9.96.060'
+        },
+        eligible_vacate_wa: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Vacate — With One Honest Caveat',
+          message: 'Based on your dates, you appear eligible to VACATE this misdemeanor conviction under RCW 9.96.060 — three years have passed since the later of your release or sentencing, with no new convictions in that window. Here is the honest caveat Washington makes people live with, and that many tools gloss over: vacating lets you lawfully say you were never convicted and stops the State Patrol from reporting it, but the COURT FILE stays public. It is strong relief, not disappearance. Two pieces of good news from the 2024 law: unpaid fines and fees no longer hold up your eligibility, and the court can even reduce what you owe on a motion. File the motion in the sentencing court — statewide forms are on courts.wa.gov, and counties like Pierce and King publish complete packets.',
+          remedy: 'Motion to Vacate (RCW 9.96.060) — court file stays public',
+          citation: 'RCW 9.96.060'
+        },
+        eligible_vacate_dv_wa: {
+          status: 'eligible',
+          title: 'DV-Related Misdemeanor — Potentially Vacatable on the 5-Year Track',
+          message: 'A domestic-violence-related misdemeanor can be vacated in Washington, but on a longer 5-year track with extra conditions — you must have no restraining-order violations in the prior 5 years, and there are limits on multiple separate-incident DV convictions. Based on your dates the 5 years appear met, but because the DV conditions are specific, this is worth confirming with legal aid before filing. The same honest caveat applies to all Washington vacations: it lets you say you were never convicted and stops State Patrol reporting, but the court file stays public. WashingtonLawHelp.org has DV-specific guidance.',
+          remedy: 'Motion to Vacate (RCW 9.96.060, DV track) — confirm the conditions with legal aid',
+          citation: 'RCW 9.96.060'
+        },
+        eligible_vacate_felony_wa: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Vacate This Felony',
+          message: 'Based on your dates, you appear eligible to VACATE this felony under RCW 9.94A.640 — 5 years since your Certificate of Discharge for a Class C felony, or 10 years for a Class B, with no new crime in that window. The same honest caveat applies as for any Washington vacation: it lets you lawfully deny the conviction and stops State Patrol reporting, but the court file stays public. File the motion in the sentencing court. If you have not yet obtained your Certificate of Discharge (RCW 9.94A.637), that is the first step — the vacation cannot proceed without it.',
+          remedy: 'Motion to Vacate a Felony (RCW 9.94A.640) — Certificate of Discharge required first',
+          citation: 'RCW 9.94A.640'
+        },
+        waiting_wa: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Washington\'s vacation waits run from the later of your release or sentencing (for a felony, from your Certificate of Discharge): 3 years for most misdemeanors, 5 for a DV-related misdemeanor or a Class C felony, 10 for a Class B felony. Based on your dates, yours has not run yet, and it also requires no new convictions during the wait. One thing that is NOT a barrier anymore: unpaid fines and fees do not delay your clock — the 2024 law changed that, so do not let an outstanding balance make you think you have longer to wait than you do.',
+          remedy: 'Wait for the period (unpaid fines do NOT extend it)',
+          citation: 'RCW 9.96.060, 9.94A.640'
+        },
+        ineligible_excluded_wa: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Vacated',
+          message: 'Washington never vacates DUI or physical-control offenses, sex offenses, or obscenity and child-exploitation offenses. This is categorical, not a matter of time. For a DUI specifically, there is no vacation route in Washington, so be cautious of any service that suggests otherwise. If you have other convictions that are not on this list, those may well be vacatable — run this again for them. WashingtonLawHelp.org can confirm where your offense falls.',
+          remedy: 'None (Excluded Offense)',
+          citation: 'RCW 9.96.060'
+        },
+        ineligible_violent_wa: {
+          status: 'ineligible',
+          title: 'Violent Offenses Generally Cannot Be Vacated',
+          message: 'Washington generally does not vacate violent offenses or crimes against a person. There is a real exception worth knowing about, though — since 2019, Assault in the 2nd degree, Assault in the 3rd degree (not against an officer), and Robbery in the 2nd degree CAN be vacated if there was no firearm, deadly-weapon, or sexual-motivation enhancement. If your offense might be one of those, it is genuinely worth checking rather than accepting a no — the enhancement question is specific and a lawyer can read it from your judgment and sentence. WashingtonLawHelp.org and county legal aid can look.',
+          remedy: 'Generally None (Violent Offense) — but check the 2019 Assault/Robbery carve-out',
+          citation: 'RCW 9.94A.640'
+        },
+        ineligible_class_a_wa: {
+          status: 'ineligible',
+          title: 'Class A Felonies Cannot Be Vacated',
+          message: 'Washington does not vacate Class A felonies — this is a categorical bar with no waiting period that changes it. The route that may remain is executive clemency through the Governor\'s office, which is a different and higher bar but not a closed door. WashingtonLawHelp.org and county legal aid can advise whether clemency is realistic in your situation.',
+          remedy: 'None (Class A Felony) — clemency is the remaining route',
+          citation: 'RCW 9.94A.640'
+        },
+        complex_level_wa: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Washington the vacation wait and whether it is possible both depend on the level and class: 3 years for a misdemeanor, 5 for a Class C felony, 10 for a Class B, and never for a Class A. Since you are not sure which yours is, we are not going to guess. Your sentencing paperwork states it, and a WSP WATCH self-check will show it. WashingtonLawHelp.org can read your record with you.',
+          remedy: 'Get Your Offense Level First (sentencing paperwork / WSP WATCH)',
+          citation: 'RCW 9.96.060, 9.94A.640'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        vacation: {
+          name: 'Motion to Vacate a Conviction (RCW 9.96.060 / 9.94A.640)',
+          formName: 'Motion and Declaration to Vacate (statewide forms; county packets)',
+          formUrl: 'https://www.courts.wa.gov/forms/',
+          steps: [
+            'For a felony, obtain a Certificate of Discharge first (RCW 9.94A.637) — the vacation cannot proceed without it.',
+            'Complete the vacation motion — statewide forms are on courts.wa.gov, and Pierce and King counties publish complete packets.',
+            'File in the sentencing court.',
+            'Understand what you get: you may lawfully deny the conviction and the State Patrol stops reporting it, but the court file stays public.'
+          ],
+          // null: Wave 4 says one guide reports generally no filing fee but
+          // counties may differ. Phone target.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The sentencing court'
+        }
+      },
+      legalAid: [
+        { name: 'WashingtonLawHelp.org (vacate guides, 2024-updated)', url: 'https://www.washingtonlawhelp.org' },
+        { name: 'Washington Courts self-help forms', url: 'https://www.courts.wa.gov/forms/' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // TENNESSEE — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  //
+  // THE QUIRK: since Jan 1, 2024, no conviction-expunction order may be entered
+  // without a TBI CERTIFICATE OF ELIGIBILITY attached — TBI certifies the
+  // offence qualifies (the court still decides). Every conviction result says
+  // this is the first step.
+  //
+  // Non-convictions expunge FREE and anytime (the statute declares no fee ever).
+  // Trap (persona from same-episode): convicted of ANY count from an episode and
+  // the rest generally can't be expunged (§ (a)(1)(E)).
+  //
+  // Convictions: single eligible conviction (misdemeanours + listed Class E
+  // felonies) at 5 years; a newer tier of certain Class C/D felonies at 10
+  // years. A two-conviction path (§ (k)) exists, once per lifetime.
+  // ==========================================================================
+  TN: {
+    code: 'TN',
+    name: 'Tennessee',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
+    terminology:
+      'Tennessee says EXPUNCTION, and it means it — the public records are destroyed. Cases that '
+      + 'ended without a conviction (dismissed, nolle, no-bill, not guilty, an arrest with no '
+      + 'charge) can be expunged for FREE, and the law says so on purpose. Convictions are harder: '
+      + 'a single eligible conviction can be expunged after 5 years, and since January 2024 there '
+      + 'is a new step — you must first get a Certificate of Eligibility from the TBI confirming the '
+      + 'offense qualifies before a court will enter the order. DUI is never expungeable.',
+    keyDates: [
+      {
+        label: 'TBI Certificate of Eligibility required for conviction expunctions',
+        date: '2024-01-01',
+        kind: 'effective',
+        note: 'No conviction-expunction order may be entered without a TBI certificate confirming the offence qualifies. Adds a step and processing time to every conviction track.',
+      },
+      {
+        label: 'Statutory reorganization of § 40-32-101 into §§ 40-32-106/107',
+        date: '2025',
+        kind: 'effective',
+        note: 'Wave 4 gives the year only, and flags that content is mid-renumbering — cite both old and new until settled; the AOC site says "updated information coming soon".',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the current statute numbering: Wave 4 flags a 2025 reorganization renumbering § 40-32-101 content into §§ 40-32-106/107, still settling. Cite both until confirmed. The AOC site itself says updated information is coming.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the newer 10-year felony tier: Wave 4 says certain Class C and D felonies were added at 10 years, and flags the exact (g)(1)(D)-(F) list — most older guides only mention Class E. The tree encodes a 10-year Class C/D track but the specific eligible-offence list needs confirming.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the TBI certificate-of-eligibility request process and turnaround? Wave 4 flags this as a new step (since Jan 2024) that adds processing time to every conviction track. Verify on TBI\'s site.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the clerk fee practice: Wave 4 says no state fee but the clerk may charge up to $100 (§ 8-21-401(b)(1)(D)(x)) for conviction/diversion expunctions, waived by indigency affidavit; dismissals are free. Confirm the current practice with a clerk (Davidson County).',
+        blocksFields: ['resources.remedies.conviction.fees'],
+      },
+      {
+        question:
+          'How are pretrial and judicial diversion completions treated, and confirm the same-episode trap (§ (a)(1)(E)): conviction of any count from an episode generally bars expunging the rest. The tree hedges diversions and discloses the same-episode rule in prose.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Tenn. Code Ann. § 40-32-101 (expunction; being renumbered to §§ 40-32-106/107 in 2025)', url: null, retrievedOn: null },
+      { id: 'Tenn. Code Ann. § 40-32-101(g) (conviction expunction; eligible offences; 5-yr and 10-yr tiers)', url: null, retrievedOn: null },
+      { id: 'Tenn. Code Ann. § 40-32-101(k) (two-conviction path; once per lifetime)', url: null, retrievedOn: null },
+      { id: 'Tenn. Code Ann. § 8-21-401(b)(1)(D)(x) (clerk fee up to $100)', url: null, retrievedOn: null },
+      { id: '2024 amendment (TBI certificate-of-eligibility requirement)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_tn' },
+            { label: 'Dismissed / Nolle / No-billed / Never charged', value: 'dismissed', next: 'eligible_nonconviction_tn' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_tn' },
+            { label: 'Diversion completed (pretrial or judicial)', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_tn: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a DUI, a sexual offense, a vehicular assault, or a Class A or Class B felony?',
+          yes: 'ineligible_excluded_tn',
+          no: 'other_convictions_tn'
+        },
+        other_convictions_tn: {
+          type: 'boolean',
+          text: 'Apart from this case, do you have any other conviction on your record?',
+          yes: 'complex_multi_tn',
+          no: 'conv_level_tn'
+        },
+        conv_level_tn: {
+          type: 'choice',
+          text: 'How was the offense classified? (Your court paperwork says. Tennessee expunges only certain levels.)',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_tn' },
+            { label: 'Class E felony (theft, forgery, credit-card fraud, some drug possession)', value: 'e', next: 'e_date_tn' },
+            { label: 'Class C or D felony', value: 'cd', next: 'cd_date_tn' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_tn' }
+          ]
+        },
+        misd_date_tn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — single eligible misdemeanour)' },
+            nextPass: 'eligible_conviction_tn',
+            nextFail: 'waiting_tn'
+          }
+        },
+        e_date_tn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — listed Class E felony)' },
+            nextPass: 'eligible_conviction_tn',
+            nextFail: 'waiting_tn'
+          }
+        },
+        cd_date_tn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — certain Class C/D felonies, newer tier)' },
+            nextPass: 'eligible_conviction_cd_tn',
+            nextFail: 'waiting_tn'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Tennessee treats non-convictions (free to expunge, anytime) very differently from convictions (a wait, plus a new TBI certificate step). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The tncourts.gov expungement page has the forms and current information, and county clerks can tell you your disposition.',
+          remedy: 'Get Your Record First (tncourts.gov / court clerk)',
+          citation: 'T.C.A. § 40-32-101 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Tennessee lets you expunge a completed pretrial or judicial diversion, and a fee applies to that. The exact eligibility and process are not something this screening has researched in detail, so we would rather point you to someone than guess. One thing worth knowing generally: if you were convicted of any count arising from the same episode as this case, that can block expunging the rest (§ (a)(1)(E)). The tncourts.gov expungement page and county legal aid can confirm your situation.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
+          citation: 'T.C.A. § 40-32-101 (diversion treatment not yet detailed)'
+        },
+        eligible_nonconviction_tn: {
+          status: 'eligible',
+          title: 'No Conviction — Free Expunction, Anytime',
+          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, no-billed, acquitted, or an arrest that never led to a charge — you can expunge it for FREE, and Tennessee law is explicit that no fee should ever be charged for this. There is no waiting period. File the petition in the court that handled the case. One thing to be aware of: if you were CONVICTED of any other count arising from the same incident, that can prevent expunging the rest (§ (a)(1)(E)) — so this cleanest path assumes nothing from that episode ended in a conviction.',
+          remedy: 'Expunction of a Non-Conviction (T.C.A. § 40-32-101) — free, anytime',
+          citation: 'T.C.A. § 40-32-101'
+        },
+        eligible_conviction_tn: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Expunge — One New Step to Know About',
+          message: 'Based on your dates — 5 years since you completed the sentence with all fines, costs, and restitution paid, and no other convictions — this conviction appears eligible for expunction under § 40-32-101(g). One step changed in January 2024 and it is worth planning for: before a court will enter the order, you must first obtain a Certificate of Eligibility from the TBI confirming the offense qualifies. That adds processing time, so start it early. Then file the petition in the court of conviction; the clerk may charge up to $100, waived if you cannot afford it. An expunction destroys the public record.',
+          remedy: 'TBI Certificate of Eligibility, then Expunction Petition (§ 40-32-101(g))',
+          citation: 'T.C.A. § 40-32-101(g)'
+        },
+        eligible_conviction_cd_tn: {
+          status: 'eligible',
+          title: 'Possibly Eligible on the Newer 10-Year Felony Tier',
+          message: 'Tennessee recently added a path for certain Class C and D felonies at 10 years — most older guides do not mention it, so this may be newer than what you have read elsewhere. Based on your dates the 10 years appear met. Two things to confirm, though: whether YOUR specific offense is on the eligible list is exactly what we are still verifying, and it is also what the TBI Certificate of Eligibility (required since January 2024) will determine before a court acts. So the honest next step is to request that certificate — it both confirms eligibility and is required to proceed. A legal aid organization can help you check the offense against the current list first. The clerk may charge up to $100, waived for indigency.',
+          remedy: 'TBI Certificate of Eligibility (confirms the offence too), then Petition (§ 40-32-101(g))',
+          citation: 'T.C.A. § 40-32-101(g)'
+        },
+        waiting_tn: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Tennessee\'s conviction expunction comes 5 years after you complete your sentence (with all fines, costs, and restitution paid) for a misdemeanor or listed Class E felony, and 10 years for the newer Class C/D felony tier. Based on your dates, yours has not run yet. Getting any outstanding fines or restitution paid matters, since the clock runs from full completion. When the time comes, remember the TBI certificate step added in 2024.',
+          remedy: 'Wait for the period (all obligations paid), then request the TBI certificate',
+          citation: 'T.C.A. § 40-32-101(g)'
+        },
+        ineligible_excluded_tn: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Expunged',
+          message: 'Tennessee does not expunge DUI convictions, sexual offenses, vehicular assault, or Class A and Class B felonies. For a DUI specifically, there is no expunction route, so be wary of any service suggesting one. If you have a non-conviction or a different, eligible conviction on your record, those may still qualify — run this again for them. Legal aid can confirm where your offense falls; the categories are specific.',
+          remedy: 'None (Excluded Offense)',
+          citation: 'T.C.A. § 40-32-101'
+        },
+        complex_multi_tn: {
+          status: 'complex',
+          title: 'More Than One Conviction — Worth a Closer Look',
+          message: 'The simplest Tennessee expunction path is for a single eligible conviction with nothing else on your record. Because you have more than one conviction, your situation needs a closer look: Tennessee does have a two-conviction path (§ (k)) — up to two offenses, each independently eligible, both before any ineligible conviction — but it can only be used ONCE in a lifetime, so timing and which convictions to include actually matter. This is worth a person rather than a screening tool. Legal aid and the tncourts.gov expungement resources can map which of your convictions qualify and whether the two-conviction path is your best move.',
+          remedy: 'Consult Legal Aid (Multiple Convictions; the § (k) Two-Conviction Path)',
+          citation: 'T.C.A. § 40-32-101(k)'
+        },
+        complex_level_tn: {
+          status: 'complex',
+          title: 'We Need the Offense Classification',
+          message: 'In Tennessee the expunction wait depends on the class: 5 years for a misdemeanor or listed Class E felony, 10 for the newer Class C/D tier, and never for Class A/B felonies, DUI, or sexual offenses. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the tncourts.gov expungement page walks through the categories. Legal aid can also read your record with you.',
+          remedy: 'Get Your Offense Classification First (court paperwork / tncourts.gov)',
+          citation: 'T.C.A. § 40-32-101(g)'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        conviction: {
+          name: 'Conviction Expunction (T.C.A. § 40-32-101(g))',
+          formName: 'Petition for Expunction (with TBI Certificate of Eligibility)',
+          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          steps: [
+            'Since January 2024, first request a Certificate of Eligibility from the TBI — it confirms the offense qualifies, and a court cannot enter the order without it. Start this early; it adds processing time.',
+            'File the petition in the court of conviction; the district attorney is served.',
+            'The clerk may charge up to $100; an indigency affidavit waives it.',
+            'For a non-conviction instead, the expunction is free and needs no TBI certificate.'
+          ],
+          // null: Wave 4 gives "up to $100, indigency waives" and flags the
+          // current practice.
+          fees: null,
+          // NOT null: the indigency waiver is a named, independent mechanism.
+          feeWaiver: 'An indigency affidavit waives the clerk fee.',
+          courtContact: 'The court of conviction; TBI for the certificate'
+        },
+        nonconviction: {
+          name: 'Non-Conviction Expunction (T.C.A. § 40-32-101)',
+          formName: 'Petition for Expunction (non-conviction)',
+          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          steps: [
+            'For a dismissal, nolle, no-bill, acquittal, or arrest without charge, file in the court that handled the case.',
+            'No TBI certificate is needed for a non-conviction.',
+            'It is free — the statute is explicit that no fee should be charged.'
+          ],
+          fees: '$0 — the statute declares no fee should ever be charged for a non-conviction expunction.',
+          feeWaiver: 'Not applicable (free).',
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Tennessee Courts — Expunctions', url: 'https://www.tncourts.gov/programs/expunctions' },
+        { name: 'Legal Aid Society of Middle Tennessee and the Cumberlands', url: 'https://www.las.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // MASSACHUSETTS — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  //
+  // THE FLAGSHIP QUIRK, and the best UX in the country: administrative SEALING
+  // of a conviction is ONE FORM, BY MAIL, FREE, NO COURT, and NON-DISCRETIONARY
+  // once the wait is met. The Commissioner of Probation MUST seal — no judge, no
+  // hearing, no reasons. For most users this is the whole answer, and the copy
+  // leads with it.
+  //
+  // Sealing (CORI hidden, §§ 100A-100C) vs expungement (destruction, §§ 100E-
+  // 100U, narrow). Expungement is the exception (offence before 21st birthday,
+  // max 2 lifetime, ~20 excluded categories); sealing is the product.
+  //
+  // Waits from disposition or release (whichever later), reset by intervening
+  // convictions/incarceration: misdemeanours 3 yrs, felonies 7, sex offences 15
+  // (and registry-required cannot seal at all).
+  // ==========================================================================
+  MA: {
+    code: 'MA',
+    name: 'Massachusetts',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
+    terminology:
+      'Massachusetts has two remedies, and the common one is unusually easy. SEALING hides your '
+      + 'record (your CORI) from most employers, and for a conviction it is administrative: you mail '
+      + 'ONE form to the Commissioner of Probation, there is no fee and no court hearing, and once '
+      + 'the waiting period is met the Commissioner MUST seal it — a judge is not involved and there '
+      + 'is no discretion to say no. EXPUNGEMENT permanently destroys the record but is deliberately '
+      + 'narrow, mostly for offenses committed before the person turned 21. For most people, sealing '
+      + 'is the whole answer.',
+    keyDates: [],
+    openQuestions: [
+      {
+        question:
+          'Confirm the current Petition to Seal form name/number. Wave 4 gives "TC-005" but flags it. Verify on the mass.gov "Seal your criminal record" page along with the current Commissioner of Probation mailing address.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm which offense categories are ineligible for administrative sealing under § 100A. Wave 4 flags the list (firearms-licensing statutes, some state-ethics offenses). The tree asks a person whether their offense is in one of these categories.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 100J expungement exclusion list (~20 categories: ABDW, firearms, OUI, restraining-order violations, sex offenses) and the § 100E-100U mechanics: offense before the 21st birthday, 3-yr misd / 7-yr felony waits, max 2 lifetime, no subsequent cases. The expungement path is disclosed but not fully branched.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions and continuances-without-a-finding (CWOF) treated for sealing? Standing call-sheet question. Wave 4 does not detail these.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Mass. Gen. Laws c. 276 § 100A (administrative sealing of convictions)', url: null, retrievedOn: null },
+      { id: 'Mass. Gen. Laws c. 276 § 100C (court sealing of non-convictions)', url: null, retrievedOn: null },
+      { id: 'Mass. Gen. Laws c. 276 §§ 100E-100U (expungement — narrow)', url: null, retrievedOn: null },
+      { id: 'Mass. Gen. Laws c. 276 § 100J (expungement exclusion list)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'seal_ineligible_ma' },
+            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'eligible_court_seal_ma' },
+            { label: 'Acquitted / No probable cause / No-billed', value: 'acquitted', next: 'eligible_auto_seal_ma' },
+            { label: 'Diversion completed / Continuance without a finding', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        seal_ineligible_ma: {
+          type: 'boolean',
+          text: 'Was the offense a sex offense that requires you to register, a firearms-licensing offense, or a state-ethics offense?',
+          yes: 'complex_ineligible_ma',
+          no: 'seal_level_ma'
+        },
+        seal_level_ma: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_ma' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_ma' },
+            { label: 'Infraction', value: 'infraction', next: 'misd_date_ma' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_ma' }
+          ]
+        },
+        misd_date_ma: {
+          type: 'date',
+          text: 'Which came LATER: the disposition of the case, or your release from any incarceration? Enter that date. (A later conviction or incarceration resets this clock.)',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'the later of disposition or release (M.G.L. c. 276 § 100A — misdemeanours; reset by intervening convictions/incarceration)' },
+            nextPass: 'eligible_seal_ma',
+            nextFail: 'waiting_ma'
+          }
+        },
+        felony_date_ma: {
+          type: 'date',
+          text: 'Which came LATER: the disposition of the case, or your release from any incarceration? Enter that date. (A later conviction or incarceration resets this clock.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'the later of disposition or release (M.G.L. c. 276 § 100A — felonies; reset by intervening convictions/incarceration)' },
+            nextPass: 'eligible_seal_ma',
+            nextFail: 'waiting_ma'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'In Massachusetts, a non-conviction can often be sealed right away, while a conviction seals administratively after a wait. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. An iCORI self-request ($25, waived if you cannot afford it) will show your record, and Greater Boston Legal Services has excellent CORI self-help materials.',
+          remedy: 'Get Your Record First (iCORI)',
+          citation: 'M.G.L. c. 276 §§ 100A, 100C (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion and CWOF Cases Need a Person',
+          message: 'Massachusetts sealing rules are screened here for convictions and non-convictions. How a completed diversion or a continuance without a finding (CWOF) is treated is not something this screening has researched in detail, and we would rather point you to someone than guess — these often resolve favorably, so it is worth asking. Greater Boston Legal Services has strong CORI self-help materials and can tell you how your disposition is treated.',
+          remedy: 'Consult Legal Aid (Diversion / CWOF Not Yet Detailed)',
+          citation: 'M.G.L. c. 276 § 100A (treatment of diversions not yet detailed)'
+        },
+        eligible_auto_seal_ma: {
+          status: 'eligible',
+          title: 'Acquittal or No-Bill — Sealed Automatically',
+          message: 'Because your case ended in an acquittal, a finding of no probable cause, or a no-bill, Massachusetts seals it AUTOMATICALLY at disposition under § 100C — there is nothing you need to do. If your record still shows it, you can ask the court to confirm the sealing was applied. An iCORI self-request will let you check what your record shows.',
+          remedy: 'Automatic Court Sealing (§ 100C) — already applied',
+          citation: 'M.G.L. c. 276 § 100C'
+        },
+        eligible_court_seal_ma: {
+          status: 'eligible',
+          title: 'Dismissed — You Can Seal It Now, No Waiting Period',
+          message: 'Because your case was dismissed or nolle prossed, you can petition the court to seal it right away under § 100C — no waiting period. It is a court petition (the judge weighs whether sealing serves "substantial justice"), which makes it a good option for people who do not want to wait out the administrative timeline. This is separate from the mail-in administrative sealing that applies to convictions. Greater Boston Legal Services can help you file.',
+          remedy: 'Court Petition to Seal a Non-Conviction (§ 100C) — no wait',
+          citation: 'M.G.L. c. 276 § 100C'
+        },
+        eligible_seal_ma: {
+          status: 'eligible',
+          title: 'Mail One Form — They Cannot Say No',
+          message: 'This is the good news, and it is genuinely simple. Based on your dates, you can seal this conviction administratively under § 100A — and that means ONE form, mailed to the Commissioner of Probation, with no fee, no court, and no hearing. Once the wait is met (3 years for a misdemeanor, 7 for a felony, from the later of your disposition or release), the Commissioner MUST seal it. There is no discretion and no reason they can give to refuse. Mail the Petition to Seal to the Commissioner of Probation, One Ashburton Place, Room 405, Boston, MA 02108. That is the whole process for most people. Greater Boston Legal Services has the current form and a plain-language walkthrough.',
+          remedy: 'Mail the Petition to Seal to the Commissioner of Probation (§ 100A) — free, non-discretionary',
+          citation: 'M.G.L. c. 276 § 100A'
+        },
+        waiting_ma: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Massachusetts administrative sealing comes 3 years after a misdemeanor or 7 years after a felony, measured from the later of your disposition or your release from any incarceration. Based on your dates, that has not run yet — and note that a later conviction or incarceration resets the clock. The good news for when you get there: sealing is a single mailed form, free, with no court and no discretion. Staying case-free is what gets you to it.',
+          remedy: 'Wait for the period, then mail one form (no fee, no court)',
+          citation: 'M.G.L. c. 276 § 100A'
+        },
+        complex_ineligible_ma: {
+          status: 'complex',
+          title: 'This Offense Category Needs a Closer Look',
+          message: 'A sex offense that requires registration cannot be sealed while the registration duty continues (and sex offenses have a longer 15-year track even when sealable), and firearms-licensing and state-ethics offenses have their own limits on administrative sealing. Because these categories are specific and the rules differ within them, we are not going to give you a flat yes or no — it is worth having someone look. Greater Boston Legal Services handles exactly these situations and can tell you whether a sealing or the narrower expungement route fits.',
+          remedy: 'Consult Legal Aid (Registration / Firearms / Ethics Offense)',
+          citation: 'M.G.L. c. 276 § 100A'
+        },
+        complex_level_ma: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Massachusetts the administrative sealing wait is 3 years for a misdemeanor and 7 for a felony. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and an iCORI self-request will show it. Once you know, sealing is a single mailed form with no fee and no court — Greater Boston Legal Services has the walkthrough.',
+          remedy: 'Get Your Offense Level First (court paperwork / iCORI)',
+          citation: 'M.G.L. c. 276 § 100A'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        sealing: {
+          name: 'Administrative Sealing of a Conviction (M.G.L. c. 276 § 100A)',
+          formName: 'Petition to Seal (mail to the Commissioner of Probation)',
+          formUrl: 'https://www.mass.gov/how-to/seal-your-criminal-record',
+          steps: [
+            'Confirm you are past the wait: 3 years for a misdemeanor, 7 for a felony, from the later of disposition or release.',
+            'Complete the Petition to Seal and MAIL it to the Commissioner of Probation, One Ashburton Place, Room 405, Boston, MA 02108.',
+            'There is no fee, no court, and no hearing. Once the wait is met, the Commissioner must seal it.',
+            'For a dismissal or acquittal instead, use the court-sealing path (§ 100C), which has no waiting period.'
+          ],
+          fees: '$0 — administrative sealing is free.',
+          feeWaiver: 'Not applicable (free).',
+          courtContact: 'Commissioner of Probation (by mail), One Ashburton Place, Room 405, Boston, MA 02108'
+        }
+      },
+      legalAid: [
+        { name: 'Mass.gov — Seal your criminal record', url: 'https://www.mass.gov/how-to/seal-your-criminal-record' },
+        { name: 'Greater Boston Legal Services (CORI self-help)', url: 'https://www.gbls.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // INDIANA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  //
+  // THE QUIRK, and a tree design no scraper has: ONE expungement petition per
+  // lifetime (§ 9-9). It must include everything at once; multi-county records
+  // are separate petitions per county, all within a 365-day window, together
+  // counting as the one shot. So the right answer is sometimes "you are
+  // eligible, but DON'T FILE YET" — filing now on one case can burn the shot
+  // for records not yet eligible.
+  //
+  // That is complex_timing_in: an ADVISORY, not a clean eligible, because
+  // whether to wait depends on the eligibility of OTHER records the screening
+  // cannot compute. Reached when a person says they have other records.
+  //
+  // Tracks: arrests/no-conviction (§ 9-1, 1yr, free); misdemeanours (§ 9-2, 5yr,
+  // MANDATORY grant); Level 6/Class D (§ 9-3, 8yr, mandatory); Level 4/5 (§ 9-4,
+  // 8yr, DISCRETIONARY, record marked-public not hidden); serious (§ 9-5, 10yr +
+  // prosecutor consent). Never: murder, sex/violent registry, official misconduct.
+  // ==========================================================================
+  IN: {
+    code: 'IN',
+    name: 'Indiana',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
+    terminology:
+      'Indiana calls it EXPUNGEMENT, though for lower-level offenses it works like sealing and for '
+      + 'higher felonies it marks the record "expunged" while leaving it public. The rule that '
+      + 'shapes everything: you get ONE expungement petition in your LIFETIME. It has to include all '
+      + 'your eligible records at once, and if your records are in different counties you file one '
+      + 'petition per county, all within a single 365-day window — together they are your one shot. '
+      + 'That means the right move is sometimes to WAIT: filing now on one case can waste the '
+      + 'petition for records that are not eligible yet. Lower-level grants are mandatory if you '
+      + 'qualify; higher felonies are up to the judge.',
+    keyDates: [],
+    openQuestions: [
+      {
+        question:
+          'Confirm the scope of the post-2022 automatic expungement of dismissed-case arrests (§ 9-1), and the 2022 additions for infraction-adjudication arrests and diversion-participant eligibility (with prosecutor authorization). Wave 4 flags the scope. The tree tells non-conviction petitioners to check whether it was already done.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 9-3 exclusion list for Level 6 / Class D felonies (bodily-injury offenses, sex/violent offenders, etc.). The tree asks a person whether their offense is excluded from the § 9-3 mandatory path.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 9-5(b) never-expungeable list (murder/homicide-level, sex/violent-offender registry, sex crimes, official misconduct). The tree asks a person whether their offense is on it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the conviction-petition filing fee? Wave 4 says § 9-1 arrest petitions are free by statute, and conviction petitions pay the civil filing fee (~$100 vicinity, county-set). Phone target.',
+        blocksFields: ['resources.remedies.conviction.fees', 'resources.remedies.conviction.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the "earlier with prosecutor\'s written consent" mechanics for the § 9-2 misdemeanour path and the § 9-5 serious-felony prosecutor-consent requirement. The tree uses the standard waits and notes the consent shortcuts in prose.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ind. Code § 35-38-9-1 (arrest/non-conviction expungement; automatic post-2022)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-2 (misdemeanour expungement; 5 yrs; mandatory)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-3 (Level 6/Class D felony; 8 yrs; mandatory; exclusion list)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-4 (Level 4/5 felony; 8 yrs; discretionary; marked-public)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-5 (serious felony; 10 yrs + prosecutor consent; discretionary)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-9 (one petition per lifetime; 365-day multi-county window)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_in' },
+            { label: 'Dismissed / Arrested but not convicted', value: 'dismissed', next: 'eligible_arrest_in' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_arrest_in' },
+            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_in: {
+          type: 'boolean',
+          text: 'Was the offense any of these: murder or a homicide-level offense, a sex crime or one requiring sex/violent-offender registration, or official misconduct by a public official?',
+          yes: 'ineligible_excluded_in',
+          no: 'level_in'
+        },
+        level_in: {
+          type: 'choice',
+          text: 'How was the offense classified? (Your paperwork says. Indiana\'s waiting period and whether a judge has discretion both depend on it.)',
+          options: [
+            { label: 'Misdemeanor (or a felony reduced to a misdemeanor)', value: 'misd', next: 'misd_date_in' },
+            { label: 'Level 6 felony / Class D felony', value: 'l6', next: 'l6_excluded_in' },
+            { label: 'Level 4 or Level 5 felony', value: 'l45', next: 'l45_date_in' },
+            { label: 'A serious felony (serious bodily injury, elected-official misconduct)', value: 'serious', next: 'serious_in' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_in' }
+          ]
+        },
+        l6_excluded_in: {
+          type: 'boolean',
+          text: 'Did the offense involve bodily injury to another person?',
+          yes: 'complex_l6_excluded_in',
+          no: 'l6_date_in'
+        },
+        misd_date_in: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-2 — misdemeanour; mandatory grant; earlier with prosecutor consent)' },
+            nextPass: 'other_records_mand_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        l6_date_in: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 8, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-3 — Level 6/Class D felony; mandatory grant)' },
+            nextPass: 'other_records_mand_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        l45_date_in: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 8, unit: 'years', anchor: 'conviction, or 3 years post-sentence whichever later (Ind. Code § 35-38-9-4 — Level 4/5 felony; discretionary; record stays publicly marked)' },
+            nextPass: 'other_records_disc_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        serious_in: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-5 — serious felony; discretionary; also requires the prosecutor\'s written consent)' },
+            nextPass: 'other_records_disc_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        // THE ONE-PETITION-TIMING gate. Shared per grant type so the "no" branch
+        // keeps its track identity.
+        other_records_mand_in: {
+          type: 'boolean',
+          text: 'Do you have any OTHER arrests or convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
+          yes: 'complex_timing_in',
+          no: 'eligible_mandatory_in'
+        },
+        other_records_disc_in: {
+          type: 'boolean',
+          text: 'Do you have any OTHER arrests or convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
+          yes: 'complex_timing_in',
+          no: 'eligible_discretionary_in'
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Indiana treats arrests without conviction (1 year, free) very differently from convictions (longer waits, and only one petition ever). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. Indiana Legal Services has expungement materials, and the indy.gov Second Chance page walks through the categories.',
+          remedy: 'Get Your Record First (Indiana Legal Services)',
+          citation: 'Ind. Code § 35-38-9 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Indiana expanded eligibility in 2022 to include some diversion participants (with prosecutor authorization), but the exact rules are not something this screening has researched in detail, so we would rather point you to someone than guess. And remember Indiana\'s one-petition-per-lifetime rule makes timing matter even here. Indiana Legal Services can tell you how your diversion is treated and how to time a petition.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
+          citation: 'Ind. Code § 35-38-9-1 (diversion treatment not yet detailed)'
+        },
+        eligible_arrest_in: {
+          status: 'eligible',
+          title: 'Arrest Without Conviction — Free Expungement (Maybe Already Done)',
+          message: 'Because this case did not end in a conviction, you can expunge the arrest under § 35-38-9-1 — it is free, and available 1 year after the arrest. Since 2022, Indiana also expunges some dismissed-case arrests AUTOMATICALLY, so check first whether yours was already done before filing anything. Here is the Indiana-specific thing to keep in mind even for a free arrest expungement: Indiana gives you ONE expungement petition in your lifetime for convictions, and while arrest expungements are treated more flexibly, if you also have convictions you may want expunged, it is worth talking to legal aid about sequencing before you file anything. Indiana Legal Services can advise.',
+          remedy: 'Arrest Expungement (§ 35-38-9-1) — free; check if already automatic',
+          citation: 'Ind. Code § 35-38-9-1'
+        },
+        eligible_mandatory_in: {
+          status: 'eligible',
+          title: 'Eligible — And the Grant Is Mandatory',
+          message: 'Based on your dates and the fact that you told us you have no other records to worry about, you appear eligible to expunge this conviction, and the good news is that for a misdemeanor or a Level 6 / Class D felony the grant is MANDATORY — if you meet the criteria, the court must grant it. Petition the convicting court; the prosecutor has 30 days to object, and a hearing is possible. One thing to double-check before filing, because it is the whole ballgame in Indiana: you get only ONE expungement petition in your lifetime, so make sure this really is everything you would want expunged. Indiana Legal Services can confirm before you use your shot.',
+          remedy: 'Petition to Expunge (§ 35-38-9-2 / 9-3) — mandatory grant, one lifetime petition',
+          citation: 'Ind. Code §§ 35-38-9-2, 35-38-9-3'
+        },
+        eligible_discretionary_in: {
+          status: 'eligible',
+          title: 'Eligible — But a Judge Decides, and the Record Stays Publicly Marked',
+          message: 'Based on your dates, you appear eligible to petition to expunge this felony — but set your expectations, because a higher-level felony works differently in Indiana. For a Level 4 or 5 felony, the grant is DISCRETIONARY: the judge weighs whether to grant it rather than being required to. And even when granted, the record is not hidden — it is publicly MARKED as "expunged" rather than sealed away. That is still meaningful relief (it carries legal protections against discrimination), but it is not the disappearance that the word suggests. The prosecutor has 30 days to object, and for the most serious felonies their written consent is required. Because this is discretionary and you get only one petition ever, this is worth doing with Indiana Legal Services.',
+          remedy: 'Petition to Expunge (§ 35-38-9-4 / 9-5) — discretionary, record stays publicly marked',
+          citation: 'Ind. Code §§ 35-38-9-4, 35-38-9-5'
+        },
+        complex_timing_in: {
+          status: 'complex',
+          title: 'You May Be Eligible — But in Indiana, Timing Is Everything',
+          message: 'This is the most important thing to understand about Indiana, and it is why we are not just telling you to go file. You appear to be past the waiting period for this case. But Indiana gives you exactly ONE expungement petition in your entire life. It has to include everything you want expunged, all at once — and if your records are in more than one county, all those petitions have to be filed within a single 365-day window and together they count as your one shot. Because you told us you have other records, filing now on just this case could BURN that one petition and leave the rest permanently on your record. Here is the strategic part: if your other records are not eligible yet, it is often far better to WAIT until they are, so a single petition can clear everything together. This is genuinely worth a conversation with a lawyer before you file anything — Indiana Legal Services and the indy.gov Second Chance program help people sequence exactly this, and getting it right once beats getting it wrong forever.',
+          remedy: 'Do NOT file yet — plan the timing with Indiana Legal Services (one petition, ever)',
+          citation: 'Ind. Code § 35-38-9-9'
+        },
+        waiting_in: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Indiana\'s expungement waits run from your conviction: 5 years for a misdemeanor, 8 for a Level 6 or higher felony (or 3 years post-sentence, whichever is later, for the higher felonies), and 10 for the most serious. Based on your dates, yours has not run yet, and it also requires no new convictions and paid obligations. There is a silver lining to waiting in Indiana specifically: because you only get one petition ever, a not-yet-eligible record is a reason to hold off filing on your other cases too, so that one petition can eventually catch everything. Indiana Legal Services can help you plan the timing.',
+          remedy: 'Wait for the period — and use the time to line up all your records',
+          citation: 'Ind. Code § 35-38-9'
+        },
+        ineligible_excluded_in: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Expunged',
+          message: 'Indiana never expunges murder or homicide-level offenses, sex crimes or offenses requiring sex or violent-offender registration, or official misconduct by a public official. This is categorical. If you have other, eligible records, those may still be expungeable — but given Indiana\'s one-petition rule, how you handle them matters, so it is worth a conversation with Indiana Legal Services rather than filing on your own. If your offense is genuinely on this never-list, executive clemency is the remaining route.',
+          remedy: 'None (Never-Expungeable Offense) — clemency is the remaining route',
+          citation: 'Ind. Code § 35-38-9-5'
+        },
+        complex_l6_excluded_in: {
+          status: 'complex',
+          title: 'A Bodily-Injury Offense Needs a Closer Look',
+          message: 'A Level 6 or Class D felony is normally a mandatory expungement after 8 years — but offenses involving bodily injury to another person are treated differently and may fall outside that mandatory path or into a discretionary one. Because the § 9-3 exclusions are specific, we are not going to guess where yours lands. Indiana Legal Services can check your exact offense against the exclusion list — and given Indiana\'s one-petition-per-lifetime rule, having a lawyer look before you file is worth it regardless.',
+          remedy: 'Consult Legal Aid (Level 6 Bodily-Injury Exclusion)',
+          citation: 'Ind. Code § 35-38-9-3'
+        },
+        complex_level_in: {
+          status: 'complex',
+          title: 'We Need the Offense Classification',
+          message: 'In Indiana the wait and whether a judge has discretion both depend on the level: 5 years for a misdemeanor (mandatory grant), 8 for a Level 6 or 4/5 felony (mandatory for Level 6, discretionary above), 10 for the most serious. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and Indiana Legal Services can read your record with you — which is worth doing anyway, because you only get one petition ever.',
+          remedy: 'Get Your Offense Classification First (court paperwork / Indiana Legal Services)',
+          citation: 'Ind. Code § 35-38-9'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        conviction: {
+          name: 'Expungement of a Conviction (Ind. Code § 35-38-9)',
+          formName: 'Petition for Expungement',
+          formUrl: 'https://www.indianalegalservices.org/expungement',
+          steps: [
+            'Before anything: remember you get ONE petition in your lifetime. Line up ALL your eligible records first — multi-county records are separate petitions filed within a single 365-day window.',
+            'File in the convicting court; the prosecutor has 30 days to object, and a hearing is possible.',
+            'Misdemeanors and Level 6 felonies are mandatory grants if you qualify; higher felonies are discretionary and the record stays publicly marked.',
+            'This is worth doing with Indiana Legal Services so you do not waste your one petition.'
+          ],
+          // null: Wave 4 gives "~$100 vicinity, county-set" and flags it.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The convicting court'
+        },
+        arrest: {
+          name: 'Expungement of an Arrest / Non-Conviction (§ 35-38-9-1)',
+          formName: 'Petition for Expungement of Arrest Records',
+          formUrl: 'https://www.indianalegalservices.org/expungement',
+          steps: [
+            'Available 1 year after the arrest, and free by statute.',
+            'Since 2022, some dismissed-case arrests expunge automatically — check whether yours already was.',
+            'File in the court where the case was handled.'
+          ],
+          fees: '$0 — arrest/non-conviction petitions are free by statute.',
+          feeWaiver: 'Not applicable (free).',
+          courtContact: 'The court where the case was handled'
+        }
+      },
+      legalAid: [
+        { name: 'Indiana Legal Services (expungement)', url: 'https://www.indianalegalservices.org/expungement' },
+        { name: 'indy.gov Second Chance (Marion County)', url: 'https://www.indy.gov' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // MISSOURI — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  //
+  // THE QUIRK: the presumption is FOR expungement. When the statutory criteria
+  // are met and pled, there is a REBUTTABLE PRESUMPTION for expungement and the
+  // PROSECUTOR bears the burden to defeat it — unusually petitioner-friendly.
+  //
+  // Exclusion-list architecture: everything is expungeable UNLESS listed
+  // (~1,900 offences qualify; 11 exception categories). The tree asks the
+  // exclusion question, not an inclusion one.
+  //
+  // FRESH LAW (Jan 1, 2025, SB 754): lifetime limits raised to 2 felonies + 3
+  // misdemeanours (was 1F+2M — many attorney sites still show the old numbers).
+  // The surprise-yes: a first-time DWI can be expunged after 10 years with no
+  // further alcohol offences (its own track).
+  //
+  // Waits (SB 53): felony 3 yrs, misdemeanour/ordinance/infraction 1 yr, from
+  // completion of disposition; the clean period runs BACKWARD from filing.
+  // ==========================================================================
+  MO: {
+    code: 'MO',
+    name: 'Missouri',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
+    terminology:
+      'Missouri says EXPUNGEMENT, and it means a court-ordered sealing that restores you to your '
+      + 'pre-offense status — in most situations you may lawfully deny it happened. Missouri is '
+      + 'built as an exclusion list: almost everything qualifies UNLESS it is one of a set of '
+      + 'excepted categories, so roughly 1,900 offenses are eligible. Two things make Missouri '
+      + 'notably favorable. A fresh 2025 law raised the lifetime limits to 2 felonies plus 3 '
+      + 'misdemeanors (many websites still show the old, lower numbers). And when you meet the '
+      + 'criteria, the presumption is FOR expungement — the prosecutor has to prove why not.',
+    keyDates: [
+      {
+        label: 'SB 754 — lifetime limits raised to 2 felonies + 3 misdemeanours',
+        date: '2025-01-01',
+        kind: 'effective',
+        note: 'Was 1 felony + 2 misdemeanours. Many attorney sites still show the old numbers. Also: separate crimes in one case are no longer automatically counted as one; arrest expungements available at 18 months (was 3 years).',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the SB 754 counting change against the current § 610.140 text: separate crimes in one case are no longer automatically counted as one toward the limits, with a nuanced same-course-of-conduct exception. Wave 4 flags the exact text. The tree asks the person to self-assess their count for the 2-felony / 3-misdemeanour limits.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the first-time-DWI expungement track: Wave 4 says a first DWI can be expunged after 10 years with no further alcohol offenses, and flags the cite (likely § 610.130/.140 interplay). The tree routes a first DWI to its own 10-year result.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'FEE CONFLICT: Wave 4 gives "$250 statutory surcharge per one source vs standard circuit filing fee per another" and flags it as a phone target. Fee waiver by in-forma-pauperis motion. Confirm the actual fee with a circuit clerk.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? Wave 4 says courts are still processing and flags a status check. And confirm no Clean Slate automation bill passed this session (Wave 4 says pending, not law).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 610.140.3 exclusion list: Class A felonies, dangerous felonies (§ 556.061), death-element felonies, felony assault, ANY domestic assault, felony kidnapping, sex-registry offenses, most weapons offenses, intoxication-related traffic (except the first-DWI 10-year track), CDL offenses. The tree asks a person whether their offence is on it.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Mo. Rev. Stat. § 610.140 (expungement; exclusion list at .3; presumption)', url: null, retrievedOn: null },
+      { id: 'Mo. Rev. Stat. § 610.130 (first-DWI expungement interplay)', url: null, retrievedOn: null },
+      { id: 'Mo. Rev. Stat. § 556.061 (dangerous felony definitions — exclusion)', url: null, retrievedOn: null },
+      { id: 'SB 754 (2025 — raised lifetime limits; counting change; 18-month arrest track)', url: null, retrievedOn: null },
+      { id: 'SB 53 (2021 — waiting periods)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'dwi_mo' },
+            { label: 'Dismissed / Arrested but not charged', value: 'dismissed', next: 'arrest_date_mo' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'arrest_date_mo' },
+            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // First-DWI carve-out is checked before the general exclusion gate, since
+        // DWI is otherwise excluded but a first one has its own 10-yr track.
+        dwi_mo: {
+          type: 'boolean',
+          text: 'Was this offense a DWI (driving while intoxicated)?',
+          yes: 'dwi_first_mo',
+          no: 'excluded_mo'
+        },
+        dwi_first_mo: {
+          type: 'boolean',
+          text: 'Was this your FIRST alcohol-related driving offense, with no further alcohol offenses since?',
+          yes: 'dwi_date_mo',
+          no: 'ineligible_dwi_mo'
+        },
+        dwi_date_mo: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the disposition of the DWI?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.130/.140 — first-DWI track; no further alcohol offences)' },
+            nextPass: 'eligible_dwi_mo',
+            nextFail: 'waiting_mo'
+          }
+        },
+        excluded_mo: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a Class A felony, a "dangerous felony", a felony causing death, any felony assault, ANY domestic assault, felony kidnapping, a sex-registry offense, a weapons offense, or a CDL-related driving offense?',
+          yes: 'ineligible_excluded_mo',
+          no: 'count_mo'
+        },
+        count_mo: {
+          type: 'choice',
+          text: 'Counting your whole record (the 2025 law allows up to 2 felonies and 3 misdemeanors/ordinance violations expunged in a lifetime): where do you stand?',
+          options: [
+            { label: 'Within those limits (this would be within 2 felonies / 3 misdemeanors)', value: 'within', next: 'conv_level_mo' },
+            { label: 'Already at or over those limits', value: 'over', next: 'ineligible_count_mo' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_mo' }
+          ]
+        },
+        conv_level_mo: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_mo' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_mo' },
+            { label: 'Infraction', value: 'infraction', next: 'misd_date_mo' },
+            { label: 'I\'m not sure', value: 'unknown', next: 'complex_level_mo' }
+          ]
+        },
+        misd_date_mo: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the disposition of the case (sentence and obligations done)?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.140 — misdemeanour/ordinance; clean period runs backward from filing)' },
+            nextPass: 'eligible_mo',
+            nextFail: 'waiting_mo'
+          }
+        },
+        felony_date_mo: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the disposition of the case (sentence and obligations done)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.140 — felony; clean period runs backward from filing)' },
+            nextPass: 'eligible_mo',
+            nextFail: 'waiting_mo'
+          }
+        },
+        arrest_date_mo: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the arrest?',
+          validation: {
+            period: { amount: 18, unit: 'months', anchor: 'the arrest (Mo. Rev. Stat. § 610.140 — arrest without charge; cut to 18 months by SB 754, 2025)' },
+            nextPass: 'eligible_arrest_mo',
+            nextFail: 'waiting_arrest_mo'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Missouri\'s timing depends on how the case ended: an arrest without charge can be expunged at 18 months, a misdemeanor at 1 year, a felony at 3. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The courts.mo.gov self-help forms and clearmyrecordmo.org can help you figure out where you stand.',
+          remedy: 'Get Your Record First (courts.mo.gov / clearmyrecordmo.org)',
+          citation: 'Mo. Rev. Stat. § 610.140 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Missouri\'s expungement rules are screened here for convictions and non-convictions. How a completed diversion is treated is not something this screening has researched in detail, so we would rather point you to someone than guess. clearmyrecordmo.org and Missouri legal aid can tell you how your disposition is treated. If it was marijuana-related, note that Missouri has a separate automatic expungement process from the 2022 Amendment XIV, which courts are still working through.',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
+          citation: 'Mo. Rev. Stat. § 610.140 (diversion treatment not yet detailed)'
+        },
+        eligible_arrest_mo: {
+          status: 'eligible',
+          title: 'Arrest Without Charge — Expungeable Now',
+          message: 'Because this was an arrest that did not lead to a charge or conviction, you can petition to expunge it — and a 2025 law cut the wait to 18 months (it used to be 3 years), so you may qualify sooner than older guides suggest. File in the court of the case; the prosecutor has 30 days to object and the court must rule within 6 months. Missouri\'s petitioner-friendly presumption applies: when you meet the criteria, the burden is on the prosecutor to show why not.',
+          remedy: 'Petition to Expunge an Arrest (§ 610.140) — 18-month wait',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        eligible_mo: {
+          status: 'eligible',
+          title: 'Potentially Eligible — And the Presumption Is on Your Side',
+          message: 'Based on your dates and record, you appear eligible to expunge this conviction under § 610.140 — 1 year after completing a misdemeanor, 3 years after a felony. Missouri is unusually favorable here in two ways worth knowing. First, the 2025 law raised the lifetime limits to 2 felonies and 3 misdemeanors, so more people qualify than the older figures on most websites suggest. Second, when you meet the criteria, there is a rebuttable presumption FOR expungement — the prosecutor bears the burden of showing why it should not be granted, rather than you having to prove your case. File in the court of the case; the prosecutor has 30 days to object and the court must rule within 6 months. The filing fee has a documented discrepancy we are still confirming, and a fee waiver is available if you cannot afford it.',
+          remedy: 'Petition to Expunge (§ 610.140) — presumption in your favor',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        eligible_dwi_mo: {
+          status: 'eligible',
+          title: 'First DWI, 10 Years Clean — This One Can Be Expunged',
+          message: 'This is a route many people do not know exists. A DWI is normally excluded from expungement in Missouri — but a FIRST alcohol-related driving offense is an exception: it can be expunged 10 years after you completed the disposition, provided you have had no further alcohol offenses since. Based on your dates, that appears met. File in the court of the case. The same petitioner-friendly presumption applies once you meet the criteria. Because the DWI rules have specific interplay between statutes, clearmyrecordmo.org and Missouri legal aid are worth using to confirm.',
+          remedy: 'Petition to Expunge a First DWI (§ 610.130/.140) — 10-year track',
+          citation: 'Mo. Rev. Stat. §§ 610.130, 610.140'
+        },
+        waiting_mo: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Missouri\'s expungement waits run from when you completed the disposition: 1 year for a misdemeanor, 3 for a felony, and 10 for a first-DWI. Based on your dates, yours has not run yet. One Missouri-specific nuance worth understanding: the clean period is measured BACKWARD from when you file — you need no other convictions (beyond most traffic) in the year or three years before filing — so the relevant question is your record in the run-up to filing, not just elapsed time since this case.',
+          remedy: 'Wait for the period (measured backward from filing)',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        waiting_arrest_mo: {
+          status: 'waiting',
+          title: 'Arrest — 18-Month Mark Not Yet Reached',
+          message: 'An arrest without a charge can be expunged 18 months after the arrest (a 2025 law cut this from 3 years). Based on your dates, that has not run yet. Come back when it has — the process is quick and the presumption favors you.',
+          remedy: 'Wait for the 18-month mark',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        ineligible_excluded_mo: {
+          status: 'ineligible',
+          title: 'This Offense Is on Missouri\'s Exclusion List',
+          message: 'Missouri expunges almost everything, but it keeps a specific exclusion list: Class A felonies, "dangerous felonies", felonies causing death, any felony assault, ANY domestic assault, felony kidnapping, sex-registry offenses, most weapons offenses, and CDL-related driving offenses. No waiting period changes that. Because these are precise legal categories — "dangerous felony" in particular is a defined term — if you are not certain your offense is actually on the list, it is worth confirming rather than assuming. clearmyrecordmo.org and Missouri legal aid can check it against the current § 610.140.3 list.',
+          remedy: 'None (Excluded Offense) — confirm against § 610.140.3',
+          citation: 'Mo. Rev. Stat. § 610.140.3'
+        },
+        ineligible_dwi_mo: {
+          status: 'ineligible',
+          title: 'A Repeat DWI Cannot Be Expunged',
+          message: 'Missouri allows expunging only a FIRST alcohol-related driving offense (after 10 years with nothing further). Because this was not your first, or there have been further alcohol offenses since, the DWI expungement route is not open. This is a firm rule. If you have other, non-alcohol offenses on your record, those may well be expungeable — run this again for them. clearmyrecordmo.org can confirm your DWI history and what else might qualify.',
+          remedy: 'None (Repeat DWI) — other offenses may still qualify',
+          citation: 'Mo. Rev. Stat. §§ 610.130, 610.140.3'
+        },
+        ineligible_count_mo: {
+          status: 'ineligible',
+          title: 'You Have Reached Missouri\'s Lifetime Limits',
+          message: 'Missouri caps lifetime expungements at 2 felonies and 3 misdemeanors or ordinance violations (the 2025 law raised these from 1 and 2 — so double-check, because if you were relying on the old numbers you may actually have more room than you think). Based on what you told us, you are at or over the current limits. This is worth confirming carefully with someone, because the 2025 law also changed HOW offenses are counted — separate crimes in one case are no longer automatically treated as one, which cuts both ways. clearmyrecordmo.org has a law-change page built for exactly this, and Missouri legal aid can count your record properly.',
+          remedy: 'Consult Legal Aid (Lifetime Limits) — the 2025 counting change may help',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        complex_count_mo: {
+          status: 'complex',
+          title: 'Your Record Count Needs Checking',
+          message: 'Missouri lets you expunge up to 2 felonies and 3 misdemeanors in a lifetime, and the 2025 law changed both the numbers and the counting method, so where you stand is genuinely worth checking rather than guessing. Since you are not sure of your count, we are not going to assume. clearmyrecordmo.org has a page specifically on the law change and its counting rules, and Missouri legal aid can pull your record and count it against the current limits.',
+          remedy: 'Get Your Record Counted (clearmyrecordmo.org / legal aid)',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        },
+        complex_level_mo: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Missouri the wait is 1 year for a misdemeanor and 3 for a felony. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and courts.mo.gov has self-help forms. clearmyrecordmo.org can also help you read your record.',
+          remedy: 'Get Your Offense Level First (court paperwork / courts.mo.gov)',
+          citation: 'Mo. Rev. Stat. § 610.140'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Petition to Expunge (Mo. Rev. Stat. § 610.140)',
+          formName: 'Missouri expungement petition (courts.mo.gov self-help forms)',
+          formUrl: 'https://www.courts.mo.gov/page.jsp?id=98230',
+          steps: [
+            'Confirm your offense is not on the § 610.140.3 exclusion list and that you are within the lifetime limits (2 felonies / 3 misdemeanors, as of 2025).',
+            'File in the court of the case; the prosecutor has 30 days to object.',
+            'The court must rule within 6 months. When you meet the criteria, the presumption is FOR expungement.',
+            'A fee waiver is available by in-forma-pauperis motion if you cannot afford the fee.'
+          ],
+          // null: Wave 4 gives a FEE CONFLICT ($250 surcharge vs standard circuit
+          // fee) flagged as a phone target.
+          fees: null,
+          // NOT null: the in-forma-pauperis waiver is a named mechanism.
+          feeWaiver: 'A fee waiver is available by in-forma-pauperis motion.',
+          courtContact: 'The court of the case'
+        }
+      },
+      legalAid: [
+        { name: 'Clear My Record MO (law-change page + forms help)', url: 'https://www.clearmyrecordmo.org' },
+        { name: 'Missouri Courts — Expungement self-help', url: 'https://www.courts.mo.gov/page.jsp?id=98230' }
+      ]
+    }
   }
 };
+
+
+
 
 
 

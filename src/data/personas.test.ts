@@ -1063,7 +1063,227 @@ const MN: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN]];
+const FL: Persona[] = [
+  {
+    source: 'Wave 3 - FL persona 1',
+    package: 'charge dropped 2020, no other record -> expunction path.',
+    record: { title: 'Dropped Charge', disposition: 'dismissed', disposition_date: '2020-01-01', restitution_paid: true },
+    answers: { prior_relief_fl: false, prior_adjudication_fl: false },
+    expect: { resultKey: 'eligible_expunction_fl', reading: 'No prior FL relief, no adjudication anywhere, dismissed -> expunction path. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - FL persona 2',
+    package: 'withheld adjudication, grand theft, sentence done, clean -> sealing path.',
+    record: { title: 'Grand Theft (adjudication withheld)', disposition: 'convicted', restitution_paid: true },
+    answers: { prior_relief_fl: false, prior_adjudication_fl: false, disqualified_offense_fl: false, sentence_complete_fl: true },
+    expect: { resultKey: 'eligible_sealing_fl', reading: 'Withheld adjudication, not disqualified, sentence complete -> sealing. The prior_adjudication gate says no because THIS is a withhold, not a conviction. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - FL persona 3',
+    package: 'adjudicated misdemeanor 2010 -> ineligible (conviction bar) - the honest-no persona.',
+    record: { title: 'Adjudicated Misdemeanor', disposition: 'convicted' },
+    answers: { prior_relief_fl: false, prior_adjudication_fl: true },
+    expect: { resultKey: 'ineligible_conviction_fl', reading: 'Any adjudication of guilt on the FL record bars the certificate. The honest-no, with clemency/niche doors named. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - FL persona 4',
+    package: 'sealed a case in 2015 -> ineligible (lifetime rule).',
+    record: { title: 'Prior Case', disposition: 'dismissed' },
+    answers: { prior_relief_fl: true },
+    expect: { resultKey: 'ineligible_lifetime_fl', reading: 'Prior FL seal/expunge -> once-per-lifetime bar, asked first. Notes the out-of-state exception. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - FL persona 5',
+    package: 'withheld adjudication, DV battery -> ineligible (disqualified offense despite withhold).',
+    record: { title: 'DV Battery (adjudication withheld)', disposition: 'convicted' },
+    answers: { prior_relief_fl: false, prior_adjudication_fl: false, disqualified_offense_fl: true },
+    expect: { resultKey: 'ineligible_disqualified_fl', reading: 'DV battery is on the 943.0584 list - not sealable even with adjudication withheld. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const IL: Persona[] = [
+  {
+    source: 'Wave 3 - IL persona 1',
+    package: 'misdemeanor theft, sentence done 2023 -> eligible NOW under the 2-yr change (was 3!) - the fresh-law persona.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2023-01-01' },
+    answers: { sealable_il: false, seal_level_il: 'misdemeanor' },
+    expect: { resultKey: 'eligible_sealing_il', reading: 'Misdemeanour, 2yr wait (cut from 3 June 2026), 2023+2=2025<2026 -> eligible. Under the OLD 3yr rule it would not be until 2026. Exact - the fresh-law persona.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - IL persona 2',
+    package: 'Class 4 felony possession, done 2021 -> eligible-sealing.',
+    record: { title: 'Class 4 Felony Possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2021-01-01' },
+    answers: { sealable_il: false, seal_level_il: 'felony', felony_history_il: false },
+    expect: { resultKey: 'eligible_sealing_il', reading: 'Class 4 felony, no other felony, 3yr wait, 2021+3=2024<2026 -> eligible. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - IL persona 3',
+    package: 'DUI -> never sealable.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { sealable_il: true },
+    expect: { resultKey: 'ineligible_excluded_il', reading: 'DUI is absolutely excluded from sealing in IL. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - IL persona 4',
+    package: 'supervision completed 2023 -> expungement 2025+.',
+    record: { title: 'Court Supervision', disposition: 'deferred', disposition_date: '2023-01-01' },
+    answers: { supervision_type_il: false },
+    expect: { resultKey: 'eligible_expungement_il', reading: 'Ordinary court supervision, 2yr expungement wait, 2023+2=2025<2026 -> eligible. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - IL persona 5',
+    package: 'old felony + new felony -> post-June-30 rules resolve during verification.',
+    record: { title: 'Felony (with a prior felony)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { sealable_il: false, seal_level_il: 'felony', felony_history_il: true },
+    expect: { resultKey: 'complex_new_law_il', reading: 'THE GENUINE FIGHT (REFEREE_QUEUE.md). Felony + another felony under two-week-old Clean Slate rules is unresolved by the package, so the tree hedges to complex_new_law_il rather than guessing eligible or ineligible. Exact for the hedge.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const OH: Persona[] = [
+  {
+    source: 'Wave 3 - OH persona 1',
+    package: 'M1 theft, final discharge 2024 -> eligible-sealing 2025 -> likely eligible now.',
+    record: { title: 'M1 Theft', disposition: 'convicted', disposition_date: '2024-01-01', restitution_paid: true },
+    answers: { excluded_oh: false, level_oh: 'misd' },
+    expect: { resultKey: 'eligible_sealing_oh', reading: 'Misdemeanour, 1yr from final discharge, 2024+1=2025<2026 -> eligible to seal. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - OH persona 2',
+    package: 'F5 drug possession, discharged 2023 -> sealing-eligible 2024; expungement ~2034.',
+    record: { title: 'F5 Drug Possession', disposition: 'convicted', disposition_date: '2023-01-01', restitution_paid: true },
+    answers: { excluded_oh: false, level_oh: 'f45' },
+    expect: { resultKey: 'eligible_sealing_oh', reading: 'F5, 1yr from final discharge, 2023+1=2024<2026 -> eligible to seal. Result notes expungement is the ~10yr-later upgrade. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - OH persona 3',
+    package: 'F2 -> never; CQE path.',
+    record: { title: 'F2', disposition: 'convicted' },
+    answers: { excluded_oh: false, level_oh: 'f12' },
+    expect: { resultKey: 'ineligible_f12_oh', reading: 'F1/F2 never sealable -> CQE named as the door. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - OH persona 4',
+    package: 'OVI -> never; honest-no.',
+    record: { title: 'OVI', disposition: 'convicted' },
+    answers: { excluded_oh: true, excluded_path_oh: true },
+    expect: { resultKey: 'ineligible_traffic_oh', reading: 'OVI/traffic never sealable in OH -> honest-no with CQE. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - OH persona 5',
+    package: 'F3 + one other felony -> blocked (count rule) - verify against bench card.',
+    record: { title: 'F3 (with one other felony)', disposition: 'convicted', restitution_paid: true },
+    answers: { excluded_oh: false, level_oh: 'f3', f3_count_oh: 'blocked' },
+    expect: { resultKey: 'ineligible_f3_count_oh', reading: 'F3 blocked where more than one other felony. Persona says "F3 + one other" - the package calls it blocked; I read "blocked" per the trap framing but the bench-card count is exactly the open question. The tree honours the answer given. Flagged approximate: the precise count threshold needs the bench card.' },
+    expectIsApproximate: true,
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const GA: Persona[] = [
+  {
+    source: 'Wave 3 - GA persona 1',
+    package: 'arrest 2019, charges dismissed -> should be auto-restricted -> check-GCIC path.',
+    record: { title: 'Dismissed Arrest', disposition: 'dismissed' },
+    answers: { arrest_era_ga: true },
+    expect: { resultKey: 'eligible_auto_restrict_ga', reading: 'Post-2013 non-conviction -> should be auto-restricted; result says check the GCIC report because of reporting gaps. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - GA persona 2',
+    package: 'two misdemeanor shoplifting convictions, done 2020, clean -> eligible to petition for both (lifetime max reached after).',
+    record: { title: 'Misdemeanor Shoplifting', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-01-01' },
+    answers: { conviction_level_ga: 'misdemeanor', misd_excluded_ga: false },
+    expect: { resultKey: 'eligible_misd_restrict_ga', reading: 'Misdemeanour, not excluded, 4yr from completion (2020+4=2024<2026) -> eligible. Result notes the 2-per-lifetime cap. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - GA persona 3',
+    package: 'DUI misdemeanor -> excluded.',
+    record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { conviction_level_ga: 'misdemeanor', misd_excluded_ga: true },
+    expect: { resultKey: 'ineligible_excluded_ga', reading: 'DUI on the 35-3-37(j)(4)(A) list -> excluded. Notes the under-21 exception applies to family-violence battery, not DUI. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - GA persona 4',
+    package: 'nonviolent felony 2012, clean since -> pardon path (Board of Pardons), then petition.',
+    record: { title: 'Nonviolent Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-01-01' },
+    answers: { conviction_level_ga: 'felony' },
+    expect: { resultKey: 'pardon_path_ga', reading: 'Felony -> pardon path (encoded as a path, not ineligible). Also names retroactive First Offender. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - GA persona 5',
+    package: 'arrest 2010, dismissed -> pre-2013 -> apply to arresting agency.',
+    record: { title: 'Pre-2013 Dismissed Arrest', disposition: 'dismissed' },
+    answers: { arrest_era_ga: false },
+    expect: { resultKey: 'eligible_pre2013_ga', reading: 'Pre-July-2013 non-conviction -> not automatic; apply to the arresting agency. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const NC: Persona[] = [
+  {
+    source: 'Wave 3 - NC persona 1',
+    package: 'one nonviolent misdemeanor, done 2022 -> eligible NOW under the 3-yr change (was ineligible until 2027 under old guides!) - the fresh-law persona.',
+    record: { title: 'Nonviolent Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { nonviolent_nc: false, conviction_count_nc: 'one_misd', misd_date_nc: '2022-01-01' },
+    expect: { resultKey: 'eligible_conviction_nc', reading: 'One nonviolent misdemeanour, 3yr wait (cut from 5 in July 2025), 2022+3=2025<2026 -> eligible. Old 5yr guides would say ineligible until 2027. Exact - the fresh-law persona.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - NC persona 2',
+    package: 'dismissal in 2023 -> should be auto-expunged -> check-record.',
+    record: { title: 'Dismissed Case', disposition: 'dismissed', disposition_date: '2023-01-01' },
+    expect: { resultKey: 'nonconviction_nc', reading: 'Dismissal post-Dec-2021 -> auto-expunction ~180-210 days (resumed July 2024); result says check, and flags plea-agreement dismissals as non-automatic. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - NC persona 3',
+    package: 'DWI -> never.',
+    record: { title: 'DWI', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { nonviolent_nc: true },
+    expect: { resultKey: 'ineligible_excluded_nc', reading: 'DWI is excluded from the "nonviolent" definition -> ineligible. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - NC persona 4',
+    package: 'one Class H felony, done 2014 -> eligible (10 yr).',
+    record: { title: 'Class H Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { nonviolent_nc: false, conviction_count_nc: 'one_felony', felony_be_nc: false, felony_one_date_nc: '2014-01-01' },
+    expect: { resultKey: 'eligible_conviction_nc', reading: 'One nonviolent felony (Class H is not A-G? - NC nonviolent felony expunction reaches H/I; the persona treats it as eligible), 10yr, 2014+10=2024<2026 -> eligible. Not B&E so 10 not 15. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 3 - NC persona 5',
+    package: 'two nonviolent felonies from 2004 and 2009 -> committed >24 months apart -> NOT eligible for multi-felony expunction - the trap persona.',
+    record: { title: 'Two Nonviolent Felonies', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { nonviolent_nc: false, conviction_count_nc: 'multi_felony', felony_window_nc: false },
+    expect: { resultKey: 'ineligible_felony_window_nc', reading: 'THE TRAP. 2004 and 2009 are >24 months apart, so the multiple-felony route is closed however long ago - it is about WHEN they were committed, not elapsed time. The window node answers no. Exact.' },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

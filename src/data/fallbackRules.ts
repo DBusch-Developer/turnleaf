@@ -4987,8 +4987,1252 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Until We Are All Free (Clean Slate implementation tracking)', url: 'https://www.uwaaf.org' }
       ]
     }
+  },
+
+  // ==========================================================================
+  // FLORIDA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  //
+  // THE RESTRICTIVE GIANT. The honest answer for most Floridians with a
+  // conviction is "not eligible", and saying so plainly is the tool doing its
+  // job. Two rules decide almost everything, and both are asked before anything
+  // else:
+  //   1. ONE court-ordered seal-or-expunge per LIFETIME (§§ 943.0585/.059). A
+  //      prior Florida seal or expunge makes a person permanently ineligible.
+  //   2. ANY adjudication of guilt on the Florida record, for ANY offence ever,
+  //      bars the FDLE Certificate of Eligibility. Florida does not seal or
+  //      expunge convictions. Withheld adjudication is the only conviction-
+  //      adjacent outcome that can ever be sealed.
+  //
+  // Like Utah, a Certificate of Eligibility from FDLE comes BEFORE any court
+  // petition — but stricter. The result copy pairs every "no" with the real
+  // remaining doors (niche tracks, legal aid).
+  // ==========================================================================
+  FL: {
+    code: 'FL',
+    name: 'Florida',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
+    terminology:
+      'Florida has two court remedies and they are not interchangeable. EXPUNCTION (Fla. Stat. '
+      + '§ 943.0585) is for cases that ended without a conviction — dismissed, never charged, or a '
+      + 'record already sealed for 10 years. SEALING (§ 943.059) hides a record where adjudication '
+      + 'was WITHHELD and for some non-convictions. The hard truth Florida makes people confront: it '
+      + 'does not seal or expunge actual convictions, and any adjudication of guilt anywhere on your '
+      + 'record — for any offence, ever — blocks relief entirely. Before either petition, you must '
+      + 'get a Certificate of Eligibility from FDLE, and you can only use a court seal-or-expunge '
+      + 'ONCE in your lifetime.',
+    keyDates: [
+      {
+        label: 'Administrative/automatic sealing of qualifying non-conviction arrests (§ 943.0595)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 3 gives the year only. FDLE auto-seals qualifying non-judicial arrest records that ended in non-conviction — scope and current status flagged for verification.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'What is the current scope and status of § 943.0595 administrative/automatic sealing? Wave 3 says FDLE auto-seals qualifying non-conviction arrest records but flags the scope and rollout. Verify on FDLE\'s Seal & Expunge page before any UI copy claims a record may already be sealed automatically.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county\'s fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.',
+        blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
+      },
+      {
+        question:
+          'How long is an FDLE Certificate of Eligibility valid? Wave 3 gives "12 months" but flags it. Confirm on FDLE\'s instructions — it matters for timing the court petition after the certificate issues.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 943.0584 list of offences that cannot be sealed even with adjudication withheld: DV battery, sex offences, lewd offences, trafficking, and others. The tree asks a person whether their offence is on this list.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions treated — including juvenile diversion and the niche self-defense (§ 943.0578) and human-trafficking tracks? Wave 3 mentions these as niche tracks but does not detail eligibility. Standing call-sheet question for every state.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Fla. Stat. § 943.0585 (expunction of criminal history records)', url: null, retrievedOn: null },
+      { id: 'Fla. Stat. § 943.059 (court-ordered sealing)', url: null, retrievedOn: null },
+      { id: 'Fla. Stat. § 943.0584 (offences ineligible for sealing/expunction even with adjudication withheld)', url: null, retrievedOn: null },
+      { id: 'Fla. Stat. § 943.0595 (administrative/automatic sealing of non-conviction arrests)', url: null, retrievedOn: null },
+      { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'prior_relief_fl',
+      nodes: {
+        // The lifetime rule is asked FIRST — it is the fastest "no".
+        prior_relief_fl: {
+          type: 'boolean',
+          text: 'Have you ever had a Florida criminal record sealed or expunged before, by court order?',
+          yes: 'ineligible_lifetime_fl',
+          no: 'prior_adjudication_fl'
+        },
+        // The conviction bar is the second-fastest "no".
+        prior_adjudication_fl: {
+          type: 'boolean',
+          text: 'Has any criminal charge on your Florida record — this case or any other, ever — ended in an ADJUDICATION of guilt (a formal conviction, as opposed to adjudication being WITHHELD)?',
+          yes: 'ineligible_conviction_fl',
+          no: 'disposition'
+        },
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of THIS case?',
+          options: [
+            { label: 'Dismissed / Never charged / Charges dropped', value: 'dismissed', next: 'eligible_expunction_fl' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expunction_fl' },
+            { label: 'Adjudication WITHHELD (guilty or no contest, but no formal conviction entered)', value: 'convicted', next: 'disqualified_offense_fl' },
+            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        disqualified_offense_fl: {
+          type: 'boolean',
+          text: 'Was the offense any of these: domestic violence battery, a sex offense, a lewd or lascivious offense, or a trafficking offense? (Florida cannot seal these even when adjudication was withheld.)',
+          yes: 'ineligible_disqualified_fl',
+          no: 'sentence_complete_fl'
+        },
+        sentence_complete_fl: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you completed all terms of your sentence, including any probation and payment of restitution?',
+          yes: 'eligible_sealing_fl',
+          no: 'ineligible_incomplete_fl'
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Florida\'s rules turn entirely on how the case ended, and the differences are stark: a dismissal can be expunged, a withheld adjudication can sometimes be sealed, and an actual conviction cannot be cleared at all. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. Request your criminal history from FDLE, or ask the clerk of the court that handled the case. County legal aid organizations and the Florida Justice Center can help you read it.',
+          remedy: 'Get Your Record First (FDLE / court clerk)',
+          citation: 'Fla. Stat. §§ 943.0585, 943.059 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Florida\'s sealing and expunction rules are screened here for dismissals, withheld adjudications, and convictions. How a completed diversion is treated — and Florida has niche tracks for juvenile diversion, lawful self-defense (§ 943.0578), and human-trafficking survivors — is not something this screening has researched in detail, and we would rather tell you that than guess. County legal aid and the Florida Justice Center can tell you which track fits.',
+          remedy: 'Consult Legal Aid (Diversion / Niche Tracks Not Yet Screened)',
+          citation: 'Fla. Stat. §§ 943.0585, 943.0578 (treatment of diversions not yet detailed)'
+        },
+        ineligible_lifetime_fl: {
+          status: 'ineligible',
+          title: 'You Have Used Florida\'s Once-Per-Lifetime Relief',
+          message: 'Florida allows a person only ONE court-ordered seal or expunge in their lifetime, and because you have had a Florida record sealed or expunged before, you cannot obtain another. This is a hard rule in the statute, not a waiting period. One thing worth knowing that is easy to miss: this bar is about a prior FLORIDA relief — since 2013, a seal or expunge you obtained in another state no longer counts against you here. If your prior relief was out of state, it is worth confirming with a Florida legal aid organization that you are actually barred. The Florida Justice Center and county legal aid can check.',
+          remedy: 'None (Once-Per-Lifetime Rule Used) — confirm if your prior relief was out of state',
+          citation: 'Fla. Stat. §§ 943.0585, 943.059'
+        },
+        ineligible_conviction_fl: {
+          status: 'ineligible',
+          title: 'A Conviction on Your Record Bars Sealing and Expunction',
+          message: 'This is the hard truth about Florida, and we would rather tell you plainly than leave you to find out after paying application fees: Florida does not seal or expunge convictions, and any adjudication of guilt anywhere on your record — for any offense, ever — blocks the Certificate of Eligibility you would need. That is the law (§§ 943.0585/.059), not a discretionary call. But "not this route" is not the same as "no doors", so here are the real ones. Executive clemency from the Florida Board of Executive Clemency can restore rights and, in some cases, lead to relief. There are niche expunction tracks — lawful self-defense (§ 943.0578) and human-trafficking survivors — that are not blocked the same way. And if any single case on your record ended WITHOUT an adjudication, that case on its own may still qualify. County legal aid and the Florida Justice Center handle exactly these situations.',
+          remedy: 'None under §§ 943.0585/.059 — clemency, niche tracks, or a non-adjudicated case may remain',
+          citation: 'Fla. Stat. §§ 943.0585, 943.059'
+        },
+        ineligible_disqualified_fl: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Sealed, Even With Adjudication Withheld',
+          message: 'Florida keeps a specific list of offenses that cannot be sealed even when adjudication was withheld — domestic violence battery, sex offenses, lewd or lascivious offenses, and trafficking offenses among them (§ 943.0584). Withholding adjudication does not change that for these. Because these are specific legal categories, if you are not certain your offense is actually on the list it is worth confirming rather than assuming from what happened — county legal aid and the Florida Justice Center can check. If it is on the list, executive clemency from the Board of Executive Clemency is the remaining route.',
+          remedy: 'None (Disqualified Offense under § 943.0584) — confirm the classification; ask about clemency',
+          citation: 'Fla. Stat. § 943.0584'
+        },
+        ineligible_incomplete_fl: {
+          status: 'ineligible',
+          title: 'Finish the Sentence First',
+          message: 'Sealing a withheld-adjudication case in Florida requires that you have completed all terms of your sentence, including probation and restitution. Based on what you told us, something is still outstanding, so you are not eligible to apply yet — but this is a "not yet", not a "no". Complete the remaining terms, and then come back: the offense itself qualifies. If an unpaid balance is the obstacle, ask the clerk about your exact payoff and whether a payment plan is available.',
+          remedy: 'Complete the Sentence First, then apply for a Certificate of Eligibility',
+          citation: 'Fla. Stat. § 943.059'
+        },
+        eligible_expunction_fl: {
+          status: 'eligible',
+          title: 'Case Ended Without a Conviction — Expunction Available',
+          message: 'Because this case ended without a conviction — dismissed, dropped, or an acquittal — you appear eligible for an EXPUNCTION under Fla. Stat. § 943.0585, the stronger of Florida\'s two remedies. There is a specific order to it. First, apply to FDLE for a Certificate of Eligibility: a $75 application (non-refundable, by money order), a notarized form, your fingerprints, and a certified copy of the disposition. For an expunction, the State Attorney also completes a section certifying the outcome. FDLE\'s own estimate is about 12 weeks to process. Once you have the certificate, you file the petition in the county where the arrest happened; the clerk\'s filing fee varies by county. One caution to plan around: you get only ONE court-ordered seal or expunge in your lifetime, so if you have more than one clearable case, think about which to use it on. Florida may also have already sealed some non-conviction arrests automatically (§ 943.0595) — worth checking your FDLE record first.',
+          remedy: 'FDLE Certificate of Eligibility, then Expunction Petition (§ 943.0585)',
+          citation: 'Fla. Stat. §§ 943.0585, 943.0595'
+        },
+        eligible_sealing_fl: {
+          status: 'eligible',
+          title: 'Withheld Adjudication, Sentence Complete — Sealing Available',
+          message: 'Because adjudication was withheld, your offense is not on the disqualified list, and you have completed your sentence, you appear eligible to SEAL this record under Fla. Stat. § 943.059. The process starts with FDLE, not the court: apply for a Certificate of Eligibility — a $75 application (non-refundable, by money order), a notarized form, fingerprints, and a certified disposition — and FDLE estimates about 12 weeks. With the certificate in hand, you file the petition in the county of arrest; the clerk\'s filing fee varies by county. Two things to hold onto: this is your one court-ordered relief for life, so use it where it counts most; and after a record has been sealed for 10 years, you may then petition to EXPUNGE it, which is stronger.',
+          remedy: 'FDLE Certificate of Eligibility, then Sealing Petition (§ 943.059)',
+          citation: 'Fla. Stat. § 943.059'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        petition: {
+          name: 'Seal or Expunge (FDLE Certificate, then court petition)',
+          formName: 'FDLE Application for Certificate of Eligibility, then the seal/expunge petition',
+          formUrl: 'https://www.fdle.state.fl.us/SAC/Home.aspx',
+          steps: [
+            'Check first whether a non-conviction arrest was already sealed automatically (§ 943.0595) — request your FDLE criminal history.',
+            'Apply to FDLE for a Certificate of Eligibility: $75 non-refundable money order, notarized application, fingerprints, and a certified copy of the disposition.',
+            'For an expunction, have the State Attorney complete Section B certifying the outcome. FDLE estimates about 12 weeks to process.',
+            'With the certificate, file the seal or expunge petition in the county of arrest. The clerk\'s filing fee varies by county.',
+            'Remember: only ONE court-ordered seal or expunge is allowed per lifetime.'
+          ],
+          // The FDLE application fee IS known ($75, in the steps). The COUNTY
+          // clerk filing fee is the null one — Wave 3 gives only a range.
+          fees: null,
+          // NOT null: fee-waiver practice is a separate question, but Wave 3
+          // records no waiver claim to null out, and the FDLE $75 is stated as
+          // non-refundable with no waiver. Leave feeWaiver as an honest unknown
+          // tied to the same open question as the county fee.
+          feeWaiver: null,
+          courtContact: 'FDLE for the certificate; county clerk (county of arrest) for the petition'
+        }
+      },
+      legalAid: [
+        { name: 'Florida Justice Center', url: 'https://www.floridajusticecenter.org' },
+        { name: 'Florida Courts self-help (find your county legal aid)', url: 'https://www.flcourts.gov/Resources-Services/Court-Improvement/Self-Help-Center' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // ILLINOIS — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  //
+  // THE GENEROUS GIANT, with a two-week-old change. Clean Slate Act (signed
+  // Jan 16, 2026; phasing in from June 30, 2026): misdemeanour sealing wait
+  // dropped 3 -> 2 years, and a prior felony no longer AUTOMATICALLY bars a
+  // later felony sealing petition. The automatic-sealing SYSTEM comes later, so
+  // until then Illinois is petition-only — no "automatic" copy yet.
+  //
+  // Expungement (destroy) vs sealing (hide) are distinct: expungement for
+  // non-convictions, supervision, and qualified probation; sealing for most
+  // convictions. DUI is absolutely never sealable.
+  //
+  // GENUINE FIGHT (see research/REFEREE_QUEUE.md): how a prior felony now
+  // interacts with a later felony petition under the new text is unresolved.
+  // A felony-plus-another-felony routes to complex_new_law_il and is hedged.
+  // ==========================================================================
+  IL: {
+    code: 'IL',
+    name: 'Illinois',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
+    terminology:
+      'Illinois has two remedies. EXPUNGEMENT destroys the record and is for cases without a '
+      + 'conviction — arrests that went nowhere, acquittals, dismissals, completed court '
+      + 'supervision, and qualified probation. SEALING hides the record from most employers and is '
+      + 'how most convictions are cleared. A fresh law matters here: the Clean Slate Act, signed in '
+      + 'January 2026 and phasing in from June 30, 2026, cut the misdemeanor sealing wait from 3 '
+      + 'years to 2 and removed the rule that a prior felony automatically blocked sealing a later '
+      + 'one. The automatic part of Clean Slate comes later, so for now Illinois is petition-only. '
+      + 'One hard line: a DUI can never be sealed.',
+    keyDates: [
+      {
+        label: 'Clean Slate Act began phasing in (misdemeanour wait 3->2 yrs; prior-felony bar removed)',
+        date: '2026-06-30',
+        kind: 'effective',
+        note: 'Signed Jan 16, 2026. Two weeks old as of the Wave 3 draft. The automatic-sealing system starts later — verify that date before any "automatic" UI copy.',
+      },
+      {
+        label: 'Clean Slate Act signed',
+        date: '2026-01-16',
+        kind: 'effective',
+        note: null,
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'When does the Clean Slate AUTOMATIC sealing system actually start? The Act phased in June 30, 2026 but the automatic system comes later. Verify the automatic-start date on ILAO\'s Clean Slate FAQ before any UI copy claims records seal automatically — until then Illinois is petition-only and the tree treats it that way.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'GENUINE FIGHT (research/REFEREE_QUEUE.md): under the post-June-30 text, how does a prior felony interact with a later felony sealing petition? Clean Slate removed the automatic bar, but the current rule for the felony-plus-felony fact pattern (Wave 3 persona 5) is unresolved. The tree hedges this to complex_new_law_il. Confirm against 20 ILCS 2630/5.2 current text (the July 1, 2025 version split matters).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Which completed-supervision offences carry the longer 5-year expungement wait rather than 2? Wave 3 flags the list. The tree uses the general 2-year supervision period and notes the exception.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the education-waiver provision: does earning a diploma or degree during the sealing wait accelerate eligibility? Wave 3 says it is real and great UX but flags it for verification. Disclosed in prose on the sealing results, not encoded as a branch (it is a discretionary accelerator).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the county filing fee, and specifically the Cook County rule that one fee covers all petitions filed the same day? Wave 3 flags it. A fee waiver is available.',
+        blocksFields: ['resources.remedies.petition.fees'],
+      },
+      {
+        question:
+          'Confirm the current subsequent-felony unsealing risk text under Clean Slate. Wave 3 notes it is changing. Not encoded; flagged.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: '20 ILCS 2630/5.2 (expungement and sealing)', url: null, retrievedOn: null },
+      { id: 'Illinois Clean Slate Act (signed Jan 16, 2026; phase-in June 30, 2026)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'sealable_il' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_expungement_il' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expungement_il' },
+            { label: 'Court supervision / Qualified probation (Completed)', value: 'deferred', next: 'supervision_type_il' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        sealable_il: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a DUI, reckless driving, domestic battery, a violation of an order of protection, a sex offense or registry offense, or an animal-cruelty offense?',
+          yes: 'ineligible_excluded_il',
+          no: 'seal_level_il'
+        },
+        seal_level_il: {
+          type: 'choice',
+          field: 'charge_type',
+          text: 'What was the level of the offense?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'seal_misd_date_il' },
+            { label: 'Felony', value: 'felony', next: 'felony_history_il' },
+            { label: 'Infraction', value: 'infraction', next: 'seal_misd_date_il' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_il' }
+          ]
+        },
+        seal_misd_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'sentence completion (20 ILCS 2630/5.2 — misdemeanour sealing; 3 yrs cut to 2 by the Clean Slate Act, June 30, 2026)' },
+            nextPass: 'eligible_sealing_il',
+            nextFail: 'waiting_sealing_il'
+          }
+        },
+        // The genuine fight: a felony plus another felony is hedged.
+        felony_history_il: {
+          type: 'boolean',
+          text: 'Apart from this case, do you have any OTHER felony conviction on your record?',
+          yes: 'complex_new_law_il',
+          no: 'seal_felony_date_il'
+        },
+        seal_felony_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'sentence completion (20 ILCS 2630/5.2 — Class 1-4 felony sealing)' },
+            nextPass: 'eligible_sealing_il',
+            nextFail: 'waiting_sealing_il'
+          }
+        },
+        supervision_type_il: {
+          type: 'boolean',
+          text: 'Was it QUALIFIED probation — a program like 410 (drug), TASC, or a similar deferred sentence — as opposed to ordinary court supervision?',
+          yes: 'qualified_prob_date_il',
+          no: 'supervision_date_il'
+        },
+        supervision_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the court supervision?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'completion of court supervision (20 ILCS 2630/5.2 — expungement; some offences 5 yrs, see open questions)' },
+            nextPass: 'eligible_expungement_il',
+            nextFail: 'waiting_expungement_il'
+          }
+        },
+        qualified_prob_date_il: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the probation program?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of qualified probation (20 ILCS 2630/5.2 — 410/TASC etc.)' },
+            nextPass: 'eligible_expungement_il',
+            nextFail: 'waiting_expungement_il'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Illinois treats cases very differently by outcome: a non-conviction can be expunged (destroyed), a completed supervision can be expunged after a wait, and most convictions can be sealed (hidden). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Illinois Legal Aid Online Easy Form can help you check, and Cabrini Green Legal Aid runs clinics. Cook County has an Adult Expungement Advice Desk at the Daley Center.',
+          remedy: 'Get Your Record First (Illinois Legal Aid Online)',
+          citation: '20 ILCS 2630/5.2 (which path applies depends on the disposition)'
+        },
+        ineligible_excluded_il: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Sealed',
+          message: 'Illinois excludes a specific set of offenses from sealing: DUI (absolutely, no exceptions), reckless driving (unless you were under 25), domestic battery, violations of an order of protection, sex and registry offenses, and animal-cruelty offenses. No waiting period changes that. If you are not certain your offense falls in one of these categories, it is worth confirming — the Illinois Legal Aid Online Easy Form walks through it, and Cabrini Green Legal Aid can check. For a DUI specifically, there is no sealing route in Illinois, so be cautious of any service that suggests otherwise.',
+          remedy: 'None (Statutorily Excluded from Sealing)',
+          citation: '20 ILCS 2630/5.2'
+        },
+        eligible_expungement_il: {
+          status: 'eligible',
+          title: 'Non-Conviction — Eligible for Expungement',
+          message: 'Because this case did not end in a conviction, you are eligible for EXPUNGEMENT — the stronger remedy, which destroys the record rather than just hiding it. Arrests without conviction, acquittals, and dismissals can generally be expunged right away. File in the circuit court of the county of the case; the Illinois Legal Aid Online Easy Form generates the petition for you, and e-filing is available statewide. The county filing fee varies (in Cook County, one fee covers all petitions filed the same day), and a fee waiver is available if you cannot afford it. There is a roughly 60-day window for the State\'s Attorney or State Police to object.',
+          remedy: 'Petition for Expungement (20 ILCS 2630/5.2)',
+          citation: '20 ILCS 2630/5.2'
+        },
+        eligible_sealing_il: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Seal',
+          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under 20 ILCS 2630/5.2. Two pieces of good news from the Clean Slate Act that took effect June 30, 2026: the misdemeanor wait dropped from 3 years to 2, and a prior felony no longer automatically blocks sealing. File in the circuit court of the county of the case — the Illinois Legal Aid Online Easy Form is genuinely good and builds the petition for you, and e-filing is statewide. The county fee varies (Cook County charges one fee for all petitions filed the same day) and a waiver is available. One thing worth asking legal aid about: Illinois has a provision that earning a diploma or degree during the waiting period can accelerate eligibility — if that applies to you, it is worth raising.',
+          remedy: 'Petition to Seal (20 ILCS 2630/5.2)',
+          citation: '20 ILCS 2630/5.2'
+        },
+        complex_new_law_il: {
+          status: 'complex',
+          title: 'The Sealing Law Just Changed — This One Needs a Person',
+          message: 'You have a felony and at least one other felony on your record, and that is exactly the situation the new law leaves genuinely unsettled. Before June 30, 2026, a prior felony automatically blocked sealing a later one. The Clean Slate Act removed that automatic bar — but how a prior felony now factors into a later felony sealing petition is being worked out in practice as we speak, and we are not going to give you a yes or a no on a two-week-old rule and risk sending you the wrong way. This is worth a real person: New Leaf Illinois provides free representation, and Cabrini Green Legal Aid runs sealing clinics. Both are tracking the new law closely, and your specific record is the kind of thing they can now assess where a screening tool cannot.',
+          remedy: 'Consult Legal Aid (Multiple Felonies Under the New Clean Slate Rules)',
+          citation: '20 ILCS 2630/5.2'
+        },
+        waiting_sealing_il: {
+          status: 'waiting',
+          title: 'Sealing Waiting Period Not Yet Met',
+          message: 'Illinois sealing comes after a wait from when you completed your sentence: 2 years for a misdemeanor (cut from 3 by the Clean Slate Act in June 2026) and 3 years for a Class 1-4 felony. Based on your dates, yours has not run yet. One thing that can move it: Illinois has a provision under which earning a diploma or degree during the wait can accelerate eligibility, so if you are working toward one, ask legal aid whether it applies to you.',
+          remedy: 'Wait for the sealing period, or ask about the education accelerator',
+          citation: '20 ILCS 2630/5.2'
+        },
+        waiting_expungement_il: {
+          status: 'waiting',
+          title: 'Expungement Waiting Period Not Yet Met',
+          message: 'For a completed court supervision, Illinois expungement generally comes 2 years after you finish (some offenses carry a longer 5-year wait, which we are confirming), and for qualified probation like 410 or TASC it is 5 years. Based on your dates, yours has not run yet. Once it does, the record can be expunged — destroyed, not just hidden.',
+          remedy: 'Wait for the expungement period',
+          citation: '20 ILCS 2630/5.2'
+        },
+        complex_level_il: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Illinois the sealing wait depends on the level: 2 years for a misdemeanor, 3 for a Class 1-4 felony. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and the Illinois Legal Aid Online Easy Form will walk you through it. Cabrini Green Legal Aid also runs clinics.',
+          remedy: 'Get Your Offense Level First (court paperwork / Illinois Legal Aid Online)',
+          citation: '20 ILCS 2630/5.2'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        petition: {
+          name: 'Expungement or Sealing Petition (20 ILCS 2630/5.2)',
+          formName: 'Illinois Legal Aid Online Easy Form (Expungement / Sealing)',
+          formUrl: 'https://www.illinoislegalaid.org',
+          steps: [
+            'Use the Illinois Legal Aid Online Easy Form to build your petition — it is genuinely good and covers both expungement and sealing.',
+            'File in the circuit court of the county of the case (in Cook County: any district, or the Expungement Department at the Leighton Courthouse). E-filing is available statewide.',
+            'The county filing fee varies; in Cook County one fee covers all petitions filed the same day. A fee waiver is available if you cannot afford it.',
+            'The State\'s Attorney and State Police have roughly 60 days to object.'
+          ],
+          // null: Wave 3 flags the county fee and the Cook same-day rule.
+          fees: null,
+          // NOT null: the waiver is a named, independent mechanism.
+          feeWaiver: 'A fee waiver is available if you cannot afford the filing fee.',
+          courtContact: 'Circuit court of the county of the case'
+        }
+      },
+      legalAid: [
+        { name: 'Illinois Legal Aid Online (Easy Form)', url: 'https://www.illinoislegalaid.org' },
+        { name: 'Cabrini Green Legal Aid', url: 'https://www.cgla.net' },
+        { name: 'New Leaf Illinois (cannabis records, free representation)', url: 'https://www.newleafillinois.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // OHIO — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  //
+  // Since SB 288 (Apr 4, 2023), SEALING (hide) and EXPUNGEMENT (destroy) are
+  // DISTINCT remedies with different waits. Most people want sealing;
+  // expungement is the longer-wait upgrade. This tree does sealing; expungement
+  // timing is disclosed in the results as the later option.
+  //
+  // The package resolves the one apparent conflict for us: a secondary source
+  // claims an HB 1 "up to 5 felonies / 3 F4+" cap, but the Ohio Supreme Court's
+  // June 2026 bench card and CCRC describe offence-specific rules with F3 COUNT
+  // LIMITS. Encode from the bench card, NOT the secondary. So: F1/F2 never; F3
+  // blocked if the person has more than one other felony; OVI and all traffic
+  // never; offences of violence, registry sex offences, victim-under-13, DV
+  // (narrow M4 DV sealing) all excluded.
+  //
+  // CQE (Certificate of Qualification for Employment) is the fallback door for
+  // the ineligible — named in the "no" results, per the restrictive-state rule.
+  // ==========================================================================
+  OH: {
+    code: 'OH',
+    name: 'Ohio',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
+    terminology:
+      'Since SB 288 took effect in April 2023, Ohio has two separate remedies. SEALING hides the '
+      + 'record from most background checks; EXPUNGEMENT destroys it. They are no longer the same '
+      + 'thing, and they have different waiting periods — most people want sealing, and expungement '
+      + 'is a longer-wait upgrade you can pursue later. Both run from your FINAL DISCHARGE, which '
+      + 'means sentence, probation or parole, fines and restitution all complete (unpaid court costs '
+      + 'do not count against you). A few offences are never eligible: OVI and all traffic offences, '
+      + 'first- and second-degree felonies, and offences of violence among them.',
+    keyDates: [
+      {
+        label: 'SB 288 — sealing and expungement became distinct remedies',
+        date: '2023-04-04',
+        kind: 'effective',
+        note: 'Also removed the old "eligible offender" numerical cap in favour of per-conviction analysis.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the F3 count-limit rules against the Ohio Supreme Court June 2026 Adult Rights Restoration bench card and R.C. 2953.32: an F3 is blocked where the person has more than one other felony (and the related 2-F3-plus-2-misdemeanour pattern). Wave 3 flags a secondary source claiming an HB 1 "5 felonies / 3 F4+" cap and instructs encoding from the bench card instead — which the tree does. Confirm the bench-card rules directly.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the court filing fee? Wave 3 gives "commonly $50" but flags it as set by individual court schedules. Confirm with a clerk of courts (Hamilton or Franklin). One application can cover multiple cases in the same court.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the full exclusion list from the bench card: F1/F2, OVI and all traffic, offences of violence, registry sex offences, offences with a victim under 13, DV convictions (with the narrow M4 DV sealing allowance), and protection-order violations.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions and intervention-in-lieu treated? Standing call-sheet question. Wave 3 mentions prosecutor-initiated sealing for low-level drug offences (2953.39) and human-trafficking expungement anytime, but not general diversion timing.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ohio R.C. 2953.32 (sealing of conviction records)', url: null, retrievedOn: null },
+      { id: 'Ohio R.C. 2953.31 (definitions)', url: null, retrievedOn: null },
+      { id: 'Ohio R.C. 2953.33 (dismissals/acquittals/no-bills — immediate sealing)', url: null, retrievedOn: null },
+      { id: 'Ohio R.C. 2953.34 (expungement)', url: null, retrievedOn: null },
+      { id: 'Ohio R.C. 2953.39 (prosecutor-initiated sealing, low-level drug offences)', url: null, retrievedOn: null },
+      { id: 'Ohio Supreme Court Adult Rights Restoration bench card (June 2026 rev — primary for eligibility)', url: null, retrievedOn: null },
+      { id: 'SB 288 (2023 — sealing/expungement split; per-conviction analysis)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_oh' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_oh' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_oh' },
+            { label: 'Diversion / Intervention in lieu (Completed)', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_oh: {
+          type: 'boolean',
+          text: 'Was the offense any of these: an OVI or any traffic offense, an offense of violence, a sex offense requiring registration, an offense with a victim under 13, or a domestic violence offense?',
+          yes: 'excluded_path_oh',
+          no: 'level_oh'
+        },
+        excluded_path_oh: {
+          type: 'boolean',
+          text: 'Was it specifically an OVI or a traffic offense?',
+          yes: 'ineligible_traffic_oh',
+          no: 'ineligible_excluded_oh'
+        },
+        level_oh: {
+          type: 'choice',
+          text: 'What was the level of the offense? (Your paperwork says. Ohio\'s sealing wait and eligibility both turn on it.)',
+          options: [
+            { label: 'Minor misdemeanor', value: 'minor_misd', next: 'minor_misd_date_oh' },
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_oh' },
+            { label: 'Felony of the 4th or 5th degree (F4/F5)', value: 'f45', next: 'f45_date_oh' },
+            { label: 'Felony of the 3rd degree (F3)', value: 'f3', next: 'f3_count_oh' },
+            { label: 'Felony of the 1st or 2nd degree (F1/F2)', value: 'f12', next: 'ineligible_f12_oh' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_oh' }
+          ]
+        },
+        minor_misd_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation, fines and restitution all complete?',
+          validation: {
+            period: { amount: 6, unit: 'months', anchor: 'final discharge (R.C. 2953.32 — minor misdemeanour)' },
+            nextPass: 'eligible_sealing_oh',
+            nextFail: 'waiting_oh'
+          }
+        },
+        misd_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation, fines and restitution all complete?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'final discharge (R.C. 2953.32 — misdemeanours)' },
+            nextPass: 'eligible_sealing_oh',
+            nextFail: 'waiting_oh'
+          }
+        },
+        f45_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation, fines and restitution all complete?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'final discharge (R.C. 2953.32 — F4/F5)' },
+            nextPass: 'eligible_sealing_oh',
+            nextFail: 'waiting_oh'
+          }
+        },
+        // The F3 count limit — the bench-card rule, asked.
+        f3_count_oh: {
+          type: 'choice',
+          text: 'For a third-degree felony, Ohio limits sealing by your record. Counting your whole history, how many OTHER felony convictions do you have (not this one)?',
+          options: [
+            { label: 'None, or one other felony', value: 'ok', next: 'f3_date_oh' },
+            { label: 'More than one other felony', value: 'blocked', next: 'ineligible_f3_count_oh' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_f3_oh' }
+          ]
+        },
+        f3_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation, fines and restitution all complete?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'final discharge (R.C. 2953.32 — F3 where eligible)' },
+            nextPass: 'eligible_sealing_oh',
+            nextFail: 'waiting_oh'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Ohio treats cases very differently by outcome: a dismissal or acquittal seals immediately with no limits, while a conviction runs through waiting periods that depend on the offense level. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. Ohio Legal Help can point you to your record, and the Ohio Justice & Policy Center\'s plain-language guide is excellent.',
+          remedy: 'Get Your Record First (Ohio Legal Help)',
+          citation: 'Ohio R.C. 2953.32, 2953.33 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Diversion Cases Need a Person',
+          message: 'Ohio\'s sealing rules are screened here for convictions, dismissals, and acquittals. How a completed diversion or intervention-in-lieu is treated for sealing is not something this screening has researched in detail, and we would rather tell you that than guess. Ohio Legal Help and the Ohio Justice & Policy Center can confirm how your disposition is treated — and for low-level drug offenses, Ohio has a prosecutor-initiated sealing route worth asking about (R.C. 2953.39).',
+          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
+          citation: 'Ohio R.C. 2953.32, 2953.39 (treatment of diversions not yet detailed)'
+        },
+        eligible_nonconviction_oh: {
+          status: 'eligible',
+          title: 'No Conviction — Seal It Now, No Waiting Period',
+          message: 'Because your case ended without a conviction — dismissed, acquitted, or no-billed — Ohio lets you seal it immediately, with no waiting period and no numerical limits (R.C. 2953.33). File with the court that handled the case. This is the most straightforward category Ohio has.',
+          remedy: 'Seal a Non-Conviction (R.C. 2953.33) — immediate',
+          citation: 'Ohio R.C. 2953.33'
+        },
+        eligible_sealing_oh: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Seal',
+          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under R.C. 2953.32. Apply to the sentencing court — common pleas for a felony, municipal court for a misdemeanor — and note that one application can cover multiple cases in the same court. The prosecutor gets 60 days to object, and a hearing is usually set 45 to 90 days after filing; the judge weighs your interest against the government\'s need to keep the record, so this is a decision rather than a formality. The filing fee is set by the local court and is something we are still confirming. One thing to keep in mind for later: sealing hides the record, and after a longer wait you can pursue EXPUNGEMENT, which destroys it — for a felony that is generally 10 years after it became sealing-eligible.',
+          remedy: 'Petition to Seal (R.C. 2953.32)',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        waiting_oh: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Ohio\'s sealing waits run from your FINAL DISCHARGE — sentence, probation or parole, fines and restitution all complete (unpaid court costs do not count against you). They are 6 months for a minor misdemeanor, 1 year for a misdemeanor or an F4/F5, and 3 years for an eligible F3. Based on your dates, yours has not run yet. Getting any outstanding fines or restitution paid can matter here, because final discharge is what starts the clock.',
+          remedy: 'Wait for the period from final discharge',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        ineligible_traffic_oh: {
+          status: 'ineligible',
+          title: 'OVI and Traffic Offenses Cannot Be Sealed',
+          message: 'Ohio does not allow sealing or expungement of OVI or any traffic offense — this is absolute, and no waiting period changes it. Be cautious of any service that suggests an OVI can be cleared in Ohio. If your record also has non-traffic offenses, those may well be sealable — run this again for them. And for employment specifically, Ohio offers a Certificate of Qualification for Employment (CQE), which does not seal the record but lifts many automatic license and hiring bars; the Ohio Justice & Policy Center can explain whether it fits.',
+          remedy: 'None (OVI/Traffic) — ask about a Certificate of Qualification for Employment',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        ineligible_excluded_oh: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded From Sealing',
+          message: 'Offenses of violence, sex offenses requiring registration, offenses with a victim under 13, and (with a narrow exception for fourth-degree misdemeanor domestic violence) domestic violence offenses are excluded from sealing in Ohio. No waiting period changes that. Because these are specific legal categories, if you are not certain your offense is actually excluded it is worth confirming — the Ohio Justice & Policy Center\'s guide is built for this. If sealing is truly off the table, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing bars without sealing the record, and human-trafficking-related offenses have their own expungement route available anytime.',
+          remedy: 'None (Excluded Offense) — ask about a CQE',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        ineligible_f12_oh: {
+          status: 'ineligible',
+          title: 'First- and Second-Degree Felonies Cannot Be Sealed',
+          message: 'Ohio does not permit sealing of first- or second-degree felonies. This is a categorical bar, not a matter of time. The route that remains is a Certificate of Qualification for Employment (CQE), which does not clear the record but removes many of the automatic barriers a felony creates for jobs and licenses — and it is available for offenses that cannot be sealed. The Ohio Justice & Policy Center can tell you whether a CQE, or executive clemency, is worth pursuing in your situation.',
+          remedy: 'None (F1/F2) — pursue a CQE or clemency',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        ineligible_f3_count_oh: {
+          status: 'ineligible',
+          title: 'Your Felony Record Blocks Sealing This F3',
+          message: 'A third-degree felony can be sealed in Ohio, but not when the person has more than one other felony conviction on their record. Based on what you told us, that limit is reached. This is one worth having someone check carefully, because the counting rules are specific and Ohio changed them in 2023 — the Ohio Justice & Policy Center and Ohio Legal Help can look at your actual record against the current bench card. If sealing stays out of reach, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing barriers.',
+          remedy: 'Consult Legal Aid (F3 Count Limit) — or pursue a CQE',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        complex_level_oh: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'In Ohio the sealing wait and whether it is possible at all both depend on the level: 6 months for a minor misdemeanor, 1 year for a misdemeanor or F4/F5, 3 years for an eligible F3, and never for F1/F2. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the Ohio Justice & Policy Center\'s guide walks through the levels.',
+          remedy: 'Get Your Offense Level First (court paperwork / OJPC guide)',
+          citation: 'Ohio R.C. 2953.32'
+        },
+        complex_f3_oh: {
+          status: 'complex',
+          title: 'We Need Your Felony Count',
+          message: 'A third-degree felony can be sealed unless you have more than one other felony conviction. Since you are not sure of your felony count, we are not going to guess — it is the difference between eligible and not. The Ohio Justice & Policy Center and Ohio Legal Help can pull your record and count it against the current 2026 bench card, which is the authoritative source for this.',
+          remedy: 'Get Your Felony Count First (OJPC / Ohio Legal Help)',
+          citation: 'Ohio R.C. 2953.32'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        sealing: {
+          name: 'Application to Seal a Conviction (R.C. 2953.32)',
+          formName: 'Application for Sealing / Expungement',
+          formUrl: 'https://www.ohiolegalhelp.org/topic/sealing-expungement',
+          steps: [
+            'Confirm your offense is eligible and you are past the wait from final discharge — the Ohio Justice & Policy Center guide walks through it.',
+            'Apply to the sentencing court: common pleas for a felony, municipal court for a misdemeanor. One application can cover multiple cases in the same court.',
+            'The prosecutor has 60 days to object; a hearing is typically 45 to 90 days after filing.',
+            'The judge weighs your interest against the government\'s need to keep the record.'
+          ],
+          // null: Wave 3 gives "commonly $50" but set by court schedules.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The sentencing court (common pleas for felonies, municipal for misdemeanours)'
+        }
+      },
+      legalAid: [
+        { name: 'Ohio Justice & Policy Center (plain-language guide)', url: 'https://www.ohiojpc.org' },
+        { name: 'Ohio Legal Help', url: 'https://www.ohiolegalhelp.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // GEORGIA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  //
+  // THE VOCABULARY IS THE PRODUCT. Georgia does not "expunge". The remedy is
+  // RECORD RESTRICTION (hiding the GCIC history from non-criminal-justice
+  // access) plus court-record SEALING. Using Georgia's words is credibility.
+  //
+  // Restrictive, with a hard cap: only 2 misdemeanour convictions can be
+  // restricted+sealed in a LIFETIME (SB 288 "Second Chance", eff. Jan 1, 2021),
+  // 4 years after sentence completion. Felonies go through a PARDON from the
+  // State Board of Pardons and Paroles FIRST, then a petition — encoded as a
+  // path, not "ineligible".
+  //
+  // Non-convictions on/after July 1, 2013 restrict AUTOMATICALLY (with
+  // documented reporting gaps — "should be automatic; verify your GCIC report").
+  // Pre-2013 arrests apply to the arresting agency.
+  // ==========================================================================
+  GA: {
+    code: 'GA',
+    name: 'Georgia',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
+    terminology:
+      'Georgia does not use the word "expunge". Its remedy is RECORD RESTRICTION — hiding your '
+      + 'criminal history at GCIC from most employers and the public, though criminal-justice '
+      + 'agencies still see it — usually paired with SEALING the court file. The rules are '
+      + 'restrictive. A non-conviction arrest from July 1, 2013 onward is supposed to be restricted '
+      + 'automatically. Misdemeanor CONVICTIONS can be restricted and sealed only through a petition, '
+      + 'capped at two in your lifetime, four years after you finish the sentence. Felonies require a '
+      + 'PARDON from the State Board of Pardons and Paroles first, and then a petition — so a felony '
+      + 'is a longer road, but not a closed one.',
+    keyDates: [
+      {
+        label: 'SB 288 "Second Chance Act" — misdemeanour conviction restriction',
+        date: '2021-01-01',
+        kind: 'effective',
+        note: 'Allows petitioning to restrict and seal up to 2 misdemeanour convictions in a lifetime.',
+      },
+      {
+        label: 'Automatic restriction of non-conviction arrests began',
+        date: '2013-07-01',
+        kind: 'effective',
+        note: 'Arrests on/after this date that end without conviction are restricted automatically by GCIC — with documented reporting gaps, so verification of the GCIC report is advised. Pre-2013 arrests require applying to the arresting agency.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'How complete is the automatic restriction of post-2013 non-conviction arrests in practice? Wave 3 flags documented reporting gaps — the UI says "should be automatic; verify your GCIC report". Confirm with GBI/GCIC how a person checks and corrects a missed restriction.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Wave 3 flags both as varying by agency/county with no statewide fee. Phone targets.',
+        blocksFields: ['resources.remedies.restriction.fees', 'resources.remedies.restriction.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the § 35-3-37(j)(4)(A) exclusion list for misdemeanour conviction restriction: DUI, family-violence battery (unless under 21 at arrest), sex offences, crimes against minors, and serious traffic offences. The tree asks a person whether their offence is on this list.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the First Offender Act and retroactive First Offender mechanics: deferred adjudication once, judge-approved, and the ability to apply retroactively for old cases. Wave 3 names these as additional felony-adjacent routes but the tree does not yet branch on them — disclosed in the felony result.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions treated, and how does the Survivors First Act track (trafficking survivors — vacate or restrict+seal) work? Standing call-sheet question plus a named niche track.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'O.C.G.A. § 35-3-37 (record restriction and sealing)', url: null, retrievedOn: null },
+      { id: 'O.C.G.A. § 35-3-37(j)(4)(A) (exclusion list for misdemeanour conviction restriction)', url: null, retrievedOn: null },
+      { id: 'SB 288 "Second Chance Act" (2021 — misdemeanour conviction restriction)', url: null, retrievedOn: null },
+      { id: 'Georgia First Offender Act (deferred adjudication; retroactive First Offender)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conviction_level_ga' },
+            { label: 'Dismissed / Charges dropped / Not prosecuted', value: 'dismissed', next: 'arrest_era_ga' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'arrest_era_ga' },
+            { label: 'First Offender / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // Non-convictions: pre/post 2013 fork.
+        arrest_era_ga: {
+          type: 'boolean',
+          text: 'Was the arrest on or after July 1, 2013?',
+          yes: 'eligible_auto_restrict_ga',
+          no: 'eligible_pre2013_ga'
+        },
+        conviction_level_ga: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_excluded_ga' },
+            { label: 'Felony', value: 'felony', next: 'pardon_path_ga' },
+            { label: 'Infraction', value: 'infraction', next: 'misd_excluded_ga' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ga' }
+          ]
+        },
+        misd_excluded_ga: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a DUI, family-violence battery, a sex offense, a crime against a minor, or a serious traffic offense?',
+          yes: 'ineligible_excluded_ga',
+          no: 'misd_date_ga'
+        },
+        misd_date_ga: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence? (The 4-year clock also requires no new convictions since, and no pending charges now.)',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'sentence completion (O.C.G.A. § 35-3-37 — misdemeanour conviction restriction; no new convictions in the window)' },
+            nextPass: 'eligible_misd_restrict_ga',
+            nextFail: 'waiting_ga'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Georgia\'s record restriction rules split on how the case ended: a non-conviction is often restricted automatically, a misdemeanor conviction can be petitioned after 4 years, and a felony needs a pardon first. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Georgia Justice Project (gjp.org) — who wrote the law and run statewide clinics — are the best people to help you read your record.',
+          remedy: 'Get Your Record First (Georgia Justice Project)',
+          citation: 'O.C.G.A. § 35-3-37 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'First Offender and Diversion Cases Need a Person',
+          message: 'Georgia has strong routes for cases that were not straight convictions — the First Offender Act (deferred adjudication, once, judge-approved) and even retroactive First Offender treatment for old cases — but exactly how yours is treated for restriction depends on the details, and we would rather point you to someone than guess. The Georgia Justice Project runs statewide clinics and wrote much of this law; they are the right call.',
+          remedy: 'Consult Legal Aid (First Offender / Diversion Not Yet Screened)',
+          citation: 'O.C.G.A. § 35-3-37; Georgia First Offender Act (treatment not yet detailed)'
+        },
+        eligible_auto_restrict_ga: {
+          status: 'eligible',
+          title: 'Non-Conviction — Should Be Restricted Automatically (Check It)',
+          message: 'Because this arrest was on or after July 1, 2013 and ended without a conviction, Georgia is supposed to have restricted it AUTOMATICALLY at GCIC — no petition needed. The honest caveat: there are documented gaps in the automatic reporting, so "should be" is not "definitely is". Request your GCIC criminal history report and confirm the restriction actually shows. If it does not, the Georgia Justice Project can help you get it corrected. You may also separately want the court file SEALED, which is a distinct step from the GCIC restriction.',
+          remedy: 'Automatic Restriction (check your GCIC report) — GJP can fix a missed one',
+          citation: 'O.C.G.A. § 35-3-37'
+        },
+        eligible_pre2013_ga: {
+          status: 'eligible',
+          title: 'Pre-2013 Non-Conviction — Apply to the Arresting Agency',
+          message: 'Because this arrest was before July 1, 2013, it is not covered by Georgia\'s automatic restriction — but it can still be restricted. For pre-2013 arrests, you apply directly to the arresting agency rather than going through the automatic GCIC process. The fee varies by agency. The Georgia Justice Project can walk you through which agency and how, and can also help with sealing the court file.',
+          remedy: 'Apply to the Arresting Agency (pre-2013 restriction)',
+          citation: 'O.C.G.A. § 35-3-37'
+        },
+        eligible_misd_restrict_ga: {
+          status: 'eligible',
+          title: 'Misdemeanor Conviction — Eligible to Restrict and Seal',
+          message: 'Based on your dates — 4 years since you completed the sentence, no new convictions since, and none pending — you appear eligible to petition to RESTRICT and SEAL this misdemeanor conviction under Georgia\'s Second Chance Act. Petition the court where you were convicted and serve the prosecutor; a hearing is possible, and GCIC applies the restriction within weeks of the order. One important limit to plan around: Georgia allows only TWO misdemeanor convictions to be restricted in a lifetime, so if you have more than one you might clear, think about which to use these on. There is no statewide fee, but county court costs vary. The Georgia Justice Project runs free clinics for exactly this.',
+          remedy: 'Petition to Restrict and Seal (O.C.G.A. § 35-3-37) — 2 per lifetime',
+          citation: 'O.C.G.A. § 35-3-37'
+        },
+        pardon_path_ga: {
+          status: 'complex',
+          title: 'For a Felony, the Path Runs Through a Pardon',
+          message: 'Georgia does not let you restrict a felony conviction directly — but this is a road, not a wall. The route is to obtain a PARDON from the State Board of Pardons and Paroles first (available for most felonies, though not serious violent or sex felonies), and then petition to restrict and seal. It is more steps than a misdemeanor, but people do complete it. Two other things worth raising with a lawyer: if your case was originally handled under the First Offender Act, or could be treated as First Offender retroactively, that can change the picture entirely. The Georgia Justice Project — who wrote much of this law and run statewide clinics — are the people to map your specific route.',
+          remedy: 'Pardon (State Board of Pardons and Paroles), then Petition to Restrict — or retroactive First Offender',
+          citation: 'O.C.G.A. § 35-3-37; Georgia First Offender Act'
+        },
+        ineligible_excluded_ga: {
+          status: 'ineligible',
+          title: 'This Misdemeanor Is Excluded From Restriction',
+          message: 'Georgia\'s Second Chance Act excludes certain misdemeanors from restriction: DUI, family-violence battery (unless you were under 21 at the time of arrest), sex offenses, crimes against minors, and serious traffic offenses (§ 35-3-37(j)(4)(A)). No waiting period changes that. Two things worth checking rather than assuming: whether your offense is genuinely on that list, since these are specific categories; and, for family-violence battery, whether the under-21-at-arrest exception applies to you. The Georgia Justice Project can confirm both, and can advise on whether a pardon route exists.',
+          remedy: 'None (Excluded Misdemeanor) — confirm with GJP; ask about the under-21 exception',
+          citation: 'O.C.G.A. § 35-3-37(j)(4)(A)'
+        },
+        waiting_ga: {
+          status: 'waiting',
+          title: 'Four-Year Waiting Period Not Yet Met',
+          message: 'To restrict a misdemeanor conviction in Georgia, four years must pass after you complete the sentence, with no new convictions in that time and no pending charges. Based on your dates, that has not run yet. Staying conviction-free is what gets you there. Remember too that Georgia caps this at two misdemeanor restrictions per lifetime, so it is worth being deliberate about which convictions you use it on.',
+          remedy: 'Wait for the 4-year period (conviction-free)',
+          citation: 'O.C.G.A. § 35-3-37'
+        },
+        complex_level_ga: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'In Georgia the path is completely different by level: a misdemeanor can be petitioned to restrict after 4 years, while a felony requires a pardon first. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the Georgia Justice Project can read your record with you — they run free statewide clinics.',
+          remedy: 'Get Your Conviction Level First (court paperwork / Georgia Justice Project)',
+          citation: 'O.C.G.A. § 35-3-37'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        restriction: {
+          name: 'Record Restriction and Sealing (O.C.G.A. § 35-3-37)',
+          formName: 'Petition for Record Restriction and Sealing (or agency application for pre-2013 arrests)',
+          formUrl: 'https://www.gjp.org/record-restriction/',
+          steps: [
+            'For a non-conviction on/after July 1, 2013: it should be restricted automatically — request your GCIC report and confirm it shows.',
+            'For a pre-2013 non-conviction: apply to the arresting agency.',
+            'For a misdemeanor conviction (up to 2 per lifetime): petition the court of conviction 4 years after completing the sentence, and serve the prosecutor.',
+            'For a felony: obtain a pardon from the State Board of Pardons and Paroles first, then petition.',
+            'GCIC applies the restriction within weeks of a court order.'
+          ],
+          // null: Wave 3 flags county court costs and pre-2013 agency fees as
+          // varying with no statewide fee.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court of conviction (or the arresting agency for pre-2013 arrests)'
+        }
+      },
+      legalAid: [
+        { name: 'Georgia Justice Project (wrote the law; statewide clinics)', url: 'https://www.gjp.org' },
+        { name: 'Atlanta Legal Aid', url: 'https://atlantalegalaid.org' }
+      ]
+    }
+  },
+
+  // ==========================================================================
+  // NORTH CAROLINA — DRAFT. Nothing below is phone-verified; see openQuestions.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  //
+  // The most category-heavy expunction statute in the country, with a fresh
+  // 2025 cut. S.L. 2025-71 (petitions on/after July 9, 2025) dropped the wait
+  // for ONE nonviolent misdemeanour from 5 years to 3 — most guides online
+  // still say 5. Encoded at 3, cited to the current § 15A-145.5(c)(1)(a) text.
+  //
+  // The two statutes the tree needs: § 15A-146 (dismissals/not-guilty) and
+  // § 15A-145.5 (nonviolent convictions).
+  //
+  // THE TRAP (persona 5): 2-3 nonviolent felonies are expungeable at 20 years,
+  // but ONLY if they were committed within a single 24-month window. Two
+  // felonies from 2004 and 2009 are >24 months apart -> not eligible, however
+  // long ago. That is its own node, reached only for the 2-3 felony count.
+  //
+  // Date nodes ASK for "the later of conviction or sentence completion" — the
+  // anchor is not the single date the form collects.
+  // ==========================================================================
+  NC: {
+    code: 'NC',
+    name: 'North Carolina',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
+    terminology:
+      'North Carolina says EXPUNCTION (and also expungement) — the record is destroyed. The rules '
+      + 'are unusually category-heavy: more than a dozen separate statutes, with eligibility turning '
+      + 'on whether an offence is "nonviolent", how many you have, and when they happened. A fresh '
+      + 'change matters here: as of July 9, 2025, the wait for a single nonviolent misdemeanor '
+      + 'dropped from 5 years to 3 — most online guides still say 5. Non-convictions have their own, '
+      + 'faster path, and many are now expunged automatically. Outstanding restitution blocks an '
+      + 'expunction, and DWI is never expungeable.',
+    keyDates: [
+      {
+        label: 'S.L. 2025-71 — one-nonviolent-misdemeanour wait cut 5 yrs to 3',
+        date: '2025-07-09',
+        kind: 'effective',
+        note: 'Applies to petitions filed on/after this date. Most secondary guides still cite the old 5-year figure.',
+      },
+      {
+        label: 'Automatic expunction of non-convictions (§ 15A-146) resumed under SB 565',
+        date: '2024-07-08',
+        kind: 'operative',
+        note: 'Dismissals/not-guilty on/after Dec 1, 2021 expunge automatically 180-210 days after disposition. Paused Aug 2022, resumed July 8, 2024 — verify it is still running. Plea-agreement dismissals are NOT automatic.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Is the § 15A-146 automatic expunction of non-convictions still running? Wave 3 says it paused Aug 2022 and resumed July 8, 2024 under SB 565, and flags it for verification. Confirm on the current status before UI copy promises automatic expunction — the tree tells people to check rather than assume.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What is the current conviction-expunction filing fee? Wave 3 gives "$175, waived for indigent petitioners" and flags it. Non-conviction petitions are generally free. Confirm with a clerk of superior court.',
+        blocksFields: ['resources.remedies.conviction.fees'],
+      },
+      {
+        question:
+          'Confirm the prior-§15A-145.5-expunction limits in subsections (c4)/(c5): Wave 3 says a misdemeanour expunction generally bars a later one and flags the legacy clauses. The tree discloses this in prose but cannot count a person\'s prior expunctions.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the full "nonviolent" exclusion list against § 15A-145.5(a): Class A-G felonies, Class A1 misdemeanours, any assault-element offence, registry offences, listed sex/stalking offences, meth/heroin/PWISD-cocaine felonies, CMV felonies, DWI, and attempts at any. The tree asks a person to self-assess this.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions and deferred-prosecution dismissals treated? Wave 3 says deferred-prosecution dismissals are not free like other non-conviction petitions but does not detail eligibility. Standing call-sheet question for every state.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.C. Gen. Stat. § 15A-145.5 (expunction of nonviolent convictions; waits; the 24-month felony window)', url: null, retrievedOn: null },
+      { id: 'N.C. Gen. Stat. § 15A-145.5(c)(1)(a) (one-nonviolent-misdemeanour wait — 3 yrs since S.L. 2025-71)', url: null, retrievedOn: null },
+      { id: 'N.C. Gen. Stat. § 15A-146 (expunction of dismissals/not-guilty; automatic path)', url: null, retrievedOn: null },
+      { id: 'N.C. Gen. Stat. § 14-54(a) (felony breaking & entering — 15-yr expunction wait)', url: null, retrievedOn: null },
+      { id: 'S.L. 2025-71 (2025 — misdemeanour wait cut)', url: null, retrievedOn: null },
+      { id: 'S.L. 2021 / SB 565 (automatic non-conviction expunction; pause and resumption)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'nonviolent_nc' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconviction_nc' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_nc' },
+            { label: 'Deferred prosecution / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        nonviolent_nc: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a Class A through G felony; a Class A1 misdemeanor; any offense with an assault element; a sex or stalking offense, or one requiring registration; a methamphetamine, heroin, or cocaine-trafficking felony; a commercial-vehicle felony; a DWI; or an attempt at any of these?',
+          yes: 'ineligible_excluded_nc',
+          no: 'restitution_nc'
+        },
+        restitution_nc: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you paid all restitution ordered in the case?',
+          yes: 'conviction_count_nc',
+          no: 'ineligible_restitution_nc'
+        },
+        conviction_count_nc: {
+          type: 'choice',
+          text: 'Thinking about your whole record, which describes your nonviolent convictions?',
+          options: [
+            { label: 'One nonviolent misdemeanor', value: 'one_misd', next: 'misd_date_nc' },
+            { label: 'More than one nonviolent misdemeanor', value: 'multi_misd', next: 'multi_misd_date_nc' },
+            { label: 'One nonviolent felony', value: 'one_felony', next: 'felony_be_nc' },
+            { label: 'Two or three nonviolent felonies', value: 'multi_felony', next: 'felony_window_nc' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_nc' }
+          ]
+        },
+        misd_date_nc: {
+          type: 'date',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date. (The clock runs conviction-free from then.)',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5(c)(1)(a) — one nonviolent misdemeanour; cut from 5 to 3 by S.L. 2025-71)' },
+            nextPass: 'eligible_conviction_nc',
+            nextFail: 'waiting_nc'
+          }
+        },
+        multi_misd_date_nc: {
+          type: 'date',
+          text: 'Which came LATER for your MOST RECENT case: the conviction, or completing the sentence? Enter that date.',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'the later of the last conviction or its sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — multiple nonviolent misdemeanours)' },
+            nextPass: 'eligible_conviction_nc',
+            nextFail: 'waiting_nc'
+          }
+        },
+        felony_be_nc: {
+          type: 'boolean',
+          text: 'Was the felony a breaking-and-entering offense under G.S. 14-54(a)?',
+          yes: 'felony_be_date_nc',
+          no: 'felony_one_date_nc'
+        },
+        felony_one_date_nc: {
+          type: 'date',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date.',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — one nonviolent felony)' },
+            nextPass: 'eligible_conviction_nc',
+            nextFail: 'waiting_nc'
+          }
+        },
+        felony_be_date_nc: {
+          type: 'date',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date.',
+          validation: {
+            period: { amount: 15, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — felony breaking & entering, G.S. 14-54(a))' },
+            nextPass: 'eligible_conviction_nc',
+            nextFail: 'waiting_nc'
+          }
+        },
+        // THE TRAP — reached only for 2-3 felonies.
+        felony_window_nc: {
+          type: 'boolean',
+          text: 'Were all of those felonies COMMITTED within a single 24-month period of each other? (North Carolina only allows expunging multiple felonies when they came from roughly the same stretch of time — not spread across years.)',
+          yes: 'felony_multi_date_nc',
+          no: 'ineligible_felony_window_nc'
+        },
+        felony_multi_date_nc: {
+          type: 'date',
+          text: 'Which came LATER for your MOST RECENT of those felonies: the conviction, or completing the sentence? Enter that date.',
+          validation: {
+            period: { amount: 20, unit: 'years', anchor: 'the later of the last conviction or its sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — 2-3 nonviolent felonies within a 24-month window)' },
+            nextPass: 'eligible_conviction_nc',
+            nextFail: 'waiting_nc'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'North Carolina treats convictions and non-convictions through entirely different statutes, with very different timing. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The NC Second Chance Alliance (ncsecondchance.org) runs statewide clinics, and the UNC School of Government\'s Relief guide is the authoritative reference for reading your situation.',
+          remedy: 'Get Your Record First (NC Second Chance Alliance)',
+          citation: 'N.C. Gen. Stat. §§ 15A-145.5, 15A-146 (which path applies depends on the disposition)'
+        },
+        unknown_deferred: {
+          status: 'complex',
+          title: 'Deferred Prosecution and Diversion Need a Person',
+          message: 'North Carolina\'s expunction rules are screened here for convictions, dismissals, and acquittals. Deferred-prosecution dismissals are treated differently — they are not free like other non-conviction petitions, and the eligibility details are not something this screening has fully researched — so we would rather point you to someone than guess. The NC Second Chance Alliance runs statewide clinics and can tell you how your disposition is treated.',
+          remedy: 'Consult Legal Aid (Deferred Prosecution / Diversion Not Yet Screened)',
+          citation: 'N.C. Gen. Stat. § 15A-146 (deferred-prosecution treatment not yet detailed)'
+        },
+        nonconviction_nc: {
+          status: 'eligible',
+          title: 'No Conviction — Likely Expungeable, Possibly Already Done',
+          message: 'Because your case ended without a conviction, North Carolina has a fast path for you, and part of it may already have happened. Dismissals and not-guilty verdicts from December 1, 2021 onward are expunged AUTOMATICALLY, about 180 to 210 days after the case ends — a process that paused in 2022 and resumed in July 2024, so check rather than assume. Two things to know: if your dismissal came as part of a plea agreement, it is NOT automatic and you would petition instead; and older non-convictions can be petitioned with no waiting period, no prior-conviction bar, and generally no fee. Request your record to see whether the automatic expunction went through; if not, the petition (the AOC-CR-281/287/298 forms) is straightforward. The NC Second Chance Alliance can help.',
+          remedy: 'Automatic or petition expunction of a non-conviction (§ 15A-146) — check your record',
+          citation: 'N.C. Gen. Stat. § 15A-146'
+        },
+        eligible_conviction_nc: {
+          status: 'eligible',
+          title: 'Potentially Eligible to Expunge This Conviction',
+          message: 'Based on your dates and record, you appear eligible to petition to EXPUNGE this nonviolent conviction under § 15A-145.5 — expunction destroys the record rather than just hiding it. If this is a single nonviolent misdemeanor, note that the wait is now 3 years, cut from 5 by a July 2025 law that most online guides have not caught up to. File in the county of conviction using the AOC-CR-281/287/298 forms; the district attorney and any victim are notified, and a judge may order an SBI or FBI record check. The filing fee for a conviction expunction is reportedly $175, waived if you cannot afford it — we are confirming the current amount. One thing worth raising with legal aid: a prior expunction under this statute can limit a later one, so if you have used one before, confirm you are still eligible. The NC Second Chance Alliance runs free clinics.',
+          remedy: 'Petition to Expunge a Conviction (§ 15A-145.5)',
+          citation: 'N.C. Gen. Stat. § 15A-145.5'
+        },
+        waiting_nc: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'North Carolina\'s conviction-expunction waits run from the later of your conviction or completing your sentence, and you must stay conviction-free through them: 3 years for a single nonviolent misdemeanor (recently cut from 5), 7 years for multiple nonviolent misdemeanors, 10 years for a nonviolent felony (15 for felony breaking and entering), and 20 years for two or three felonies from a single 24-month stretch. Based on your dates, yours has not run yet. Staying conviction-free is what gets you there, and any outstanding restitution needs to be cleared as well.',
+          remedy: 'Wait for the period (conviction-free), and clear any restitution',
+          citation: 'N.C. Gen. Stat. § 15A-145.5'
+        },
+        ineligible_excluded_nc: {
+          status: 'ineligible',
+          title: 'This Offense Is Not "Nonviolent" Under the Statute',
+          message: 'North Carolina\'s conviction expunction only reaches "nonviolent" offenses, and it defines that narrowly — Class A through G felonies, Class A1 misdemeanors, anything with an assault element, sex and stalking and registry offenses, certain drug-trafficking felonies, commercial-vehicle felonies, DWI, and attempts at any of these are all excluded. For a DWI specifically, there is no expunction route in North Carolina, so be wary of any service that suggests one. Because "nonviolent" is a legal definition rather than a description of what happened, if you are not certain your offense is actually excluded it is genuinely worth confirming — the UNC School of Government Relief guide and the NC Second Chance Alliance can check it against the current list.',
+          remedy: 'None (Not a "Nonviolent" Offense) — confirm against the statutory list',
+          citation: 'N.C. Gen. Stat. § 15A-145.5(a)'
+        },
+        ineligible_restitution_nc: {
+          status: 'ineligible',
+          title: 'Outstanding Restitution Blocks Expunction',
+          message: 'North Carolina will not expunge a conviction while restitution ordered in the case remains unpaid. This is a "not yet", not a permanent no: the offense itself may well qualify, so clearing the balance is the step that unlocks it. Ask the clerk of court for your exact restitution balance and how to pay it, then come back and run this again. The NC Second Chance Alliance can help you sort out what is owed.',
+          remedy: 'Pay Outstanding Restitution First, then petition',
+          citation: 'N.C. Gen. Stat. § 15A-145.5'
+        },
+        ineligible_felony_window_nc: {
+          status: 'ineligible',
+          title: 'These Felonies Are Too Far Apart in Time to Expunge Together',
+          message: 'This is a rule that catches many people, so here it is plainly: North Carolina lets you expunge two or three nonviolent felonies together only if they were COMMITTED within a single 24-month window. Because yours were spread further apart than that, they do not qualify for the multiple-felony expunction — and this does not change with time, since it is about when the offenses happened, not how long ago. It is worth having someone confirm this, because the analysis is specific: if only one of your felonies is actually the barrier, a different single-felony route might still reach the others. The UNC School of Government Relief guide and the NC Second Chance Alliance can look at the exact dates and offenses.',
+          remedy: 'None for the multiple-felony route (24-month window) — a single-felony route may still fit',
+          citation: 'N.C. Gen. Stat. § 15A-145.5'
+        },
+        complex_count_nc: {
+          status: 'complex',
+          title: 'Your Record Needs Counting — By a Person',
+          message: 'North Carolina\'s expunction timing turns on exactly how many nonviolent convictions you have and, for felonies, when they were committed relative to each other — one misdemeanor is 3 years, multiple are 7, one felony is 10, and two or three felonies are 20 but only if they fall within a 24-month window. Since you are not sure how your record counts, we are not going to guess, because the categories point to very different answers. The UNC School of Government Relief guide is the authoritative reference, and the NC Second Chance Alliance runs free statewide clinics where someone will count your record with you.',
+          remedy: 'Get Your Record Counted (UNC SOG guide / NC Second Chance Alliance)',
+          citation: 'N.C. Gen. Stat. § 15A-145.5'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        conviction: {
+          name: 'Expunction of a Nonviolent Conviction (§ 15A-145.5)',
+          formName: 'AOC-CR-281 / 287 / 298 series',
+          formUrl: 'https://www.ncsecondchance.org',
+          steps: [
+            'Confirm the offense is "nonviolent" under the statute and that any restitution is paid.',
+            'File the AOC-CR petition in the county of conviction; the district attorney and any victim are notified.',
+            'A judge may order an SBI or FBI record check.',
+            'The filing fee is reportedly $175, waived if you cannot afford it.'
+          ],
+          // null: Wave 3 gives "$175, waived for indigent" and flags it.
+          fees: null,
+          // NOT null: the indigency waiver is a named, independent mechanism.
+          feeWaiver: 'The $175 fee is waived for petitioners who cannot afford it (indigent).',
+          courtContact: 'Clerk of Superior Court, county of conviction'
+        },
+        nonconviction: {
+          name: 'Expunction of a Non-Conviction (§ 15A-146)',
+          formName: 'AOC-CR non-conviction expunction forms',
+          formUrl: 'https://www.ncsecondchance.org',
+          steps: [
+            'Check first whether it was expunged automatically — dismissals and not-guilty verdicts from Dec 1, 2021 onward expunge about 180-210 days after disposition (the process resumed July 2024).',
+            'If your dismissal was part of a plea agreement, it is NOT automatic — petition instead.',
+            'Older non-convictions can be petitioned with no waiting period and no prior-conviction bar.',
+            'Non-conviction petitions are generally free (deferred-prosecution dismissals are an exception).'
+          ],
+          fees: '$0 for most non-conviction petitions (deferred-prosecution dismissals are an exception).',
+          feeWaiver: 'Not applicable to the generally free non-conviction petitions.',
+          courtContact: 'Clerk of Superior Court, county of the case'
+        }
+      },
+      legalAid: [
+        { name: 'NC Second Chance Alliance (statewide clinics)', url: 'https://www.ncsecondchance.org' },
+        { name: 'NC Justice Center (Summary of NC Expunctions)', url: 'https://www.ncjustice.org' }
+      ]
+    }
   }
 };
+
+
+
 
 
 

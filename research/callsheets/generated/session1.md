@@ -1,9 +1,9 @@
-# Turnleaf — Call Session 1 (Wave 1: UT)
+# Turnleaf — Call Session 1 (Wave 1: MI · UT)
 
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**6 open questions across 1 state.**
+**13 open questions across 2 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -14,7 +14,40 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ---
 
-## 1. UTAH (UT)
+## 1. MICHIGAN (MI)
+
+**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+
+**Contacts (from the data — no phone numbers are stored; see header):**
+- **Application to Set Aside Conviction (MCL 780.621)** — The court that convicted you
+- **Automatic Set-Aside (MCL 780.621g) — no application** — Michigan State Police (criminal history record check)
+- Michigan Legal Help (free guided set-aside interview) — https://michiganlegalhelp.org
+- Safe & Just Michigan — https://safeandjustmi.org
+
+**Dates that govern:**
+- 2023-04-11 — Automatic set-aside (MCL 780.621g) live (operative) · Records have been setting aside automatically since this date, with no petition and no notice to the person.
+- 2022-02 — First-offence OWI became petitionable (court discretion) (effective) · Wave 1 gives month and year only ("since Feb 2022"). OWI remains excluded from the automatic track.
+
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+
+1. What is the fee to file a set-aside application, and if there is one, can it be waived? Wave 1 gives "$50 fee to Michigan State Police" and marks it "widely cited but VERIFY BY PHONE — it is on the MC 227 instructions". Widely cited is not a source. Ask about the RI-008 fingerprint card fee at the same time — Wave 1 calls it "small" without giving a number, so it is not stated anywhere in the app.
+   - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
+2. Confirm the automatic set-aside exclusion list against MCL 780.621g, and confirm it really is broader than the petition exclusion list in MCL 780.621c. The tree asks a person to self-assess both lists; if either is wrong or if they are not actually different, the track fork is wrong.
+   - *Blocks no single field — affects a branch or wording.*
+3. The "One Bad Night" rule (MCL 780.621b) — multiple offences within 24 hours arising from the same transaction count as ONE conviction, except for assaultive, weapon, or 10+ year offences — has no representation in the tree. It changes the count that decides the waiting period, and the record model cannot express relationships between charges.
+   - *Blocks no single field — affects a branch or wording.*
+4. How are non-convictions treated? Wave 1 documents only convictions for Michigan — dismissals and acquittals are not covered at all, so the tree hedges them. What relief exists for a dismissed charge or an acquittal?
+   - *Blocks no single field — affects a branch or wording.*
+5. How are completed deferrals/diversions (including HYTA and 7411 dispositions) treated for set-aside? Not covered in Wave 1 — standing call-sheet question for every state.
+   - *Blocks no single field — affects a branch or wording.*
+6. Confirm the automatic-track count limits: max 2 felonies and 4 misdemeanours of 93 days or more set aside automatically, with unlimited 92-day-or-less misdemeanours. The tree does not gate on these — it cannot count — so a person past the limits may be told to check a record that will never clear on its own.
+   - *Blocks no single field — affects a branch or wording.*
+7. What is the exact effective date of the first-offence OWI petition path? Wave 1 gives month and year only ("since Feb 2022").
+   - *Blocks no single field — affects a branch or wording.*
+
+---
+
+## 2. UTAH (UT)
 
 **Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 

@@ -412,7 +412,106 @@ const UT: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT]];
+const MI: Persona[] = [
+  {
+    source: 'Wave 1 — MI persona 1',
+    package: 'one misdemeanor, 8 yrs post-sentence, clean, non-excluded → likely already automatically set aside → check-record path.',
+    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-07-15' },
+    answers: {
+      pending_charges_mi: false,
+      marijuana_mi: false,
+      petition_excluded_mi: false,
+      owi_mi: false,
+      auto_excluded_mi: false,
+      // auto_date_misd_mi reads the record: its anchor IS sentencing.
+    },
+    expect: {
+      resultKey: 'check_record_first_mi',
+      reading:
+        'Misdemeanour, 8 years post-sentence, not on the automatic exclusion list → past the 7-year '
+        + 'automatic threshold, so it is probably already set aside and nobody told them. Leads with '
+        + 'the MSP record check rather than an application. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — MI persona 2',
+    package: 'one felony (non-excluded), 6 yrs post-discharge → eligible-petition.',
+    record: { title: 'Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      pending_charges_mi: false,
+      marijuana_mi: false,
+      petition_excluded_mi: false,
+      owi_mi: false,
+      auto_excluded_mi: false,
+      auto_date_felony_mi: '2020-07-15',   // 6 yrs — short of the 10-yr automatic
+      petition_counts_mi: 'one_felony_or_serious',
+      petition_date_5_mi: '2020-07-15',    // 6 yrs — past the 5-yr petition period
+      new_convictions_mi: false,
+    },
+    expect: {
+      resultKey: 'eligible_petition_mi',
+      reading:
+        'The two tracks diverge here, which is the point of this persona: 6 years is past the '
+        + '5-year PETITION period for one felony but short of the 10-year AUTOMATIC one. So waiting '
+        + 'would cost four more years — petition now. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — MI persona 3',
+    package: '3 felonies, latest discharge 6 yrs ago → waiting (7y multiple-felony period).',
+    record: { title: 'Felony (third)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      pending_charges_mi: false,
+      marijuana_mi: false,
+      petition_excluded_mi: false,
+      owi_mi: false,
+      auto_excluded_mi: false,
+      auto_date_felony_mi: '2020-07-15',
+      petition_counts_mi: 'multiple_felonies',
+      petition_date_7_mi: '2020-07-15',    // 6 yrs of the 7 needed
+    },
+    expect: {
+      resultKey: 'waiting_mi',
+      reading:
+        'Three felonies is at Michigan\'s lifetime cap, not over it, so the count gate passes and the '
+        + 'multiple-felony 7-year period applies. Six years since the latest discharge → waiting. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — MI persona 4',
+    package: 'marijuana misdemeanor 2019 → eligible-now via 621e.',
+    record: { title: 'Marijuana Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { pending_charges_mi: false, marijuana_mi: true },
+    expect: {
+      resultKey: 'eligible_marijuana_mi',
+      reading:
+        'MCL 780.621e: no waiting period and a rebuttable presumption of eligibility. Asked before '
+        + 'either other track because it beats both — the person can file today and the burden sits '
+        + 'with the prosecutor. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — MI persona 5',
+    package: 'OWI first offense, 5 yrs → complex (discretionary petition path; not automatic).',
+    record: { title: 'OWI (first offense)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-07-15' },
+    answers: { pending_charges_mi: false, marijuana_mi: false, petition_excluded_mi: false, owi_mi: true },
+    expect: {
+      resultKey: 'complex_owi_mi',
+      reading:
+        'OWI is the case that proves the two exclusion lists differ: petitionable since Feb 2022 but '
+        + 'at the court\'s DISCRETION, and excluded from automatic entirely — so waiting never clears '
+        + 'it. Routed to legal aid rather than screened to an answer. Exact.',
+    },
+    now: NOW,
+  },
+];
+
+// ---------------------------------------------------------------------------
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

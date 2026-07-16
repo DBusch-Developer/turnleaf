@@ -1733,7 +1733,669 @@ const LA: Persona[] = [
 ];
 
 // ---------------------------------------------------------------------------
-const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO], ['MD', MD], ['WI', WI], ['SC', SC], ['AL', AL], ['LA', LA]];
+// ---------------------------------------------------------------------------
+// WAVE 6 — KY, OR, IA, NV, AR, MS, KS, NM, NE, ID, WV
+// ---------------------------------------------------------------------------
+const KY: Persona[] = [
+  {
+    source: 'Wave 6 — KY persona 1',
+    package: 'dismissed-with-prejudice 2022 -> should be auto-expunged — check.',
+    record: { title: 'Dismissed charge', disposition: 'dismissed', disposition_date: '2022-06-01' },
+    answers: { dismissal_ky: true, auto_cutoff_ky: true },
+    expect: {
+      resultKey: 'check_record_auto_ky',
+      reading:
+        'A dismissal-with-prejudice that ended on/after Jul 15, 2020 is automatic (KRS 431.076); the tree '
+        + 'routes it to the check-your-record result, matching "should be auto-expunged — check."',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KY persona 2',
+    package: 'misdemeanor theft 2018, done -> eligible, $100+$40.',
+    record: { title: 'Misdemeanor theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { level_ky: 'misd', misd_excluded_ky: false },
+    expect: {
+      resultKey: 'eligible_misd_ky',
+      reading: 'A non-excluded misdemeanor 8 years past sentence clears the 5-year § 431.078 wait -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KY persona 3',
+    package: 'Class D possession 2017, clean -> eligible, ~$340 all-in, 4–5 month cert wait first.',
+    record: { title: 'Class D possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2017-06-01', probation_status: 'completed' },
+    answers: { level_ky: 'felonyD', felonyD_eligible_ky: 'eligible' },
+    expect: {
+      resultKey: 'eligible_felonyD_ky',
+      reading: 'An enumerated Class D felony 9 years past sentence clears the 5-year § 431.073 wait -> eligible (certificate-first).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KY persona 4',
+    package: 'two Class D felonies, separate incidents -> 2023 amendment ⚠️ — the verify-then-encode branch.',
+    record: { title: 'Second Class D felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-06-01', probation_status: 'completed' },
+    answers: { level_ky: 'felonyD', felonyD_eligible_ky: 'eligible' },
+    expect: {
+      resultKey: 'eligible_felonyD_ky',
+      reading:
+        'The 2023 amendment allows expunging MORE THAN ONE qualifying Class D felony, so the tree does not '
+        + 'cap them — a second separate-incident Class D felony still reaches eligible_felonyD_ky, whose '
+        + 'message states the multiple-felony rule. This IS the verify-then-encode branch.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KY persona 5',
+    package: 'Class C felony -> pardon only.',
+    record: { title: 'Class C felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_ky: 'felonyABC' },
+    expect: {
+      resultKey: 'ineligible_felony_ky',
+      reading: 'Class A/B/C felonies are expungeable only if pardoned; the tree routes them to the pardon-only result.',
+    },
+    now: NOW,
+  },
+];
+
+const OR: Persona[] = [
+  {
+    source: 'Wave 6 — OR persona 1',
+    package: 'B felony drug delivery 2015, clean -> eligible since 2022 (was 20-yr wait before SB 397 — many people don\'t know they became eligible).',
+    record: { title: 'Class B felony drug delivery', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { excluded_or: false, level_or: 'felonyB' },
+    expect: {
+      resultKey: 'eligible_conviction_or',
+      reading: 'A non-excluded Class B felony 11 years past conviction clears the SB 397 7-year wait -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — OR persona 2',
+    package: 'A misdemeanor 2021 -> eligible 2024.',
+    record: { title: 'Class A misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_or: false, level_or: 'misdA' },
+    expect: {
+      resultKey: 'eligible_conviction_or',
+      reading: 'A Class A misdemeanor past the 3-year wait (2021 -> eligible 2024, now 2026) -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — OR persona 3',
+    package: 'DUII diversion completed -> NOT expungable — expectation-setter.',
+    record: { title: 'DUII diversion', disposition: 'deferred' },
+    answers: { diversion_duii_or: true },
+    expect: {
+      resultKey: 'ineligible_duii_or',
+      reading: 'A completed DUII diversion is the unique Oregon trap — not expungable; the tree routes it to the DUII-diversion ineligible result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — OR persona 4',
+    package: 'dismissed theft charge -> the drafting-error ⚠️ branch.',
+    record: { title: 'Dismissed theft charge', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'nonconv_or',
+      reading:
+        'Dismissals route to nonconv_or, which is eligible-with-caveat and explicitly names the known ORS '
+        + '137.225 dismissal drafting error — this IS the drafting-error branch.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — OR persona 5',
+    package: 'old unpaid fines, judgment expired -> 2025 amendment says eligible now.',
+    record: { title: 'Class C felony, old unpaid fines', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-06-01', probation_status: 'completed', restitution_paid: false },
+    answers: { excluded_or: false, level_or: 'felonyC' },
+    expect: {
+      resultKey: 'eligible_conviction_or',
+      reading:
+        'The 2025 amendment makes expired money-judgment LFOs count as sentence-complete, so unpaid old fines '
+        + 'no longer block. The tree does not gate on fines, so a Class C felony past the 5-year wait is '
+        + 'eligible even with restitution unpaid — matching "eligible now."',
+    },
+    now: NOW,
+  },
+];
+
+const IA: Persona[] = [
+  {
+    source: 'Wave 6 — IA persona 1',
+    package: 'dismissed case 2020, costs paid -> eligible.',
+    record: { title: 'Dismissed case', disposition: 'dismissed', disposition_date: '2020-06-01' },
+    answers: { costs_ia: true },
+    expect: {
+      resultKey: 'eligible_nonconv_ia',
+      reading: 'A non-conviction with court costs paid and well past 180 days -> eligible under § 901C.2.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — IA persona 2',
+    package: 'deferred judgment done 2016 -> should already be expunged — check.',
+    record: { title: 'Deferred judgment', disposition: 'deferred', disposition_date: '2016-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'check_deferred_ia',
+      reading: 'A completed deferred judgment (post-2013) is automatic under § 907.9; the tree routes it to the check-your-record result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — IA persona 3',
+    package: 'misdemeanor theft 2015 -> 8-yr wait met 2023 -> eligible, once-ever decision.',
+    record: { title: 'Misdemeanor theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { level_ia: 'misd', misd_excluded_ia: false },
+    expect: {
+      resultKey: 'eligible_misd_ia',
+      reading: 'A non-excluded misdemeanor 11 years past conviction clears the 8-year § 901C.3 wait -> eligible; the result names the once-per-lifetime trade-off.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — IA persona 4',
+    package: 'OWI -> never; honest-no.',
+    record: { title: 'OWI', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_ia: 'misd', misd_excluded_ia: true },
+    expect: {
+      resultKey: 'ineligible_excluded_ia',
+      reading: 'OWI is an excluded category under § 901C.3; the tree routes it to the excluded-offense honest-no.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — IA persona 5',
+    package: 'felony conviction -> pardon only.',
+    record: { title: 'Felony conviction', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_ia: 'felony' },
+    expect: {
+      resultKey: 'ineligible_felony_ia',
+      reading: 'Iowa has no felony-conviction expungement; the tree routes felonies to the pardon-only result.',
+    },
+    now: NOW,
+  },
+];
+
+const NV: Persona[] = [
+  {
+    source: 'Wave 6 — NV persona 1',
+    package: 'Cat E possession 2021, discharged -> 2-yr wait met -> eligible.',
+    record: { title: 'Category E possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_nv: false, package_rule_nv: false, level_nv: 'catE' },
+    expect: {
+      resultKey: 'eligible_conviction_nv',
+      reading: 'A Category E felony 5 years past discharge clears the 2-year NRS 179.245 tier -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NV persona 2',
+    package: 'dismissal 2024 -> seal NOW.',
+    record: { title: 'Dismissal', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_nv',
+      reading: 'Dismissals seal immediately under NRS 179.255 with no wait -> the seal-now result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NV persona 3',
+    package: 'misdemeanor DUI 2020 -> 7-yr wait -> 2027.',
+    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { excluded_nv: false, package_rule_nv: false, level_nv: 'misd7' },
+    expect: {
+      resultKey: 'waiting_nv',
+      reading: 'A misdemeanor DUI carries a 7-year wait; 2020 -> 2027, so at 2026 it has not run -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NV persona 4',
+    package: 'eligible 2016 gross misd + brand-new 2025 misdemeanor -> package rule blocks everything — the teaching persona.',
+    record: { title: 'Gross misdemeanor (2016) with a new 2025 case', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2016-06-01', probation_status: 'completed' },
+    answers: { excluded_nv: false, package_rule_nv: true },
+    expect: {
+      resultKey: 'complex_package_nv',
+      reading:
+        'The package rule seals the record as one set; a newer 2025 case that is not yet eligible blocks the '
+        + 'whole petition. Answering the package-rule gate "yes" routes to complex_package_nv — the teaching result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NV persona 5',
+    package: 'felony DUI -> never.',
+    record: { title: 'Felony DUI', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-06-01' },
+    answers: { excluded_nv: true },
+    expect: {
+      resultKey: 'ineligible_excluded_nv',
+      reading: 'Felony DUI is never sealable in Nevada; the excluded gate routes it to the ineligible result.',
+    },
+    now: NOW,
+  },
+];
+
+const AR: Persona[] = [
+  {
+    source: 'Wave 6 — AR persona 1',
+    package: 'Class D theft felony, sentence done last month -> eligible NOW, free — the state\'s headline.',
+    record: { title: 'Class D theft felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2026-06-01', probation_status: 'completed' },
+    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: false, felony_violent_ar: false },
+    expect: {
+      resultKey: 'eligible_felony_ar',
+      reading: 'A non-violent Class D felony seals immediately on completion under § 16-90-1406 -> eligible now, free.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — AR persona 2',
+    package: 'misdemeanor 2024, fines paid -> immediate.',
+    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed' },
+    answers: { level_ar: 'misd', misd_dwi_ar: false, misd_serious_ar: false },
+    expect: {
+      resultKey: 'eligible_misd_ar',
+      reading: 'A non-DWI, non-serious misdemeanor seals immediately on completion under § 16-90-1405 -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — AR persona 3',
+    package: 'two separate felony convictions -> one-prior-felony cap ⚠️ analysis branch.',
+    record: { title: 'Second separate felony conviction', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: true },
+    expect: {
+      resultKey: 'complex_priorfelony_ar',
+      reading:
+        'More than one prior felony triggers the one-prior-felony cap (same-episode felonies count as one), '
+        + 'which needs case-specific analysis; the tree routes it to complex_priorfelony_ar.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — AR persona 4',
+    package: 'DWI misdemeanor 2018 -> 10-yr wait -> 2028.',
+    record: { title: 'DWI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { level_ar: 'misd', misd_dwi_ar: true },
+    expect: {
+      resultKey: 'waiting_ar',
+      reading: 'A misdemeanor DWI carries a 10-year wait; 2018 -> 2028, so at 2026 it has not run -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — AR persona 5',
+    package: 'Class B drug felony, done 2023 -> immediate — the surprise-yes.',
+    record: { title: 'Class B drug felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: false, felony_violent_ar: false },
+    expect: {
+      resultKey: 'eligible_felony_ar',
+      reading:
+        'Class A/B DRUG felonies seal immediately (a drug offense answers "no" to the non-drug Y/A/B exclusion). '
+        + 'The tree reaches eligible_felony_ar immediately -> the surprise-yes.',
+    },
+    now: NOW,
+  },
+];
+
+const MS: Persona[] = [
+  {
+    source: 'Wave 6 — MS persona 1',
+    package: 'felony possession 2018, done, paid -> one-shot eligible — spend-it-wisely branch (MS joins IN/IA in the "don\'t file casually" club).',
+    record: { title: 'Felony possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
+    answers: { level_ms: 'felony', felony_prioruse_ms: false, felony_excluded_ms: false },
+    expect: {
+      resultKey: 'eligible_felony_ms',
+      reading: 'A non-excluded felony 8 years past completion clears the 5-year § 99-19-71 wait -> eligible; the result names the one-per-lifetime trade-off.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — MS persona 2',
+    package: 'first misdemeanor 2023 -> eligible now.',
+    record: { title: 'First misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { level_ms: 'misd', misd_firstoffender_ms: true },
+    expect: {
+      resultKey: 'eligible_misd_ms',
+      reading: 'A first-offense, non-traffic misdemeanor has no set wait -> eligible now.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — MS persona 3',
+    package: 'embezzlement felony -> excluded — the surprise-no.',
+    record: { title: 'Embezzlement felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { level_ms: 'felony', felony_prioruse_ms: false, felony_excluded_ms: true },
+    expect: {
+      resultKey: 'ineligible_excluded_ms',
+      reading: 'Embezzlement is on the § 99-19-71 exclusion list; the tree routes it to the excluded honest-no (surprise-no).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — MS persona 4',
+    package: 'dismissed charge -> petition, shall-grant.',
+    record: { title: 'Dismissed charge', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_ms',
+      reading: 'Non-convictions are expunged on petition where the court "shall" grant -> the non-conviction eligible result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — MS persona 5',
+    package: 'second felony after a prior expunction -> never.',
+    record: { title: 'Second felony after a prior expunction', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { level_ms: 'felony', felony_prioruse_ms: true },
+    expect: {
+      resultKey: 'ineligible_prioruse_ms',
+      reading: 'The one-felony-per-lifetime limit, once used, bars a second felony expunction; the tree routes it to the prior-use ineligible result.',
+    },
+    now: NOW,
+  },
+];
+
+const KS: Persona[] = [
+  {
+    source: 'Wave 6 — KS persona 1',
+    package: 'severity-8 theft felony 2019, discharged 2021 -> 3-yr wait met -> eligible.',
+    record: { title: 'Severity-8 theft felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
+    answers: { excluded_ks: false, specialty_ks: false, level_ks: 'felony3' },
+    expect: {
+      resultKey: 'eligible_conviction_ks',
+      reading: 'A severity 6-10 non-drug felony sits in the 3-year tier; discharged 2021, past 3 years at 2026 -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KS persona 2',
+    package: 'first DUI 2018, done 2019 -> 5-yr wait met -> eligible (DUI expungable here, unlike most of this wave!).',
+    record: { title: 'First DUI', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { excluded_ks: false, specialty_ks: false, level_ks: 'dui1' },
+    expect: {
+      resultKey: 'eligible_conviction_ks',
+      reading: 'A first DUI sits in the 5-year tier; done 2019, past 5 years at 2026 -> eligible (Kansas expunges DUI).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KS persona 3',
+    package: 'drug-court graduate last month -> petition NOW, fee waivable.',
+    record: { title: 'Drug-court graduate', disposition: 'convicted', disposition_date: '2026-06-01', probation_status: 'completed' },
+    answers: { excluded_ks: false, specialty_ks: true },
+    expect: {
+      resultKey: 'eligible_specialty_ks',
+      reading: 'Drug/veterans-court graduates may petition immediately with the docket fee waivable; the specialty gate routes to eligible_specialty_ks.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KS persona 4',
+    package: 'registrable offense -> not while registered.',
+    record: { title: 'Registrable offense', disposition: 'convicted', disposition_date: '2015-06-01' },
+    answers: { excluded_ks: true },
+    expect: {
+      resultKey: 'ineligible_excluded_ks',
+      reading: 'Anyone still required to register cannot expunge while registering; the excluded gate routes to the ineligible result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — KS persona 5',
+    package: 'diversion completed 2021 -> eligible.',
+    record: { title: 'Completed diversion', disposition: 'deferred', disposition_date: '2021-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_conviction_ks',
+      reading: 'A completed diversion has a 3-year wait; 2021 past 3 years at 2026 -> eligible.',
+    },
+    now: NOW,
+  },
+];
+
+const NM: Persona[] = [
+  {
+    source: 'Wave 6 — NM persona 1',
+    package: '4th-degree felony possession 2019, done 2020 -> 4-yr wait met -> eligible.',
+    record: { title: '4th-degree felony possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { excluded_nm: false, cannabis_nm: false, level_nm: 'deg4' },
+    expect: {
+      resultKey: 'eligible_conviction_nm',
+      reading: 'A 4th-degree felony sits in the 4-year tier; done 2020, past 4 years at 2026 -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NM persona 2',
+    package: 'dismissal 2024 -> eligible 2025.',
+    record: { title: 'Dismissal', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_nm',
+      reading: 'Non-convictions clear 1 year after final disposition; 2024 -> eligible 2025, met at 2026.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NM persona 3',
+    package: 'DWI -> never — honest-no.',
+    record: { title: 'DWI', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { excluded_nm: true },
+    expect: {
+      resultKey: 'ineligible_excluded_nm',
+      reading: 'DWI is excluded entirely (even first-offense deferred); the excluded gate routes to the honest-no.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NM persona 4',
+    package: 'cannabis possession 2019 -> should be auto-expunged — check.',
+    record: { title: 'Cannabis possession (<=2 oz)', disposition: 'convicted', disposition_date: '2019-06-01' },
+    answers: { excluded_nm: false, cannabis_nm: true },
+    expect: {
+      resultKey: 'check_cannabis_nm',
+      reading: 'Minor cannabis possession is supposed to be automatic under § 29-3A-8; the tree routes it to the check-your-record result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NM persona 5',
+    package: '2nd-degree felony 2014, done 2016 -> eligible 2024.',
+    record: { title: '2nd-degree felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-06-01', probation_status: 'completed' },
+    answers: { excluded_nm: false, cannabis_nm: false, level_nm: 'deg2' },
+    expect: {
+      resultKey: 'eligible_conviction_nm',
+      reading: 'A 2nd-degree felony sits in the 8-year tier; done 2016 -> eligible 2024, met at 2026.',
+    },
+    now: NOW,
+  },
+];
+
+const NE: Persona[] = [
+  {
+    source: 'Wave 6 — NE persona 1',
+    package: 'felony probation completed -> set-aside eligible; record stays visible — the honest-yes-but.',
+    record: { title: 'Felony, probation completed', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { pardoned_ne: false, sentence_ne: 'noncustody', setaside_excluded_ne: false },
+    expect: {
+      resultKey: 'eligible_setaside_ne',
+      reading: 'A completed probation sentence is set-aside eligible under § 29-2264; the result states the honest "stays visible" caveat.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NE persona 2',
+    package: '3-yr prison sentence -> pardon only.',
+    record: { title: 'Felony, 3-year prison sentence', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01', prison_sentenced: true },
+    answers: { pardoned_ne: false, sentence_ne: 'long_prison' },
+    expect: {
+      resultKey: 'ineligible_prison_ne',
+      reading: 'Imprisonment over one year is beyond set-aside; the tree routes it to the pardon-only result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NE persona 3',
+    package: 'dismissed charge -> § 29-3523 relief.',
+    record: { title: 'Dismissed charge', disposition: 'dismissed', disposition_date: '2022-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_ne',
+      reading: 'Non-convictions can be removed/sealed under § 29-3523; the tree routes dismissals to that eligible result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NE persona 4',
+    package: 'pardoned conviction -> NOW sealable.',
+    record: { title: 'Pardoned conviction', disposition: 'convicted', disposition_date: '2012-06-01' },
+    answers: { pardoned_ne: true },
+    expect: {
+      resultKey: 'eligible_pardoned_ne',
+      reading: 'A pardoned conviction is sealable since 2021; the pardon gate routes to the pardoned-sealable result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — NE persona 5',
+    package: 'misdemeanor fine-only 2020, paid -> set-aside now.',
+    record: { title: 'Misdemeanor, fine-only', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'none' },
+    answers: { pardoned_ne: false, sentence_ne: 'noncustody', setaside_excluded_ne: false },
+    expect: {
+      resultKey: 'eligible_setaside_ne',
+      reading: 'A fine-only sentence, paid, is set-aside eligible under § 29-2264 -> set-aside now.',
+    },
+    now: NOW,
+  },
+];
+
+const ID: Persona[] = [
+  {
+    source: 'Wave 6 — ID persona 1',
+    package: 'arrested 2023, never charged -> ISP request now, free.',
+    record: { title: 'Arrested, never charged', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_id',
+      reading: 'A no-charge/non-conviction clears through the ISP administrative request (§ 67-3004(10)); the tree routes it there.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — ID persona 2',
+    package: 'misdemeanor possession 2018, everything paid 2019 -> shielding eligible 2024 — the 2023-law persona.',
+    record: { title: 'Non-violent misdemeanor possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { shielding_type_id: 'nonviolent_misd' },
+    expect: {
+      resultKey: 'eligible_shielding_id',
+      reading: 'A non-violent misdemeanor 5 conviction-free years past completion (paid 2019 -> eligible 2024) clears § 67-3004(11) shielding.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — ID persona 3',
+    package: 'violent misdemeanor -> excluded; honest-no.',
+    record: { title: 'Violent misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { shielding_type_id: 'violent_misd' },
+    expect: {
+      resultKey: 'ineligible_violent_id',
+      reading: 'Assaultive/violent misdemeanors are excluded from shielding; the tree routes them to the honest-no.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — ID persona 4',
+    package: 'withheld judgment completed -> move for dismissal; explain it\'s visible-but-dismissed.',
+    record: { title: 'Withheld judgment completed', disposition: 'deferred', disposition_date: '2020-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'withheld_id',
+      reading: 'A completed withheld judgment moves to dismissal under § 19-2604; the result explains it is visible-but-dismissed.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — ID persona 5',
+    package: 'old felony theft -> no path but pardon/commutation — honest-no.',
+    record: { title: 'Old felony theft', charge_type: 'felony', disposition: 'convicted', disposition_date: '2010-06-01' },
+    answers: { shielding_type_id: 'other' },
+    expect: {
+      resultKey: 'ineligible_nopath_id',
+      reading: 'A felony outside shielding (not drug-possession) has no expungement path; the tree routes it to the pardon/commutation honest-no.',
+    },
+    now: NOW,
+  },
+];
+
+const WV: Persona[] = [
+  {
+    source: 'Wave 6 — WV persona 1',
+    package: 'single misdemeanor 2023, done -> 1-yr wait met -> eligible.',
+    record: { title: 'Single misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { excluded_wv: false, prior_use_wv: false, accel_wv: false, level_wv: 'misd_single' },
+    expect: {
+      resultKey: 'eligible_misd_wv',
+      reading: 'A single misdemeanor 3 years past completion clears the 1-year § 61-11-26 wait -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — WV persona 2',
+    package: 'NV felony 2020 + completed recovery program -> 26a: eligible at 3 yrs (2023+), WSP fee waived — the fast-lane persona.',
+    record: { title: 'Non-violent felony + completed recovery program', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { excluded_wv: false, prior_use_wv: false, accel_wv: true, level_accel_wv: 'felony' },
+    expect: {
+      resultKey: 'eligible_accel_wv',
+      reading:
+        'A non-violent ("NV") felony on the § 61-11-26a acceleration lane (recovery program completed) drops '
+        + 'to a 3-year wait; 2020 -> eligible 2023, met at 2026, WSP fee waived -> eligible_accel_wv.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — WV persona 3',
+    package: 'DV battery -> excluded.',
+    record: { title: 'DV battery', disposition: 'convicted', disposition_date: '2019-06-01' },
+    answers: { excluded_wv: true },
+    expect: {
+      resultKey: 'ineligible_excluded_wv',
+      reading: 'DV assault/battery is on the § 61-11-26(c) exclusion list; the excluded gate routes to the ineligible result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — WV persona 4',
+    package: 'acquitted -> 60 days -> expunge.',
+    record: { title: 'Acquitted', disposition: 'acquitted', disposition_date: '2024-06-01' },
+    answers: {},
+    expect: {
+      resultKey: 'eligible_nonconv_wv',
+      reading: 'An acquittal is expungeable 60 days after the case ended (§ 61-11-25); well past 60 days -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 6 — WV persona 5',
+    package: 'already used expungement once -> the ⚠️ once-ever branch.',
+    record: { title: 'Prior expungement already used', disposition: 'convicted', disposition_date: '2018-06-01' },
+    answers: { excluded_wv: false, prior_use_wv: true },
+    expect: {
+      resultKey: 'complex_onceever_wv',
+      reading:
+        'The SCA-C900 once-only rule means a prior expungement may have used the single request; the prior-use '
+        + 'gate routes to complex_onceever_wv, which hedges the scope for confirmation.',
+    },
+    now: NOW,
+  },
+];
+
+
+const SUITES: Array<[string, Persona[]]> = [['CA', CA], ['AZ', AZ], ['NY', NY], ['TX', TX], ['UT', UT], ['MI', MI], ['PA', PA], ['NJ', NJ], ['CO', CO], ['CT', CT], ['DE', DE], ['OK', OK], ['VA', VA], ['MN', MN], ['FL', FL], ['IL', IL], ['OH', OH], ['GA', GA], ['NC', NC], ['WA', WA], ['TN', TN], ['MA', MA], ['IN', IN], ['MO', MO], ['MD', MD], ['WI', WI], ['SC', SC], ['AL', AL], ['LA', LA], ['KY', KY], ['OR', OR], ['IA', IA], ['NV', NV], ['AR', AR], ['MS', MS], ['KS', KS], ['NM', NM], ['NE', NE], ['ID', ID], ['WV', WV]];
 
 for (const [code, personas] of SUITES) {
   describe(`Wave 0 personas — ${code}`, () => {

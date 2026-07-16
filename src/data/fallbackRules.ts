@@ -8660,6 +8660,2318 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         { name: 'Louisiana Law Help', url: 'https://www.louisianalawhelp.org' }
       ]
     }
+  },
+  WV: {
+    code: 'WV',
+    name: 'West Virginia',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'West Virginia uses EXPUNGEMENT, filed in the circuit court where the case was decided — § 61-11-26 '
+      + 'for convictions and § 61-11-25 for non-convictions. Two things make it distinctive. First, an '
+      + 'ACCELERATION lane (§ 61-11-26a): if you complete an approved substance-abuse treatment or recovery '
+      + 'program, or a WV Department of Education job-readiness course, your waiting periods drop sharply AND '
+      + 'the $100 State Police fee is waived — a treatment-and-work fast lane no other state has. Second, and '
+      + 'important to know before you file: the Supreme Court\'s official petition instructions (form SCA-C900) '
+      + 'say a person may request expungement under these sections only ONCE — so the question is not just '
+      + 'whether you are eligible, but whether this is the record worth spending that one request on.',
+    keyDates: [],
+    openQuestions: [
+      {
+        question:
+          'Confirm the SCA-C900 "only once" language and its SCOPE. Wave 6 flags this: the Supreme Court\'s official petition instructions say a person may request expungement under §§ 61-11-26/26a only once, but it is unclear whether that means once per person for life or once per statute/petition. It changes strategy the way Indiana\'s one-petition rule does. The tree routes people who have already expunged once to a "confirm this before you spend your one request" result; confirm the scope with a circuit clerk (Kanawha).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the full § 61-11-26(c) exclusion list. Wave 6 gives violent felonies, felonies with minor victims, sexual offenses, deadly-weapon offenses, DV assault/battery, DUI, driving-suspended, and CDL offenses, and flags the (c) list as needing the full statutory text. Also confirm the note that an old DUI (5+ years) does not itself block expunging a separate, eligible felony. The tree asks these as exclusions; confirm the list against current § 61-11-26(c).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the circuit court filing fee amount (it varies by county). Wave 6 gives the $100 State Police records-division fee (§ 61-11-26(n), waived on the 26a acceleration lane) but flags the separate circuit court filing fee as a per-county phone target. The fees field is null pending this; a Kanawha circuit clerk is the check.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm West Virginia has NOT enacted automatic expungement. Wave 6 says to check whether any 2024-26 automation bill (HB 4344-era proposals) moved, and to encode "petition-only" unless a call says otherwise. The tree is petition-only throughout; confirm no automation program is live.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'W. Va. Code § 61-11-26 (expungement of convictions; 1-yr / 2-yr / 5-yr waits; (c) exclusions; (n) $100 WSP fee)', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 61-11-26a (acceleration: treatment/recovery or job-readiness course shortens waits to 90 days / 1 yr / 3 yrs and waives the WSP fee)', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 61-11-25 (expungement of non-convictions; 60-day wait; pretrial diversion / deferred adjudication dismissals)', url: null, retrievedOn: null },
+      { id: 'W. Va. Supreme Court petition instructions SCA-C900 ("only once" language)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_wv' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_wv' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_wv' },
+            { label: 'Diversion / deferred adjudication completed and dismissed', value: 'deferred', next: 'eligible_deferred_wv' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_wv: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a violent felony, a felony with a minor victim, a sexual offense, a deadly-weapon offense, domestic-violence assault or battery, DUI, driving on a suspended license, or a CDL-holder traffic offense?',
+          yes: 'ineligible_excluded_wv',
+          no: 'prior_use_wv'
+        },
+        prior_use_wv: {
+          type: 'boolean',
+          text: 'Have you ever obtained a West Virginia expungement before, under § 61-11-26 or § 61-11-26a?',
+          yes: 'complex_onceever_wv',
+          no: 'accel_wv'
+        },
+        accel_wv: {
+          type: 'boolean',
+          text: 'Have you completed an approved substance-abuse treatment or recovery program, or a WV Department of Education job-readiness course? (This "acceleration" shortens your waiting periods and waives the $100 State Police fee.)',
+          yes: 'level_accel_wv',
+          no: 'level_wv'
+        },
+        level_wv: {
+          type: 'choice',
+          text: 'Which best describes the conviction(s) you want to clear?',
+          options: [
+            { label: 'A single misdemeanor', value: 'misd_single', next: 'misd_single_date_wv' },
+            { label: 'Multiple misdemeanors', value: 'misd_multi', next: 'misd_multi_date_wv' },
+            { label: 'A non-violent felony (or several from the same incident)', value: 'felony', next: 'felony_date_wv' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wv' }
+          ]
+        },
+        level_accel_wv: {
+          type: 'choice',
+          text: 'Which best describes the conviction(s) you want to clear?',
+          options: [
+            { label: 'A single misdemeanor', value: 'misd_single', next: 'misd_single_accel_date_wv' },
+            { label: 'Multiple misdemeanors', value: 'misd_multi', next: 'misd_multi_accel_date_wv' },
+            { label: 'A non-violent felony (or several from the same incident)', value: 'felony', next: 'felony_accel_date_wv' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wv' }
+          ]
+        },
+        misd_single_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete this misdemeanor case — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'conviction / incarceration / supervision completion, whichever latest (W. Va. Code § 61-11-26 — single misdemeanor)' },
+            nextPass: 'eligible_misd_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        misd_multi_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the LAST of the misdemeanors — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'completion of the LAST misdemeanor, whichever of conviction/incarceration/supervision is latest (W. Va. Code § 61-11-26 — multiple misdemeanors)' },
+            nextPass: 'eligible_misd_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        felony_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the felony case — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction / incarceration / supervision completion, whichever latest (W. Va. Code § 61-11-26 — non-violent felony)' },
+            nextPass: 'eligible_felony_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        misd_single_accel_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete this misdemeanor case — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 90, unit: 'days', anchor: 'completion, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — single misdemeanor; treatment/job-readiness completed)' },
+            nextPass: 'eligible_accel_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        misd_multi_accel_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the LAST of the misdemeanors — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'completion of the last, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — multiple misdemeanors)' },
+            nextPass: 'eligible_accel_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        felony_accel_date_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the felony case — conviction, any incarceration, and any supervision, whichever was latest?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'completion, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — non-violent felony)' },
+            nextPass: 'eligible_accel_wv',
+            nextFail: 'waiting_wv'
+          }
+        },
+        nonconv_wv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case acquitted or dismissed?',
+          validation: {
+            period: { amount: 60, unit: 'days', anchor: 'after the acquittal or dismissal (W. Va. Code § 61-11-25 — non-conviction)' },
+            nextPass: 'eligible_nonconv_wv',
+            nextFail: 'waiting_nonconv_wv'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'West Virginia handles convictions (§ 61-11-26) and non-convictions (§ 61-11-25) on different tracks, and the waiting periods differ. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a West Virginia State Police criminal-history request will show the disposition; Legal Aid of West Virginia can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / WV State Police)',
+          citation: 'W. Va. Code §§ 61-11-25, 61-11-26 (which path applies depends on the disposition)'
+        },
+        eligible_deferred_wv: {
+          status: 'eligible',
+          title: 'Diversion Completed — Likely Expungeable',
+          message: 'Because you completed a pretrial diversion or deferred-adjudication agreement and the charge was dismissed, West Virginia generally allows that dismissal to be expunged. One caution to confirm: there are carve-outs for domestic-violence-related matters, so if yours involved a DV charge, check that first. This is filed in the circuit court where the case was handled. Legal Aid of West Virginia can confirm your route. And a planning note worth knowing up front: the Supreme Court\'s official instructions say you may request expungement only once, so it is worth being deliberate about timing.',
+          remedy: 'Expunge a completed-diversion dismissal (§ 61-11-25) — confirm DV carve-outs',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        eligible_nonconv_wv: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable After 60 Days',
+          message: 'Because your case ended in an acquittal or dismissal, you can petition to expunge it 60 days after the case ended — and based on your date, that window has passed. You file in the circuit court where the case was decided, serving the State Police, the prosecutor, and the arresting agency, who then certify compliance. Legal Aid of West Virginia can help with the petition.',
+          remedy: 'Non-conviction expungement petition (§ 61-11-25)',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        eligible_misd_wv: {
+          status: 'eligible',
+          title: 'Misdemeanor Waiting Period Met — Expungeable',
+          message: 'Based on your dates, the waiting period for your misdemeanor record has passed — 1 year for a single misdemeanor, or 2 years from the last if there were several. You can petition the circuit court where the case was decided. Two things to plan around: there is a $100 State Police fee plus a circuit court filing fee (the circuit fee varies by county — worth calling to confirm), and the Supreme Court\'s official instructions say you may request expungement only once, so be deliberate about which record you clear. If you have completed a substance-abuse treatment or recovery program, or a job-readiness course, ask about the acceleration lane — it shortens the wait and waives the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
+          remedy: 'Conviction expungement petition (§ 61-11-26)',
+          citation: 'W. Va. Code § 61-11-26'
+        },
+        eligible_felony_wv: {
+          status: 'eligible',
+          title: 'Non-Violent Felony, 5+ Years — Expungeable',
+          message: 'Based on your dates, the 5-year waiting period for a non-violent felony (or several felonies from the same incident, counted together) has passed. You can petition the circuit court where the case was decided. Plan around two things: a $100 State Police fee plus a circuit court filing fee that varies by county, and the Supreme Court\'s official instruction that you may request expungement only once — so this is worth doing deliberately. If you have completed an approved treatment or recovery program, or a WV job-readiness course, the acceleration lane can cut the wait to 3 years and waive the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
+          remedy: 'Conviction expungement petition (§ 61-11-26)',
+          citation: 'W. Va. Code § 61-11-26'
+        },
+        eligible_accel_wv: {
+          status: 'eligible',
+          title: 'Acceleration Lane — Shorter Wait, Fee Waived',
+          message: 'Because you completed an approved substance-abuse treatment or recovery program, or a WV Department of Education job-readiness course, you qualify for West Virginia\'s acceleration lane (§ 61-11-26a): the waiting periods drop to 90 days for a single misdemeanor, 1 year for multiple misdemeanors, and 3 years for a non-violent felony — and the $100 State Police fee is waived. Based on your dates, your shortened period has passed. This treatment-and-work fast lane is unique to West Virginia; Jobs & Hope WV is the program hub. You still file in the circuit court where the case was decided (a circuit filing fee, which varies by county, may still apply). Remember the once-only rule when choosing which record to clear.',
+          remedy: 'Accelerated expungement petition (§ 61-11-26a) — $100 State Police fee waived',
+          citation: 'W. Va. Code § 61-11-26a'
+        },
+        waiting_wv: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'West Virginia\'s waiting periods run from whichever is latest of your conviction, release from incarceration, or completion of supervision: 1 year for a single misdemeanor, 2 years for multiple misdemeanors, and 5 years for a non-violent felony. Based on your dates, yours has not passed yet. One route can shorten it: completing an approved substance-abuse treatment or recovery program, or a WV job-readiness course, drops the waits to 90 days / 1 year / 3 years and waives the $100 State Police fee (§ 61-11-26a). Jobs & Hope WV runs those programs.',
+          remedy: 'Wait for the period — or shorten it via the § 61-11-26a acceleration lane',
+          citation: 'W. Va. Code §§ 61-11-26, 61-11-26a'
+        },
+        waiting_nonconv_wv: {
+          status: 'waiting',
+          title: 'Not Yet 60 Days',
+          message: 'For an acquittal or dismissal, West Virginia lets you petition to expunge 60 days after the case ended. Based on your date, that 60-day window has not passed yet. Once it does, you file in the circuit court where the case was decided. Legal Aid of West Virginia can help you prepare in the meantime.',
+          remedy: 'Wait until 60 days after the case ended, then petition (§ 61-11-25)',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        ineligible_excluded_wv: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded From Expungement',
+          message: 'West Virginia\'s expungement statute excludes a set of offenses: violent felonies, felonies with a minor victim, sexual offenses, deadly-weapon offenses, domestic-violence assault or battery, DUI, driving on a suspended license, and CDL-holder traffic offenses. No waiting period changes that for the excluded offense itself. One thing worth knowing, though: an old DUI (5 or more years back) does not, by itself, block you from expunging a SEPARATE, eligible offense — each offense is judged on its own, so if you have another record that qualifies, screen that one on its own. For an offense that is truly excluded, a Governor\'s pardon is the remaining route. Legal Aid of West Virginia can help you check where yours falls.',
+          remedy: 'None for the excluded offense — a separate eligible offense can still be pursued; else pardon',
+          citation: 'W. Va. Code § 61-11-26(c)'
+        },
+        complex_onceever_wv: {
+          status: 'complex',
+          title: 'You May Have Already Used Your One Request — Confirm First',
+          message: 'This is a West Virginia-specific caution, not a no. The Supreme Court\'s official petition instructions (form SCA-C900) say a person may request expungement under §§ 61-11-26/26a only once. Because you told us you have expunged a record before, you may have already used that one request — but the exact scope of the "only once" rule (once per person for life, or once per petition) is something we flag for confirmation rather than guess at. Before filing anything, confirm with the circuit clerk where you would file (Kanawha County is a good reference) whether you can request again. If you can only go once, this is a decision about which record matters most. Legal Aid of West Virginia can help you weigh it.',
+          remedy: 'Confirm the scope of the once-only rule with a circuit clerk before filing',
+          citation: 'W. Va. Supreme Court petition instructions SCA-C900; W. Va. Code §§ 61-11-26, 61-11-26a'
+        },
+        complex_level_wv: {
+          status: 'complex',
+          title: 'We Need to Know What You Are Clearing',
+          message: 'West Virginia\'s waiting period depends on whether you are clearing a single misdemeanor (1 year), multiple misdemeanors (2 years from the last), or a non-violent felony (5 years) — and the acceleration lane changes those to 90 days / 1 year / 3 years. Since you are not sure which describes your record, we are not going to guess. Your court paperwork or a West Virginia State Police criminal-history request will show it. Legal Aid of West Virginia can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / WV State Police)',
+          citation: 'W. Va. Code §§ 61-11-26, 61-11-26a'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (W. Va. Code §§ 61-11-25, 61-11-26, 61-11-26a)',
+          formName: 'WV Supreme Court expungement forms (SCA-C900 series)',
+          formUrl: 'https://www.courtswv.gov/lower-courts/sca-forms',
+          steps: [
+            'Confirm your offense is not on the § 61-11-26(c) exclusion list (violent felonies, minor-victim felonies, sex offenses, deadly-weapon offenses, DV assault/battery, DUI, driving-suspended, CDL offenses).',
+            'If you completed a substance-abuse treatment/recovery program or a WV job-readiness course, use the § 61-11-26a acceleration lane — shorter waits and the $100 State Police fee is waived. Jobs & Hope WV is the program hub.',
+            'File in the circuit court where the case was decided, serving the State Police superintendent, the prosecutor, the police chief, and (if applicable) the warden; agencies certify compliance within 60 days.',
+            'Because the official instructions say you may request expungement only once, be deliberate about which record you clear — confirm the scope with your circuit clerk before filing.'
+          ],
+          // null: the $100 State Police fee is known, but Wave 6 flags the separate
+          // circuit court filing fee as a per-county unknown, so the total is unknown.
+          fees: null,
+          // NOT null: the § 61-11-26a acceleration is a named mechanism that waives the WSP fee.
+          feeWaiver: 'The § 61-11-26a acceleration lane — completing an approved substance-abuse treatment/recovery program or a WV Department of Education job-readiness course — waives the $100 State Police fee.',
+          courtContact: 'The circuit court where the case was decided (Kanawha County is a reference for fee confirmation)'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid of West Virginia', url: 'https://www.lawv.net' },
+        { name: 'Jobs & Hope WV (acceleration-lane program hub)', url: 'https://jobsandhope.wv.gov' }
+      ]
+    }
+  },
+  KY: {
+    code: 'KY',
+    name: 'Kentucky',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Kentucky uses EXPUNGEMENT, and almost everything runs through one document: a CERTIFICATE OF '
+      + 'ELIGIBILITY from the State Police / Administrative Office of the Courts (KRS § 431.079), required '
+      + 'before you file a petition under § 431.073 (Class D felonies), § 431.076 (non-convictions), or '
+      + '§ 431.078 (misdemeanors). The certificate costs $40, is valid for only 30 days once issued, and — '
+      + 'this is the dominant practical fact — the State Police say it averages 4-5 MONTHS to process. So '
+      + 'the real advice is: start the certificate first and plan around the wait, even if your eligibility '
+      + 'date is still ahead of you. The one exception is non-convictions since July 15, 2020, which are '
+      + 'automatic and need no certificate. (Drug offenses also have a separate void-and-seal path under '
+      + 'KRS §§ 218A.275(8), 218A.276.)',
+    keyDates: [
+      {
+        label: 'Automatic non-conviction expungement begins (KRS § 431.076)',
+        date: '2020-07-15',
+        kind: 'operative',
+        note: 'Acquittals and dismissals-with-prejudice on or after this date are expunged automatically, 30 days after the case ends — no petition, no certificate. Does NOT cover plea-deal dismissals. Older cases use the petition route.',
+      },
+      {
+        label: 'Amendment allowing MULTIPLE Class D felony expungements (KRS § 431.073)',
+        date: '2023-06-29',
+        kind: 'effective',
+        note: 'The 2023 amendment repealed the once-per-lifetime limit; a person may now expunge more than one qualifying Class D felony. Older guides still say once-only — encode from the amended statute. Flagged for confirmation against current text.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the full KRS § 431.078 misdemeanor exclusion list. Wave 6 gives 5-year eligibility for most misdemeanors/violations but excludes sex offenses and offenses against children, and flags the full exclusion list as needing the statute text. The tree asks a sex-offense/child-offense exclusion; confirm the complete list.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the 2023 amendment (eff. Jun 29, 2023) to KRS § 431.073 allows expunging MULTIPLE qualifying Class D felonies, not one per lifetime. Wave 6 persona 4 (two Class D felonies, separate incidents) is the verify-then-encode branch and says to encode from the amended statute. The tree does not cap Class D felonies at one; confirm against the current text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the State Police certificate backlog (KSP\'s own page says 4-5 months to process the § 431.079 Certificate of Eligibility) and confirm no automation exists: Wave 6 says SB 290 (automatic expungement) failed in the 2026 session. The tree tells conviction-eligible people to start the certificate first and plan around the wait, and is petition-only for convictions; confirm both facts.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ky. Rev. Stat. § 431.073 (Class D felony expungement; 5-yr wait; multiple-felony amendment 2023)', url: null, retrievedOn: null },
+      { id: 'Ky. Rev. Stat. § 431.078 (misdemeanor expungement; 5-yr wait; $100 filing fee)', url: null, retrievedOn: null },
+      { id: 'Ky. Rev. Stat. § 431.076 (non-conviction expungement; automatic since Jul 15, 2020)', url: null, retrievedOn: null },
+      { id: 'Ky. Rev. Stat. § 431.079 (Certificate of Eligibility; $40; 30-day validity; KSP/AOC)', url: null, retrievedOn: null },
+      { id: 'Ky. Rev. Stat. §§ 218A.275(8), 218A.276 (drug-offense void-and-seal)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ky' },
+            { label: 'Dismissed', value: 'dismissed', next: 'dismissal_ky' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'dismissal_ky' },
+            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'dismissal_ky' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        dismissal_ky: {
+          type: 'boolean',
+          text: 'Was the case dismissed WITH PREJUDICE, or were you acquitted (found not guilty) — as opposed to a dismissal that was part of a plea deal?',
+          yes: 'auto_cutoff_ky',
+          no: 'petition_dismissal_ky'
+        },
+        auto_cutoff_ky: {
+          type: 'boolean',
+          text: 'Did the case end (the dismissal or acquittal) on or after July 15, 2020?',
+          yes: 'check_record_auto_ky',
+          no: 'petition_dismissal_ky'
+        },
+        level_ky: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor or violation', value: 'misd', next: 'misd_excluded_ky' },
+            { label: 'Class D felony (the lowest felony level)', value: 'felonyD', next: 'felonyD_eligible_ky' },
+            { label: 'Class A, B, or C felony', value: 'felonyABC', next: 'ineligible_felony_ky' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ky' }
+          ]
+        },
+        misd_excluded_ky: {
+          type: 'boolean',
+          text: 'Was the offense a sex offense, or an offense against a child?',
+          yes: 'ineligible_excluded_ky',
+          no: 'misd_date_ky'
+        },
+        misd_date_ky: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including any probation?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence or probation (Ky. Rev. Stat. § 431.078 — misdemeanor)' },
+            nextPass: 'eligible_misd_ky',
+            nextFail: 'waiting_ky'
+          }
+        },
+        felonyD_eligible_ky: {
+          type: 'choice',
+          text: 'Kentucky expunges about 61 enumerated Class D felonies (plus same-incident offenses, pardoned felonies, and multiple qualifying felonies since 2023). Is your Class D felony one of the eligible enumerated offenses?',
+          options: [
+            { label: 'Yes, it is one of the eligible offenses', value: 'eligible', next: 'felonyD_date_ky' },
+            { label: 'No, it is not on the eligible list', value: 'not_eligible', next: 'ineligible_felonyD_ky' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felonyD_list_ky' }
+          ]
+        },
+        felonyD_date_ky: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including any probation or parole?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence/probation/parole, no new convictions in the prior 5 years and none pending (Ky. Rev. Stat. § 431.073 — Class D felony)' },
+            nextPass: 'eligible_felonyD_ky',
+            nextFail: 'waiting_ky'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Kentucky handles convictions and non-convictions on very different tracks — non-convictions since July 15, 2020 are automatic, while convictions require a Certificate of Eligibility and a petition. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. A KSP criminal-history request or your court paperwork will show the disposition; the Department of Public Advocacy expungement guide explains the tracks.',
+          remedy: 'Get Your Record First (KSP / court paperwork)',
+          citation: 'Ky. Rev. Stat. §§ 431.073, 431.076, 431.078 (which path applies depends on the disposition)'
+        },
+        check_record_auto_ky: {
+          status: 'eligible',
+          title: 'Likely Already Expunged Automatically — Check Your Record',
+          message: 'Because your case was a dismissal-with-prejudice or an acquittal that ended on or after July 15, 2020, Kentucky expunges it AUTOMATICALLY — 30 days after the case ended, with no petition, no certificate, and no fee (KRS § 431.076). So the honest first step is not to file anything but to CHECK whether it has already come off: request your KSP criminal-history record and look. If it is still showing after well past 30 days, the Department of Public Advocacy or a legal-aid expungement clinic can help you follow up. Note this automatic path does not cover dismissals that were part of a plea deal.',
+          remedy: 'Check your record — it should already be expunged (§ 431.076)',
+          citation: 'Ky. Rev. Stat. § 431.076'
+        },
+        petition_dismissal_ky: {
+          status: 'eligible',
+          title: 'Non-Conviction — Expungeable by Petition',
+          message: 'Because your case ended without a conviction, it can be expunged — but not automatically, either because it ended before July 15, 2020 or because it was a plea-deal dismissal rather than a dismissal-with-prejudice or acquittal. You file a petition (KRS § 431.076), and for non-convictions there is NO filing fee (confirmed by the Department of Public Advocacy). There is a 60-day waiting period on the older petition route. Because plea-deal and diversion dismissals can be handled differently, this is worth doing with help: the DPA and legal-aid expungement clinics do exactly this.',
+          remedy: 'Non-conviction expungement petition (§ 431.076) — no filing fee',
+          citation: 'Ky. Rev. Stat. § 431.076'
+        },
+        eligible_misd_ky: {
+          status: 'eligible',
+          title: 'Misdemeanor, 5+ Years — Expungeable (Start the Certificate First)',
+          message: 'Based on your dates — 5 years since completing your sentence or probation — your misdemeanor is expungeable under KRS § 431.078. Here is the Kentucky-specific advice that matters: start the Certificate of Eligibility FIRST. It costs $40, is valid only 30 days once issued, and the State Police say it takes 4-5 months to process, so it is the long pole. The petition itself carries a $100 filing fee. Total is roughly $140. Fee-help clinics (Louisville Goodwill / Urban League) can assist. The Department of Public Advocacy expungement guide walks through the steps.',
+          remedy: 'Misdemeanor expungement (§ 431.078) — get the § 431.079 certificate first',
+          citation: 'Ky. Rev. Stat. § 431.078'
+        },
+        eligible_felonyD_ky: {
+          status: 'eligible',
+          title: 'Class D Felony, 5+ Years — Expungeable (Plan Around the Certificate)',
+          message: 'Based on your dates — 5 years since completing your sentence, probation, or parole, with no new convictions in the prior 5 years and none pending — your Class D felony appears eligible under KRS § 431.073. Start the Certificate of Eligibility first: $40, valid 30 days, and 4-5 months to process at the State Police, so build your timeline around it. The petition costs $50 to file plus $250 due if it is granted (payable over 18 months — the expungement is not final until it is paid), roughly $340 all-in with the certificate. And one thing many guides get wrong: since a 2023 amendment, you can expunge MORE THAN ONE qualifying Class D felony, not just one for life. Fee-help clinics (Louisville Goodwill / Urban League) and the Department of Public Advocacy can help.',
+          remedy: 'Class D felony expungement (§ 431.073) — certificate first; multiple felonies allowed since 2023',
+          citation: 'Ky. Rev. Stat. § 431.073'
+        },
+        waiting_ky: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Kentucky\'s waiting period is 5 years from completing your sentence (and, for a Class D felony, with no new convictions in the prior 5 years). Based on your dates, yours has not passed yet. Here is a Kentucky-specific tip for the meantime: because the Certificate of Eligibility takes 4-5 months to process, many people start that process a few months before their eligibility date so the paperwork is ready when the wait ends. The Department of Public Advocacy expungement guide explains the timing.',
+          remedy: 'Wait for the 5-year period — but start the certificate a few months early',
+          citation: 'Ky. Rev. Stat. §§ 431.073, 431.078'
+        },
+        ineligible_excluded_ky: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded',
+          message: 'Kentucky\'s misdemeanor expungement excludes sex offenses and offenses against children, and no waiting period changes that. (The full exclusion list is something we are confirming against the statute.) For an offense that is truly excluded, a Governor\'s pardon is the remaining route. The Department of Public Advocacy can help you check where yours falls.',
+          remedy: 'None (Excluded Offense) — ask about a pardon',
+          citation: 'Ky. Rev. Stat. § 431.078'
+        },
+        ineligible_felonyD_ky: {
+          status: 'ineligible',
+          title: 'This Class D Felony Is Not on the Eligible List',
+          message: 'Kentucky expunges only about 61 enumerated Class D felonies. Because yours is not one of them, the standard expungement route does not apply. Two things can still open a door: if the felony was pardoned, pardoned felonies are expungeable; and same-incident offenses can sometimes be swept in with an eligible one. Because this is list-specific, it is worth confirming with help — the Department of Public Advocacy and legal-aid clinics can check the enumerated list against your exact offense.',
+          remedy: 'None on the standard list — check pardon / same-incident paths',
+          citation: 'Ky. Rev. Stat. § 431.073'
+        },
+        ineligible_felony_ky: {
+          status: 'ineligible',
+          title: 'Class A, B, or C Felony — Pardon Only',
+          message: 'Kentucky\'s felony expungement reaches only Class D felonies (the lowest level). Class A, B, and C felonies cannot be expunged except when they have been pardoned. So the route here is a Governor\'s pardon; if one is granted, the pardoned felony then becomes expungeable. The Department of Public Advocacy can explain the pardon process.',
+          remedy: 'None (higher-level felony) — a pardon can open an expungement path',
+          citation: 'Ky. Rev. Stat. § 431.073'
+        },
+        complex_level_ky: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'In Kentucky the route depends heavily on the level: misdemeanors and about 61 enumerated Class D felonies can be expunged, while Class A/B/C felonies cannot (except by pardon). Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a KSP criminal-history request will show it. The Department of Public Advocacy can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / KSP)',
+          citation: 'Ky. Rev. Stat. §§ 431.073, 431.078'
+        },
+        complex_felonyD_list_ky: {
+          status: 'complex',
+          title: 'We Need to Match Your Felony to the Eligible List',
+          message: 'Kentucky\'s Class D felony expungement covers about 61 specific, enumerated offenses. Whether yours qualifies depends on matching your exact offense to that list — something we are not going to guess at. Your court paperwork names the precise statute you were convicted under, and the Department of Public Advocacy expungement guide (or a legal-aid clinic) can check it against the eligible list. If it is on the list and 5 years have passed, the certificate-first process applies.',
+          remedy: 'Match Your Offense to the § 431.073 List (DPA / court paperwork)',
+          citation: 'Ky. Rev. Stat. § 431.073'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (Ky. Rev. Stat. §§ 431.073, 431.076, 431.078; certificate § 431.079)',
+          formName: 'AOC expungement forms + Certificate of Eligibility application',
+          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          steps: [
+            'For a conviction, request the Certificate of Eligibility FIRST (KRS § 431.079): $40, valid only 30 days once issued, and 4-5 months to process at the State Police — it is the long pole, so start it early.',
+            'For a non-conviction that ended on or after July 15, 2020 (dismissal-with-prejudice or acquittal), do NOT file — it should be automatic; check your KSP record instead.',
+            'File the petition in the court of conviction: misdemeanors $100 (§ 431.078); Class D felonies $50 to file plus $250 due on grant, payable over 18 months (§ 431.073); non-convictions have no filing fee.',
+            'Use a fee-help clinic (Louisville Goodwill / Urban League) or the Department of Public Advocacy guide if the fees are a barrier.'
+          ],
+          // NOT null: statutory fees are given precisely — $40 certificate, $100
+          // misdemeanor, $50 + $250 Class D felony. Non-convictions have no fee.
+          fees: '$40 Certificate of Eligibility (KRS § 431.079). Misdemeanor petition: $100 (§ 431.078). Class D felony petition: $50 to file plus $250 due if granted, payable over 18 months (§ 431.073). Non-conviction petitions: no filing fee.',
+          feeWaiver: 'Non-conviction petitions carry no filing fee (DPA-confirmed). For conviction fees, fee-help clinics (Louisville Goodwill / Urban League) assist people who cannot pay.',
+          courtContact: 'The court of conviction; KSP/AOC for the Certificate of Eligibility'
+        }
+      },
+      legalAid: [
+        { name: 'Kentucky Department of Public Advocacy — Expungement Guide', url: 'https://dpa.ky.gov' },
+        { name: 'expungeky.com (eligibility FAQ)', url: 'https://expungeky.com' }
+      ]
+    }
+  },
+  OR: {
+    code: 'OR',
+    name: 'Oregon',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Oregon calls it SETTING ASIDE a conviction (ORS 137.225), which seals the record. The 2022 overhaul '
+      + '(SB 397) shortened the waiting periods dramatically and made many older convictions newly eligible — '
+      + 'a Class B felony that once carried a 20-year wait now runs 7 years, so a lot of people became eligible '
+      + 'without realizing it. A 2025 amendment went further: expired money-judgment obligations now count as '
+      + '"sentence complete," so old unpaid fines whose judgments have lapsed no longer block you. Filing is '
+      + 'FREE (SB 397 eliminated the court fee); only a State Police record-check fee remains. Two traps to '
+      + 'know: DUII and other traffic offenses are excluded, and a completed DUII DIVERSION does not qualify '
+      + 'either. Counties can be slow — backlogs run up to about two years.',
+    keyDates: [
+      {
+        label: 'SB 397 set-aside overhaul takes effect (ORS 137.225)',
+        date: '2022-01-01',
+        kind: 'effective',
+        note: 'Shortened waits (Class B felony 20 yrs -> 7 yrs, etc.) and eliminated the court filing fee. Made many older convictions newly eligible — a key "you may already qualify" fact.',
+      },
+      {
+        label: 'Amendment: expired money-judgment obligations count as sentence-complete',
+        date: '2025',
+        kind: 'effective',
+        note: 'Chapter 395 of 2025. Wave 6 gives the year only. Unpaid old LFOs whose money judgments have expired no longer block a set-aside.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the Oregon State Police record-check / fingerprint fee amount. Wave 6 flags a conflict: $33 (Powell Law) vs $80 (fingerprint-card provisions/others). One OSP fee covers filings across multiple counties. The court filing fee itself was eliminated by SB 397. The fees and feeWaiver fields are null pending this amount; an OSP or circuit-court call is the check.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the ORS 137.225 dismissal subsection against the current text. Wave 6 flags a known drafting error (an old subsection (9) cross-reference) that made SOME dismissed charges wait conviction-length periods rather than being expungeable anytime; a practitioner article flagged it unfixed as of 2024. The tree treats dismissals/acquittals as expungeable with essentially no wait but names this caveat; confirm the current statute and county practice (Multnomah).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the 2025 chapter 395 amendment (expired money-judgment obligations count as sentence-complete) and the county backlog reality (~2 years, practitioner-documented). The tree tells people old expired-judgment LFOs no longer block them and sets an honest timeline expectation; confirm both against current practice.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Or. Rev. Stat. § 137.225 (set-aside; SB 397 of 2021 eff. 2022; ch. 395 of 2025; waits and exclusions)', url: null, retrievedOn: null },
+      { id: 'Or. Rev. Stat. § 475C.397 (marijuana conviction set-aside; anytime, no fees, no fingerprints)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_or' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_or' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_or' },
+            { label: 'Diversion completed', value: 'deferred', next: 'diversion_duii_or' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_or: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a Class A felony, a person felony, a sex offense, an offense with a child or elderly victim, or a traffic offense (including DUII)?',
+          yes: 'ineligible_excluded_or',
+          no: 'level_or'
+        },
+        level_or: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Class B felony (non-person, non-firearms)', value: 'felonyB', next: 'felonyB_date_or' },
+            { label: 'Class C felony', value: 'felonyC', next: 'felonyC_date_or' },
+            { label: 'Class A misdemeanor', value: 'misdA', next: 'misdA_date_or' },
+            { label: 'Class B or C misdemeanor, violation, or contempt', value: 'misdBC', next: 'misdBC_date_or' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_or' }
+          ]
+        },
+        diversion_duii_or: {
+          type: 'boolean',
+          text: 'Was this a DUII (driving-under-the-influence) diversion?',
+          yes: 'ineligible_duii_or',
+          no: 'nonconv_or'
+        },
+        felonyB_date_or: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or released from custody — whichever was later?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait, supervision complete (ORS 137.225 — Class B felony)' },
+            nextPass: 'eligible_conviction_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        felonyC_date_or: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or released from custody — whichever was later?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait, supervision complete (ORS 137.225 — Class C felony)' },
+            nextPass: 'eligible_conviction_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        misdA_date_or: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or released from custody — whichever was later?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait (ORS 137.225 — Class A misdemeanor)' },
+            nextPass: 'eligible_conviction_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        misdBC_date_or: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or released from custody — whichever was later?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait (ORS 137.225 — Class B/C misdemeanor, violation, contempt)' },
+            nextPass: 'eligible_conviction_or',
+            nextFail: 'waiting_or'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Oregon treats convictions and non-convictions differently, and the outcome decides the whole route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an Oregon State Police record check will show the disposition; Legal Aid Services of Oregon (1-800-351-7248) can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / OSP)',
+          citation: 'Or. Rev. Stat. § 137.225 (the route depends on the disposition)'
+        },
+        eligible_conviction_or: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Set-Aside Available',
+          message: 'Based on your dates, your waiting period under ORS 137.225 has passed (7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, 1 for lesser misdemeanors and violations), you have had no other convictions during that time, and any supervision is complete. Two things worth knowing: the 2022 SB 397 overhaul made many older convictions newly eligible — so this may be newer than you think — and since a 2025 amendment, old unpaid fines whose money judgments have expired no longer block you. Filing is FREE; only a State Police record-check fee applies (the amount is something we are confirming), and one such fee covers filings in multiple counties. Expect the county to be slow — backlogs can run up to about two years. Legal Aid Services of Oregon can help.',
+          remedy: 'Set-aside petition (ORS 137.225) — free to file',
+          citation: 'Or. Rev. Stat. § 137.225'
+        },
+        nonconv_or: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable (One Caveat to Confirm)',
+          message: 'Because your case ended without a conviction — dismissed, acquitted, or a non-DUII diversion — Oregon generally lets you set it aside with essentially no waiting period (arrests that never led to a charge have a short 60-day wait). Filing is free apart from the State Police record-check fee. One honest caveat: there is a known drafting error in ORS 137.225 that, as of 2024, some practitioners said could make certain DISMISSED charges wait a conviction-length period in some counties — it is on our list to verify against the current statute. So if a clerk pushes back on timing, that is why; Legal Aid Services of Oregon can help you navigate it.',
+          remedy: 'Set-aside of a non-conviction (ORS 137.225) — confirm the dismissal-timing caveat',
+          citation: 'Or. Rev. Stat. § 137.225'
+        },
+        ineligible_duii_or: {
+          status: 'ineligible',
+          title: 'DUII Diversion — Not Eligible to Set Aside',
+          message: 'This is one of Oregon\'s traps, and it catches people. Even though you completed a DUII diversion and the charge was dismissed, Oregon does NOT allow a DUII diversion dismissal to be set aside — DUII is treated as a traffic offense, and those are excluded whether they end in conviction or diversion. So there is no set-aside route here. If you have OTHER, non-traffic offenses on your record, those may still qualify on their own; and it is worth confirming your exact disposition with Legal Aid Services of Oregon, since diversion records are handled unusually.',
+          remedy: 'None (DUII diversion is excluded) — screen any non-traffic offenses separately',
+          citation: 'Or. Rev. Stat. § 137.225'
+        },
+        waiting_or: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Oregon\'s set-aside waiting periods run from your conviction or release, whichever is later, with no other convictions in between: 7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, and 1 year for lesser misdemeanors and violations. Based on your dates, yours has not passed yet. When it does, filing is free apart from a State Police record-check fee. Legal Aid Services of Oregon can help you prepare.',
+          remedy: 'Wait for the ORS 137.225 period',
+          citation: 'Or. Rev. Stat. § 137.225'
+        },
+        ineligible_excluded_or: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded',
+          message: 'Oregon excludes several categories from set-aside: Class A felonies, person felonies, sex offenses, offenses with a child or elderly victim, and traffic offenses including DUII. No waiting period changes that for the excluded offense. Two things worth knowing: marijuana convictions have their own separate path (ORS 475C.397) that is available anytime with no fees and no fingerprints, so if yours was marijuana-related, ask about that; and a Governor\'s pardon remains a route for otherwise-excluded offenses. Legal Aid Services of Oregon can help you check.',
+          remedy: 'None for the excluded offense — ask about the marijuana path (475C.397) or a pardon',
+          citation: 'Or. Rev. Stat. § 137.225'
+        },
+        complex_level_or: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'In Oregon the waiting period depends on the exact level — Class B felony (7 years), Class C felony (5), Class A misdemeanor (3), or lesser (1). Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and an Oregon State Police record check will show it. Legal Aid Services of Oregon can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / OSP)',
+          citation: 'Or. Rev. Stat. § 137.225'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Set Aside a Conviction (ORS 137.225)',
+          formName: 'Oregon Judicial Department set-aside forms',
+          formUrl: 'https://www.courts.oregon.gov/forms/Pages/set-aside.aspx',
+          steps: [
+            'Confirm your offense is not excluded (Class A / person felonies, sex offenses, child/elder-victim offenses, traffic including DUII). Marijuana convictions use the separate, anytime, free path in ORS 475C.397.',
+            'Check the waiting period for your level (7 / 5 / 3 / 1 years) from conviction or release, whichever is later — SB 397 shortened these, so you may already qualify.',
+            'File in the sentencing court. The court filing fee was eliminated; a State Police record-check fee remains (one fee covers multiple counties).',
+            'Expect a wait — the DA has 120 days to object and county backlogs can run up to about two years. Legal Aid Services of Oregon can help.'
+          ],
+          // null: SB 397 eliminated the filing fee, but the remaining OSP record-check
+          // fee conflicts in the sources ($33 vs $80), so the total is unknown — and
+          // with it, whether any waiver applies.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The sentencing court; Oregon State Police for the record check'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid Services of Oregon (1-800-351-7248)', url: 'https://lasoregon.org' },
+        { name: 'Oregon Judicial Department — Self-Help / Forms', url: 'https://www.courts.oregon.gov/self-help' }
+      ]
+    }
+  },
+  IA: {
+    code: 'IA',
+    name: 'Iowa',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Iowa uses EXPUNGEMENT (the record is made confidential, not destroyed), under Chapter 901C. It is '
+      + 'narrow. There is NO felony-conviction expungement — felonies clear only by a Governor\'s pardon. '
+      + 'Non-convictions can be expunged, but with an unusual and harsh catch: every court cost in the case '
+      + 'must be PAID first. Completed deferred judgments are expunged automatically. And since 2019 you can '
+      + 'expunge a misdemeanor conviction — but only ONE, ever: it is a once-per-lifetime application, so if '
+      + 'you have several, you have to choose which one to spend it on. That makes the real question less '
+      + '"am I eligible" and more "is this the record worth using my one chance on."',
+    keyDates: [
+      {
+        label: 'Misdemeanor-conviction expungement enacted (Iowa Code § 901C.3)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. Since 2019, a single misdemeanor conviction can be expunged 8 years after conviction — once per lifetime.',
+      },
+      {
+        label: 'Automatic expungement of completed deferred judgments (Iowa Code § 907.9)',
+        date: '2013-07',
+        kind: 'operative',
+        note: 'Wave 6 gives month and year. Deferred judgments completed after July 2013 are expunged automatically; earlier ones (and some rural unsupervised-probation cases) may need a motion.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the filing fee for Chapter 901C petitions. Wave 6 found no statutory filing fee for 901C petitions and flags it for a clerk (Polk County) — the petition is filed in the criminal case. The fees and feeWaiver fields are null pending this.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the full list of ~25 excluded misdemeanor categories under Iowa Code § 901C.3. Wave 6 gives OWI (§ 321J.2), assault variants, harassment, stalking, weapons (ch. 724), and sex offenses among them, and flags the complete list as needing the statute. The tree asks these as exclusions; confirm the full set.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Iowa Code § 901C.2 (non-conviction expungement; all court costs paid; 180-day wait)', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 901C.3 (misdemeanor-conviction expungement; 8-yr wait; once per lifetime; ~25 exclusions)', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 907.9 (deferred-judgment expungement; automatic since Jul 2013)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ia' },
+            { label: 'Dismissed', value: 'dismissed', next: 'costs_ia' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'costs_ia' },
+            { label: 'Deferred judgment completed', value: 'deferred', next: 'check_deferred_ia' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        costs_ia: {
+          type: 'boolean',
+          text: 'Have ALL court costs and fees in the case been paid? (Iowa is unusual — it requires every court cost paid before a non-conviction can be expunged.)',
+          yes: 'nonconv_date_ia',
+          no: 'ineligible_costs_ia'
+        },
+        nonconv_date_ia: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did the case end (the acquittal or dismissal)?',
+          validation: {
+            period: { amount: 180, unit: 'days', anchor: 'after the acquittal/dismissal with all court costs paid (Iowa Code § 901C.2 — non-conviction; waivable for good cause)' },
+            nextPass: 'eligible_nonconv_ia',
+            nextFail: 'waiting_nonconv_ia'
+          }
+        },
+        level_ia: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_excluded_ia' },
+            { label: 'Felony', value: 'felony', next: 'ineligible_felony_ia' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ia' }
+          ]
+        },
+        misd_excluded_ia: {
+          type: 'boolean',
+          text: 'Was the offense any of these: OWI (operating while intoxicated), an assault, harassment, stalking, a weapons offense, a sex offense, or another similar excluded category?',
+          yes: 'ineligible_excluded_ia',
+          no: 'misd_date_ia'
+        },
+        misd_date_ia: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 8, unit: 'years', anchor: 'from conviction, all financial obligations paid, no pending charges (Iowa Code § 901C.3 — misdemeanor; once per lifetime)' },
+            nextPass: 'eligible_misd_ia',
+            nextFail: 'waiting_misd_ia'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Iowa handles non-convictions, completed deferred judgments, and misdemeanor convictions on three different tracks — and felonies not at all except by pardon. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Iowa Courts Online or your paperwork will show the disposition; Iowa Legal Aid can help you read it.',
+          remedy: 'Get Your Record First (Iowa Courts Online / paperwork)',
+          citation: 'Iowa Code §§ 901C.2, 901C.3, 907.9 (the route depends on the disposition)'
+        },
+        check_deferred_ia: {
+          status: 'eligible',
+          title: 'Deferred Judgment — Likely Already Expunged, Check',
+          message: 'Because you completed a deferred judgment, Iowa expunges it AUTOMATICALLY if it was completed after July 2013 — no petition needed. So the honest first step is to CHECK whether it has already come off: look yourself up on Iowa Courts Online. If it completed before July 2013, or it was a rural unsupervised-probation case, you may need to file a motion to finish the job. Iowa Legal Aid can help you confirm and, if needed, file.',
+          remedy: 'Check your record — a post-2013 deferred should already be expunged (§ 907.9)',
+          citation: 'Iowa Code § 907.9'
+        },
+        eligible_nonconv_ia: {
+          status: 'eligible',
+          title: 'No Conviction, Costs Paid — Expungeable',
+          message: 'Because your case ended without a conviction, all court costs are paid, and more than 180 days have passed, it can be expunged under Iowa Code § 901C.2. You file in the criminal case. Note this does not apply to deferred-judgment dismissals (those have their own automatic path) or insanity/incompetency dismissals. Iowa Legal Aid can help with the filing.',
+          remedy: 'Non-conviction expungement (§ 901C.2)',
+          citation: 'Iowa Code § 901C.2'
+        },
+        waiting_nonconv_ia: {
+          status: 'waiting',
+          title: 'Not Yet 180 Days',
+          message: 'For a non-conviction with all court costs paid, Iowa lets you expunge 180 days after the case ended. Based on your date, that has not passed yet (the wait can sometimes be waived for good cause, such as identity theft). Once it does, you file in the criminal case. Iowa Legal Aid can help you prepare.',
+          remedy: 'Wait until 180 days after the case ended (§ 901C.2)',
+          citation: 'Iowa Code § 901C.2'
+        },
+        ineligible_costs_ia: {
+          status: 'ineligible',
+          title: 'Court Costs Must Be Paid First',
+          message: 'Iowa has an unusual and, frankly, harsh requirement: even for a case that ended WITHOUT a conviction, you cannot expunge it until every court cost and fee in the case is paid. Because those are still outstanding, the expungement is blocked for now — but this is a "not yet," not a "never." Once the costs are cleared, and 180 days have passed since the case ended, you can file under § 901C.2. Iowa Legal Aid can help you sort out what is owed and to whom.',
+          remedy: 'Pay the outstanding court costs, then expunge (§ 901C.2)',
+          citation: 'Iowa Code § 901C.2'
+        },
+        eligible_misd_ia: {
+          status: 'eligible',
+          title: 'Misdemeanor, 8+ Years — Eligible, But Choose Carefully',
+          message: 'Based on your dates — 8 years since conviction, financial obligations paid, and no pending charges — this misdemeanor is eligible for expungement under Iowa Code § 901C.3. But here is the Iowa-specific catch you should weigh before filing: you get only ONE misdemeanor expungement in your lifetime (one application covers multiple misdemeanors only if they were from the same incident). So if you have more than one misdemeanor on your record, the real question is which one is worth spending your single chance on. Iowa Legal Aid flags exactly this trade-off and can help you decide.',
+          remedy: 'Misdemeanor expungement (§ 901C.3) — but it is once per lifetime',
+          citation: 'Iowa Code § 901C.3'
+        },
+        waiting_misd_ia: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Iowa lets you expunge a misdemeanor conviction 8 years after the conviction, with all financial obligations paid and no pending charges. Based on your dates, that has not passed yet. When it does, remember it is a once-per-lifetime expungement, so it is worth being deliberate about which record you use it on. Iowa Legal Aid can help you plan.',
+          remedy: 'Wait for the 8-year period (§ 901C.3)',
+          citation: 'Iowa Code § 901C.3'
+        },
+        ineligible_excluded_ia: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded',
+          message: 'Iowa\'s misdemeanor expungement law excludes about 25 categories, including OWI (operating while intoxicated), assault variants, harassment, stalking, weapons offenses, and sex offenses. Because yours falls in an excluded category, the § 901C.3 route does not apply, and no waiting period changes that. For an excluded offense, a Governor\'s pardon is the remaining route. Iowa Legal Aid can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Offense) — ask about a pardon',
+          citation: 'Iowa Code § 901C.3'
+        },
+        ineligible_felony_ia: {
+          status: 'ineligible',
+          title: 'Felony Conviction — Pardon Only',
+          message: 'Iowa does not have felony-conviction expungement at all — the only route to clear a felony conviction is a Governor\'s pardon. That is a real process, just a different one from expungement. Iowa Legal Aid and the Governor\'s office can explain how to apply. (If any of your charges ended without a conviction, those may still be expungeable separately.)',
+          remedy: 'None (no felony expungement in Iowa) — a pardon is the route',
+          citation: 'Iowa Code ch. 901C'
+        },
+        complex_level_ia: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'It matters a lot in Iowa: a misdemeanor conviction may be expungeable (once per lifetime, after 8 years), but a felony conviction cannot be expunged at all — only pardoned. Since you are not sure which yours is, we are not going to guess. Iowa Courts Online or your paperwork states it, and Iowa Legal Aid can help you read it.',
+          remedy: 'Get the Conviction Level First (Iowa Courts Online / paperwork)',
+          citation: 'Iowa Code § 901C.3'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (Iowa Code ch. 901C; deferred judgments § 907.9)',
+          formName: 'Iowa Judicial Branch expungement forms',
+          formUrl: 'https://www.iowacourts.gov/for-the-public/court-forms/',
+          steps: [
+            'For a completed deferred judgment, check Iowa Courts Online first — post-July-2013 completions are expunged automatically.',
+            'For a non-conviction, pay every court cost in the case first (Iowa requires it), then file after 180 days under § 901C.2.',
+            'For a misdemeanor conviction 8+ years old, file under § 901C.3 — but remember it is once per lifetime, so choose which record deliberately.',
+            'Felony convictions cannot be expunged; a Governor\'s pardon is the only route. Iowa Legal Aid can help throughout.'
+          ],
+          // null: Wave 6 found no statutory filing fee for 901C petitions and flags
+          // it for a clerk — so the fee, and any waiver, are unknown.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court where the criminal case was filed'
+        }
+      },
+      legalAid: [
+        { name: 'Iowa Legal Aid', url: 'https://www.iowalegalaid.org' },
+        { name: 'Iowa Judicial Branch — Court Forms', url: 'https://www.iowacourts.gov/for-the-public/court-forms/' }
+      ]
+    }
+  },
+  NV: {
+    code: 'NV',
+    name: 'Nevada',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Nevada uses RECORD SEALING — NRS 179.245 for convictions, NRS 179.255 for non-convictions. There is '
+      + 'no automation; you petition. The waiting periods ladder by offense level, running from your release '
+      + 'or discharge. The single most important thing to understand is the PACKAGE RULE: Nevada seals your '
+      + 'record as one complete set, so a single case that is not yet eligible blocks the WHOLE petition, and '
+      + 'a new conviction resets the clock. Non-convictions, by contrast, can be sealed immediately with no '
+      + 'wait — something people often do not realize. Sealing restores your right to vote, hold office, and '
+      + 'sit on a jury, but NOT firearm rights (that needs a pardon).',
+    keyDates: [
+      {
+        label: 'Marijuana (<=2.5 oz) decriminalized-offense sealing, immediate (AB 192)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. Records of now-decriminalized minor marijuana possession can be sealed immediately.',
+      },
+      {
+        label: 'Pardoned convictions become sealable on receipt of the pardon',
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. A pardoned conviction can be sealed once the pardon is received.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm when the sealing waiting clock starts — specifically whether "release or discharge" requires fines/fees paid. Wave 6 notes practitioner sources say completion includes fines but flags the clock start for verification. The tree runs each ladder period from release/discharge; confirm whether unpaid financial obligations delay the clock.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the 1-year general (catch-all) misdemeanor tier from the statute. Wave 6 lists it but flags it for confirmation against NRS 179.245. The tree routes "other misdemeanors" to a 1-year wait; confirm.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the sealing cost reality. Wave 6 says there is no single statutory fee — the cost is SCOPE reports from each arresting agency, a criminal-history record, and certified copies, roughly $150 all-in self-filed in Las Vegas Justice Court (practitioner figure), plus a months-long Carson City Repository backlog to actually seal after the order. The fees and feeWaiver fields are null pending this; the Nevada Legal Services Record Sealing Manual and the Eighth Judicial District are the checks.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Nev. Rev. Stat. § 179.245 (conviction sealing; tiered waits)', url: null, retrievedOn: null },
+      { id: 'Nev. Rev. Stat. § 179.255 (non-conviction sealing; immediate)', url: null, retrievedOn: null },
+      { id: 'Nev. Rev. Stat. § 179.2445 (rebuttable presumption in favor of sealing)', url: null, retrievedOn: null },
+      { id: 'AB 192 of 2019 (sealing of decriminalized minor marijuana possession)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nv' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_nv' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_nv' },
+            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'eligible_nonconv_nv' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_nv: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a crime against a child, a sex offense, a felony DUI, or home invasion with a deadly weapon?',
+          yes: 'ineligible_excluded_nv',
+          no: 'package_rule_nv'
+        },
+        package_rule_nv: {
+          type: 'boolean',
+          text: 'Nevada seals your record as one complete set. Do you have ANY other criminal case that is not yet eligible to be sealed — for example a more recent conviction, or another case still inside its waiting period?',
+          yes: 'complex_package_nv',
+          no: 'level_nv'
+        },
+        level_nv: {
+          type: 'choice',
+          text: 'How would you describe the offense?',
+          options: [
+            { label: 'Category A felony, a crime of violence, or residential burglary', value: 'catA', next: 'date10_nv' },
+            { label: 'Category B, C, or D felony', value: 'catBCD', next: 'date5_nv' },
+            { label: 'Category E felony', value: 'catE', next: 'date2_nv' },
+            { label: 'Gross misdemeanor', value: 'gross', next: 'date2_nv' },
+            { label: 'Misdemeanor DV battery, misdemeanor DUI, or welfare fraud', value: 'misd7', next: 'date7_nv' },
+            { label: 'Misdemeanor battery, harassment, stalking, or protection-order violation', value: 'misd2', next: 'date2_nv' },
+            { label: 'Another misdemeanor', value: 'misd1', next: 'date1_nv' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nv' }
+          ]
+        },
+        date10_nv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category A felony, crime of violence, or residential burglary)' },
+            nextPass: 'eligible_conviction_nv',
+            nextFail: 'waiting_nv'
+          }
+        },
+        date5_nv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category B, C, or D felony)' },
+            nextPass: 'eligible_conviction_nv',
+            nextFail: 'waiting_nv'
+          }
+        },
+        date2_nv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category E felony, gross misdemeanor, or misd. battery/harassment/stalking/protection-order violation)' },
+            nextPass: 'eligible_conviction_nv',
+            nextFail: 'waiting_nv'
+          }
+        },
+        date7_nv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — misdemeanor DV battery, misdemeanor DUI, or welfare fraud)' },
+            nextPass: 'eligible_conviction_nv',
+            nextFail: 'waiting_nv'
+          }
+        },
+        date1_nv: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — general misdemeanor)' },
+            nextPass: 'eligible_conviction_nv',
+            nextFail: 'waiting_nv'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Nevada seals convictions and non-convictions differently — non-convictions can be sealed immediately, while convictions ladder by level from your release date. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. A Nevada criminal-history (SCOPE) report or your court paperwork will show the disposition; the Nevada Legal Services Record Sealing Manual explains the tracks.',
+          remedy: 'Get Your Record First (SCOPE / court paperwork)',
+          citation: 'Nev. Rev. Stat. §§ 179.245, 179.255 (the route depends on the disposition)'
+        },
+        eligible_nonconv_nv: {
+          status: 'eligible',
+          title: 'No Conviction — Sealable Immediately',
+          message: 'Because your case ended without a conviction — dismissed, acquitted, or a completed diversion — Nevada lets you seal it IMMEDIATELY, with no waiting period. People often do not realize this is available. You petition under NRS 179.255; there is a rebuttable presumption in your favor, and if the prosecutor stipulates, the court must seal. The main cost is gathering the records (SCOPE reports, criminal history, certified copies) rather than a single filing fee. The Nevada Legal Services Record Sealing Manual walks through it.',
+          remedy: 'Non-conviction sealing (NRS 179.255) — no wait',
+          citation: 'Nev. Rev. Stat. § 179.255'
+        },
+        eligible_conviction_nv: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Sealing Available',
+          message: 'Based on your dates, the waiting period for your offense level has passed, running from your release or discharge (10 years for the most serious, down through 5, 2, and 1 year for lesser offenses; 7 years for misdemeanor DV battery, misdemeanor DUI, or welfare fraud). Nevada applies a rebuttable presumption in your favor, and if the prosecutor stipulates the court must seal. Remember the package rule: everything you want sealed has to be eligible at once. There is no single filing fee — budget for record-gathering (SCOPE reports, criminal history, certified copies), and expect a months-long Repository backlog to actually seal after the order. Sealing restores voting, office, and jury rights, but not firearms. Nevada Legal Services can help.',
+          remedy: 'Conviction sealing petition (NRS 179.245)',
+          citation: 'Nev. Rev. Stat. § 179.245'
+        },
+        waiting_nv: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Nevada\'s sealing waiting periods run from your release or discharge and ladder by level: 10 years for the most serious offenses, 5 for mid-level felonies, 2 for the lowest felony and gross misdemeanors, 7 for misdemeanor DV battery / DUI / welfare fraud, and 1 year for other misdemeanors. Based on your dates, yours has not passed yet — and note a new conviction would reset the clock. When the time comes, the Nevada Legal Services Record Sealing Manual is the self-help authority.',
+          remedy: 'Wait for the NRS 179.245 period (a new conviction resets it)',
+          citation: 'Nev. Rev. Stat. § 179.245'
+        },
+        ineligible_excluded_nv: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Sealed',
+          message: 'Nevada never seals certain offenses: crimes against children, sex offenses, felony DUI, and home invasion with a deadly weapon. No waiting period changes that. For an offense like this, a pardon from the State Board of Pardons is the remaining route — and a pardoned conviction can then be sealed. Nevada Legal Services can explain the pardon process and check whether any of your other cases might be sealable on their own.',
+          remedy: 'None (Excluded Offense) — a pardon can open a sealing path',
+          citation: 'Nev. Rev. Stat. § 179.245'
+        },
+        complex_package_nv: {
+          status: 'complex',
+          title: 'The Package Rule May Be Blocking You',
+          message: 'This is Nevada\'s most important and least-known rule. Nevada seals your record as one complete SET — so even if the offense you asked about is eligible, a single OTHER case that is not yet eligible (a more recent conviction, or another case still inside its waiting period) blocks the entire petition. Because you told us there is such a case, sealing is likely blocked until that case also becomes eligible. This is not necessarily a permanent no: once every case is past its own waiting period, the whole set can be sealed together. Nevada Legal Services can map out when that happens for your specific record.',
+          remedy: 'Wait until every case is eligible — the package must clear together',
+          citation: 'Nev. Rev. Stat. § 179.245'
+        },
+        complex_level_nv: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'Nevada\'s waiting period depends closely on the exact level — the category of felony, or which kind of misdemeanor. Since you are not sure which yours is, we are not going to guess between a 1-year and a 10-year wait. A SCOPE criminal-history report or your court paperwork states it, and the Nevada Legal Services Record Sealing Manual can help you read it.',
+          remedy: 'Get the Offense Level First (SCOPE / court paperwork)',
+          citation: 'Nev. Rev. Stat. § 179.245'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)',
+          formName: 'Nevada Legal Services Record Sealing Manual / Eighth Judicial District forms',
+          formUrl: 'https://nlslaw.net/record-sealing/',
+          steps: [
+            'Confirm your offense is not one Nevada never seals (crimes against children, sex offenses, felony DUI, home invasion with a deadly weapon).',
+            'Check the package rule first: every case you want sealed must be past its own waiting period, because Nevada seals the whole set at once.',
+            'Gather the records: SCOPE reports from each arresting agency, your criminal history, and certified copies — there is no single statutory filing fee.',
+            'File the petition; there is a rebuttable presumption in your favor and a 30-day objection window. Expect a months-long Repository backlog to actually seal after the order.'
+          ],
+          // null: Wave 6 says there is no single statutory fee — cost is record-gathering,
+          // roughly $150 all-in per a practitioner figure that is flagged for verification,
+          // so the fee and any waiver are unknown.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court where the case was decided (Las Vegas Justice Court / Eighth Judicial District)'
+        }
+      },
+      legalAid: [
+        { name: 'Nevada Legal Services — Record Sealing Manual', url: 'https://nlslaw.net' },
+        { name: 'Legal Aid Center of Southern Nevada', url: 'https://www.lacsn.org' }
+      ]
+    }
+  },
+  AR: {
+    code: 'AR',
+    name: 'Arkansas',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Arkansas uses SEALING, under the Comprehensive Criminal Record Sealing Act of 2013 (§ 16-90-1401 '
+      + 'et seq.), with uniform petition and order forms statewide. It is quietly one of the more generous '
+      + 'states, and two facts drive that. First, filing is FREE — there has been no filing fee since July '
+      + '2019 (Act 680). Second, many records seal IMMEDIATELY on sentence completion, with no waiting '
+      + 'period: most misdemeanors, and non-violent Class C/D felonies plus Class A/B DRUG felonies. '
+      + '"Completion" includes paying your fines and costs. There is a cap worth knowing — you can seal with '
+      + 'at most one prior felony conviction (felonies from the same episode count as one).',
+    keyDates: [
+      {
+        label: 'Filing fee eliminated statewide (Act 680)',
+        date: '2019-07',
+        kind: 'effective',
+        note: 'Wave 6 gives month and year. Since July 2019 there has been no filing fee to seal a record in Arkansas (confirmed by Legal Aid of Arkansas).',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the short list of more serious misdemeanors that carry a 5-year wait (rather than immediate sealing). Wave 6 gives negligent-homicide A-misdemeanor, third-degree battery, indecent exposure, and DV-adjacent offenses among them, and flags the full list for the statute (§ 16-90-1405). The tree asks a "serious misdemeanor" question routing to a 5-year wait; confirm the list.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the misdemeanor-DWI 10-year wait. Wave 6 gives it per Legal Aid of Arkansas and flags it as a surprisingly long outlier needing confirmation. The tree routes a misdemeanor DWI to a 10-year wait; confirm against the statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm that non-convictions (arrests, nolle prosequi, dismissals, acquittals) are sealable with NO waiting period under §§ 16-90-1409/1410. Wave 6 gives this but flags it for confirmation. The tree routes non-convictions to an immediate result; confirm.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the one-prior-felony cap and how same-episode felonies count. Wave 6 says sealing allows at most one prior felony conviction, with same-episode felonies counting as one, and flags persona 3 (two separate felony convictions) as an analysis branch. The tree routes people with more than one prior felony to a "get an analysis" result; confirm the rule (§ 16-90-1406).',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Ark. Code § 16-90-1405 (misdemeanor sealing; immediate on completion; serious-list and DWI waits)', url: null, retrievedOn: null },
+      { id: 'Ark. Code § 16-90-1406 (felony sealing; immediate for non-violent C/D and A/B drug; one-prior-felony cap)', url: null, retrievedOn: null },
+      { id: 'Ark. Code § 16-90-1408 (offenses ineligible for sealing)', url: null, retrievedOn: null },
+      { id: 'Ark. Code §§ 16-90-1409, 16-90-1410 (non-conviction sealing)', url: null, retrievedOn: null },
+      { id: 'Act 680 of 2019 (eliminated the sealing filing fee)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ar' },
+            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'eligible_nonconv_ar' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ar' },
+            { label: 'First Offender Act 346 / diversion completed', value: 'deferred', next: 'eligible_nonconv_ar' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        level_ar: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_dwi_ar' },
+            { label: 'Felony', value: 'felony', next: 'felony_excluded_ar' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ar' }
+          ]
+        },
+        misd_dwi_ar: {
+          type: 'boolean',
+          text: 'Was this a DWI (driving while intoxicated)?',
+          yes: 'misd_dwi_date_ar',
+          no: 'misd_serious_ar'
+        },
+        misd_serious_ar: {
+          type: 'boolean',
+          text: 'Was it one of a short list of more serious misdemeanors — negligent homicide, third-degree battery, indecent exposure, or a domestic-violence-related misdemeanor?',
+          yes: 'misd_serious_date_ar',
+          no: 'eligible_misd_ar'
+        },
+        misd_dwi_date_ar: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including paying all fines and costs?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1405 — misdemeanor DWI)' },
+            nextPass: 'eligible_misd_ar',
+            nextFail: 'waiting_ar'
+          }
+        },
+        misd_serious_date_ar: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including paying all fines and costs?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1405 — serious-list misdemeanor)' },
+            nextPass: 'eligible_misd_ar',
+            nextFail: 'waiting_ar'
+          }
+        },
+        felony_excluded_ar: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a Class Y, A, or B felony that is NOT a drug offense; manslaughter; a sex offense; a violent felony; an unclassified felony with a maximum over 10 years; or a CDL-holder traffic felony?',
+          yes: 'ineligible_excluded_ar',
+          no: 'felony_prior_ar'
+        },
+        felony_prior_ar: {
+          type: 'boolean',
+          text: 'Do you have more than one prior felony conviction? (Arkansas allows sealing with at most one prior felony; felonies from the same episode count as one.)',
+          yes: 'complex_priorfelony_ar',
+          no: 'felony_violent_ar'
+        },
+        felony_violent_ar: {
+          type: 'boolean',
+          text: 'Was it a VIOLENT Class C or D felony? (Non-violent Class C/D felonies and Class A/B drug felonies seal immediately; violent C/D felonies have a 5-year wait.)',
+          yes: 'felony_violent_date_ar',
+          no: 'eligible_felony_ar'
+        },
+        felony_violent_date_ar: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your sentence, including paying all fines and costs?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1406 — violent Class C/D felony)' },
+            nextPass: 'eligible_felony_ar',
+            nextFail: 'waiting_ar'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Arkansas seals convictions and non-convictions differently, and many records seal immediately once you know which track you are on. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. An Arkansas State Police (ACIC) criminal-history request or your court paperwork will show the disposition; Legal Aid of Arkansas can help you read it.',
+          remedy: 'Get Your Record First (ACIC / court paperwork)',
+          citation: 'Ark. Code § 16-90-1401 et seq. (the route depends on the disposition)'
+        },
+        eligible_nonconv_ar: {
+          status: 'eligible',
+          title: 'No Conviction — Sealable Now, Free',
+          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, acquitted, or completed under the First Offender Act 346 — Arkansas lets you seal it with no waiting period, and filing is free (no fee since Act 680 in 2019). You use the statewide uniform petition, filed in the court of the case. Legal Aid of Arkansas can help. (First Offender Act 346 completions and pardoned convictions also have their own sealing doors.)',
+          remedy: 'Non-conviction sealing (§§ 16-90-1409/1410) — free, no wait',
+          citation: 'Ark. Code §§ 16-90-1409, 16-90-1410'
+        },
+        eligible_misd_ar: {
+          status: 'eligible',
+          title: 'Misdemeanor — Sealable, and Filing Is Free',
+          message: 'Your misdemeanor is sealable in Arkansas, and filing is free (no fee since Act 680 in 2019). Most misdemeanors seal IMMEDIATELY once your sentence is complete and your fines and costs are paid — there is no waiting period and no limit on how many you can seal. A short list of more serious misdemeanors carries a 5-year wait, and a misdemeanor DWI a 10-year wait, but based on what you told us yours is clear to file. You use the statewide uniform petition in the court of the case; the prosecutor has 30 days to object, and the standard is that the court SHALL seal absent clear-and-convincing reasons not to. Legal Aid of Arkansas can help.',
+          remedy: 'Misdemeanor sealing (§ 16-90-1405) — free',
+          citation: 'Ark. Code § 16-90-1405'
+        },
+        eligible_felony_ar: {
+          status: 'eligible',
+          title: 'Felony — Sealable, Possibly Right Now',
+          message: 'This is Arkansas being quietly generous. Non-violent Class C and D felonies, and Class A/B DRUG felonies, seal IMMEDIATELY once your sentence is complete and your fines and costs are paid — no waiting period. (Violent Class C/D felonies have a 5-year wait.) Filing is free, on the statewide uniform petition in the court of the case; the court must wait 90 days before granting, and the decision is discretionary. Remember the cap: this works with at most one prior felony conviction. Legal Aid of Arkansas can help you file.',
+          remedy: 'Felony sealing (§ 16-90-1406) — free; immediate for non-violent C/D and A/B drug',
+          citation: 'Ark. Code § 16-90-1406'
+        },
+        waiting_ar: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'A few Arkansas offenses carry a wait before sealing: a short list of serious misdemeanors (5 years), a misdemeanor DWI (10 years), and violent Class C/D felonies (5 years), each running from when you completed your sentence and paid your fines and costs. Based on your dates, yours has not passed yet. When it does, filing is free. Legal Aid of Arkansas can help you time it.',
+          remedy: 'Wait for the period, then seal for free',
+          citation: 'Ark. Code §§ 16-90-1405, 16-90-1406'
+        },
+        ineligible_excluded_ar: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Sealed',
+          message: 'Arkansas excludes certain offenses from sealing entirely (§ 16-90-1408): Class Y, A, and B felonies that are not drug offenses, manslaughter, sex offenses, violent felonies, unclassified felonies with a maximum over 10 years, and CDL-holder traffic felonies. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-ineligible offense. Legal Aid of Arkansas can help you confirm where yours falls and explain the pardon process.',
+          remedy: 'None (Ineligible Offense) — a pardon is the remaining route',
+          citation: 'Ark. Code § 16-90-1408'
+        },
+        complex_priorfelony_ar: {
+          status: 'complex',
+          title: 'The One-Prior-Felony Cap Needs a Closer Look',
+          message: 'Arkansas lets you seal a felony only if you have at most ONE prior felony conviction — but with an important wrinkle: felonies arising from the same episode count as a single conviction. Because you told us you have more than one prior felony, whether you qualify depends on how those convictions are counted, which is exactly the kind of analysis worth doing with help rather than guessing at. Legal Aid of Arkansas can look at your specific record and tell you whether the cap is met. If it is, the good news is that filing is free.',
+          remedy: 'Get a One-Prior-Felony Analysis (Legal Aid of Arkansas)',
+          citation: 'Ark. Code § 16-90-1406'
+        },
+        complex_level_ar: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'Arkansas sealing works differently for misdemeanors and felonies, and within felonies the class and whether it is a drug offense matter a lot. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and an ACIC criminal-history request will show it. Legal Aid of Arkansas can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / ACIC)',
+          citation: 'Ark. Code § 16-90-1401 et seq.'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Record Sealing (Comprehensive Criminal Record Sealing Act, Ark. Code § 16-90-1401 et seq.)',
+          formName: 'ACIC uniform statewide petition and order forms',
+          formUrl: 'https://acic.arkansas.gov',
+          steps: [
+            'Confirm your offense is not on the § 16-90-1408 ineligible list, and that you have at most one prior felony conviction (same-episode felonies count as one).',
+            'Complete your sentence, including paying all fines and costs — "completion" includes the money owed.',
+            'File the statewide uniform petition in the court of the case. There is no filing fee (Act 680, 2019).',
+            'The prosecutor has 30 days to object on misdemeanors; on felonies the court waits 90 days before granting. Legal Aid of Arkansas can help.'
+          ],
+          // NOT null: Wave 6 states there is no filing fee since Act 680 (July 2019).
+          fees: 'No filing fee — Arkansas eliminated the sealing filing fee statewide in July 2019 (Act 680).',
+          feeWaiver: 'Not needed — filing is free statewide since Act 680 (2019).',
+          courtContact: 'The court where the case was decided'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid of Arkansas', url: 'https://arlegalaid.org' },
+        { name: 'Center for Arkansas Legal Services', url: 'https://arlegalservices.org' }
+      ]
+    }
+  },
+  MS: {
+    code: 'MS',
+    name: 'Mississippi',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Mississippi uses EXPUNCTION (§ 99-19-71), filed in the court that handled the case. The defining fact '
+      + 'for felonies: you get ONE felony expunction in your LIFETIME, five years after you finish every term '
+      + 'of the sentence and pay all fines and costs — and it is discretionary, so a judge has to find you '
+      + 'rehabilitated after a hearing with 10 days\' notice to the district attorney. That makes the real '
+      + 'question less "am I eligible" and more "is this the conviction worth using my one chance on." '
+      + 'Misdemeanors are easier — a first-offense, non-traffic misdemeanor can be petitioned with no set '
+      + 'waiting period. Non-convictions can be expunged on petition (the court "shall" grant), though not '
+      + 'automatically.',
+    keyDates: [
+      {
+        label: 'General one-felony-per-lifetime expunction rule in effect (§ 99-19-71)',
+        date: '2019',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only ("post-Jul 2019 general rule"). A person may expunge one felony in their lifetime, 5 years after completing all sentence terms.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the full felony exclusion list under § 99-19-71. Wave 6 gives crimes of violence (§ 97-3-2), first-degree arson, drug trafficking, third-or-later DUI, felon-in-possession, failure to register as a sex offender, and EMBEZZLEMENT (the surprising one), and flags the list as needing the full statute text. The tree asks these as exclusions; confirm the complete set.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm that a first-offense, non-traffic misdemeanor has NO statutory waiting period for expunction. Wave 6 gives this but flags it for confirmation. The tree routes a first-offense misdemeanor to an immediate petition result; confirm.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the $150 expunction fee is current and whether it applies to non-conviction petitions. Wave 6 gives § 99-19-72: $100 judicial fund + $40 DA fund + $10 clerk = $150, and flags both currency and non-conviction scope. Also confirm the 2026 automatic-expungement bill (HB 1344) died before encoding "no automation" (bills were introduced 2024 HB 801, 2025 HB 1117, 2026 HB 1344).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether a pauper\'s/indigency waiver applies to the $150 expunction fee. Wave 6 gives the fee amount but says nothing about a waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Hinds).',
+        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Miss. Code § 99-19-71 (expunction; one felony per lifetime; 5-yr wait; misdemeanor and non-conviction paths; exclusions)', url: null, retrievedOn: null },
+      { id: 'Miss. Code § 99-19-72 ($150 expunction fee: $100 judicial + $40 DA + $10 clerk)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ms' },
+            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'eligible_nonconv_ms' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ms' },
+            { label: 'Non-adjudication / diversion completed', value: 'deferred', next: 'eligible_nonconv_ms' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        level_ms: {
+          type: 'choice',
+          text: 'What was the level of the conviction?',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_firstoffender_ms' },
+            { label: 'Felony', value: 'felony', next: 'felony_prioruse_ms' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ms' }
+          ]
+        },
+        misd_firstoffender_ms: {
+          type: 'boolean',
+          text: 'Is this your first offense, and was it a non-traffic misdemeanor?',
+          yes: 'eligible_misd_ms',
+          no: 'complex_misd_discretionary_ms'
+        },
+        felony_prioruse_ms: {
+          type: 'boolean',
+          text: 'Have you already used a felony expunction before? (Mississippi allows only ONE felony expunction in your lifetime.)',
+          yes: 'ineligible_prioruse_ms',
+          no: 'felony_excluded_ms'
+        },
+        felony_excluded_ms: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a crime of violence, first-degree arson, drug trafficking, a third-or-later DUI, felon-in-possession of a weapon, failure to register as a sex offender, or embezzlement?',
+          yes: 'ineligible_excluded_ms',
+          no: 'felony_date_ms'
+        },
+        felony_date_ms: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete every term of your sentence, including paying all fines and costs?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'after completing all sentence terms with fines/costs paid (Miss. Code § 99-19-71 — felony; discretionary, one per lifetime)' },
+            nextPass: 'eligible_felony_ms',
+            nextFail: 'waiting_ms'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Mississippi handles convictions and non-convictions differently, and felonies have a once-in-a-lifetime rule that makes the outcome important to get right. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Mississippi criminal-history request will show the disposition; the Mississippi Center for Justice has expungement resources.',
+          remedy: 'Get Your Record First (court paperwork / criminal history)',
+          citation: 'Miss. Code § 99-19-71 (the route depends on the disposition)'
+        },
+        eligible_nonconv_ms: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable by Petition',
+          message: 'Because your case ended without a conviction — dismissed, dropped, acquitted, or resolved through non-adjudication — Mississippi expunges it on petition, and for these the court "shall" grant expunction. It is not automatic, so you do have to file, in the court that handled the case. Note the $150 statutory fee may or may not apply to non-conviction petitions (we are confirming that). The Mississippi Center for Justice can help.',
+          remedy: 'Non-conviction expunction petition (§ 99-19-71) — court shall grant',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        eligible_misd_ms: {
+          status: 'eligible',
+          title: 'First-Offense Misdemeanor — Expungeable, No Set Wait',
+          message: 'Because this is a first-offense, non-traffic misdemeanor, Mississippi lets you petition the convicting court to expunge it with no set waiting period. You file in the court that handled the case; the statutory fee is $150 ($100 judicial fund, $40 DA fund, $10 clerk). The Mississippi Center for Justice can help with the petition. (Even beyond first offenses, municipal and justice courts can expunge misdemeanors at their discretion after two years of good conduct, and there is a separate path for people under 23.)',
+          remedy: 'First-offense misdemeanor expunction (§ 99-19-71)',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        complex_misd_discretionary_ms: {
+          status: 'complex',
+          title: 'Not a First Offense — a Discretionary Path May Still Exist',
+          message: 'The simplest misdemeanor route (a first-offense, non-traffic misdemeanor with no set wait) does not fit, because this is not a first offense. That is not the end of the road: municipal and justice courts in Mississippi can expunge misdemeanors at their DISCRETION after two years of good conduct, and there is a separate first-offender path for people who were under 23. Because these are discretionary and court-specific, it is worth confirming with the court that handled your case, or with the Mississippi Center for Justice, rather than guessing.',
+          remedy: 'Ask the convicting court about discretionary misdemeanor expunction (2-yr good conduct)',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        eligible_felony_ms: {
+          status: 'eligible',
+          title: 'Felony, 5+ Years — Eligible, But It Is Your One Shot',
+          message: 'Based on your dates — five years since you finished every term of the sentence and paid all fines and costs — this felony is eligible for expunction under § 99-19-71. Two Mississippi-specific things to weigh before you file. First, you get only ONE felony expunction in your lifetime, so if you have more than one felony, choose deliberately (offenses sharing a common set of facts count as one conviction). Second, it is discretionary: a judge decides after a hearing, with 10 days\' notice to the district attorney, and has to find you rehabilitated — so it helps to come prepared. The $150 fee applies. The Mississippi Center for Justice can help you make the strongest case.',
+          remedy: 'Felony expunction (§ 99-19-71) — once per lifetime, discretionary',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        waiting_ms: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Mississippi lets you expunge a felony five years after you complete every term of the sentence and pay all fines and costs. Based on your dates, that has not passed yet. When it does, remember this is a once-in-a-lifetime, discretionary expunction — so it is worth being deliberate about which conviction you use it on and coming to the hearing prepared. The Mississippi Center for Justice can help you plan.',
+          remedy: 'Wait for the 5-year period (§ 99-19-71)',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        ineligible_excluded_ms: {
+          status: 'ineligible',
+          title: 'This Felony Is Excluded',
+          message: 'Mississippi excludes a set of felonies from expunction, and this one falls in it: crimes of violence, first-degree arson, drug trafficking, a third-or-later DUI, felon-in-possession of a weapon, failure to register as a sex offender, and — the one that surprises people — embezzlement. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-ineligible offense. The Mississippi Center for Justice can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Felony) — a pardon is the remaining route',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        ineligible_prioruse_ms: {
+          status: 'ineligible',
+          title: 'Your One Felony Expunction Has Been Used',
+          message: 'Mississippi allows only one felony expunction in a lifetime, and because you have already used it, a second felony cannot be expunged — no waiting period changes that. Two things are still worth checking: any NON-conviction on your record can still be expunged separately, and a pardon from the Governor remains a route for the felony itself. The Mississippi Center for Justice can help you look at both.',
+          remedy: 'None (one-felony limit used) — check non-convictions or a pardon',
+          citation: 'Miss. Code § 99-19-71'
+        },
+        complex_level_ms: {
+          status: 'complex',
+          title: 'We Need the Conviction Level',
+          message: 'Mississippi treats misdemeanors and felonies very differently — a first-offense misdemeanor has no set wait, while a felony is a once-in-a-lifetime, discretionary expunction after 5 years. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a criminal-history request will show it. The Mississippi Center for Justice can help you read it.',
+          remedy: 'Get the Conviction Level First (court paperwork / criminal history)',
+          citation: 'Miss. Code § 99-19-71'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expunction (Miss. Code § 99-19-71)',
+          formName: 'Petition for expunction (filed in the court that handled the case)',
+          formUrl: 'https://www.mscenterforjustice.org',
+          steps: [
+            'For a felony, confirm it is not excluded (violence, first-degree arson, trafficking, 3rd+ DUI, felon-in-possession, sex-registration failure, embezzlement) and that you have not used your one lifetime felony expunction.',
+            'Complete every term of the sentence and pay all fines and costs; for a felony, wait 5 years from that point.',
+            'File the petition in the court that handled the case. The statutory fee is $150 ($100 judicial + $40 DA + $10 clerk).',
+            'A felony expunction is discretionary — the judge holds a hearing with 10 days\' notice to the DA and must find you rehabilitated, so come prepared. The Mississippi Center for Justice can help.'
+          ],
+          // NOT null: § 99-19-72 gives $150 ($100 + $40 + $10). Currency and
+          // non-conviction scope are flagged as open questions, not a conflicting value.
+          fees: '$150 statutory expunction fee (§ 99-19-72): $100 judicial fund, $40 DA fund, $10 clerk. Whether it applies to non-conviction petitions is being confirmed.',
+          // null: Wave 6 gives no waiver information; whether a pauper's/indigency
+          // waiver applies is an open question.
+          feeWaiver: null,
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Mississippi Center for Justice', url: 'https://www.mscenterforjustice.org' },
+        { name: 'Mission First Legal Aid Office', url: 'https://missionfirst.org' }
+      ]
+    }
+  },
+  KS: {
+    code: 'KS',
+    name: 'Kansas',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Kansas uses EXPUNGEMENT (K.S.A. 21-6614), which functions as sealing — the record survives for certain '
+      + 'listed agencies. It is discretionary but broad, and it has two features that stand out from the rest '
+      + 'of this wave. First, DUI is actually expungeable here (a first DUI after a 5-year wait), which is '
+      + 'unusual. Second, a Kansas expungement RESTORES firearm rights (since 2021) — rare among states. The '
+      + 'waiting periods run from when your sentence is satisfied, and graduates of a drug court or veterans '
+      + 'treatment court can petition immediately with the docket fee waivable. The court "shall" expunge if '
+      + 'you have had no felony conviction in the past two years, none is pending, and the circumstances '
+      + 'warrant it.',
+    keyDates: [
+      {
+        label: 'Expungement restores firearm rights (K.S.A. 21-6614(k)(2))',
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. A Kansas expungement restores firearm rights — rare among states, and worth knowing.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the docket fee. Wave 6 flags a conflict: the statute text says $176, while current guides and Judicial Council materials say $195 (set by a Supreme Court order that updates over time). The fees field is null pending this; a district clerk is the check. (The fee is waived for non-convictions, and a poverty affidavit is available.)',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm the exact waiting period for a second-or-later DUI. Wave 6 gives it as a 7-to-10-year range, which is not a single number; the tree routes a 2nd+ DUI to an "exact period needs confirming" result rather than guess. Confirm the precise period against K.S.A. 21-6614.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Kan. Stat. Ann. § 21-6614 (expungement; 3-yr and 5-yr tiers; discretionary standard; firearm restoration)', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 22-2410 (arrest-record expungement)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_ks' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_ks' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ks' },
+            { label: 'Diversion agreement completed', value: 'deferred', next: 'diversion_date_ks' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_ks: {
+          type: 'boolean',
+          text: 'Was the offense any of these: murder, manslaughter, rape, a sex offense against a minor, child abuse, or a commercial-vehicle DUI — or are you still required to register as an offender?',
+          yes: 'ineligible_excluded_ks',
+          no: 'specialty_ks'
+        },
+        specialty_ks: {
+          type: 'boolean',
+          text: 'Did you graduate from a drug court or a veterans treatment court program?',
+          yes: 'eligible_specialty_ks',
+          no: 'level_ks'
+        },
+        level_ks: {
+          type: 'choice',
+          text: 'How would you describe the offense?',
+          options: [
+            { label: 'A misdemeanor, or a traffic/tobacco infraction', value: 'misd', next: 'date3_ks' },
+            { label: 'An older Class D/E felony, a nongrid or severity 6-10 non-drug felony, or a lower-level drug felony', value: 'felony3', next: 'date3_ks' },
+            { label: 'A more serious eligible felony', value: 'felony5', next: 'date5_ks' },
+            { label: 'A first DUI', value: 'dui1', next: 'date5_ks' },
+            { label: 'A second or later DUI', value: 'dui2', next: 'dateDUI2_ks' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ks' }
+          ]
+        },
+        date3_ks: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'from sentence satisfied / discharge (K.S.A. 21-6614 — 3-year tier: misdemeanors, infractions, lower-level and older felonies)' },
+            nextPass: 'eligible_conviction_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        date5_ks: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'from sentence satisfied / discharge (K.S.A. 21-6614 — 5-year tier: more serious eligible felonies and first DUI)' },
+            nextPass: 'eligible_conviction_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        dateDUI2_ks: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          validation: {
+            period: { amount: null, unit: 'years', anchor: 'from sentence satisfied (K.S.A. 21-6614 — second-or-later DUI; Wave 6 gives a 7-to-10-year range, not a single period)' },
+            nextUnknown: 'complex_dui2_ks'
+          }
+        },
+        diversion_date_ks: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the diversion agreement?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'from completion of the diversion agreement (K.S.A. 21-6614 — diversion)' },
+            nextPass: 'eligible_conviction_ks',
+            nextFail: 'waiting_ks'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Kansas expunges convictions, diversions, and non-convictions on different timelines. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a KBI criminal-history request will show the disposition; Kansas Legal Services runs free expungement clinics and can help you read it.',
+          remedy: 'Get Your Record First (KBI / court paperwork)',
+          citation: 'Kan. Stat. Ann. § 21-6614 (the timeline depends on the disposition)'
+        },
+        eligible_nonconv_ks: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable, Fee Waived',
+          message: 'Because your case ended without a conviction, you can expunge it, and the docket fee is waived for non-convictions. You file in the court that handled the case. Expect the process to take a couple of months (a hearing roughly 60+ days out, then 8-12 weeks for the KBI to update). Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org) and can help.',
+          remedy: 'Non-conviction expungement (§ 21-6614) — fee waived',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        eligible_specialty_ks: {
+          status: 'eligible',
+          title: 'Specialty-Court Graduate — Petition Now, Fee Waivable',
+          message: 'Because you graduated from a drug court or veterans treatment court, Kansas lets you petition for expungement IMMEDIATELY — no waiting period — and the docket fee can be waived. You file in the court that handled the case; the court "shall" expunge if you have had no felony conviction in the past two years, none is pending, and the circumstances warrant it. And a nice bonus in Kansas: expungement restores your firearm rights. Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
+          remedy: 'Immediate expungement for specialty-court graduates (§ 21-6614) — fee waivable',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        eligible_conviction_ks: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Expungeable',
+          message: 'Based on your dates, the waiting period for your offense has passed — generally 3 years for misdemeanors, infractions, and lower-level or older felonies, or 5 years for more serious eligible felonies and a first DUI, running from when your sentence was satisfied. Two Kansas advantages worth knowing: a first DUI really is expungeable here (unusual), and expungement restores your firearm rights (since 2021). The court "shall" expunge if you have had no felony conviction in the past two years and none is pending. Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org).',
+          remedy: 'Expungement petition (§ 21-6614)',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        waiting_ks: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Kansas expungement waiting periods run from when your sentence is satisfied: 3 years for misdemeanors, infractions, and lower-level or older felonies; 5 years for more serious eligible felonies and a first DUI; and 3 years from completing a diversion. Based on your dates, yours has not passed yet. When it does, remember Kansas expungement also restores firearm rights, and Kansas Legal Services runs free clinics to help.',
+          remedy: 'Wait for the period (§ 21-6614)',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        complex_dui2_ks: {
+          status: 'complex',
+          title: 'Second DUI — We Need the Exact Waiting Period',
+          message: 'A second or later DUI is expungeable in Kansas, but the waiting period is longer and our source gives it as a range (roughly 7 to 10 years) rather than a single number — so rather than guess your eligibility date, we are flagging it for a precise answer. A district court clerk or Kansas Legal Services can tell you the exact period that applies to your case. The good news is that the route exists; it is the timing we want to pin down. Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org).',
+          remedy: 'Confirm the exact 2nd-DUI waiting period (district clerk / Kansas Legal Services)',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        ineligible_excluded_ks: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Expunged',
+          message: 'Kansas never expunges certain offenses: murder, manslaughter, rape, sex offenses against a minor, child abuse, and commercial-vehicle DUI — and no one who is still required to register can expunge while that requirement is in place. No waiting period changes that. If a registration requirement is the only barrier, this may become a "not yet" once that ends; otherwise a pardon is the remaining route. Kansas Legal Services can help you check.',
+          remedy: 'None (Excluded Offense, or still registering) — check when registration ends, or a pardon',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        },
+        complex_level_ks: {
+          status: 'complex',
+          title: 'We Need the Offense Level',
+          message: 'The Kansas waiting period depends on the offense — 3 years for most misdemeanors and lower-level felonies, 5 for more serious felonies and a first DUI, longer for repeat DUIs. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a KBI criminal-history request will show it. Kansas Legal Services can help you read it.',
+          remedy: 'Get the Offense Level First (court paperwork / KBI)',
+          citation: 'Kan. Stat. Ann. § 21-6614'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (Kan. Stat. Ann. § 21-6614)',
+          formName: 'Kansas Judicial Council expungement forms',
+          formUrl: 'https://www.kansasjudicialcouncil.org/legal-forms/expungement',
+          steps: [
+            'Confirm your offense is not one Kansas never expunges, and that you are not still required to register.',
+            'Check your waiting period from when your sentence was satisfied (3 or 5 years for most offenses; specialty-court graduates can file immediately).',
+            'File the petition in the court that handled the case. The docket fee is waived for non-convictions; a poverty affidavit is available otherwise.',
+            'Expect 2-4 months (a hearing ~60+ days out, then 8-12 weeks for the KBI). Kansas Legal Services runs free clinics: kls_expunge@klsinc.org.'
+          ],
+          // null: Wave 6 flags a fee conflict — statute says $176, current guides/Judicial
+          // Council say $195 (Supreme Court order). Waived for non-convictions.
+          fees: null,
+          // NOT null: non-conviction fee waiver, poverty affidavit, and specialty-court
+          // waiver are named mechanisms.
+          feeWaiver: 'The docket fee is waived for non-conviction expungements; a poverty affidavit is available for others; and drug-court/veterans-court graduates can have the docket fee waived.',
+          courtContact: 'The court that handled the case'
+        }
+      },
+      legalAid: [
+        { name: 'Kansas Legal Services (free expungement clinics; kls_expunge@klsinc.org)', url: 'https://www.kansaslegalservices.org' },
+        { name: 'Kansas Judicial Council — Expungement Forms', url: 'https://www.kansasjudicialcouncil.org' }
+      ]
+    }
+  },
+  NM: {
+    code: 'NM',
+    name: 'New Mexico',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'New Mexico uses EXPUNGEMENT under the Criminal Record Expungement Act (§ 29-3A), effective January 1, '
+      + '2020 — one of the broader laws in the country when it passed. The waiting periods for convictions '
+      + 'ladder by the DEGREE of the offense, and getting that ladder right matters: many legal blogs flatten '
+      + 'it to "2 years for misdemeanors, 4 for felonies," which is wrong. Non-convictions clear after just '
+      + '1 year. There is also an automatic path for minor cannabis possession. A handful of offenses are '
+      + 'excluded entirely, including DWI (even a first-offense deferred one) and — the odd one out — '
+      + 'embezzlement.',
+    keyDates: [
+      {
+        label: 'Criminal Record Expungement Act takes effect (§ 29-3A)',
+        date: '2020-01-01',
+        kind: 'effective',
+        note: 'One of the nation\'s broader expungement laws when passed. 2021 amendments added motor-vehicle penalty assessments and allowed one petition to cover multiple records in a district.',
+      },
+      {
+        label: 'Automatic cannabis expungement (§ 29-3A-8; HB 314)',
+        date: '2021',
+        kind: 'operative',
+        note: 'Wave 6 gives the year (with a 2023 HB 314 update). Possession of 2 oz or less is to be expunged automatically 2 years after conviction/arrest — operational status flagged for verification.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Verify the operational status of automatic cannabis expungement (§ 29-3A-8, 2021 + 2023 HB 314). Wave 6 says possession of 2 oz or less should be expunged automatically 2 years after conviction/arrest — New Mexico\'s only automation — but flags that the automation actually running needs confirmation (call DPS or the Second Judicial District). The tree routes cannabis to a "check whether it is already off" result; confirm the program is live.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the filing fee. Wave 6 notes CREA sets no statutory fee, so a district court civil filing fee applies (~$132 historically) — a phone target. The fees and feeWaiver fields are null pending this; nmcourts.gov and a district clerk are the checks.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm the full conviction waiting-period ladder from § 29-3A-5, against the flattened version many blogs give. Wave 6 gives: municipal/most misdemeanors 2 yrs; misdemeanor aggravated battery and 4th-degree felonies 4 yrs; 3rd-degree 6 yrs; 2nd-degree 8 yrs; 1st-degree and Crimes Against Household Members Act (DV) offenses 10 yrs. The tree encodes this full ladder; confirm against the statute.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'N.M. Stat. § 29-3A-4 (non-conviction expungement; 1-yr wait)', url: null, retrievedOn: null },
+      { id: 'N.M. Stat. § 29-3A-5 (conviction expungement; degree-laddered waits)', url: null, retrievedOn: null },
+      { id: 'N.M. Stat. § 29-3A-8 (automatic cannabis expungement; HB 314)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nm' },
+            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'nonconv_date_nm' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_nm' },
+            { label: 'Pre-prosecution diversion / conditional discharge completed', value: 'deferred', next: 'nonconv_date_nm' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        excluded_nm: {
+          type: 'boolean',
+          text: 'Was the offense any of these: a crime against a child, an offense causing great bodily harm or death, a sex offense, embezzlement, or DWI?',
+          yes: 'ineligible_excluded_nm',
+          no: 'cannabis_nm'
+        },
+        cannabis_nm: {
+          type: 'boolean',
+          text: 'Was this a conviction for possession of 2 ounces or less of cannabis?',
+          yes: 'check_cannabis_nm',
+          no: 'level_nm'
+        },
+        level_nm: {
+          type: 'choice',
+          text: 'How would you describe the offense?',
+          options: [
+            { label: 'A municipal-ordinance offense or most misdemeanors', value: 'misd', next: 'date2_nm' },
+            { label: 'Misdemeanor aggravated battery, or a 4th-degree felony', value: 'deg4', next: 'date4_nm' },
+            { label: 'A 3rd-degree felony', value: 'deg3', next: 'date6_nm' },
+            { label: 'A 2nd-degree felony', value: 'deg2', next: 'date8_nm' },
+            { label: 'A 1st-degree felony, or a Crimes Against Household Members Act (DV) offense', value: 'deg1', next: 'date10_nm' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nm' }
+          ]
+        },
+        nonconv_date_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case finally disposed of (dismissal, acquittal, or completion of diversion)?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'from final disposition (N.M. Stat. § 29-3A-4 — non-conviction)' },
+            nextPass: 'eligible_nonconv_nm',
+            nextFail: 'waiting_nonconv_nm'
+          }
+        },
+        date2_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — municipal / most misdemeanors)' },
+            nextPass: 'eligible_conviction_nm',
+            nextFail: 'waiting_nm'
+          }
+        },
+        date4_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — misdemeanor aggravated battery / 4th-degree felony)' },
+            nextPass: 'eligible_conviction_nm',
+            nextFail: 'waiting_nm'
+          }
+        },
+        date6_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          validation: {
+            period: { amount: 6, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 3rd-degree felony)' },
+            nextPass: 'eligible_conviction_nm',
+            nextFail: 'waiting_nm'
+          }
+        },
+        date8_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          validation: {
+            period: { amount: 8, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 2nd-degree felony)' },
+            nextPass: 'eligible_conviction_nm',
+            nextFail: 'waiting_nm'
+          }
+        },
+        date10_nm: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 1st-degree felony / Crimes Against Household Members Act)' },
+            nextPass: 'eligible_conviction_nm',
+            nextFail: 'waiting_nm'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'New Mexico clears non-convictions after 1 year and convictions on a degree-based ladder, so the outcome decides the timeline. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a DPS record check will show the disposition; the nmcourts.gov expungement forms and Supreme Court handout explain the tracks.',
+          remedy: 'Get Your Record First (court paperwork / DPS)',
+          citation: 'N.M. Stat. § 29-3A (the timeline depends on the disposition)'
+        },
+        eligible_nonconv_nm: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable After 1 Year',
+          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, acquitted, or completed through pre-prosecution diversion or a conditional discharge — New Mexico lets you expunge it 1 year after the final disposition, and based on your date that year has passed. The petition is filed under seal with a DPS RAP sheet no more than 90 days old attached, and one petition can cover multiple records in the same district. The nmcourts.gov forms walk through it.',
+          remedy: 'Non-conviction expungement (§ 29-3A-4)',
+          citation: 'N.M. Stat. § 29-3A-4'
+        },
+        waiting_nonconv_nm: {
+          status: 'waiting',
+          title: 'Not Yet 1 Year',
+          message: 'For a non-conviction, New Mexico requires 1 year from the final disposition before you can expunge. Based on your date, that year has not passed yet. Once it does, you file under seal with a recent DPS RAP sheet attached. The nmcourts.gov forms and Supreme Court handout can help you prepare.',
+          remedy: 'Wait until 1 year after final disposition (§ 29-3A-4)',
+          citation: 'N.M. Stat. § 29-3A-4'
+        },
+        check_cannabis_nm: {
+          status: 'eligible',
+          title: 'Minor Cannabis — Should Be Automatic, Check Your Record',
+          message: 'Because this was possession of 2 ounces or less of cannabis, New Mexico is supposed to expunge it AUTOMATICALLY — 2 years after the conviction or arrest, with no petition (§ 29-3A-8). This is the state\'s only automatic path. So the honest first step is to CHECK whether it has already come off: request your DPS record and look. Because the automation is newer, we are still confirming how reliably it is running — so if it is still showing after the 2 years, you can fall back on filing the regular petition. New Mexico Legal Aid can help you check or file.',
+          remedy: 'Check your record — minor cannabis should be automatic (§ 29-3A-8)',
+          citation: 'N.M. Stat. § 29-3A-8'
+        },
+        eligible_conviction_nm: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Expungeable',
+          message: 'Based on your dates, the waiting period for your offense\'s degree has passed, running conviction-free from when you completed your last sentence with fines, fees, and restitution paid. New Mexico\'s ladder is: 2 years for municipal offenses and most misdemeanors, 4 for misdemeanor aggravated battery and 4th-degree felonies, 6 for 3rd-degree, 8 for 2nd-degree, and 10 for 1st-degree felonies and domestic-violence (Crimes Against Household Members Act) offenses. The court weighs a "justice served" balancing. The nmcourts.gov forms and New Mexico Legal Aid can help.',
+          remedy: 'Conviction expungement (§ 29-3A-5)',
+          citation: 'N.M. Stat. § 29-3A-5'
+        },
+        waiting_nm: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'New Mexico\'s conviction waiting periods run conviction-free from when you complete your last sentence with all financial obligations paid, and they ladder by degree: 2 / 4 / 6 / 8 / 10 years from most misdemeanors up to 1st-degree felonies and domestic-violence offenses. Based on your dates, yours has not passed yet. The nmcourts.gov forms and New Mexico Legal Aid can help when the time comes.',
+          remedy: 'Wait for the degree-based period (§ 29-3A-5)',
+          citation: 'N.M. Stat. § 29-3A-5'
+        },
+        ineligible_excluded_nm: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded',
+          message: 'New Mexico excludes several categories from expungement entirely: crimes against children, offenses causing great bodily harm or death, sex offenses, embezzlement (the one that surprises people), and DWI — including a first-offense deferred DWI. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-excluded offense. New Mexico Legal Aid can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Offense) — a pardon is the remaining route',
+          citation: 'N.M. Stat. § 29-3A-5'
+        },
+        complex_level_nm: {
+          status: 'complex',
+          title: 'We Need the Offense Degree',
+          message: 'New Mexico\'s waiting period depends closely on the DEGREE — anywhere from 2 years for a misdemeanor to 10 years for a first-degree or domestic-violence felony. Since you are not sure which yours is, we are not going to guess (and be wary of blogs that flatten this to "2 years misdemeanor, 4 years felony" — that is not the real ladder). Your court paperwork states the degree, and a DPS record check will show it. New Mexico Legal Aid can help you read it.',
+          remedy: 'Get the Offense Degree First (court paperwork / DPS)',
+          citation: 'N.M. Stat. § 29-3A-5'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Expungement (Criminal Record Expungement Act, N.M. Stat. § 29-3A)',
+          formName: 'New Mexico courts expungement forms + Supreme Court handout',
+          formUrl: 'https://www.nmcourts.gov',
+          steps: [
+            'Confirm your offense is not excluded (crimes against children, great-bodily-harm/death offenses, sex offenses, embezzlement, DWI).',
+            'For minor cannabis, check your DPS record first — it should be expunged automatically 2 years after conviction/arrest.',
+            'For other convictions, check the degree-based waiting period (2 / 4 / 6 / 8 / 10 years) conviction-free from completing your last sentence with all financial obligations paid.',
+            'File the petition under seal with a DPS RAP sheet no more than 90 days old attached; one petition can cover multiple records in a district. New Mexico Legal Aid can help.'
+          ],
+          // null: CREA sets no statutory fee, so a district-court civil filing fee applies
+          // (~$132 historically, unconfirmed) — the amount and any waiver are open.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The district court where the case was decided'
+        }
+      },
+      legalAid: [
+        { name: 'New Mexico Legal Aid', url: 'https://www.newmexicolegalaid.org' },
+        { name: 'New Mexico Courts — Self-Help / Expungement', url: 'https://www.nmcourts.gov' }
+      ]
+    }
+  },
+  NE: {
+    code: 'NE',
+    name: 'Nebraska',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Nebraska needs an honest expectation reset in the first breath, because it is unlike every other '
+      + 'state: its conviction relief is limited to a SET-ASIDE, with no general sealing authority. A granted '
+      + 'set-aside nullifies the conviction and removes civil disabilities — but the conviction STAYS on your '
+      + 'public record, annotated "set aside." So if you are searching for "expungement," the thing Nebraska '
+      + 'offers is real but different: it clears the legal effect, not the visibility. Set-asides cover '
+      + 'sentences of probation, a fine, community service, or (since 2020) up to one year of imprisonment; '
+      + 'anything longer needs a pardon. Non-convictions and pardoned convictions CAN be removed or sealed.',
+    keyDates: [
+      {
+        label: 'Set-aside extended to imprisonment of 1 year or less (LB 881)',
+        date: '2020',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. Before LB 881, set-aside was limited to probation/fine/community-service sentences; it now also reaches completed imprisonment of one year or less.',
+      },
+      {
+        label: 'Pardoned convictions become sealable',
+        date: '2021',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. A pardoned conviction can now be sealed — one of the few things in Nebraska that actually comes off the public record.',
+      },
+      {
+        label: 'Voting restored automatically on sentence completion (LB20)',
+        date: '2024',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. LB20 ended the former 2-year waiting period; voting rights are restored automatically once the sentence is complete. An adjacent-rights fact, not part of set-aside.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the § 29-2264 set-aside conditions: eligible for probation/fine/community-service sentences, or (since LB 881, 2020) completed imprisonment of one year or less; not still pending; not registrable; not vehicular homicide; and no set-aside denial in the past 2 years. It is discretionary (Brunsen factors). The tree routes on sentence type and these exclusions; confirm against the statute.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether a set-aside restores firearm rights, and the county-practice split on domestic-violence misdemeanors. Wave 6 says firearms are NOT restored by a set-aside (that needs the pardon board) and flags live litigation with counties split on DV misdemeanors. The tree tells people firearms are not restored; confirm the current state of that litigation.',
+        blocksFields: [],
+      },
+    ],
+    sources: [
+      { id: 'Neb. Rev. Stat. § 29-2264 (set-aside of a conviction; LB 881 of 2020)', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 29-3523 (removal/sealing of non-conviction records)', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 29-3005 (trafficking-survivor set-aside and sealing)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'pardoned_ne' },
+            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_ne' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ne' },
+            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'eligible_nonconv_ne' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        pardoned_ne: {
+          type: 'boolean',
+          text: 'Has this conviction been pardoned?',
+          yes: 'eligible_pardoned_ne',
+          no: 'sentence_ne'
+        },
+        sentence_ne: {
+          type: 'choice',
+          text: 'What kind of sentence did you receive?',
+          options: [
+            { label: 'Probation, a fine only, or community service', value: 'noncustody', next: 'setaside_excluded_ne' },
+            { label: 'Imprisonment of one year or less', value: 'short_prison', next: 'setaside_excluded_ne' },
+            { label: 'Imprisonment of more than one year', value: 'long_prison', next: 'ineligible_prison_ne' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_sentence_ne' }
+          ]
+        },
+        setaside_excluded_ne: {
+          type: 'boolean',
+          text: 'Is the offense one that requires you to register (a sex offense), or was it vehicular homicide?',
+          yes: 'ineligible_excluded_ne',
+          no: 'eligible_setaside_ne'
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Nebraska handles convictions (set-aside) and non-convictions (removal or sealing) differently. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Nebraska State Patrol record check will show the disposition; the nebraskajudicial.gov self-help pages and Legal Aid of Nebraska\'s Clean Slate Program can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / State Patrol)',
+          citation: 'Neb. Rev. Stat. §§ 29-2264, 29-3523 (the route depends on the disposition)'
+        },
+        eligible_nonconv_ne: {
+          status: 'eligible',
+          title: 'No Conviction — Removable or Sealable',
+          message: 'Because your case ended without a conviction, Nebraska can actually remove or seal it — one of the few things here that genuinely comes off the record. This covers arrests without a charge (on set timelines), dismissed cases, and erroneous arrests (shown by clear-and-convincing evidence), under § 29-3523. Legal Aid of Nebraska\'s Clean Slate Program can help you file. The nebraskajudicial.gov self-help pages have the forms.',
+          remedy: 'Non-conviction removal/sealing (§ 29-3523)',
+          citation: 'Neb. Rev. Stat. § 29-3523'
+        },
+        eligible_pardoned_ne: {
+          status: 'eligible',
+          title: 'Pardoned — Now Sealable',
+          message: 'Because this conviction was pardoned, Nebraska now lets you SEAL it (since 2021) — which, in a state where convictions normally stay visible even after a set-aside, is meaningful. This is one of the few Nebraska paths that actually takes the record off public view. Legal Aid of Nebraska\'s Clean Slate Program can help you with the sealing, and the nebraskajudicial.gov self-help pages have guidance.',
+          remedy: 'Seal a pardoned conviction (2021 law)',
+          citation: 'Neb. Rev. Stat. § 29-2264'
+        },
+        eligible_setaside_ne: {
+          status: 'eligible',
+          title: 'Set-Aside Available — But Know What It Does',
+          message: 'Based on your sentence (probation, a fine, community service, or imprisonment of one year or less), you appear eligible to petition for a SET-ASIDE under § 29-2264, once your sentence is complete and any payment is made. Here is the honest part you should hold onto: a set-aside nullifies the conviction and removes civil disabilities, but the conviction STAYS on your public record, annotated "set aside." It clears the legal effect, not the visibility — and it does not restore firearm rights (that needs the Board of Pardons). It is also discretionary, so a judge weighs the circumstances. Within those limits it is real and worth doing. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Set-aside petition (§ 29-2264) — nullifies the conviction, but it stays visible',
+          citation: 'Neb. Rev. Stat. § 29-2264'
+        },
+        ineligible_prison_ne: {
+          status: 'ineligible',
+          title: 'Sentence Over One Year — Pardon Only',
+          message: 'Because your sentence was more than one year of imprisonment, it is beyond what a set-aside can reach (set-aside covers probation, fines, community service, or up to one year of imprisonment). The remaining route is a pardon from the Nebraska Board of Pardons — a real process, just a different one, and a pardoned conviction can then be sealed. Legal Aid of Nebraska\'s Clean Slate Program can explain the pardon process.',
+          remedy: 'None by set-aside — a pardon is the route (and a pardon can then be sealed)',
+          citation: 'Neb. Rev. Stat. § 29-2264'
+        },
+        ineligible_excluded_ne: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded From Set-Aside',
+          message: 'Nebraska\'s set-aside is not available for offenses that require registration (sex offenses) or for vehicular homicide. No completion or waiting changes that. The remaining route is a pardon from the Board of Pardons. Legal Aid of Nebraska\'s Clean Slate Program can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Offense) — a pardon is the route',
+          citation: 'Neb. Rev. Stat. § 29-2264'
+        },
+        complex_sentence_ne: {
+          status: 'complex',
+          title: 'We Need to Know Your Sentence',
+          message: 'In Nebraska, whether a set-aside is available turns on your sentence: probation, a fine, community service, or imprisonment of one year or less can qualify, but more than a year of imprisonment cannot (pardon only). Since you are not sure which describes yours, we are not going to guess. Your court paperwork states the sentence, and the nebraskajudicial.gov self-help pages and Legal Aid of Nebraska can help you read it.',
+          remedy: 'Get Your Sentence Details First (court paperwork)',
+          citation: 'Neb. Rev. Stat. § 29-2264'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Set-Aside of a Conviction (Neb. Rev. Stat. § 29-2264)',
+          formName: 'Nebraska Judicial Branch set-aside self-help forms',
+          formUrl: 'https://supremecourt.nebraska.gov/self-help',
+          steps: [
+            'Understand what a set-aside does: it nullifies the conviction and removes civil disabilities, but the conviction stays on your public record marked "set aside," and firearm rights are not restored.',
+            'Confirm your sentence qualifies (probation, fine, community service, or imprisonment of one year or less) and the offense is not registrable or vehicular homicide.',
+            'Complete your sentence and any payment, then file the set-aside petition — it is discretionary, so the judge weighs the circumstances.',
+            'If the sentence was over a year, or you want the record actually off public view, a pardon is the route (and a pardoned conviction can then be sealed). Legal Aid of Nebraska\'s Clean Slate Program can help.'
+          ],
+          // NOT null: Wave 6 says a set-aside petition typically carries no fee.
+          fees: 'Typically none — Nebraska set-aside petitions usually carry no fee.',
+          feeWaiver: 'Not typically needed — set-aside petitions usually carry no fee.',
+          courtContact: 'The court that entered the conviction'
+        }
+      },
+      legalAid: [
+        { name: 'Legal Aid of Nebraska — Clean Slate Program (AccessLine)', url: 'https://www.legalaidofnebraska.org' },
+        { name: 'Nebraska Judicial Branch — Self-Help', url: 'https://supremecourt.nebraska.gov/self-help' }
+      ]
+    }
+  },
+  ID: {
+    code: 'ID',
+    name: 'Idaho',
+    lastReviewed: '2026-07-16',
+    verificationStatus: 'draft',
+    sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    terminology:
+      'Idaho is honest-limited: it has no general expungement of convictions, but three narrow tools, and one '
+      + 'of them is new enough that most guides miss it. (1) NON-CONVICTIONS clear through a written request to '
+      + 'the Idaho State Police (§ 67-3004(10)) — administrative, not a court petition. (2) SHIELDING '
+      + '(§ 67-3004(11), from HB 149 in 2023) is the new door: ONE conviction — a non-violent misdemeanor or '
+      + 'a felony drug-possession — can be hidden from public view after 5 conviction-free years. (3) A '
+      + 'WITHHELD JUDGMENT (§ 19-2601) that you complete can be dismissed under § 19-2604, restoring rights '
+      + '(including firearms) — but the record then reads "Dismissed by Court" and is NOT sealed. There is no '
+      + 'automation.',
+    keyDates: [
+      {
+        label: 'Conviction shielding created (§ 67-3004(11), HB 149)',
+        date: '2023',
+        kind: 'effective',
+        note: 'Wave 6 gives the year only. HB 149 created a new shielding remedy for one non-violent-misdemeanor or felony-drug-possession conviction after 5 conviction-free years. Fresh law that most older guides do not reflect — they still say Idaho has no conviction relief.',
+      },
+    ],
+    openQuestions: [
+      {
+        question:
+          'Confirm the § 67-3004(11) shielding rule (HB 149, 2023): ONE conviction, either a non-violent misdemeanor or a felony drug-possession, petitioned after 5 conviction-free years from full sentence completion (probation, parole, fines, restitution), under a "held accountable" standard; the record is hidden from public view and deniable, but law enforcement retains access; assaultive/violent misdemeanors are excluded. Wave 6 flags this as fresh-law discrepancy material. The tree encodes it; confirm against the statute and district practice (Ada County).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the fees. Wave 6 says the § 67-3004(10) ISP administrative non-conviction request appears to be free (documentation only), and flags the § 67-3004(11) shielding petition as a court filing whose fee is a phone target. The fees and feeWaiver fields are null pending both.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+    ],
+    sources: [
+      { id: 'Idaho Code § 67-3004(10) (non-conviction expungement via ISP BCI request)', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 67-3004(11) (conviction shielding; HB 149 of 2023)', url: null, retrievedOn: null },
+      { id: 'Idaho Code §§ 19-2601, 19-2604 (withheld judgment; dismissal; felony-to-misdemeanor reduction)', url: null, retrievedOn: null },
+    ],
+    rules: {
+      startNode: 'disposition',
+      nodes: {
+        disposition: {
+          type: 'choice',
+          field: 'disposition',
+          text: 'What was the outcome of the case?',
+          options: [
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'shielding_type_id' },
+            { label: 'Dismissed / Never charged', value: 'dismissed', next: 'eligible_nonconv_id' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_id' },
+            { label: 'Withheld judgment completed', value: 'deferred', next: 'withheld_id' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        shielding_type_id: {
+          type: 'choice',
+          text: 'Shielding covers only ONE conviction, and only two kinds. Which best describes yours?',
+          options: [
+            { label: 'A non-violent misdemeanor', value: 'nonviolent_misd', next: 'shielding_date_id' },
+            { label: 'A felony drug-possession offense', value: 'felony_drug', next: 'shielding_date_id' },
+            { label: 'An assaultive or violent misdemeanor', value: 'violent_misd', next: 'ineligible_violent_id' },
+            { label: 'Something else (another felony, etc.)', value: 'other', next: 'ineligible_nopath_id' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_id' }
+          ]
+        },
+        shielding_date_id: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your full sentence — probation, parole, fines, and restitution?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction-free from full sentence completion (Idaho Code § 67-3004(11) — shielding; one conviction)' },
+            nextPass: 'eligible_shielding_id',
+            nextFail: 'waiting_id'
+          }
+        }
+      },
+      results: {
+        unknown_disposition: {
+          status: 'complex',
+          title: 'We Need the Case Outcome First',
+          message: 'Idaho\'s three tools depend entirely on the outcome — a non-conviction goes to the State Police, a completed withheld judgment gets dismissed, and only certain single convictions can be shielded. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an Idaho State Police record check will show the disposition; the Idaho courts\' self-help pages can help you read it.',
+          remedy: 'Get Your Record First (court paperwork / ISP)',
+          citation: 'Idaho Code § 67-3004 (the tool depends on the disposition)'
+        },
+        eligible_nonconv_id: {
+          status: 'eligible',
+          title: 'No Conviction — Clear It Through the State Police',
+          message: 'Because your case ended without a conviction — dismissed, acquitted, or an arrest that never led to a charge (after 1 year) — Idaho clears it through a WRITTEN REQUEST to the Idaho State Police (§ 67-3004(10)), not a court petition. The State Police has an application form; once granted, your fingerprints and criminal history are expunged and the court file is sealed. One exception to know: this does not cover a dismissal that came from a withheld judgment (§ 19-2604(1)) — those follow a different path. The Idaho courts\' self-help pages can help.',
+          remedy: 'ISP administrative expungement request (§ 67-3004(10))',
+          citation: 'Idaho Code § 67-3004(10)'
+        },
+        withheld_id: {
+          status: 'eligible',
+          title: 'Withheld Judgment — Move to Dismiss (But Know It Stays Visible)',
+          message: 'Because you completed a withheld judgment, you can move to have the case DISMISSED under § 19-2604, which restores your rights — including firearm rights. That is a real and worthwhile step. But here is the honest caveat: after dismissal the record is not sealed. It will read "Dismissed by Court" and remains visible to anyone who looks. (For a felony, you may also be able to have it reduced to a misdemeanor under § 19-2604(2).) If you want it actually hidden, a shielding petition may be available separately for an eligible conviction. The Idaho courts\' self-help pages explain the motion.',
+          remedy: 'Motion to dismiss a completed withheld judgment (§ 19-2604) — visible but dismissed',
+          citation: 'Idaho Code § 19-2604'
+        },
+        eligible_shielding_id: {
+          status: 'eligible',
+          title: 'Shielding Available — Idaho\'s New 2023 Door',
+          message: 'Based on your dates — 5 conviction-free years since you completed your full sentence, including fines and restitution — your conviction appears eligible for SHIELDING under § 67-3004(11), a remedy Idaho created in 2023 (HB 149) that many guides still do not know exists. It covers one conviction (a non-violent misdemeanor or a felony drug-possession), and once granted the record is hidden from public view and you can deny it — though law enforcement keeps access. The standard is whether you have been "held accountable." Because this is fresh law, it is worth filing with help; the Idaho courts\' self-help pages and a district clerk (Ada County) can guide the petition.',
+          remedy: 'Shielding petition (§ 67-3004(11)) — one conviction, hidden from public view',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        waiting_id: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Idaho\'s shielding remedy requires 5 conviction-free years from when you completed your full sentence — probation, parole, fines, and restitution. Based on your dates, that has not passed yet. When it does, remember shielding covers only one conviction, so if you have more than one eligible offense, it is worth being deliberate. The Idaho courts\' self-help pages can help you plan.',
+          remedy: 'Wait for the 5 conviction-free years (§ 67-3004(11))',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        ineligible_violent_id: {
+          status: 'ineligible',
+          title: 'Assaultive/Violent Misdemeanor — Not Shieldable',
+          message: 'Idaho\'s shielding remedy specifically excludes assaultive and violent misdemeanors, so this conviction cannot be shielded, and no waiting period changes that. Idaho has no general conviction expungement, so the remaining routes are a pardon or commutation from the Commission of Pardons and Parole. If any part of your record was a non-conviction, that can still be cleared through the State Police separately. The Idaho courts\' self-help pages can help you check.',
+          remedy: 'None (excluded from shielding) — a pardon/commutation is the route',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        ineligible_nopath_id: {
+          status: 'ineligible',
+          title: 'No Expungement Path for This Conviction',
+          message: 'Idaho has no general expungement of convictions. Its shielding remedy reaches only one non-violent misdemeanor or a felony drug-possession, so a conviction outside those categories (such as another kind of felony) does not have an expungement or shielding route. The honest answer is that the remaining path is a pardon or commutation from the Commission of Pardons and Parole. If any of your charges ended without a conviction, those can still be cleared through the State Police. The Idaho courts\' self-help pages can point you to the pardon process.',
+          remedy: 'None (no conviction expungement in Idaho) — a pardon/commutation is the route',
+          citation: 'Idaho Code § 67-3004'
+        },
+        complex_level_id: {
+          status: 'complex',
+          title: 'We Need to Know the Conviction',
+          message: 'Idaho\'s shielding remedy is narrow — it covers only a non-violent misdemeanor or a felony drug-possession, and excludes assaultive/violent misdemeanors and other felonies. Whether yours qualifies depends on exactly what it was, which we are not going to guess. Your court paperwork names the offense, and an Idaho State Police record check will show it. The Idaho courts\' self-help pages can help you read it.',
+          remedy: 'Get the Conviction Details First (court paperwork / ISP)',
+          citation: 'Idaho Code § 67-3004(11)'
+        }
+      }
+    },
+    resources: {
+      remedies: {
+        expungement: {
+          name: 'Idaho record relief (ISP expungement § 67-3004(10); shielding § 67-3004(11); withheld-judgment dismissal § 19-2604)',
+          formName: 'Idaho State Police expungement application / Idaho courts shielding forms',
+          formUrl: 'https://isp.idaho.gov/BCI/',
+          steps: [
+            'For a non-conviction, submit the Idaho State Police expungement request (§ 67-3004(10)) — administrative, not a court filing.',
+            'For a completed withheld judgment, file a motion to dismiss under § 19-2604 (restores rights, including firearms) — but know the record stays visible, marked "Dismissed by Court."',
+            'For one eligible conviction (non-violent misdemeanor or felony drug-possession), file a shielding petition (§ 67-3004(11)) after 5 conviction-free years from full sentence completion.',
+            'There is no general conviction expungement otherwise; a pardon or commutation is the remaining route. The Idaho courts\' self-help pages can guide each.'
+          ],
+          // null: Wave 6 says the ISP administrative request "appears free" (unconfirmed)
+          // and the shielding petition court fee is a phone target — both unknown.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'Idaho State Police (BCI) for non-convictions; the district court for shielding and withheld-judgment motions'
+        }
+      },
+      legalAid: [
+        { name: 'Idaho Legal Aid Services', url: 'https://www.idaholegalaid.org' },
+        { name: 'Idaho Courts — Self-Help', url: 'https://www.courtselfhelp.idaho.gov' }
+      ]
+    }
   }
 };
 

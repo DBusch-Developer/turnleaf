@@ -5029,7 +5029,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     code: 'FL',
     name: 'Florida',
     lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
     terminology:
       'Florida has two court remedies and they are not interchangeable. EXPUNCTION (Fla. Stat. '
@@ -5045,32 +5046,29 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         label: 'Administrative/automatic sealing of qualifying non-conviction arrests (§ 943.0595)',
         date: '2019',
         kind: 'effective',
-        note: 'Wave 3 gives the year only. FDLE auto-seals qualifying non-judicial arrest records that ended in non-conviction — scope and current status flagged for verification.',
+        note: 'FDLE MANDATORILY auto-seals qualifying non-conviction arrest records (§ 943.0595), with no lifetime limit ((2)(b)) — but NOT forcible felonies (§ 776.08) or specified sex-registry offenses ((2)(a)), and FDLE sealing its own copy does not force other agencies to seal theirs ((3)(c)). (Diana, statute pass 2026-07-16.)',
       },
     ],
     openQuestions: [
       {
         question:
-          'What is the current scope and status of § 943.0595 administrative/automatic sealing? Wave 3 says FDLE auto-seals qualifying non-conviction arrest records but flags the scope and rollout. Verify on FDLE\'s Seal & Expunge page before any UI copy claims a record may already be sealed automatically.',
-        blocksFields: [],
-      },
-      {
-        question:
           'What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county\'s fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.',
         blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
       },
-      {
-        question:
-          'Confirm the § 943.0584 list of offences that cannot be sealed even with adjudication withheld: DV battery, sex offences, lewd offences, trafficking, and others. The tree asks a person whether their offence is on this list.',
-        blocksFields: [],
-      },
     ],
     sources: [
-      { id: 'Fla. Stat. § 943.0585 (expunction of criminal history records)', url: null, retrievedOn: null },
-      { id: 'Fla. Stat. § 943.059 (court-ordered sealing)', url: null, retrievedOn: null },
-      { id: 'Fla. Stat. § 943.0584 (offences ineligible for sealing/expunction even with adjudication withheld)', url: null, retrievedOn: null },
-      { id: 'Fla. Stat. § 943.0595 (administrative/automatic sealing of non-conviction arrests)', url: null, retrievedOn: null },
-      { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction)', url: null, retrievedOn: null },
+      // Diana read all seven directly (7/16); FL statute URLs (leg.state.fl.us uses
+      // chapter-range paths) not yet supplied, so retrievedOn is set and url is
+      // held pending her links — read-but-unlinked.
+      { id: 'Fla. Stat. § 943.0585 (expunction; (1)(g) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity; (5)-(6) $75/fingerprint/notarized COE mechanics)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.059 (court-ordered sealing; (1)(e) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction; (1) notwithstanding 943.0585(1)&(2) — overrides the lifetime and conviction bars; (2) own COE; (4) imports 943.0585(5)-(6))', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0581 (administrative expunction; read 7/16)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0582 (juvenile diversion expunction; (4) does not use the adult once-per-lifetime relief)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0584 (offenses ineligible even with adjudication withheld; (1) conviction = any guilty/nolo plea or finding, withheld or not; (2)(a)-(hh) the full category list)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0595 (MANDATORY auto-sealing of non-conviction arrests; (2)(b) no lifetime limit; (2)(a) excludes forcible felony 776.08 and specified registry offenses even if dismissed/acquitted; (3)(c) FDLE sealing does not force other agencies)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 776.08 (forcible felony — excluded from 943.0595 auto-sealing; cross-reference)', url: null, retrievedOn: null },
+      { id: 'Fla. Stat. § 943.0435(1)(h)1.a.(I) (sex-offender-registry offenses excluded from 943.0595 auto-sealing; cross-reference)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'prior_relief_fl',
@@ -5125,10 +5123,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           ]
         },
         disqualified_offense_fl: {
-          type: 'boolean',
-          text: 'Was the offense any of these: domestic violence battery, a sex offense, a lewd or lascivious offense, or a trafficking offense? (Florida cannot seal these even when adjudication was withheld.)',
-          yes: 'ineligible_disqualified_fl',
-          no: 'sentence_complete_fl'
+          type: 'choice',
+          text: 'Florida keeps a specific list of offenses that cannot be sealed even when adjudication was WITHHELD — and for this list, a "conviction" means any guilty or no-contest plea or trial finding, whether or not adjudication was withheld (§ 943.0584(1)). Is your offense in any of these categories?',
+          options: [
+            { label: 'A sexual offense (ch. 794, sexual misconduct, lewd/lascivious on a minor/elderly/disabled person, sexual performance by a child, obscenity, or voyeurism)', value: 'sexual', next: 'ineligible_disqualified_fl' },
+            { label: 'Murder, manslaughter, aggravated assault, felony or aggravated battery, stalking, kidnapping, or false imprisonment', value: 'violent', next: 'ineligible_disqualified_fl' },
+            { label: 'Domestic-violence assault or battery', value: 'dv', next: 'ineligible_disqualified_fl' },
+            { label: 'An offense against a child (luring/enticing, child abuse, buying/selling minors, or procuring a minor for prostitution)', value: 'child', next: 'ineligible_disqualified_fl' },
+            { label: 'Human trafficking', value: 'trafficking', next: 'ineligible_disqualified_fl' },
+            { label: 'Burglary of a dwelling, robbery, carjacking, or home-invasion robbery', value: 'burglary_robbery', next: 'ineligible_disqualified_fl' },
+            { label: 'Arson', value: 'arson', next: 'ineligible_disqualified_fl' },
+            { label: 'Abuse of an elderly or disabled person', value: 'elder', next: 'ineligible_disqualified_fl' },
+            { label: 'Drug trafficking, or manufacturing a controlled substance', value: 'drug_traffic', next: 'ineligible_disqualified_fl' },
+            { label: 'Terrorism, illegal use of explosives, or aircraft piracy', value: 'terrorism', next: 'ineligible_disqualified_fl' },
+            { label: 'Communications or wire fraud (the Florida Communications Fraud Act)', value: 'fraud', next: 'ineligible_disqualified_fl' },
+            { label: 'An offense that requires sexual-predator or sex-offender registration', value: 'registry', next: 'ineligible_disqualified_fl' },
+            { label: 'None of the above', value: 'none', next: 'sentence_complete_fl' }
+          ]
         },
         sentence_complete_fl: {
           type: 'boolean',
@@ -5170,7 +5181,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_disqualified_fl: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Sealed, Even With Adjudication Withheld',
-          message: 'Florida keeps a specific list of offenses that cannot be sealed even when adjudication was withheld — domestic violence battery, sex offenses, lewd or lascivious offenses, and trafficking offenses among them (§ 943.0584). Withholding adjudication does not change that for these. Because these are specific legal categories, if you are not certain your offense is actually on the list it is worth confirming rather than assuming from what happened — county legal aid and the Florida Justice Center can check. If it is on the list, executive clemency from the Board of Executive Clemency is the remaining route.',
+          message: 'Florida keeps a specific statutory list of offenses that cannot be sealed even when adjudication was withheld (§ 943.0584(2)), and yours falls in one of those categories. An important trap this closes: for this list, a "conviction" includes any guilty or no-contest plea or trial finding whether or not adjudication was withheld (§ 943.0584(1)) — so a withhold does not help here. Because these are specific legal categories, if you are not certain your offense is actually on the list it is worth confirming rather than assuming from what happened — county legal aid and the Florida Justice Center can check. If it is on the list, executive clemency from the Board of Executive Clemency is the remaining route.',
           remedy: 'None (Disqualified Offense under § 943.0584) — confirm the classification; ask about clemency',
           citation: 'Fla. Stat. § 943.0584'
         },
@@ -5184,9 +5195,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_expunction_fl: {
           status: 'eligible',
           title: 'Case Ended Without a Conviction — Expunction Available',
-          message: 'Because this case ended without a conviction — dismissed, dropped, or an acquittal — you appear eligible for an EXPUNCTION under Fla. Stat. § 943.0585, the stronger of Florida\'s two remedies. There is a specific order to it. First, apply to FDLE for a Certificate of Eligibility: a $75 application (non-refundable, by money order), a notarized form, your fingerprints, and a certified copy of the disposition. For an expunction, the State Attorney also completes a section certifying the outcome. FDLE\'s own estimate is about 12 weeks to process. Once you have the certificate, you file the petition in the county where the arrest happened; the clerk\'s filing fee varies by county. One caution to plan around: you get only ONE court-ordered seal or expunge in your lifetime, so if you have more than one clearable case, think about which to use it on. Florida may also have already sealed some non-conviction arrests automatically (§ 943.0595) — worth checking your FDLE record first.',
+          message: 'Because this case ended without a conviction — dismissed, dropped, or an acquittal — you appear eligible for an EXPUNCTION under Fla. Stat. § 943.0585, the stronger of Florida\'s two remedies. There is a specific order to it. First, apply to FDLE for a Certificate of Eligibility: a $75 application (non-refundable, by money order), a notarized form, your fingerprints, and a certified copy of the disposition. For an expunction, the State Attorney also completes a section certifying the outcome. FDLE\'s own estimate is about 12 weeks to process. Once you have the certificate, you file the petition in the county where the arrest happened; the clerk\'s filing fee varies by county. One caution to plan around: you get only ONE court-ordered seal or expunge in your lifetime, so if you have more than one clearable case, think about which to use it on. Florida also has MANDATORY automatic sealing of qualifying non-conviction arrests (§ 943.0595): FDLE seals them itself, with no lifetime limit ((2)(b)), so yours may already be done — check your FDLE record first. Two honest caveats, though: automatic sealing does NOT apply if the underlying charge was a forcible felony (§ 776.08) or a specified sex-offense-registry offense, even if the case was dismissed or you were acquitted ((2)(a)); and when FDLE seals its own copy, other agencies that received the record are not automatically required to seal theirs ((3)(c)), so a background check could still surface it until you follow up.',
           remedy: 'FDLE Certificate of Eligibility, then Expunction Petition (§ 943.0585)',
-          citation: 'Fla. Stat. §§ 943.0585, 943.0595'
+          citation: 'Fla. Stat. §§ 943.0585, 943.0595(1),(2)(a),(2)(b),(3)(c),(3)(d)'
         },
         eligible_sealing_fl: {
           status: 'eligible',

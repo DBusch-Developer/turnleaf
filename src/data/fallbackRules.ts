@@ -12109,7 +12109,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     code: 'SD',
     name: 'South Dakota',
     lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
     terminology:
       'South Dakota is restrictive, and it is best to be plain about it: expungement (§§ 23A-3-26 to -37) is '
@@ -12149,12 +12150,22 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
+          'The suspended-imposition / diversion path (check_deferred_sd) cites § 23A-27-13 (suspended imposition of sentence) and §§ 23A-3-35 to -37 (diversion auto-expungement), which Diana has NOT yet read — they remain unlinked. That result is a "check your record" hedge, not a computed-eligibility claim, so SD flipped to statute_cited on the six verified non-conviction/automatic sections (§§ 23A-3-27/-30/-31/-32/-33/-34); read § 23A-27-13 and the diversion sections when convenient to link them.',
+        blocksFields: [],
+      },
+      {
+        question:
           'Confirm the circuit court filing fee, and whether any fee waiver applies. Wave 7 gives the DCI record check as $24 (Pierre, (605) 773-3331) but flags the circuit court filing fee as a per-clerk phone target and gives no waiver information. The fees and feeWaiver fields are null pending both.',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
       },
     ],
     sources: [
-      { id: 'S.D. Codified Laws §§ 23A-3-26 to -37 (non-conviction expungement)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws §§ 23A-3-26 to -37 (non-conviction expungement — framework)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws § 23A-3-27 (who/when: (1) no-charge arrest 1 yr from arrest; (2) dismissal 1 yr from the formal dismissal on the record; (3) acquittal anytime; (4) earlier on a showing of compelling necessity)', url: 'https://sdlegislature.gov/Statutes/23A-3-27', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-3-30 (grant standard: discretionary; the PETITIONER bears the burden by clear and convincing evidence that the ends of justice AND the best interest of the public AND of the petitioner are served)', url: 'https://sdlegislature.gov/Statutes/23A-3-30', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-3-31 (effect: SEALING, not destruction — a nonpublic DCI record is retained for law enforcement, prosecutors, and courts, usable for a later sentencing enhancement)', url: 'https://sdlegislature.gov/Statutes/23A-3-31', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-3-32 (restores the person to pre-arrest status in contemplation of law, with perjury protection for denying the arrest/indictment/trial — speaks to the ARREST and proceedings; pair with -31\'s retained nonpublic record)', url: 'https://sdlegislature.gov/Statutes/23A-3-32', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-3-33 (no statute of limitations on applying; pre-July-2010 arrests qualify)', url: 'https://sdlegislature.gov/Statutes/23A-3-33', retrievedOn: '2026-07-16' },
       { id: 'S.D. Codified Laws § 23A-3-34 (automatic removal from the PUBLIC record — highest-charged petty offense / municipal ordinance violation / Class 2 misdemeanor; 5-year wait after all court-ordered conditions satisfied and no further convictions in 5 yrs; record stays available to court personnel and usable as a later-prosecution enhancement)', url: 'https://sdlegislature.gov/Statutes/23A-3-34', retrievedOn: '2026-07-16' },
       { id: 'S.D. Codified Laws § 23A-27-13 (suspended imposition of sentence)', url: null, retrievedOn: null },
     ],
@@ -12178,7 +12189,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When was the case dismissed (or the arrest made, if no charge was ever filed)?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'after dismissal or an arrest with no charging instrument (S.D. Codified Laws §§ 23A-3-27 — sooner on compelling necessity)' },
+            period: { amount: 1, unit: 'years', anchor: '1 year from the formal dismissal on the record (§ 23A-3-27(2)); for a no-charge arrest, 1 year from the arrest (§ 23A-3-27(1)); earlier on a showing of compelling necessity (§ 23A-3-27(4))' },
             nextPass: 'eligible_dismissal_sd',
             nextFail: 'waiting_sd'
           }
@@ -12205,21 +12216,21 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_dismissal_sd: {
           status: 'eligible',
           title: 'No Conviction, 1+ Year — Expungeable',
-          message: 'Because your case was dismissed (or was an arrest that never led to a charge) and at least a year has passed, you can petition to expunge it. The standard is a discretionary "ends of justice" one; the prosecutor gets notice, and a hearing can be waived if everyone consents. The ujs.sd.gov Guide & File online interview walks you through forms UJS-391/-394. (A dismissal can sometimes be expunged sooner than a year on a showing of compelling necessity.)',
+          message: 'Because your case ended without a conviction, you can petition to expunge it — a dismissal 1 year from the formal dismissal on the record, or a no-charge arrest 1 year from the arrest. Be clear-eyed about the standard: this is not automatic. It is discretionary, and YOU carry the burden — by clear and convincing evidence — of showing the court that expungement serves the ends of justice and the best interest of both the public and you (§ 23A-3-30). If granted, "expungement" here means SEALING, not destruction: a nonpublic record is kept at the DCI for law enforcement, prosecutors, and the courts, and it can be used to enhance a sentence in a later case (§ 23A-3-31). Within those limits it is real relief — the law restores you to your pre-arrest status and lets you lawfully deny the arrest, with perjury protection (§ 23A-3-32), though that protection speaks to the arrest and proceedings, not to that retained law-enforcement record. Two reassurances: there is NO deadline to apply, and even pre-July-2010 arrests qualify (§ 23A-3-33). The ujs.sd.gov Guide & File interview walks you through forms UJS-391/-394.',
           remedy: 'Non-conviction expungement petition (§ 23A-3-27)',
           citation: 'S.D. Codified Laws § 23A-3-27'
         },
         waiting_sd: {
           status: 'waiting',
           title: 'Not Yet One Year',
-          message: 'For a dismissal or a no-charge arrest, South Dakota generally requires 1 year before you can petition to expunge (though a dismissal can sometimes go sooner on a showing of compelling necessity). Based on your date, the year has not passed yet. When it does, the ujs.sd.gov Guide & File self-help will walk you through it.',
+          message: 'For a dismissal, South Dakota measures the 1-year wait from the formal dismissal on the record; for a no-charge arrest, from the arrest date (§ 23A-3-27). Based on your date, the year has not passed yet. One early door worth knowing: earlier filing is possible if you can show COMPELLING NECESSITY (§ 23A-3-27(4)). When the year runs (or if you can show that necessity), the ujs.sd.gov Guide & File self-help will walk you through it.',
           remedy: 'Wait until 1 year (or show compelling necessity) — § 23A-3-27',
           citation: 'S.D. Codified Laws § 23A-3-27'
         },
         eligible_acquittal_sd: {
           status: 'eligible',
           title: 'Acquitted — Expungeable Anytime',
-          message: 'Because you were acquitted (found not guilty), South Dakota lets you petition to expunge the record ANYTIME, with no waiting period. The standard is a discretionary "ends of justice" one, and the prosecutor gets notice. The ujs.sd.gov Guide & File online interview walks you through the forms. A DCI record check ($24) helps confirm what is on file.',
+          message: 'Because you were acquitted (found not guilty), South Dakota lets you petition to expunge the record ANYTIME, with no waiting period (§ 23A-3-27(3)). One honest note on the standard: it is discretionary and YOU carry the burden — by clear and convincing evidence — of showing that expungement serves the ends of justice and the best interest of the public and you (§ 23A-3-30); it is not automatic. If granted, expungement means SEALING: a nonpublic DCI record is retained for law enforcement, prosecutors, and courts and can enhance a later sentence (§ 23A-3-31), though the law otherwise restores you to pre-arrest status and lets you deny the arrest with perjury protection (§ 23A-3-32). There is no deadline to apply, and pre-July-2010 arrests qualify (§ 23A-3-33). The ujs.sd.gov Guide & File interview walks you through the forms; a DCI record check ($24) helps confirm what is on file.',
           remedy: 'Non-conviction expungement after acquittal (§ 23A-3-27) — no wait',
           citation: 'S.D. Codified Laws § 23A-3-27'
         },
@@ -12239,10 +12250,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         ineligible_dui_sd: {
           status: 'ineligible',
-          title: 'DUI / Motor-Vehicle Conviction — Excluded',
-          message: 'South Dakota excludes DUI and other motor-vehicle convictions from expungement entirely. No waiting period changes that. A pardon from the Governor remains a route (a pardoned conviction is then sealed), and there is an exceptional-pardon path 5 years out. The ujs.sd.gov self-help and a pardon application through the Board of Pardons and Paroles are where to look next.',
-          remedy: 'None (DUI/MV excluded) — a pardon is the remaining route',
-          citation: 'S.D. Codified Laws § 23A-3-34'
+          title: 'DUI Conviction — No Clearing Path in South Dakota',
+          message: 'South Dakota has no clause that names DUI as excluded; the answer follows from how the two clearing paths are scoped. A DUI conviction is a Class 1 misdemeanor, which sits ABOVE the automatic-removal ceiling — that program reaches only Class 2 misdemeanors and below (§ 23A-3-34). And petition expungement reaches only cases that did NOT end in a conviction — a no-charge arrest, a dismissal, or an acquittal (§ 23A-3-27). A DUI conviction falls outside both, so there is no expungement route for it. A pardon from the Governor remains a path (a pardoned conviction is then sealed), with an exceptional-pardon path 5 years out. The ujs.sd.gov self-help and the Board of Pardons and Paroles are where to look next.',
+          remedy: 'None (a DUI conviction is outside both § 23A-3-34 and § 23A-3-27) — a pardon is the route',
+          citation: 'S.D. Codified Laws §§ 23A-3-34, 23A-3-27'
         },
         ineligible_conviction_sd: {
           status: 'ineligible',

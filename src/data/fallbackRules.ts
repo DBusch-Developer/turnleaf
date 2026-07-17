@@ -5061,17 +5061,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       },
       {
         question:
-          'How long is an FDLE Certificate of Eligibility valid? Wave 3 gives "12 months" but flags it. Confirm on FDLE\'s instructions — it matters for timing the court petition after the certificate issues.',
-        blocksFields: [],
-      },
-      {
-        question:
           'Confirm the § 943.0584 list of offences that cannot be sealed even with adjudication withheld: DV battery, sex offences, lewd offences, trafficking, and others. The tree asks a person whether their offence is on this list.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'How are completed diversions treated — including juvenile diversion and the niche self-defense (§ 943.0578) and human-trafficking tracks? Wave 3 mentions these as niche tracks but does not detail eligibility. Standing call-sheet question for every state.',
         blocksFields: [],
       },
     ],
@@ -5089,14 +5079,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         prior_relief_fl: {
           type: 'boolean',
           text: 'Have you ever had a Florida criminal record sealed or expunged before, by court order?',
-          yes: 'ineligible_lifetime_fl',
+          yes: 'selfdefense_lifetime_fl',
           no: 'prior_adjudication_fl'
         },
         // The conviction bar is the second-fastest "no".
         prior_adjudication_fl: {
           type: 'boolean',
           text: 'Has any criminal charge on your Florida record — this case or any other, ever — ended in an ADJUDICATION of guilt (a formal conviction, as opposed to adjudication being WITHHELD)?',
-          yes: 'ineligible_conviction_fl',
+          yes: 'selfdefense_conviction_fl',
           no: 'disposition'
         },
         disposition: {
@@ -5107,8 +5097,31 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Dismissed / Never charged / Charges dropped', value: 'dismissed', next: 'eligible_expunction_fl' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_expunction_fl' },
             { label: 'Adjudication WITHHELD (guilty or no contest, but no formal conviction entered)', value: 'convicted', next: 'disqualified_offense_fl' },
-            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Diversion completed', value: 'deferred', next: 'diversion_type_fl' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // Self-defense expunction (943.0578) overrides BOTH the lifetime bar and
+        // the conviction bar ("notwithstanding 943.0585(1) and (2)").
+        selfdefense_lifetime_fl: {
+          type: 'boolean',
+          text: 'Did the state attorney or the court find that you acted in lawful self-defense under chapter 776, and either not file charges or dismiss them on that basis?',
+          yes: 'eligible_selfdefense_fl',
+          no: 'ineligible_lifetime_fl'
+        },
+        selfdefense_conviction_fl: {
+          type: 'boolean',
+          text: 'Did the state attorney or the court find that you acted in lawful self-defense under chapter 776, and either not file charges or dismiss them on that basis?',
+          yes: 'eligible_selfdefense_fl',
+          no: 'ineligible_conviction_fl'
+        },
+        diversion_type_fl: {
+          type: 'choice',
+          text: 'What kind of diversion did you complete?',
+          options: [
+            { label: 'Juvenile diversion (a diversion program for a minor)', value: 'juvenile', next: 'eligible_juvenile_fl' },
+            { label: 'Adult diversion — and the case was then dismissed or dropped (nolle prossed) by the state attorney', value: 'adult_dismissed', next: 'eligible_expunction_fl' },
+            { label: 'I\'m not sure how the case finally ended', value: 'unsure', next: 'unknown_deferred' }
           ]
         },
         disqualified_offense_fl: {
@@ -5136,16 +5149,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         unknown_deferred: {
           status: 'complex',
           title: 'Diversion Cases Need a Person',
-          message: 'Florida\'s sealing and expunction rules are screened here for dismissals, withheld adjudications, and convictions. How a completed diversion is treated — and Florida has niche tracks for juvenile diversion, lawful self-defense (§ 943.0578), and human-trafficking survivors — is not something this screening has researched in detail, and we would rather tell you that than guess. County legal aid and the Florida Justice Center can tell you which track fits.',
-          remedy: 'Consult Legal Aid (Diversion / Niche Tracks Not Yet Screened)',
-          citation: 'Fla. Stat. §§ 943.0585, 943.0578 (treatment of diversions not yet detailed)'
+          message: 'You told us a diversion was completed but were not sure how the case finally ended — and in Florida that last step decides the path. If the state attorney dismissed or dropped the charges, the case can be expunged like any non-conviction; if adjudication was withheld, sealing may be possible; and juvenile diversion and lawful-self-defense cases have their own separate doors. Rather than guess, pull your FDLE criminal history or ask the court clerk how the case was finally disposed, then run this again. County legal aid and the Florida Justice Center can help you read it.',
+          remedy: 'Confirm how the case finally ended (FDLE / court clerk), then re-run',
+          citation: 'Fla. Stat. §§ 943.0585, 943.059 (the path depends on the final disposition)'
         },
         ineligible_lifetime_fl: {
           status: 'ineligible',
           title: 'You Have Used Florida\'s Once-Per-Lifetime Relief',
-          message: 'Florida allows a person only ONE court-ordered seal or expunge in their lifetime, and because you have had a Florida record sealed or expunged before, you cannot obtain another. This is a hard rule in the statute, not a waiting period. One thing worth knowing that is easy to miss: this bar is about a prior FLORIDA relief — since 2013, a seal or expunge you obtained in another state no longer counts against you here. If your prior relief was out of state, it is worth confirming with a Florida legal aid organization that you are actually barred. The Florida Justice Center and county legal aid can check.',
-          remedy: 'None (Once-Per-Lifetime Rule Used) — confirm if your prior relief was out of state',
-          citation: 'Fla. Stat. §§ 943.0585, 943.059'
+          message: 'Florida allows a person only ONE court-ordered seal or expunge in their lifetime, and because you have had a Florida record sealed or expunged before, you cannot obtain another. This is a hard rule in the statute, not a waiting period. One thing worth knowing that is easy to miss: this bar is about a prior FLORIDA relief. A seal or expunge you obtained in ANOTHER STATE does not count against you here, because both statutes only cross-reference Florida sealing and expunction statutes (§§ 943.059(1)(e), 943.0585(1)(g)). If your prior relief was out of state, it is worth confirming with a Florida legal aid organization that you are not actually barred. The Florida Justice Center and county legal aid can check.',
+          remedy: 'None (Once-Per-Lifetime Rule Used) — an out-of-state prior relief does NOT count',
+          citation: 'Fla. Stat. §§ 943.059(1)(e), 943.0585(1)(g)'
         },
         ineligible_conviction_fl: {
           status: 'ineligible',
@@ -5181,6 +5194,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           message: 'Because adjudication was withheld, your offense is not on the disqualified list, and you have completed your sentence, you appear eligible to SEAL this record under Fla. Stat. § 943.059. The process starts with FDLE, not the court: apply for a Certificate of Eligibility — a $75 application (non-refundable, by money order), a notarized form, fingerprints, and a certified disposition — and FDLE estimates about 12 weeks. With the certificate in hand, you file the petition in the county of arrest; the clerk\'s filing fee varies by county. Two things to hold onto: this is your one court-ordered relief for life, so use it where it counts most; and after a record has been sealed for 10 years, you may then petition to EXPUNGE it, which is stronger.',
           remedy: 'FDLE Certificate of Eligibility, then Sealing Petition (§ 943.059)',
           citation: 'Fla. Stat. § 943.059'
+        },
+        eligible_selfdefense_fl: {
+          status: 'eligible',
+          title: 'Lawful Self-Defense — a Separate Expunction That Overrides the Bars',
+          message: 'This is a specific and powerful Florida route. If the state attorney or the court found that you acted in lawful self-defense under chapter 776 and either declined to file charges or dismissed them on that basis, you may qualify for a self-defense expunction under Fla. Stat. § 943.0578 — and, importantly, it applies "notwithstanding" the usual rules, so it is NOT blocked by a prior Florida relief or by a conviction elsewhere on your record (§ 943.0578(1)). It uses its own Certificate of Eligibility process (§ 943.0578(2)), with the same mechanics as a standard petition — a $75 application, fingerprints, and a notarized form (§ 943.0585(5)-(6), imported by § 943.0578(4)). Because it turns on the self-defense finding and is fact-specific, it is worth doing with help: the Florida Justice Center and county legal aid handle these.',
+          remedy: 'Lawful self-defense expunction (§ 943.0578) — overrides the lifetime and conviction bars',
+          citation: 'Fla. Stat. § 943.0578'
+        },
+        eligible_juvenile_fl: {
+          status: 'eligible',
+          title: 'Juvenile Diversion — a Separate Path That Does Not Use Your Adult Shot',
+          message: 'Because you completed a JUVENILE diversion program, Florida has a separate expunction path under Fla. Stat. § 943.0582 — and here is the part that matters: using it does NOT burn your once-per-lifetime ADULT seal-or-expunge (§ 943.0582(4)). So this is its own door, not the one you would use for an adult case later. It runs through FDLE like the others. Because juvenile-record rules have their own details, the Florida Justice Center and county legal aid can confirm your eligibility and walk you through it.',
+          remedy: 'Juvenile diversion expunction (§ 943.0582) — does not use your adult lifetime relief',
+          citation: 'Fla. Stat. § 943.0582'
         }
       }
     },

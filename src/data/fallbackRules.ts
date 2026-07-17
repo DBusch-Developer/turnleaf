@@ -5060,13 +5060,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       // Diana read all seven directly (7/16); FL statute URLs (leg.state.fl.us uses
       // chapter-range paths) not yet supplied, so retrievedOn is set and url is
       // held pending her links — read-but-unlinked.
-      { id: 'Fla. Stat. § 943.0585 (expunction; (1)(g) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity; (5)-(6) $75/fingerprint/notarized COE mechanics)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.059 (court-ordered sealing; (1)(e) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction; (1) notwithstanding 943.0585(1)&(2) — overrides the lifetime and conviction bars; (2) own COE; (4) imports 943.0585(5)-(6))', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.0581 (administrative expunction; read 7/16)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.0582 (juvenile diversion expunction; (4) does not use the adult once-per-lifetime relief)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.0584 (offenses ineligible even with adjudication withheld; (1) conviction = any guilty/nolo plea or finding, withheld or not; (2)(a)-(hh) the full category list)', url: null, retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.0595 (MANDATORY auto-sealing of non-conviction arrests; (2)(b) no lifetime limit; (2)(a) excludes forcible felony 776.08 and specified registry offenses even if dismissed/acquitted; (3)(c) FDLE sealing does not force other agencies)', url: null, retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0585 (expunction; (1)(g) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity; (5)-(6) $75/fingerprint/notarized COE mechanics)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0585', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.059 (court-ordered sealing; (1)(e) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.059', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction; (1) notwithstanding 943.0585(1)&(2) — overrides the lifetime and conviction bars; (2) own COE; (4) imports 943.0585(5)-(6))', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0578', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0581 (administrative expunction; read 7/16)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0581', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0582 (juvenile diversion expunction; (4) does not use the adult once-per-lifetime relief)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0582', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0584 (offenses ineligible even with adjudication withheld; (1) conviction = any guilty/nolo plea or finding, withheld or not; (2)(a)-(hh) the full category list)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0584', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.0595 (MANDATORY auto-sealing of non-conviction arrests; (2)(b) no lifetime limit; (2)(a) excludes forcible felony 776.08 and specified registry offenses even if dismissed/acquitted; (3)(c) FDLE sealing does not force other agencies)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0595', retrievedOn: '2026-07-16' },
       { id: 'Fla. Stat. § 776.08 (forcible felony — excluded from 943.0595 auto-sealing; cross-reference)', url: null, retrievedOn: null },
       { id: 'Fla. Stat. § 943.0435(1)(h)1.a.(I) (sex-offender-registry offenses excluded from 943.0595 auto-sealing; cross-reference)', url: null, retrievedOn: null },
     ],

@@ -12150,7 +12150,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     openQuestions: [
       {
         question:
-          'The suspended-imposition / diversion path (check_deferred_sd) cites § 23A-27-13 (suspended imposition of sentence) and §§ 23A-3-35 to -37 (diversion auto-expungement), which Diana has NOT yet read — they remain unlinked. That result is a "check your record" hedge, not a computed-eligibility claim, so SD flipped to statute_cited on the six verified non-conviction/automatic sections (§§ 23A-3-27/-30/-31/-32/-33/-34); read § 23A-27-13 and the diversion sections when convenient to link them.',
+          'check_deferred_sd status. The SIS cluster is verified (§§ 23A-27-13/-13.1/-13.3/-14, linked 7/16): a completed SIS is discharged and dismissed without adjudication and is NOT a conviction (§ 14). Still HELD: whether the record is SEALED traces to § 23A-27-17, not yet read — the copy says "not a conviction" (cited) + "sealing status: confirm" until Diana reads 17. Also unread: §§ 23A-27-14.1/14.2 (licensing, cited in copy) and the diversion sections §§ 23A-3-35 to -37. check_deferred_sd is a check-your-record hedge, not a computed-eligibility claim.',
         blocksFields: [],
       },
       {
@@ -12167,7 +12167,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       { id: 'S.D. Codified Laws § 23A-3-32 (restores the person to pre-arrest status in contemplation of law, with perjury protection for denying the arrest/indictment/trial — speaks to the ARREST and proceedings; pair with -31\'s retained nonpublic record)', url: 'https://sdlegislature.gov/Statutes/23A-3-32', retrievedOn: '2026-07-16' },
       { id: 'S.D. Codified Laws § 23A-3-33 (no statute of limitations on applying; pre-July-2010 arrests qualify)', url: 'https://sdlegislature.gov/Statutes/23A-3-33', retrievedOn: '2026-07-16' },
       { id: 'S.D. Codified Laws § 23A-3-34 (automatic removal from the PUBLIC record — highest-charged petty offense / municipal ordinance violation / Class 2 misdemeanor; 5-year wait after all court-ordered conditions satisfied and no further convictions in 5 yrs; record stays available to court personnel and usable as a later-prosecution enhancement)', url: 'https://sdlegislature.gov/Statutes/23A-3-34', retrievedOn: '2026-07-16' },
-      { id: 'S.D. Codified Laws § 23A-27-13 (suspended imposition of sentence)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws § 23A-27-13 (felony SIS: first-ever felony only; excludes death/life-imprisonment felonies; once per lifetime)', url: 'https://sdlegislature.gov/Statutes/23A-27-13', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-27-13.1 (a nonpublic DCI record exists during the SIS, retained until discharge)', url: 'https://sdlegislature.gov/Statutes/23A-27-13.1', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-27-13.3 (since 2025, excludes rape under SDCL 22-22-1(2)-(3) from felony SIS)', url: 'https://sdlegislature.gov/Statutes/23A-27-13.3', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-27-14 (completed SIS -> discharge and dismissal WITHOUT adjudication, not deemed a conviction; discharge is NOT automatic — the court services officer OR the defendant must raise it; once for the § 23A-27-12.2 track, counting out-of-state SIS)', url: 'https://sdlegislature.gov/Statutes/23A-27-14', retrievedOn: '2026-07-16' },
+      { id: 'S.D. Codified Laws § 23A-27-17 (record sealing on SIS discharge — referenced by §§ 14.1/14.2; NOT yet read: the SIS "sealed" claim is HELD pending this section)', url: null, retrievedOn: null },
+      { id: 'S.D. Codified Laws §§ 23A-27-14.1, 14.2 (teacher/education and gaming/racing licensing may still see and act on an SIS record; cited in copy, link pending)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -12236,10 +12241,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         check_deferred_sd: {
           status: 'eligible',
-          title: 'Suspended Imposition or Diversion — Likely Already Sealed, Check',
-          message: 'Good news, and it may already be done. If you successfully completed a suspended imposition of sentence, the record is sealed on completion; and completed diversions are auto-expunged (no motion needed). So the honest first step is to CHECK — pull a DCI record ($24) or look at your court record to confirm it happened. If it did not, the ujs.sd.gov self-help or a clerk can help you follow up. Either way, you may not need to file anything new.',
-          remedy: 'Check your record — suspended imposition/diversion should already be sealed',
-          citation: 'S.D. Codified Laws § 23A-27-13'
+          title: 'Suspended Imposition — Not a Conviction; Confirm Your Discharge',
+          message: 'Here is what is confirmed and what to check. If you successfully completed a suspended imposition of sentence (SIS), you are discharged and the case is dismissed WITHOUT a judgment of guilt — so it is NOT a conviction (§ 23A-27-14). Whether the record is also SEALED is something we are still confirming (that turns on § 23A-27-17, which we have not yet read), so treat sealing as "confirm," not "done." An important practical point: the discharge is NOT automatic — your court services officer OR YOU must bring the completed probation to the court\'s attention (§ 23A-27-14). So if your probation ended and no discharge and dismissal was entered, raise it with the court; that is the difference between "should be cleared" and "is cleared." Two honesty notes: during the SIS a nonpublic DCI record exists and is retained until discharge (§ 23A-27-13.1), and teacher/education and gaming/racing licensing boards can still see and act on an SIS record (§§ 23A-27-14.1, 14.2). A few eligibility facts, if it helps: a felony SIS must be your first-ever felony and excludes death- or life-imprisonment felonies (§ 23A-27-13) and, since 2025, rape under SDCL 22-22-1(2)-(3) (§ 23A-27-13.3); and it is available once per lifetime for a felony SIS, and once for the § 23A-27-12.2 track (§ 23A-27-14) — counting SIS granted in other states too. The honest first step is to CHECK: pull a DCI record ($24) or look at your court record to confirm the discharge and dismissal were entered, and confirm the sealing status. (A completed diversion may likewise clear, though those sections are still being confirmed.)',
+          remedy: 'Confirm your SIS discharge/dismissal was entered (§ 23A-27-14) — sealing status pending (§ 23A-27-17)',
+          citation: 'S.D. Codified Laws §§ 23A-27-13, 23A-27-13.1, 23A-27-13.3, 23A-27-14 (sealing per § 23A-27-17, not yet read)'
         },
         check_autoremoval_sd: {
           status: 'eligible',

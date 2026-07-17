@@ -5563,7 +5563,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     code: 'OH',
     name: 'Ohio',
     lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
     terminology:
       'Since SB 288 took effect in April 2023, Ohio has two separate remedies. SEALING hides the '
@@ -5572,7 +5573,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       + 'is a longer-wait upgrade you can pursue later. Both run from your FINAL DISCHARGE, which '
       + 'means sentence, probation or parole, fines and restitution all complete (unpaid court costs '
       + 'do not count against you). A few offences are never eligible: OVI and all traffic offences, '
-      + 'first- and second-degree felonies, and offences of violence among them.',
+      + 'first- and second-degree felonies, and FELONY offences of violence — a misdemeanour offence of violence is '
+      + 'not categorically barred. The statutory application fee is $50 plus up to $50 local (one fee regardless of '
+      + 'how many cases), waived entirely if you are indigent.',
     keyDates: [
       {
         label: 'SB 288 — sealing and expungement became distinct remedies',
@@ -5580,36 +5583,34 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         kind: 'effective',
         note: 'Also removed the old "eligible offender" numerical cap in favour of per-conviction analysis.',
       },
+      {
+        label: 'HB 96 — current R.C. 2953.32 sealing text',
+        date: '2025-09-30',
+        kind: 'effective',
+        note: 'R.C. 2953.32 verified current through HB 96 (Diana, statute pass 2026-07-16).',
+      },
+      {
+        label: 'SB 56 — R.C. 2953.321 marijuana/hashish expungement track',
+        date: '2026-03-20',
+        kind: 'effective',
+        note: 'Enacted SB 56. Marijuana or hashish possession (R.C. 2925.11) convictions or dismissals for conduct BEFORE this date are expungeable any time under R.C. 2953.321.',
+      },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the F3 count-limit rules against the Ohio Supreme Court June 2026 Adult Rights Restoration bench card and R.C. 2953.32: an F3 is blocked where the person has more than one other felony (and the related 2-F3-plus-2-misdemeanour pattern). Wave 3 flags a secondary source claiming an HB 1 "5 felonies / 3 F4+" cap and instructs encoding from the bench card instead — which the tree does. Confirm the bench-card rules directly.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the court filing fee? Wave 3 gives "commonly $50" but flags it as set by individual court schedules. Confirm with a clerk of courts (Hamilton or Franklin). One application can cover multiple cases in the same court.',
-        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the full exclusion list from the bench card: F1/F2, OVI and all traffic, offences of violence, registry sex offences, offences with a victim under 13, DV convictions (with the narrow M4 DV sealing allowance), and protection-order violations.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'How are completed diversions and intervention-in-lieu treated? Standing call-sheet question. Wave 3 mentions prosecutor-initiated sealing for low-level drug offences (2953.39) and human-trafficking expungement anytime, but not general diversion timing.',
+          'Diversion / intervention-in-lieu that did NOT end in a dismissal: the tree routes a completed diversion whose charges were dismissed into the R.C. 2953.33 non-conviction path (a dismissed complaint is textually within 2953.33(A)(1)); a diversion that did not end in dismissal keeps the punt node. Confirm local practice for the non-dismissal case. (R.C. 2953.39 prosecutor-initiated sealing for low-level drug offences remains a referral mention.)',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Ohio R.C. 2953.32 (sealing of conviction records)', url: null, retrievedOn: null },
-      { id: 'Ohio R.C. 2953.31 (definitions)', url: null, retrievedOn: null },
-      { id: 'Ohio R.C. 2953.33 (dismissals/acquittals/no-bills — immediate sealing)', url: null, retrievedOn: null },
-      { id: 'Ohio R.C. 2953.34 (expungement)', url: null, retrievedOn: null },
-      { id: 'Ohio R.C. 2953.39 (prosecutor-initiated sealing, low-level drug offences)', url: null, retrievedOn: null },
-      { id: 'Ohio Supreme Court Adult Rights Restoration bench card (June 2026 rev — primary for eligibility)', url: null, retrievedOn: null },
+      { id: 'Ohio R.C. 2953.31 (definitions)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.31', retrievedOn: '2026-07-16' },
+      { id: 'Ohio R.C. 2953.32 (sealing/expungement of convictions; current through HB 96; (A) exclusions & counting, (B) waits, (C) procedure, (D) fees & BCI retention)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.32', retrievedOn: '2026-07-16' },
+      { id: 'Ohio R.C. 2953.321 (marijuana/hashish possession expungement, SB 56 eff. 2026-03-20)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.321', retrievedOn: '2026-07-16' },
+      { id: 'Ohio R.C. 2953.33 (non-convictions: dismissals/acquittals anytime; no-bill 2-yr; pardon sealing; (C) seal-not-expunge list)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.33', retrievedOn: '2026-07-16' },
+      { id: 'Ohio R.C. 2953.34 (expungement)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.34', retrievedOn: '2026-07-16' },
+      { id: 'Ohio R.C. 2953.39 (prosecutor-initiated sealing, low-level drug offences)', url: 'https://codes.ohio.gov/ohio-revised-code/section-2953.39', retrievedOn: '2026-07-16' },
+      { id: 'Ohio Supreme Court Adult Rights Restoration bench card (cross-check only, not read — statute text is primary and current)', url: null, retrievedOn: null },
       { id: 'SB 288 (2023 — sealing/expungement split; per-conviction analysis)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -5620,24 +5621,85 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_oh' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_oh' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'pardon_oh' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nobill_gate_oh' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_oh' },
-            { label: 'Diversion / Intervention in lieu (Completed)', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Diversion / Intervention in lieu (Completed)', value: 'deferred', next: 'diversion_dismissed_oh' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_oh: {
+        // A gubernatorial pardon opens its own sealing track (2953.33(A)(3)).
+        pardon_oh: {
           type: 'boolean',
-          text: 'Was the offense any of these: an OVI or any traffic offense, an offense of violence, a sex offense requiring registration, an offense with a victim under 13, or a domestic violence offense?',
-          yes: 'excluded_path_oh',
-          no: 'level_oh'
+          text: 'Have you received a Governor\'s pardon for this conviction (absolute, partial, or a conditional pardon whose conditions are met)?',
+          yes: 'eligible_pardon_oh',
+          no: 'marijuana_oh'
         },
-        excluded_path_oh: {
+        // 2953.321 (SB 56): marijuana/hashish possession before 2026-03-20 -> anytime expungement.
+        marijuana_oh: {
           type: 'boolean',
-          text: 'Was it specifically an OVI or a traffic offense?',
-          yes: 'ineligible_traffic_oh',
-          no: 'ineligible_excluded_oh'
+          text: 'Was this a marijuana or hashish possession under R.C. 2925.11 (a minor-misdemeanor or low-level possession), for conduct BEFORE March 20, 2026?',
+          yes: 'eligible_marijuana_oh',
+          no: 'excluded_oh'
+        },
+        // Dismissed complaints seal anytime (2953.33(A)(1)); a grand-jury no-bill waits 2 years (A)(2).
+        nobill_gate_oh: {
+          type: 'boolean',
+          text: 'Was this specifically a grand-jury NO-BILL (the grand jury declined to indict), rather than a dismissal of a filed charge?',
+          yes: 'nobill_date_oh',
+          no: 'eligible_nonconviction_oh'
+        },
+        diversion_dismissed_oh: {
+          type: 'boolean',
+          text: 'When you completed the diversion or intervention-in-lieu, were the charges then DISMISSED?',
+          yes: 'eligible_nonconviction_oh',
+          no: 'unknown_deferred'
+        },
+        nobill_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did the grand jury return the no-bill report?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'from the no-bill report (R.C. 2953.33(A)(2))' },
+            nextPass: 'eligible_nobill_oh',
+            nextFail: 'waiting_nobill_oh'
+          }
+        },
+        // The exclusion / special-treatment categories, from R.C. 2953.32(A)(1)-(2).
+        excluded_oh: {
+          type: 'choice',
+          text: 'Ohio bars or specially treats certain categories. Which best describes the offense?',
+          options: [
+            { label: 'An OVI or any traffic offense', value: 'traffic', next: 'ineligible_traffic_oh' },
+            { label: 'A FELONY offense of violence (not a sexually oriented offense)', value: 'felony_violence', next: 'ineligible_excluded_oh' },
+            { label: 'A sex offense you are CURRENTLY required to register for', value: 'registry', next: 'waiting_registry_oh' },
+            { label: 'An offense with a victim under 13 (other than nonsupport under 2919.21)', value: 'victim_u13', next: 'ineligible_excluded_oh' },
+            { label: 'Theft in office (R.C. 2921.41)', value: 'theft_office', next: 'ineligible_excluded_oh' },
+            { label: 'First- or second-degree-misdemeanor domestic violence (R.C. 2919.25)', value: 'dv_m12', next: 'ineligible_excluded_oh' },
+            { label: 'Third- or fourth-degree-misdemeanor domestic violence, or a protection-order violation (R.C. 2919.27)', value: 'dv_m34', next: 'sealonly_date_oh' },
+            { label: 'Soliciting improper compensation (R.C. 2921.43)', value: 'soliciting', next: 'soliciting_date_oh' },
+            { label: 'None of these', value: 'none', next: 'level_oh' }
+          ]
+        },
+        sealonly_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation or parole, fines and restitution all complete?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'final discharge (R.C. 2953.32(A)(2) — M3/M4 DV or protection-order violation: sealable on the misdemeanor timeline, never expungeable)' },
+            nextPass: 'eligible_sealing_only_oh',
+            nextFail: 'waiting_oh'
+          }
+        },
+        soliciting_date_oh: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was your final discharge — sentence, probation or parole, fines and restitution all complete?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'final discharge (R.C. 2953.32(B)(1)(a)(iii) — soliciting improper compensation, 7-year wait)' },
+            nextPass: 'eligible_sealing_oh',
+            nextFail: 'waiting_oh'
+          }
         },
         level_oh: {
           type: 'choice',
@@ -5684,10 +5746,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // The F3 count limit — the bench-card rule, asked.
         f3_count_oh: {
           type: 'choice',
-          text: 'For a third-degree felony, Ohio limits sealing by your record. Counting your whole history, how many OTHER felony convictions do you have (not this one)?',
+          text: 'For a third-degree felony, Ohio limits sealing by your record (same-act convictions count as one). Counting your whole history, which fits?',
           options: [
-            { label: 'None, or one other felony', value: 'ok', next: 'f3_date_oh' },
-            { label: 'More than one other felony', value: 'blocked', next: 'ineligible_f3_count_oh' },
+            { label: 'This is my only felony, or I have just one other felony', value: 'ok', next: 'f3_date_oh' },
+            { label: 'I have more than one other felony conviction', value: 'blocked', next: 'ineligible_f3_count_oh' },
+            { label: 'I have exactly two third-degree felonies (including this one), and few other convictions', value: 'two_f3', next: 'complex_f3_twoprong_oh' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_f3_oh' }
           ]
         },
@@ -5720,14 +5783,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_nonconviction_oh: {
           status: 'eligible',
           title: 'No Conviction — Seal It Now, No Waiting Period',
-          message: 'Because your case ended without a conviction — dismissed, acquitted, or no-billed — Ohio lets you seal it immediately, with no waiting period and no numerical limits (R.C. 2953.33). File with the court that handled the case. This is the most straightforward category Ohio has.',
+          message: 'Because your case ended without a conviction — dismissed or acquitted — Ohio lets you seal it any time, with no waiting period and no numerical limits (R.C. 2953.33(A)(1)). File with the court that handled the case. One honest limit to know: certain non-conviction records on the R.C. 2953.33(C) list (traffic offenses, a felony offense of violence, registry offenses, offenses with a victim under 13, first- and second-degree felonies, domestic-violence and protection-order matters, and the F3-count situations) can be SEALED but not EXPUNGED. For most non-convictions, though, this is the most straightforward category Ohio has. (If yours was a marijuana or hashish possession, it may also qualify for the anytime expungement under R.C. 2953.321.)',
           remedy: 'Seal a Non-Conviction (R.C. 2953.33) — immediate',
           citation: 'Ohio R.C. 2953.33'
         },
         eligible_sealing_oh: {
           status: 'eligible',
           title: 'Potentially Eligible to Seal',
-          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under R.C. 2953.32. Apply to the sentencing court — common pleas for a felony, municipal court for a misdemeanor — and note that one application can cover multiple cases in the same court. The prosecutor gets 60 days to object, and a hearing is usually set 45 to 90 days after filing; the judge weighs your interest against the government\'s need to keep the record, so this is a decision rather than a formality. The filing fee is set by the local court and is something we are still confirming. One thing to keep in mind for later: sealing hides the record, and after a longer wait you can pursue EXPUNGEMENT, which destroys it — for a felony that is generally 10 years after it became sealing-eligible.',
+          message: 'Based on your dates, you appear eligible to petition to SEAL this conviction under R.C. 2953.32. Apply to the sentencing court — common pleas for a felony, municipal court for a misdemeanor — and one application can cover multiple cases in the same court. On procedure: the court gives the prosecutor notice at least 60 days before the hearing, the prosecutor\'s objection is due up to 30 days before it, and the hearing is set 45 to 90 days after you file (R.C. 2953.32(C)); the judge weighs your interest against the government\'s need to keep the record, so it is a decision, not a formality. Fees are statutory: $50 application plus a local court fee of up to $50, one fee no matter how many cases — waived entirely with a poverty affidavit if you are indigent. On the sealing-vs-expungement upgrade: for a FELONY you can later pursue EXPUNGEMENT (which destroys the record) generally 10 years after it became sealing-eligible; for a MISDEMEANOR, expungement carries the SAME wait as sealing (1 year, or 6 months for a minor misdemeanor), not an extra decade (R.C. 2953.32(B)(1)(b)). One honesty caveat: even after expungement, BCI retains the conviction record solely for law-enforcement employment screening (R.C. 2953.32(D)(5)).',
           remedy: 'Petition to Seal (R.C. 2953.32)',
           citation: 'Ohio R.C. 2953.32'
         },
@@ -5748,7 +5811,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_excluded_oh: {
           status: 'ineligible',
           title: 'This Offense Is Excluded From Sealing',
-          message: 'Offenses of violence, sex offenses requiring registration, offenses with a victim under 13, and (with a narrow exception for fourth-degree misdemeanor domestic violence) domestic violence offenses are excluded from sealing in Ohio. No waiting period changes that. Because these are specific legal categories, if you are not certain your offense is actually excluded it is worth confirming — the Ohio Justice & Policy Center\'s guide is built for this. If sealing is truly off the table, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing bars without sealing the record, and human-trafficking-related offenses have their own expungement route available anytime.',
+          message: 'The category you chose is excluded from sealing under R.C. 2953.32(A)(1): a FELONY offense of violence, an offense with a victim under 13, theft in office, or first-/second-degree-misdemeanor domestic violence. No waiting period changes that. One thing worth knowing, because it catches people: a MISDEMEANOR offense of violence is NOT categorically barred — so if yours was a misdemeanor offense of violence, run this again and choose \'None of these\' at the category step. If sealing is truly off the table, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing bars, and human-trafficking-related offenses have their own anytime expungement. The Ohio Justice & Policy Center can confirm where yours falls.',
           remedy: 'None (Excluded Offense) — ask about a CQE',
           citation: 'Ohio R.C. 2953.32'
         },
@@ -5762,7 +5825,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_f3_count_oh: {
           status: 'ineligible',
           title: 'Your Felony Record Blocks Sealing This F3',
-          message: 'A third-degree felony can be sealed in Ohio, but not when the person has more than one other felony conviction on their record. Based on what you told us, that limit is reached. This is one worth having someone check carefully, because the counting rules are specific and Ohio changed them in 2023 — the Ohio Justice & Policy Center and Ohio Legal Help can look at your actual record against the current bench card. If sealing stays out of reach, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing barriers.',
+          message: 'A third-degree felony can be sealed in Ohio, but not when the person has more than one other felony conviction (R.C. 2953.32(A)(1)(h)). Based on what you told us, that limit is reached. The counting rules are specific and worth having checked: same-act convictions count as one, and two or three convictions from the same proceeding within a 3-month period may be counted as one at the court\'s discretion (R.C. 2953.32(A)(3)) — so the count is not always the obvious number. Ohio Legal Help and the Ohio Justice & Policy Center can look at your actual record. If sealing stays out of reach, a Certificate of Qualification for Employment (CQE) can still lift many hiring and licensing barriers.',
           remedy: 'Consult Legal Aid (F3 Count Limit) — or pursue a CQE',
           citation: 'Ohio R.C. 2953.32'
         },
@@ -5776,9 +5839,58 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         complex_f3_oh: {
           status: 'complex',
           title: 'We Need Your Felony Count',
-          message: 'A third-degree felony can be sealed unless you have more than one other felony conviction. Since you are not sure of your felony count, we are not going to guess — it is the difference between eligible and not. The Ohio Justice & Policy Center and Ohio Legal Help can pull your record and count it against the current 2026 bench card, which is the authoritative source for this.',
+          message: 'A third-degree felony can be sealed unless you have more than one other felony conviction, and there is a second rule for exactly two F3s. Since you are not sure of your felony count, we are not going to guess — it is the difference between eligible and not, and the counting has wrinkles (same-act convictions count as one; some same-proceeding convictions within 3 months may count as one). The Ohio Justice & Policy Center and Ohio Legal Help can pull your record and count it precisely (R.C. 2953.32(A)(3)).',
           remedy: 'Get Your Felony Count First (OJPC / Ohio Legal Help)',
-          citation: 'Ohio R.C. 2953.32'
+          citation: 'Ohio R.C. 2953.32(A)(3)'
+        },
+        complex_f3_twoprong_oh: {
+          status: 'complex',
+          title: 'Two Third-Degree Felonies — a Specific Counting Rule',
+          message: 'You told us you have exactly two third-degree felonies, and Ohio has a specific rule for that. Two F3 convictions are sealable ONLY if your total convictions do not exceed those two F3s plus two misdemeanors (R.C. 2953.32(A)(3)) — and the counting has wrinkles: convictions from the same act count as one, and two or three convictions from the same proceeding within a 3-month period may be counted as one at the court\'s discretion. Whether you qualify turns on that exact count, so it is worth having someone do it rather than guessing. Ohio Legal Help and the Ohio Justice & Policy Center can pull your record and count it precisely.',
+          remedy: 'Get a Precise Felony Count (OJPC / Ohio Legal Help) — the two-F3 rule',
+          citation: 'Ohio R.C. 2953.32(A)(3)'
+        },
+        eligible_pardon_oh: {
+          status: 'eligible',
+          title: 'Pardoned — a Separate Sealing Route',
+          message: 'Because you have received a Governor\'s pardon for this conviction, Ohio opens a sealing route to you under R.C. 2953.33(A)(3) — an absolute or partial pardon, or a conditional pardon once its conditions are met, may be sealed. This is separate from the ordinary conviction-sealing timeline. You apply to the court that handled the case; Ohio Legal Help and the Ohio Justice & Policy Center can walk you through it.',
+          remedy: 'Seal a pardoned conviction (R.C. 2953.33(A)(3))',
+          citation: 'Ohio R.C. 2953.33(A)(3)'
+        },
+        eligible_marijuana_oh: {
+          status: 'eligible',
+          title: 'Marijuana / Hashish Possession — Expungeable Any Time',
+          message: 'Because this was a marijuana or hashish possession under R.C. 2925.11 for conduct before March 20, 2026, Ohio\'s SB 56 gives you the strongest route it has: EXPUNGEMENT under R.C. 2953.321, available ANY TIME with no waiting period — it destroys the record rather than just sealing it. It applies to qualifying convictions and dismissals alike, and the $50 fee is waived if you are indigent. You file with the court that handled the case. Ohio Legal Help can help you prepare it.',
+          remedy: 'Marijuana/hashish expungement any time (R.C. 2953.321)',
+          citation: 'Ohio R.C. 2953.321'
+        },
+        eligible_nobill_oh: {
+          status: 'eligible',
+          title: 'Grand-Jury No-Bill — Sealable After 2 Years',
+          message: 'Because your case ended in a grand-jury NO-BILL — the grand jury declined to indict — Ohio lets you seal it, with one timing rule: you must wait 2 years from the date of the no-bill report (R.C. 2953.33(A)(2)). Based on your dates, that has passed, so you can file with the court that handled the case. Like other non-convictions, a no-bill on the R.C. 2953.33(C) list can be sealed but not expunged.',
+          remedy: 'Seal a no-bill 2 years after the report (R.C. 2953.33(A)(2))',
+          citation: 'Ohio R.C. 2953.33(A)(2)'
+        },
+        waiting_nobill_oh: {
+          status: 'waiting',
+          title: 'No-Bill — Not Yet 2 Years',
+          message: 'A grand-jury no-bill can be sealed, but not until 2 years after the no-bill report (R.C. 2953.33(A)(2)). Based on your date, those 2 years have not passed yet. When they do, you file with the court that handled the case. Ohio Legal Help can help you prepare in the meantime.',
+          remedy: 'Wait until 2 years after the no-bill report (R.C. 2953.33(A)(2))',
+          citation: 'Ohio R.C. 2953.33(A)(2)'
+        },
+        waiting_registry_oh: {
+          status: 'waiting',
+          title: 'Registration Duty — Sealable 5 Years After It Ends',
+          message: 'Because this is a sex offense you are currently required to register for, Ohio bars sealing while that registration duty is in place (R.C. 2953.32(A)(1)(c)) — but this is a "not yet," not a "never." You become eligible to apply 5 years after your registration requirements end or are terminated (R.C. 2953.32(B)(1)(a)(iv)). So the path exists on the far side of registration. The Ohio Justice & Policy Center can confirm when your registration duty ends and help you plan for it.',
+          remedy: 'Eligible 5 years after registration ends (R.C. 2953.32(B)(1)(a)(iv))',
+          citation: 'Ohio R.C. 2953.32(A)(1)(c), (B)(1)(a)(iv)'
+        },
+        eligible_sealing_only_oh: {
+          status: 'eligible',
+          title: 'DV / Protection-Order (M3/M4) — Sealable, but Never Expungeable',
+          message: 'A third- or fourth-degree-misdemeanor domestic violence, or a protection-order violation, gets special treatment in Ohio: it CAN be sealed — on the normal misdemeanor timeline, which your dates meet — but it can NEVER be expunged (R.C. 2953.32(A)(2)). So sealing is open to you; the stronger expungement upgrade is not, ever. You apply to the court that handled the case (one application can cover multiple cases in the same court), with the $50-plus-local statutory fee, waived if you are indigent.',
+          remedy: 'Seal an M3/M4 DV or protection-order offense (R.C. 2953.32(A)(2)) — sealing only',
+          citation: 'Ohio R.C. 2953.32(A)(2)'
         }
       }
     },
@@ -5794,9 +5906,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             'The prosecutor has 60 days to object; a hearing is typically 45 to 90 days after filing.',
             'The judge weighs your interest against the government\'s need to keep the record.'
           ],
-          // null: Wave 3 gives "commonly $50" but set by court schedules.
-          fees: null,
-          feeWaiver: null,
+          // Resolved from R.C. 2953.32(D)(3) (Diana, statute pass 2026-07-16).
+          fees: '$50 application fee plus a local court fee of up to $50 — one fee regardless of how many cases the application covers (R.C. 2953.32(D)(3)).',
+          feeWaiver: 'Waived entirely with a poverty affidavit showing indigency (R.C. 2953.32(D)(3)).',
           courtContact: 'The sentencing court (common pleas for felonies, municipal for misdemeanours)'
         }
       },

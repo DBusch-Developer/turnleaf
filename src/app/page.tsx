@@ -8,6 +8,7 @@ import CheckrMockPanel from '../components/CheckrMockPanel';
 import { StateRuleConfig } from '../data/fallbackRules';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
 import { Settings, ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
+import { usePublishScreen, type WillowScreen } from '../components/AssistantContext';
 
 // The four steps of the screening, in order. The number is not decoration —
 // it is the sequence the CTA refers back to ("Start Step 1").
@@ -169,6 +170,24 @@ export default function Home() {
     return () => document.body.classList.remove('has-photo-bg');
   }, [onLanding]);
 
+  // Tell Willow what the person is looking at, so it can default each
+  // question to the state on screen instead of asking "which state?" first.
+  const publishScreen = usePublishScreen();
+  useEffect(() => {
+    const screen: WillowScreen = onLanding
+      ? 'landing'
+      : isOpeningState
+        ? 'loading'
+        : comingSoon
+          ? 'coming-soon'
+          : stateConfig
+            ? (results ? 'results' : 'wizard')
+            : 'selector';
+    const stateName =
+      stateConfig?.name ?? states.find(s => s.code === selectedStateCode)?.name ?? null;
+    publishScreen({ selectedStateCode, stateName, screen });
+  }, [onLanding, isOpeningState, comingSoon, stateConfig, results, selectedStateCode, states, publishScreen]);
+
   return (
     <div style={{
       padding: onLanding ? 0 : '3rem 0',
@@ -184,7 +203,8 @@ export default function Home() {
         className="btn btn-primary"
         style={{
           position: 'fixed',
-          bottom: '2rem',
+          // Stacked above the Willow launcher, which owns the bottom-right corner.
+          bottom: '6.5rem',
           right: '2rem',
           borderRadius: '50px',
           padding: '0.75rem 1.5rem',

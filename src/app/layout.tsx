@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { AssistantProvider } from '../components/AssistantContext';
 
 export const metadata: Metadata = {
   title: 'Turnleaf | 50-State Criminal Record Expungement Eligibility Checker',
@@ -72,7 +73,7 @@ export default function RootLayout({
 
         {/* Main Workspace */}
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          {children}
+          <AssistantProvider>{children}</AssistantProvider>
         </main>
 
         {/* Persistent Legal Disclaimer Footer (NFR-1 / R1) */}

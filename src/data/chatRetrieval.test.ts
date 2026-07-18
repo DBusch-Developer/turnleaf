@@ -192,4 +192,13 @@ describe('citation backstop', () => {
       sources: [{ id: 'Cal. Penal Code § 1203.4', url: 'https://example.gov/1203.4', retrievedOn: '2026-07-16' }] };
     expect(hasUnsupportedCitation('per § 1203.4 you may qualify', [bundle])).toBe(false);
   });
+
+  test('a statute that appears only in node text (not in the model context) is not allow-listed', () => {
+    const base = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    // Put a citation ONLY in node-text `questions` and blank everything assembleContextText renders.
+    const bundle = { ...base, results: [], remedies: [], terminology: '', openQuestions: [], keyDates: [], sources: [],
+      questions: ['Was this under 625 ILCS 5/3-707?'] };
+    // node text is never sent to the model, so citing it must be flagged unsupported:
+    expect(hasUnsupportedCitation('per ILCS 5/3-707 you may qualify', [bundle])).toBe(true);
+  });
 });

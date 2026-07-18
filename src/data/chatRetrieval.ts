@@ -130,9 +130,10 @@ export function assembleContextText(bundles: ContextBundle[]): string {
       if (b.openQuestions.length) {
         lines.push(`Open questions in our data (do not resolve these): ${b.openQuestions.join(' | ')}`);
       }
-      if (b.sources.length) {
+      const linkedSources = b.sources.filter(s => s.url);
+      if (linkedSources.length) {
         lines.push(
-          `Sources: ${b.sources.map(s => `${s.id}${s.url ? ` (${s.url})` : ''}`).join('; ')}`,
+          `Sources: ${linkedSources.map(s => `${s.id} (${s.url})`).join('; ')}`,
         );
       }
       if (b.keyDates.length) {
@@ -159,25 +160,15 @@ const STATUTE_NUM_RE = /\d+(?:[.:/-]\d+)*[a-z]?/gi;
 
 const normalizeNum = (s: string): string => s.toLowerCase().replace(/[.:/-]+$/, '');
 
-/** Every statute-number token that appears in a bundle's VERIFIED grounding —
- *  result copy/citations, remedies, terminology, node text, key dates, open
- *  questions, and ONLY human-linked (verified) sources. Unlinked sources
- *  (url === null) are unverified citations and are deliberately excluded, so a
- *  VERIFIED answer resting on one is caught as unsupported. */
+/** The statute numbers the model was actually shown — extracted from the SAME
+ *  text `assembleContextText` sends to Groq. This is the allow-list the citation
+ *  backstop checks against: a cited number absent here was never in our context.
+ *  Because assembleContextText now renders only verified (linked) sources, an
+ *  unverified citation cannot sneak onto the allow-list. */
 export function contextStatuteNumbers(bundles: ContextBundle[]): Set<string> {
   const set = new Set<string>();
-  const add = (s: string | null | undefined): void => {
-    if (!s) return;
-    for (const m of s.matchAll(STATUTE_NUM_RE)) set.add(normalizeNum(m[0]));
-  };
-  for (const b of bundles) {
-    add(b.terminology);
-    for (const r of b.results) { add(r.title); add(r.message); add(r.remedy); add(r.citation); }
-    for (const r of b.remedies) { add(r.name); add(r.formName); add(r.fees); add(r.feeWaiver); add(r.courtContact); }
-    for (const q of b.openQuestions) add(q);
-    for (const k of b.keyDates) { add(k.label); add(k.date); add(k.note); }
-    for (const q of b.questions) add(q);
-    for (const s of b.sources) if (s.url) add(s.id); // linked = human-verified only
+  for (const m of assembleContextText(bundles).matchAll(STATUTE_NUM_RE)) {
+    set.add(normalizeNum(m[0]));
   }
   return set;
 }

@@ -7,6 +7,9 @@ import {
   collectCitations,
   parseTierTag,
   deterministicFallbackAnswer,
+  contextStatuteNumbers,
+  citedStatuteNumbers,
+  hasUnsupportedCitation,
 } from './chatRetrieval';
 import { fallbackRules, type StateRuleConfig } from './fallbackRules';
 
@@ -136,5 +139,34 @@ describe('deterministicFallbackAnswer', () => {
     const ans = deterministicFallbackAnswer([unverifiedBundle], [], 'can I clear a misdemeanor?');
     expect(ans.tier).toBe('BEYOND');
     expect(ans.citations).toEqual([]);
+  });
+});
+
+describe('citation backstop', () => {
+  test('citedStatuteNumbers picks up cued citations and ignores durations/money', () => {
+    const nums = citedStatuteNumbers('Under § 1203.4 and R.C. 2953.32 you may qualify; it takes 2 years and costs $50.');
+    expect(new Set(nums)).toEqual(new Set(['1203.4', '2953.32']));
+  });
+
+  test('a citation present in the context is supported', () => {
+    const ca = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const allowed = contextStatuteNumbers([ca]);
+    expect(allowed.size).toBeGreaterThan(0);
+    // Pick a real number the CA context actually contains, and prove the guard accepts it.
+    const someNumber = [...allowed][0];
+    expect(hasUnsupportedCitation(`grounded in § ${someNumber}`, [ca])).toBe(false);
+  });
+
+  test('a citation absent from the context is flagged as unsupported', () => {
+    const ca = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    expect(hasUnsupportedCitation('see § 999999.99 for details', [ca])).toBe(true);
+  });
+
+  test('empty bundles: any cited statute is unsupported', () => {
+    expect(hasUnsupportedCitation('per § 1203.4', [])).toBe(true);
+  });
+
+  test('no cited statute: never unsupported', () => {
+    expect(hasUnsupportedCitation('Sealing generally hides a record from public view.', [])).toBe(false);
   });
 });

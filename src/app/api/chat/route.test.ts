@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { POST } from './route';
 
 const call = (body: unknown) =>
@@ -37,5 +37,39 @@ describe('/api/chat (deterministic path, no GROQ key)', () => {
     expect(data.tier).toBe('BEYOND');
     expect(data.legalAid.length).toBeGreaterThan(0);
     expect(data.citations).toEqual([]);
+  });
+});
+
+const groqReply = (content: string) => ({
+  ok: true,
+  json: async () => ({ choices: [{ message: { content } }] }),
+  text: async () => '',
+});
+
+describe('/api/chat (Groq path + citation backstop)', () => {
+  const savedKey = process.env.GROQ_API_KEY;
+  const savedDb = process.env.DATABASE_URL;
+  beforeEach(() => { process.env.GROQ_API_KEY = 'test-key'; delete process.env.DATABASE_URL; });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    if (savedKey === undefined) delete process.env.GROQ_API_KEY; else process.env.GROQ_API_KEY = savedKey;
+    if (savedDb === undefined) delete process.env.DATABASE_URL; else process.env.DATABASE_URL = savedDb;
+  });
+
+  test('a VERIFIED answer citing an out-of-context statute is discarded for the grounded fallback', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => groqReply('[[TIER:VERIFIED]] Under § 999999.99 you qualify.')));
+    const res = await call({ message: 'Can I clear a misdemeanor?', stateCode: 'CA' });
+    const data = await res.json();
+    expect(data.degraded).toBe(true);          // fell through to deterministic
+    expect(data.answer).not.toContain('999999.99');
+  });
+
+  test('a clean GENERAL answer passes through untouched', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => groqReply('[[TIER:GENERAL]] Sealing generally hides a record from public view.')));
+    const res = await call({ message: 'what is sealing?', stateCode: 'CA' });
+    const data = await res.json();
+    expect(data.degraded).toBe(false);
+    expect(data.tier).toBe('GENERAL');
+    expect(data.answer).toContain('Sealing');
   });
 });

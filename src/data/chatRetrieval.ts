@@ -147,6 +147,47 @@ export function assembleContextText(bundles: ContextBundle[]): string {
     .join('\n\n');
 }
 
+// A statute-number token: digits with optional . : / - separators, optional trailing letter.
+// Matches 1203.4, 2953.32, 160.59, 651:5, 2630/5.2, 13-911, 23A-27-13.
+const STATUTE_NUM_RE = /\d+(?:[.:/-]\d+)*[a-z]?/gi;
+
+const normalizeNum = (s: string): string => s.toLowerCase().replace(/[.:/-]+$/, '');
+
+/** Every statute-number token that appears anywhere in the context we send the
+ *  model. If the model cites a number, it should be one of these. Built from the
+ *  full assembled context (permissive on purpose — the guard only catches
+ *  citations that appear NOWHERE in what we provided). */
+export function contextStatuteNumbers(bundles: ContextBundle[]): Set<string> {
+  const text = assembleContextText(bundles);
+  const set = new Set<string>();
+  for (const m of text.matchAll(STATUTE_NUM_RE)) set.add(normalizeNum(m[0]));
+  return set;
+}
+
+// A statute number is only treated as a CITATION when it follows a citation cue
+// (a section symbol, or a word/abbreviation like section / code / R.C. / CPL /
+// PC / RSA / ILCS / chapter / article / statute). This is what keeps "2 years"
+// and "$50" from being read as citations.
+const CITED_NUM_RE =
+  /(?:§\s*|\b(?:section|sec|code|chapter|ch|article|art|r\.?c|cpl|pc|rsa|ilcs|stat)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)/gi;
+
+/** The statute numbers the answer actually cites (number following a citation cue). */
+export function citedStatuteNumbers(answer: string): string[] {
+  const out: string[] = [];
+  for (const m of answer.matchAll(CITED_NUM_RE)) out.push(normalizeNum(m[1]));
+  return out;
+}
+
+/** True when the answer cites a statute number that is absent from the context
+ *  we gave the model — i.e. the model invented a citation. Empty bundles → treat
+ *  any cited statute as unsupported (a VERIFIED claim with no context to stand on). */
+export function hasUnsupportedCitation(answer: string, bundles: ContextBundle[]): boolean {
+  const cited = citedStatuteNumbers(answer);
+  if (cited.length === 0) return false;
+  const allowed = contextStatuteNumbers(bundles);
+  return cited.some(n => n.length > 0 && !allowed.has(n));
+}
+
 export interface Citation {
   label: string;
   url: string | null;

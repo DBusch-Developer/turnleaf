@@ -8,6 +8,7 @@ import {
   collectLegalAid,
   parseTierTag,
   deterministicFallbackAnswer,
+  hasUnsupportedCitation,
   type ContextBundle,
 } from '../../../data/chatRetrieval';
 
@@ -82,6 +83,15 @@ export async function POST(request: Request) {
           const raw = data.choices?.[0]?.message?.content?.trim();
           if (raw) {
             const { tier, text } = parseTierTag(raw);
+            // Backstop: a VERIFIED answer that cites a statute we never put in the
+            // context is an invented citation — discard it and use the grounded
+            // deterministic answer instead. (Doctrine: never present invented law
+            // as verified.)
+            if (tier === 'VERIFIED' && hasUnsupportedCitation(text, bundles)) {
+              console.warn('Willow: discarded a VERIFIED answer citing statutes outside the provided context.');
+              const fb = deterministicFallbackAnswer(bundles, outOfScope, message);
+              return NextResponse.json({ answer: fb.text, tier: fb.tier, citations: fb.citations, legalAid: fb.legalAid, degraded: true });
+            }
             return NextResponse.json({
               answer: text,
               tier,

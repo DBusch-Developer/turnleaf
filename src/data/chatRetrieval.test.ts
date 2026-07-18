@@ -201,6 +201,13 @@ describe('citation backstop', () => {
     expect(hasUnsupportedCitation('per § 1203.4 you may qualify', [bundle])).toBe(false);
   });
 
+  test('an Oxford/serial-comma list captures every item, including an invented last one', () => {
+    expect(new Set(citedStatuteNumbers('§ 1203.4, 4852.01, and 290.5')))
+      .toEqual(new Set(['1203.4', '4852.01', '290.5']));
+    expect(new Set(citedStatuteNumbers('under sections 1203.4, 4852.01, and 999999.99 you may qualify')))
+      .toEqual(new Set(['1203.4', '4852.01', '999999.99']));
+  });
+
   test('a statute that appears only in node text (not in the model context) is not allow-listed', () => {
     const base = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
     // Put a citation ONLY in node-text `questions` and blank everything assembleContextText renders.

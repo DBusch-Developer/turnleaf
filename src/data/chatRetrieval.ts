@@ -179,7 +179,7 @@ export function contextStatuteNumbers(bundles: ContextBundle[]): Set<string> {
 // numbers in a list ("sections 1203.4 and 5/3-707") inherit the cue — but only
 // compound or §-prefixed ones, so "and 2 years" never reads "2" as a citation.
 const CITED_NUM_RE =
-  /(?:§\s*|\b(?:sections?|secs?|codes?|chapters?|chs?|articles?|arts?|statutes?|stats?|r\.?c|c\.?p\.?l|p\.?c|rsa|ilcs)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)((?:\s*(?:,|;|&|and|or)\s*(?:§\s*\d+(?:[.:/-]\d+)*[a-z]?|\d+[.:/-]\d+(?:[.:/-]\d+)*[a-z]?))*)/gi;
+  /(?:§\s*|\b(?:sections?|secs?|codes?|chapters?|chs?|articles?|arts?|statutes?|stats?|r\.?c|c\.?p\.?l|p\.?c|rsa|ilcs)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)((?:\s*(?:,\s*and|,\s*or|,|;|&|and|or)\s*(?:§\s*\d+(?:[.:/-]\d+)*[a-z]?|\d+[.:/-]\d+(?:[.:/-]\d+)*[a-z]?))*)/gi;
 
 const TRAILING_NUM_RE = /\d+(?:[.:/-]\d+)*[a-z]?/g;
 

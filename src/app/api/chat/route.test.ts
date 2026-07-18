@@ -1,5 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { POST } from './route';
+import { buildContextBundle, contextStatuteNumbers } from '../../../data/chatRetrieval';
+import { fallbackRules, type StateRuleConfig } from '../../../data/fallbackRules';
 
 const call = (body: unknown) =>
   POST(new Request('http://localhost/api/chat', {
@@ -71,5 +73,16 @@ describe('/api/chat (Groq path + citation backstop)', () => {
     expect(data.degraded).toBe(false);
     expect(data.tier).toBe('GENERAL');
     expect(data.answer).toContain('Sealing');
+  });
+
+  test('a VERIFIED answer citing a real in-context statute passes through, not degraded', async () => {
+    const ca = fallbackRules['CA'] as StateRuleConfig;
+    const allowed = contextStatuteNumbers([buildContextBundle(ca)]);
+    const someNumber = [...allowed][0];
+    vi.stubGlobal('fetch', vi.fn(async () => groqReply(`[[TIER:VERIFIED]] Under § ${someNumber} you may qualify.`)));
+    const res = await call({ message: 'Can I clear a misdemeanor?', stateCode: 'CA' });
+    const data = await res.json();
+    expect(data.degraded).toBe(false);
+    expect(data.tier).toBe('VERIFIED');
   });
 });

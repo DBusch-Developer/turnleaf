@@ -148,28 +148,46 @@ export function assembleContextText(bundles: ContextBundle[]): string {
 }
 
 // A statute-number token: digits with optional . : / - separators, optional trailing letter.
-// Matches 1203.4, 2953.32, 160.59, 651:5, 2630/5.2, 13-911, 23A-27-13.
+// Matches 1203.4, 2953.32, 160.59, 651:5, 2630/5.2, 13-911 as single tokens. The
+// trailing [a-z]? binds to the FIRST digit group it can reach, so a token like
+// "23A-27-13" does NOT match as one token — it fragments into "23a" and "27-13"
+// (the "-" before "27" cannot chain onto "23a" since a letter already closed
+// that match). Parenthesized subsections (e.g. "1192.7(c)") normalize down to
+// their base number ("1192.7"), since "(c)" isn't part of the digit run — a
+// known coarseness of this backstop, acceptable for a defense-in-depth guard.
 const STATUTE_NUM_RE = /\d+(?:[.:/-]\d+)*[a-z]?/gi;
 
 const normalizeNum = (s: string): string => s.toLowerCase().replace(/[.:/-]+$/, '');
 
-/** Every statute-number token that appears anywhere in the context we send the
- *  model. If the model cites a number, it should be one of these. Built from the
- *  full assembled context (permissive on purpose — the guard only catches
- *  citations that appear NOWHERE in what we provided). */
+/** Every statute-number token that appears in a bundle's VERIFIED grounding —
+ *  result copy/citations, remedies, terminology, node text, key dates, open
+ *  questions, and ONLY human-linked (verified) sources. Unlinked sources
+ *  (url === null) are unverified citations and are deliberately excluded, so a
+ *  VERIFIED answer resting on one is caught as unsupported. */
 export function contextStatuteNumbers(bundles: ContextBundle[]): Set<string> {
-  const text = assembleContextText(bundles);
   const set = new Set<string>();
-  for (const m of text.matchAll(STATUTE_NUM_RE)) set.add(normalizeNum(m[0]));
+  const add = (s: string | null | undefined): void => {
+    if (!s) return;
+    for (const m of s.matchAll(STATUTE_NUM_RE)) set.add(normalizeNum(m[0]));
+  };
+  for (const b of bundles) {
+    add(b.terminology);
+    for (const r of b.results) { add(r.title); add(r.message); add(r.remedy); add(r.citation); }
+    for (const r of b.remedies) { add(r.name); add(r.formName); add(r.fees); add(r.feeWaiver); add(r.courtContact); }
+    for (const q of b.openQuestions) add(q);
+    for (const k of b.keyDates) { add(k.label); add(k.date); add(k.note); }
+    for (const q of b.questions) add(q);
+    for (const s of b.sources) if (s.url) add(s.id); // linked = human-verified only
+  }
   return set;
 }
 
 // A statute number is only treated as a CITATION when it follows a citation cue
-// (a section symbol, or a word/abbreviation like section / code / R.C. / CPL /
-// PC / RSA / ILCS / chapter / article / statute). This is what keeps "2 years"
-// and "$50" from being read as citations.
+// (a section symbol, or a word/abbreviation like section(s) / code(s) / R.C. /
+// C.P.L. / P.C. / RSA / ILCS / chapter(s) / article(s) / statute(s)). This is
+// what keeps "2 years" and "$50" from being read as citations.
 const CITED_NUM_RE =
-  /(?:§\s*|\b(?:section|sec|code|chapter|ch|article|art|r\.?c|cpl|pc|rsa|ilcs|stat)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)/gi;
+  /(?:§\s*|\b(?:sections?|secs?|codes?|chapters?|chs?|articles?|arts?|statutes?|stats?|r\.?c|c\.?p\.?l|p\.?c|rsa|ilcs)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)/gi;
 
 /** The statute numbers the answer actually cites (number following a citation cue). */
 export function citedStatuteNumbers(answer: string): string[] {

@@ -169,4 +169,27 @@ describe('citation backstop', () => {
   test('no cited statute: never unsupported', () => {
     expect(hasUnsupportedCitation('Sealing generally hides a record from public view.', [])).toBe(false);
   });
+
+  test('cue regex catches the word "statute" and plural cue forms', () => {
+    expect(citedStatuteNumbers('Per statute 999999.99 you qualify.')).toEqual(['999999.99']);
+    // Each number needs its own cue word (CITED_NUM_RE matches per-cue, not
+    // list-continuation) — "sections 1203.4 and articles 999999.99" exercises
+    // two distinct plural cue forms in one sentence, both firing correctly.
+    expect(new Set(citedStatuteNumbers('Under sections 1203.4 and articles 999999.99 you may qualify.')))
+      .toEqual(new Set(['1203.4', '999999.99']));
+  });
+
+  test('an UNVERIFIED (unlinked) source citation is not allow-listed', () => {
+    const base = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const bundle = { ...base, results: [], remedies: [], questions: [], openQuestions: [], keyDates: [], terminology: '',
+      sources: [{ id: 'Cal. Penal Code § 290.5', url: null, retrievedOn: null }] };
+    expect(hasUnsupportedCitation('per § 290.5 you qualify', [bundle])).toBe(true);
+  });
+
+  test('a VERIFIED (linked) source citation is allow-listed', () => {
+    const base = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const bundle = { ...base, results: [], remedies: [], questions: [], openQuestions: [], keyDates: [], terminology: '',
+      sources: [{ id: 'Cal. Penal Code § 1203.4', url: 'https://example.gov/1203.4', retrievedOn: '2026-07-16' }] };
+    expect(hasUnsupportedCitation('per § 1203.4 you may qualify', [bundle])).toBe(false);
+  });
 });

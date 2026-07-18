@@ -40,6 +40,12 @@ describe('detectStateCodes', () => {
   test('does not treat the word "in" or "or" as Indiana/Oregon', () => {
     expect(detectStateCodes('what forms do I file or submit in court?', null)).toEqual([]);
   });
+  test('does not misfire the interjection "OK" as Oklahoma', () => {
+    expect(detectStateCodes('OK, what is the fee in Texas?', null)).toEqual(['TX']);
+  });
+  test('still detects Oklahoma by its full name', () => {
+    expect(detectStateCodes('rules in Oklahoma', null)).toEqual(['OK']);
+  });
 });
 
 describe('buildContextBundle', () => {
@@ -60,6 +66,37 @@ describe('assembleContextText', () => {
     const withNullFee = { ...bundle, remedies: [{ name: 'Test remedy', formName: null, steps: [], fees: null, feeWaiver: null, courtContact: null }] };
     const text = assembleContextText([withNullFee]);
     expect(text).toContain('not verified in our data');
+  });
+
+  test('renders a non-null courtContact on the remedy line', () => {
+    const bundle = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const withContact = {
+      ...bundle,
+      remedies: [{ name: 'Test remedy', formName: null, steps: [], fees: null, feeWaiver: null, courtContact: 'Clerk of Court, (555) 123-4567' }],
+    };
+    const text = assembleContextText([withContact]);
+    expect(text).toContain('Clerk of Court, (555) 123-4567');
+  });
+
+  test('a null courtContact is never dropped — renders "not verified in our data"', () => {
+    const bundle = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const withNullContact = {
+      ...bundle,
+      remedies: [{ name: 'Test remedy', formName: null, steps: [], fees: null, feeWaiver: null, courtContact: null }],
+    };
+    const text = assembleContextText([withNullContact]);
+    expect(text).toContain('court contact: not verified in our data');
+  });
+
+  test('renders keyDates when present', () => {
+    const bundle = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const withKeyDate = {
+      ...bundle,
+      keyDates: [{ label: 'AB 1076 effective', date: '2021-01-01', kind: 'effective' as const, note: 'automatic relief begins' }],
+    };
+    const text = assembleContextText([withKeyDate]);
+    expect(text).toContain('AB 1076 effective');
+    expect(text).toContain('2021-01-01');
   });
 });
 
@@ -91,5 +128,13 @@ describe('deterministicFallbackAnswer', () => {
     expect(ans.citations).toEqual([]);
     expect(ans.legalAid.length).toBeGreaterThan(0);
     expect(ans.text.toLowerCase()).toContain('legal aid');
+  });
+
+  test('a bundle claiming verified:false is not trusted -> BEYOND tier with no citations', () => {
+    const bundle = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
+    const unverifiedBundle = { ...bundle, verified: false };
+    const ans = deterministicFallbackAnswer([unverifiedBundle], [], 'can I clear a misdemeanor?');
+    expect(ans.tier).toBe('BEYOND');
+    expect(ans.citations).toEqual([]);
   });
 });

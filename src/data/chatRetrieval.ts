@@ -21,6 +21,13 @@ export const VERIFIED_STATE_CODES: Set<string> = new Set(
 
 const escapeRegex = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+/** Two-letter state codes that double as common English words/interjections
+ *  (e.g. "OK", "HI"). Excluded from the standalone-code match only — the full
+ *  state name still matches normally, so "Oklahoma" is unaffected. */
+const CODE_MATCH_EXCLUSIONS: Set<string> = new Set([
+  'OK', 'HI', 'IN', 'OR', 'ME', 'LA', 'OH', 'CO', 'ID', 'AL', 'PA',
+]);
+
 /**
  * Which state(s) a question is about. Full state names are matched
  * case-insensitively (longest first, so "West Virginia" is consumed before
@@ -42,6 +49,7 @@ export function detectStateCodes(message: string, currentStateCode: string | nul
   }
   for (const { code } of stateDirectory) {
     if (found.includes(code)) continue;
+    if (CODE_MATCH_EXCLUSIONS.has(code)) continue;
     if (new RegExp(`\\b${code}\\b`).test(message)) found.push(code);
   }
   if (found.length === 0 && currentStateCode) return [currentStateCode.toUpperCase()];
@@ -115,7 +123,7 @@ export function assembleContextText(bundles: ContextBundle[]): string {
         lines.push('Remedies:');
         for (const r of b.remedies) {
           lines.push(
-            `- ${r.name} — form: ${orUnknown(r.formName)}; fees: ${orUnknown(r.fees)}; fee waiver: ${orUnknown(r.feeWaiver)}`,
+            `- ${r.name} — form: ${orUnknown(r.formName)}; fees: ${orUnknown(r.fees)}; fee waiver: ${orUnknown(r.feeWaiver)}; court contact: ${orUnknown(r.courtContact)}`,
           );
         }
       }
@@ -125,6 +133,13 @@ export function assembleContextText(bundles: ContextBundle[]): string {
       if (b.sources.length) {
         lines.push(
           `Sources: ${b.sources.map(s => `${s.id}${s.url ? ` (${s.url})` : ''}`).join('; ')}`,
+        );
+      }
+      if (b.keyDates.length) {
+        lines.push(
+          `Key dates: ${b.keyDates
+            .map(d => `${d.label}: ${d.date} (${d.kind})${d.note ? ` — ${d.note}` : ''}`)
+            .join('; ')}`,
         );
       }
       return lines.join('\n');
@@ -190,10 +205,10 @@ export function deterministicFallbackAnswer(
   outOfScopeCodes: string[],
   _message: string,
 ): AssistantAnswer {
-  const legalAid = collectLegalAid(bundles);
-  if (bundles.length > 0) {
+  const verified = bundles.filter(b => b.verified);
+  if (verified.length > 0) {
     const parts: string[] = [];
-    for (const b of bundles) {
+    for (const b of verified) {
       const top = b.results.slice(0, 2);
       const body = top
         .map(r => `${r.title}: ${r.message}${r.citation ? ` (${r.citation})` : ''}`)
@@ -203,8 +218,14 @@ export function deterministicFallbackAnswer(
     parts.push(
       'This is general screening information, not legal advice — a legal aid attorney or court clerk should confirm before you file.',
     );
-    return { tier: 'VERIFIED', text: parts.join(' '), citations: collectCitations(bundles), legalAid };
+    return {
+      tier: 'VERIFIED',
+      text: parts.join(' '),
+      citations: collectCitations(verified),
+      legalAid: collectLegalAid(verified),
+    };
   }
+  const legalAid = collectLegalAid(bundles);
   const scope = outOfScopeCodes.length
     ? `We have not verified the law for ${outOfScopeCodes.join(', ')} yet, and questions that combine states are beyond what we can confirm. `
     : 'That is beyond what Turnleaf has verified. ';

@@ -73,6 +73,7 @@ describe('/api/chat (Groq path + citation backstop)', () => {
     expect(data.degraded).toBe(false);
     expect(data.tier).toBe('GENERAL');
     expect(data.answer).toContain('Sealing');
+    expect(data.citations).toEqual([]);
   });
 
   test('a VERIFIED answer citing a real in-context statute passes through, not degraded', async () => {
@@ -84,5 +85,6 @@ describe('/api/chat (Groq path + citation backstop)', () => {
     const data = await res.json();
     expect(data.degraded).toBe(false);
     expect(data.tier).toBe('VERIFIED');
+    expect(data.citations.length).toBeGreaterThan(0);
   });
 });

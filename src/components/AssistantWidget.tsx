@@ -169,7 +169,7 @@ export default function AssistantWidget() {
           ) : (
             <div key={i} style={{ alignSelf: 'flex-start', maxWidth: '92%', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {m.tier && (() => {
-                const b = TIER_BADGE[m.tier];
+                const b = TIER_BADGE[m.tier] ?? TIER_BADGE.GENERAL;
                 return (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', alignSelf: 'flex-start', background: b.bg, color: b.color, borderRadius: '9999px', padding: '0.15rem 0.55rem', fontSize: '0.68rem', fontWeight: 700 }}>
                     <b.Icon size={13} /> {b.label}

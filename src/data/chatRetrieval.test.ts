@@ -179,6 +179,14 @@ describe('citation backstop', () => {
       .toEqual(new Set(['1203.4', '999999.99']));
   });
 
+  test('a continued citation in a list is detected (inherits the cue)', () => {
+    expect(new Set(citedStatuteNumbers('under sections 1203.4 and 999999.99 you may qualify')))
+      .toEqual(new Set(['1203.4', '999999.99']));
+  });
+  test('a bare integer after a citation is not read as a citation', () => {
+    expect(citedStatuteNumbers('under § 1203.4 and 2 years later')).toEqual(['1203.4']);
+  });
+
   test('an UNVERIFIED (unlinked) source citation is not allow-listed', () => {
     const base = buildContextBundle(fallbackRules['CA'] as StateRuleConfig);
     const bundle = { ...base, results: [], remedies: [], questions: [], openQuestions: [], keyDates: [], terminology: '',

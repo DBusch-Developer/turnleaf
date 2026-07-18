@@ -87,6 +87,11 @@ export async function POST(request: Request) {
             // context is an invented citation — discard it and use the grounded
             // deterministic answer instead. (Doctrine: never present invented law
             // as verified.)
+            // NOTE: this backstop verifies that every statute NUMBER the model cited is
+            // present in the context we gave it — it does NOT verify that the surrounding
+            // claim is accurate. Claim fidelity rests on the prompt + low temperature, with
+            // the deterministic fallback as the grounded floor. This is the same accepted
+            // risk as /api/summarize.
             if (tier === 'VERIFIED' && hasUnsupportedCitation(text, bundles)) {
               console.warn('Willow: discarded a VERIFIED answer citing statutes outside the provided context.');
               const fb = deterministicFallbackAnswer(bundles, outOfScope, message);
@@ -95,7 +100,7 @@ export async function POST(request: Request) {
             return NextResponse.json({
               answer: text,
               tier,
-              citations: tier === 'BEYOND' ? [] : collectCitations(bundles),
+              citations: tier === 'VERIFIED' ? collectCitations(bundles) : [],
               legalAid: collectLegalAid(bundles),
               degraded: false,
             });

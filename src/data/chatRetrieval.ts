@@ -173,17 +173,24 @@ export function contextStatuteNumbers(bundles: ContextBundle[]): Set<string> {
   return set;
 }
 
-// A statute number is only treated as a CITATION when it follows a citation cue
-// (a section symbol, or a word/abbreviation like section(s) / code(s) / R.C. /
-// C.P.L. / P.C. / RSA / ILCS / chapter(s) / article(s) / statute(s)). This is
-// what keeps "2 years" and "$50" from being read as citations.
+// A statute number is a CITATION only when it follows a citation cue (a section
+// symbol, or a word/abbreviation like section / code / R.C. / CPL / PC / RSA /
+// ILCS / chapter / article / statute). The optional trailing group lets further
+// numbers in a list ("sections 1203.4 and 5/3-707") inherit the cue — but only
+// compound or §-prefixed ones, so "and 2 years" never reads "2" as a citation.
 const CITED_NUM_RE =
-  /(?:§\s*|\b(?:sections?|secs?|codes?|chapters?|chs?|articles?|arts?|statutes?|stats?|r\.?c|c\.?p\.?l|p\.?c|rsa|ilcs)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)/gi;
+  /(?:§\s*|\b(?:sections?|secs?|codes?|chapters?|chs?|articles?|arts?|statutes?|stats?|r\.?c|c\.?p\.?l|p\.?c|rsa|ilcs)\.?\s+(?:§\s*)?)(\d+(?:[.:/-]\d+)*[a-z]?)((?:\s*(?:,|;|&|and|or)\s*(?:§\s*\d+(?:[.:/-]\d+)*[a-z]?|\d+[.:/-]\d+(?:[.:/-]\d+)*[a-z]?))*)/gi;
 
-/** The statute numbers the answer actually cites (number following a citation cue). */
+const TRAILING_NUM_RE = /\d+(?:[.:/-]\d+)*[a-z]?/g;
+
+/** The statute numbers the answer actually cites: a number after a citation cue,
+ *  plus any compound/§-prefixed numbers continued from it across a list. */
 export function citedStatuteNumbers(answer: string): string[] {
   const out: string[] = [];
-  for (const m of answer.matchAll(CITED_NUM_RE)) out.push(normalizeNum(m[1]));
+  for (const m of answer.matchAll(CITED_NUM_RE)) {
+    out.push(normalizeNum(m[1]));
+    if (m[2]) for (const t of m[2].matchAll(TRAILING_NUM_RE)) out.push(normalizeNum(t[0]));
+  }
   return out;
 }
 

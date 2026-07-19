@@ -6740,79 +6740,102 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // WASHINGTON — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  // WASHINGTON — STATUTE-VERIFIED 2026-07-18. Diana read RCW 9.96.060 (certified
+  // 7/12/2024, incl. 2024 c 296), 9.94A.640 (certified 8/15/2025, incl. 2025 c
+  // 169), 9.94A.637, and 10.97.060 at app.leg.wa.gov.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md + Diana's 7/18 reads.
   //
-  // THE QUIRK: Washington VACATES, it does not expunge or (generally) seal.
-  // After a vacation you may lawfully say you were never convicted and WSP stops
-  // reporting it — BUT THE COURT FILE STAYS PUBLIC. Sealing (GR 15) is separate
-  // and rare. Every WA result says this plainly; competitors blur it.
+  // THE QUIRK: Washington VACATES, it does not expunge or (generally) seal. After
+  // a vacation you may lawfully say you were never convicted and WSP stops
+  // reporting it — BUT THE COURT FILE STAYS PUBLIC. And it is DISCRETIONARY: even
+  // when every criterion is met the court "may in its discretion" vacate.
   //
-  // The 2024 New Hope Act change is the fresh-rule persona: the waiting clock no
-  // longer waits for LFO (fines/fees) payoff — it runs from release/sentencing,
-  // and courts can waive outstanding LFOs on motion. Older guides still say "pay
-  // everything first". The tree does NOT gate on LFOs.
+  // LFO CORRECTION (was inverted): completion of ALL sentence terms INCLUDING
+  // financial obligations is a FILING PRECONDITION (9.96.060(2)(a)). The 2024
+  // change (2024 c 296 — NOT the New Hope Act, which is 2019 c 331) moved only the
+  // CLOCK: (2)(g) runs 3 years from the later of release from supervision, release
+  // from confinement, or sentencing — LFO timing does not extend the wait, but
+  // payment is still required before you file.
   //
-  // The 2019 surprise-yes: Assault 2, Assault 3 (non-officer), and Robbery 2 are
-  // vacatable if there was no firearm/deadly-weapon/sexual-motivation
-  // enhancement — a real carve-out from the "violent = never" rule.
+  // Felony clocks (9.94A.640(2)(e)/(f)) run from the later of release from
+  // community custody, release from confinement, or SENTENCING — not the COD date.
+  // The COD (9.94A.637) is a separate prerequisite. Mandatory paths: 21+ cannabis
+  // (060(5)), drug possession (Blake-void + 060(6)), juvenile prison-riot (640(5)).
   // ==========================================================================
   WA: {
     code: 'WA',
     name: 'Washington',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
     terminology:
       'Washington does not expunge or, in most cases, seal. Instead it VACATES a conviction — the '
       + 'plea is withdrawn or the verdict set aside and the charge dismissed. After a vacation you '
-      + 'may legally state you were never convicted, and the State Patrol stops reporting it. But '
-      + 'there is one honest catch that matters: the COURT FILE itself stays public. Vacating is '
-      + 'strong relief, but it is not the same as the record disappearing. A 2024 change (the New '
-      + 'Hope Act) also means unpaid fines and fees no longer delay your eligibility — the clock '
-      + 'runs from your release or sentencing, and the court can even reduce what you owe.',
+      + 'may legally state you were never convicted, and the State Patrol stops reporting it. Two '
+      + 'honest catches matter: the COURT FILE itself stays public, and vacation is discretionary — '
+      + 'even meeting every rule, the court "may" vacate rather than "shall." On money: you must '
+      + 'complete the whole sentence, INCLUDING paying all fines, fees, and restitution, before you '
+      + 'file (RCW 9.96.060(2)(a)). A 2024 change (2024 c 296) fixed a common misunderstanding — your '
+      + 'waiting clock does not wait for those payments; it runs from your release or sentencing — but '
+      + 'the payment itself is still a filing precondition, and the court can address reducing what you '
+      + 'owe on a separate motion.',
     keyDates: [
       {
-        label: 'New Hope Act — waiting clock no longer waits for LFO payoff',
-        date: '2024',
-        kind: 'effective',
-        note: 'Wave 4 gives the year only. The clock runs from release/sentencing; courts can waive or reduce outstanding legal financial obligations on motion. Older guides still say "pay all fines first". Verify the session-law cite.',
-      },
-      {
-        label: 'New Hope Act — Assault 2/3 and Robbery 2 carve-out from the violent-offence bar',
+        label: '2019 c 331 (New Hope Act) — felony carve-outs and clock re-anchor',
         date: '2019',
         kind: 'effective',
-        note: 'Wave 4 gives the year only. Vacatable if no firearm/deadly-weapon/sexual-motivation enhancement.',
+        note: 'Broadened the offences that can be vacated (the Assault 2/3 and Robbery 2 carve-out, vacatable if no firearm/deadly-weapon/sexual-motivation enhancement) and re-anchored the felony waiting clock.',
+      },
+      {
+        label: '2023 sp.s. c 1 — mandatory drug-possession vacate path',
+        date: '2023',
+        kind: 'effective',
+        note: 'RCW 9.96.060(6): completing a substance use disorder program, or an assessment via a recovery navigator / arrest-and-jail-alternative / LEAD program plus 6 months of substantial compliance, means the court MUST vacate a simple-possession conviction. Stacks on top of the Blake void-vacatur remedy for pre-2/25/2021 offences.',
+      },
+      {
+        label: '2024 c 296 — misdemeanor clock re-anchor + DV-clock LFO exclusion',
+        date: '2024',
+        kind: 'effective',
+        note: 'The misdemeanor waiting clock (9.96.060(2)(g)) runs 3 years from the later of release from supervision, release from confinement, or sentencing — LFO payment timing no longer extends it (though payment stays a filing precondition). The DV 5-year clock (2)(f) runs from completion of sentence conditions including court-ordered treatment but EXCLUDING payment of financial obligations.',
+      },
+      {
+        label: '2025 c 169 — juvenile prison-riot conviction vacate',
+        date: '2025-04-25',
+        kind: 'effective',
+        note: 'RCW 9.94A.640(5): a prison-riot conviction (9.94.010) committed while incarcerated in a DCYF or county juvenile facility — the court SHALL vacate on application.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the 2024 New Hope Act session-law cite for the rule that the waiting clock no longer waits for LFO (legal financial obligation) payoff. Wave 4 says the clock runs from release/sentencing and courts can waive LFOs on motion — but flags the exact cite. The tree encodes this rule; confirm it against the current RCW 9.96.060 / 9.94A.640 text.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the DV-related misdemeanour subsection: Wave 4 gives a 5-year track with extra conditions (no restraining-order violations in the prior 5 years; fewer than two separate-incident DV convictions) but flags the exact DV subsection. The tree asks whether the offence was DV-related and applies the 5-year track.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the filing fee for a vacation motion? Wave 4 says one guide reports generally none but counties may differ — phone target. A WSP WATCH self-check is $11 online, free in person.',
+          'What is the filing fee for a vacation motion? The statute is silent, counties vary, and one guide reports generally none — phone target. A WSP WATCH self-check is $11 online, free in person.',
         blocksFields: ['resources.remedies.vacation.fees', 'resources.remedies.vacation.feeWaiver'],
       },
       {
         question:
-          'How are completed diversions treated? Wave 4 details special tracks (trafficking/DV-victim convictions under 9.96.080 / 9.94A.648, marijuana misdemeanours, pre-1975 treaty-fishing) but not general diversion. Standing call-sheet question.',
+          'Pull RCW 9.96.080 and 9.94A.648 — the two survivor/victim vacation PROCESS sections. RCW 9.96.060(3) and 9.94A.640(3) route trafficking, prostitution, commercial-sexual-abuse-of-a-minor, sexual-assault, and DV victims (and 9.96.060(7), a homicide victim\'s family) to those sections, but their requirements cannot be encoded until 9.96.080 / 9.94A.648 themselves are read. The tree names the track and routes to legal aid.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Recheck DUI vacation next session. HB 1110 (2025-26) would have opened DUI vacation effective July 1, 2026, but died in House Community Safety; it was reintroduced 2026-01-12 with no further action and the session ended. The DUI/physical-control exclusion (9.96.060(2), 9.94A.640(2)(g)) still stands — confirm nothing passed before softening it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'How are completed diversions and deferred prosecutions treated beyond the RCW 10.97.060 nonconviction-deletion path the tree now routes them to? A deferred prosecution ends in dismissal (nothing to vacate) but is the first thing an agency may refuse to delete (10.97.060(1)), and a DUI deferred prosecution still counts as a "prior offense" under 46.61.5055. Confirm the remaining boundaries with the call sheet.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Wash. Rev. Code § 9.96.060 (vacating misdemeanour convictions)', url: null, retrievedOn: null },
-      { id: 'Wash. Rev. Code § 9.94A.640 (vacating felony convictions)', url: null, retrievedOn: null },
-      { id: 'Wash. Rev. Code § 9.94A.637 (Certificate of Discharge — felony prerequisite)', url: null, retrievedOn: null },
-      { id: 'Wash. Rev. Code § 46.61.502/.504 (DUI/physical control — never vacatable)', url: null, retrievedOn: null },
-      { id: 'New Hope Act (2019, amended 2021/2024 — broadened offences; LFO change)', url: null, retrievedOn: null },
+      { id: 'Wash. Rev. Code § 9.96.060 (vacating misdemeanour convictions; (2) conditions incl. (2)(a) LFO/sentence completion, (2)(b) no pending charges, (2)(d) reduced-from-DUI prior offense, (2)(f) DV track, (2)(g) 3-yr clock, (2)(h)/(i) conviction/restraining-order bars; (5) 21+ cannabis mandatory; (6) drug-possession mandatory; (7) homicide-victim family; (8)-(9) effects) — certified 7/12/2024, incl. 2024 c 296', url: 'https://app.leg.wa.gov/rcw/default.aspx?cite=9.96.060', retrievedOn: '2026-07-18' },
+      { id: 'Wash. Rev. Code § 9.94A.640 (vacating felony convictions; (1) COD prerequisite + discretion, (2)(a) no pending charges, (2)(c)-(d) rolling lookbacks, (2)(e)/(f) 10-yr/5-yr clocks, (2)(g) DUI/APC exclusion, (2)(e) sex-registration carve-out, (3) survivor track, (4) effects, (5) juvenile prison-riot) — certified 8/15/2025, incl. 2025 c 169', url: 'https://app.leg.wa.gov/rcw/default.aspx?cite=9.94A.640', retrievedOn: '2026-07-18' },
+      { id: 'Wash. Rev. Code § 9.94A.637 (Certificate of Discharge; (1)-(3) LFOs complete, retroactive effective date to when conditions were met, (4) alternate motion route, (8) early discharge at halfway point for non-violent/non-sex)', url: 'https://app.leg.wa.gov/rcw/default.aspx?cite=9.94A.637', retrievedOn: '2026-07-18' },
+      { id: 'Wash. Rev. Code § 10.97.060 (deletion of nonconviction data from criminal-justice-agency files on request — 2 yrs after favorable disposition / 3 yrs from arrest with no disposition; agency may refuse for diversion, prior felony/gross-misd, or intervening arrest)', url: 'https://app.leg.wa.gov/rcw/default.aspx?cite=10.97.060', retrievedOn: '2026-07-18' },
+      { id: 'Wash. Rev. Code § 9.96.080 (survivor/victim vacation process — PENDING, not yet pulled)', url: null, retrievedOn: null },
+      { id: 'Wash. Rev. Code § 9.94A.648 (survivor/victim felony vacation process — PENDING, not yet pulled)', url: null, retrievedOn: null },
+      { id: 'Washington Court Rule GR 15 (sealing/destruction of court records — separate from vacation; PENDING, courts.wa.gov)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -6822,18 +6845,54 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_wa' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'special_category_wa' },
             { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_wa' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_wa' },
-            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Diversion / Deferred prosecution completed', value: 'deferred', next: 'eligible_diversion_wa' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_wa: {
+        // The mandatory / special tracks come first — each is its own rule and
+        // several skip the ordinary conditions entirely.
+        special_category_wa: {
+          type: 'choice',
+          text: 'Before we go further — was the conviction any of these special categories? (Washington has mandatory "shall vacate" paths for some of them.)',
+          options: [
+            { label: 'Misdemeanor cannabis (marijuana) possession, and you were 21 or older when it happened', value: 'cannabis21', next: 'eligible_cannabis_wa' },
+            { label: 'Simple drug possession (any controlled substance)', value: 'drug_possession', next: 'blake_date_wa' },
+            { label: 'A prison-riot conviction from while you were held in a juvenile facility (DCYF or county)', value: 'juvenile_riot', next: 'eligible_juvenile_riot_wa' },
+            { label: 'A conviction you got as a victim of trafficking, prostitution, sexual assault, or domestic violence', value: 'survivor', next: 'survivor_tracks_wa' },
+            { label: 'None of these', value: 'none', next: 'excluded_wa' }
+          ]
+        },
+        // Simple possession: split by State v. Blake (Feb. 25, 2021).
+        blake_date_wa: {
           type: 'boolean',
-          text: 'Was the offense a DUI or physical-control offense, a sex offense, or an obscenity/child-exploitation offense?',
-          yes: 'ineligible_excluded_wa',
-          no: 'violent_wa'
+          text: 'Was the drug-possession offense committed BEFORE February 25, 2021?',
+          yes: 'eligible_blake_void_wa',
+          no: 'eligible_drug_sud_wa'
+        },
+        excluded_wa: {
+          type: 'choice',
+          text: 'Which of these describes the offense, if any?',
+          options: [
+            { label: 'A DUI, a physical-control offense, or operating a train/railroad while intoxicated', value: 'dui_pc', next: 'ineligible_excluded_wa' },
+            { label: 'A sex offense, or an obscenity/child-exploitation offense', value: 'sex_obsc', next: 'ineligible_excluded_wa' },
+            { label: 'It was originally a DUI charge, but was reduced to something else (e.g., negligent or reckless driving)', value: 'reduced_dui', next: 'reduced_dui_date_wa' },
+            { label: 'None of these', value: 'none', next: 'violent_wa' }
+          ]
+        },
+        // Reduced-from-DUI "prior offense" under RCW 46.61.5055 — vacatable, but on
+        // a 10-year-from-ARREST clock with no subsequent alcohol/drug violation
+        // (9.96.060(2)(d)).
+        reduced_dui_date_wa: {
+          type: 'date',
+          text: 'When were you ARRESTED on the original DUI charge? (This clock runs from the arrest, not the conviction.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'arrest on the original DUI charge (RCW 9.96.060(2)(d) — reduced-from-DUI "prior offense"; also requires no subsequent alcohol/drug violation within 10 years of the arrest)' },
+            nextPass: 'eligible_reduced_dui_wa',
+            nextFail: 'waiting_reduced_dui_wa'
+          }
         },
         violent_wa: {
           type: 'boolean',
@@ -6841,7 +6900,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           yes: 'violent_carveout_wa',
           no: 'level_wa'
         },
-        // The 2019 surprise-yes carve-out.
+        // The 2019 c 331 surprise-yes carve-out.
         violent_carveout_wa: {
           type: 'boolean',
           text: 'Was it specifically Assault in the 2nd degree, Assault in the 3rd degree (not against an officer), or Robbery in the 2nd degree — AND with no firearm, deadly-weapon, or sexual-motivation enhancement?',
@@ -6853,32 +6912,48 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'charge_type',
           text: 'What was the level of the offense?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'dv_wa' },
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'lfo_check_wa' },
             { label: 'Felony', value: 'felony', next: 'felony_class_wa' },
-            { label: 'Infraction', value: 'infraction', next: 'dv_wa' },
+            { label: 'Infraction', value: 'infraction', next: 'infraction_wa' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_wa' }
           ]
         },
+        // LFO / sentence-completion is a FILING PRECONDITION (9.96.060(2)(a)) —
+        // not the clock. Asked (covers all LFOs, not just restitution).
+        lfo_check_wa: {
+          type: 'boolean',
+          text: 'Have you completed everything on the sentence, including paying all fines, fees, and restitution?',
+          yes: 'dv_wa',
+          no: 'lfo_gate_wa'
+        },
         dv_wa: {
           type: 'boolean',
-          text: 'Was the misdemeanor a domestic-violence-related offense?',
-          yes: 'misd_dv_date_wa',
+          text: 'Was the misdemeanor a domestic-violence-related offense? (Washington reads this broadly — a court can find domestic violence from the case file and totality, not only from a formal DV tag.)',
+          yes: 'dv_incidents_wa',
           no: 'misd_date_wa'
+        },
+        // Separate-incidents bar — 9.96.060(2)(f): you must have fewer than two DV
+        // convictions from SEPARATE incidents (multiple from one incident = one).
+        dv_incidents_wa: {
+          type: 'boolean',
+          text: 'Do you have two or more domestic-violence convictions arising from SEPARATE incidents? (Multiple convictions from a single incident count as one.)',
+          yes: 'ineligible_dv_incidents_wa',
+          no: 'misd_dv_date_wa'
         },
         misd_date_wa: {
           type: 'date',
-          text: 'Which came LATER: your release from confinement or supervision, or your sentencing? Enter that date. (Unpaid fines do NOT delay this — the 2024 law changed that.)',
+          text: 'Which came LATEST: your release from supervision or probation, your release from confinement, or your sentencing? Enter that date. (Unpaid fines do NOT delay this clock — but they must be paid before you file.)',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'the later of release or sentencing (RCW 9.96.060 — misdemeanours; LFOs no longer delay the clock per the 2024 New Hope Act)' },
+            period: { amount: 3, unit: 'years', anchor: 'the later of release from supervision, release from confinement, or sentencing (RCW 9.96.060(2)(g) — misdemeanours; per 2024 c 296 LFO payment timing does not extend the clock)' },
             nextPass: 'eligible_vacate_wa',
             nextFail: 'waiting_wa'
           }
         },
         misd_dv_date_wa: {
           type: 'date',
-          text: 'Which came LATER: your release from confinement or supervision, or your sentencing? Enter that date.',
+          text: 'When did you complete the conditions of the original sentence, including any court-ordered treatment? Enter that date. (Payment of fines and fees is NOT part of this clock.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'the later of release or sentencing (RCW 9.96.060 — DV-related misdemeanours; extra conditions apply)' },
+            period: { amount: 5, unit: 'years', anchor: 'completion of the original sentence conditions incl. court-ordered treatment but EXCLUDING payment of financial obligations (RCW 9.96.060(2)(f) — DV-related misdemeanours; per 2024 c 296)' },
             nextPass: 'eligible_vacate_dv_wa',
             nextFail: 'waiting_wa'
           }
@@ -6893,20 +6968,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'I don\'t know the class', value: 'unsure', next: 'complex_level_wa' }
           ]
         },
+        // Felony clock runs from the later of release from community custody,
+        // release from confinement, or SENTENCING — NOT the COD date (which is a
+        // separate prerequisite, 9.94A.640(1)/9.94A.637).
         felony_c_date_wa: {
           type: 'date',
-          text: 'When did you receive your Certificate of Discharge? (Washington requires this before vacating a felony.)',
+          text: 'Which came LATEST: your release from community custody, your release from confinement, or your sentencing date? Enter that date.',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'Certificate of Discharge (RCW 9.94A.640 — Class C felony; no new crime in the prior 5 years)' },
+            period: { amount: 5, unit: 'years', anchor: 'the later of release from community custody, release from confinement, or sentencing (RCW 9.94A.640(2)(f) — Class C felony; no new conviction in the prior 5 years)' },
             nextPass: 'eligible_vacate_felony_wa',
             nextFail: 'waiting_wa'
           }
         },
         felony_b_date_wa: {
           type: 'date',
-          text: 'When did you receive your Certificate of Discharge?',
+          text: 'Which came LATEST: your release from community custody, your release from confinement, or your sentencing date? Enter that date.',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'Certificate of Discharge (RCW 9.94A.640 — Class B felony; no new crime in the prior 10 years)' },
+            period: { amount: 10, unit: 'years', anchor: 'the later of release from community custody, release from confinement, or sentencing (RCW 9.94A.640(2)(e) — Class B felony; no new conviction in the prior 10 years)' },
             nextPass: 'eligible_vacate_felony_wa',
             nextFail: 'waiting_wa'
           }
@@ -6920,54 +6998,124 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (WSP WATCH)',
           citation: 'RCW 9.96.060, 9.94A.640 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Diversion Cases Need a Person',
-          message: 'Washington\'s vacation rules are screened here for convictions, dismissals, and acquittals. How a completed diversion is treated is not something this screening has researched in detail, and Washington also has special expedited tracks — for trafficking and domestic-violence victims (RCW 9.96.080 / 9.94A.648) and mandatory marijuana-misdemeanor vacation. We would rather point you to someone than guess. WashingtonLawHelp.org can tell you which track fits.',
-          remedy: 'Consult Legal Aid (Diversion / Special Tracks Not Yet Screened)',
-          citation: 'RCW 9.96.060 (treatment of diversions not yet detailed)'
-        },
         eligible_nonconviction_wa: {
           status: 'eligible',
-          title: 'No Conviction — Likely Nothing to Vacate',
-          message: 'Because your case ended without a conviction — dismissed or acquitted — there is generally no conviction on your record to vacate, which is good news. Your record should already reflect that no conviction resulted. If you want to confirm what shows, a WSP WATCH self-check ($11 online, free in person) will tell you. If a non-conviction is still appearing incorrectly, WashingtonLawHelp.org can help you get it corrected.',
-          remedy: 'Confirm your record (WSP WATCH) — generally no conviction to vacate',
-          citation: 'RCW 9.96.060'
+          title: 'No Conviction — You Can Ask to Have the Record Deleted',
+          message: 'Because your case ended without a conviction, Washington gives you a real remedy, not just "nothing to vacate." Under RCW 10.97.060 you can REQUEST that criminal-justice agencies delete the nonconviction data from their files, once 2 years have passed since the case ended in your favor (or 3 years from the arrest or citation if no disposition ever resulted, unless you are a fugitive or under active prosecution). Two honest caveats. First, this is a request the agency MAY refuse — for example if the case was a deferred prosecution or similar diversion, if you have a prior felony or gross-misdemeanor conviction, or if there was an intervening arrest or charge. Second, this reaches agency files (like the State Patrol\'s); the COURT FILE is a separate fight under court rule GR 15, which this screening does not cover. Start by checking what actually shows with a WSP WATCH self-check ($11 online, free in person); WashingtonLawHelp.org can help with the deletion request.',
+          remedy: 'Request deletion of nonconviction data (RCW 10.97.060) — agency files; court file is separate (GR 15)',
+          citation: 'RCW 10.97.060'
+        },
+        eligible_diversion_wa: {
+          status: 'eligible',
+          title: 'Diversion Completed — Dismissed, With a Deletion Request Available',
+          message: 'A completed diversion or deferred prosecution ends in a dismissal, so there is no conviction to vacate — that part is good news. What you CAN do is ask criminal-justice agencies to delete the nonconviction data under RCW 10.97.060 (generally 2 years after the favorable outcome). Be aware of two specifics that hit diversions in particular: a deferred prosecution is exactly the kind of disposition an agency may refuse to delete (RCW 10.97.060(1)), and if this was a DUI deferred prosecution, it still counts as a "prior offense" under RCW 46.61.5055 for any future DUI — so it is not fully "gone" for that purpose. The court file is a separate matter under GR 15, not screened here. WashingtonLawHelp.org can help you press the deletion request and explain what a diversion does and does not clear.',
+          remedy: 'Dismissed via diversion — request nonconviction-data deletion (RCW 10.97.060)',
+          citation: 'RCW 10.97.060'
+        },
+        eligible_cannabis_wa: {
+          status: 'eligible',
+          title: 'Cannabis Possession (21+) — the Court MUST Vacate',
+          message: 'This is one of Washington\'s strongest paths. For a misdemeanor cannabis (marijuana) possession conviction where you were 21 or older at the time of the offense, the court SHALL vacate it on your application — no waiting period, and none of the usual condition checks (RCW 9.96.060(5)). This reaches predecessor statutes going back to 1971 and equivalent municipal ordinances, so an old marijuana-possession conviction counts. File the motion in the sentencing court; statewide forms are on courts.wa.gov. As with every Washington vacation, it lets you lawfully deny the conviction and stops State Patrol reporting, but the court file itself stays public.',
+          remedy: 'Motion to Vacate — mandatory for 21+ cannabis possession (RCW 9.96.060(5))',
+          citation: 'RCW 9.96.060(5)'
+        },
+        eligible_blake_void_wa: {
+          status: 'eligible',
+          title: 'Simple Drug Possession Before Blake — Void, With a Refund Coming',
+          message: 'Because your simple-possession offense was committed before February 25, 2021, it is governed by State v. Blake, which struck down Washington\'s old possession law as unconstitutional. That makes the conviction VOID — it is subject to mandatory vacatur, with no eligibility test at all, and you are entitled to a refund of the legal financial obligations you paid on it through the statewide Blake process. Look for the Blake Refund Bureau resources on courts.wa.gov, which handle both the vacatur and the refund. This is separate from the ordinary vacation rules and is stronger than them. WashingtonLawHelp.org can point you to the current Blake process.',
+          remedy: 'Void under State v. Blake — mandatory vacatur + LFO refund (courts.wa.gov Blake process)',
+          citation: 'State v. Blake; RCW 9.96.060(6)'
+        },
+        eligible_drug_sud_wa: {
+          status: 'eligible',
+          title: 'Simple Drug Possession — Court MUST Vacate After Treatment/Compliance',
+          message: 'For a simple drug-possession conviction from on or after February 25, 2021, Washington added a mandatory path in 2023 (RCW 9.96.060(6)): the court MUST vacate if you have completed a substance use disorder program, OR you obtained an assessment through a recovery navigator, an arrest-and-jail-alternative, or a LEAD program and then had 6 months of substantial compliance, documented in a written status update. There is no ordinary waiting period on this path — the trigger is the treatment or compliance, not time. File the motion in the sentencing court. As always in Washington, vacation lets you deny the conviction and stops State Patrol reporting, but the court file stays public. WashingtonLawHelp.org can help you assemble the documentation.',
+          remedy: 'Motion to Vacate — mandatory on treatment/compliance (RCW 9.96.060(6))',
+          citation: 'RCW 9.96.060(6)'
+        },
+        eligible_juvenile_riot_wa: {
+          status: 'eligible',
+          title: 'Juvenile-Facility Prison-Riot Conviction — the Court MUST Vacate',
+          message: 'A 2025 law (2025 c 169, effective April 25, 2025) added a mandatory path for a narrow but important situation: a prison-riot conviction (RCW 9.94.010) for conduct while you were incarcerated in a DCYF or county juvenile facility. On your application, the court SHALL vacate it (RCW 9.94A.640(5)). This is a fresh law, so a lawyer may be the fastest way to make sure the court applies it correctly. File in the sentencing court; the same Washington caveat applies — you may deny the conviction and the State Patrol stops reporting it, but the court file stays public.',
+          remedy: 'Motion to Vacate — mandatory for a juvenile-facility prison-riot conviction (RCW 9.94A.640(5))',
+          citation: 'RCW 9.94A.640(5)'
+        },
+        survivor_tracks_wa: {
+          status: 'complex',
+          title: 'A Survivor Vacation Track May Apply — This One Needs a Person',
+          message: 'Washington has special vacation tracks for people whose convictions grew out of being a victim, and they are more generous than the ordinary rules. If your conviction resulted from being a victim of sex trafficking, prostitution, commercial sexual abuse of a minor, sexual assault, or domestic violence, you (or the prosecutor on the state\'s behalf) can seek vacation through RCW 9.96.080 (misdemeanors) or RCW 9.94A.648 (felonies), per RCW 9.96.060(3) and 9.94A.640(3). Separately, RCW 9.96.060(7) lets the family of a homicide victim vacate that victim\'s prostitution conviction, and the court shall grant it. (One more narrow "shall" path, unrelated to survivors: RCW 9.96.060(4) covers a pre-1975 treaty-fishing conviction, felonies included.) We have not yet read the two survivor process sections (9.96.080 / 9.94A.648) in detail, so rather than guess at their requirements we route you to someone who works these cases. WashingtonLawHelp.org and survivor-focused legal aid can help.',
+          remedy: 'Survivor vacation tracks (RCW 9.96.080 / 9.94A.648) — consult legal aid',
+          citation: 'RCW 9.96.060(3), 9.94A.640(3)'
+        },
+        eligible_reduced_dui_wa: {
+          status: 'eligible',
+          title: 'Reduced-From-DUI Conviction — Potentially Vacatable at 10 Years',
+          message: 'This is a real path that surprises people. A conviction that is a "prior offense" under RCW 46.61.5055 because it was originally a DUI charge reduced to something else (like negligent or reckless driving) CAN be vacated — unlike a straight DUI, which never can. The rule (RCW 9.96.060(2)(d)): 10 or more years must have passed since the ARREST, and you must have had no subsequent alcohol- or drug-related violation within 10 years of that arrest. Based on the arrest date you gave, the 10 years appear met. Because the "no subsequent violation" piece is specific, it is worth confirming with legal aid before filing. The usual Washington caveats apply — you complete all sentence terms including LFOs before filing, vacation is discretionary, and the court file stays public.',
+          remedy: 'Motion to Vacate a reduced-from-DUI conviction (RCW 9.96.060(2)(d)) — 10 years from arrest',
+          citation: 'RCW 9.96.060(2)(d)'
+        },
+        waiting_reduced_dui_wa: {
+          status: 'waiting',
+          title: 'Reduced-From-DUI Conviction — 10 Years From Arrest Not Yet Met',
+          message: 'A conviction that was originally a DUI reduced to something else can be vacated, but only once 10 years have passed since the ARREST on the original DUI charge (RCW 9.96.060(2)(d)) — and only if there was no subsequent alcohol- or drug-related violation within 10 years of that arrest. Based on the arrest date you gave, the 10 years have not run yet. Come back when they have; and note the "no subsequent violation" condition, which a new alcohol/drug case would break.',
+          remedy: 'Wait for 10 years from the arrest (RCW 9.96.060(2)(d))',
+          citation: 'RCW 9.96.060(2)(d)'
+        },
+        lfo_gate_wa: {
+          status: 'waiting',
+          title: 'Finish Paying Before You File — the Clock May Already Be Running',
+          message: 'Here is an important and often-misunderstood piece of Washington law. Your waiting clock does NOT wait for your fines, fees, and restitution — it runs from your release or sentencing, so it may already be running or even already satisfied. BUT completing the sentence, including paying those financial obligations, is a precondition to FILING the vacation motion (RCW 9.96.060(2)(a)). So the payment does not lengthen your wait; it is just something to finish before you file. If the balance is the obstacle, you do not have to accept it as-is: the court can address reducing what you owe on a separate motion, and the statewide forms are on courts.wa.gov. WashingtonLawHelp.org can help you with an LFO-reduction request and then the vacation itself.',
+          remedy: 'Pay/resolve remaining LFOs (a filing precondition, not the clock) — ask about LFO reduction (RCW 9.96.060(2)(a))',
+          citation: 'RCW 9.96.060(2)(a)'
         },
         eligible_vacate_wa: {
           status: 'eligible',
           title: 'Potentially Eligible to Vacate — With One Honest Caveat',
-          message: 'Based on your dates, you appear eligible to VACATE this misdemeanor conviction under RCW 9.96.060 — three years have passed since the later of your release or sentencing, with no new convictions in that window. Here is the honest caveat Washington makes people live with, and that many tools gloss over: vacating lets you lawfully say you were never convicted and stops the State Patrol from reporting it, but the COURT FILE stays public. It is strong relief, not disappearance. Two pieces of good news from the 2024 law: unpaid fines and fees no longer hold up your eligibility, and the court can even reduce what you owe on a motion. File the motion in the sentencing court — statewide forms are on courts.wa.gov, and counties like Pierce and King publish complete packets.',
-          remedy: 'Motion to Vacate (RCW 9.96.060) — court file stays public',
+          message: 'Based on your dates, you appear eligible to VACATE this misdemeanor conviction under RCW 9.96.060 — 3 years have passed since the later of your release from supervision, release from confinement, or sentencing. The full set of conditions the court will check: no charges pending against you in any state, federal, or tribal court (2)(b); no new conviction in any of those courts in the 3 years before you apply (2)(h); and you are not currently restrained by a domestic-violence protection, no-contact, antiharassment, or civil restraining order, and were not found to have violated one in the prior 5 years (2)(i) — that last one applies to everyone, not just DV cases. Two honest caveats Washington makes people live with. First, this is DISCRETIONARY — even when you meet every rule, the court "may" vacate, not "shall." Second, vacating lets you lawfully say you were never convicted and stops the State Patrol from reporting it, and it restores your right to deny the conviction (9.96.060(8)-(9)), but the COURT FILE stays public, it does NOT restore firearm rights (that is a separate process under RCW 9.41.040/.041), and a vacation entered after July 28, 2019 still counts as a prior for recidivist charging. On money: your fines and fees did not delay the clock, but they must be paid before you file (2)(a); the court can address reducing what you owe on a separate motion. File in the sentencing court — statewide forms are on courts.wa.gov.',
+          remedy: 'Motion to Vacate (RCW 9.96.060) — discretionary; court file stays public; firearm rights separate',
           citation: 'RCW 9.96.060'
         },
         eligible_vacate_dv_wa: {
           status: 'eligible',
           title: 'DV-Related Misdemeanor — Potentially Vacatable on the 5-Year Track',
-          message: 'A domestic-violence-related misdemeanor can be vacated in Washington, but on a longer 5-year track with extra conditions — you must have no restraining-order violations in the prior 5 years, and there are limits on multiple separate-incident DV convictions. Based on your dates the 5 years appear met, but because the DV conditions are specific, this is worth confirming with legal aid before filing. The same honest caveat applies to all Washington vacations: it lets you say you were never convicted and stops State Patrol reporting, but the court file stays public. WashingtonLawHelp.org has DV-specific guidance.',
-          remedy: 'Motion to Vacate (RCW 9.96.060, DV track) — confirm the conditions with legal aid',
-          citation: 'RCW 9.96.060'
+          message: 'A domestic-violence-related misdemeanor can be vacated in Washington on a 5-year track (RCW 9.96.060(2)(f)). Your clock runs from completing the original sentence conditions, including any court-ordered treatment, but NOT from paying your fines and fees — those are a separate filing precondition. Based on that, the 5 years appear met, and you told us you do not have two or more DV convictions from separate incidents (which would bar it). Two specific things to know going in: there is a perjury trap in the required affidavit, so it must be accurate; and written notice of the petition must go to the prosecuting office that handled the case (2)(f)(i)). Once vacated, a DV conviction generally cannot be used against you in a later prosecution (9.96.060(8)(b)) — but order-violation and stalking convictions can be, and a vacation entered after July 28, 2019 still counts as a prior for recidivist charging (8)(c). The usual caveats apply: vacation is discretionary, it does not restore firearm rights, and the court file stays public. Because the DV conditions are specific, confirm with legal aid before filing; WashingtonLawHelp.org has DV-specific guidance.',
+          remedy: 'Motion to Vacate (RCW 9.96.060(2)(f), DV track) — written notice to the prosecutor; confirm conditions with legal aid',
+          citation: 'RCW 9.96.060(2)(f)'
         },
         eligible_vacate_felony_wa: {
           status: 'eligible',
           title: 'Potentially Eligible to Vacate This Felony',
-          message: 'Based on your dates, you appear eligible to VACATE this felony under RCW 9.94A.640 — 5 years since your Certificate of Discharge for a Class C felony, or 10 years for a Class B, with no new crime in that window. The same honest caveat applies as for any Washington vacation: it lets you lawfully deny the conviction and stops State Patrol reporting, but the court file stays public. File the motion in the sentencing court. If you have not yet obtained your Certificate of Discharge (RCW 9.94A.637), that is the first step — the vacation cannot proceed without it.',
-          remedy: 'Motion to Vacate a Felony (RCW 9.94A.640) — Certificate of Discharge required first',
+          message: 'Based on your dates, you appear eligible to VACATE this felony under RCW 9.94A.640 — 5 years (Class C, (2)(f)) or 10 years (Class B, (2)(e)) from the later of your release from community custody, release from confinement, or sentencing, with no new conviction in that lookback window (2)(c)-(d)) and no charges pending anywhere, including federal (2)(a)). One prerequisite to understand: you must first have a Certificate of Discharge (RCW 9.94A.637) — and it requires your legal financial obligations to be complete (637(1)-(3)). Two useful facts about the COD: it is retroactively effective to the date you actually completed all conditions, so your vacation wait may already be satisfied by the time it issues; and if you were non-violent and non-sex, you can seek early discharge at the halfway point of your community supervision (637(8)). If your only route to a COD is the alternate motion under 637(4), its delayed-effective-date math is genuinely tricky — take that one to legal aid. The usual Washington caveats apply: vacation is discretionary, it lets you deny the conviction and stops State Patrol reporting but the court file stays public, it does NOT restore firearm rights (RCW 9.41.040/.041 separate), and a post-July 28, 2019 vacation still counts as a prior for recidivist charging (9.94A.640(4)). File in the sentencing court.',
+          remedy: 'Motion to Vacate a Felony (RCW 9.94A.640) — Certificate of Discharge required first (RCW 9.94A.637)',
           citation: 'RCW 9.94A.640'
         },
         waiting_wa: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Washington\'s vacation waits run from the later of your release or sentencing (for a felony, from your Certificate of Discharge): 3 years for most misdemeanors, 5 for a DV-related misdemeanor or a Class C felony, 10 for a Class B felony. Based on your dates, yours has not run yet, and it also requires no new convictions during the wait. One thing that is NOT a barrier anymore: unpaid fines and fees do not delay your clock — the 2024 law changed that, so do not let an outstanding balance make you think you have longer to wait than you do.',
-          remedy: 'Wait for the period (unpaid fines do NOT extend it)',
+          message: 'Washington\'s vacation waits run from the later of your release from supervision, release from confinement, or sentencing (for a felony, the same three anchors): 3 years for most misdemeanors, 5 for a DV-related misdemeanor or a Class C felony, 10 for a Class B felony. Based on your dates, yours has not run yet, and it also requires no new convictions in the lookback window. One thing that is NOT a barrier: unpaid fines and fees do not delay your clock — the 2024 change (2024 c 296) settled that — so do not let an outstanding balance make you think you have longer to wait than you do. (You do, however, need those paid before you actually file.)',
+          remedy: 'Wait for the period (unpaid fines do NOT extend it; pay them before filing)',
           citation: 'RCW 9.96.060, 9.94A.640'
         },
         ineligible_excluded_wa: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Vacated',
-          message: 'Washington never vacates DUI or physical-control offenses, sex offenses, or obscenity and child-exploitation offenses. This is categorical, not a matter of time. For a DUI specifically, there is no vacation route in Washington, so be cautious of any service that suggests otherwise. If you have other convictions that are not on this list, those may well be vacatable — run this again for them. WashingtonLawHelp.org can confirm where your offense falls.',
-          remedy: 'None (Excluded Offense)',
+          message: 'Washington does not vacate DUI, physical control (RCW 46.61.504), or operating a train or railroad while intoxicated (RCW 9.91.020), and felony DUI or physical control is categorically excluded too (RCW 9.94A.640(2)(g)). It also does not vacate sex offenses or obscenity and child-exploitation offenses. These are categorical, not a matter of time. Two things worth knowing before you accept this. First, if your DUI was actually REDUCED to something else (like negligent or reckless driving), that reduced conviction CAN be vacated on a 10-year-from-arrest track — run this again and choose that option. Second, there is one exception on the sex-offense side: a MISDEMEANOR failure to register as a sex offender (RCW 9A.44.132) is NOT excluded and can be vacated on the normal misdemeanor track (RCW 9.96.060(2)(e)). (Note: bills to open DUI vacation have been introduced but none has passed, so the DUI bar stands for now.) WashingtonLawHelp.org can confirm where your offense falls.',
+          remedy: 'None (Excluded Offense) — but check the reduced-from-DUI and failure-to-register exceptions',
+          citation: 'RCW 9.96.060, 9.94A.640(2)(g)'
+        },
+        infraction_wa: {
+          status: 'complex',
+          title: 'An Infraction Is Not a Criminal Conviction',
+          message: 'Washington\'s vacation law (RCW 9.96.060) covers misdemeanors and gross misdemeanors — not infractions. An infraction is not a criminal conviction, so there is generally nothing to "vacate," and it is generally not reported as criminal history in the first place. If an infraction is somehow showing up on a background check as if it were criminal, that is a data problem worth correcting rather than a vacation question. A WSP WATCH self-check ($11 online, free in person) will show what is actually on your record; WashingtonLawHelp.org can help if something is being reported incorrectly.',
+          remedy: 'Not a criminal conviction — nothing to vacate (confirm via WSP WATCH)',
           citation: 'RCW 9.96.060'
+        },
+        ineligible_dv_incidents_wa: {
+          status: 'ineligible',
+          title: 'Two or More Separate-Incident DV Convictions Block This',
+          message: 'Washington bars vacating a domestic-violence misdemeanor if you have two or more DV convictions arising from SEPARATE incidents (RCW 9.96.060(2)(f)) — though multiple convictions from a single incident count as just one, so it is worth being sure the incidents really were separate. Based on what you told us, this bar applies. Because "separate incidents" is a specific legal judgment and the DV rules here are intricate, this is genuinely worth having a person confirm rather than accepting outright — the file may support a different reading. WashingtonLawHelp.org and DV-focused legal aid can look at your specific history.',
+          remedy: 'Not eligible (two or more separate-incident DV convictions) — worth confirming with legal aid',
+          citation: 'RCW 9.96.060(2)(f)'
         },
         ineligible_violent_wa: {
           status: 'ineligible',
@@ -6999,13 +7147,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Motion and Declaration to Vacate (statewide forms; county packets)',
           formUrl: 'https://www.courts.wa.gov/forms/',
           steps: [
-            'For a felony, obtain a Certificate of Discharge first (RCW 9.94A.637) — the vacation cannot proceed without it.',
-            'Complete the vacation motion — statewide forms are on courts.wa.gov, and Pierce and King counties publish complete packets.',
+            'Complete the whole sentence, including paying all fines, fees, and restitution — that is a filing precondition (RCW 9.96.060(2)(a)), even though it does not delay the waiting clock. If the balance is the obstacle, ask the court about reducing it on a separate motion.',
+            'For a felony, obtain a Certificate of Discharge first (RCW 9.94A.637) — the vacation cannot proceed without it. It is retroactively effective to the date you completed all conditions.',
+            'Complete the vacation motion — statewide forms are on courts.wa.gov, and Pierce and King counties publish complete packets. For a DV-related misdemeanor, written notice of the petition must go to the prosecuting office that handled the case (RCW 9.96.060(2)(f)(i)).',
             'File in the sentencing court.',
-            'Understand what you get: you may lawfully deny the conviction and the State Patrol stops reporting it, but the court file stays public.'
+            'Understand what you get: it is discretionary; you may lawfully deny the conviction and the State Patrol stops reporting it, but the COURT FILE stays public, firearm rights are NOT restored (RCW 9.41.040/.041 is a separate process), and a post-July 28, 2019 vacation still counts as a prior for recidivist charging.'
           ],
-          // null: Wave 4 says one guide reports generally no filing fee but
-          // counties may differ. Phone target.
+          // null: statute is silent on the filing fee; counties vary; one guide
+          // reports generally none. Phone target (WATCH $11 online / free in person).
           fees: null,
           feeWaiver: null,
           courtContact: 'The sentencing court'

@@ -34,7 +34,8 @@ describe('/api/chat (deterministic path, no GROQ key)', () => {
   });
 
   test('unverified/draft state -> BEYOND tier with legal aid, no citations', async () => {
-    const res = await call({ message: 'What about my record?', stateCode: 'WA' });
+    // WV is a still-draft state (WA was verified 2026-07-18 and now returns VERIFIED).
+    const res = await call({ message: 'What about my record?', stateCode: 'WV' });
     const data = await res.json();
     expect(data.tier).toBe('BEYOND');
     expect(data.legalAid.length).toBeGreaterThan(0);

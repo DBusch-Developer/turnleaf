@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import StateSelector, { StateSummary } from '../components/StateSelector';
 import EligibilityWizard, { ConvictionRecord } from '../components/EligibilityWizard';
 import ResultsDisplay from '../components/ResultsDisplay';
-import CheckrMockPanel from '../components/CheckrMockPanel';
+import CheckrReportDemo from '../components/CheckrReportDemo';
 import { StateRuleConfig } from '../data/fallbackRules';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
-import { Settings, ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
 import { usePublishScreen, type WillowScreen } from '../components/AssistantContext';
 
 // The four steps of the screening, in order. The number is not decoration —
@@ -29,7 +29,7 @@ export default function Home() {
   // record's date again and this comes back.
   const [prepopulatedRecords, setPrepopulatedRecords] = useState<ConvictionRecord[]>([]);
   const [results, setResults] = useState<any[] | null>(null);
-  const [showDemoPanel, setShowDemoPanel] = useState(false);
+  const [showCheckr, setShowCheckr] = useState(false);
   // Not 'is it loading' — that is derived (see isOpeningState). This is the
   // one thing the render cannot infer: whether the fetch came back empty.
   const [loadFailed, setLoadFailed] = useState(false);
@@ -63,6 +63,15 @@ export default function Home() {
         setLoadingStates(false);
       }
     })();
+  }, []);
+
+  // The Checkr integration demo opens via the footer link (?demo=checkr). Read on
+  // mount (not a lazy initial state) so SSR and first client render agree.
+  useEffect(() => {
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === 'checkr') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-shot mount read
+      setShowCheckr(true);
+    }
   }, []);
 
   /**
@@ -124,10 +133,18 @@ export default function Home() {
   }, [selectedStateCode]);
 
   // Load a Checkr mock report (FR-22)
+  const closeCheckr = () => {
+    setShowCheckr(false);
+    if (typeof window !== 'undefined' && window.location.search) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  };
+
   const handleLoadMockReport = (mockRecords: ConvictionRecord[], stateCode: string) => {
     setPrepopulatedRecords(mockRecords);
     setSelectedStateCode(stateCode);
     setResults(null); // Clear previous results
+    closeCheckr();
   };
 
   const handleScreeningComplete = (screeningResults: any[]) => {
@@ -197,34 +214,13 @@ export default function Home() {
       justifyContent: onLanding ? 'flex-start' : 'center'
     }}>
       
-      {/* Floating Developer Panel Toggle */}
-      <button 
-        onClick={() => setShowDemoPanel(true)}
-        className="btn btn-primary"
-        style={{
-          position: 'fixed',
-          // Stacked above the Willow launcher, which owns the bottom-right corner.
-          bottom: '6.5rem',
-          right: '2rem',
-          borderRadius: '50px',
-          padding: '0.75rem 1.5rem',
-          boxShadow: '0 8px 32px rgba(77, 124, 89, 0.3)',
-          zIndex: 30,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}
-      >
-        <Settings size={20} />
-        <span>Demo Panel</span>
-      </button>
-
-      {/* Slide-out mock Checkr drawer */}
-      <CheckrMockPanel
-        isOpen={showDemoPanel}
-        onClose={() => setShowDemoPanel(false)}
-        onLoadReport={handleLoadMockReport}
-      />
+      {/* Checkr integration demo — full-screen mock report, opened from the footer link */}
+      {showCheckr && (
+        <CheckrReportDemo
+          onRunScreening={handleLoadMockReport}
+          onClose={closeCheckr}
+        />
+      )}
 
       {onLanding ? (
         <>

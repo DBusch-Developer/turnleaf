@@ -109,6 +109,11 @@ export default function RootLayout({
               <p style={{ color: 'var(--color-text-light)', fontSize: '0.75rem' }}>
                 &copy; {new Date().getFullYear()} Turnleaf. Designed for the Next Chapter AI-Augmented Builder Cohort.
               </p>
+              <p style={{ fontSize: '0.72rem' }}>
+                <a href="/?demo=checkr" style={{ color: 'var(--color-text-light)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                  Checkr integration demo
+                </a>
+              </p>
             </div>
           </div>
         </footer>

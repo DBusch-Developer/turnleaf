@@ -39,44 +39,35 @@ export default function EligibilityWizard({
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showRapSheetInstructions, setShowRapSheetInstructions] = useState(false);
 
-  // Sync prepopulated records (from Checkr panel)
+  // An empty charge for a given state. Every seeded/added record is built here
+  // so a record always carries the state whose group it sits in.
+  const makeEmptyRecord = (stateCode: string): ConvictionRecord => ({
+    id: makeRecordId(),
+    state: stateCode,
+    title: '',
+    charge_type: 'misdemeanor',
+    disposition: 'convicted',
+    disposition_date: new Date().toISOString().split('T')[0],
+    probation_status: 'completed',
+    prison_sentenced: false,
+    restitution_paid: true
+  });
+
+  // Sync prepopulated records (from Checkr panel), else seed ONE empty charge
+  // per selected state so every state opens with its own group (and its own
+  // "Add charge in {state}" button). A single-state session seeds one record,
+  // exactly as before; a CA+TX session seeds a CA group and a TX group.
   useEffect(() => {
     if (prepopulatedRecords.length > 0) {
       setRecords(prepopulatedRecords);
       setShowCheckpoint(true); // Auto-advance to checkpoint for quick demo
     } else if (records.length === 0) {
-      addEmptyRecord();
+      setRecords(states.map(s => makeEmptyRecord(s.code)));
     }
   }, [prepopulatedRecords]);
 
-  const addEmptyRecord = () => {
-    const newRecord: ConvictionRecord = {
-      id: Math.random().toString(36).substr(2, 9),
-      state: states[0].code,
-      title: '',
-      charge_type: 'misdemeanor',
-      disposition: 'convicted',
-      disposition_date: new Date().toISOString().split('T')[0],
-      probation_status: 'completed',
-      prison_sentenced: false,
-      restitution_paid: true
-    };
-    setRecords([...records, newRecord]);
-  };
-
   const addRecordForState = (stateCode: string) => {
-    const newRecord: ConvictionRecord = {
-      id: makeRecordId(),
-      state: stateCode,
-      title: '',
-      charge_type: 'misdemeanor',
-      disposition: 'convicted',
-      disposition_date: new Date().toISOString().split('T')[0],
-      probation_status: 'completed',
-      prison_sentenced: false,
-      restitution_paid: true
-    };
-    setRecords([...records, newRecord]);
+    setRecords([...records, makeEmptyRecord(stateCode)]);
   };
 
   const removeRecord = (id: string) => {
@@ -311,10 +302,10 @@ export default function EligibilityWizard({
             </div>
           )}
 
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'space-between' }}>
-            <button className="btn btn-outline" onClick={addEmptyRecord}>
-              <Plus size={16} /> Add Another Charge
-            </button>
+          {/* Adding a charge is per-group ("Add charge in {state}") so it lands
+              in the right state. A global add button here duplicated that and,
+              multi-state, always added to the first state — removed. */}
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
             <button className="btn btn-primary" onClick={() => setShowCheckpoint(true)}>
               Review & Submit
             </button>

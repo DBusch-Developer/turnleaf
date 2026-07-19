@@ -8,19 +8,19 @@ Turnleaf screens a user's criminal record against their state's researched, cite
 
 ## 2. Scope
 
-**In scope (MVP):** state selection, multi-charge entry, a deterministic per-state rules engine, four result statuses, waiting-period date estimates, plain-language summaries, filing packets, PDF export, honest in-research handling, and a mock background-check demo.
+**In scope (MVP):** multi-state selection (each state screened independently under its own law), multi-charge entry, a deterministic per-state rules engine, four result statuses, waiting-period date estimates, plain-language summaries, filing packets, PDF export, honest in-research handling, and a mock background-check demo.
 
 **Out of scope (MVP):** user accounts, saved history, real background-check integration, document e-filing, payments, non-English localization.
 
 ## 3. Functional requirements
 
 ### State selection & coverage
-- **FR-1** — Display all 50 states in a searchable selector, marking which have researched rules vs. in-research.
+- **FR-1** — Display all 50 states in a searchable selector, marking which have researched rules vs. in-research. The selector is multi-select: a session may span several states, each screened independently under its own law (via manual pick or a multi-state background-check handoff).
 - **FR-2** — Load a state's rule config from the database, falling back to `fallbackRules` when the DB is unavailable.
 - **FR-9** — For a state without researched rules, show an honest in-research panel with national referral links; never show generic rules.
 
 ### Record entry
-- **FR-3** — Support screening multiple charges/records in one session.
+- **FR-3** — Support screening multiple charges/records in one session, including charges spanning multiple states; records are grouped by state and each is evaluated under that state's own rules.
 - **FR-4** — When a user marks charge type or disposition "unknown," show instructions for obtaining their official RAP sheet, with a state legal-aid link.
 - **FR-10** — Show state-specific conditional fields (e.g., CA state-prison flag, AZ restitution-paid flag).
 - **FR-5** — Require a pre-screening checkpoint where the user confirms their entries match official records before results are generated.
@@ -57,7 +57,7 @@ Turnleaf screens a user's criminal record against their state's researched, cite
 
 ## 5. Acceptance criteria (MVP)
 
-- A user can screen a multi-charge record in any of CA, AZ, NY, TX and receive per-charge statuses with citations.
+- A user can screen a multi-charge record in any of CA, AZ, NY, TX — and across several of them in one session — and receive per-charge statuses with citations, stacked one section per state.
 - Eligible results show a real form, fee, fee-waiver, court contact, and steps.
 - Waiting results show a computed eligibility date.
 - Every summary is hedged and never advises filing.

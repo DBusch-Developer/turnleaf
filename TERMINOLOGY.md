@@ -6,7 +6,7 @@ Use these terms consistently across code, UI copy, and docs. Where states use di
 
 - **Record clearing** — the neutral umbrella term for any remedy that hides, seals, sets aside, or erases a criminal record. Preferred in general UI copy.
 - **Justice-impacted individual** — a person with a criminal record. Preferred over "offender," "ex-con," or "criminal."
-- **Screening** — Turnleaf's eligibility check. Always a *screening*, never a *determination* or *legal opinion*.
+- **Screening** — Turnleaf's eligibility check. Always a *screening*, never a *determination* or *legal opinion*. A single screening session may span several states; each state's charges are screened independently under that state's own law, and results stack one section per state.
 - **In-research / Coming-soon panel** — the honest UI shown for a state whose rules have not yet been researched and cited; links to national referrals.
 
 ## Types of relief (state-specific)

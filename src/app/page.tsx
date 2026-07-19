@@ -155,6 +155,7 @@ export default function Home() {
   const handleLoadMockReport = (mockRecords: ConvictionRecord[]) => {
     const codes = groupByState(mockRecords, r => r.state).map(g => g.state);
     setPrepopulatedRecords(mockRecords);
+    setLoadFailed(false); // A fresh selection deserves a fresh fetch attempt.
     setSelectedStateCodes(codes);
     setResults(null); // Clear previous results
     closeCheckr();
@@ -248,6 +249,65 @@ export default function Home() {
     ? groupByState(results as ScreeningResultItem[], r => r.state)
         .map(g => ({ stateConfig: configs[g.state], results: g.items }))
     : [];
+
+  // The state picker — shown as the entry step AND as the final safety net if
+  // every content branch below falls through. One definition, so the two can't
+  // drift. `pendingCodes` lights up the states currently opening.
+  const selectorView = (
+    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <button
+        className="btn btn-secondary"
+        onClick={() => setShowSelector(false)}
+        style={{ marginBottom: '1.5rem' }}
+      >
+        <ArrowLeft size={16} /> Back
+      </button>
+      <StateSelector
+        states={states}
+        dataSource={dataSource}
+        loading={loadingStates}
+        pendingCodes={isOpeningState ? selectedStateCodes : []}
+        onContinue={(codes) => { setLoadFailed(false); setSelectedStateCodes(codes); }}
+      />
+    </div>
+  );
+
+  // The compact per-state "still in research" note. Rendered alongside the
+  // wizard when a session mixes screenable + in-research states, AND on its own
+  // when EVERY selected state is in research (so ≥2 in-research states no longer
+  // fall through to the error fallback). Single in-research still gets the full
+  // ComingSoonPanel — see soloComingSoon below.
+  const researchingNotes = (
+    <div style={{ maxWidth: '800px', margin: '0 auto 1rem' }}>
+      {researchingCodes.map(c => {
+        const cs = comingSoonByState[c];
+        const ref = cs.referrals[0];
+        return (
+          <div
+            key={c}
+            className="glass-card"
+            style={{ padding: '0.9rem 1.1rem', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem' }}
+          >
+            <BookOpen size={18} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
+            <span style={{ flex: 1, color: 'var(--color-text-muted)' }}>
+              <strong style={{ color: 'var(--color-text)' }}>{cs.name}</strong> is still in research — we won&apos;t screen it.
+            </span>
+            {ref && (
+              <a
+                href={ref.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}
+              >
+                {ref.name} <ExternalLink size={14} />
+              </a>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
 
   return (
     <div style={{
@@ -348,26 +408,8 @@ export default function Home() {
            * own entrance, and two animations on the same element stacking is
            * what read as choppy. */}
         {selectedStateCodes.length === 0 || isOpeningState ? (
-          /* Step 1: choose a state */
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowSelector(false)}
-              style={{ marginBottom: '1.5rem' }}
-            >
-              <ArrowLeft size={16} /> Back
-            </button>
-            <StateSelector
-              states={states}
-              dataSource={dataSource}
-              loading={loadingStates}
-              pendingCode={isOpeningState ? (selectedStateCodes[0] ?? null) : null}
-              onSelectState={(code) => setSelectedStateCodes([code])}
-            />
-          </div>
-        ) : soloComingSoon ? (
-          /* Single in-research state: honest full-screen panel, identical to before */
-          <ComingSoonPanel config={soloComingSoon} onReset={handleReset} />
+          /* Step 1: choose states (multi-select). Holds while a session opens. */
+          selectorView
         ) : results ? (
           /* Results: one stacked section per state, each under its own law */
           <ResultsDisplay sections={sections} onReset={handleReset} />
@@ -375,37 +417,7 @@ export default function Home() {
           /* Eligibility check flow — screens each screenable state; any
              in-research states in the same session get a compact inline note. */
           <div>
-            {researchingCodes.length > 0 && (
-              <div style={{ maxWidth: '800px', margin: '0 auto 1rem' }}>
-                {researchingCodes.map(c => {
-                  const cs = comingSoonByState[c];
-                  const ref = cs.referrals[0];
-                  return (
-                    <div
-                      key={c}
-                      className="glass-card"
-                      style={{ padding: '0.9rem 1.1rem', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem' }}
-                    >
-                      <BookOpen size={18} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-                      <span style={{ flex: 1, color: 'var(--color-text-muted)' }}>
-                        <strong style={{ color: 'var(--color-text)' }}>{cs.name}</strong> is still in research — we won&apos;t screen it.
-                      </span>
-                      {ref && (
-                        <a
-                          href={ref.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-secondary"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}
-                        >
-                          {ref.name} <ExternalLink size={14} />
-                        </a>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            {researchingCodes.length > 0 && researchingNotes}
             <EligibilityWizard
               configs={screenableConfigs}
               prepopulatedRecords={prepopulatedRecords}
@@ -413,8 +425,25 @@ export default function Home() {
               onReset={handleReset}
             />
           </div>
-        ) : (
-          /* Error Fallback state */
+        ) : soloComingSoon ? (
+          /* Single in-research state, nothing else: full-screen honest panel,
+             identical to before multi-state. */
+          <ComingSoonPanel config={soloComingSoon} onReset={handleReset} />
+        ) : researchingCodes.length > 0 ? (
+          /* Two or more selected states, all in research: the compact notes
+             list (not the error fallback, and not a screening). */
+          <div>
+            {researchingNotes}
+            <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+              <button className="btn btn-secondary" onClick={handleReset}>
+                <ArrowLeft size={16} /> Choose different states
+              </button>
+            </div>
+          </div>
+        ) : loadFailed ? (
+          /* Error fallback — LAST resort: selected codes, none screenable, none
+             in research, not opening, and a load actually failed. A partial
+             failure still screens the states that loaded (above). */
           <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
             <AlertTriangle size={48} style={{ color: 'var(--color-error)', margin: '0 auto 1rem' }} />
             <h3 style={{ marginBottom: '0.5rem' }}>Failed to Load Rules</h3>
@@ -425,6 +454,9 @@ export default function Home() {
               <ArrowLeft size={16} /> Return to Home
             </button>
           </div>
+        ) : (
+          /* Safety net: nothing to show and nothing failed — back to the picker. */
+          selectorView
         )}
 
       </div>

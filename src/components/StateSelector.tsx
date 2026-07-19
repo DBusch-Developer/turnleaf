@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Check } from 'lucide-react';
 
 export interface StateSummary {
   code: string;
@@ -19,9 +19,9 @@ interface StateSelectorProps {
   states: StateSummary[];
   dataSource: 'database' | 'fallback' | null;
   loading: boolean;
-  /** The state being opened right now, if any — it gets the waiting treatment. */
-  pendingCode: string | null;
-  onSelectState: (code: string) => void;
+  /** The states being opened right now, if any — they get the waiting treatment. */
+  pendingCodes: string[];
+  onContinue: (codes: string[]) => void;
 }
 
 /**
@@ -37,10 +37,17 @@ export default function StateSelector({
   states,
   dataSource,
   loading,
-  pendingCode,
-  onSelectState,
+  pendingCodes,
+  onContinue,
 }: StateSelectorProps) {
   const [search, setSearch] = useState('');
+  // Local multi-select. A row (or quick-select button) toggles its code in and
+  // out of `picked`; the footer Continue hands the whole set to the page at
+  // once, so a session opens with several states rather than one per click.
+  const [picked, setPicked] = useState<string[]>([]);
+  const opening = pendingCodes.length > 0;
+  const togglePicked = (code: string) =>
+    setPicked(prev => (prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]));
 
   const filteredStates = states.filter(s =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -128,17 +135,22 @@ export default function StateSelector({
             QUICK SELECT
           </p>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            {quickSelect.map(s => (
-              <button
-                key={s.code}
-                className="btn btn-secondary"
-                style={{ flex: 1, minWidth: '100px', padding: '0.5rem 1rem' }}
-                onClick={() => onSelectState(s.code)}
-                disabled={loading}
-              >
-                {s.name}
-              </button>
-            ))}
+            {quickSelect.map(s => {
+              const isPicked = picked.includes(s.code);
+              return (
+                <button
+                  key={s.code}
+                  className={isPicked ? 'btn btn-primary' : 'btn btn-secondary'}
+                  style={{ flex: 1, minWidth: '100px', padding: '0.5rem 1rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}
+                  onClick={() => togglePicked(s.code)}
+                  disabled={loading || opening}
+                  aria-pressed={isPicked}
+                >
+                  {isPicked && <Check size={14} />}
+                  {s.name}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
@@ -166,46 +178,69 @@ export default function StateSelector({
         ) : filteredStates.length > 0 ? (
           filteredStates.map(state => {
             const status = getStatusLabel(state);
-            // The state being opened. The click lands here rather than on a
-            // spinner that replaced the page, so the feedback is attached to the
-            // thing that was clicked. While one is opening the others dim, which
-            // also stops a second click starting a second load.
-            const isPending = state.code === pendingCode;
-            const isDimmed = pendingCode !== null && !isPending;
+            // The states being opened. The click toggles selection in place
+            // rather than replacing the page with a spinner, so the feedback is
+            // attached to the thing that was clicked. While a session is opening
+            // the rows dim, which also stops a click starting a second load.
+            const isPending = pendingCodes.includes(state.code);
+            const isDimmed = opening && !isPending;
+            const isPicked = picked.includes(state.code);
+            // Picked and pending both read as "chosen" — highlight either.
+            const isChosen = isPicked || isPending;
+            const baseBg = isChosen ? 'var(--color-primary-light)' : 'rgba(255,255,255,0.4)';
             return (
               <button
                 key={state.code}
-                onClick={() => onSelectState(state.code)}
-                disabled={pendingCode !== null}
+                onClick={() => togglePicked(state.code)}
+                disabled={opening}
                 aria-busy={isPending}
+                aria-pressed={isPicked}
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.85rem 1rem',
-                  border: `1px solid ${isPending ? 'var(--color-primary)' : 'var(--color-card-border)'}`,
+                  border: `1px solid ${isChosen ? 'var(--color-primary)' : 'var(--color-card-border)'}`,
                   borderRadius: '12px',
-                  background: isPending ? 'var(--color-primary-light)' : 'rgba(255,255,255,0.4)',
-                  cursor: pendingCode !== null ? 'default' : 'pointer',
+                  background: baseBg,
+                  cursor: opening ? 'default' : 'pointer',
                   textAlign: 'left',
                   width: '100%',
                   opacity: isDimmed ? 0.4 : state.available ? 1 : 0.75,
                   transition: 'background var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast)'
                 }}
                 onMouseOver={(e) => {
-                  if (pendingCode === null) e.currentTarget.style.background = 'var(--color-primary-light)';
+                  if (!opening && !isPicked) e.currentTarget.style.background = 'var(--color-primary-light)';
                 }}
                 onMouseOut={(e) => {
-                  if (pendingCode === null) e.currentTarget.style.background = 'rgba(255,255,255,0.4)';
+                  if (!opening && !isPicked) e.currentTarget.style.background = baseBg;
                 }}
               >
-                <div>
-                  {/* The space is a real character, not just margin. Margin
-                      gives the eye a gap but leaves the text content as
-                      "Alabama(AL)" — which is what a screen reader announces
-                      and what you get if you copy the row. */}
-                  <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{state.name}</span>{' '}
-                  <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>({state.code})</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  {/* Check marks the row as picked. Reserve the slot even when
+                      unpicked so the label doesn't jump as rows toggle. */}
+                  <span style={{
+                    width: '18px',
+                    height: '18px',
+                    flexShrink: 0,
+                    borderRadius: '5px',
+                    border: `1.5px solid ${isPicked ? 'var(--color-primary)' : 'var(--color-card-border)'}`,
+                    background: isPicked ? 'var(--color-primary)' : 'transparent',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    {isPicked && <Check size={12} strokeWidth={3} />}
+                  </span>
+                  <div>
+                    {/* The space is a real character, not just margin. Margin
+                        gives the eye a gap but leaves the text content as
+                        "Alabama(AL)" — which is what a screen reader announces
+                        and what you get if you copy the row. */}
+                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{state.name}</span>{' '}
+                    <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>({state.code})</span>
+                  </div>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -236,6 +271,21 @@ export default function StateSelector({
         ) : (
           <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '1rem' }}>No states match your search.</p>
         )}
+      </div>
+
+      {/* Continue — hands the whole picked set to the page at once. A session
+          opens with every chosen state, each screened under its own law. */}
+      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+        <button
+          className="btn btn-primary"
+          style={{ minWidth: '220px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}
+          onClick={() => onContinue(picked)}
+          disabled={picked.length === 0 || opening}
+          aria-busy={opening}
+        >
+          {opening && <RefreshCw className="animate-spin" size={16} />}
+          Continue with {picked.length} state{picked.length === 1 ? '' : 's'}
+        </button>
       </div>
     </div>
   );

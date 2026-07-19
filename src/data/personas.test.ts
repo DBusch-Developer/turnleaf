@@ -528,8 +528,9 @@ const MI: Persona[] = [
     package: 'one misdemeanor, 8 yrs post-sentence, clean, non-excluded → likely already automatically set aside → check-record path.',
     record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-07-15' },
     answers: {
-      pending_charges_mi: false,
       marijuana_mi: false,
+      trafficking_victim_mi: false,
+      pending_charges_mi: false,
       petition_excluded_mi: false,
       owi_mi: false,
       auto_excluded_mi: false,
@@ -540,7 +541,7 @@ const MI: Persona[] = [
       reading:
         'Misdemeanour, 8 years post-sentence, not on the automatic exclusion list → past the 7-year '
         + 'automatic threshold, so it is probably already set aside and nobody told them. Leads with '
-        + 'the MSP record check rather than an application. Exact.',
+        + 'the MSP record check; copy now carries the 621g(5)-(7) caps/conviction-free/assaultive-count conditions. Exact.',
     },
     now: NOW,
   },
@@ -549,8 +550,9 @@ const MI: Persona[] = [
     package: 'one felony (non-excluded), 6 yrs post-discharge → eligible-petition.',
     record: { title: 'Felony', charge_type: 'felony', disposition: 'convicted' },
     answers: {
-      pending_charges_mi: false,
       marijuana_mi: false,
+      trafficking_victim_mi: false,
+      pending_charges_mi: false,
       petition_excluded_mi: false,
       owi_mi: false,
       auto_excluded_mi: false,
@@ -562,59 +564,138 @@ const MI: Persona[] = [
     expect: {
       resultKey: 'eligible_petition_mi',
       reading:
-        'The two tracks diverge here, which is the point of this persona: 6 years is past the '
-        + '5-year PETITION period for one felony but short of the 10-year AUTOMATIC one. So waiting '
-        + 'would cost four more years — petition now. Exact.',
+        'The two tracks diverge here: 6 years is past the 5-year PETITION period for one felony but '
+        + 'short of the 10-year AUTOMATIC one. So waiting would cost four more years — petition now. '
+        + 'Copy now carries the $50-no-waiver fee, 3-yr re-file bar, and privilege-not-right framing. Exact.',
     },
     now: NOW,
   },
   {
     source: 'Wave 1 — MI persona 3',
-    package: '3 felonies, latest discharge 6 yrs ago → waiting (7y multiple-felony period).',
+    package: '3 felonies (not one bad night), latest discharge 6 yrs ago → waiting (7y multiple-felony period).',
     record: { title: 'Felony (third)', charge_type: 'felony', disposition: 'convicted' },
     answers: {
-      pending_charges_mi: false,
       marijuana_mi: false,
+      trafficking_victim_mi: false,
+      pending_charges_mi: false,
       petition_excluded_mi: false,
       owi_mi: false,
       auto_excluded_mi: false,
       auto_date_felony_mi: '2020-07-15',
       petition_counts_mi: 'multiple_felonies',
+      one_bad_night_mi: false,             // spread across time, not a single transaction
       petition_date_7_mi: '2020-07-15',    // 6 yrs of the 7 needed
     },
     expect: {
       resultKey: 'waiting_mi',
       reading:
-        'Three felonies is at Michigan\'s lifetime cap, not over it, so the count gate passes and the '
-        + 'multiple-felony 7-year period applies. Six years since the latest discharge → waiting. Exact.',
+        'Three felonies is at Michigan\'s lifetime cap, not over it, so the count gate passes. Not One '
+        + 'Bad Night → the multiple-felony 7-year period applies. Six years since the latest discharge → waiting. Exact.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — MI persona 4',
-    package: 'marijuana misdemeanor 2019 → eligible-now via 621e.',
+    source: 'Wave 1 — MI persona 4 (bug-3 regression)',
+    package: 'marijuana misdemeanor 2019, even WITH a pending charge → still eligible-now via 621e.',
     record: { title: 'Marijuana Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01' },
-    answers: { pending_charges_mi: false, marijuana_mi: true },
+    answers: { marijuana_mi: true },
     expect: {
       resultKey: 'eligible_marijuana_mi',
       reading:
-        'MCL 780.621e: no waiting period and a rebuttable presumption of eligibility. Asked before '
-        + 'either other track because it beats both — the person can file today and the burden sits '
-        + 'with the prosecutor. Exact.',
+        'BUG-3 fix: marijuana (621e, no pending-charge condition) is now asked BEFORE the pending gate, '
+        + 'so a pending charge cannot block it. marijuana_mi=true short-circuits to 621e; the result copy '
+        + 'now spells out the 60-day / 21-day / burden-on-prosecutor mechanics (621e(4)-(6)). Exact.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — MI persona 5',
-    package: 'OWI first offense, 5 yrs → complex (discretionary petition path; not automatic).',
-    record: { title: 'OWI (first offense)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-07-15' },
-    answers: { pending_charges_mi: false, marijuana_mi: false, petition_excluded_mi: false, owi_mi: true },
+    source: 'Wave 1 — MI persona 5 (upgraded)',
+    package: 'first-violation OWI, 6 yrs out → discretionary-eligible (was complex).',
+    record: { title: 'OWI (first violation)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { marijuana_mi: false, trafficking_victim_mi: false, pending_charges_mi: false, petition_excluded_mi: false, owi_mi: true, owi_date_mi: '2020-01-01' },
     expect: {
-      resultKey: 'complex_owi_mi',
+      resultKey: 'eligible_owi_mi',
       reading:
-        'OWI is the case that proves the two exclusion lists differ: petitionable since Feb 2022 but '
-        + 'at the court\'s DISCRETION, and excluded from automatic entirely — so waiting never clears '
-        + 'it. Routed to legal aid rather than screened to an answer. Exact.',
+        'First-violation OWI: petitionable once per lifetime (621c(3)), 5-yr wait (621d(2)) met at 6 yrs, '
+        + 'discretionary and never automatic. Upgraded from the old complex_owi_mi hedge to a real eligible '
+        + 'path; copy carries the rehab-factor and no-SOS-driving-record notes. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 — MI CDL commercial traffic',
+    package: 'commercial-traffic offense committed while holding a CDL → PETITION-excluded (621c(1)(d)), not merely automatic-excluded.',
+    record: { title: 'CDL commercial traffic offense', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { marijuana_mi: false, trafficking_victim_mi: false, pending_charges_mi: false, petition_excluded_mi: true },
+    expect: {
+      resultKey: 'ineligible_serious_mi',
+      reading:
+        'BUG-1 fix: CDL commercial-traffic offenses are on the PETITION exclusion list (621c(1)(d)), so they '
+        + 'route to ineligible_serious_mi at the petition gate — they no longer merely fall through to the '
+        + 'automatic-excluded list. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 — MI felony DV with prior misd DV',
+    package: 'felony domestic-violence with a prior misdemeanor DV conviction → petition-excluded (621c(1)(e)).',
+    record: { title: 'Felony DV (prior misd DV)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { marijuana_mi: false, trafficking_victim_mi: false, pending_charges_mi: false, petition_excluded_mi: true },
+    expect: {
+      resultKey: 'ineligible_serious_mi',
+      reading:
+        'BUG-2 fix: felony DV with a prior misdemeanor DV is a petition exclusion (621c(1)(e)), now on the '
+        + 'petition_excluded_mi gate → ineligible_serious_mi. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 — MI deferred 7411',
+    package: 'completed section-7411 deferral (dismissed) → counts as a misdemeanor conviction for eligibility (621(2)), not an invisible hedge.',
+    record: { title: 'Section 7411 deferral (dismissed)', disposition: 'deferred', disposition_date: '2022-01-01' },
+    expect: {
+      resultKey: 'deferred_counts_mi',
+      reading:
+        'UPGRADE: 621(2) treats a deferred-and-dismissed disposition (7411/769.4a/HYTA/liquor code) as a '
+        + 'MISDEMEANOR conviction when counting set-aside eligibility, and 621d(7)(d) requires listing it. '
+        + 'Replaces the old unknown_deferred hedge; honest caveat that set-aside-ability of the deferral itself is unanswered. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 — MI One Bad Night (two felonies)',
+    package: 'two non-assaultive felonies from a single 24-hour transaction → 621b counts them as ONE → the 5-yr single-felony bucket, not 7-yr.',
+    record: { title: 'Two felonies, one night', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      marijuana_mi: false, trafficking_victim_mi: false, pending_charges_mi: false, petition_excluded_mi: false, owi_mi: false,
+      auto_excluded_mi: false, auto_date_felony_mi: '2019-01-01',   // fails the 10-yr automatic
+      petition_counts_mi: 'multiple_felonies', one_bad_night_mi: true,
+      petition_date_5_mi: '2019-01-01', new_convictions_mi: false,
+    },
+    expect: {
+      resultKey: 'eligible_petition_mi',
+      reading:
+        'ONE BAD NIGHT (621b): two non-assaultive/non-weapon/<10-yr felonies from a single 24-hr transaction '
+        + 'count as ONE conviction, moving the person from the 7-yr multi-felony bucket to the 5-yr single-felony '
+        + 'bucket. 2019+5=2024<2026 passes where 7 (2026) would not. The gift-and-trap node. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 — MI assaultive misdemeanor (gap)',
+    package: 'a non-serious assaultive-crime misdemeanor → 621d gap (excluded from 3-yr (3), unnamed in (2)) → conservative 5-yr route.',
+    record: { title: 'Assaultive misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      marijuana_mi: false, trafficking_victim_mi: false, pending_charges_mi: false, petition_excluded_mi: false, owi_mi: false,
+      auto_excluded_mi: true,   // assaultive crime is excluded from the automatic track
+      petition_counts_mi: 'assault_misd', petition_date_5_assault_mi: '2020-01-01', new_convictions_mi: false,
+    },
+    expect: {
+      resultKey: 'eligible_petition_mi',
+      reading:
+        'GAP handling: an assaultive-crime misdemeanor is excluded from the 3-yr bucket (621d(3)) and not named '
+        + 'in (2), so it no longer silently rides the 3-yr path — routed to the conservative 5-yr node (2020+5=2025<2026). '
+        + 'The date node anchor flags the unsettled period; an open question tracks it. Exact for the routing.',
     },
     now: NOW,
   },

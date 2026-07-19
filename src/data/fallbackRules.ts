@@ -2161,8 +2161,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // MICHIGAN — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave1_Draft_Package.md
+  // MICHIGAN — STATUTE-VERIFIED 2026-07-18 (text current through PA 20 of 2026).
+  // Diana read MCL 780.621, 780.621b, 780.621c, 780.621d, 780.621e, 780.621g from
+  // legislature.mi.gov. Draft waits/counts/anchors CONFIRMED. Two routing bugs
+  // fixed: (a) CDL commercial-traffic offenses were only automatic-excluded but are
+  // PETITION-excluded (621c(1)(d)); (b) the pending-charges gate wrongly blocked
+  // the 621e marijuana path, which has no pending condition. One statutory gap
+  // flagged: 621d does not clearly assign a waiting bucket to assaultive-crime
+  // MISDEMEANOURS ((3) excludes them from the 3-yr bucket, (2) does not name them)
+  // — routed conservatively to the 5-yr node; see open questions.
+  // Source: research/waves/Turnleaf_Wave1_Draft_Package.md + Diana's 7/18 reads.
   //
   // Three tracks: petition set-aside (MCL 780.621), automatic set-aside
   // (MCL 780.621g, live since Apr 11, 2023), and a marijuana misdemeanour fast
@@ -2194,8 +2202,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   MI: {
     code: 'MI',
     name: 'Michigan',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave1_Draft_Package.md',
     terminology:
       'Michigan says SET ASIDE. That is the statutory term; almost everyone says "expungement", and '
@@ -2210,59 +2219,59 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         label: 'Automatic set-aside (MCL 780.621g) live',
         date: '2023-04-11',
         kind: 'operative',
-        note: 'Records have been setting aside automatically since this date, with no petition and no notice to the person.',
+        note: 'Records set aside automatically since this date, with no petition and no notice to the person. Statutorily derived: effective 2021-04-11 plus the 2-year trigger in 621g.',
       },
       {
         label: 'First-offence OWI became petitionable (court discretion)',
-        date: '2022-02',
+        date: '2022-02-19',
         kind: 'effective',
-        note: 'Wave 1 gives month and year only ("since Feb 2022"). OWI remains excluded from the automatic track.',
+        note: '2021 PA 79 (per the 621c history line). OWI remains excluded from the automatic track; a first-violation OWI is petitionable once per lifetime at the court\'s discretion.',
+      },
+      {
+        label: 'MCL 780.621 amended by 2023 PA 205',
+        date: '2024-02-13',
+        kind: 'effective',
+        note: 'The encoded 621 text is the current post-amendment text. The specific content of the 2023 PA 205 change was not separately verified.',
       },
     ],
     openQuestions: [
       {
         question:
-          'What is the fee to file a set-aside application, and if there is one, can it be waived? Wave 1 gives "$50 fee to Michigan State Police" and marks it "widely cited but VERIFY BY PHONE — it is on the MC 227 instructions". Widely cited is not a source. Ask about the RI-008 fingerprint card fee at the same time — Wave 1 calls it "small" without giving a number, so it is not stated anywhere in the app.',
-        blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the automatic set-aside exclusion list against MCL 780.621g, and confirm it really is broader than the petition exclusion list in MCL 780.621c. The tree asks a person to self-assess both lists; if either is wrong or if they are not actually different, the track fork is wrong.',
+          'GAP: MCL 780.621d does not clearly assign a waiting period to an assaultive-crime MISDEMEANOR. Subsection (3) excludes assaultive-crime misdemeanours from the 3-year bucket, and (2) does not name them. The tree routes them conservatively to the 5-year node — confirm the correct period with a bench card or the clerk.',
         blocksFields: [],
       },
       {
         question:
-          'The "One Bad Night" rule (MCL 780.621b) — multiple offences within 24 hours arising from the same transaction count as ONE conviction, except for assaultive, weapon, or 10+ year offences — has no representation in the tree. It changes the count that decides the waiting period, and the record model cannot express relationships between charges.',
+          'For a completed deferred-and-dismissed disposition (7411, 769.4a, HYTA-type, liquor-code), the COUNTING treatment is answered — 621(2) counts it as a misdemeanour conviction for set-aside eligibility, and 621d(7)(d) requires listing it. The remaining question: can the deferral record ITSELF be set aside? The read text does not answer it.',
         blocksFields: [],
       },
       {
         question:
-          'How are non-convictions treated? Wave 1 documents only convictions for Michigan — dismissals and acquittals are not covered at all, so the tree hedges them. What relief exists for a dismissed charge or an acquittal?',
+          'Non-convictions (dismissals/acquittals) are confirmed to be OUTSIDE this set-aside act. The likely home for arrest-record relief is MCL 28.243, which has NOT been read yet — read it next.',
         blocksFields: [],
       },
       {
         question:
-          'How are completed deferrals/diversions (including HYTA and 7411 dispositions) treated for set-aside? Not covered in Wave 1 — standing call-sheet question for every state.',
+          'Fees below the statutory $50: the RI-008 fingerprint-card fee is set locally by the law-enforcement agency (not in the statute), and the 621e marijuana application fee is not stated in that section (likely none) — confirm both on the MC 227 / MC 227a instructions.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the automatic-track count limits: max 2 felonies and 4 misdemeanours of 93 days or more set aside automatically, with unlimited 92-day-or-less misdemeanours. The tree does not gate on these — it cannot count — so a person past the limits may be told to check a record that will never clear on its own.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the exact effective date of the first-offence OWI petition path? Wave 1 gives month and year only ("since Feb 2022").',
+          'ADD SECTION: MCL 780.621h (grounds for REINSTATEMENT of an automatic set-aside) was NOT read on 7/18. Reinstatement handling is unencoded until GS/MCL 780.621h is read.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Mich. Comp. Laws § 780.621 (petition set-aside)', url: null, retrievedOn: null },
-      { id: 'Mich. Comp. Laws § 780.621b ("One Bad Night" — same-transaction offences count as one)', url: null, retrievedOn: null },
-      { id: 'Mich. Comp. Laws § 780.621c (petition-track exclusions)', url: null, retrievedOn: null },
-      { id: 'Mich. Comp. Laws § 780.621d (petition waiting periods)', url: null, retrievedOn: null },
-      { id: 'Mich. Comp. Laws § 780.621e (marijuana misdemeanour set-aside)', url: null, retrievedOn: null },
-      { id: 'Mich. Comp. Laws § 780.621g (automatic set-aside)', url: null, retrievedOn: null },
+      { id: 'Mich. Comp. Laws § 780.621 (petition set-aside; (1)(a) 3-felony cap, (1)(b) 2 assaultive lifetime, (1)(c) one same-offense >10-yr felony, (1)(d) pre-1/12/2015 CSC-4th narrow path [no other convictions except <=2 "minor offenses": <=90 days, <=$1,000, offender <=21]; (2) deferred-and-dismissed dispositions [incl. MCL 333.7411, 769.4a, HYTA-type] count as a MISDEMEANOR conviction for eligibility counting; (3) trafficking-victim path for MCL 750.448/449/450; (4) definitions incl. first-violation-OWI; amended by 2023 PA 205, eff. Feb 13, 2024)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621b ("One Bad Night" — same-transaction offences within 24 hours count as ONE conviction for petitions under sec 1 AND sec 1e; carve-outs: assaultive, dangerous-weapon, max penalty of 10 or more years, out-of-state assaultive equivalents)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621B', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621c (petition exclusions; (1)(a) life-max felonies + attempts, (1)(b) listed CSC/child offenses [750.136b(3), 136d(1)(b)-(c), 145c, 145d, 520c, 520d, 520g], (1)(c) CSC-4th (520e) on/after 1/12/2015, (1)(d) OWI [subject to (3)-(4)] + CDL commercial-traffic offenses + traffic causing injury/death, (1)(e) felony DV with prior misdemeanor DV, (1)(f) trafficking + terrorism chapters; (2) all applies to automatic 1g too; (3) first-OWI petitionable ONCE per lifetime, never automatic; (4) discretionary rehab factors; (5) SOS driving record untouched; 2021 PA 79, eff. Feb 19, 2022)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621C', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621d (petition waiting periods; (1) 7 yrs multiple felonies, (2) 5 yrs one felony/serious misdemeanor(s)/one first-OWI, (3) 3 yrs misdemeanors EXCEPT serious, OWI-first, and assaultive-crime misdemeanors; all anchored to LATEST of sentencing/probation completion/parole discharge/imprisonment completion; (4) grant conditions [period elapsed + no pending + conviction-free during period], (5) denial -> 3-yr re-file bar unless court sets earlier, (6) trafficking apps anytime unlimited, (8) fingerprints to MSP + MSP/FBI check, (9) $50 fee to MSP [statutory, NO waiver in text], (10) serve AG + prosecutor + victim notice for assaultive/serious misd, (13) discretionary standard, (14) privilege not right)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621D', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621e (marijuana misdemeanours — 7403(2)(d), 7404(2)(d), 7453 paraphernalia + corresponding ordinances; apply anytime, rebuttable presumption; prosecutor has 60 days; no answer -> court MUST set aside within 21 days; answer -> hearing <=30 days, burden on prosecutor by preponderance, order within 14 days; NO fee and NO pending-charge condition in this section)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621E', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621g (automatic set-aside; (1)/(3) <=92-day misdemeanors 7 yrs from sentencing [unlimited count], (4) 93-day+ misdemeanors 7 yrs from sentencing, (2) felonies 10 yrs from later of sentencing or MDOC imprisonment completion [must be otherwise sec-1 eligible], (5) lifetime automatic caps 2 felonies + 4 [93-day+] misdemeanors, (6) no pending + conviction-free during period, (7) automatic felony/93-day+ paths OFF for anyone with MORE THAN ONE assaultive-crime conviction, (10) exclusions [assaultive, serious misdemeanors, crimes of dishonesty (def (15)), >=10-yr offenses, ch. XVII offenses involving minor/vulnerable adult/injury/serious impairment/death, trafficking], (8) governor may delay 180 days, (12) reinstatement per sec 1h, (14) subject to appropriation)', url: 'https://legislature.mi.gov/Laws/MCL?objectName=MCL-780-621G', retrievedOn: '2026-07-18' },
+      { id: 'Mich. Comp. Laws § 780.621h (reinstatement of automatic set-asides) — cite-only, NOT read', url: null, retrievedOn: null },
+      { id: 'Mich. Comp. Laws § 780.623 (set-aside record is nonpublic) — cite-only, NOT read', url: null, retrievedOn: null },
+      { id: 'Mich. Comp. Laws § 780.811 ("serious misdemeanor" list) — cite-only, NOT read', url: null, retrievedOn: null },
+      { id: 'Mich. Comp. Laws § 28.243 (likely home of non-conviction / arrest-record relief) — cite-only, NOT read', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -2272,44 +2281,68 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'pending_charges_mi' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'marijuana_mi' },
             { label: 'Dismissed', value: 'dismissed', next: 'unknown_nonconviction_mi' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'unknown_nonconviction_mi' },
-            { label: 'Deferred adjudication / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Deferred adjudication / Diversion completed', value: 'deferred', next: 'deferred_counts_mi' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
+        },
+        // BUG-FIX (reorder): the marijuana path (621e) and the trafficking-victim
+        // path (621(3)) are asked FIRST, before the pending-charges gate — neither
+        // section carries a pending-charge condition, so pending must not block them.
+        // MCL 780.621e also has no waiting period and a rebuttable presumption.
+        marijuana_mi: {
+          type: 'boolean',
+          text: 'Was this a misdemeanor marijuana offense — conduct that would not be a crime now that recreational marijuana is legal in Michigan?',
+          yes: 'eligible_marijuana_mi',
+          no: 'trafficking_victim_mi'
+        },
+        trafficking_victim_mi: {
+          type: 'boolean',
+          text: 'Was this a conviction under MCL 750.448, 750.449, or 750.450 that you committed as a direct result of being a victim of human trafficking?',
+          yes: 'eligible_trafficking_mi',
+          no: 'pending_charges_mi'
         },
         pending_charges_mi: {
           type: 'boolean',
           text: 'Do you have any criminal charges pending against you right now?',
           yes: 'ineligible_pending_mi',
-          no: 'marijuana_mi'
-        },
-        // Asked first: MCL 780.621e has no waiting period and a rebuttable
-        // presumption of eligibility, so it beats both other tracks outright.
-        marijuana_mi: {
-          type: 'boolean',
-          text: 'Was this a misdemeanor marijuana offense — conduct that would not be a crime now that recreational marijuana is legal in Michigan?',
-          yes: 'eligible_marijuana_mi',
           no: 'petition_excluded_mi'
         },
+        // BUG-FIX: CDL commercial-traffic offenses and traffic causing injury/death
+        // are PETITION exclusions (621c(1)(d)), and a felony DV with a prior
+        // misdemeanor DV is one too (621c(1)(e)) — all belong on this gate, not only
+        // on the automatic list. CSC framing is concrete: listed CSC/child offenses,
+        // plus CSC-4th if on/after Jan 12, 2015 (pre-2015 CSC-4th has a narrow path).
         petition_excluded_mi: {
           type: 'boolean',
-          text: 'Was the offense any of these: a felony punishable by life imprisonment, most criminal sexual conduct offenses, a traffic offense that caused injury or death, a human-trafficking-related offense, or a terrorism-related offense?',
+          text: 'Was the offense any of these: a felony punishable by life imprisonment (or an attempt at one); one of the listed criminal sexual conduct or child offenses (2nd- or 3rd-degree CSC or assault with intent to commit CSC — MCL 750.520c/520d/520g; child abuse under MCL 750.136b(3)/136d; or child sexually abusive activity or material under MCL 750.145c/145d), or fourth-degree CSC (MCL 750.520e) committed on or after January 12, 2015; a commercial-traffic offense committed while holding a CDL, or a traffic offense that caused injury or death; a felony domestic-violence offense when you have a prior misdemeanor domestic-violence conviction; or a human-trafficking or terrorism offense?',
           yes: 'ineligible_serious_mi',
           no: 'owi_mi'
         },
-        // OWI is the case that proves the two lists differ: excluded from
-        // automatic, but petitionable at the court's discretion since Feb 2022.
+        // A first-violation OWI is petitionable ONCE per lifetime at the court's
+        // discretion (621c(3)) — a real 5-year path (621d(2)), never automatic.
         owi_mi: {
           type: 'boolean',
-          text: 'Was this a first-offense OWI (operating while intoxicated)?',
-          yes: 'complex_owi_mi',
+          text: 'Was this a first-violation OWI (operating while intoxicated), with no prior OWI conviction under MCL 257.625 at the time of this offense?',
+          yes: 'owi_date_mi',
           no: 'auto_excluded_mi'
         },
+        owi_date_mi: {
+          type: 'date',
+          text: 'Which came LAST: your sentencing, your release from jail or prison, or your discharge from probation or parole? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the LATEST of sentencing, release from imprisonment, or discharge from probation/parole (MCL 780.621d(2) — one first-violation OWI)' },
+            nextPass: 'eligible_owi_mi',
+            nextFail: 'waiting_mi'
+          }
+        },
+        // CDL / traffic-injury-death removed from this list — they are now caught by
+        // petition_excluded_mi above, before reaching the automatic fork.
         auto_excluded_mi: {
           type: 'boolean',
-          text: 'Is the offense any of these: an assaultive crime, a "serious misdemeanor", a crime of dishonesty, an offense punishable by 10 or more years, an offense involving a minor or a vulnerable adult, an offense causing injury or death, human trafficking, a traffic offense causing injury or death, or a commercial traffic offense committed while holding a CDL? (These are excluded from Michigan\'s AUTOMATIC set-aside — a petition may still be possible.)',
+          text: 'Is the offense any of these: an assaultive crime, a "serious misdemeanor", a crime of dishonesty, an offense punishable by 10 or more years, or an offense involving a minor or a vulnerable adult, or causing injury, serious impairment, or death, or human trafficking? (These are excluded from Michigan\'s AUTOMATIC set-aside — a petition may still be possible.)',
           yes: 'petition_counts_mi',
           no: 'auto_level_mi'
         },
@@ -2340,7 +2373,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'When were you sentenced, or released from an MDOC facility — whichever came later?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'sentencing, or release from MDOC — whichever is later (MCL 780.621g, felonies)' },
+            period: { amount: 10, unit: 'years', anchor: 'sentencing, or completion of MDOC imprisonment — whichever is later (MCL 780.621g, felonies)' },
             nextPass: 'check_record_first_mi',
             nextFail: 'petition_counts_mi'
           }
@@ -2351,12 +2384,34 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'choice',
           text: 'Thinking about your whole record, not just this case: which describes you best? (Michigan allows up to 3 felonies and unlimited misdemeanors to be set aside in a lifetime, and at most 2 assaultive crimes.)',
           options: [
-            { label: 'Misdemeanors only, none of them "serious misdemeanors"', value: 'misd_nonserious', next: 'petition_date_3_mi' },
+            { label: 'Misdemeanors only — none "serious" and none an assaultive crime', value: 'misd_nonserious', next: 'petition_date_3_mi' },
+            { label: 'An assaultive-crime misdemeanor (not a felony, not a "serious misdemeanor")', value: 'assault_misd', next: 'petition_date_5_assault_mi' },
             { label: 'One felony, or misdemeanors including a "serious misdemeanor"', value: 'one_felony_or_serious', next: 'petition_date_5_mi' },
-            { label: 'More than one felony (up to 3 total)', value: 'multiple_felonies', next: 'petition_date_7_mi' },
+            { label: 'More than one felony (up to 3 total)', value: 'multiple_felonies', next: 'one_bad_night_mi' },
             { label: 'More than 3 felonies, or more than 2 assaultive crimes', value: 'over_limits', next: 'ineligible_counts_mi' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_counts_mi' }
           ]
+        },
+        // "One Bad Night" (621b): multiple felonies from a single transaction within
+        // 24 hours count as ONE conviction — which can move the person from the
+        // 7-year multi-felony bucket to the 5-year single-felony bucket. Gift and trap.
+        one_bad_night_mi: {
+          type: 'boolean',
+          text: 'Did all of those felonies happen within a single 24-hour period arising from the same transaction — and was none of them an assaultive crime, none involved a dangerous weapon, and none punishable by 10 or more years?',
+          yes: 'petition_date_5_mi',
+          no: 'petition_date_7_mi'
+        },
+        // GAP: 621d excludes an assaultive-crime misdemeanour from the 3-yr bucket
+        // (3) but does not name it in (2). Routed conservatively to 5 yrs; see the
+        // assaultive-misdemeanour open question.
+        petition_date_5_assault_mi: {
+          type: 'date',
+          text: 'Which came LAST: your sentencing, your release from jail or prison, or your discharge from probation or parole? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the LATEST of sentencing, release from imprisonment, or discharge from probation/parole — CONSERVATIVE: MCL 780.621d(3) excludes an assaultive-crime misdemeanour from the 3-yr bucket and (2) does not name it, so its period is unsettled; routed to 5 yrs pending confirmation' },
+            nextPass: 'new_convictions_mi',
+            nextFail: 'waiting_mi'
+          }
         },
         // All three ASK: the petition clock runs from the LATEST of three
         // events, which is not the date the form collects.
@@ -2404,38 +2459,38 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         unknown_nonconviction_mi: {
           status: 'complex',
-          title: 'Dismissals and Acquittals Are Not Screened Here Yet',
-          message: 'Michigan\'s set-aside statutes are about convictions, and that is what this screening has researched. What happens to a dismissed charge or an acquittal in Michigan is not something we have verified yet, and we would rather tell you that than guess — the answer is usually better than for a conviction, not worse, so it is worth asking someone. Michigan Legal Help has a free online tool and Safe & Just Michigan can point you at the right process.',
-          remedy: 'Consult Legal Aid (Non-Convictions Not Yet Screened)',
-          citation: 'Mich. Comp. Laws § 780.621 et seq. (non-convictions not yet researched)'
+          title: 'Dismissals and Acquittals Are Handled by a Different Law',
+          message: 'Good news first: the answer for a dismissal or acquittal is usually better than for a conviction. But it is not in the set-aside act (MCL 780.621 et seq.), which is about convictions — that much we confirmed. Relief for a non-conviction arrest record most likely lives in MCL 28.243, which we have not read yet, so we would rather point you to someone than guess at its conditions. Michigan Legal Help has a free online tool and Safe & Just Michigan can point you at the right process for clearing a non-conviction.',
+          remedy: 'Consult Legal Aid (non-conviction relief is outside the set-aside act — likely MCL 28.243)',
+          citation: 'Mich. Comp. Laws § 780.621 et seq. does not cover non-convictions (see MCL 28.243, not yet read)'
         },
-        unknown_deferred: {
+        deferred_counts_mi: {
           status: 'complex',
-          title: 'Deferred and Diverted Cases Need a Person',
-          message: 'Michigan\'s set-aside rules are screened here for convictions. How a completed deferral or diversion is treated — including dispositions under HYTA or section 7411, which Michigan uses often — is not something this screening has researched yet, and we would rather tell you that than guess. Michigan Legal Help or Safe & Just Michigan can confirm how your case was actually disposed and which path fits.',
-          remedy: 'Consult Legal Aid (Deferral / Diversion Not Yet Screened)',
-          citation: 'Mich. Comp. Laws § 780.621 et seq. (treatment of deferrals not yet researched)'
+          title: 'A Deferred-and-Dismissed Case Still Counts',
+          message: 'This matters even though your case ended in a dismissal. Michigan treats a deferred-and-dismissed disposition — the ones under section 7411, section 769.4a, HYTA-type deferrals, the liquor code, and similar — as a MISDEMEANOR CONVICTION when it counts up your record for set-aside eligibility (MCL 780.621(2)), and you must list it on any set-aside application (MCL 780.621d(7)(d)). So it is not invisible: it uses up "count" the same way a real misdemeanor would, which can change which waiting period or cap applies to your other cases. What the statutes we read do NOT answer is whether the deferral record ITSELF can be set aside — so bring the actual disposition paperwork to someone. Michigan Legal Help and Safe & Just Michigan can confirm how your case was disposed and how it counts.',
+          remedy: 'Have your deferral disposition reviewed — it counts as a misdemeanor for set-aside eligibility',
+          citation: 'Mich. Comp. Laws §§ 780.621(2), 780.621d(7)(d)'
         },
         eligible_marijuana_mi: {
           status: 'eligible',
           title: 'Marijuana Misdemeanor — The Fast Path',
-          message: 'Because this was a misdemeanor marijuana offense for conduct that is now legal in Michigan, you can apply to set it aside under MCL 780.621e — and this is the best route Michigan has. There is NO waiting period, so you can apply today, and the law presumes you are eligible: the prosecutor has to rebut that presumption rather than you having to prove it. The form is MC 227a, filed in the court that convicted you. Do this before considering the ordinary petition path; it is faster and the burden is on the other side.',
+          message: 'Because this was a misdemeanor marijuana offense for conduct that is now legal in Michigan, you can apply to set it aside under MCL 780.621e — and this is the best route Michigan has. There is NO waiting period, so you can apply today, and the law presumes you are eligible. The mechanics favor you: after you file (form MC 227a, in the court that convicted you), the prosecutor has 60 days. If the prosecutor does not respond, the court MUST set the conviction aside within 21 days. If the prosecutor does object, the court holds a hearing within 30 days, and the burden is on the PROSECUTOR to show by a preponderance of the evidence that you should not get relief — not on you. Do this before the ordinary petition path; it is faster and the burden sits with the other side.',
           remedy: 'Application to Set Aside Marijuana Conviction (form MC 227a, MCL 780.621e)',
-          citation: 'Mich. Comp. Laws § 780.621e'
+          citation: 'Mich. Comp. Laws § 780.621e(4)-(6)'
         },
         check_record_first_mi: {
           status: 'eligible',
           title: 'Your Record May Already Be Set Aside — Check Before You File',
-          message: 'Start here, not with an application or a fee. Michigan has been setting records aside AUTOMATICALLY since April 2023 under MCL 780.621g — no petition, no fee, and nobody tells you it happened. Misdemeanors qualify 7 years after sentencing; felonies 10 years after sentencing or release from an MDOC facility, whichever is later. Based on your dates you are past that, and the offense you described is not on the automatic exclusion list — so there is a real chance this is already done. Find out before you spend anything: request your criminal history from the Michigan State Police and see what it shows. If the automatic system reached you, you are finished. If it missed you — and there are caps on how much clears automatically, at most 2 felonies and 4 misdemeanors of 93 days or more — the petition path under MCL 780.621 is still open. One thing to know either way: a set-aside does not clear your Secretary of State driving record.',
+          message: 'Start here, not with an application or a fee. Michigan has been setting records aside AUTOMATICALLY since April 2023 under MCL 780.621g — no petition, no fee, and nobody tells you it happened. Misdemeanors qualify 7 years after sentencing; felonies 10 years after completing MDOC imprisonment or from sentencing, whichever is later. Based on your dates you are past that, and the offense you described is not on the automatic exclusion list — so there is a real chance this is already done. Find out before you spend anything: request your criminal history from the Michigan State Police. Several conditions decide whether the automatic system actually reaches you, and this screening cannot check them for you: you must have no pending charges and stay conviction-free through the period (621g(6)); the automatic FELONY and 93-day-or-more misdemeanor paths do not run AT ALL for anyone with MORE THAN ONE assaultive-crime conviction (621g(7)); and there are lifetime caps — at most 2 felonies and 4 misdemeanors of 93 days or more clear automatically, though misdemeanors of 92 days or less are unlimited (621g(5)). If automatic relief missed you, the petition path under MCL 780.621 is still open. Two more honest notes: the automatic program is subject to appropriation and the governor may delay it up to 180 days (621g(8),(14)), which is another reason to check rather than assume; and a set-aside does not clear your Secretary of State driving record.',
           remedy: 'Check with Michigan State Police first — petition (form MC 227) only if automatic relief missed you',
-          citation: 'Mich. Comp. Laws §§ 780.621g, 780.621'
+          citation: 'Mich. Comp. Laws § 780.621g(5),(6),(7),(8),(14); § 780.621'
         },
         eligible_petition_mi: {
           status: 'eligible',
           title: 'Potentially Eligible to Petition for a Set-Aside',
-          message: 'Based on your dates and your record, you appear potentially eligible to apply to set this conviction aside under MCL 780.621. File form MC 227 in the court that convicted you (MC 227a if it is a marijuana misdemeanor). You will need a certified copy of the conviction and a fingerprint card (form RI-008, taken at a local law enforcement agency for a small fee), and you must serve copies on the Attorney General and the prosecuting agency. A hearing is usually required, so expect to appear. Michigan Legal Help has a free guided interview that fills the form out with you — it is worth using. Two things worth knowing: setting aside a traffic offense does NOT clear your Secretary of State driving record, and the fee amount is one of the things we are still verifying.',
-          remedy: 'Application to Set Aside Conviction (form MC 227, MCL 780.621)',
-          citation: 'Mich. Comp. Laws §§ 780.621, 780.621d'
+          message: 'Based on your dates and your record, you appear potentially eligible to apply to set this conviction aside under MCL 780.621. File form MC 227 in the court that convicted you. There is a $50 fee to the Michigan State Police (MCL 780.621d(9)), and the statute provides NO fee waiver — plan for it. You will also need a fingerprint card (form RI-008, 621d(8)); the local fingerprinting fee is set by the agency and is not stated in the statute. Serve copies on the Attorney General and the prosecuting agency; for an assaultive crime or a "serious misdemeanor" the victim is notified and may be heard (621d(10)). Be clear-eyed about the standard: a set-aside is discretionary and framed by the statute as a privilege, not a right (621d(13)-(14)), so a judge can say no even when you are eligible. If you are denied, you generally cannot re-file for 3 years unless the court sets an earlier date (621d(5)). One thing the grant conditions we read do NOT include is an automatic bar for unpaid restitution — though a judge may weigh anything in discretion. Michigan Legal Help has a free guided interview that fills the form out with you. Note too: setting aside a traffic offense does NOT clear your Secretary of State driving record.',
+          remedy: 'Application to Set Aside Conviction (form MC 227, MCL 780.621) — $50 to MSP, no statutory waiver',
+          citation: 'Mich. Comp. Laws §§ 780.621, 780.621d(5),(8),(9),(10),(13),(14)'
         },
         waiting_mi: {
           status: 'waiting',
@@ -2444,12 +2499,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Wait for the period to run, then file form MC 227',
           citation: 'Mich. Comp. Laws § 780.621d'
         },
-        complex_owi_mi: {
-          status: 'complex',
-          title: 'First-Offense OWI — Possible, But the Court Decides',
-          message: 'A first-offense OWI sits in an unusual spot in Michigan, and it is worth understanding why. Since February 2022 you CAN petition to set it aside — but it is discretionary, meaning the judge decides rather than the statute deciding for them. And it is excluded from Michigan\'s automatic set-aside entirely, so waiting will not clear it: nothing happens unless you file. That combination is exactly the situation where a person makes the difference, so this is not a screening we should finish for you. Michigan Legal Help and Safe & Just Michigan both handle OWI set-asides, and the Attorney General runs expungement clinics. Note too that setting aside an OWI does not clear your Secretary of State driving record.',
-          remedy: 'Consult Legal Aid (Discretionary OWI Petition; Never Automatic)',
-          citation: 'Mich. Comp. Laws §§ 780.621, 780.621g'
+        eligible_owi_mi: {
+          status: 'eligible',
+          title: 'First-Violation OWI — You Can Petition (the Court Decides)',
+          message: 'A first-violation OWI has its own path in Michigan, and based on your dates it is open to you. Since February 19, 2022 you can petition to set aside ONE first-violation OWI in your lifetime (MCL 780.621c(3)), after the 5-year wait measured from the latest of your sentencing, release, or discharge from supervision (621d(2)) — which you have met. Two honest caveats. First, it is discretionary: the judge decides, and the statute directs the court to weigh things like your completion of rehabilitation or education programming (621c(4)), so it helps to document those. Second, OWI is excluded from the AUTOMATIC track entirely — waiting will never clear it, so nothing happens unless you file. File form MC 227 in the convicting court. Note that setting aside an OWI does NOT clear your Secretary of State driving record (621c(5)). Michigan Legal Help and the Attorney General\'s expungement clinics both handle OWI set-asides.',
+          remedy: 'Petition to set aside one first-violation OWI (form MC 227, MCL 780.621c(3)) — discretionary, never automatic',
+          citation: 'Mich. Comp. Laws §§ 780.621c(3),(4),(5), 780.621d(2)'
         },
         ineligible_pending_mi: {
           status: 'ineligible',
@@ -2461,9 +2516,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         ineligible_serious_mi: {
           status: 'ineligible',
           title: 'Excluded Offense',
-          message: 'Felonies punishable by life imprisonment, most criminal sexual conduct offenses, traffic offenses that caused injury or death, human-trafficking-related offenses, and terrorism-related offenses cannot be set aside in Michigan — not by petition and not automatically. That exclusion is in the statute, so no waiting period changes it. If you are not certain your offense is on that list, it is worth checking with someone before you accept this answer: Michigan Legal Help is free and the Attorney General runs expungement clinics.',
-          remedy: 'None (Statutorily Excluded) — Consult Legal Aid',
-          citation: 'Mich. Comp. Laws § 780.621c'
+          message: 'Several categories cannot be set aside in Michigan — not by petition and not automatically (MCL 780.621c): felonies punishable by life imprisonment and attempts; listed criminal sexual conduct and child offenses; a commercial-traffic offense committed while holding a CDL, or a traffic offense that caused injury or death; a felony domestic-violence offense where you have a prior misdemeanor domestic-violence conviction; and human-trafficking or terrorism offenses. Two things are worth a closer look rather than taking this as final. If your offense is fourth-degree criminal sexual conduct (MCL 750.520e) committed BEFORE January 12, 2015, there is a narrow petition path — but only if you have no other convictions except up to two "minor offenses" (each punishable by no more than 90 days or a $1,000 fine, committed before you turned 21) (MCL 780.621(1)(d)). And if you are simply not certain your offense is on the excluded list, check before accepting a no. Michigan Legal Help is free and the Attorney General runs expungement clinics.',
+          remedy: 'None (Statutorily Excluded) — but ask about the narrow pre-2015 CSC-4th path; Consult Legal Aid',
+          citation: 'Mich. Comp. Laws §§ 780.621c, 780.621(1)(d)'
+        },
+        eligible_trafficking_mi: {
+          status: 'eligible',
+          title: 'Trafficking-Survivor Path — Apply Anytime, No Limit',
+          message: 'Michigan has a distinct, protective route here. If you were convicted under MCL 750.448, 750.449, or 750.450 as a direct result of being a victim of human trafficking, you may apply to set that conviction aside AT ANY TIME — there is no waiting period, and it does not count against the usual lifetime caps (MCL 780.621(3), 780.621d(6)). At the hearing the standard works in your favor: eligibility is decided by a preponderance of the evidence. Because this path turns on establishing the trafficking connection, it is worth doing with help — Michigan Legal Help and Safe & Just Michigan handle exactly these cases, and the Attorney General runs expungement clinics.',
+          remedy: 'Petition to set aside a trafficking-related conviction (MCL 780.621(3)) — anytime, no count limit',
+          citation: 'Mich. Comp. Laws §§ 780.621(3), 780.621d(6),(12)'
         },
         ineligible_counts_mi: {
           status: 'ineligible',
@@ -2496,17 +2558,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formUrl: 'https://www.courts.michigan.gov/492269/siteassets/forms/scao-approved/mc227.pdf',
           steps: [
             'Get a certified copy of the conviction from the convicting court.',
-            'Get a fingerprint card (form RI-008) from a local law enforcement agency — there is a fee, which we have not verified.',
-            'Complete form MC 227 (or MC 227a for a marijuana misdemeanor) and file it in the court that convicted you.',
-            'Serve copies on the Michigan Attorney General and the prosecuting agency.',
-            'Expect a hearing — one is usually required.',
+            'Get a fingerprint card (form RI-008) from a local law enforcement agency — a local fee applies (set by the agency, not in the statute).',
+            'Complete form MC 227 (or MC 227a for a marijuana misdemeanor) and file it in the court that convicted you, with the $50 fee to the Michigan State Police.',
+            'Serve copies on the Michigan Attorney General and the prosecuting agency; for an assaultive crime or "serious misdemeanor" the victim is notified and may be heard.',
+            'Expect a hearing — one is usually required, and the decision is discretionary.',
             'Michigan Legal Help has a free guided interview that completes the form with you.'
           ],
-          // null: Wave 1 gives "$50 to Michigan State Police" and marks it
-          // "widely cited but VERIFY BY PHONE". Widely cited is not a source.
-          fees: null,
-          // Dependent: whether a waiver applies is unknowable while the fee is.
-          feeWaiver: null,
+          fees: '$50 to the Michigan State Police (MCL 780.621d(9)), plus a local fingerprint-card fee not stated in the statute.',
+          // The statute provides no fee-waiver mechanism for the $50.
+          feeWaiver: 'None — MCL 780.621d(9) sets the $50 fee with no statutory waiver provision.',
           courtContact: 'The court that convicted you'
         },
         automatic: {

@@ -330,7 +330,7 @@ export default function Home() {
           <div>
             {!results ? (
               <EligibilityWizard
-                stateConfig={stateConfig}
+                configs={{ [stateConfig.code]: stateConfig }}
                 prepopulatedRecords={prepopulatedRecords}
                 onScreeningComplete={handleScreeningComplete}
                 onReset={handleReset}

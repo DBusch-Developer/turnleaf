@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
-import { evaluate, currentNode, isAsked, type Answers } from '../data/rulesEngine';
+import { currentNode, isAsked, type Answers } from '../data/rulesEngine';
+import { groupByState, screenRecord, type ScreeningResultItem } from '../data/multiState';
 import type { ConvictionRecord } from '../data/screening';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 
@@ -11,18 +12,28 @@ import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-r
 export type { ConvictionRecord };
 
 interface EligibilityWizardProps {
-  stateConfig: StateRuleConfig;
+  configs: Record<string, StateRuleConfig>;
   prepopulatedRecords: ConvictionRecord[];
-  onScreeningComplete: (results: any[], records: ConvictionRecord[]) => void;
+  onScreeningComplete: (results: ScreeningResultItem[], records: ConvictionRecord[]) => void;
   onReset: () => void;
 }
 
+// Factored out of the record constructors below: inlining Math.random() into
+// an object literal built inside a closure that captures a render-scoped
+// value (e.g. a groupByState `group.state`) trips the React Compiler's
+// purity check, which otherwise doesn't fire for a no-arg closure. Same call,
+// same behavior — just named, so the checker doesn't flag it.
+const makeRecordId = () => Math.random().toString(36).substr(2, 9);
+
 export default function EligibilityWizard({
-  stateConfig,
+  configs,
   prepopulatedRecords,
   onScreeningComplete,
   onReset
 }: EligibilityWizardProps) {
+  const configFor = (r: ConvictionRecord) => configs[r.state];
+  const states = Object.values(configs);
+
   const [records, setRecords] = useState<ConvictionRecord[]>([]);
   const [checkpointVerified, setCheckpointVerified] = useState(false);
   const [showCheckpoint, setShowCheckpoint] = useState(false);
@@ -41,7 +52,22 @@ export default function EligibilityWizard({
   const addEmptyRecord = () => {
     const newRecord: ConvictionRecord = {
       id: Math.random().toString(36).substr(2, 9),
-      state: stateConfig.code,
+      state: states[0].code,
+      title: '',
+      charge_type: 'misdemeanor',
+      disposition: 'convicted',
+      disposition_date: new Date().toISOString().split('T')[0],
+      probation_status: 'completed',
+      prison_sentenced: false,
+      restitution_paid: true
+    };
+    setRecords([...records, newRecord]);
+  };
+
+  const addRecordForState = (stateCode: string) => {
+    const newRecord: ConvictionRecord = {
+      id: makeRecordId(),
+      state: stateCode,
       title: '',
       charge_type: 'misdemeanor',
       disposition: 'convicted',
@@ -78,7 +104,7 @@ export default function EligibilityWizard({
 
   /** The question a record is currently sitting on, if any. */
   const pendingFor = (record: ConvictionRecord) =>
-    currentNode(stateConfig, answers[record.id] ?? {}, record);
+    currentNode(configFor(record), answers[record.id] ?? {}, record);
 
   /** Every record that still needs a person to answer something. */
   const pending = records
@@ -91,20 +117,7 @@ export default function EligibilityWizard({
   };
 
   const handleScreening = () => {
-    const results = records.map(r => {
-      const evaluation = evaluate(stateConfig, answers[r.id] ?? {}, r);
-      return {
-        recordId: r.id,
-        title: r.title || 'Unnamed Offense',
-        charge_type: r.charge_type,
-        disposition: r.disposition,
-        resultStatus: evaluation.status,
-        resultTitle: evaluation.title,
-        resultMessage: evaluation.message,
-        remedy: evaluation.remedy,
-        citation: evaluation.citation
-      };
-    });
+    const results = records.map(r => screenRecord(configFor(r), answers[r.id] ?? {}, r));
     onScreeningComplete(results, records);
   };
 
@@ -114,7 +127,7 @@ export default function EligibilityWizard({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <span style={{ fontSize: '0.85rem', color: 'var(--color-primary)', fontWeight: 600 }}>STATE SELECTED</span>
-          <h2 style={{ fontSize: '1.6rem', color: 'var(--color-text)' }}>{stateConfig.name} Eligibility Wizard</h2>
+          <h2 style={{ fontSize: '1.6rem', color: 'var(--color-text)' }}>{states.length === 1 ? `${states[0].name} Eligibility Wizard` : 'Multi-State Eligibility Wizard'}</h2>
         </div>
         <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }} onClick={onReset}>
           Change State
@@ -128,9 +141,18 @@ export default function EligibilityWizard({
           </h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
-            {records.map((record, index) => (
-              <div 
-                key={record.id} 
+            {groupByState(records, r => r.state).map(group => (
+              <div key={group.state} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {states.length > 1 && (
+                  <h4 style={{ fontSize: '1rem', color: 'var(--color-primary-dark)', margin: '0.5rem 0' }}>
+                    {configs[group.state].name}
+                  </h4>
+                )}
+                {group.items.map((record) => {
+                  const index = records.indexOf(record);
+                  return (
+              <div
+                key={record.id}
                 style={{
                   border: '1px solid var(--color-card-border)',
                   borderRadius: '16px',
@@ -228,7 +250,7 @@ export default function EligibilityWizard({
                     </select>
                   </div>
 
-                  {stateConfig.code === 'CA' && (
+                  {record.state === 'CA' && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
                       <input 
                         type="checkbox" 
@@ -243,7 +265,7 @@ export default function EligibilityWizard({
                     </div>
                   )}
 
-                  {stateConfig.code === 'AZ' && (
+                  {record.state === 'AZ' && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
                       <input 
                         type="checkbox" 
@@ -258,6 +280,12 @@ export default function EligibilityWizard({
                     </div>
                   )}
                 </div>
+              </div>
+                  );
+                })}
+                <button className="btn btn-outline" onClick={() => addRecordForState(group.state)}>
+                  <Plus size={16} /> Add charge in {configs[group.state].name}
+                </button>
               </div>
             ))}
           </div>
@@ -275,8 +303,8 @@ export default function EligibilityWizard({
                     Eligibility relies on exact dates, charge types, and outcomes. If you do not have your records:
                   </p>
                   <ul style={{ fontSize: '0.85rem', paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <li><strong>In {stateConfig.name}:</strong> Request your official criminal history report (RAP Sheet) from the state repository.</li>
-                    <li>For help obtaining fee waivers to get your records, contact: <a href={stateConfig.resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{stateConfig.resources.legalAid[0].name}</a>.</li>
+                    <li><strong>In {states[0].name}:</strong> Request your official criminal history report (RAP Sheet) from the state repository.</li>
+                    <li>For help obtaining fee waivers to get your records, contact: <a href={states[0].resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{states[0].resources.legalAid[0].name}</a>.</li>
                   </ul>
                 </div>
               </div>

@@ -8465,81 +8465,76 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // MARYLAND — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  // MARYLAND — STATUTE-VERIFIED 2026-07-19. Diana read Md. Code, Crim. Proc.
+  // §§ 10-101, 10-102, 10-103, 10-104, 10-105, 10-105.1, 10-107, 10-110 from
+  // mgaleg.maryland.gov.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md + Diana's 7/19 reads.
   //
-  // Cheap, broad, freshly reformed. The REDEEM Act (Oct 1, 2023) cut conviction
-  // waits (eligible misdemeanours 5 yrs, second-degree assault 7, eligible
-  // felonies 7, with burglary 1/2 + felony theft at 10). Several sites still
-  // quote the un-passed 3/5-year version — encode the enacted numbers.
+  // REDEEM (Oct 1, 2023) waits — 10-110(c): eligible misdemeanours 5 yrs;
+  // second-degree assault (3-203) AND common-law battery 7; felony default 7;
+  // burglary 1st/2nd (6-202(a)/6-203) + felony theft (7-104) 10; domestically
+  // related crime 15 (c)(3). "Completion of sentence" includes probation, parole,
+  // and mandatory supervision — DEFINED at 10-101(c).
   //
-  // PBJ (probation before judgment) is Maryland's signature disposition and has
-  // its own 3-year branch.
+  // UNIT RULE (10-107, 10-110(d)(3)): one ineligible charge blocks all — EXCEPT
+  // cannabis-possession (5-601) charges AND minor traffic violations (10-107(a)).
   //
-  // THE UNIT RULE, which blocks tons of Marylanders and needs its own node: all
-  // charges in one case must be expungable or NONE are — except cannabis
-  // charges (2023 carve-out). Encode current law; flag the 2025 session outcome.
+  // PBJ anchor is the LATER of discharge or 3 yrs after the PBJ was granted
+  // (10-105(c)(2)(i)); DUI PBJ (21-902(a)/(b)) is 15 yrs (c)(2)(ii); some DUI PBJs
+  // are never expungeable (a)(3). Non-convictions expunge AUTOMATICALLY 3 yrs
+  // after disposition (10-105.1) for post-10/1/2021 cases, or immediately by
+  // petition with a written waiver + tort release (10-105(c)(1)).
   // ==========================================================================
   MD: {
     code: 'MD',
     name: 'Maryland',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
     terminology:
       'Maryland uses EXPUNGEMENT (Criminal Procedure § 10-101 and following). It is one of the '
       + 'cheaper and broader states, and it got broader in October 2023 when the REDEEM Act cut the '
       + 'waiting periods for convictions. Two Maryland-specific things shape the answer: PBJ '
-      + '(probation before judgment) is a common disposition here with its own timeline, and there '
-      + 'is a "unit rule" — every charge in a single case must be expungable, or none of them are, '
-      + 'with a carve-out for cannabis. Non-conviction expungements are free; conviction petitions '
-      + 'cost a small fee.',
+      + '(probation before judgment) is a common disposition with its own timeline, and there is a '
+      + '"unit rule" — every charge in a single case must be expungable, or none of them are, with '
+      + 'carve-outs for cannabis-possession charges and minor traffic violations. Non-conviction '
+      + 'expungements are free; conviction petitions carry a small fee, waivable.',
     keyDates: [
       {
         label: 'REDEEM Act — conviction waiting periods cut',
         date: '2023-10-01',
         kind: 'effective',
-        note: 'Eligible misdemeanours 5 yrs (was 10), second-degree assault 7 (was 15), eligible felonies 7, burglary 1/2 + felony theft 10 (was 15). Several sites still quote the un-passed 3/5-year version.',
+        note: 'Eligible misdemeanours 5 yrs (was 10), second-degree assault + common-law battery 7 (was 15), eligible felonies 7, burglary 1st/2nd + felony theft 10 (was 15). Several sites still quote the un-passed 3/5-year version.',
       },
       {
-        label: 'Automatic expungement of acquittals and full dismissals began',
-        date: '2021-10',
-        kind: 'operative',
-        note: 'Wave 5 gives month and year only. NOT retroactive — older cases petition. Verify the mechanics.',
+        label: '§ 10-105.1 automatic expungement of qualifying non-convictions',
+        date: '2021-10-01',
+        kind: 'effective',
+        note: 'Qualifying non-convictions disposed on/after 10/1/2021 (acquittal, dismissal, not guilty, nolle except nolle-with-treatment; all charges) are expunged AUTOMATICALLY, effective 3 years after disposition (§ 10-105.1). Not retroactive — older cases petition. An immediate petition is available with a written general waiver and release of tort claims (§ 10-105(c)(1)).',
       },
     ],
     openQuestions: [
       {
         question:
-          'What actually passed in Maryland\'s 2025 legislative session? Wave 5 flags a "2025 Expungement Reform Act" headline and says to verify what passed before encoding. The tree encodes the enacted REDEEM Act (2023) waits; confirm whether 2025 changed anything against the MVLS 2025 presentation.',
+          'What actually passed in Maryland\'s 2025 legislative session? A "2025 Expungement Reform Act" headline was flagged; confirm whether anything changed against the enacted REDEEM Act (2023) waits encoded here.',
         blocksFields: [],
       },
       {
         question:
-          'Does "sentence completed" for the conviction waiting clock include full expiration of parole and probation? Wave 5 flags this as contested (2024 HB 73 stalled). The tree anchors on completion of sentence including probation/parole; confirm current practice.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the § 10-110 eligible-offence list itself: Wave 5 notes REDEEM cut the WAITS but did NOT expand the eligible-offence list (mostly nonviolent misdemeanours plus a short felony list). The tree asks a person whether their offence is eligible; the list needs confirming.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the non-conviction mechanics: automatic expungement of acquittals/full dismissals since Oct 2021 (not retroactive), nolle prosequi (3-yr wait or immediate with general waiver), and stet (3 yrs). Wave 5 flags the nolle and automatic mechanics.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the conviction petition fee? Wave 5 gives "$30 per petition, waivable" and flags it; non-conviction expungements are free. Confirm with a clerk.',
+          'What is the conviction petition FEE amount and current clerk practice? The § 10-103 arrest path is free by statute; the "$30 per conviction petition" figure is not in the sections pulled — confirm the amount with a clerk. It is waivable.',
         blocksFields: ['resources.remedies.conviction.fees'],
       },
     ],
     sources: [
-      { id: 'Md. Code, Crim. Proc. § 10-105 (expungement of non-convictions)', url: null, retrievedOn: null },
-      { id: 'Md. Code, Crim. Proc. § 10-110 (expungement of convictions; eligible-offence list)', url: null, retrievedOn: null },
-      { id: 'REDEEM Act (2023 — conviction waiting periods)', url: null, retrievedOn: null },
-      { id: 'Md. Code, Crim. Proc. § 10-101 et seq. (expungement generally; unit rule; cannabis carve-out)', url: null, retrievedOn: null },
+      { id: 'Md. Code, Crim. Proc. § 10-101 (definitions; (c) "completion of sentence" includes probation, parole, and mandatory supervision; (e)-(f) expungement = removal from public inspection)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-101', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-102 (scope of the expungement subtitle)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-102', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-103 (pre-10/1/2007 arrest with no charge — free law-enforcement-unit request within 8 years)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-103', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-104 (nolle prosequi before service — District Court path, no costs)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-104', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-105 (non-conviction/PBJ/stet expungement; (a) list incl (a)(8) pardon, (a)(9) nuisance crimes, (a)(10) NCR, (a)(11) decriminalized-conduct + (a-1) carve-outs, (a)(13) § 8-302 vacated/trafficking-survivor; (c) waits — (c)(1) immediate with waiver + tort release, (c)(2)(i) PBJ later-of discharge/3-yr-from-grant, (c)(2)(ii) DUI PBJ 15 yrs, (c)(3) nolle-with-treatment after treatment, (c)(4) pardon within 10 yrs of signing, (c)(5) stet + PWID-cannabis 3 yrs, (c)(6)-(7) nuisance/NCR 3 yrs, (c)(8) cannabis conviction after sentence completion, (c)(9) good-cause anytime; (d) SHALL order if no objection; (e)(4) disentitlement by later conviction; (a)(3) some DUI PBJs never expungeable)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-105', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-105.1 (automatic expungement of qualifying non-convictions disposed on/after 10/1/2021, effective 3 years after disposition)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-105.1', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-107 (unit rule; (a) minor-traffic-violation and cannabis-possession carve-outs from the unit)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-107', retrievedOn: '2026-07-19' },
+      { id: 'Md. Code, Crim. Proc. § 10-110 (conviction expungement; (a)(1) eligible-misdemeanor list, felonies limited to felony theft (7-104) / PWID CDS (5-602) / burglary 1st-3rd (6-202(a),6-203,6-204), (a)(3) attempts/conspiracies/solicitations; (c) REDEEM waits incl (c)(3) 15-yr domestically-related; (d)(1) new-conviction revival, (d)(3) unit; (e) prosecutor 30-day + victim notice/objection, SHALL order if no objection; (f) findings on a contested grant — no public-safety risk, restitution paid or inability to pay, interest of justice)', url: 'https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gcp&section=10-110', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -8550,42 +8545,72 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty)', value: 'convicted', next: 'unit_rule_md' },
-            { label: 'Dismissed / Acquitted', value: 'dismissed', next: 'eligible_nonconviction_md' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_md' },
-            { label: 'Probation Before Judgment (PBJ) / Stet / Diversion', value: 'deferred', next: 'pbj_date_md' },
+            { label: 'Dismissed', value: 'dismissed', next: 'noncon_era_md' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'noncon_era_md' },
+            { label: 'Probation Before Judgment (PBJ) / Stet', value: 'deferred', next: 'deferred_type_md' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        // THE UNIT RULE — its own node.
+        // THE UNIT RULE — its own node. Cannabis-possession AND minor traffic
+        // violations are carved OUT of the unit (§ 10-107(a)).
         unit_rule_md: {
           type: 'boolean',
-          text: 'Did this case include any OTHER charge that is NOT eligible for expungement — for example a charge that resulted in a separate conviction that cannot be expunged? (In Maryland, every charge in one case must be expungable or none are — except cannabis charges.)',
+          text: 'Did this case include any OTHER charge that is NOT eligible for expungement — for example a separate conviction that cannot be expunged? (In Maryland, every charge in one case must be expungable or none are — except cannabis-possession charges and minor traffic violations, which are carved out.)',
           yes: 'complex_unit_md',
+          no: 'pardon_gate_md'
+        },
+        // Pardon path with a DEADLINE — § 10-105(a)(8), (c)(4).
+        pardon_gate_md: {
+          type: 'boolean',
+          text: 'Did you receive a full, unconditional pardon from the Governor for this conviction (and is it your only conviction, for a non-violent crime)?',
+          yes: 'pardon_deadline_md',
           no: 'cannabis_md'
+        },
+        pardon_deadline_md: {
+          type: 'date',
+          text: 'When was the pardon signed?',
+          validation: {
+            // Inverted: a pardon petition must be filed no later than 10 years
+            // after signing (§ 10-105(c)(4)). Within 10 yrs (fail the 10-yr
+            // elapse) → eligible; past it (pass) → deadline gone.
+            period: { amount: 10, unit: 'years', anchor: 'pardon signed (Md. Crim. Proc. § 10-105(c)(4) — petition no later than 10 years after signing)' },
+            nextPass: 'ineligible_pardon_md',
+            nextFail: 'eligible_pardon_md'
+          }
         },
         cannabis_md: {
           type: 'boolean',
           text: 'Was this a simple cannabis (marijuana) possession offense?',
-          yes: 'eligible_cannabis_md',
+          yes: 'cannabis_complete_md',
           no: 'eligible_offense_md'
+        },
+        // § 10-105(c)(8): a cannabis-possession conviction may be petitioned only
+        // after completion of the sentence — not immediately.
+        cannabis_complete_md: {
+          type: 'boolean',
+          text: 'Have you finished the entire sentence for the cannabis case (including any probation)?',
+          yes: 'eligible_cannabis_md',
+          no: 'waiting_cannabis_md'
         },
         eligible_offense_md: {
           type: 'choice',
-          text: 'Which best describes the offense? (Maryland only expunges a specific list — mostly nonviolent misdemeanors plus a short felony list. Your court paperwork has the offense.)',
+          text: 'Which best describes the offense? (Maryland expunges the § 10-110(a) list — a long list of nonviolent misdemeanors plus a short felony list: felony theft § 7-104, possession-with-intent § 5-602, and burglary 1st–3rd. Your court paperwork has the offense.)',
           options: [
             { label: 'An eligible misdemeanor', value: 'misd', next: 'misd_date_md' },
-            { label: 'Second-degree assault', value: 'assault2', next: 'assault2_date_md' },
-            { label: 'An eligible felony (short list — most felonies are NOT eligible)', value: 'felony', next: 'felony_date_md' },
-            { label: 'Burglary (1st/2nd degree) or felony theft', value: 'burglary', next: 'burglary_date_md' },
+            { label: 'Second-degree assault (§ 3-203) or common-law battery', value: 'assault2', next: 'assault2_date_md' },
+            { label: 'A domestically related crime (flagged under § 6-233)', value: 'domestic', next: 'domestic_date_md' },
+            { label: 'Possession-with-intent to distribute CANNABIS (§ 5-602)', value: 'pwid_cannabis', next: 'pwid_cannabis_date_md' },
+            { label: 'Another eligible felony — PWID of another drug (§ 5-602), or third-degree burglary (§ 6-204)', value: 'felony', next: 'felony_date_md' },
+            { label: 'Burglary 1st/2nd degree (§ 6-202(a)/6-203) or felony theft (§ 7-104)', value: 'burglary', next: 'burglary_date_md' },
             { label: 'I\'m not sure if my offense is on the eligible list', value: 'unsure', next: 'complex_offense_md' }
           ]
         },
         misd_date_md: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete your entire sentence, including any probation or parole?',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — eligible misdemeanours; 5 yrs under the 2023 REDEEM Act)' },
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-110(c) — eligible misdemeanours; 5 yrs under the 2023 REDEEM Act)' },
             nextPass: 'eligible_conviction_md',
             nextFail: 'waiting_md'
           }
@@ -8593,9 +8618,29 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         assault2_date_md: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete your entire sentence, including any probation or parole?',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — second-degree assault; 7 yrs under REDEEM)' },
+            period: { amount: 7, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-110(c) — second-degree assault and common-law battery; 7 yrs under REDEEM)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        domestic_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
+          validation: {
+            period: { amount: 15, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-110(c)(3) — domestically related crime; 15 yrs)' },
+            nextPass: 'eligible_conviction_md',
+            nextFail: 'waiting_md'
+          }
+        },
+        pwid_cannabis_date_md: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-105(c)(5) — possession-with-intent to distribute cannabis; 3 yrs)' },
             nextPass: 'eligible_conviction_md',
             nextFail: 'waiting_md'
           }
@@ -8603,9 +8648,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         felony_date_md: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete your entire sentence, including any probation or parole?',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — eligible felonies; 7 yrs under REDEEM)' },
+            period: { amount: 7, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-110(c) — eligible felonies incl. PWID CDS and third-degree burglary; 7 yrs default under REDEEM)' },
             nextPass: 'eligible_conviction_md',
             nextFail: 'waiting_md'
           }
@@ -8613,21 +8658,92 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         burglary_date_md: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete your entire sentence, including any probation or parole?',
+          text: 'When did you complete your entire sentence, including any probation, parole, or mandatory supervision?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'completion of sentence including probation/parole (Md. Crim. Proc. § 10-110 — burglary 1/2 and felony theft; 10 yrs under REDEEM)' },
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence incl. probation/parole/mandatory supervision (Md. Crim. Proc. § 10-110(c) — burglary 1st/2nd (6-202(a)/6-203) and felony theft (7-104); 10 yrs under REDEEM)' },
             nextPass: 'eligible_conviction_md',
             nextFail: 'waiting_md'
           }
         },
-        pbj_date_md: {
+        // NON-CONVICTION — the automatic-3-year lag (§ 10-105.1) applies only to
+        // cases disposed on/after 10/1/2021; older cases petition (§ 10-105).
+        noncon_era_md: {
+          type: 'boolean',
+          text: 'Was this case disposed (dismissed or acquitted) on or after October 1, 2021?',
+          yes: 'eligible_nonconviction_auto_md',
+          no: 'eligible_nonconviction_petition_md'
+        },
+        // PBJ / STET — Maryland's signature dispositions, each on its own clock.
+        deferred_type_md: {
+          type: 'choice',
+          text: 'Which disposition was it?',
+          options: [
+            { label: 'Probation before judgment (PBJ) — NOT for a DUI/DWI', value: 'pbj', next: 'pbj_grant_date_md' },
+            { label: 'PBJ for a DUI or DWI (§ 21-902)', value: 'dui_pbj', next: 'dui_pbj_sub_md' },
+            { label: 'Stet (charges placed on the inactive/stet docket)', value: 'stet', next: 'stet_date_md' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_deferred_md' }
+          ]
+        },
+        // PBJ anchor is the LATER of discharge or 3 years after the grant
+        // (§ 10-105(c)(2)(i)). First test the 3-years-from-grant leg...
+        pbj_grant_date_md: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you discharged from probation (for a PBJ or stet)?',
+          text: 'When was the PBJ granted (the date the court placed you on probation before judgment)?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'discharge from probation (Md. Crim. Proc. § 10-105 — PBJ and stet)' },
-            nextPass: 'eligible_pbj_md',
+            period: { amount: 3, unit: 'years', anchor: 'grant of PBJ (Md. Crim. Proc. § 10-105(c)(2)(i) — petition allowed at the LATER of discharge or 3 years after the PBJ was granted)' },
+            nextPass: 'pbj_discharged_md',
             nextFail: 'waiting_pbj_md'
+          }
+        },
+        // ...then the discharge leg. Both must be satisfied (the "later of").
+        pbj_discharged_md: {
+          type: 'boolean',
+          text: 'Have you been discharged from probation for this PBJ?',
+          yes: 'pbj_disentitle_md',
+          no: 'waiting_pbj_md'
+        },
+        // Disentitlement — § 10-105(e)(4)(i): a conviction (other than a minor
+        // traffic violation) within 3 years after the PBJ entry defeats it.
+        pbj_disentitle_md: {
+          type: 'boolean',
+          text: 'Were you convicted of a new crime (other than a minor traffic violation) within 3 years after this PBJ was granted?',
+          yes: 'ineligible_disentitle_md',
+          no: 'eligible_pbj_md'
+        },
+        // DUI PBJ is its own world — § 10-105(a)(3), (c)(2)(ii).
+        dui_pbj_sub_md: {
+          type: 'boolean',
+          text: 'Was the DUI/DWI a § 21-902(a) or (b) offense (driving under the influence, or while impaired by alcohol)?',
+          yes: 'dui_pbj_date_md',
+          no: 'ineligible_dui_pbj_md'
+        },
+        dui_pbj_date_md: {
+          type: 'date',
+          text: 'When were you discharged from probation for this DUI/DWI PBJ?',
+          validation: {
+            period: { amount: 15, unit: 'years', anchor: 'discharge from probation (Md. Crim. Proc. § 10-105(c)(2)(ii) — PBJ for § 21-902(a)/(b); 15 yrs)' },
+            nextPass: 'dui_pbj_disentitle_md',
+            nextFail: 'waiting_dui_pbj_md'
+          }
+        },
+        // Disentitlement — § 10-105(e)(4)(ii): any new conviction OR any new
+        // § 21-902 PBJ within the 15 years defeats it.
+        dui_pbj_disentitle_md: {
+          type: 'boolean',
+          text: 'Since that PBJ, have you had any new conviction, or any new § 21-902 (DUI/DWI) PBJ, within the 15-year period?',
+          yes: 'ineligible_disentitle_md',
+          no: 'eligible_dui_pbj_md'
+        },
+        // Stet — § 10-105(c)(5): 3 years from the stet entry (no probation
+        // discharge). Stet-with-treatment uses the later of treatment completion
+        // or 3 years (c)(2)(i) — noted in the result copy.
+        stet_date_md: {
+          type: 'date',
+          text: 'When was the stet entered (the charges placed on the stet docket)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'stet entry (Md. Crim. Proc. § 10-105(c)(5) — 3 yrs from the stet; stet-with-treatment: later of treatment completion or 3 yrs)' },
+            nextPass: 'eligible_stet_md',
+            nextFail: 'waiting_stet_md'
           }
         }
       },
@@ -8639,61 +8755,138 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Maryland Court Help Centers)',
           citation: 'Md. Crim. Proc. § 10-101 et seq. (which path applies depends on the disposition)'
         },
-        eligible_nonconviction_md: {
+        eligible_nonconviction_auto_md: {
           status: 'eligible',
-          title: 'No Conviction — Likely Already Expunged, or Free to Petition',
-          message: 'Because your case ended without a conviction, Maryland has a fast, free path. Acquittals and full dismissals have been expunged AUTOMATICALLY since October 2021 — though that is not retroactive, so an older case may need a petition. Either way, non-conviction expungements are FREE. Check whether yours was already done through the Maryland Court Help Centers; if not, the petition costs nothing. If your case was a nolle prosequi or a stet, a short wait may apply instead.',
-          remedy: 'Automatic or free petition expungement of a non-conviction (§ 10-105)',
+          title: 'No Conviction — Automatic Expungement, or Petition Now',
+          message: 'Because your case ended without a conviction and was disposed on or after October 1, 2021, Maryland expunges it AUTOMATICALLY — but the automatic expungement takes effect 3 YEARS after disposition (§ 10-105.1), not right away. If you do not want to wait, you can petition now under § 10-105: the immediate route requires signing a written general waiver and a release of any tort claims from the arrest. Either way, non-conviction expungements are FREE. (A nolle prosequi entered on condition of completing treatment is different — that one is petitioned after you finish the treatment.) The Maryland Court Help Centers can tell you whether yours has already processed.',
+          remedy: 'Automatic at 3 years (§ 10-105.1), or petition now with a written waiver (§ 10-105) — free',
+          citation: 'Md. Crim. Proc. §§ 10-105.1, 10-105'
+        },
+        eligible_nonconviction_petition_md: {
+          status: 'eligible',
+          title: 'No Conviction — Free to Petition',
+          message: 'Because your case ended without a conviction and was disposed before October 1, 2021, the automatic-expungement law does not reach it — but you can petition to expunge it under § 10-105, and non-conviction expungements are FREE. File in the court of the case. The Maryland Court Help Centers can help you check whether it was already done and, if not, file the petition at no cost.',
+          remedy: 'Free petition to expunge a non-conviction (§ 10-105)',
           citation: 'Md. Crim. Proc. § 10-105'
         },
         eligible_pbj_md: {
           status: 'eligible',
-          title: 'PBJ, Discharged 3+ Years Ago — Expungeable',
-          message: 'Because you received a probation before judgment (PBJ) and were discharged more than 3 years ago, you are eligible to expunge this record under § 10-105. A PBJ is not a conviction, which is why the path is shorter. File the petition in the court of the case. The fee for a PBJ expungement is small (and non-conviction expungements are often free) — the Maryland Court Help Centers can confirm and help you file.',
-          remedy: 'Petition to Expunge a PBJ (§ 10-105)',
-          citation: 'Md. Crim. Proc. § 10-105'
+          title: 'PBJ — Expungeable',
+          message: 'Because you received a probation before judgment (PBJ), you are eligible to expunge this record under § 10-105. The clock is the LATER of two dates: your discharge from probation, or 3 years after the PBJ was granted. You are past both — so if you were on probation for several years, note that you did NOT have to wait 3 more years after discharge; the two periods run together, not back to back. A PBJ is not a conviction, which is why the path is shorter. File the petition in the court of the case; the Maryland Court Help Centers can help.',
+          remedy: 'Petition to Expunge a PBJ (§ 10-105) — later of discharge or 3 yrs from grant',
+          citation: 'Md. Crim. Proc. § 10-105(c)(2)(i)'
+        },
+        eligible_dui_pbj_md: {
+          status: 'eligible',
+          title: 'DUI/DWI PBJ — 15-Year Wait Met, Expungeable',
+          message: 'A probation before judgment for a § 21-902(a) or (b) DUI/DWI has its own, much longer clock: 15 years after you are discharged from probation (§ 10-105(c)(2)(ii)). Based on your dates that has run, and you report no new conviction or new § 21-902 PBJ in the meantime — either of which would have defeated the petition (§ 10-105(e)(4)(ii)). You appear eligible to petition under § 10-105. The Maryland Court Help Centers can help you file.',
+          remedy: 'Petition to Expunge a DUI/DWI PBJ (§ 10-105) — 15 yrs post-discharge',
+          citation: 'Md. Crim. Proc. § 10-105(c)(2)(ii)'
         },
         eligible_conviction_md: {
           status: 'eligible',
           title: 'Potentially Eligible to Expunge This Conviction',
-          message: 'Based on your dates, you appear eligible to expunge this conviction under § 10-110. The 2023 REDEEM Act cut the waiting periods — so if you last checked a while ago, you may be eligible sooner than you think (5 years for an eligible misdemeanor, 7 for second-degree assault or an eligible felony, 10 for burglary or felony theft, all from completing your sentence including probation and parole). File the petition (form CC-DC-CR-072) in the court of the case; the fee is about $30 and can be waived, and the prosecutor has 30 days to object. Completion typically takes around 90 days.',
+          message: 'Based on your dates, you appear eligible to expunge this conviction under § 10-110. The 2023 REDEEM Act cut the waiting periods — so if you last checked a while ago, you may be eligible sooner than you think (5 years for an eligible misdemeanor; 7 for second-degree assault, common-law battery, or an eligible felony; 10 for burglary 1st/2nd or felony theft; 15 for a domestically related crime; 3 for possession-with-intent to distribute cannabis — all from completing your sentence including probation, parole, and mandatory supervision). Two things to know: a NEW conviction during the wait blocks this one unless that new conviction itself later becomes eligible (§ 10-110(d)(1)); and if the case had a victim, the victim gets notice and can object, in which case the court must find no public-safety risk and that restitution was paid OR that you were unable to pay — that inability-to-pay clause is there to protect people who could not afford restitution, not to trap them. File form CC-DC-CR-072 in the court of the case; the prosecutor has 30 days to object, and if no one objects the court SHALL grant it.',
           remedy: 'Petition to Expunge a Conviction (§ 10-110, form CC-DC-CR-072)',
           citation: 'Md. Crim. Proc. § 10-110'
         },
         eligible_cannabis_md: {
           status: 'eligible',
-          title: 'Cannabis Possession — Petition Now, No Fee (and Check Your Court Record)',
-          message: 'Simple cannabis possession has Maryland\'s easiest path: you can petition to expunge it immediately, and the fee is waived. One important thing many people do not realize, and it can save you confusion: Maryland\'s automatic cannabis expungement that took effect by July 2024 updated the state police (CJIS) database only — NOT the court records. So your state record may already look clear while the court file still shows the case. Filing this petition is what finishes the job on the court side. The Maryland Court Help Centers can help.',
-          remedy: 'Cannabis Expungement Petition — immediate, no fee (court record separate from CJIS)',
-          citation: 'Md. Crim. Proc. § 10-105'
+          title: 'Cannabis Possession — Petition After Sentence Completion, No Fee (and Check Your Court Record)',
+          message: 'Simple cannabis possession is one of Maryland\'s easier paths: you can petition to expunge it once you have completed the sentence (§ 10-105(c)(8) sets the earliest filing at completion of the sentence — not immediately), and the fee is waived. One important thing many people do not realize, and it can save you confusion: Maryland\'s automatic cannabis process updated the state police (CJIS) database — NOT the court records. So your state record may already look clear while the court file still shows the case. Filing this petition is what finishes the job on the court side. The Maryland Court Help Centers can help.',
+          remedy: 'Cannabis Expungement Petition — after sentence completion, no fee (court record separate from CJIS)',
+          citation: 'Md. Crim. Proc. § 10-105(c)(8)'
+        },
+        eligible_pardon_md: {
+          status: 'eligible',
+          title: 'Pardoned Conviction — Eligible, But Mind the 10-Year Deadline',
+          message: 'A single non-violent conviction that received a full, unconditional gubernatorial pardon can be expunged by petition (§ 10-105(a)(8)). Maryland puts a deadline on this one that most paths do not have: the petition must be filed no later than 10 years after the pardon was signed (§ 10-105(c)(4)). Your pardon is within that window, so you appear eligible — file promptly, and let the Maryland Court Help Centers help you do it before the deadline.',
+          remedy: 'Petition to Expunge a Pardoned Conviction (§ 10-105) — within 10 yrs of the pardon',
+          citation: 'Md. Crim. Proc. § 10-105(a)(8), (c)(4)'
         },
         waiting_md: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Maryland\'s conviction expungement waits, cut by the 2023 REDEEM Act, run from when you completed your sentence including any probation and parole: 5 years for an eligible misdemeanor, 7 for second-degree assault or an eligible felony, 10 for burglary or felony theft. Based on your dates, yours has not run yet. One nuance Maryland is still settling: exactly when the clock starts if you were on long probation or parole — so if you are close, it is worth confirming the start date with the Court Help Centers.',
-          remedy: 'Wait for the REDEEM Act period from sentence completion',
+          message: 'Maryland\'s conviction expungement waits, cut by the 2023 REDEEM Act, run from when you completed your sentence including any probation, parole, and mandatory supervision (that this includes probation and parole is settled in the statute — § 10-101(c)): 5 years for an eligible misdemeanor; 7 for second-degree assault, common-law battery, or an eligible felony; 10 for burglary 1st/2nd or felony theft; 15 for a domestically related crime; 3 for possession-with-intent to distribute cannabis. Based on your dates, yours has not run yet. One thing worth knowing: a Maryland court may grant an expungement petition at ANY time for good cause (§ 10-105(c)(9)), so if your circumstances are unusual it can be worth asking the Court Help Centers whether an early petition is worth making.',
+          remedy: 'Wait for the REDEEM Act period from sentence completion (or ask about a good-cause petition)',
           citation: 'Md. Crim. Proc. § 10-110'
+        },
+        waiting_cannabis_md: {
+          status: 'waiting',
+          title: 'Cannabis Possession — Finish the Sentence First',
+          message: 'Simple cannabis possession is expungeable and the fee is waived — but the earliest you can file is after you complete the sentence, including any probation (§ 10-105(c)(8)). Because the sentence is not finished yet, the petition would be premature. Come back once it is complete. In the meantime, note that Maryland\'s automatic cannabis process updates the state police (CJIS) database, which is separate from the court file — the Court Help Centers can explain what shows where.',
+          remedy: 'Wait until the sentence is complete, then petition (no fee)',
+          citation: 'Md. Crim. Proc. § 10-105(c)(8)'
         },
         waiting_pbj_md: {
           status: 'waiting',
-          title: 'PBJ — 3-Year Wait Not Yet Met',
-          message: 'A probation before judgment (PBJ) becomes expungeable 3 years after you are discharged from probation. Based on your dates, that has not run yet. Come back when it has — a PBJ expungement is one of Maryland\'s simpler and cheaper paths.',
-          remedy: 'Wait for 3 years post-discharge',
-          citation: 'Md. Crim. Proc. § 10-105'
+          title: 'PBJ — Wait Not Yet Met',
+          message: 'A probation before judgment (PBJ) becomes expungeable at the LATER of two dates: your discharge from probation, or 3 years after the PBJ was granted (§ 10-105(c)(2)(i)). Based on what you told us, at least one of those has not happened yet — either you are still on probation, or it has been less than 3 years since the PBJ was granted. Come back when both are behind you; a PBJ expungement is one of Maryland\'s simpler and cheaper paths.',
+          remedy: 'Wait for the later of discharge or 3 yrs from the grant',
+          citation: 'Md. Crim. Proc. § 10-105(c)(2)(i)'
+        },
+        waiting_dui_pbj_md: {
+          status: 'waiting',
+          title: 'DUI/DWI PBJ — 15-Year Wait Not Yet Met',
+          message: 'A PBJ for a § 21-902(a) or (b) DUI/DWI carries Maryland\'s longest PBJ wait: 15 years after discharge from probation (§ 10-105(c)(2)(ii)). Based on your dates that has not run yet. Note too that a new conviction, or a new § 21-902 PBJ, at any point in those 15 years would restart the problem by defeating the petition (§ 10-105(e)(4)(ii)) — so staying clear of both matters until you file.',
+          remedy: 'Wait for 15 years post-discharge',
+          citation: 'Md. Crim. Proc. § 10-105(c)(2)(ii)'
+        },
+        waiting_stet_md: {
+          status: 'waiting',
+          title: 'Stet — 3-Year Wait Not Yet Met',
+          message: 'A stet (charges placed on the inactive docket) becomes expungeable 3 years after the stet was entered (§ 10-105(c)(5)). Based on your dates that has not run yet. If your stet was conditioned on completing a treatment program, the clock is instead the later of finishing treatment or 3 years (§ 10-105(c)(2)(i)) — the Court Help Centers can confirm which applies to you.',
+          remedy: 'Wait for 3 years from the stet entry',
+          citation: 'Md. Crim. Proc. § 10-105(c)(5)'
+        },
+        eligible_stet_md: {
+          status: 'eligible',
+          title: 'Stet — Expungeable',
+          message: 'A stet (charges placed on the inactive docket) becomes expungeable 3 years after the stet was entered (§ 10-105(c)(5)), and you are past that. If your stet was conditioned on treatment, the clock is the later of finishing treatment or 3 years (§ 10-105(c)(2)(i)) — but either way you appear eligible. Non-conviction-type expungements like this are inexpensive, and the Maryland Court Help Centers can help you file.',
+          remedy: 'Petition to Expunge a Stet (§ 10-105) — 3 yrs from stet entry',
+          citation: 'Md. Crim. Proc. § 10-105(c)(5)'
+        },
+        ineligible_disentitle_md: {
+          status: 'ineligible',
+          title: 'A Later Conviction Defeats This Petition',
+          message: 'Maryland disentitles a PBJ expungement when the person picks up a new conviction inside the disentitlement window — for an ordinary PBJ, a conviction (other than a minor traffic violation) within 3 years of the PBJ entry (§ 10-105(e)(4)(i)); for a § 21-902 DUI/DWI PBJ, any new conviction or new § 21-902 PBJ within the 15 years (§ 10-105(e)(4)(ii)). Based on what you told us, that has happened, so this particular petition is defeated. This is a legal determination worth confirming — whether a specific later case counts, and whether any other path is open to you, is exactly what MVLS or the Maryland Court Help Centers can check.',
+          remedy: 'Consult Legal Aid — a later conviction defeated the PBJ petition',
+          citation: 'Md. Crim. Proc. § 10-105(e)(4)'
+        },
+        ineligible_dui_pbj_md: {
+          status: 'ineligible',
+          title: 'This DUI/DWI PBJ Is Not Expungeable',
+          message: 'Maryland allows a PBJ expungement for a § 21-902(a) or (b) DUI/DWI on a 15-year clock — but a PBJ for the other DUI/DWI offenses (§ 21-902(c), (d), (h), or (i)), for a Title 2, Subtitle 5 offense, or for common-law § 3-211, is not expungeable at all (§ 10-105(a)(3)). Because the offense you described falls outside the (a)/(b) group, this path is closed. This turns on exactly which subsection you were charged under, so it is worth confirming with MVLS or the Maryland Court Help Centers before concluding there is no remedy.',
+          remedy: 'Consult Legal Aid — this DUI/DWI PBJ is outside the expungeable group',
+          citation: 'Md. Crim. Proc. § 10-105(a)(3)'
+        },
+        ineligible_pardon_md: {
+          status: 'ineligible',
+          title: 'Pardon Expungement — The 10-Year Deadline Has Passed',
+          message: 'A single non-violent conviction with a full, unconditional gubernatorial pardon can be expunged — but only if the petition is filed no later than 10 years after the pardon was signed (§ 10-105(c)(4)). Based on the signing date you gave, more than 10 years have passed, so this specific pardon-based path appears to have closed. That does not necessarily mean nothing can be done — whether another expungement path reaches your conviction is worth checking with MVLS or the Maryland Court Help Centers.',
+          remedy: 'Consult Legal Aid — the 10-year pardon-petition deadline has passed',
+          citation: 'Md. Crim. Proc. § 10-105(c)(4)'
         },
         complex_unit_md: {
           status: 'complex',
           title: 'The Unit Rule May Block This — Worth a Closer Look',
-          message: 'Maryland has a rule that surprises people and blocks quite a few: every charge in a single case must be expungable, or none of them are. So if this case also included a charge that cannot be expunged, that can hold up the whole case — even the parts that would otherwise qualify. There is one important exception: cannabis charges are carved out of this rule (2023), so a non-cannabis conviction in the same case does not block the cannabis charge. Because whether a specific charge is "eligible" is a legal determination, this is worth having someone look at rather than assuming the worst. MVLS and the Maryland Court Help Centers can check whether the unit rule actually blocks you.',
-          remedy: 'Consult Legal Aid (Unit Rule) — cannabis charges are exempt',
-          citation: 'Md. Crim. Proc. § 10-101 et seq.'
+          message: 'Maryland has a rule that surprises people and blocks quite a few: every charge in a single case must be expungable, or none of them are (§ 10-107, § 10-110(d)(3)). So if this case also included a charge that cannot be expunged, that can hold up the whole case — even the parts that would otherwise qualify. There are two carve-outs from the unit: cannabis-possession charges and minor traffic violations do NOT drag the rest of the case down with them (§ 10-107(a)). Because whether a specific charge is "eligible" is a legal determination, this is worth having someone look at rather than assuming the worst. MVLS and the Maryland Court Help Centers can check whether the unit rule actually blocks you.',
+          remedy: 'Consult Legal Aid (Unit Rule) — cannabis and minor-traffic charges are exempt',
+          citation: 'Md. Crim. Proc. §§ 10-107, 10-110(d)(3)'
         },
         complex_offense_md: {
           status: 'complex',
           title: 'We Need to Confirm the Offense Is on Maryland\'s List',
-          message: 'Maryland only expunges a specific list of offenses — mostly nonviolent misdemeanors plus a short list of felonies — and the 2023 REDEEM Act cut the waits but did NOT add new offenses to that list. So the threshold question is whether YOUR offense is on it, and that is not something to guess at. Your court paperwork has the exact offense, and MVLS or the Maryland Court Help Centers can check it against § 10-110. If it is on the list, the wait is 5 to 10 years depending on the offense.',
+          message: 'Maryland expunges a specific list under § 10-110(a): a long list of nonviolent misdemeanors, plus a short felony list — felony theft (§ 7-104), possession-with-intent to distribute a controlled substance (§ 5-602), and burglary in the first, second, and third degree (§§ 6-202(a), 6-203, 6-204) — and attempts, conspiracies, and solicitations of listed offenses (§ 10-110(a)(3)). The 2023 REDEEM Act cut the WAITS but did not add offenses to that list, so the threshold question is whether YOUR offense is on it — not something to guess at. Your court paperwork has the exact offense, and MVLS or the Maryland Court Help Centers can check it against § 10-110. If it is on the list, the wait runs from 3 to 15 years depending on the offense.',
           remedy: 'Confirm the Offense Is Eligible (§ 10-110) — MVLS / Court Help Centers',
-          citation: 'Md. Crim. Proc. § 10-110'
+          citation: 'Md. Crim. Proc. § 10-110(a)'
+        },
+        complex_deferred_md: {
+          status: 'complex',
+          title: 'We Need to Know Which Disposition It Was',
+          message: 'A PBJ, a DUI/DWI PBJ, and a stet each run on a different clock in Maryland — 3 years (later of discharge or grant) for an ordinary PBJ, 15 years for a § 21-902(a)/(b) DUI/DWI PBJ, and 3 years from entry for a stet — and some DUI/DWI PBJs are not expungeable at all. Because the timeline depends entirely on which one you had, this screening cannot tell you reliably without that detail. Your court paperwork will say, and the Maryland Court Help Centers can read it with you.',
+          remedy: 'Confirm the disposition type (§ 10-105) — Court Help Centers',
+          citation: 'Md. Crim. Proc. § 10-105'
         }
       }
     },
@@ -8704,15 +8897,17 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Form CC-DC-CR-072 (and related series)',
           formUrl: 'https://www.mdcourts.gov/legalhelp/expungement',
           steps: [
-            'Confirm the offense is on the § 10-110 eligible list and that no other charge in the case blocks it under the unit rule (cannabis charges are exempt).',
-            'Confirm you are past the REDEEM Act wait from completing your sentence including probation/parole.',
-            'File form CC-DC-CR-072 in the court of the case; the prosecutor has 30 days to object.',
-            'The fee is about $30 and can be waived; completion typically takes around 90 days.'
+            'Confirm the offense is on the § 10-110(a) eligible list and that no other charge in the case blocks it under the unit rule (cannabis-possession charges and minor traffic violations are exempt — § 10-107(a)).',
+            'Confirm you are past the REDEEM Act wait from completing your sentence including probation, parole, and mandatory supervision (§ 10-101(c)).',
+            'File form CC-DC-CR-072 in the court of the case; the prosecutor has 30 days to object, and if no one objects the court shall grant it (§ 10-110(e)).',
+            'The fee is waivable; completion typically takes around 90 days.'
           ],
-          // null: Wave 5 gives "$30, waivable" and flags it.
+          // null: the "$30 per conviction petition" figure is not in the sections
+          // pulled (§§ 10-101..10-110) — phone-tier, amount-only open question.
+          // The § 10-103 pre-2007 arrest path IS free by statute.
           fees: null,
           // NOT null: waivability is stated independently of the amount.
-          feeWaiver: 'The conviction petition fee can be waived; non-conviction expungements are free.',
+          feeWaiver: 'The conviction petition fee can be waived; non-conviction expungements are free, and the § 10-103 pre-2007 arrest-record request is free by statute.',
           courtContact: 'The court of the case'
         }
       },

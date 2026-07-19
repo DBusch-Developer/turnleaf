@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { fallbackRules } from './fallbackRules';
 import type { ConvictionRecord } from './screening';
-import { screenRecord, groupByState } from './multiState';
+import { screenRecord, screenAll, groupByState } from './multiState';
 
 // fallbackRules is keyed by state code (Record<string, StateRuleConfig>), not
 // an array — index directly rather than `.find(s => s.code === ...)`.
@@ -34,6 +34,33 @@ describe('screenRecord', () => {
     // And each result carries the state of the record it came from.
     expect(caItem.state).toBe('CA');
     expect(txItem.state).toBe('TX');
+  });
+});
+
+describe('screenAll — the per-record routing boundary', () => {
+  it('routes EACH record to its own state config (the headline-bug guard)', () => {
+    // A CA record and a TX record screened together: routing must send each to
+    // configs[record.state], not to a shared/first config. If the mapping were
+    // crossed (both under CA, the original bug), the TX theft would come back
+    // eligible. This exercises configs[r.state] itself, not just screenRecord.
+    const configs = { CA, TX };
+    const records = [
+      rec({ id: 'ca', state: 'CA', disposition: 'dismissed' }),
+      rec({ id: 'tx', state: 'TX', disposition: 'convicted', charge_type: 'misdemeanor' }),
+    ];
+    const results = screenAll(configs, {}, records);
+    expect(results.map(r => r.state)).toEqual(['CA', 'TX']);
+    expect(results.find(r => r.state === 'CA')!.resultStatus).toBe('eligible');
+    expect(results.find(r => r.state === 'TX')!.resultStatus).toBe('ineligible');
+  });
+
+  it('skips a record whose state has no config (in-research, not screened here)', () => {
+    const configs = { CA };
+    const results = screenAll(configs, {}, [
+      rec({ id: 'ca', state: 'CA', disposition: 'dismissed' }),
+      rec({ id: 'zz', state: 'ZZ' }),
+    ]);
+    expect(results.map(r => r.state)).toEqual(['CA']);
   });
 });
 

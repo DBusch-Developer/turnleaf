@@ -101,6 +101,22 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
       </div>
 
       {/* Per-Conviction Screenings (FR-3) */}
+      {/* NO computed "earliest eligibility date" here — deliberately.
+       *
+       * This block once lived in ResultsDisplay beside a getWaitingDetails()
+       * helper that computed the date from a hardcoded table of waiting periods
+       * keyed on state code (with `let yearsRequired = 3` as a default). That was
+       * a second, competing copy of the law: it disagreed with fallbackRules on
+       * three of four states — AZ felonies (2 yrs here vs 5/10 in the rules), NY
+       * (10 yrs flat vs Clean Slate's 3/8), and TX deferred misdemeanours (2 yrs
+       * vs no wait at all) — and invented a 3-year answer for any state it had
+       * never heard of.
+       *
+       * Legal rules live in data (AGENTS.md), and a waiting period the user sees
+       * must come from the node that applied. The engine does not yet surface
+       * WHICH period decided a result, so the date is gone rather than wrong;
+       * res.resultMessage still states the period in prose. Restoring a real
+       * date is tracked with the engine extraction. Do not reintroduce a table. */}
       <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--color-text)' }}>Records Breakdown</h3>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2.5rem' }}>

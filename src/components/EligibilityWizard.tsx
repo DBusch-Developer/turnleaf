@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
 import { currentNode, isAsked, type Answers } from '../data/rulesEngine';
-import { groupByState, screenRecord, type ScreeningResultItem } from '../data/multiState';
+import { groupByState, screenAll, type ScreeningResultItem } from '../data/multiState';
 import type { ConvictionRecord } from '../data/screening';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 
@@ -112,7 +112,7 @@ export default function EligibilityWizard({
   };
 
   const handleScreening = () => {
-    const results = records.map(r => screenRecord(configFor(r), answers[r.id] ?? {}, r));
+    const results = screenAll(configs, answers, records);
     onScreeningComplete(results, records);
   };
 
@@ -303,19 +303,24 @@ export default function EligibilityWizard({
                       charge never sees California's legal-aid link. */}
                   <ul style={{ fontSize: '0.85rem', paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     <li><strong>In your state:</strong> Request your official criminal history report (RAP Sheet) from the state repository.</li>
-                    <li>
-                      For help obtaining fee waivers to get your records, contact:
-                      <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                        {states
-                          .filter(s => s.resources.legalAid[0])
-                          .map(s => (
-                            <li key={s.code}>
-                              {states.length > 1 && <strong>{s.name}: </strong>}
-                              <a href={s.resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{s.resources.legalAid[0].name}</a>
-                            </li>
-                          ))}
-                      </ul>
-                    </li>
+                    {/* Only offer the fee-waiver referral when a screened state
+                        actually has a legal-aid link — otherwise "contact:"
+                        dangles over an empty list. */}
+                    {states.some(s => s.resources.legalAid[0]) && (
+                      <li>
+                        For help obtaining fee waivers to get your records, contact:
+                        <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                          {states
+                            .filter(s => s.resources.legalAid[0])
+                            .map(s => (
+                              <li key={s.code}>
+                                {states.length > 1 && <strong>{s.name}: </strong>}
+                                <a href={s.resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{s.resources.legalAid[0].name}</a>
+                              </li>
+                            ))}
+                        </ul>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>

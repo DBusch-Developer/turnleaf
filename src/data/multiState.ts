@@ -42,6 +42,26 @@ export function screenRecord(
   };
 }
 
+/**
+ * Screen a whole record set, routing EACH record to its own state's config.
+ *
+ * This is the routing boundary the headline bug lived at: a record must be
+ * evaluated against `configs[record.state]`, never a shared or first config.
+ * A record whose state has no config in the map is skipped — the page surfaces
+ * that state as in-research and does not screen it here (mirrors the wizard's
+ * prepopulated-record guard).
+ */
+export function screenAll(
+  configs: Record<string, StateRuleConfig>,
+  answersByRecord: Record<string, Answers>,
+  records: ConvictionRecord[],
+  now?: Date
+): ScreeningResultItem[] {
+  return records
+    .filter(r => configs[r.state])
+    .map(r => screenRecord(configs[r.state], answersByRecord[r.id] ?? {}, r, now));
+}
+
 /** Bucket items by state, in the order each state first appears. */
 export function groupByState<T>(
   items: T[],

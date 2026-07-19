@@ -8044,80 +8044,81 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // MISSOURI — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  // MISSOURI — STATUTE-VERIFIED 2026-07-19. Diana read RSMo § 610.140 (effective
+  // 1/1/2025, A.L. 2024 S.B. 754), § 610.130 (effective 1/1/2017, formerly
+  // 577.054), §§ 610.122, 610.123, 610.126, and §§ 610.105, 610.106 from
+  // revisor.mo.gov.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md + Diana's 7/19 reads.
   //
-  // THE QUIRK: the presumption is FOR expungement. When the statutory criteria
-  // are met and pled, there is a REBUTTABLE PRESUMPTION for expungement and the
-  // PROSECUTOR bears the burden to defeat it — unusually petitioner-friendly.
+  // THE QUIRK: the presumption is FOR expungement — when the criteria are met and
+  // pled, § 610.140.6 gives a REBUTTABLE PRESUMPTION for expungement and the
+  // PROSECUTOR bears the burden to defeat it. Exclusion-list architecture (.3).
   //
-  // Exclusion-list architecture: everything is expungeable UNLESS listed
-  // (~1,900 offences qualify; 11 exception categories). The tree asks the
-  // exclusion question, not an inclusion one.
+  // SB 754 (1/1/2025): lifetime limits 2 felonies + 3 misdemeanours/ordinance
+  // violations with an authorized term of imprisonment; INFRACTIONS UNLIMITED
+  // (.13). Waits: felony 3 yrs, misdemeanour/municipal/infraction 1 yr (.6(1)).
+  // Same-course-of-conduct crimes count only as the highest level in one petition
+  // (.2(3)). $250 surcharge REMOVED; arrest track now 18 months but only where the
+  // petitioner was NEVER CHARGED (.7).
   //
-  // FRESH LAW (Jan 1, 2025, SB 754): lifetime limits raised to 2 felonies + 3
-  // misdemeanours (was 1F+2M — many attorney sites still show the old numbers).
-  // The surprise-yes: a first-time DWI can be expunged after 10 years with no
-  // further alcohol offences (its own track).
-  //
-  // Waits (SB 53): felony 3 yrs, misdemeanour/ordinance/infraction 1 yr, from
-  // completion of disposition; the clean period runs BACKWARD from filing.
+  // CHARGED-then-dismissed / nolle / acquitted / NGRI / completed-SIS records
+  // close AUTOMATICALLY by law under § 610.105 — no petition, no wait (not the
+  // 18-month arrest track). First-DWI has its own 10-yr § 610.130 track (from the
+  // guilty plea/conviction date; total CDL exclusion). Secondary destruction path
+  // at §§ 610.122/.123/.126.
   // ==========================================================================
   MO: {
     code: 'MO',
     name: 'Missouri',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
     terminology:
       'Missouri says EXPUNGEMENT, and it means a court-ordered sealing that restores you to your '
       + 'pre-offense status — in most situations you may lawfully deny it happened. Missouri is '
-      + 'built as an exclusion list: almost everything qualifies UNLESS it is one of a set of '
-      + 'excepted categories, so roughly 1,900 offenses are eligible. Two things make Missouri '
-      + 'notably favorable. A fresh 2025 law raised the lifetime limits to 2 felonies plus 3 '
-      + 'misdemeanors (many websites still show the old, lower numbers). And when you meet the '
-      + 'criteria, the presumption is FOR expungement — the prosecutor has to prove why not.',
+      + 'built as an exclusion list: almost everything qualifies UNLESS it is one of the categories '
+      + 'excepted at § 610.140.3. Two things make it notably favorable. A 2025 law (SB 754) set the '
+      + 'lifetime limits at 2 felonies plus 3 misdemeanors or ordinance violations, with infractions '
+      + 'unlimited (many websites still show the old, lower numbers). And when you meet the criteria, '
+      + 'the presumption is FOR expungement — the prosecutor has to prove why not. Separately, records '
+      + 'of cases that were charged and then dismissed, nolle prossed, or ended in acquittal are '
+      + 'closed automatically by law under § 610.105.',
     keyDates: [
       {
-        label: 'SB 754 — lifetime limits raised to 2 felonies + 3 misdemeanours',
+        label: 'SB 754 — lifetime limits raised; $250 surcharge removed (§ 610.140, A.L. 2024)',
         date: '2025-01-01',
         kind: 'effective',
-        note: 'Was 1 felony + 2 misdemeanours. Many attorney sites still show the old numbers. Also: separate crimes in one case are no longer automatically counted as one; arrest expungements available at 18 months (was 3 years).',
+        note: 'Limits set at 2 felonies + 3 misdemeanours/ordinance violations (infractions unlimited). The old $250 statutory surcharge was REMOVED. Arrest expungements at 18 months (was 3 years) — but only where the petitioner was NEVER CHARGED. Many attorney sites still show the old numbers.',
+      },
+      {
+        label: '§ 610.130 first-DWI expungement moved from § 577.054',
+        date: '2017-01-01',
+        kind: 'effective',
+        note: 'The first-intoxication-offence expungement is now § 610.130 (transferred from the former § 577.054, effective 1/1/2017). Older guides still cite the dead number.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the SB 754 counting change against the current § 610.140 text: separate crimes in one case are no longer automatically counted as one toward the limits, with a nuanced same-course-of-conduct exception. Wave 4 flags the exact text. The tree asks the person to self-assess their count for the 2-felony / 3-misdemeanour limits.',
+          'What is the standard civil FILING FEE amount for an expungement petition, and the current clerk practice? The 1/1/2025 § 610.140 text contains NO fee or surcharge provision — the old $250 statutory surcharge is gone (SB 754) — so only the ordinary civil filing fee (amount not in the statutes pulled) remains, waivable by in-forma-pauperis motion. Confirm the amount with a circuit clerk.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the first-time-DWI expungement track: Wave 4 says a first DWI can be expunged after 10 years with no further alcohol offenses, and flags the cite (likely § 610.130/.140 interplay). The tree routes a first DWI to its own 10-year result.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'FEE CONFLICT: Wave 4 gives "$250 statutory surcharge per one source vs standard circuit filing fee per another" and flags it as a phone target. Fee waiver by in-forma-pauperis motion. Confirm the actual fee with a circuit clerk.',
-        blocksFields: ['resources.remedies.expungement.fees'],
-      },
-      {
-        question:
-          'What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? Wave 4 says courts are still processing and flags a status check. And confirm no Clean Slate automation bill passed this session (Wave 4 says pending, not law).',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the § 610.140.3 exclusion list: Class A felonies, dangerous felonies (§ 556.061), death-element felonies, felony assault, ANY domestic assault, felony kidnapping, sex-registry offenses, most weapons offenses, intoxication-related traffic (except the first-DWI 10-year track), CDL offenses. The tree asks a person whether their offence is on it.',
+          'What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? That is a constitutional provision, not in this statutory pull; Wave 4 says courts are still processing. Confirm the current status.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Mo. Rev. Stat. § 610.140 (expungement; exclusion list at .3; presumption)', url: null, retrievedOn: null },
-      { id: 'Mo. Rev. Stat. § 610.130 (first-DWI expungement interplay)', url: null, retrievedOn: null },
-      { id: 'Mo. Rev. Stat. § 556.061 (dangerous felony definitions — exclusion)', url: null, retrievedOn: null },
-      { id: 'SB 754 (2025 — raised lifetime limits; counting change; 18-month arrest track)', url: null, retrievedOn: null },
-      { id: 'SB 53 (2021 — waiting periods)', url: null, retrievedOn: null },
+      { id: 'Mo. Rev. Stat. § 610.140 (expungement — effective 1/1/2025, A.L. 2024 S.B. 754; .2(1) petition by anyone charged/found guilty/pleaded/arrested, .2(3) same-course-of-conduct counts only as the highest level; .3 exclusion list; .4 total CDL exclusion; .6 waits [felony 3 yrs / misd-municipal-infraction 1 yr], clean-conduct, obligations paid, no pending charges, presumption FOR expungement with burden on the prosecutor; .7 18-month arrest track [never charged]; .8 court rules within 6 months; .9 effects; .10-.11 disclosure duties; .12 1-year refile bar; .13 lifetime limits [2 felonies + 3 misd/ordinance, infractions unlimited])', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.140', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.130 (first-intoxication-offence expungement — effective 1/1/2017, formerly § 577.054; .1 10 years from the guilty plea or conviction date; .2 no subsequent intoxication convictions and no other alcohol-related enforcement contacts [§ 302.525], none pending; .4 total CDL exclusion; misdemeanour/ordinance only, once per lifetime, mandatory "shall")', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.130', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.105 (records of charged cases that are dismissed / nolle prossed / acquitted, and completed-SIS cases, close AUTOMATICALLY on final termination; .2 victim access for ch. 566 / listed child-offence SIS cases; NGRI dispositions stay accessible to law enforcement and listed care agencies)', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.105', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.106 (pre-9/28/1981 SIS motion procedure)', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.106', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.122 (destruction of a false-information arrest record — no probable cause now, no charges to be pursued, no SIS received; SIS recipient cannot use this path, .1(1)(c))', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.122', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.123 (procedure for a § 610.122 destruction — verified petition in the civil division of the county of arrest, fingerprint card, all record-holders named, hearing no sooner than 30 days)', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.123', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 610.126 (a § 610.122 expungement does not imply the arrest was invalid and bars later suits over it)', url: 'https://revisor.mo.gov/main/OneSection.aspx?section=610.126', retrievedOn: '2026-07-19' },
+      { id: 'Mo. Rev. Stat. § 556.061 (dangerous-felony definition — referenced by the § 610.140.3 exclusion) — cite-only', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -8128,177 +8129,314 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'dwi_mo' },
-            { label: 'Dismissed / Arrested but not charged', value: 'dismissed', next: 'arrest_date_mo' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'arrest_date_mo' },
-            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Dismissed / Nolle prosequi / Arrested but never charged', value: 'dismissed', next: 'charged_gate_mo' },
+            { label: 'Acquitted (Found Not Guilty, or Not Guilty by Reason of Insanity)', value: 'acquitted', next: 'acquittal_ngri_mo' },
+            { label: 'Suspended imposition of sentence (SIS) / Diversion completed', value: 'deferred', next: 'sis_ch566_mo' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        // First-DWI carve-out is checked before the general exclusion gate, since
-        // DWI is otherwise excluded but a first one has its own 10-yr track.
+        // First-intoxication-offence (610.130) is its own 10-yr track, checked
+        // before the general exclusion gate. Felony DWI / CMV-DUI and CDL holders
+        // are barred outright (610.130.4 total CDL exclusion).
         dwi_mo: {
           type: 'boolean',
-          text: 'Was this offense a DWI (driving while intoxicated)?',
-          yes: 'dwi_first_mo',
+          text: 'Was this offense a DWI or another intoxication-related traffic or boating offense?',
+          yes: 'dwi_felony_mo',
           no: 'excluded_mo'
+        },
+        dwi_felony_mo: {
+          type: 'boolean',
+          text: 'Was it a FELONY intoxication offense, or a commercial-vehicle DUI?',
+          yes: 'ineligible_dwi_mo',
+          no: 'dwi_cdl_mo'
+        },
+        dwi_cdl_mo: {
+          type: 'boolean',
+          text: 'Do you hold — or are you required to hold — a commercial driver license (CDL)?',
+          yes: 'ineligible_dwi_cdl_mo',
+          no: 'dwi_first_mo'
         },
         dwi_first_mo: {
           type: 'boolean',
-          text: 'Was this your FIRST alcohol-related driving offense, with no further alcohol offenses since?',
+          text: 'Was this your FIRST intoxication-related traffic or boating offense — with no later intoxication-related convictions, no other alcohol-related enforcement contacts since (an administrative license suspension counts), and none pending?',
           yes: 'dwi_date_mo',
           no: 'ineligible_dwi_mo'
         },
         dwi_date_mo: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete the disposition of the DWI?',
+          text: 'When did you plead guilty to, or were you convicted of, this offense?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.130/.140 — first-DWI track; no further alcohol offences)' },
+            period: { amount: 10, unit: 'years', anchor: 'the date of the guilty plea or conviction (Mo. Rev. Stat. § 610.130.1 — first intoxication offence; misdemeanour/ordinance only, once per lifetime)' },
             nextPass: 'eligible_dwi_mo',
             nextFail: 'waiting_mo'
           }
         },
+        // § 610.140.3 exclusion list (weapons handled by the exception below).
         excluded_mo: {
           type: 'boolean',
-          text: 'Was the offense any of these: a Class A felony, a "dangerous felony", a felony causing death, any felony assault, ANY domestic assault, felony kidnapping, a sex-registry offense, a weapons offense, or a CDL-related driving offense?',
+          text: 'Was the offense any of these: a Class A felony; a "dangerous felony" (§ 556.061); a felony with a death element; ANY felony assault; ANY domestic assault (any level); felony kidnapping; a sex-offender-registration offense or an enumerated chapter 566 offense; any intoxication-related traffic or boating offense (other than the first-offence § 610.130 route); or a motor-vehicle violation committed while you held a CDL?',
           yes: 'ineligible_excluded_mo',
-          no: 'count_mo'
+          no: 'weapons_mo'
         },
-        count_mo: {
-          type: 'choice',
-          text: 'Counting your whole record (the 2025 law allows up to 2 felonies and 3 misdemeanors/ordinance violations expunged in a lifetime): where do you stand?',
-          options: [
-            { label: 'Within those limits (this would be within 2 felonies / 3 misdemeanors)', value: 'within', next: 'conv_level_mo' },
-            { label: 'Already at or over those limits', value: 'over', next: 'ineligible_count_mo' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_mo' }
-          ]
+        // § 610.140.3(11): weapons offences under § 571.030 are excluded EXCEPT
+        // unlawful carrying (571.030.1(1)) with a guilty finding before 1/1/2017,
+        // and 571.030.1(4). A flat exclusion would false-ineligible those.
+        weapons_mo: {
+          type: 'boolean',
+          text: 'Was this a weapons offense under § 571.030?',
+          yes: 'weapons_exception_mo',
+          no: 'conv_level_mo'
+        },
+        weapons_exception_mo: {
+          type: 'boolean',
+          text: 'Is it either unlawful carrying (§ 571.030.1(1)) with a guilty finding BEFORE January 1, 2017, or a § 571.030.1(4) offense?',
+          yes: 'conv_level_mo',
+          no: 'ineligible_excluded_mo'
         },
         conv_level_mo: {
           type: 'choice',
           field: 'charge_type',
           text: 'What was the level of the offense?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_mo' },
-            { label: 'Felony', value: 'felony', next: 'felony_date_mo' },
-            { label: 'Infraction', value: 'infraction', next: 'misd_date_mo' },
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_count_mo' },
+            { label: 'Felony', value: 'felony', next: 'felony_count_mo' },
+            { label: 'Infraction', value: 'infraction', next: 'infraction_date_mo' },
             { label: 'I\'m not sure', value: 'unknown', next: 'complex_level_mo' }
+          ]
+        },
+        // Lifetime limits (.13): 3 misdemeanours/ordinance, 2 felonies. Infractions
+        // are UNLIMITED, so they never reach a count gate.
+        misd_count_mo: {
+          type: 'choice',
+          text: 'Counting your whole record, how many misdemeanor or ordinance-violation expungements have you already had? (Missouri allows up to 3 in a lifetime; convictions from a single course of conduct count as one.)',
+          options: [
+            { label: 'Fewer than 3 — this would be within the limit', value: 'within', next: 'misd_date_mo' },
+            { label: 'Already at 3', value: 'over', next: 'ineligible_count_mo' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_mo' }
+          ]
+        },
+        felony_count_mo: {
+          type: 'choice',
+          text: 'Counting your whole record, how many felony expungements have you already had? (Missouri allows up to 2 in a lifetime; convictions from a single course of conduct count as one.)',
+          options: [
+            { label: 'Fewer than 2 — this would be within the limit', value: 'within', next: 'felony_date_mo' },
+            { label: 'Already at 2', value: 'over', next: 'ineligible_count_mo' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_mo' }
           ]
         },
         misd_date_mo: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete the disposition of the case (sentence and obligations done)?',
+          text: 'When did you complete the authorized disposition of the case (sentence and all obligations done)?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.140 — misdemeanour/ordinance; clean period runs backward from filing)' },
-            nextPass: 'eligible_mo',
+            period: { amount: 1, unit: 'years', anchor: 'completion of the authorized disposition; clean of other guilty findings in the period, running backward from filing (Mo. Rev. Stat. § 610.140.6 — misdemeanour/ordinance/infraction)' },
+            nextPass: 'clean_conduct_mo',
             nextFail: 'waiting_mo'
           }
         },
         felony_date_mo: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete the disposition of the case (sentence and obligations done)?',
+          text: 'When did you complete the authorized disposition of the case (sentence and all obligations done)?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'completion of disposition (Mo. Rev. Stat. § 610.140 — felony; clean period runs backward from filing)' },
-            nextPass: 'eligible_mo',
+            period: { amount: 3, unit: 'years', anchor: 'completion of the authorized disposition; clean of other guilty findings in the period, running backward from filing (Mo. Rev. Stat. § 610.140.6 — felony)' },
+            nextPass: 'clean_conduct_mo',
             nextFail: 'waiting_mo'
           }
+        },
+        infraction_date_mo: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the authorized disposition of the case (all obligations done)?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'completion of the authorized disposition (Mo. Rev. Stat. § 610.140.6, .13 — infraction; unlimited, no lifetime cap)' },
+            nextPass: 'clean_conduct_mo',
+            nextFail: 'waiting_mo'
+          }
+        },
+        // Arrest (never charged) track (.7): the arrest must be for an ELIGIBLE
+        // crime and the person must have no guilty findings since. "Charged" cases
+        // go to the § 610.105 automatic-closure result instead.
+        charged_gate_mo: {
+          type: 'boolean',
+          text: 'Were you ever formally CHARGED in this case (as opposed to arrested but never charged)?',
+          yes: 'dismissed_closure_mo',
+          no: 'arrest_excluded_mo'
+        },
+        arrest_excluded_mo: {
+          type: 'boolean',
+          text: 'Was the arrest for one of Missouri\'s excluded offenses — a Class A felony, a "dangerous felony", any felony or domestic assault, a sex-offender-registration offense, and the like (§ 610.140.3)?',
+          yes: 'ineligible_excluded_mo',
+          no: 'arrest_clean_mo'
+        },
+        arrest_clean_mo: {
+          type: 'boolean',
+          text: 'Have you had any misdemeanor or felony guilty finding since that arrest?',
+          yes: 'ineligible_arrest_clean_mo',
+          no: 'arrest_date_mo'
         },
         arrest_date_mo: {
           type: 'date',
           field: 'disposition_date',
           text: 'When was the arrest?',
           validation: {
-            period: { amount: 18, unit: 'months', anchor: 'the arrest (Mo. Rev. Stat. § 610.140 — arrest without charge; cut to 18 months by SB 754, 2025)' },
+            period: { amount: 18, unit: 'months', anchor: 'the arrest (Mo. Rev. Stat. § 610.140.7 — arrest without charge; cut to 18 months by SB 754, 2025)' },
             nextPass: 'eligible_arrest_mo',
             nextFail: 'waiting_arrest_mo'
           }
+        },
+        // Acquittal: NGRI still closes under 610.105 (not routed to ineligible).
+        acquittal_ngri_mo: {
+          type: 'boolean',
+          text: 'Was this a verdict of not guilty by reason of insanity (or a related mental-capacity finding)?',
+          yes: 'ngri_closure_mo',
+          no: 'dismissed_closure_mo'
+        },
+        // Completed SIS closes under 610.105; ch. 566 / child-offence SIS cases
+        // carry a victim-access disclosure (610.105.2).
+        sis_ch566_mo: {
+          type: 'boolean',
+          text: 'Was the suspended-imposition (SIS) or diversion offense a chapter 566 sexual offense or a listed child offense?',
+          yes: 'sis_closure_ch566_mo',
+          no: 'sis_closure_mo'
+        },
+        // Clean-conduct condition (.6(2)): no other misdemeanour/felony guilty
+        // finding in the waiting period, measured backward from filing (routine
+        // traffic under chs. 301-304 and 307 excluded).
+        clean_conduct_mo: {
+          type: 'boolean',
+          text: 'In your waiting period leading up to now (the 1 year for a misdemeanor/ordinance/infraction, or 3 years for a felony), have you had any OTHER misdemeanor or felony guilty finding — not counting routine traffic-regulation violations (chapters 301-304, 307)?',
+          yes: 'ineligible_clean_mo',
+          no: 'eligible_mo'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Missouri\'s timing depends on how the case ended: an arrest without charge can be expunged at 18 months, a misdemeanor at 1 year, a felony at 3. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The courts.mo.gov self-help forms and clearmyrecordmo.org can help you figure out where you stand.',
+          message: 'Missouri\'s path depends entirely on how the case ended: a charged case that was dismissed, nolle prossed, or acquitted closes automatically by law; an arrest that never led to a charge can be expunged at 18 months; and a conviction runs 1 year (misdemeanor) or 3 (felony). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The courts.mo.gov self-help forms and clearmyrecordmo.org can help you figure out where you stand.',
           remedy: 'Get Your Record First (courts.mo.gov / clearmyrecordmo.org)',
-          citation: 'Mo. Rev. Stat. § 610.140 (which path applies depends on the disposition)'
+          citation: 'Mo. Rev. Stat. §§ 610.105, 610.140 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
+        dismissed_closure_mo: {
+          status: 'eligible',
+          title: 'Charged, Then Cleared — Your Record Closes Automatically',
+          message: 'Because you were charged and the case then ended without a conviction — dismissed, nolle prosequi, or a not-guilty verdict — Missouri closes the official records AUTOMATICALLY by operation of law when the case reaches final termination (§ 610.105.1). There is no petition to file and no waiting period. Two honest caveats: the court\'s own judgment or order and the prosecutor\'s final action remain accessible, and "closed" is not the same as destroyed. If you want more than closure, you have two options. You can petition for a full § 610.140 EXPUNGEMENT for an eligible offense — someone who was charged may petition, and with no conviction there is no waiting period to run — and, in the narrow situation where the arrest itself rested on false information (no probable cause now, no charges to pursue), § 610.122 allows outright DESTRUCTION of the arrest record. clearmyrecordmo.org and Missouri legal aid can tell you which upgrade fits.',
+          remedy: 'Records close automatically (§ 610.105); upgrade to a § 610.140 expungement or § 610.122 destruction if it fits',
+          citation: 'Mo. Rev. Stat. §§ 610.105, 610.140, 610.122'
+        },
+        ngri_closure_mo: {
           status: 'complex',
-          title: 'Diversion Cases Need a Person',
-          message: 'Missouri\'s expungement rules are screened here for convictions and non-convictions. How a completed diversion is treated is not something this screening has researched in detail, so we would rather point you to someone than guess. clearmyrecordmo.org and Missouri legal aid can tell you how your disposition is treated. If it was marijuana-related, note that Missouri has a separate automatic expungement process from the 2022 Amendment XIV, which courts are still working through.',
-          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
-          citation: 'Mo. Rev. Stat. § 610.140 (diversion treatment not yet detailed)'
+          title: 'Insanity Verdict — Records Close, but Access Is Restricted',
+          message: 'A not-guilty-by-reason-of-insanity verdict is still a non-conviction, and the official records close by law under § 610.105 — you are not simply "ineligible" here. The difference from an ordinary acquittal is access: the disposition remains available to law enforcement and to the care agencies the statute lists, rather than being sealed from everyone. Because the mental-health context makes this specific, it is worth confirming exactly what remains visible with a person: clearmyrecordmo.org and Missouri legal aid can explain it and tell you whether a § 610.140 petition would add anything for you.',
+          remedy: 'Records close under § 610.105 (disposition stays visible to law enforcement / care agencies)',
+          citation: 'Mo. Rev. Stat. § 610.105'
+        },
+        sis_closure_mo: {
+          status: 'eligible',
+          title: 'SIS Completed — Your Record Closes Automatically',
+          message: 'Because you successfully completed a suspended imposition of sentence (SIS) and the case reached final termination, Missouri closes the official records AUTOMATICALLY by law under § 610.105 — no petition, no wait, and no conviction on your record. Two things worth knowing about SIS specifically: the guilty plea you entered can still be used to impeach you if you later testify, and — unlike a false-information arrest — an SIS case cannot use the § 610.122 destruction path (§ 610.122.1(1)(c)). If your SIS pre-dates September 28, 1981, there is a separate motion procedure under § 610.106. For most people the automatic closure is the answer; clearmyrecordmo.org and Missouri legal aid can confirm and tell you whether a § 610.140 expungement would add anything.',
+          remedy: 'Records close automatically (§ 610.105); a § 610.140 expungement is the optional upgrade',
+          citation: 'Mo. Rev. Stat. §§ 610.105, 610.106, 610.122'
+        },
+        sis_closure_ch566_mo: {
+          status: 'complex',
+          title: 'SIS on a Chapter 566 Offense — Closes, but the Victim Can Access It',
+          message: 'Completing a suspended imposition of sentence (SIS) closes your official records automatically under § 610.105 — but for a chapter 566 sexual offense or a listed child offense, the statute gives the VICTIM access to those records (§ 610.105.2), so the closure is narrower than for other cases. That, plus the fact that an SIS guilty plea can still be used to impeach you and cannot use the § 610.122 destruction path, makes this a situation to walk through with a person rather than assume. clearmyrecordmo.org and Missouri legal aid can explain exactly what remains accessible.',
+          remedy: 'Records close under § 610.105, but the victim retains access (§ 610.105.2) — confirm with legal aid',
+          citation: 'Mo. Rev. Stat. § 610.105.2'
         },
         eligible_arrest_mo: {
           status: 'eligible',
           title: 'Arrest Without Charge — Expungeable Now',
-          message: 'Because this was an arrest that did not lead to a charge or conviction, you can petition to expunge it — and a 2025 law cut the wait to 18 months (it used to be 3 years), so you may qualify sooner than older guides suggest. File in the court of the case; the prosecutor has 30 days to object and the court must rule within 6 months. Missouri\'s petitioner-friendly presumption applies: when you meet the criteria, the burden is on the prosecutor to show why not.',
-          remedy: 'Petition to Expunge an Arrest (§ 610.140) — 18-month wait',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          message: 'Because this was an arrest that never led to a charge, for an eligible offense, and you have had no guilty findings since, you can petition to expunge it — and a 2025 law cut the wait to 18 months (it used to be 3 years). File in the court of the case; the prosecutor has 30 days to object, and the court must rule within 6 months. Missouri\'s petitioner-friendly presumption applies: once you meet the criteria, the burden is on the prosecutor to show why not, and filing carries no statutory surcharge. There is also a stronger option in a narrow case: if the arrest rested on FALSE INFORMATION — no probable cause now and no charges to pursue — § 610.122 allows the record to be DESTROYED, not just expunged. That is a separate verified petition in the civil division of the county of arrest, with a fingerprint card and every record-holder named as a defendant, and a hearing no sooner than 30 days (§ 610.123). Note that a § 610.122 destruction does not mean the arrest was invalid and bars later suits over it (§ 610.126). clearmyrecordmo.org can help you choose.',
+          remedy: 'Petition to Expunge an Arrest (§ 610.140.7) — 18 months; or § 610.122 destruction if the arrest was false-information',
+          citation: 'Mo. Rev. Stat. §§ 610.140.7, 610.122, 610.123, 610.126'
         },
         eligible_mo: {
           status: 'eligible',
           title: 'Potentially Eligible — And the Presumption Is on Your Side',
-          message: 'Based on your dates and record, you appear eligible to expunge this conviction under § 610.140 — 1 year after completing a misdemeanor, 3 years after a felony. Missouri is unusually favorable here in two ways worth knowing. First, the 2025 law raised the lifetime limits to 2 felonies and 3 misdemeanors, so more people qualify than the older figures on most websites suggest. Second, when you meet the criteria, there is a rebuttable presumption FOR expungement — the prosecutor bears the burden of showing why it should not be granted, rather than you having to prove your case. File in the court of the case; the prosecutor has 30 days to object and the court must rule within 6 months. The filing fee has a documented discrepancy we are still confirming, and a fee waiver is available if you cannot afford it.',
-          remedy: 'Petition to Expunge (§ 610.140) — presumption in your favor',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          message: 'Based on your dates and record, you appear eligible to expunge this under § 610.140 — 1 year after completing the authorized disposition for a misdemeanor, ordinance violation, or infraction, and 3 years for a felony. Missouri is unusually favorable in two ways. First, the lifetime limits are 2 felonies and 3 misdemeanors/ordinance violations (infractions are unlimited), and convictions from a single course of conduct count as just one — so more people qualify than older figures suggest. Second, once you meet the criteria there is a rebuttable presumption FOR expungement: the PROSECUTOR bears the burden of showing why not. File in the court of the case; the prosecutor has 30 days to object, the court must rule within 6 months, and filing carries NO statutory surcharge — the old $250 was removed (a fee waiver is available for the ordinary civil filing fee). A granted expungement restores your civil rights — voting, office, jury — and counts as a full removal for federal firearms purposes (§ 610.140.9). One honest limit: you must still disclose the expunged offense for certain professional licenses and in banking, insurance, and gaming contexts (§ 610.140.10-.11), and it can still be used as a prior offense; the "answer no" right applies only where no public record remains. If a petition is denied for not meeting the criteria, you cannot refile for one year (§ 610.140.12).',
+          remedy: 'Petition to Expunge (§ 610.140) — presumption in your favor, no statutory surcharge',
+          citation: 'Mo. Rev. Stat. § 610.140.6, .9, .10, .11, .12, .13'
         },
         eligible_dwi_mo: {
           status: 'eligible',
-          title: 'First DWI, 10 Years Clean — This One Can Be Expunged',
-          message: 'This is a route many people do not know exists. A DWI is normally excluded from expungement in Missouri — but a FIRST alcohol-related driving offense is an exception: it can be expunged 10 years after you completed the disposition, provided you have had no further alcohol offenses since. Based on your dates, that appears met. File in the court of the case. The same petitioner-friendly presumption applies once you meet the criteria. Because the DWI rules have specific interplay between statutes, clearmyrecordmo.org and Missouri legal aid are worth using to confirm.',
-          remedy: 'Petition to Expunge a First DWI (§ 610.130/.140) — 10-year track',
-          citation: 'Mo. Rev. Stat. §§ 610.130, 610.140'
+          title: 'First Intoxication Offense, 10 Years On — This One Can Be Expunged',
+          message: 'This is a route many people do not know exists. Intoxication-related offenses are normally excluded from Missouri expungement — but a FIRST intoxication-related traffic or boating offense that was a misdemeanor or a county/city ordinance violation has its own route (§ 610.130): it can be expunged 10 years after the date of your guilty plea or conviction, provided you have had no later intoxication-related convictions and no other alcohol-related enforcement contacts since (an administrative license suspension counts), with none pending. Based on your dates, that appears met, and the grant is mandatory — the court "shall" order it once the criteria are met. This route can be used only ONCE in a lifetime, and it is not open to felony intoxication offenses, commercial-vehicle DUIs, or anyone who holds or must hold a CDL. File in the court of the case; clearmyrecordmo.org and Missouri legal aid are worth using to confirm.',
+          remedy: 'Petition to Expunge a First Intoxication Offense (§ 610.130) — 10-year track, mandatory grant',
+          citation: 'Mo. Rev. Stat. § 610.130'
         },
         waiting_mo: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Missouri\'s expungement waits run from when you completed the disposition: 1 year for a misdemeanor, 3 for a felony, and 10 for a first-DWI. Based on your dates, yours has not run yet. One Missouri-specific nuance worth understanding: the clean period is measured BACKWARD from when you file — you need no other convictions (beyond most traffic) in the year or three years before filing — so the relevant question is your record in the run-up to filing, not just elapsed time since this case.',
-          remedy: 'Wait for the period (measured backward from filing)',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          message: 'Missouri\'s expungement waits run from when you completed the authorized disposition: 1 year for a misdemeanor, ordinance violation, or infraction, 3 years for a felony, and 10 years (from the guilty plea/conviction date) for a first intoxication offense. Based on your dates, yours has not run yet. One Missouri-specific nuance: the clean-conduct period is measured BACKWARD from when you file — you need no other misdemeanor or felony guilty findings in that period (routine traffic-regulation violations under chapters 301-304 and 307 do not count) — so the relevant question is your record in the run-up to filing, not just elapsed time since this case. All fines and restitution must also be paid before the clock is satisfied.',
+          remedy: 'Wait for the period (measured backward from filing), with all obligations paid',
+          citation: 'Mo. Rev. Stat. § 610.140.6'
         },
         waiting_arrest_mo: {
           status: 'waiting',
           title: 'Arrest — 18-Month Mark Not Yet Reached',
-          message: 'An arrest without a charge can be expunged 18 months after the arrest (a 2025 law cut this from 3 years). Based on your dates, that has not run yet. Come back when it has — the process is quick and the presumption favors you.',
-          remedy: 'Wait for the 18-month mark',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          message: 'An arrest that never led to a charge can be expunged 18 months after the arrest (a 2025 law cut this from 3 years), as long as the arrest was for an eligible offense and you have had no guilty findings since. Based on your dates, that has not run yet. Come back when it has — the process is quick, there is no statutory surcharge, and the presumption favors you. (If the arrest rested on false information, the § 610.122 destruction path has no such waiting period — worth asking legal aid about.)',
+          remedy: 'Wait for the 18-month mark (or ask about § 610.122 destruction for a false-information arrest)',
+          citation: 'Mo. Rev. Stat. § 610.140.7'
+        },
+        ineligible_arrest_clean_mo: {
+          status: 'ineligible',
+          title: 'A Later Guilty Finding Blocks the Arrest Expungement',
+          message: 'The 18-month arrest expungement (§ 610.140.7) is available only if you have had no misdemeanor or felony guilty finding SINCE the arrest. Because you have, this particular route is not open right now. Two things are worth knowing rather than stopping here: the newer conviction itself may be expungeable on its own timeline (1 year for a misdemeanor, 3 for a felony) — run this again for it — and if the original arrest rested on false information, the § 610.122 destruction path turns on the arrest itself rather than your later record. clearmyrecordmo.org and Missouri legal aid can map the sequence.',
+          remedy: 'None on the arrest track right now (later guilty finding) — screen the newer conviction, or ask about § 610.122',
+          citation: 'Mo. Rev. Stat. § 610.140.7'
         },
         ineligible_excluded_mo: {
           status: 'ineligible',
           title: 'This Offense Is on Missouri\'s Exclusion List',
-          message: 'Missouri expunges almost everything, but it keeps a specific exclusion list: Class A felonies, "dangerous felonies", felonies causing death, any felony assault, ANY domestic assault, felony kidnapping, sex-registry offenses, most weapons offenses, and CDL-related driving offenses. No waiting period changes that. Because these are precise legal categories — "dangerous felony" in particular is a defined term — if you are not certain your offense is actually on the list, it is worth confirming rather than assuming. clearmyrecordmo.org and Missouri legal aid can check it against the current § 610.140.3 list.',
-          remedy: 'None (Excluded Offense) — confirm against § 610.140.3',
+          message: 'Missouri expunges almost everything, but § 610.140.3 keeps a specific exclusion list: Class A felonies; "dangerous felonies" (a defined term, § 556.061); felonies with a death element; ANY felony assault; domestic assault at ANY level; felony kidnapping; sex-offender-registration and enumerated chapter 566 offenses; intoxication-related traffic and boating offenses (other than the first-offence § 610.130 route); and CDL-holder motor-vehicle violations. Weapons offenses under § 571.030 are also excluded — but NOT unlawful carrying (§ 571.030.1(1)) with a guilty finding before January 1, 2017, nor § 571.030.1(4); those stay eligible. Because these are precise legal categories, if you are not certain your offense is genuinely on the list it is worth confirming. clearmyrecordmo.org and Missouri legal aid can check it against the current § 610.140.3 text.',
+          remedy: 'None (Excluded Offense) — confirm against § 610.140.3, including the pre-2017 weapons exception',
           citation: 'Mo. Rev. Stat. § 610.140.3'
         },
         ineligible_dwi_mo: {
           status: 'ineligible',
-          title: 'A Repeat DWI Cannot Be Expunged',
-          message: 'Missouri allows expunging only a FIRST alcohol-related driving offense (after 10 years with nothing further). Because this was not your first, or there have been further alcohol offenses since, the DWI expungement route is not open. This is a firm rule. If you have other, non-alcohol offenses on your record, those may well be expungeable — run this again for them. clearmyrecordmo.org can confirm your DWI history and what else might qualify.',
-          remedy: 'None (Repeat DWI) — other offenses may still qualify',
+          title: 'A Repeat or Felony Intoxication Offense Cannot Be Expunged',
+          message: 'Missouri\'s § 610.130 route reaches only a FIRST intoxication-related traffic or boating offense that was a misdemeanor or ordinance violation — after 10 years with no later intoxication convictions and no other alcohol-related enforcement contacts. Because this was not your first, or there has been later intoxication activity since, that route is not open — and a felony intoxication offense is never eligible. This is a firm rule. If you have other, non-intoxication offenses on your record, those may well be expungeable — run this again for them. clearmyrecordmo.org can confirm your history and what else might qualify.',
+          remedy: 'None (repeat or felony intoxication offense) — other offenses may still qualify',
           citation: 'Mo. Rev. Stat. §§ 610.130, 610.140.3'
+        },
+        ineligible_dwi_cdl_mo: {
+          status: 'ineligible',
+          title: 'A CDL Holder Cannot Expunge an Intoxication Offense',
+          message: 'Missouri\'s first-offence intoxication expungement (§ 610.130) has a total exclusion for commercial driver license holders: if you hold, or are required to hold, a CDL, the route is not available — regardless of how long ago the offense was or how clean your record has been since (§ 610.130.4). This is a hard rule tied to federal commercial-driving requirements. If you have other, non-intoxication offenses that are not tied to a CDL, those may still be expungeable — run this again for them. clearmyrecordmo.org and Missouri legal aid can confirm.',
+          remedy: 'None (CDL holder, § 610.130.4) — other offenses may still qualify',
+          citation: 'Mo. Rev. Stat. § 610.130.4'
         },
         ineligible_count_mo: {
           status: 'ineligible',
           title: 'You Have Reached Missouri\'s Lifetime Limits',
-          message: 'Missouri caps lifetime expungements at 2 felonies and 3 misdemeanors or ordinance violations (the 2025 law raised these from 1 and 2 — so double-check, because if you were relying on the old numbers you may actually have more room than you think). Based on what you told us, you are at or over the current limits. This is worth confirming carefully with someone, because the 2025 law also changed HOW offenses are counted — separate crimes in one case are no longer automatically treated as one, which cuts both ways. clearmyrecordmo.org has a law-change page built for exactly this, and Missouri legal aid can count your record properly.',
-          remedy: 'Consult Legal Aid (Lifetime Limits) — the 2025 counting change may help',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          message: 'Missouri caps lifetime expungements at 2 felonies and 3 misdemeanors or ordinance violations (infractions are not capped). Based on what you told us, you are at the limit for this type. Two things are worth confirming with a person before you take this as final. Convictions from a single course of conduct count as just ONE toward the limit (§ 610.140.2(3)), so you may have used up less of your allowance than it seems. And if any of your offenses were infractions, those do not count against the limit at all. clearmyrecordmo.org has a page built for exactly this counting, and Missouri legal aid can count your record properly.',
+          remedy: 'Consult Legal Aid (Lifetime Limits) — single-course-of-conduct offenses count as one; infractions are uncapped',
+          citation: 'Mo. Rev. Stat. § 610.140.2(3), .13'
         },
         complex_count_mo: {
           status: 'complex',
           title: 'Your Record Count Needs Checking',
-          message: 'Missouri lets you expunge up to 2 felonies and 3 misdemeanors in a lifetime, and the 2025 law changed both the numbers and the counting method, so where you stand is genuinely worth checking rather than guessing. Since you are not sure of your count, we are not going to assume. clearmyrecordmo.org has a page specifically on the law change and its counting rules, and Missouri legal aid can pull your record and count it against the current limits.',
+          message: 'Missouri lets you expunge up to 2 felonies and 3 misdemeanors/ordinance violations in a lifetime (infractions are unlimited), and there is a rule that often helps: convictions from a single course of conduct count as just ONE (§ 610.140.2(3)). Since you are not sure of your count, we are not going to guess. clearmyrecordmo.org has a page on the counting rules, and Missouri legal aid can pull your record and count it against the current limits.',
           remedy: 'Get Your Record Counted (clearmyrecordmo.org / legal aid)',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          citation: 'Mo. Rev. Stat. § 610.140.2(3), .13'
+        },
+        ineligible_clean_mo: {
+          status: 'ineligible',
+          title: 'A Recent Guilty Finding Breaks the Clean Period',
+          message: 'Missouri\'s expungement requires that you have no OTHER misdemeanor or felony guilty finding during the waiting period, measured backward from when you file — 1 year for a misdemeanor, ordinance violation, or infraction, 3 years for a felony (§ 610.140.6(2)). Routine traffic-regulation violations (chapters 301-304 and 307) do not count. Because you have had such a guilty finding inside that window, the clock effectively has not run clean yet. This is a "not yet," not a permanent no: once enough clean time has passed since your most recent guilty finding, this offense may qualify. clearmyrecordmo.org and Missouri legal aid can time it with you.',
+          remedy: 'Wait until the clean period (1 or 3 years) runs with no other guilty findings',
+          citation: 'Mo. Rev. Stat. § 610.140.6(2)'
         },
         complex_level_mo: {
           status: 'complex',
           title: 'We Need the Offense Level',
-          message: 'In Missouri the wait is 1 year for a misdemeanor and 3 for a felony. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and courts.mo.gov has self-help forms. clearmyrecordmo.org can also help you read your record.',
+          message: 'In Missouri the wait is 1 year for a misdemeanor, ordinance violation, or infraction, and 3 years for a felony — and infractions are not counted against the lifetime limits. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and courts.mo.gov has self-help forms. clearmyrecordmo.org can also help you read your record.',
           remedy: 'Get Your Offense Level First (court paperwork / courts.mo.gov)',
-          citation: 'Mo. Rev. Stat. § 610.140'
+          citation: 'Mo. Rev. Stat. § 610.140.6'
         }
       }
     },
@@ -8309,16 +8447,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Missouri expungement petition (courts.mo.gov self-help forms)',
           formUrl: 'https://www.courts.mo.gov/page.jsp?id=98230',
           steps: [
-            'Confirm your offense is not on the § 610.140.3 exclusion list and that you are within the lifetime limits (2 felonies / 3 misdemeanors, as of 2025).',
+            'Confirm your offense is not on the § 610.140.3 exclusion list and that you are within the lifetime limits (2 felonies / 3 misdemeanors-ordinance; infractions are uncapped; single-course offenses count as one).',
             'File in the court of the case; the prosecutor has 30 days to object.',
-            'The court must rule within 6 months. When you meet the criteria, the presumption is FOR expungement.',
-            'A fee waiver is available by in-forma-pauperis motion if you cannot afford the fee.'
+            'The court must rule within 6 months. When you meet the criteria, the presumption is FOR expungement (the prosecutor bears the burden).',
+            'There is no statutory surcharge (the old $250 was removed by SB 754); a fee waiver is available for the ordinary civil filing fee by in-forma-pauperis motion.'
           ],
-          // null: Wave 4 gives a FEE CONFLICT ($250 surcharge vs standard circuit
-          // fee) flagged as a phone target.
-          fees: null,
-          // NOT null: the in-forma-pauperis waiver is a named mechanism.
-          feeWaiver: 'A fee waiver is available by in-forma-pauperis motion.',
+          fees: 'No statutory expungement surcharge (the $250 charge was removed by SB 754, effective 1/1/2025); only the ordinary civil filing fee applies — amount not confirmed here.',
+          feeWaiver: 'A fee waiver for the ordinary civil filing fee is available by in-forma-pauperis motion.',
           courtContact: 'The court of the case'
         }
       },

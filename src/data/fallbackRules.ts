@@ -5940,8 +5940,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   GA: {
     code: 'GA',
     name: 'Georgia',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
     terminology:
       'Georgia does not use the word "expunge". Its remedy is RECORD RESTRICTION — hiding your '
@@ -5965,39 +5966,44 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         kind: 'effective',
         note: 'Arrests on/after this date that end without conviction are restricted automatically by GCIC — with documented reporting gaps, so verification of the GCIC report is advised. Pre-2013 arrests require applying to the arresting agency.',
       },
+      {
+        label: 'HB 1201 — trafficking-survivor restriction track',
+        date: '2024-04-24',
+        kind: 'effective',
+        note: 'Added O.C.G.A. § 35-3-37(j)(6)-(7): a survivor of human trafficking may petition the sentencing court to restrict a conviction, First Offender (§ 42-8-60), or conditional-discharge (§ 16-13-2) sentence for an offense committed while a victim (§ 16-5-46) — filed under seal, no fee.',
+      },
     ],
     openQuestions: [
       {
         question:
-          'How complete is the automatic restriction of post-2013 non-conviction arrests in practice? Wave 3 flags documented reporting gaps — the UI says "should be automatic; verify your GCIC report". Confirm with GBI/GCIC how a person checks and corrects a missed restriction.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Wave 3 flags both as varying by agency/county with no statewide fee. Phone targets.',
+          'What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Statute-verified 7/18 confirms there is no statewide fee; both vary by agency/county. Phone targets.',
         blocksFields: ['resources.remedies.restriction.fees', 'resources.remedies.restriction.feeWaiver'],
       },
       {
         question:
-          'Confirm the § 35-3-37(j)(4)(A) exclusion list for misdemeanour conviction restriction: DUI, family-violence battery (unless under 21 at arrest), sex offences, crimes against minors, and serious traffic offences. The tree asks a person whether their offence is on this list.',
+          'How complete is the automatic restriction of post-2013 non-conviction arrests in practice? Documented reporting gaps remain — the UI says "should be automatic; verify your GCIC report". Confirm with GBI/GCIC how a person checks and corrects a missed restriction.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the First Offender Act and retroactive First Offender mechanics: deferred adjudication once, judge-approved, and the ability to apply retroactively for old cases. Wave 3 names these as additional felony-adjacent routes but the tree does not yet branch on them — disclosed in the felony result.',
+          'Can a COMPLETED § 42-8-60 First Offender record be further restricted/sealed? § 42-8-60 exonerates but does not restrict, and a plain FO completion is not on § 35-3-37(h)(2)\'s automatic-restriction list (only § 16-13-2 drug and § 3-3-23.1 alcohol first-offender completions are). Whether a separate restriction route exists is unsettled — GJP call target.',
         blocksFields: [],
       },
       {
         question:
-          'How are completed diversions treated, and how does the Survivors First Act track (trafficking survivors — vacate or restrict+seal) work? Standing call-sheet question plus a named niche track.',
+          'How does the § 42-8-66 retroactive-First-Offender prosecutor-consent requirement play out in practice? Sumrall (2024) and Ballard (2025) make consent a threshold; confirm with GJP how often prosecutors consent and any local practice for seeking it.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'O.C.G.A. § 35-3-37 (record restriction and sealing)', url: null, retrievedOn: null },
-      { id: 'O.C.G.A. § 35-3-37(j)(4)(A) (exclusion list for misdemeanour conviction restriction)', url: null, retrievedOn: null },
-      { id: 'SB 288 "Second Chance Act" (2021 — misdemeanour conviction restriction)', url: null, retrievedOn: null },
-      { id: 'Georgia First Offender Act (deferred adjudication; retroactive First Offender)', url: null, retrievedOn: null },
+      { id: 'O.C.G.A. § 35-3-37 (record restriction; (j)(4)(B) misdemeanor exclusion list; (h)(2) automatic-restriction list; (j)(6)-(7) trafficking-survivor track)', url: 'https://law.justia.com/codes/georgia/title-35/chapter-3/article-2/section-35-3-37/', retrievedOn: '2026-07-18' },
+      { id: 'O.C.G.A. § 42-8-60 (First Offender; (e) exoneration, (h) discharge notation, (i) exceptions, (l) once per lifetime; (j)(10) bars DUI from First Offender sentencing)', url: 'https://law.justia.com/codes/georgia/title-42/chapter-8/article-3/section-42-8-60/', retrievedOn: '2026-07-18' },
+      { id: 'O.C.G.A. § 42-8-62 (First Offender discharge; clerk transmits the discharge to GCIC within 30 days)', url: 'https://law.justia.com/codes/georgia/title-42/chapter-8/article-3/section-42-8-62/', retrievedOn: '2026-07-18' },
+      { id: 'O.C.G.A. § 42-8-66 (retroactive First Offender; (d) preponderance standard, (h) no filing fee; prosecutor consent a threshold requirement)', url: 'https://law.justia.com/codes/georgia/title-42/chapter-8/article-3/section-42-8-66/', retrievedOn: '2026-07-18' },
+      { id: 'O.C.G.A. § 40-6-391 (DUI — a "serious traffic offense" in Title 40 Ch. 6 Art. 15, reached by § 35-3-37(j)(4)(B)(xviii))', url: 'https://law.justia.com/codes/georgia/title-40/chapter-6/article-15/section-40-6-391/', retrievedOn: '2026-07-18' },
+      { id: 'State v. C.S.B., 250 Ga. 261 (1982) (First Offender discharge is exoneration, not expungement — the record stays public)', url: null, retrievedOn: null },
+      { id: 'Sumrall v. State, 320 Ga. 617 (2024) (retroactive First Offender properly denied without a hearing absent prosecutor consent)', url: null, retrievedOn: null },
+      { id: 'Ballard v. State, 321 Ga. 352 (2025) (prosecutor consent is a threshold requirement for retroactive First Offender)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -6007,11 +6013,35 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conviction_level_ga' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'trafficking_check_ga' },
             { label: 'Dismissed / Charges dropped / Not prosecuted', value: 'dismissed', next: 'arrest_era_ga' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'arrest_era_ga' },
-            { label: 'First Offender / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'First Offender sentence / Diversion', value: 'deferred', next: 'fo_outcome_ga' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // Trafficking-survivor gate (HB 1201, § 35-3-37(j)(6)-(7)) sits on the
+        // conviction path. It is an ASKED node — trafficking is a fact the person
+        // supplies, never a disposition value (ConvictionRecord.disposition is a
+        // shared 50-state schema).
+        trafficking_check_ga: {
+          type: 'boolean',
+          text: 'Was this offense committed while you were a victim of human trafficking (O.C.G.A. § 16-5-46)?',
+          yes: 'trafficking_survivor_ga',
+          no: 'conviction_level_ga'
+        },
+        // How a First Offender / conditional-discharge sentence ended decides
+        // everything: a completed discharge exonerates (§ 42-8-60(e)), a revocation
+        // becomes an ordinary conviction (§ 42-8-60(d)).
+        fo_outcome_ga: {
+          type: 'choice',
+          text: 'How did the First Offender (or conditional-discharge) sentence end?',
+          options: [
+            { label: 'I completed it and was discharged', value: 'completed', next: 'fo_completed_ga' },
+            { label: 'It was revoked — I was adjudicated guilty', value: 'revoked', next: 'conviction_level_ga' },
+            { label: 'I was never told I was eligible for First Offender, or I was sentenced to a year or less between March 18, 1968 and October 31, 1982', value: 'retroactive', next: 'fo_retroactive_ga' },
+            { label: 'The offense was committed while I was a victim of human trafficking', value: 'trafficking', next: 'trafficking_survivor_ga' },
+            { label: 'I\'m not sure how it ended', value: 'unsure', next: 'fo_unsure_ga' }
           ]
         },
         // Non-convictions: pre/post 2013 fork.
@@ -6031,11 +6061,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ga' }
           ]
         },
+        // § 35-3-37(j)(4)(B) exclusion list — a CHOICE, not a yes/no, because two
+        // cases inside the list route back to eligible: misdemeanor shoplifting /
+        // refund fraud (carved out of the theft exclusion) and family-violence
+        // assault/battery where the person was under 21 at arrest or sentenced as
+        // a youthful offender.
         misd_excluded_ga: {
-          type: 'boolean',
-          text: 'Was the offense any of these: a DUI, family-violence battery, a sex offense, a crime against a minor, or a serious traffic offense?',
-          yes: 'ineligible_excluded_ga',
-          no: 'misd_date_ga'
+          type: 'choice',
+          text: 'Georgia bars a specific list of misdemeanors from restriction (O.C.G.A. § 35-3-37(j)(4)(B)) — family-violence assault/battery/stalking, sexual offenses, offenses against minors, theft, obstructing a 911 call, being a Peeping Tom, and DUI or other serious traffic offenses, among others. Which best describes this one?',
+          options: [
+            { label: 'None of those — an ordinary misdemeanor', value: 'none', next: 'misd_date_ga' },
+            { label: 'Misdemeanor shoplifting or refund fraud', value: 'shoplifting_refund', next: 'misd_date_ga' },
+            { label: 'Family-violence simple assault, simple battery, or battery — and I was under 21 at the time of arrest, or sentenced as a youthful offender', value: 'fv_under21', next: 'misd_date_ga' },
+            { label: 'Yes — one of the excluded offenses on that list', value: 'excluded', next: 'ineligible_excluded_ga' }
+          ]
         },
         misd_date_ga: {
           type: 'date',
@@ -6056,12 +6095,33 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Georgia Justice Project)',
           citation: 'O.C.G.A. § 35-3-37 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
+        fo_completed_ga: {
+          status: 'eligible',
+          title: 'First Offender Completed — You Were Exonerated by Law',
+          message: 'If you completed a First Offender sentence and were discharged, Georgia treats that discharge as automatic: you were "completely exonerated" and are not considered to have a criminal conviction (O.C.G.A. § 42-8-60(e)). Two exceptions to know: it does not remove a sex-offender registration requirement, and the discharge can still be considered in the employment contexts named in § 42-8-63.1 (§ 42-8-60(i)). One thing this is NOT: exoneration is not the same as restriction or sealing. Under State v. C.S.B., 250 Ga. 261 (1982), a First Offender discharge is not an expungement — the record stays public, carrying the § 42-8-60(h) discharge notation, and a plain § 42-8-60 completion is not on § 35-3-37(h)(2)\'s automatic-restriction list (only first-offender completions under § 16-13-2 (drugs) and § 3-3-23.1 (alcohol) are named there). Two practical steps: confirm the discharge was actually entered — the clerk must transmit it to GCIC within 30 days (§ 42-8-62) — and, because whether a completed First Offender record can be further restricted is unsettled, ask the Georgia Justice Project. First Offender treatment is available only once in a lifetime (§ 42-8-60(l)).',
+          remedy: 'Confirm the discharge was recorded (§ 42-8-62); ask GJP about restricting a completed First Offender record',
+          citation: 'O.C.G.A. § 42-8-60(e), (h), (i), (l); § 42-8-62; § 35-3-37(h)(2); State v. C.S.B., 250 Ga. 261 (1982)'
+        },
+        fo_retroactive_ga: {
           status: 'complex',
-          title: 'First Offender and Diversion Cases Need a Person',
-          message: 'Georgia has strong routes for cases that were not straight convictions — the First Offender Act (deferred adjudication, once, judge-approved) and even retroactive First Offender treatment for old cases — but exactly how yours is treated for restriction depends on the details, and we would rather point you to someone than guess. The Georgia Justice Project runs statewide clinics and wrote much of this law; they are the right call.',
-          remedy: 'Consult Legal Aid (First Offender / Diversion Not Yet Screened)',
-          citation: 'O.C.G.A. § 35-3-37; Georgia First Offender Act (treatment not yet detailed)'
+          title: 'Retroactive First Offender May Be Open — but the Prosecutor Must Consent',
+          message: 'Georgia lets some people ask a court to grant First Offender treatment after the fact — if you were eligible but were never told about it at sentencing, or were sentenced to a year or less between March 18, 1968 and October 31, 1982 (O.C.G.A. § 42-8-66). There is no filing fee (§ 42-8-66(h)). But there is a threshold you cannot skip: the prosecuting attorney must consent. The Georgia Supreme Court has held that a retroactive petition filed without the prosecutor\'s consent is properly denied without even a hearing (Sumrall v. State, 320 Ga. 617 (2024); Ballard v. State, 321 Ga. 352 (2025)). If the prosecutor does consent, the court then decides by a preponderance of the evidence whether retroactive treatment serves "the ends of justice and the welfare of society" (§ 42-8-66(d)). Because that consent is decisive, this is a route to walk with a lawyer — the Georgia Justice Project runs free statewide clinics.',
+          remedy: 'Petition for retroactive First Offender (§ 42-8-66) — secure the prosecutor\'s consent first',
+          citation: 'O.C.G.A. § 42-8-66(d), (h); Sumrall v. State, 320 Ga. 617 (2024); Ballard v. State, 321 Ga. 352 (2025)'
+        },
+        fo_unsure_ga: {
+          status: 'complex',
+          title: 'First Offender Outcome Decides Everything — Get the Sentencing Order',
+          message: 'Whether a First Offender case helps or hurts turns on one fact: was an adjudication of guilt ever entered? If you completed it and were discharged, you were exonerated by law; if it was revoked, it became an ordinary conviction. Since you are not sure which happened, we are not going to guess — your sentencing order and discharge paperwork will say. The Georgia Justice Project can read your record with you and tell you which path you are on.',
+          remedy: 'Get your sentencing / discharge order (Georgia Justice Project can help read it)',
+          citation: 'O.C.G.A. § 42-8-60 (a First Offender discharge vs. an adjudication of guilt decides the path)'
+        },
+        trafficking_survivor_ga: {
+          status: 'complex',
+          title: 'A Trafficking-Survivor Restriction Track May Apply',
+          message: 'Georgia opened a distinct path for people whose offense was committed while they were a victim of human trafficking (O.C.G.A. § 35-3-37(j)(6)-(7), added by HB 1201 effective April 24, 2024). It can reach a conviction as well as a First Offender (§ 42-8-60) or conditional-discharge (§ 16-13-2) sentence, for an offense tied to trafficking (§ 16-5-46). You petition the sentencing court on the form the Attorney General provides, filed under seal, with no fee. You do not have to prove your victim status with documentation, though documentation creates a rebuttable presumption in your favor. If the prosecutor consents in writing — or simply does not respond within 30 days — the court restricts the record without a hearing; if the prosecutor objects, you must show your entitlement by a preponderance of the evidence, and a hearing is set within 90 days if you request one. Because this is a newer, sensitive track, do it with an advocate — the Georgia Justice Project can help.',
+          remedy: 'Trafficking-survivor petition to the sentencing court (§ 35-3-37(j)(6)-(7)) — under seal, no fee',
+          citation: 'O.C.G.A. § 35-3-37(j)(6)-(7) (HB 1201, eff. 2024-04-24); § 16-5-46'
         },
         eligible_auto_restrict_ga: {
           status: 'eligible',
@@ -6093,10 +6153,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         ineligible_excluded_ga: {
           status: 'ineligible',
-          title: 'This Misdemeanor Is Excluded From Restriction',
-          message: 'Georgia\'s Second Chance Act excludes certain misdemeanors from restriction: DUI, family-violence battery (unless you were under 21 at the time of arrest), sex offenses, crimes against minors, and serious traffic offenses (§ 35-3-37(j)(4)(A)). No waiting period changes that. Two things worth checking rather than assuming: whether your offense is genuinely on that list, since these are specific categories; and, for family-violence battery, whether the under-21-at-arrest exception applies to you. The Georgia Justice Project can confirm both, and can advise on whether a pardon route exists.',
-          remedy: 'None (Excluded Misdemeanor) — confirm with GJP; ask about the under-21 exception',
-          citation: 'O.C.G.A. § 35-3-37(j)(4)(A)'
+          title: 'This Misdemeanor Is on Georgia\'s Exclusion List',
+          message: 'Georgia\'s Second Chance Act restriction does not reach the misdemeanors listed in O.C.G.A. § 35-3-37(j)(4)(B): family-violence simple assault, simple battery, or battery (each with an exception if you were under 21 at arrest or sentenced as a youthful offender); family-violence stalking; violating a family-violence protective order; child molestation; enticing a child; improper sexual contact (§ 16-6-5.1); public indecency (§ 16-6-8(b)); keeping a place of prostitution; pimping; pandering by compulsion; sexual battery; obstructing an emergency (911) call; being a Peeping Tom; offenses related to minors (Title 16, Ch. 12, Art. 3, Part 2); theft (Title 16, Ch. 8) — but NOT misdemeanor shoplifting or refund fraud, which stay eligible; and serious traffic offenses (Title 40, Ch. 6, Article 15). A DUI lands here as a serious traffic offense: the chain is § 35-3-37(j)(4)(B)(xviii) → Title 40, Ch. 6, Article 15 → § 40-6-391 (this is separate from § 42-8-60(j)(10), which bars DUI from First Offender sentencing). No waiting period changes this. Two things worth confirming rather than assuming: whether your offense is genuinely one of these categories; and, for a family-violence assault or battery, whether the under-21-at-arrest or youthful-offender exception applies to you. The Georgia Justice Project can check both and advise whether a pardon route exists.',
+          remedy: 'None (Excluded Misdemeanor) — confirm with GJP; ask about the under-21 exception and the shoplifting / refund-fraud carve-outs',
+          citation: 'O.C.G.A. § 35-3-37(j)(4)(B) (DUI via (j)(4)(B)(xviii) → Title 40 Ch. 6 Art. 15 → § 40-6-391)'
         },
         waiting_ga: {
           status: 'waiting',

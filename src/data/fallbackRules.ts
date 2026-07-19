@@ -4638,95 +4638,89 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // VIRGINIA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  // VIRGINIA — STATUTE-VERIFIED 2026-07-18. Diana read the full text of Va. Code
+  // ch. 23.1 (§ 19.2-392.2) and ch. 23.2 (§§ 19.2-392.5 through 19.2-392.17) at
+  // law.lis.virginia.gov, incl. the 2025 cc. 634/671 renumbering and 2026 c. 1127.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md + Diana's 7/18 reads.
   //
-  // HANDLE WITH CARE: the sealing regime took effect July 1, 2026 — two weeks
-  // before the package was drafted. Before it, Virginia had essentially NO
-  // conviction relief. Automatic processes are only spinning up, so every
-  // automatic result carries a rollout caveat, and secondary sources are full
-  // of stale 2025 effective dates.
+  // HANDLE WITH CARE: the sealing regime took effect July 1, 2026. Automatic
+  // processes are still spinning up, so every automatic result carries a rollout
+  // caveat, and secondary sources are full of stale 2025 effective dates.
   //
-  // TWO regimes coexist: SEALING (new, convictions, § 19.2-392.5 et seq.) and
-  // EXPUNGEMENT (old, non-convictions, § 19.2-392.2 — still exists). Only
-  // offences on/after Jan 1, 1986 are sealable — a boolean gate, because the
-  // offence date predates the disposition date the form collects.
+  // THREE things coexist: automatic SEALING (§ 19.2-392.6 criteria, § 392.7
+  // monthly sweep), PETITION sealing (§ 392.12, plus the lighter § 392.12:1
+  // track for a few offences), and EXPUNGEMENT (non-convictions, § 392.2 — being
+  // rewritten by 2026 c. 1127, effective Dec 1, 2026). Only offences on/after
+  // Jan 1, 1986 are sealable — EXCEPT simple marijuana possession (former
+  // § 18.2-250.1), sealed by operation of law regardless of date (§ 392.6:1).
   //
-  // The felony petition gate is a whole-record test (no Class 1-2 ever; no
-  // Class 3-4 in 20 years; no felony in 10 years) that the record model cannot
-  // compute — asked, unsure -> hedge. FIFTH state on the count-logic backlog.
+  // The felony petition gate is a whole-record test the record model cannot
+  // compute — asked, unsure -> hedge.
   // ==========================================================================
   VA: {
     code: 'VA',
     name: 'Virginia',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
     terminology:
-      'Virginia now has two different remedies. SEALING is the new one (effective July 1, 2026, '
-      + 'Va. Code § 19.2-392.5 and following) and it is what covers convictions — before this law, '
-      + 'Virginia had almost no way to clear a conviction at all. EXPUNGEMENT is the older remedy '
-      + '(§ 19.2-392.2) and still exists, but only for non-convictions. Because the sealing law is '
-      + 'brand new, its automatic parts are still being switched on: eligible does not yet mean '
-      + 'sealed, and any date you see on another website may be wrong. Only records with offense '
-      + 'dates on or after January 1, 1986 can be sealed.',
+      'Virginia has two remedies, and the law is a rolling sequence: the July 2025 acts (cc. 634/671) '
+      + 'restructured the chapter, the July 1, 2026 sealing regime went live, and on December 1, 2026 '
+      + 'the expungement statute expands (2026 c. 1127). SEALING (Va. Code § 19.2-392.5 and following) '
+      + 'covers convictions — before this law, Virginia had almost no way to clear one. EXPUNGEMENT '
+      + '(§ 19.2-392.2) is the older remedy and still exists for non-convictions. Because the sealing '
+      + 'law is brand new, its automatic parts are still being switched on: eligible does not yet mean '
+      + 'sealed, and a date on another website may be wrong. Most records need an offense date on or '
+      + 'after January 1, 1986 to be sealed — simple marijuana possession is the exception. Separately, '
+      + 'non-criminal Title 46.2 traffic infractions are deemed sealed 11 years after final disposition '
+      + 'with no filing (§ 19.2-392.17).',
     keyDates: [
       {
         label: 'Comprehensive sealing regime took effect (SB 1466 / HB 2723)',
         date: '2026-07-01',
         kind: 'effective',
-        note: 'Two weeks old as of the Wave 2 draft. The biggest recent second-chance-law change in the country. Automatic processes are spinning up — verify rollout status before any UI copy claims sealing is happening automatically now.',
+        note: 'The biggest recent second-chance-law change in the country. Automatic processes are spinning up — verify rollout status before any UI copy claims sealing is happening automatically now.',
       },
       {
         label: 'Earliest sealable offense date',
         date: '1986-01-01',
         kind: 'effective',
-        note: 'Only records with offense dates on or after this date can be sealed.',
+        note: 'Most records need an offense date on or after this date to be sealed. Exception: simple marijuana possession (former § 18.2-250.1) is sealed by operation of law regardless of date (§ 19.2-392.6:1).',
+      },
+      {
+        label: 'Expungement statute rewrite takes effect (2026 c. 1127)',
+        date: '2026-12-01',
+        kind: 'effective',
+        note: 'The December version of § 19.2-392.2 broadens expungement to any disposition where the person was "not ultimately convicted" (unless a facts-sufficient stipulation/finding was made), allows one petition to cover multiple charges from separate occurrences, softens the standard to "potential manifest injustice," adds that a prior conviction alone cannot defeat the petition, and lets appellants proceed under a pseudonym.',
       },
     ],
     openQuestions: [
       {
         question:
-          'What is the current automatic-sealing rollout status? The regime took effect July 1, 2026 and automatic processes are only spinning up. Verify on vsp.virginia.gov (the State Police petition-based-record-sealing page) and vscc.virginia.gov before any UI copy claims records are being sealed automatically now. Trust only VSP, the Crime Commission, and the statute — secondary sources carry stale 2025 dates.',
+          'What is the current automatic-sealing rollout status? The regime took effect July 1, 2026 and automatic processes are only spinning up. Verify on vsp.virginia.gov (the State Police record-sealing page) and vscc.virginia.gov before any UI copy claims records are being sealed automatically now. Trust only VSP, the Crime Commission, and the statute — secondary sources carry stale 2025 dates.',
         blocksFields: [],
       },
       {
         question:
-          'Are petition sealing filings genuinely free with no fingerprint card, per the 2025 amendments? Wave 2 says yes and calls it a UI headline if confirmed — verify on the Circuit Court\'s own instructions and by phone. This is one of the most user-relevant facts in the state.',
-        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver', 'resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the exact lifetime-limit mechanics in § 19.2-392.12: Wave 2 says 2 lifetime sealing petitions but flags the precise mechanics. The tree discloses the limit in prose but cannot count a person\'s prior petitions.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the automatic misdemeanor list in § 19.2-392.7: petit larceny, shoplifting, trespass variants, disorderly conduct, misdemeanor marijuana distribution — sealed 7 years after conviction if no other CCRE-reportable conviction in that window (traffic infractions do not count against). The tree asks a person whether their offense is on this list.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the full § 19.2-392.12 petition exclusion list and the felony gating: no Class 1-2 felony ever, no Class 3-4 felony in 20 years, no felony of any kind in 10 years, 10 years clean, drug/alcohol convictions require a rehabilitation showing. The tree asks a person to self-assess the felony-history gate; the exact provisions need confirming.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'How are DEFERRED dispositions treated under the new sealing regime? Not covered in Wave 2 — standing call-sheet question. The tree hedges deferrals.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the felony non-conviction path: Wave 2 says a felony charge that ended without conviction is sealable at conclusion WITH the defendant\'s request and the Commonwealth\'s Attorney\'s concurrence, or via old-regime expungement otherwise. The tree routes felony non-convictions to a result that explains both; confirm the concurrence requirement.',
+          'Are Circuit Court clerks circulating a § 19.2-392.12:1 petition form yet, or are petitioners drafting their own? The 12:1 track is new and lighter (free, 7 years, no manifest-injustice element); the statute is clear but the local filing mechanics may not have caught up. Phone-verify with a Circuit Court clerk.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Va. Code § 19.2-392.5 et seq. (record sealing — new regime, eff. July 1, 2026)', url: null, retrievedOn: null },
-      { id: 'Va. Code § 19.2-392.7 (automatic sealing — misdemeanour list; 7-year rule)', url: null, retrievedOn: null },
-      { id: 'Va. Code § 19.2-392.11 (automatic sealing provisions)', url: null, retrievedOn: null },
-      { id: 'Va. Code § 19.2-392.12 (petition sealing; felony gating; exclusions; lifetime limit)', url: null, retrievedOn: null },
-      { id: 'Va. Code § 19.2-392.2 (expungement — old regime, non-convictions)', url: null, retrievedOn: null },
+      { id: 'Va. Code § 19.2-392.2 (expungement — non-convictions; rewritten by 2026 c. 1127 eff. Dec 1, 2026)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.2/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.5 (sealing — definitions and general provisions; fines/costs do not block sealing (F))', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.5/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.6 (automatic-sealing ELIGIBILITY criteria — (A) offense list, (B) 7-year/no-CCRE-conviction rule, (C) same-day companion-conviction bar)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.6/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.6:1 (simple marijuana possession, former § 18.2-250.1 — sealed by operation of law, no order, regardless of offense date; (B) DMV federal-retention lag)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.6:1/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.7 (automatic-sealing PROCESS — monthly State Police sweep against the § 392.6(A)-(C) criteria; (B) records DSP cannot determine electronically)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.7/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.8 (sealing at disposition — acquittal or dismissal with prejudice; (A) misdemeanours unless the person objects, (B) felonies on oral request + Commonwealth\'s Attorney concurrence, (D) denial without prejudice, § 392.2 stays open)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.8/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.10 (effect of sealing)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.10/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.11 (automatic sealing of non-convictions — annual sweep; zero CCRE-reportable convictions on the whole record + no arrest/charge in 3 years; excludes facts-sufficient deferred dismissals)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.11/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.12 (petition sealing; (B) no court fees, (C) two lifetime grants, (E) CCRE electronic forwarding, (F) anchors/restitution, (L) exclusion list)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.12/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.12:1 (lighter petition track — § 4.1-305 and § 18.2-265.3(A); (C) free, (D) same-day-companion bar, (E) does not count toward the two § 392.12 grants, (I) 7-year conviction-free showing, court SHALL seal)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.12:1/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.13 (sealing procedure — hearings, orders)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.13/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.16 (dissemination and access to sealed records)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.16/', retrievedOn: '2026-07-18' },
+      { id: 'Va. Code § 19.2-392.17 (non-criminal Title 46.2 traffic infractions — deemed sealed 11 years after final disposition, no filing)', url: 'https://law.lis.virginia.gov/vacode/title19.2/section19.2-392.17/', retrievedOn: '2026-07-18' },
       { id: 'SB 1466 / HB 2723 (comprehensive sealing regime)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -4740,7 +4734,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'offense_1986_va' },
             { label: 'Dismissed', value: 'dismissed', next: 'nonconviction_va' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_va' },
-            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            // §§ 19.2-392.12(A) and 19.2-392.12:1(A) both expressly cover a
+            // "charge deferred and dismissed" — same petition flow as convictions,
+            // clock anchored on the dismissal date (§ 392.12(F)(2)(i)).
+            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'offense_1986_va' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
@@ -4748,30 +4745,51 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'boolean',
           text: 'Was the offense committed on or after January 1, 1986?',
           yes: 'excluded_va',
+          no: 'mj_pre1986_va'
+        },
+        // Marijuana carve-out from the pre-1986 hard line — former § 18.2-250.1 is
+        // sealed by operation of law regardless of offense date (§ 19.2-392.6:1).
+        mj_pre1986_va: {
+          type: 'boolean',
+          text: 'Was this a simple marijuana possession offense (former § 18.2-250.1)?',
+          yes: 'sealed_by_law_mj_va',
           no: 'ineligible_pre1986_va'
         },
+        // Exclusion gate scoped to the PETITION track — the list is § 19.2-392.12(L).
         excluded_va: {
           type: 'boolean',
-          text: 'Was the offense any of these: a Class 1, 2, 3, or 4 felony; a sex offense; a violent felony; a firearm felony; a DUI; an assault and battery against a family member; a protective-order violation; or a hate crime?',
+          text: 'Was the offense any of these: a DUI or related offense (including unreasonable refusal, or a boating/commercial-vehicle equivalent); ANY offense where the victim was a family or household member; a protective-order violation; a hate crime; a sex-offense or any Article 7 offense (§ 18.2-61 et seq.); a violent felony; a felony where a firearm was used (unless your firearm rights were restored); a flunitrazepam/GHB offense; an election offense; or an animal-cruelty offense?',
           yes: 'ineligible_excluded_va',
           no: 'offense_class_va'
         },
         offense_class_va: {
           type: 'choice',
-          text: 'Which best describes the offense? (Your court paperwork has the details — Virginia\'s new sealing law treats these groups differently.)',
+          text: 'Which best describes the offense? (Your court paperwork has the details — Virginia\'s sealing law treats these groups differently.)',
           options: [
-            { label: 'A specific automatic-list misdemeanor: petit larceny, shoplifting, trespass, disorderly conduct, or misdemeanor marijuana distribution', value: 'auto_misd', next: 'auto_date_va' },
+            { label: 'A specific automatic-list misdemeanor: petit larceny, shoplifting, trespass, disorderly conduct, or misdemeanor marijuana distribution', value: 'auto_misd', next: 'auto_companion_va' },
+            { label: 'Simple marijuana possession — former § 18.2-250.1', value: 'marijuana', next: 'sealed_by_law_mj_va' },
+            { label: 'Underage alcohol possession (§ 4.1-305) or sale of drug paraphernalia (§ 18.2-265.3(A))', value: 'petition121', next: 'petition_121_date_va' },
             { label: 'Any other misdemeanor', value: 'other_misd', next: 'petition_misd_date_va' },
             { label: 'A Class 5 or 6 felony, or grand larceny', value: 'low_felony', next: 'felony_history_va' },
             { label: 'I\'m not sure which group', value: 'unsure', next: 'complex_class_va' }
           ]
+        },
+        // Same-day companion conviction — § 19.2-392.6(C) kills automatic sealing,
+        // and § 19.2-392.12:1(D) bars the 12:1 track when the offense was finalized
+        // the same date as a conviction ineligible under 12:1 — so route to the
+        // ordinary § 392.12 petition track instead.
+        auto_companion_va: {
+          type: 'boolean',
+          text: 'On the same date you were convicted of this offense, were you also convicted of anything NOT on that automatic-sealing list?',
+          yes: 'petition_misd_date_va',
+          no: 'auto_date_va'
         },
         auto_date_va: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'conviction (Va. Code § 19.2-392.7 — automatic misdemeanour sealing; no other CCRE-reportable conviction in the window)' },
+            period: { amount: 7, unit: 'years', anchor: 'conviction (Va. Code § 19.2-392.6 — automatic-sealing eligibility criteria; no other CCRE-reportable conviction in the window; process § 19.2-392.7)' },
             nextPass: 'check_record_first_va',
             nextFail: 'waiting_auto_va'
           }
@@ -4779,15 +4797,26 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition_misd_date_va: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When were you convicted? (The clock runs conviction-free, so a later conviction restarts it.)',
+          text: 'When were you convicted, or when was the deferred charge dismissed? (The clock runs conviction-free, so a later conviction restarts it.)',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'conviction, conviction-free (Va. Code § 19.2-392.12 — petition sealing, misdemeanours)' },
+            period: { amount: 7, unit: 'years', anchor: 'conviction or dismissal of a deferred charge, conviction-free (Va. Code § 19.2-392.12 — petition sealing, misdemeanours)' },
             nextPass: 'eligible_petition_va',
             nextFail: 'waiting_petition_va'
           }
         },
-        // The whole-record felony gate — asked, unsure -> hedge. Fifth state on
-        // the count-logic backlog (UT, NY, MI, NJ, VA).
+        // The lighter § 19.2-392.12:1 track — no manifest-injustice element, no
+        // felony ladder, no restitution precondition, no lifetime cap.
+        petition_121_date_va: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted, or when was the deferred charge dismissed? (The clock runs conviction-free.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'conviction or dismissal of a deferred charge, conviction-free (Va. Code § 19.2-392.12:1(I) — lighter petition track for § 4.1-305 / § 18.2-265.3(A))' },
+            nextPass: 'eligible_petition_121_va',
+            nextFail: 'waiting_petition_121_va'
+          }
+        },
+        // The whole-record felony gate — asked, unsure -> hedge.
         felony_history_va: {
           type: 'choice',
           text: 'This one is about your WHOLE record, not just this case. Do ALL of these describe you: you have never been convicted of a Class 1 or 2 felony; you have no Class 3 or 4 felony in the last 20 years; and you have no felony of any kind in the last 10 years?',
@@ -4800,9 +4829,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         felony_date_va: {
           type: 'date',
           field: 'disposition_date',
-          text: 'Which came LATEST: your conviction, your release, or the end of any supervision for this case? Enter that date. (The clock runs conviction-free from then.)',
+          text: 'Which came LATEST: the dismissal of a deferred charge, your conviction, your release from incarceration, a finding that you violated probation/parole/a suspended sentence, or your release from incarceration on such a finding? Enter that date. (The clock runs conviction-free from then.)',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'the latest of conviction, release, or violation events, conviction-free (Va. Code § 19.2-392.12 — petition sealing, felonies)' },
+            period: { amount: 10, unit: 'years', anchor: 'the latest of dismissal of a deferred charge, conviction, release from incarceration, a probation/parole/suspended-sentence violation finding, or release on such a finding, conviction-free (Va. Code § 19.2-392.12(F)(2) — petition sealing, felonies)' },
             nextPass: 'eligible_petition_felony_va',
             nextFail: 'waiting_petition_felony_va'
           }
@@ -4816,47 +4845,61 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Virginia State Police)',
           citation: 'Va. Code §§ 19.2-392.2, 19.2-392.5 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Deferred and Diverted Cases Need a Person',
-          message: 'Virginia\'s new sealing law is screened here for convictions, and its expungement law for non-convictions. How a deferred or diverted disposition is treated under the new sealing regime is not something we have researched yet — the law is only weeks old — and we would rather tell you that than guess. The Legal Aid Justice Center and Justice Forward Virginia are tracking the new law closely.',
-          remedy: 'Consult Legal Aid (Deferral Under the New Law — Not Yet Screened)',
-          citation: 'Va. Code § 19.2-392.5 et seq. (treatment of deferrals not yet researched)'
-        },
         nonconviction_va: {
           status: 'eligible',
           title: 'No Conviction — Sealing or Expungement Should Be Available',
-          message: 'Because your case ended without a conviction, Virginia has a route for you — and which one depends on the level. A misdemeanor non-conviction seals at the conclusion of the case for new cases, or through an annual State Police sweep for older ones once you have been 3 years clean. A FELONY non-conviction is sealable at conclusion too, but it needs your request and the Commonwealth\'s Attorney\'s agreement — if that is not given, the older expungement law (§ 19.2-392.2) is still open to you as a petition. Because the new sealing law only took effect on July 1, 2026 and its automatic parts are still starting up, check your record with the Virginia State Police rather than assume it is done. If you need the petition route, the Legal Aid Justice Center can help.',
-          remedy: 'Automatic/at-conclusion sealing, or expungement petition (§ 19.2-392.2) — check with VSP',
-          citation: 'Va. Code §§ 19.2-392.7, 19.2-392.2'
+          message: 'Because your case ended without a conviction, Virginia has a route for you. There are three ways it can happen. (1) At disposition: on an acquittal or a dismissal WITH PREJUDICE, a misdemeanor seals unless you object, while a felony needs your immediate oral request AND the Commonwealth\'s Attorney\'s concurrence (§ 19.2-392.8) — and if that is denied it is without prejudice, so the expungement route below stays open either way. (2) An annual State Police sweep (§ 19.2-392.11) seals non-convictions automatically, but it is stricter than a simple wait: it requires ZERO reportable convictions on your entire record and no arrests or charges in the past 3 years, and it does NOT cover a deferred case that was dismissed after a finding that the facts were sufficient. (3) Expungement (§ 19.2-392.2): a first-time misdemeanor or civil non-conviction is entitled to expungement unless the Commonwealth shows good cause, and the filing is free. Because the sealing law is brand new and its automatic parts are still starting up, check your record with the Virginia State Police rather than assume it is done. The Legal Aid Justice Center can help with the petition routes.',
+          remedy: 'At-disposition sealing (§ 19.2-392.8), annual sweep (§ 19.2-392.11), or free expungement (§ 19.2-392.2)',
+          citation: 'Va. Code §§ 19.2-392.8, 19.2-392.11, 19.2-392.2'
         },
         check_record_first_va: {
           status: 'eligible',
           title: 'Your Record May Be Sealed Automatically — Check, Because the Law Is New',
-          message: 'Good news, with one honest caveat. Your offense is on Virginia\'s automatic-sealing list, and based on your dates — 7 years since conviction with no other reportable conviction in that window — it qualifies to be sealed with no petition and no fee. The caveat: Virginia\'s sealing law only took effect on July 1, 2026, so the automatic machinery is still being switched on. "Eligible" does not yet mean "done", and you should not assume it has happened. Check your status with the Virginia State Police (vsp.virginia.gov) rather than a third-party site — secondary sources have this law wrong. If the automatic process has not reached you yet, it is coming; there is nothing you need to file for the automatic path.',
-          remedy: 'Check with Virginia State Police — automatic sealing (Va. Code § 19.2-392.7)',
-          citation: 'Va. Code § 19.2-392.7'
+          message: 'Good news, with one honest caveat. Your offense is on Virginia\'s automatic-sealing list, and based on your dates — 7 years since conviction with no other reportable conviction in that window (§ 19.2-392.6) — it qualifies to be sealed with no petition and no fee. The caveat: the sealing law only took effect on July 1, 2026, so the automatic machinery (the monthly State Police sweep, § 19.2-392.7) is still being switched on. "Eligible" does not yet mean "done." Check your status with the Virginia State Police (vsp.virginia.gov) rather than a third-party site — secondary sources have this law wrong. And here is the key point most people miss: the automatic path is not the only path. If the monthly sweep has not reached you — or the State Police could not determine your eligibility electronically (§ 19.2-392.7(B)) — this same offense can be sealed by a free § 19.2-392.12:1 petition, and that petition does NOT use up either of your two lifetime § 19.2-392.12 petitions.',
+          remedy: 'Check with Virginia State Police — automatic sealing (§ 19.2-392.6; process § 19.2-392.7); or free § 19.2-392.12:1 petition',
+          citation: 'Va. Code § 19.2-392.6'
         },
         eligible_petition_va: {
           status: 'eligible',
           title: 'Potentially Eligible to Petition to Seal',
-          message: 'Based on your dates — 7 conviction-free years — you appear eligible to petition to seal this misdemeanor under Virginia\'s new law (§ 19.2-392.12). File the petition in the Circuit Court where the charge originated. Two things worth knowing. Per the 2025 amendments, there are reportedly no filing fees and no fingerprint card required — we are confirming that, and if it holds it makes this one of the easiest petitions in the country. And there is a lifetime limit of two sealing petitions, so if you have records you might seal, it is worth thinking about which to use a petition on. Because the law is brand new, the Legal Aid Justice Center and Justice Forward Virginia are the best current guides.',
-          remedy: 'Petition to Seal (Va. Code § 19.2-392.12) — Circuit Court',
+          message: 'Based on your dates — 7 conviction-free years — you appear eligible to petition to seal this misdemeanor under Virginia\'s sealing law (§ 19.2-392.12). File the petition in the Circuit Court where the charge originated. What the statute now settles: there are NO court fees or costs (§ 19.2-392.12(B)), and there is no fingerprint card — instead you ask the court to have the State Police forward your record electronically (§ 19.2-392.12(E)). Two limits to plan around. First, any restitution ordered on this offense must be paid in full before the sealing order can enter (§ 19.2-392.12(F)(4), § 19.2-392.5(F)); other fines and costs do NOT block sealing and survive it. Second, only two § 19.2-392.12 petitions can be GRANTED in your lifetime (§ 19.2-392.12(C)), each covering a single transaction or occurrence (ancillary matters do not count as separate) — so it is worth thinking about which records to spend a petition on. Because the law is brand new, the Legal Aid Justice Center and Justice Forward Virginia are the best current guides.',
+          remedy: 'Petition to Seal (Va. Code § 19.2-392.12) — Circuit Court, no fee',
           citation: 'Va. Code § 19.2-392.12'
+        },
+        eligible_petition_121_va: {
+          status: 'eligible',
+          title: 'Eligible for Virginia\'s Lighter Sealing Petition',
+          message: 'Your offense — underage alcohol possession (§ 4.1-305) or sale of drug paraphernalia (§ 18.2-265.3(A)) — has its own, easier petition track (§ 19.2-392.12:1), and based on your dates you have the 7 conviction-free years it requires. This one is genuinely lighter than the main sealing petition: the filing is free (§ 19.2-392.12:1(C)); you file in the Circuit Court where the case was disposed of; and on the 7-year showing the court SHALL seal — there is no "manifest injustice" test, no felony-history ladder, and no restitution precondition. It has NO lifetime cap, and a grant here does NOT count against your two lifetime § 19.2-392.12 petitions (§ 19.2-392.12:1(E)). Because the track is new, a Circuit Court clerk can tell you whether they have a form yet; the Legal Aid Justice Center can help you draft one if not.',
+          remedy: 'Petition to Seal (Va. Code § 19.2-392.12:1) — Circuit Court, free, no lifetime cap',
+          citation: 'Va. Code § 19.2-392.12:1'
         },
         eligible_petition_felony_va: {
           status: 'eligible',
           title: 'Potentially Eligible to Petition to Seal This Felony',
-          message: 'This is new for Virginia: until July 2026 a felony like yours — a Class 5 or 6 felony, or grand larceny — could not be cleared at all. Now it can be sealed by petition. Based on what you told us, you clear the record requirements (no Class 1-2 felony ever, none Class 3-4 in 20 years, no felony in 10 years) and you are past 10 conviction-free years. File the petition in the Circuit Court where the charge originated. A few things to plan around: if this was a drug- or alcohol-related conviction, the court will want to see a showing of rehabilitation; there is a lifetime limit of two sealing petitions; and the court weighs statutory criteria rather than granting automatically. Per the 2025 amendments, filing is reportedly free with no fingerprint card, which we are confirming. Given how new this is, use the Legal Aid Justice Center — they are tracking it closely.',
-          remedy: 'Petition to Seal a Felony (Va. Code § 19.2-392.12) — Circuit Court',
+          message: 'This is new for Virginia: until July 2026 a felony like yours — a Class 5 or 6 felony, or grand larceny — could not be cleared at all. Now it can be sealed by petition. Based on what you told us, you clear the record requirements (no Class 1-2 felony ever, none Class 3-4 in 20 years, no felony in 10 years) and you are past 10 conviction-free years, measured from the LATEST of: the dismissal of a deferred charge, your conviction, your release from incarceration, a finding that you violated probation, parole, or a suspended sentence, or your release from incarceration on such a finding (§ 19.2-392.12(F)(2)). File the petition in the Circuit Court where the charge originated. What the statute settles: filing is free with no court costs (§ 19.2-392.12(B)) and no fingerprint card — the court has the State Police forward your record (§ 19.2-392.12(E)). Any restitution on this offense must be paid in full first (§ 19.2-392.12(F)(4), § 19.2-392.5(F)); other fines and costs do not block sealing. There is a lifetime limit of two § 19.2-392.12 grants (§ 19.2-392.12(C)), and the court weighs statutory criteria rather than granting automatically. Given how new this is, use the Legal Aid Justice Center — they are tracking it closely.',
+          remedy: 'Petition to Seal a Felony (Va. Code § 19.2-392.12) — Circuit Court, no fee',
           citation: 'Va. Code § 19.2-392.12'
+        },
+        sealed_by_law_mj_va: {
+          status: 'eligible',
+          title: 'Simple Marijuana Possession — Already Sealed by Operation of Law',
+          message: 'You do not need to do anything here. Any charge or conviction for simple marijuana possession under former § 18.2-250.1 is sealed by operation of law in Virginia (§ 19.2-392.6:1) — there is no order to obtain and no petition to file, and it applies regardless of the date of the offense, so there is no 1986 cutoff for this one. If it still shows up on a record check, that is a data-lag problem, not an eligibility problem: check with the Virginia State Police, and note that the DMV may take longer to drop it because of federal record-retention rules (§ 19.2-392.6:1(B)). If it does not clear on its own, the Legal Aid Justice Center can help you push it through.',
+          remedy: 'Sealed by operation of law — nothing to file (Va. Code § 19.2-392.6:1)',
+          citation: 'Va. Code § 19.2-392.6:1'
         },
         waiting_auto_va: {
           status: 'waiting',
           title: 'Automatic Sealing — Seven-Year Mark Not Yet Reached',
-          message: 'Your offense is on Virginia\'s automatic-sealing list, which is the easy path — but it seals 7 years after conviction, and only if you have no other reportable conviction in that window (traffic infractions do not count against you). Based on your dates, that has not run yet. Once it does, and if you stay conviction-free, the sealing is automatic — nothing to file. Because the law is only weeks old, check your status with the Virginia State Police as the date approaches rather than relying on other sites.',
-          remedy: 'Wait for the 7-year automatic mark (Va. Code § 19.2-392.7)',
-          citation: 'Va. Code § 19.2-392.7'
+          message: 'Your offense is on Virginia\'s automatic-sealing list, which is the easy path — but it seals 7 years after conviction, and only if you have no other reportable conviction in that window, traffic infractions aside (§ 19.2-392.6). Based on your dates, that has not run yet. Once it does, and if you stay conviction-free, the sealing is automatic through the monthly State Police sweep (§ 19.2-392.7) — nothing to file. One thing worth knowing for when your date arrives: the automatic path is not the only one. The same offense can also be sealed by a free § 19.2-392.12:1 petition, which does not use up either of your two lifetime § 19.2-392.12 petitions — so if the sweep is slow to reach you, that petition is a backstop. Because the law is only weeks old, check your status with the Virginia State Police as the date approaches rather than relying on other sites.',
+          remedy: 'Wait for the 7-year automatic mark (§ 19.2-392.6); or a free § 19.2-392.12:1 petition',
+          citation: 'Va. Code § 19.2-392.6'
+        },
+        waiting_petition_121_va: {
+          status: 'waiting',
+          title: 'Lighter Sealing Petition — Seven Conviction-Free Years Not Yet Met',
+          message: 'The § 19.2-392.12:1 track for underage alcohol possession (§ 4.1-305) or sale of drug paraphernalia (§ 18.2-265.3(A)) needs 7 conviction-free years from your conviction or the dismissal of the deferred charge. Based on your dates, that has not run yet, and a new conviction restarts it. When it does run, this is one of Virginia\'s easiest petitions — free, no manifest-injustice test, and it does not count against your two lifetime § 19.2-392.12 petitions.',
+          remedy: 'Wait for 7 conviction-free years (Va. Code § 19.2-392.12:1)',
+          citation: 'Va. Code § 19.2-392.12:1'
         },
         waiting_petition_va: {
           status: 'waiting',
@@ -4874,17 +4917,17 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         ineligible_pre1986_va: {
           status: 'ineligible',
-          title: 'Offenses Before 1986 Cannot Be Sealed',
-          message: 'Virginia\'s sealing law reaches only offenses committed on or after January 1, 1986, so this conviction falls outside it. That is a hard line in the statute, not a waiting period. If the case actually ended without a conviction, the older expungement law (§ 19.2-392.2) may still help regardless of date. Given how specific this is, it is worth confirming with someone: the Legal Aid Justice Center can tell you whether any route fits.',
+          title: 'Offenses Before 1986 Generally Cannot Be Sealed',
+          message: 'Virginia\'s sealing law generally reaches only offenses committed on or after January 1, 1986, so this conviction falls outside it. That is a hard line in the statute, not a waiting period. One important exception, in case it applies to you: simple marijuana possession under former § 18.2-250.1 is sealed by operation of law regardless of date (§ 19.2-392.6:1) — the 1986 cutoff does not touch it. And if the case actually ended without a conviction, the older expungement law (§ 19.2-392.2) may still help regardless of date. Given how specific this is, it is worth confirming with someone: the Legal Aid Justice Center can tell you whether any route fits.',
           remedy: 'None under the sealing law (pre-1986) — ask about old-regime expungement',
           citation: 'Va. Code § 19.2-392.5 et seq.'
         },
         ineligible_excluded_va: {
           status: 'ineligible',
-          title: 'Excluded From Sealing',
-          message: 'Virginia\'s sealing law excludes a specific set of offenses: Class 1 through 4 felonies, sex offenses, violent felonies, firearm felonies, DUI, assault and battery against a family member, protective-order violations, and hate crimes. No waiting period changes that. Two things worth knowing before you accept this: the categories are legal classifications, so whether your offense counts as, say, a "violent felony" is something worth confirming rather than assuming from what happened. And if the case actually ended without a conviction, a different route (expungement) may apply. The Legal Aid Justice Center and Justice Forward Virginia can check where your offense falls.',
-          remedy: 'None (Statutorily Excluded from Sealing) — confirm the classification',
-          citation: 'Va. Code § 19.2-392.12'
+          title: 'Excluded From Petition Sealing',
+          message: 'Virginia\'s petition-sealing law excludes a specific set of offenses (§ 19.2-392.12(L)): DUI and its whole cluster — including unreasonable refusal (§ 18.2-268.3) and the boating and commercial-vehicle equivalents; ANY offense where the victim was a family or household member as defined in § 16.1-228; protective-order violations; hate crimes; sex-offender-registry offenses and everything in Article 7 (§ 18.2-61 and following); violent felonies under § 17.1-805(C); non-violent felonies where a firearm was used, unless your firearm rights have been restored; flunitrazepam or GHB offenses; findings of not guilty by reason of insanity; election offenses; and the animal-cruelty article. No waiting period changes that. Two things worth knowing before you accept this: these are legal classifications, so whether your offense actually counts as, say, a "violent felony" is worth confirming rather than assuming from what happened. And if the case ended without a conviction, a different route (expungement) may apply. The Legal Aid Justice Center and Justice Forward Virginia can check where your offense falls.',
+          remedy: 'None (Statutorily Excluded from Petition Sealing) — confirm the classification',
+          citation: 'Va. Code § 19.2-392.12(L)'
         },
         ineligible_felony_history_va: {
           status: 'ineligible',
@@ -4912,32 +4955,33 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     resources: {
       remedies: {
         sealing: {
-          name: 'Petition to Seal (new regime, Va. Code § 19.2-392.12)',
+          name: 'Petition to Seal (Va. Code § 19.2-392.12; lighter track § 19.2-392.12:1)',
           formName: 'Petition for Sealing of Criminal Records',
           formUrl: 'https://vsp.virginia.gov/sealing/',
           steps: [
-            'Confirm your offense is not on the exclusion list and that your dates and felony history qualify — the Virginia State Police can provide your record.',
-            'File the petition in the Circuit Court where the charge originated.',
-            'Per the 2025 amendments there are reportedly no filing fees and no fingerprint card required — confirm on the court\'s own instructions.',
-            'Remember the lifetime limit of two sealing petitions, and that the court weighs statutory criteria before granting.'
+            'Confirm your offense is not on the § 19.2-392.12(L) exclusion list and that your dates and felony history qualify — the Virginia State Police can provide your record.',
+            'Pay any restitution ordered on the offense in full first; it must be satisfied before a sealing order can enter (§ 19.2-392.12(F)(4)). Other fines and costs do not block sealing.',
+            'File the petition in the Circuit Court where the charge originated. There are no court fees or costs, and no fingerprint card — you ask the court to have the State Police forward your record electronically (§ 19.2-392.12(B), (E)).',
+            'Remember the limit of two § 19.2-392.12 petitions granted per lifetime (§ 19.2-392.12(C)); the court weighs statutory criteria before granting. Underage-alcohol (§ 4.1-305) and paraphernalia-sale (§ 18.2-265.3(A)) offenses use the lighter § 19.2-392.12:1 track, which is free and does not count toward that limit.'
           ],
-          // null: Wave 2 says no fees / no fingerprint card per 2025 amendments,
-          // but flags both for confirmation — and calls it a headline if true.
-          fees: null,
-          feeWaiver: null,
+          // Statute-cited: § 19.2-392.12(B) — no court fees or costs.
+          fees: 'No court fees or costs (Va. Code § 19.2-392.12(B)); the § 19.2-392.12:1 track is likewise free (§ 19.2-392.12:1(C)).',
+          feeWaiver: 'Not applicable — there is no filing fee or cost to waive (Va. Code § 19.2-392.12(B)).',
           courtContact: 'Circuit Court where the charge originated'
         },
         expungement: {
-          name: 'Expungement (old regime, non-convictions, Va. Code § 19.2-392.2)',
+          name: 'Expungement (non-convictions, Va. Code § 19.2-392.2)',
           formName: 'Petition for Expungement',
           formUrl: 'https://www.vacourts.gov/',
           steps: [
             'This route is for non-convictions — dismissals, acquittals, and charges that did not result in a conviction.',
+            'A first-time misdemeanor or civil non-conviction is entitled to expungement unless the Commonwealth shows good cause, and the filing is free (§ 19.2-392.2).',
             'File the petition in the Circuit Court where the charge was heard.',
-            'For a felony non-conviction, sealing at conclusion may be faster if the Commonwealth\'s Attorney concurs — ask about that first.'
+            'For a felony non-conviction, sealing at conclusion may be faster if the Commonwealth\'s Attorney concurs (§ 19.2-392.8(B)) — ask about that first.'
           ],
-          fees: null,
-          feeWaiver: null,
+          // Statute-cited: § 19.2-392.2 — first-time misdemeanor/civil non-conviction free.
+          fees: 'A first-time misdemeanor or civil non-conviction expungement is filed free of charge (Va. Code § 19.2-392.2); costs for other expungement filings are not specified in the sections reviewed.',
+          feeWaiver: 'A first-time misdemeanor or civil non-conviction filing is free (Va. Code § 19.2-392.2).',
           courtContact: 'Circuit Court where the charge was heard'
         }
       },

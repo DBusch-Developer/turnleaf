@@ -9908,53 +9908,76 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   SC: {
     code: 'SC',
     name: 'South Carolina',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
     terminology:
-      'South Carolina EXPUNGEMENT (an Order for Destruction of Arrest Records) works differently '
-      + 'from most states in one big way: you apply through the circuit SOLICITOR\'S office — a '
-      + 'prosecutor\'s office — not the court. The solicitor decides eligibility, coordinates the '
-      + 'SLED record check, and processes the order. Which convictions can be expunged is a short, '
-      + 'closed list of specific first-offense situations; most everything else routes to a pardon. '
-      + 'Non-conviction cases from the lower (summary) courts have been expunged automatically and '
-      + 'for free since 2009.',
+      'South Carolina EXPUNGEMENT is SOLICITOR-ADMINISTERED: you apply through the solicitor\'s office '
+      + '(a prosecutor) in the circuit where the charge originated, not directly to a court — except a '
+      + 'summary-court non-conviction, which the court handles itself for free (§ 17-22-950). Which '
+      + 'convictions can be expunged is a closed catalog (§ 17-22-910) — mostly specific first-offense '
+      + 'situations — and eligibility keys to the offense you were CONVICTED of, not the original charge, '
+      + 'so a plead-down qualifies on the plea. Non-conviction records are DESTROYED publicly (§ 17-1-40), '
+      + 'though sealed law-enforcement copies persist. The fees are steep and mostly statutory: about $310 '
+      + 'per order ($250 solicitor, $25 SLED, $35 clerk), and the $250 is NONREFUNDABLE even if you turn '
+      + 'out to be ineligible — so it is worth confirming eligibility before you pay.',
     keyDates: [
       {
         label: 'Automatic free expungement of summary-court non-convictions',
         date: '2009-06',
         kind: 'operative',
-        note: 'Wave 5 gives month and year only. Magistrate/municipal dismissals and not-guilty verdicts (§ 17-22-950).',
+        note: 'Magistrate/municipal dismissals, nolle pros, and not-guilty verdicts — the court issues the order immediately at no cost, and the charge comes off internet-based public records within 30 days of disposition (§ 17-22-950).',
+      },
+      {
+        label: '2024 Act 111 — first-offense firearm/weapon possession added to § 22-5-910',
+        date: '2024',
+        kind: 'effective',
+        note: 'A first-offense unlawful possession of a firearm or weapon carrying ≤1 year / ≤$1,000 is now expungeable under § 22-5-910(A) at 3 years, alongside the older ≤30-day/≤$1,000 first-offense path.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Did the general first-offense nonviolent expungement bill (§ 17-22-915, H.4602 / H.3730) become law? Wave 5 says it has been filed repeatedly and was NOT law as of the research date — verify the session status. If it passed, South Carolina changes fundamentally (a broad 3-year path). The tree encodes current law (the closed statute list); confirm nothing passed.',
+          'Pull the cite-only alternative paths not in this read: § 17-22-530(A) (alcohol-education), § 17-22-330(A) (traffic-education), § 17-22-1010 (Youth Challenge Academy), § 56-5-750(F) (failure-to-stop for blue light) — each has its own expungement route and fee treatment.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the $310 fee breakdown and refund mechanics: Wave 5 gives $250 solicitor admin + $25 SLED verification + $35 clerk, separate money orders, nonrefundable if denied at the SLED stage but the $35 returns if the solicitor rejects. Confirm current amounts and the refund rule (per the 14th circuit\'s description).',
-        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the plea-deal dismissal fee rule: Wave 5 says General Sessions dismissals/nolle pros are free through the solicitor if NOT part of a plea deal, but plea-deal dismissals pay full fees. Verify.',
+          'Pull the § 16-1-60 (violent crimes) and § 16-1-70 (nonviolent crimes) lists — the § 22-5-920 (YOA) and § 63-19-2050 (juvenile) exclusion/eligibility screens key on those cross-references, and the tree currently asks the person rather than enumerating.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the § 22-5-930 first-offense drug-possession conditional-discharge 10-year lookback quirk, and the § 22-5-920 Youthful Offender Act retroactive path for pre-2010 convictions. The tree uses the standard 3-yr and 5-yr periods; these nuances are flagged.',
+          'Confirm the § 16-25-30 domestic-violence exception scope referenced by the § 22-5-920 YOA exclusions (Ch. 25, Title 16 offenses are excluded "except per § 16-25-30").',
+        blocksFields: [],
+      },
+      {
+        question:
+          'What are the PTI program fees (the § 17-22-90 area) and the conditional-discharge indigency-waiver mechanics in practice? The § 44-53-450(C) discharge fee ($350 general sessions / $150 summary court) is statutory and waivable only on an indigency finding; the PTI program-fee amounts were not in this pull.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Session sweep: § 22-5-910\'s history ends at 2018 (plus 2024 Act 111) and South Carolina runs perennial expungement-expansion bills. Verify nothing in the 2025-26 session amended the § 17-22-910 catalog or added a general first-offense path before the next review.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'S.C. Code § 17-22-910 et seq. (Uniform Expungement of Criminal Records Act; solicitor process)', url: null, retrievedOn: null },
-      { id: 'S.C. Code § 17-22-950 (automatic summary-court non-conviction expungement)', url: null, retrievedOn: null },
-      { id: 'S.C. Code § 22-5-910 (first-offence low-penalty conviction; 3 yrs)', url: null, retrievedOn: null },
-      { id: 'S.C. Code § 22-5-920 (Youthful Offender Act convictions; 5 yrs; once per lifetime)', url: null, retrievedOn: null },
-      { id: 'S.C. Code § 22-5-930 (first-offence drug possession; 3 yrs)', url: null, retrievedOn: null },
+      { id: 'S.C. Code § 17-22-910 (expungement authority catalog — (A) the 13 eligible paths, (B) eligibility keys to the offense of conviction not the charge, (C) retroactive; solicitor-administered)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-910', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-920 (expungement application — mandatory form through the solicitor)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-920', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-930 (SLED verification of the expungement application)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-930', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-940 (fees — $250 solicitor admin per order NONREFUNDABLE, $25 SLED, $35 clerk refunded if ineligible; exemptions for 17-1-40 non-plea-deal, summary-court 950 free; (A)(2) donation fund up to 50%; (G) one charge per order except 17-1-40/150 same-incident; (I) no-consent circuit-court action; (J) identity-theft waiver)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-940', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-950 (summary-court non-conviction — court SHALL expunge immediately, no application, no cost; exceptions: preliminary-hearing dismissal, same-course charges in both courts; (E) 30-day internet scrub; prosecution/LE objection → general sessions judge)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-950', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-960 (effects — employer immunity; employers except criminal-justice agencies may not use expunged info adversely; inadmissible in negligent-hiring/retention suits)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-960', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-22-150 (pretrial intervention — (a) successful completion → noncriminal disposition → destruction + restoration + honest-no; SLED fee waived)', url: 'https://www.scstatehouse.gov/code/t17c022.php#17-22-150', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 17-1-40 (non-conviction record DESTRUCTION — discharge/dismissal/nolle/not-guilty; but LE/prosecution retain sealed copies (3yr+120d / indefinitely for investigations); (D) no fee for destruction; (B)(3) PPP conditional-discharge exemption; (B)(4) plead-to-lesser NCIC correction)', url: 'https://www.scstatehouse.gov/code/t17c001.php#17-1-40', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 22-5-910 (first-offense minor conviction — (a) ≤30 days/≤$1,000, (b) 2024 Act 111 first-offense firearm/weapon ≤1yr/≤$1,000; 3 yrs from CONVICTION date conviction-free, DV-3rd 5 yrs; excludes motor-vehicle-operation offenses; discretionary, once per lifetime; (E) single-incident = one conviction; pending-charge bar unless pending >5 yrs) — through 2024 Act 111', url: 'https://www.scstatehouse.gov/code/t22c005.php#22-5-910', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 22-5-920 (Youthful Offender Act conviction — must be SENTENCED under YOA; clean while serving AND 5 yrs after; excludes motor-vehicle, violent (16-1-60), Ch.25 T.16 DV except 16-25-30, sex-registry; (B)(3) YOA-eligible-but-not-sentenced = INELIGIBLE; once per lifetime; discretionary) — through 2023 Act 73', url: 'https://www.scstatehouse.gov/code/t22c005.php#22-5-920', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 22-5-930 ((A) first-offense simple possession / unlawful prescription (40-43-86(EE)) — 3 yrs from SENTENCE COMPLETION; (B) first-offense PWID — 20 yrs from completion, no other drug/felony conviction (non-drug misd OK); (D) conditional-discharge lookback bar (5 yrs marijuana / 10 yrs other CS); pending bar; once; (F) single-incident)', url: 'https://www.scstatehouse.gov/code/t22c005.php#22-5-930', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 34-11-90(e) (fraudulent check — first-offense misdemeanor-level (instrument ≤$5,000): 1 yr from conviction conviction-free → court SHALL expunge (mandatory); felony-level >$5,000 excluded; once)', url: 'https://www.scstatehouse.gov/code/t34c011.php#34-11-90', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 44-53-450 (conditional discharge — first drug offense (44-53-370(c)/(d), 375(A)) deferral, completion → discharge (not a conviction), once; (C) $350 gen-sessions / $150 summary discharge fee, indigency-waivable; (B) then expunge → restoration + FULL honest-no)', url: 'https://www.scstatehouse.gov/code/t44c053.php#44-53-450', retrievedOn: '2026-07-19' },
+      { id: 'S.C. Code § 63-19-2050 (juvenile — status offense SHALL expunge; nonviolent (16-1-70) MAY (18+, completed, no subsequent, nothing pending); found-not-guilty SHALL regardless of age, fee-free; violent (16-1-60) never; (A)(2) prior adjudication for ≥5yr-adult-max offense bars; (E) honest-no + restoration)', url: 'https://www.scstatehouse.gov/code/t63c019.php#63-19-2050', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -9964,59 +9987,210 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_type_sc' },
-            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'court_type_sc' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'juvenile_sc' },
+            { label: 'Dismissed / Nolle prossed / Charges dropped', value: 'dismissed', next: 'court_type_sc' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'court_type_sc' },
-            { label: 'PTI / Diversion completed', value: 'deferred', next: 'eligible_diversion_sc' },
+            { label: 'PTI / Conditional discharge / Diversion completed', value: 'deferred', next: 'deferred_type_sc' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        court_type_sc: {
+        // JUVENILE (§ 63-19-2050) is its own path — checked first on the convicted branch.
+        juvenile_sc: {
           type: 'boolean',
-          text: 'Was the case in a summary court — a magistrate court or a municipal court (for a lower-level offense) — rather than General Sessions (the main trial court)?',
-          yes: 'eligible_auto_sc',
-          no: 'eligible_gs_dismissal_sc'
+          text: 'Was this a JUVENILE delinquency adjudication in family court (you were under 18 at the time)?',
+          yes: 'juvenile_type_sc',
+          no: 'conv_pending_sc'
         },
-        conv_type_sc: {
+        juvenile_type_sc: {
           type: 'choice',
-          text: 'South Carolina only expunges a few specific first-offense situations. Which, if any, describes yours?',
+          text: 'What kind of juvenile offense was it?',
           options: [
-            { label: 'A first-offense conviction with a penalty of 30 days or less, or a $1,000 fine or less', value: 's910', next: 's910_date_sc' },
-            { label: 'A Youthful Offender Act conviction (I was 17 to 24, non-violent, no registry)', value: 's920', next: 's920_date_sc' },
-            { label: 'A first-offense simple drug possession or minor drug offense', value: 's930', next: 's930_date_sc' },
-            { label: 'None of these — it was a more serious offense, a DUI, or a repeat offense', value: 'other', next: 'pardon_path_sc' },
+            { label: 'A status offense (something only unlawful because of age — truancy, running away, curfew)', value: 'status', next: 'eligible_juvenile_status_sc' },
+            { label: 'A nonviolent crime (§ 16-1-70)', value: 'nonviolent', next: 'eligible_juvenile_nonviolent_sc' },
+            { label: 'A violent crime (§ 16-1-60)', value: 'violent', next: 'ineligible_juvenile_violent_sc' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_conv_sc' }
           ]
+        },
+        // Pending-charge bar (§§ 22-5-910/930) — any pending charge blocks unless it
+        // has been pending more than 5 years.
+        conv_pending_sc: {
+          type: 'boolean',
+          text: 'Do you have any criminal charge currently pending that has been pending for 5 years or LESS?',
+          yes: 'ineligible_pending_sc',
+          no: 'conv_path_sc'
+        },
+        conv_path_sc: {
+          type: 'choice',
+          text: 'South Carolina expunges a closed list of situations, keyed to the offense you were CONVICTED of (a plead-down qualifies on the plea). Which describes yours?',
+          options: [
+            { label: 'A first-offense minor conviction — ≤30 days or ≤$1,000; OR a first-offense firearm/weapon possession ≤1 year / ≤$1,000', value: 's910', next: 's910_mv_sc' },
+            { label: 'A conviction I was SENTENCED for under the Youthful Offender Act', value: 's920', next: 's920_sentenced_sc' },
+            { label: 'A first-offense simple drug possession (or unlawful prescription-drug possession)', value: 's930a', next: 's930_lookback_sc' },
+            { label: 'A first-offense possession-with-intent-to-distribute (PWID)', value: 's930b', next: 's930b_lookback_sc' },
+            { label: 'A first-offense fraudulent check', value: 'fraud', next: 'fraud_level_sc' },
+            { label: 'None of these — a more serious, motor-vehicle, or repeat offense', value: 'other', next: 'pardon_path_sc' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_conv_sc' }
+          ]
+        },
+        // § 22-5-910: excludes motor-vehicle-operation offenses; DV-3rd is 5 yrs.
+        s910_mv_sc: {
+          type: 'boolean',
+          text: 'Is this a motor-vehicle-operation offense (for example a DUI or another driving offense)?',
+          yes: 'ineligible_mv_sc',
+          no: 's910_clean_sc'
+        },
+        s910_clean_sc: {
+          type: 'boolean',
+          text: 'Since this conviction, have you had ANY other conviction — in South Carolina or any other state?',
+          yes: 'ineligible_910_clean_sc',
+          no: 's910_dv_sc'
+        },
+        s910_dv_sc: {
+          type: 'boolean',
+          text: 'Was this a third-degree domestic-violence offense (§ 16-25-20(D))?',
+          yes: 's910_dv_date_sc',
+          no: 's910_date_sc'
         },
         s910_date_sc: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction, conviction-free (S.C. Code § 22-5-910 — first-offence low-penalty; DV 3rd degree is 5 yrs)' },
-            nextPass: 'eligible_conviction_sc',
-            nextFail: 'waiting_sc'
+            period: { amount: 3, unit: 'years', anchor: 'conviction date, conviction-free (S.C. Code § 22-5-910 — first-offense minor conviction; 3 yrs)' },
+            nextPass: 'eligible_910_sc',
+            nextFail: 'waiting_910_sc'
           }
         },
-        s920_date_sc: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the sentence?',
-          validation: {
-            period: { amount: 5, unit: 'years', anchor: 'sentence completion (S.C. Code § 22-5-920 — Youthful Offender Act; non-violent; no registry; once per lifetime)' },
-            nextPass: 'eligible_yoa_sc',
-            nextFail: 'waiting_sc'
-          }
-        },
-        s930_date_sc: {
+        s910_dv_date_sc: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction (S.C. Code § 22-5-930 — first-offence drug possession; conditional-discharge lookback may apply)' },
-            nextPass: 'eligible_conviction_sc',
-            nextFail: 'waiting_sc'
+            period: { amount: 5, unit: 'years', anchor: 'conviction date, conviction-free (S.C. Code § 22-5-910 — third-degree domestic violence; 5 yrs)' },
+            nextPass: 'eligible_910_sc',
+            nextFail: 'waiting_910_sc'
           }
+        },
+        // § 22-5-920 YOA: the TRAP — must have been SENTENCED under YOA.
+        s920_sentenced_sc: {
+          type: 'boolean',
+          text: 'Were you actually SENTENCED under the Youthful Offender Act (Chapter 19 of Title 24)? (Being eligible for YOA but sentenced as an adult does not count.)',
+          yes: 's920_excluded_sc',
+          no: 'ineligible_yoa_trap_sc'
+        },
+        s920_excluded_sc: {
+          type: 'boolean',
+          text: 'Is the offense any of these (excluded from YOA expungement): a motor-vehicle-operation offense; a violent crime (§ 16-1-60); a domestic-violence offense under Chapter 25 of Title 16 (except as allowed by § 16-25-30); or a sex-offender-registry offense?',
+          yes: 'ineligible_yoa_excl_sc',
+          no: 's920_date_sc'
+        },
+        s920_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence (including any probation or parole)?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'sentence completion (S.C. Code § 22-5-920 — Youthful Offender Act; clean while serving AND 5 yrs after; once per lifetime)' },
+            nextPass: 'eligible_920_sc',
+            nextFail: 'waiting_920_sc'
+          }
+        },
+        // § 22-5-930(A) simple possession — conditional-discharge lookback bar (D).
+        s930_lookback_sc: {
+          type: 'boolean',
+          text: 'Did you receive a drug conditional discharge within 5 years before the arrest (for simple marijuana possession) OR within 10 years before (for any other controlled substance or prescription drug)?',
+          yes: 'ineligible_930_lookback_sc',
+          no: 's930a_clean_sc'
+        },
+        s930a_clean_sc: {
+          type: 'boolean',
+          text: 'Since this conviction, have you had ANY other conviction — in South Carolina or any other state?',
+          yes: 'ineligible_930_clean_sc',
+          no: 's930a_date_sc'
+        },
+        s930a_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence (including any probation or parole)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'sentence completion, conviction-free (S.C. Code § 22-5-930(A) — first-offense simple possession; 3 yrs)' },
+            nextPass: 'eligible_930_sc',
+            nextFail: 'waiting_930_sc'
+          }
+        },
+        // § 22-5-930(B) PWID — 20 yrs; cleanliness = no other DRUG or FELONY conviction.
+        s930b_lookback_sc: {
+          type: 'boolean',
+          text: 'Did you receive a drug conditional discharge within 10 years before the arrest for this offense?',
+          yes: 'ineligible_930_lookback_sc',
+          no: 's930b_clean_sc'
+        },
+        s930b_clean_sc: {
+          type: 'boolean',
+          text: 'Since completing the sentence, have you had any DRUG conviction or any FELONY conviction? (A non-drug MISDEMEANOR does NOT count against you here.)',
+          yes: 'ineligible_930_clean_sc',
+          no: 's930b_date_sc'
+        },
+        s930b_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence (including any probation or parole)?',
+          validation: {
+            period: { amount: 20, unit: 'years', anchor: 'sentence completion, no drug/felony conviction since (S.C. Code § 22-5-930(B) — first-offense PWID; 20 yrs)' },
+            nextPass: 'eligible_930_sc',
+            nextFail: 'waiting_930_sc'
+          }
+        },
+        // § 34-11-90(e) fraudulent check — felony-level (>$5,000) excluded.
+        fraud_level_sc: {
+          type: 'boolean',
+          text: 'Was the check or instrument amount OVER $5,000 (making it a felony-level offense)?',
+          yes: 'ineligible_fraud_felony_sc',
+          no: 'fraud_clean_sc'
+        },
+        fraud_clean_sc: {
+          type: 'boolean',
+          text: 'Since this conviction, have you had any other conviction?',
+          yes: 'waiting_fraud_sc',
+          no: 'fraud_date_sc'
+        },
+        fraud_date_sc: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'conviction, conviction-free (S.C. Code § 34-11-90(e) — first-offense misdemeanor-level fraudulent check; 1 yr; court SHALL expunge)' },
+            nextPass: 'eligible_fraud_sc',
+            nextFail: 'waiting_fraud_sc'
+          }
+        },
+        // NON-CONVICTION.
+        court_type_sc: {
+          type: 'boolean',
+          text: 'Was the case in a SUMMARY court — a magistrate or municipal court (lower-level offenses) — rather than General Sessions (the main trial court)?',
+          yes: 'summary_exception_sc',
+          no: 'gs_pleadeal_sc'
+        },
+        summary_exception_sc: {
+          type: 'boolean',
+          text: 'Was the case dismissed at a PRELIMINARY HEARING, or do you have same-course-of-events charges pending in BOTH the summary court and general sessions?',
+          yes: 'eligible_17140_sc',
+          no: 'eligible_950_sc'
+        },
+        gs_pleadeal_sc: {
+          type: 'boolean',
+          text: 'Was the dismissal or nolle prosequi part of a PLEA DEAL in which you pled guilty to other charges?',
+          yes: 'eligible_17140_pleadeal_sc',
+          no: 'eligible_17140_sc'
+        },
+        // DEFERRED — PTI (§ 17-22-150), conditional discharge (§ 44-53-450), or other.
+        deferred_type_sc: {
+          type: 'choice',
+          text: 'Which kind of program did you complete?',
+          options: [
+            { label: 'Pretrial intervention (PTI)', value: 'pti', next: 'eligible_pti_sc' },
+            { label: 'A drug conditional discharge (a first drug offense deferral)', value: 'cd', next: 'eligible_cd_sc' },
+            { label: 'Another diversion program / I\'m not sure', value: 'other', next: 'complex_diversion_sc' }
+          ]
         }
       },
       results: {
@@ -10027,61 +10201,194 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (sccourts.org / circuit solicitor)',
           citation: 'S.C. Code § 17-22-910 et seq. (which path applies depends on the disposition)'
         },
-        eligible_diversion_sc: {
-          status: 'eligible',
-          title: 'Completed Diversion or PTI — Expungeable',
-          message: 'Because you completed a pretrial intervention (PTI) or diversion program, that case is expungeable. Here is the South Carolina-specific thing to know: you apply through the SOLICITOR\'S office (the prosecutor) in your circuit, not the court — the solicitor handles eligibility and processing. Many PTI programs include the expungement as part of completion, so check whether yours was already done. The sccourts.org FAQ explains the process.',
-          remedy: 'Expungement through the Circuit Solicitor (PTI/diversion)',
-          citation: 'S.C. Code § 17-22-910 et seq.'
-        },
-        eligible_auto_sc: {
-          status: 'eligible',
-          title: 'Summary-Court Non-Conviction — Should Be Automatic and Free',
-          message: 'Because your case ended without a conviction in a summary court (magistrate or municipal), South Carolina should have expunged it AUTOMATICALLY and for FREE — this has been the rule since 2009 (§ 17-22-950). So there may be nothing for you to do. Request your record to confirm the expungement went through; if it did not, the solicitor\'s office in your circuit can correct it. This is the one South Carolina path that does not run up the usual fees.',
-          remedy: 'Automatic Free Expungement (§ 17-22-950) — check it was applied',
-          citation: 'S.C. Code § 17-22-950'
-        },
-        eligible_gs_dismissal_sc: {
-          status: 'eligible',
-          title: 'General Sessions Dismissal — Expungeable Through the Solicitor',
-          message: 'Because your General Sessions case ended without a conviction, you can have it expunged — through the SOLICITOR\'S office (the prosecutor) in your circuit, which is where South Carolina handles this rather than the court. One thing that affects the cost: if the dismissal was NOT part of a plea deal, it is generally free; if it came as part of a plea agreement, the full fees may apply. The sccourts.org FAQ and your circuit solicitor\'s application page explain the process.',
-          remedy: 'Expungement through the Circuit Solicitor (free if not part of a plea deal)',
-          citation: 'S.C. Code § 17-22-910 et seq.'
-        },
-        eligible_conviction_sc: {
-          status: 'eligible',
-          title: 'Eligible First-Offense Conviction — Apply Through the Solicitor',
-          message: 'Based on your dates, this first-offense conviction appears eligible for expungement. Two South Carolina-specific things to know. First, you apply through the SOLICITOR\'S office in your circuit — the prosecutor, not the court — and they coordinate the SLED record check and process the order. Second, the cost: expungement in South Carolina runs about $310 total ($250 to the solicitor, $25 for SLED verification, $35 to the clerk), typically in separate money orders. The sccourts.org FAQ walks through it, and your circuit solicitor\'s page has the application.',
-          remedy: 'Expungement through the Circuit Solicitor (§ 22-5-910 / 930)',
+        ineligible_pending_sc: {
+          status: 'ineligible',
+          title: 'A Pending Charge Blocks This — For Now',
+          message: 'South Carolina will not expunge a conviction while you have another charge pending, unless that charge has been pending for MORE than 5 years (§§ 22-5-910/930). This is a timing bar, not a permanent one — once the pending case resolves, come back and run this again. (The 5-year clock is paused for any time you are under a failure-to-appear bench warrant.) The solicitor\'s office in your circuit handles the eligibility check as a matter of course.',
+          remedy: 'None Yet (Pending Charge) — reassess once it resolves',
           citation: 'S.C. Code §§ 22-5-910, 22-5-930'
         },
-        eligible_yoa_sc: {
+        eligible_910_sc: {
+          status: 'eligible',
+          title: 'First-Offense Minor Conviction — Eligible Through the Solicitor',
+          message: 'Based on your dates, this first-offense conviction appears eligible under § 22-5-910 — either the older path (a penalty of 30 days or less, or a $1,000 fine or less) or the newer 2024 firearm/weapon-possession path (≤1 year / ≤$1,000). The wait is 3 years from the CONVICTION date, conviction-free (5 years for a third-degree domestic-violence offense). Two South Carolina specifics: you apply through the SOLICITOR\'S office in your circuit, not the court; and it is DISCRETIONARY (the court "may" grant) and usable only ONCE in your lifetime, tracked by SLED. On cost — and this is the trap to avoid: the fees run about $310 ($250 solicitor, $25 SLED, $35 clerk), and the $250 solicitor fee is NONREFUNDABLE even if you turn out to be ineligible, so confirm eligibility with the solicitor before paying. Ask the solicitor\'s office about its private donation fund, which can cover up to half the admin fee.',
+          remedy: 'Expungement through the Circuit Solicitor (§ 22-5-910) — once per lifetime; $250 fee is nonrefundable',
+          citation: 'S.C. Code §§ 22-5-910, 17-22-940'
+        },
+        waiting_910_sc: {
+          status: 'waiting',
+          title: 'First-Offense Conviction — 3-Year Wait Not Yet Met',
+          message: 'A first-offense minor conviction under § 22-5-910 becomes expungeable 3 years after the CONVICTION date, conviction-free (5 years for a third-degree domestic-violence offense). Based on your dates, that has not run yet, and any new conviction — in South Carolina or another state — during the window would block it. Come back when the period runs; you apply through the solicitor\'s office in your circuit, and this route can be used only once in your lifetime.',
+          remedy: 'Wait for the 3-year (or 5-year DV) period, then apply through the solicitor',
+          citation: 'S.C. Code § 22-5-910'
+        },
+        ineligible_910_clean_sc: {
+          status: 'ineligible',
+          title: 'A Later Conviction Blocks the First-Offense Path',
+          message: 'The § 22-5-910 first-offense path requires that you have had NO other conviction — in South Carolina or any other state — during the 3-year window after the conviction. Because you told us there was a later conviction, this particular path is not available. That does not necessarily end things: another statutory path (a drug or Youthful Offender path) or a pardon may still fit, and whether a specific later case counts is worth confirming rather than assuming. SC Appleseed and the solicitor\'s office can check.',
+          remedy: 'Not eligible on the § 22-5-910 path (later conviction) — ask about other routes',
+          citation: 'S.C. Code § 22-5-910'
+        },
+        ineligible_mv_sc: {
+          status: 'ineligible',
+          title: 'Motor-Vehicle Offenses Are Excluded',
+          message: 'South Carolina\'s first-offense expungement path (§ 22-5-910) excludes any motor-vehicle-operation offense — which is why a DUI, in particular, cannot be expunged this way however long ago it was. No waiting period changes that. The remaining route for a motor-vehicle conviction is a PARDON from the Board of Probation, Parole and Pardon Services, which does not erase the record but restores rights and removes many barriers. If the offense was not actually a driving offense, run this again and choose a different category.',
+          remedy: 'None on the expungement list (motor-vehicle offense) — a pardon is the route',
+          citation: 'S.C. Code § 22-5-910'
+        },
+        eligible_920_sc: {
           status: 'eligible',
           title: 'Youthful Offender Act Conviction — Eligible, Once in a Lifetime',
-          message: 'Because this was a Youthful Offender Act conviction (you were 17 to 24, it was non-violent, and it is not a registry offense) and you completed your sentence more than 5 years ago, you appear eligible to expunge it under § 22-5-920. One important limit: this route can be used only ONCE in your lifetime, so if you have more than one YOA conviction you might clear, it is worth being deliberate about which. You apply through the SOLICITOR\'S office in your circuit, and the cost is about $310 total. If your conviction is from before 2010, there is a retroactive YOA path worth asking about.',
-          remedy: 'YOA Expungement through the Circuit Solicitor (§ 22-5-920) — once per lifetime',
+          message: 'Because you were SENTENCED under the Youthful Offender Act, the offense is not excluded (not a motor-vehicle, violent, DV, or registry offense), and you have stayed clean both while serving the sentence AND for 5 years after completing it, you appear eligible to expunge under § 22-5-920. (Note: a driving-under-suspension conviction, or a pre-May-2018 disturbing-schools conviction, does not disqualify you.) This route can be used only ONCE in your lifetime, so if you have more than one YOA conviction to clear, be deliberate about which. You apply through the SOLICITOR\'S office in your circuit; it is discretionary. On cost: about $310 total, and the $250 solicitor fee is nonrefundable even if you turn out to be ineligible — confirm with the solicitor first, and ask about the donation fund.',
+          remedy: 'YOA Expungement through the Circuit Solicitor (§ 22-5-920) — once per lifetime; $250 nonrefundable',
+          citation: 'S.C. Code §§ 22-5-920, 17-22-940'
+        },
+        waiting_920_sc: {
+          status: 'waiting',
+          title: 'YOA Conviction — 5-Year Post-Completion Wait Not Yet Met',
+          message: 'A Youthful Offender Act conviction becomes expungeable 5 years after you complete the sentence (including probation or parole), and you must stay clean both while serving and through those 5 years (§ 22-5-920). Based on your dates, the 5 years have not run yet. Come back when they have; you apply through the solicitor\'s office, and this route is once per lifetime.',
+          remedy: 'Wait for 5 years after sentence completion, then apply through the solicitor',
           citation: 'S.C. Code § 22-5-920'
         },
-        waiting_sc: {
+        ineligible_yoa_trap_sc: {
+          status: 'ineligible',
+          title: 'YOA-Eligible Is Not Enough — You Must Have Been SENTENCED Under It',
+          message: 'This is a trap in South Carolina law worth understanding. The § 22-5-920 expungement is available only if you were actually SENTENCED under the Youthful Offender Act — being eligible for YOA but sentenced as an adult does NOT qualify (§ 22-5-920(B)(3)). Your sentencing paperwork will say whether the Youthful Offender Act was applied. (There is one narrow exception for certain pre-June-2010 convictions of statutory youthful offenders.) Because this turns on exactly how you were sentenced, it is worth having SC Appleseed or the solicitor\'s office confirm before you conclude there is no route — and a pardon remains available regardless.',
+          remedy: 'Not eligible (YOA-eligible but adult-sentenced, § 22-5-920(B)(3)) — confirm the sentencing; ask about a pardon',
+          citation: 'S.C. Code § 22-5-920(B)(3)'
+        },
+        ineligible_yoa_excl_sc: {
+          status: 'ineligible',
+          title: 'This YOA Conviction Is on the Exclusion List',
+          message: 'The § 22-5-920 Youthful Offender Act path excludes motor-vehicle-operation offenses, violent crimes (§ 16-1-60), Chapter 25 of Title 16 domestic-violence offenses (except as allowed by § 16-25-30), and sex-offender-registry offenses. Because the offense you described is in one of those categories, this path is closed. Whether a specific offense counts as "violent" or falls under the DV exception is a legal classification worth confirming rather than assuming — SC Appleseed and the solicitor\'s office can check — and a pardon remains available as a separate route.',
+          remedy: 'None on the YOA path (excluded offense) — confirm the classification; ask about a pardon',
+          citation: 'S.C. Code § 22-5-920'
+        },
+        eligible_930_sc: {
+          status: 'eligible',
+          title: 'First-Offense Drug Conviction — Eligible Through the Solicitor',
+          message: 'Based on your dates, this first-offense drug conviction appears eligible under § 22-5-930. The clock runs from SENTENCE COMPLETION (not the conviction date): 3 years for simple possession or unlawful prescription-drug possession, or 20 years for a first possession-with-intent-to-distribute — and for the PWID path, only a later DRUG or FELONY conviction interrupts the clean period (a non-drug misdemeanor does not). You apply through the SOLICITOR\'S office in your circuit, once per lifetime. On cost: about $310 total, and the $250 solicitor fee is NONREFUNDABLE even if you turn out to be ineligible — so confirm eligibility before paying, and ask the solicitor about its donation fund, which can cover up to half the admin fee.',
+          remedy: 'Drug Expungement through the Circuit Solicitor (§ 22-5-930) — once per lifetime; $250 nonrefundable',
+          citation: 'S.C. Code §§ 22-5-930, 17-22-940'
+        },
+        waiting_930_sc: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'South Carolina\'s conviction expungement waits are 3 years for a first-offense low-penalty conviction or a first drug-possession offense (5 years for a third-degree DV), and 5 years after sentence completion for a Youthful Offender Act conviction. Based on your dates, yours has not run yet, and it requires staying conviction-free. When the time comes, you apply through the solicitor\'s office in your circuit.',
-          remedy: 'Wait for the period (conviction-free), then apply through the solicitor',
-          citation: 'S.C. Code §§ 22-5-910, 22-5-920, 22-5-930'
+          title: 'First-Offense Drug Conviction — Wait Not Yet Met',
+          message: 'A first-offense drug conviction under § 22-5-930 becomes expungeable a set time after you complete the sentence: 3 years for simple possession, or 20 years for possession-with-intent-to-distribute. Based on your dates, that has not run yet. Note the clock runs from sentence COMPLETION, not the conviction — so finishing any probation or parole is what starts it. Come back when the period runs; you apply through the solicitor\'s office, once per lifetime.',
+          remedy: 'Wait for the period from sentence completion, then apply through the solicitor',
+          citation: 'S.C. Code § 22-5-930'
+        },
+        ineligible_930_lookback_sc: {
+          status: 'ineligible',
+          title: 'A Prior Conditional Discharge Blocks This',
+          message: 'South Carolina bars the § 22-5-930 drug-expungement path if you received a drug CONDITIONAL DISCHARGE too recently before the arrest for this offense — within 5 years for simple marijuana possession, or within 10 years for any other controlled substance or prescription drug (§ 22-5-930(D)). Because that lookback applies to you, this path is not available. A pardon remains a separate route, and whether the timing truly bars you is worth confirming with SC Appleseed or the solicitor\'s office.',
+          remedy: 'Not eligible (conditional-discharge lookback bar, § 22-5-930(D)) — ask about a pardon',
+          citation: 'S.C. Code § 22-5-930(D)'
+        },
+        ineligible_930_clean_sc: {
+          status: 'ineligible',
+          title: 'A Later Drug or Felony Conviction Blocks the PWID Path',
+          message: 'The § 22-5-930(B) path for a first possession-with-intent-to-distribute requires that you have had no other DRUG conviction and no FELONY conviction in the 20 years since completing the sentence (a non-drug misdemeanor would not have counted). Because you told us there was a later drug or felony conviction, this path is not available. A pardon remains a separate route; SC Appleseed and the solicitor\'s office can confirm whether the specific later case truly disqualifies you.',
+          remedy: 'Not eligible on the PWID path (later drug/felony conviction) — ask about a pardon',
+          citation: 'S.C. Code § 22-5-930(B)'
+        },
+        eligible_fraud_sc: {
+          status: 'eligible',
+          title: 'Fraudulent Check — MANDATORY Expungement',
+          message: 'This is South Carolina\'s one mandatory conviction-expungement path. For a first-offense fraudulent check at the misdemeanor level (the instrument was $5,000 or less), once one year has passed conviction-free, the court SHALL expunge it — it is not discretionary (§ 34-11-90(e)). Based on your dates, that year has run. You apply through the SOLICITOR\'S office in your circuit, once per lifetime; the usual fees apply (about $310, with the $250 solicitor portion nonrefundable), so ask about the donation fund. Because the grant is mandatory once you qualify, this is one of the more reliable paths in the state.',
+          remedy: 'Mandatory expungement through the Circuit Solicitor (§ 34-11-90(e)) — court shall grant',
+          citation: 'S.C. Code § 34-11-90(e)'
+        },
+        waiting_fraud_sc: {
+          status: 'waiting',
+          title: 'Fraudulent Check — 1-Year Wait Not Yet Met',
+          message: 'A first-offense misdemeanor-level fraudulent check is expunged (mandatorily) one year after conviction, provided you stay conviction-free in that year (§ 34-11-90(e)). Based on your dates, either the year has not run or there was a later conviction. Come back once a clean year has passed; you apply through the solicitor\'s office, and this route is once per lifetime.',
+          remedy: 'Wait for one conviction-free year, then apply through the solicitor',
+          citation: 'S.C. Code § 34-11-90(e)'
+        },
+        ineligible_fraud_felony_sc: {
+          status: 'ineligible',
+          title: 'Felony-Level Fraudulent Check Is Excluded',
+          message: 'The § 34-11-90(e) fraudulent-check expungement reaches only the misdemeanor level — an instrument of $5,000 or less. Because the amount here was over $5,000, making it a felony-level offense, this path is closed, and no waiting period changes that. A pardon from the Board of Probation, Parole and Pardon Services remains a separate route. SC Appleseed can advise on whether it is worth pursuing.',
+          remedy: 'None (felony-level fraudulent check) — a pardon is the route',
+          citation: 'S.C. Code § 34-11-90(e)'
+        },
+        eligible_950_sc: {
+          status: 'eligible',
+          title: 'Summary-Court Non-Conviction — Automatic and Free',
+          message: 'This is South Carolina\'s best case. Because your case ended without a conviction in a summary court (magistrate or municipal) and you were fingerprinted, the court SHALL issue the expungement order itself — no application, no cost (§ 17-22-950). (If you were not fingerprinted, you apply to the summary court, still free.) On top of that, the charge comes off all internet-based public records within 30 days of the disposition, whether or not you file anything (§ 17-22-950(E)). So there may be nothing for you to do. Request your record to confirm it went through; if the prosecution or law enforcement objected (other charges pending, or ineligible), a general-sessions judge decides and you get written notice within 30 days.',
+          remedy: 'Automatic free expungement (§ 17-22-950) — plus 30-day internet scrub; check it was applied',
+          citation: 'S.C. Code § 17-22-950'
+        },
+        eligible_17140_sc: {
+          status: 'eligible',
+          title: 'Non-Conviction — Records Destroyed, Fees Waived',
+          message: 'Because your case ended without a conviction (a dismissal, nolle prosequi, or not-guilty in general sessions, or a summary case that falls outside the automatic path), South Carolina DESTROYS the public arrest records — booking, mug shots, fingerprints, bench warrants (§ 17-1-40). You apply through the solicitor\'s office, and here the fees are waived: no $250 solicitor fee for a general-sessions non-conviction (unless it was part of a plea deal — see below), no $25 SLED fee, and the $35 clerk fee is waived for a dismissal or acquittal (§ 17-22-940). One honest limit worth knowing: "destroyed" means the PUBLIC records go, but law enforcement and the prosecutor keep sealed copies (generally for a few years, indefinitely for ongoing or future investigations). Multiple charges from the same incident are handled as one order.',
+          remedy: 'Non-conviction destruction (§ 17-1-40) through the solicitor — fees waived',
+          citation: 'S.C. Code §§ 17-1-40, 17-22-940'
+        },
+        eligible_17140_pleadeal_sc: {
+          status: 'eligible',
+          title: 'Non-Conviction From a Plea Deal — Eligible, but the $250 Fee Applies',
+          message: 'Your charge was dismissed or nolle prossed, so it is a non-conviction and its public records are destroyed under § 17-1-40 — but there is a specific fee trap worth naming. The $250 solicitor fee is normally WAIVED for a general-sessions non-conviction, EXCEPT when the dismissal came as part of a plea deal in which you pled guilty to other charges (§ 17-22-940). Because that describes your case, the $250 solicitor fee applies here (the $25 SLED fee and the $35 clerk fee are still waived for a dismissal/acquittal). You apply through the solicitor\'s office; ask about the donation fund, which can cover up to half the admin fee. As always, "destroyed" reaches the public records; law enforcement keeps sealed copies.',
+          remedy: 'Non-conviction destruction (§ 17-1-40) — $250 solicitor fee applies (plea-deal exception)',
+          citation: 'S.C. Code §§ 17-1-40, 17-22-940'
+        },
+        eligible_pti_sc: {
+          status: 'eligible',
+          title: 'Completed PTI — Non-Criminal Disposition, With a Full Right to Deny',
+          message: 'Because you successfully completed pretrial intervention (PTI), your case ends in a NON-CRIMINAL disposition (§ 17-22-150(a)): the records are destroyed under § 17-1-40, you are restored to the status you held before the arrest, and — importantly — you may lawfully answer as though the arrest and charge never happened. This is one of the few South Carolina paths with an explicit right to deny. You apply through the solicitor\'s office, and the $25 SLED fee is waived for a PTI expungement. Many PTI programs fold the expungement into completion, so check whether yours was already done. SC Appleseed can help if it was not.',
+          remedy: 'PTI expungement (§ 17-22-150) — destruction + restoration + right to deny; SLED fee waived',
+          citation: 'S.C. Code §§ 17-22-150, 17-1-40'
+        },
+        eligible_cd_sc: {
+          status: 'eligible',
+          title: 'Completed Conditional Discharge — Then Expunge, With a Full Right to Deny',
+          message: 'Because you completed a drug conditional discharge (a first-drug-offense deferral under § 44-53-450), your case was discharged and dismissed WITHOUT a conviction ever being entered. Two steps follow. First, the discharge itself carries a fee that must be paid before it is entered — $350 in general sessions or $150 in summary court — waivable or reducible only on a finding of indigency. Then you apply under § 44-53-450(B) to expunge, and the effect is strong: restoration to your pre-arrest status and a FULL right to deny the offense ever occurred. This conditional-discharge route is available only once per person, and the $25 SLED fee is waived for it. SC Appleseed can help you with both steps.',
+          remedy: 'Expunge after a conditional discharge (§ 44-53-450) — restoration + right to deny; once per person',
+          citation: 'S.C. Code § 44-53-450'
+        },
+        complex_diversion_sc: {
+          status: 'complex',
+          title: 'Which Diversion Program Was It? That Decides the Route',
+          message: 'South Carolina has several diversion programs and they expunge on different terms — pretrial intervention (§ 17-22-150), a drug conditional discharge (§ 44-53-450), alcohol education (§ 17-22-530), traffic education (§ 17-22-330), and others we have not yet detailed. Because the route, the fee, and whether you get a right to deny all depend on which program you completed, we would rather point you to someone than guess. The solicitor\'s office that ran your program is the authority, and SC Appleseed can help you sort out which path applies.',
+          remedy: 'Consult the solicitor / SC Appleseed (which diversion program decides the route)',
+          citation: 'S.C. Code §§ 17-22-150, 44-53-450'
+        },
+        eligible_juvenile_status_sc: {
+          status: 'eligible',
+          title: 'Juvenile Status Offense — the Court SHALL Expunge',
+          message: 'For a juvenile STATUS offense — something unlawful only because of your age, like truancy, running away, or a curfew violation — the family court SHALL expunge the record on request (§ 63-19-2050), and a not-guilty finding is expunged regardless of age and for free. The record is destroyed under § 17-1-40, and once expunged you may lawfully deny the adjudication and are restored to your pre-offense status. There are conditions the court checks — generally that you are 18 or older, the disposition is complete, and nothing new is pending — but a status offense is the strongest juvenile case. SC Appleseed and the family court can help you file.',
+          remedy: 'Juvenile status-offense expungement (§ 63-19-2050) — mandatory; destruction + right to deny',
+          citation: 'S.C. Code § 63-19-2050'
+        },
+        eligible_juvenile_nonviolent_sc: {
+          status: 'eligible',
+          title: 'Juvenile Nonviolent Adjudication — May Be Expungeable',
+          message: 'A juvenile adjudication for a NONVIOLENT crime (§ 16-1-70) can be expunged, but it is discretionary (the court "may") and has real conditions: you must be 18 or older, have completed the disposition, have no subsequent adjudication or conviction, and have nothing pending in family or general sessions court (§ 63-19-2050). One hard bar to check — a prior adjudication for an offense that carries a 5-year-or-more adult maximum sentence blocks the petition entirely (§ 63-19-2050(A)(2)). If granted, the record is destroyed under § 17-1-40 and you are restored to your pre-offense status with a right to deny. Because this is discretionary and the conditions are specific, SC Appleseed and the family court are worth involving.',
+          remedy: 'Juvenile nonviolent expungement (§ 63-19-2050) — discretionary; conditions apply',
+          citation: 'S.C. Code § 63-19-2050'
+        },
+        ineligible_juvenile_violent_sc: {
+          status: 'ineligible',
+          title: 'A Juvenile Violent Adjudication Cannot Be Expunged',
+          message: 'South Carolina does not expunge a juvenile adjudication for a VIOLENT crime (as defined in § 16-1-60) — this is a categorical bar in § 63-19-2050, and no waiting period changes it. Whether a specific offense counts as "violent" under § 16-1-60 is a legal classification, so if there is any doubt it is worth confirming with SC Appleseed or the family court rather than assuming. A pardon is a separate route that these juvenile rules do not govern.',
+          remedy: 'None (juvenile violent adjudication) — confirm the classification; a pardon is separate',
+          citation: 'S.C. Code § 63-19-2050'
         },
         pardon_path_sc: {
           status: 'complex',
-          title: 'This Conviction Is Not on the Expungement List — A Pardon Is the Route',
-          message: 'We will be straight with you: South Carolina only expunges a short, specific list of first-offense situations, and most convictions — including more serious offenses, DUIs, and repeat offenses — are not on it. There is no general expungement for them, however long ago they were. But there is a real route, and it is worth pursuing: a PARDON from the South Carolina Board of Probation, Parole and Pardon Services. A pardon does not erase the record, but it removes many of the barriers a conviction creates and restores rights. One thing to watch: South Carolina\'s legislature has repeatedly considered a broad first-offense expungement bill, and if it passes, more convictions would become expungeable — so it is worth checking current law. The sccourts.org resources and the Pardon board can point you to the right path.',
-          remedy: 'Pardon (Board of Probation, Parole and Pardon Services) — not on the expungement list',
-          citation: 'S.C. Code § 17-22-910 et seq.'
+          title: 'This Conviction Is Not on the Expungement Catalog — A Pardon Is the Route',
+          message: 'We will be straight with you: South Carolina expunges only the closed catalog in § 17-22-910 — mostly specific first-offense situations — and most convictions, including more serious offenses, motor-vehicle offenses, and repeat offenses, are not on it. There is no general expungement for them, however long ago they were. But there is a real route worth pursuing: a PARDON from the South Carolina Board of Probation, Parole and Pardon Services. A pardon does not erase the record, but it removes many of the barriers a conviction creates and restores rights. One thing to watch: South Carolina\'s legislature repeatedly considers a broad first-offense expungement bill, so it is worth checking whether current law has expanded. SC Appleseed and the Pardon board can point you to the right path.',
+          remedy: 'Pardon (Board of Probation, Parole and Pardon Services) — not on the § 17-22-910 catalog',
+          citation: 'S.C. Code § 17-22-910'
         },
         complex_conv_sc: {
           status: 'complex',
-          title: 'We Need to Match Your Conviction to the List',
-          message: 'South Carolina expunges only a few specific first-offense situations — a low-penalty first offense, a Youthful Offender Act conviction, or a first drug-possession offense — and everything else needs a pardon instead. Since you are not sure which, if any, fits your case, we are not going to guess, because it is the difference between a straightforward expungement and no expungement at all. Your court paperwork has the offense and penalty, and the solicitor\'s office in your circuit determines eligibility as a matter of course. The sccourts.org FAQ is a good starting point.',
-          remedy: 'Match Your Conviction to the List (court paperwork / circuit solicitor)',
-          citation: 'S.C. Code § 17-22-910 et seq.'
+          title: 'We Need to Match Your Conviction to the Catalog',
+          message: 'South Carolina expunges only the closed § 17-22-910 catalog — a low-penalty first offense, a first-offense firearm/weapon, a Youthful Offender Act conviction, a first drug offense, a first fraudulent check, and a few others — with everything else needing a pardon. Since you are not sure which, if any, fits, we are not going to guess, because it is the difference between a straightforward expungement and none. Your court paperwork has the offense and penalty, and — importantly — eligibility keys to the offense you were CONVICTED of, not the original charge, so a plead-down can qualify on the plea (§ 17-22-910(B)). The solicitor\'s office determines eligibility as a matter of course; SC Appleseed can help you read it.',
+          remedy: 'Match Your Conviction to the § 17-22-910 Catalog (court paperwork / circuit solicitor)',
+          citation: 'S.C. Code § 17-22-910'
         }
       }
     },
@@ -10092,15 +10399,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Application for Expungement (filed with the circuit solicitor)',
           formUrl: 'https://www.sccourts.org/selfHelp/',
           steps: [
-            'Identify your circuit\'s solicitor office — that is where South Carolina expungements are handled, not the court.',
-            'For a summary-court non-conviction, it should already be automatic and free (since 2009) — check first.',
-            'For an eligible conviction or a General Sessions dismissal, file the application with the solicitor; they coordinate the SLED verification.',
-            'Budget for the fees: about $310 total ($250 solicitor, $25 SLED, $35 clerk), typically in separate money orders — with exemptions for non-plea-deal dismissals.'
+            'Confirm eligibility BEFORE paying: the $250 solicitor fee is nonrefundable even if you turn out to be statutorily ineligible or the solicitor withholds consent — so use the solicitor\'s eligibility check first.',
+            'A summary-court non-conviction is automatic and free (§ 17-22-950) — check that it was applied before doing anything.',
+            'For an eligible conviction or a general-sessions non-conviction, file the application with the solicitor in the circuit where the charge originated; they coordinate the SLED verification.',
+            'Ask the solicitor\'s office about its private donation fund (§ 17-22-940(A)(2)) — it can cover up to 50% of the $250 admin fee, first-come-first-served. If the solicitor withholds consent, retained counsel can file a circuit-court action for a judicial eligibility determination (§ 17-22-940(I)).'
           ],
-          // null: Wave 5 gives the $310 breakdown but flags current amounts and
-          // the refund mechanics.
-          fees: null,
-          feeWaiver: null,
+          // Statute-cited exact fees (§ 17-22-940); amounts are in the statute.
+          fees: 'About $310 per order: $250 solicitor admin fee (NONREFUNDABLE even if ineligible or the solicitor withholds consent), $25 SLED verification, $35 clerk filing fee (refunded if statutorily ineligible) — S.C. Code § 17-22-940. A conditional-discharge discharge fee ($350 general sessions / $150 summary court) applies before that path.',
+          feeWaiver: 'Summary-court § 17-22-950 expungements are entirely free. For a § 17-1-40 general-sessions non-conviction, the $250 solicitor fee is waived UNLESS the dismissal was part of a plea deal; the $25 SLED fee is waived for § 17-1-40 / 17-22-150 / conditional-discharge paths; the $35 clerk fee is waived for a dismissal or acquittal. The $250 may be waived for identity-theft false accusations (§ 17-22-940(J)), and the conditional-discharge fee is waivable on an indigency finding.',
           courtContact: 'The circuit solicitor\'s office (16 judicial circuits)'
         }
       },

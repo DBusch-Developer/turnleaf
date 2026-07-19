@@ -9382,68 +9382,79 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // WISCONSIN — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  // WISCONSIN — STATUTE-VERIFIED 2026-07-19. Diana read Wis. Stat. § 973.015
+  // (2023-24 Statutes updated through 2025 Wis. Act 247, certified and published
+  // 7-1-26), including the printed case annotations, from docs.legis.wisconsin.gov.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md + Diana's 7/19 read.
   //
-  // THE HONEST-NO TEMPLATE. Wis. Stat. § 973.015: expungement exists ONLY if the
-  // judge ordered it AT SENTENCING, for offences committed BEFORE age 25, max
-  // penalty 6 years or less. If the judge did not order it then, NO PETITION
-  // PROCESS EXISTS (State v. Matasek / State v. Arberry closed the door). Reform
-  // failed AGAIN in 2025. Almost everyone gets "no path; here is the pardon".
+  // THE HONEST-NO TEMPLATE, now statute-confirmed. § 973.015: expungement exists
+  // ONLY if the judge ordered it AT SENTENCING (1m)(a)1 — offence before age 25,
+  // max penalty 6 years or less, benefit/no-harm finding. If not ordered then, NO
+  // PETITION PROCESS EXISTS (Matasek: "at the time of sentencing"; Arberry: no
+  // post-sentencing motion). The statute text is UNTOUCHED since 2015 a. 80/366
+  // — no 2021-2025 act amended it — so the honest-no stands as of the 7/1/2026
+  // certified publication.
   //
-  // Two honesty notes in every result: (1) if it WAS ordered, completion is
-  // self-executing (State v. Hemp) and may already have happened — check CCAP.
-  // (2) Expungement removes COURT records (CCAP) only; the DOJ Crime Information
-  // Bureau record survives, so CIB-check employers still see it.
-  //
-  // Getting this page right — accurate, kind, useful — demonstrates the
-  // product's integrity better than any generous state.
+  // Once ordered, it is SELF-EXECUTING on successful completion (Hemp) — but
+  // "successful completion" is a real bar: no subsequent conviction, probation not
+  // revoked, conditions satisfied INCLUDING DOC-imposed conditions the court cannot
+  // excuse after a violation (Lickes). Court-record only (Leitner/Braunschweig:
+  // law-enforcement/prosecutor records survive; facts usable at later sentencing);
+  // CIB record survives; DOT driving-record entries (343.23(2)(a)) are not reached.
+  // Narrow real routes: mandatory order for a 942.08 offence under 18 (1m)(a)2,
+  // and the (2m) trafficking-survivor motion, filable at any time.
   // ==========================================================================
   WI: {
     code: 'WI',
     name: 'Wisconsin',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
     terminology:
       'Wisconsin expungement is unusually limited, and being honest about that is the whole point. '
       + 'Under Wis. Stat. § 973.015, a record can only be expunged if the JUDGE ORDERED it at the '
       + 'time of sentencing — for an offense committed before you turned 25, with a maximum penalty '
       + 'of six years or less. If the judge did not order it then, there is no later petition you '
-      + 'can file; the courts have confirmed that door is closed. For most people, the real path is '
-      + 'a Governor\'s pardon, which does not erase the record but restores rights. And even a '
-      + 'granted expungement only clears the court record — the state Crime Information Bureau record '
-      + 'survives, so some background checks still show it.',
+      + 'can file; the courts have confirmed that door is closed (Matasek, Arberry), and the statute '
+      + 'text has not changed since 2015. For most people, the real path is a Governor\'s pardon, '
+      + 'which does not erase the record but restores rights. And even a granted expungement only '
+      + 'clears the COURT record — the state Crime Information Bureau record survives, and driving-'
+      + 'record entries at the DOT are not reached — so some background checks still show it.',
     keyDates: [
+      {
+        label: '§ 973.015 confirmed against the certified statute (no reform passed)',
+        date: '2026-07-01',
+        kind: 'operative',
+        note: 'The 2023-24 Statutes were certified and published 7/1/2026 (updated through 2025 Wis. Act 247). The § 973.015 history ends at 2015 a. 80, 366 — no 2021-2025 act amended it, so the at-sentencing-only rule stands. (Reform bills passed the Assembly in 2021 and 2024 but the Senate never voted; Evers\'s budget petition process (LRB-1770) was stripped.)',
+      },
       {
         label: 'Governor\'s pardon process revived',
         date: '2019',
         kind: 'operative',
-        note: 'Wave 5 gives the year only. Felony convictions, generally 5 years post-sentence-completion, via the Pardon Advisory Board.',
+        note: 'Wave 5 gives the year only. Felony convictions, generally 5 years post-sentence-completion, via the Pardon Advisory Board. Executive process, not in § 973.015 — see open questions.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm no expungement-petition process passed in the 2025-26 Wisconsin session. Wave 5 says reform failed again — Evers put a petition process in the budget (LRB-1770), the Legislature stripped it; Assembly bills passed in 2021 and 2024 but the Senate never voted. As of the research date the answer is no. Verify nothing passed in the weeks since before softening the honest-no.',
+          'Confirm the current Governor\'s pardon criteria and wait: Wave 5 gives felony convictions, ~5 years post-sentence-completion, via the Pardon Advisory Board, with some expedited review since 2021. This is an executive process, NOT part of § 973.015, so it is not settled by the statute pull. The tree routes most people here; confirm the criteria.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the current Governor\'s pardon criteria and wait: Wave 5 gives felony convictions, ~5 years post-sentence-completion, via the Pardon Advisory Board, with some expedited review since 2021. The tree routes most people here; confirm the criteria.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the § 973.015(1m)(a)3 exclusion list (listed violent Class H felonies and others) and the special tracks: juvenile § 938.355(4m) petition at 17, and trafficking-survivor § 973.015(2m) motion for prostitution convictions anytime. The tree asks the at-sentencing question; these are disclosed.',
+          'Confirm the juvenile § 938.355(4m) expungement-petition track (a petition available at 17). It is a separate statute, not part of § 973.015, and was not pulled — the tree discloses it in prose only. Pull § 938.355(4m) before encoding its requirements.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Wis. Stat. § 973.015 (expungement — at-sentencing only; under 25; max 6-yr penalty)', url: null, retrievedOn: null },
-      { id: 'State v. Matasek; State v. Arberry (no post-sentencing petition process)', url: null, retrievedOn: null },
-      { id: 'State v. Hemp (completion self-executing once ordered)', url: null, retrievedOn: null },
-      { id: 'Wis. Stat. § 973.015(2m) (trafficking-survivor motion)', url: null, retrievedOn: null },
+      { id: 'Wis. Stat. § 973.015 (expungement — (1m)(a)1 at-sentencing only, under 25, max 6-yr penalty, benefit/no-harm; (1m)(a)2 mandatory order for a § 942.08 offence under 18; (1m)(a)3 Class H/I felony bars; (1m)(b) self-executing on successful completion; DOT § 343.23(2)(a) not reached) — 2023-24 Statutes certified/published 7/1/2026', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'Wis. Stat. § 973.015(2m) (trafficking-survivor motion — vacate or expunge a § 944.30 prostitution conviction/adjudication/NGRI at any time; benefit/no-harm; DA served)', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'State v. Matasek; State v. Arberry (expungement decided "at the time of sentencing"; no post-sentencing motion) — verified from the annotations printed with the certified § 973.015', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'State v. Hemp (expungement self-executing on successful completion; certificate forwarded automatically, court cannot revisit) — verified from the annotations printed with the certified § 973.015', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'State v. Lickes ("conditions" for successful completion include DOC-imposed conditions, which the court cannot excuse after a violation) — verified from the annotations printed with the certified § 973.015', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'State v. Leitner; State v. Braunschweig (expungement reaches the COURT record only; law-enforcement and prosecutor records survive and the underlying facts remain usable at a later sentencing) — verified from the annotations printed with the certified § 973.015', url: 'https://docs.legis.wisconsin.gov/statutes/statutes/973/015', retrievedOn: '2026-07-19' },
+      { id: 'Statute-history note: § 973.015 history ends at 2015 a. 80, 366 — no 2021-2025 act amended it (confirmed against the 7/1/2026 certified publication)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -9453,25 +9464,38 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'ordered_wi' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'traffick_wi' },
             { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_wi' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_wi' },
             { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        // The single question that decides everything in Wisconsin.
+        // Trafficking-survivor route (2m) — the one motion that can be filed at any
+        // time, checked before the at-sentencing gate.
+        traffick_wi: {
+          type: 'boolean',
+          text: 'Was this a prostitution conviction (Wis. Stat. § 944.30) that resulted from your being a victim of human trafficking?',
+          yes: 'eligible_traffick_wi',
+          no: 'ordered_wi'
+        },
+        // The single question that decides everything else in Wisconsin.
         ordered_wi: {
           type: 'boolean',
-          text: 'At your SENTENCING, did the judge order that this offense would be expunged upon your successful completion? (This had to be decided at sentencing — for an offense committed before you turned 25, with a maximum penalty of 6 years or less. If it was not ordered then, Wisconsin has no way to add it later.)',
+          text: 'At your SENTENCING, did the judge order that this offense would be expunged upon your successful completion? (This had to be decided at sentencing — for an offense committed before you turned 25, with a maximum penalty of 6 years or less. Within that, a Class H or Class I felony cannot be expunged if you had any prior felony, or if it is a listed violent offense — which is why some young defendants never got the order. If it was not ordered then, Wisconsin has no way to add it later.)',
           yes: 'completed_wi',
           no: 'pardon_path_wi'
         },
+        // "Successful completion" is a real bar (Lickes): no subsequent conviction,
+        // probation not revoked, conditions satisfied incl. DOC-imposed ones.
         completed_wi: {
-          type: 'boolean',
-          text: 'Have you successfully completed the sentence — no new convictions, probation not revoked, all conditions met, and fines paid?',
-          yes: 'eligible_already_wi',
-          no: 'waiting_wi'
+          type: 'choice',
+          text: 'How did the sentence end?',
+          options: [
+            { label: 'I completed it successfully — no new conviction, probation not revoked, all conditions met', value: 'success', next: 'eligible_already_wi' },
+            { label: 'I am still completing it (still on probation / conditions ongoing)', value: 'ongoing', next: 'waiting_wi' },
+            { label: 'My probation was revoked, I picked up a new conviction, or I failed a condition', value: 'failed', next: 'failed_wi' }
+          ]
         }
       },
       results: {
@@ -9499,22 +9523,36 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_already_wi: {
           status: 'eligible',
           title: 'It May Already Be Expunged — Check CCAP',
-          message: 'Here is some good news that a lot of people miss: because the judge ordered expungement at your sentencing and you successfully completed the sentence, your expungement is SELF-EXECUTING — it happens automatically on completion, with no petition to file. It may already be done. Check the Wisconsin court records system (CCAP) to confirm the case has been expunged. One honest caveat to know, though: Wisconsin expungement removes the COURT record only. The state Department of Justice Crime Information Bureau (CIB) record survives, so an employer running a CIB background check may still see it. That is a real limit, not a technicality — but the court-record expungement is still meaningful.',
-          remedy: 'Check CCAP — expungement is automatic on completion (but the CIB record survives)',
-          citation: 'Wis. Stat. § 973.015'
+          message: 'Here is some good news that a lot of people miss: because the judge ordered expungement at your sentencing and you successfully completed the sentence, your expungement is SELF-EXECUTING — it happens automatically on completion, with no petition to file (State v. Hemp). It may already be done. Check the Wisconsin court records system (CCAP) to confirm the case has been expunged. One honest caveat to know, though: Wisconsin expungement removes the COURT record only. The state Department of Justice Crime Information Bureau (CIB) record survives, so an employer running a CIB background check may still see it — and driving-record entries kept by the DOT (Wis. Stat. § 343.23(2)(a)) are not reached either. That is a real limit, not a technicality — but the court-record expungement is still meaningful.',
+          remedy: 'Check CCAP — expungement is automatic on completion (but the CIB and DOT records survive)',
+          citation: 'Wis. Stat. § 973.015(1m)(b); State v. Hemp'
         },
         waiting_wi: {
           status: 'waiting',
           title: 'Finish the Sentence — Then It Expunges Automatically',
-          message: 'Your judge ordered expungement at sentencing, which is the hard part in Wisconsin — so you are on the right track. It has not happened yet because it triggers on SUCCESSFUL completion: no new convictions, probation not revoked, all conditions met, and fines paid. Once you finish all of that, the expungement is automatic — you do not file anything. Stay on track and it will happen. One thing to know for later: it clears the court record but not the state Crime Information Bureau record, which survives.',
-          remedy: 'Complete the sentence successfully — expungement is then automatic',
-          citation: 'Wis. Stat. § 973.015'
+          message: 'Your judge ordered expungement at sentencing, which is the hard part in Wisconsin — so you are on the right track. It has not happened yet because it triggers on SUCCESSFUL completion, and that is a real bar: no subsequent conviction, your probation not revoked, and all conditions satisfied — including conditions the Department of Corrections imposed, which a court cannot excuse after a violation (State v. Lickes). Meet all of that and the expungement is automatic — you do not file anything. One thing to know for later: it clears the court record but not the state Crime Information Bureau record, and it does not reach DOT driving-record entries (Wis. Stat. § 343.23(2)(a)) — both survive.',
+          remedy: 'Complete the sentence successfully (all conditions, incl. DOC-imposed) — expungement is then automatic',
+          citation: 'Wis. Stat. § 973.015(1m)(b); State v. Lickes'
+        },
+        failed_wi: {
+          status: 'ineligible',
+          title: 'The Completion Condition Failed — the Expungement Is Lost',
+          message: 'This is a hard one to deliver, but you should hear it straight. Your judge ordered expungement at sentencing, but that order was conditional on SUCCESSFUL completion — and a probation revocation, a new conviction, or a failed condition defeats it. Wisconsin\'s courts have held that "conditions" includes conditions the Department of Corrections imposed, and a court cannot excuse a violation after the fact (State v. Lickes). So the expungement that was ordered does not take effect, and because Wisconsin has no post-sentencing petition process (Matasek, Arberry), there is no way to revive it. The real remaining route is the same as for everyone else here — a GOVERNOR\'S PARDON, generally available 5 years after you complete your sentence for a felony, through the Pardon Advisory Board (evers.wi.gov). A pardon restores rights without erasing the record. Wisconsin legal aid can confirm whether the completion truly failed, since the details matter.',
+          remedy: 'Expungement lost (completion failed) — Governor\'s Pardon is the remaining route',
+          citation: 'Wis. Stat. § 973.015(1m)(b); State v. Lickes'
+        },
+        eligible_traffick_wi: {
+          status: 'eligible',
+          title: 'Trafficking Survivor — a Motion You Can File At Any Time',
+          message: 'Wisconsin has one route that is not locked to sentencing, and it may fit you. Under § 973.015(2m), if you have a prostitution conviction (Wis. Stat. § 944.30) — or a related delinquency adjudication or NGRI finding — that resulted from your being a victim of human trafficking, you can file a motion AT ANY TIME to vacate OR expunge it. You show that you were a trafficking victim (under Wis. Stat. § 940.302 or § 948.051, or the federal Trafficking Victims Protection Act, 22 U.S.C. 7101-7112) and that the offense resulted from the trafficking; the district attorney is served and gets a chance to respond, and the court makes the benefit/no-harm finding. Evidence can include certified court records, immigration documents, agency documentation, or other credible evidence, and the law makes timing allowances for your safety. Because this is a real motion with a showing to make, do it with help — Wisconsin legal aid and survivor-focused advocates handle exactly these.',
+          remedy: 'Motion to vacate or expunge (§ 973.015(2m)) — trafficking survivor, filable any time',
+          citation: 'Wis. Stat. § 973.015(2m)'
         },
         pardon_path_wi: {
           status: 'complex',
           title: 'No Expungement Path — But a Pardon Is a Real Route',
-          message: 'We are going to be straight with you, because Wisconsin is unusual and a lot of tools are not honest about it. If the judge did NOT order expungement at your sentencing, there is no way to add it now — Wisconsin has no petition process to expunge a conviction after the fact, and the courts have confirmed that. That is a hard no on expungement, and we would rather tell you plainly than send you chasing a filing that does not exist. But it is not the end of the road. The real path in Wisconsin is a GOVERNOR\'S PARDON, and the process is active — you can generally apply 5 years after completing your sentence for a felony. A pardon does not erase the record, but it restores your rights and removes many barriers, and Wisconsin has been granting them. Apply through the Governor\'s Pardon Advisory Board (evers.wi.gov has the information). If you were under 18, or your conviction was a trafficking-related prostitution offense, there are separate narrow routes worth asking legal aid about.',
-          remedy: 'Governor\'s Pardon (Pardon Advisory Board) — no expungement path exists',
+          message: 'We are going to be straight with you, because Wisconsin is unusual and a lot of tools are not honest about it. If the judge did NOT order expungement at your sentencing, there is no way to add it now — Wisconsin has no petition process to expunge a conviction after the fact, and the courts have confirmed that (Matasek, Arberry). That is a hard no on expungement, and we would rather tell you plainly than send you chasing a filing that does not exist. Two specific things worth checking before you accept it, though. First, if your offense was a violation of Wis. Stat. § 942.08(2)(b), (c), or (d) or (3) committed before you turned 18, the court was REQUIRED to order expungement at sentencing (§ 973.015(1m)(a)2) — so if no order appears, that may be a sentencing error worth raising with counsel. Second, if your offense was a Class H or Class I felony and you never got the order, it may be because the statute bars it when you have any prior felony or the offense is a listed violent one (§ 973.015(1m)(a)3) — that is the law working as written, not a mistake. Otherwise, the real path is a GOVERNOR\'S PARDON: the process is active, and you can generally apply 5 years after completing your sentence for a felony. A pardon does not erase the record, but it restores rights and removes many barriers, and Wisconsin has been granting them (Pardon Advisory Board, evers.wi.gov). And if you were 17, ask legal aid about the separate juvenile § 938.355(4m) petition.',
+          remedy: 'Governor\'s Pardon (Pardon Advisory Board) — no expungement path exists (check the 942.08 mandatory-order note)',
           citation: 'Wis. Stat. § 973.015; State v. Matasek'
         }
       }

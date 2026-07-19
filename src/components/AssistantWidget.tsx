@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { MessageCircle, X, Send, ShieldCheck, Info, Scale, ExternalLink } from 'lucide-react';
+import { MessageCircle, X, Send, ShieldCheck, Info, Scale, ExternalLink, RotateCcw } from 'lucide-react';
 import { useAssistantScreen } from './AssistantContext';
 
 type Tier = 'VERIFIED' | 'GENERAL' | 'BEYOND';
@@ -47,6 +47,9 @@ export default function AssistantWidget() {
   const [loading, setLoading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
+  // A fresh conversation is one the user hasn't spoken in yet — we show Willow's
+  // intro card as the welcome, then hand over to the running conversation.
+  const isFresh = !messages.some(m => m.role === 'user');
   const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant');
   const face: WidgetState = loading
     ? 'thinking'
@@ -102,6 +105,12 @@ export default function AssistantWidget() {
     }
   };
 
+  const startNewConversation = () => {
+    if (loading) return;
+    setMessages([GREETING]);
+    setInput('');
+  };
+
   if (!open) {
     return (
       <button
@@ -115,8 +124,8 @@ export default function AssistantWidget() {
           boxShadow: '0 8px 32px rgba(77, 124, 89, 0.35)',
         }}
       >
-        <img src="/willow/welcoming.png" alt="" width={36} height={36}
-          style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', background: 'var(--color-primary-light)' }} />
+        <img src="/willow/welcoming.png" alt="" width={46} height={46}
+          style={{ width: 46, height: 46, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 18%', background: 'var(--color-primary-light)', border: '2px solid rgba(255,255,255,0.7)' }} />
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
           <MessageCircle size={16} /> Ask Willow
         </span>
@@ -135,12 +144,20 @@ export default function AssistantWidget() {
     >
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.85rem 1rem', borderBottom: '1px solid var(--color-card-border)' }}>
-        <img src={FACE[face]} alt="Willow" width={40} height={40}
-          style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', background: 'var(--color-primary-light)' }} />
+        <img src={FACE[face]} alt="Willow" width={52} height={52}
+          style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 18%', background: 'var(--color-primary-light)', border: '2px solid var(--color-card-border)' }} />
         <div style={{ flex: 1 }}>
           <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, color: 'var(--color-text)' }}>Willow</div>
           <div style={{ fontSize: '0.7rem', color: 'var(--color-text-light)' }}>Turnleaf Assistant</div>
         </div>
+        <button
+          aria-label="Start a new conversation"
+          title="Start a new conversation"
+          onClick={startNewConversation}
+          disabled={loading || isFresh}
+          style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', cursor: loading || isFresh ? 'default' : 'pointer', opacity: loading || isFresh ? 0.4 : 1, padding: 4 }}>
+          <RotateCcw size={18} />
+        </button>
         <button aria-label="Close assistant" onClick={() => setOpen(false)}
           style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', padding: 4 }}>
           <X size={20} />
@@ -161,7 +178,16 @@ export default function AssistantWidget() {
 
       {/* Message list */}
       <div ref={listRef} style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {messages.map((m, i) =>
+        {isFresh ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            <img
+              src="/willow/intro-card.png"
+              alt="Willow, the Turnleaf assistant — a friendly guide to understanding your options with clear, honest answers grounded in verified law."
+              style={{ width: '100%', borderRadius: '14px', border: '1px solid var(--color-card-border)', display: 'block' }}
+            />
+          </div>
+        ) : (
+          messages.map((m, i) =>
           m.role === 'user' ? (
             <div key={i} style={{ alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--color-primary)', color: '#FAF9F5', borderRadius: '14px 14px 2px 14px', padding: '0.55rem 0.8rem', fontSize: '0.9rem' }}>
               {m.content}
@@ -203,7 +229,7 @@ export default function AssistantWidget() {
               </div>
             </div>
           ),
-        )}
+        ))}
         {loading && (
           <div style={{ alignSelf: 'flex-start', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Willow is thinking…</div>
         )}

@@ -8162,75 +8162,79 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // INDIANA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  // INDIANA — STATUTE-VERIFIED 2026-07-19. Diana read the current IC 35-38-9
+  // (§§ 0.5, 0.6, 1, 2, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5, 10, 11, 12), incl. the
+  // P.L.77-2025 amendments, plus IC 35-38-10 (trafficked persons), from iga.in.gov.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md + Diana's 7/19 reads.
   //
-  // THE QUIRK, and a tree design no scraper has: ONE expungement petition per
-  // lifetime (§ 9-9). It must include everything at once; multi-county records
-  // are separate petitions per county, all within a 365-day window, together
-  // counting as the one shot. So the right answer is sometimes "you are
-  // eligible, but DON'T FILE YET" — filing now on one case can burn the shot
-  // for records not yet eligible.
+  // THE QUIRK: ONE conviction expungement petition per lifetime (§ 9(i)) — but
+  // softened by the statute: it covers convictions only (arrest expungements never
+  // burn it), a denied petition can be refiled for the unexpunged convictions
+  // (§ 9(j)-(l)), and multi-county records are separate petitions in a single
+  // 365-day window (§ 9(h)-(i)). Timing still matters; the advisory stays.
   //
-  // That is complex_timing_in: an ADVISORY, not a clean eligible, because
-  // whether to wait depends on the eligibility of OTHER records the screening
-  // cannot compute. Reached when a person says they have other records.
-  //
-  // Tracks: arrests/no-conviction (§ 9-1, 1yr, free); misdemeanours (§ 9-2, 5yr,
-  // MANDATORY grant); Level 6/Class D (§ 9-3, 8yr, mandatory); Level 4/5 (§ 9-4,
-  // 8yr, DISCRETIONARY, record marked-public not hidden); serious (§ 9-5, 10yr +
-  // prosecutor consent). Never: murder, sex/violent registry, official misconduct.
+  // Tracks: non-conviction (§ 1 — free; AUTOMATIC for charges filed after 6/30/2022);
+  // misdemeanor (§ 2, 5yr, mandatory); Level 6/Class D (§ 3, 8yr, mandatory);
+  // Level 4/5 (§ 4, later of 8yr/3yr-post-sentence, discretionary, marked-public);
+  // serious (§ 5, later of 10yr/5yr-post-sentence, discretionary + prosecutor
+  // consent). Never (§ 5(b)): sex/violent offenders, homicide, trafficking, sex
+  // offenses, felony-death, 2+ deadly-weapon felonies, SVF firearm, elected/judicial
+  // official misconduct. Trafficked-person vacatur → IC 35-38-10-2 → expungeable.
   // ==========================================================================
   IN: {
     code: 'IN',
     name: 'Indiana',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
     terminology:
-      'Indiana calls it EXPUNGEMENT, though for lower-level offenses it works like sealing and for '
-      + 'higher felonies it marks the record "expunged" while leaving it public. The rule that '
-      + 'shapes everything: you get ONE expungement petition in your LIFETIME. It has to include all '
-      + 'your eligible records at once, and if your records are in different counties you file one '
-      + 'petition per county, all within a single 365-day window — together they are your one shot. '
-      + 'That means the right move is sometimes to WAIT: filing now on one case can waste the '
-      + 'petition for records that are not eligible yet. Lower-level grants are mandatory if you '
-      + 'qualify; higher felonies are up to the judge.',
-    keyDates: [],
+      'Indiana calls it EXPUNGEMENT, though for lower-level offenses it seals the record and for '
+      + 'higher felonies it marks the record "expunged" while leaving it public. The rule that shapes '
+      + 'everything: you get ONE conviction-expungement petition in your LIFETIME (IC 35-38-9-9). It '
+      + 'has to include all your eligible convictions at once, and multi-county records are separate '
+      + 'petitions filed within a single 365-day window that together count as your one shot. Two things '
+      + 'soften that: expunging an ARREST or non-conviction never uses up your petition, and a denied '
+      + 'petition can be refiled for the convictions it did not reach. Since 2022, non-convictions on '
+      + 'charges filed after June 30, 2022 are expunged AUTOMATICALLY, with no petition at all. Lower-'
+      + 'level grants are mandatory if you qualify; higher felonies are up to the judge.',
+    keyDates: [
+      {
+        label: 'Automatic non-conviction expungement threshold (P.L.14-2022)',
+        date: '2022-06-30',
+        kind: 'effective',
+        note: 'For charges FILED after June 30, 2022, a dismissal of all charges, an acquittal, or a vacated conviction triggers a court-ordered expungement with NO petition — effective no earlier than 60 days out, and the prosecutor may seek up to a 1-year delay (§ 35-38-9-1(b)). Events before this use the § 1(d) petition path.',
+      },
+      {
+        label: 'P.L.77-2025 — CDL carve-out and current-code amendments',
+        date: '2025-01-01',
+        kind: 'effective',
+        note: 'Added § 35-38-9-0.6(d): the BMV cannot be ordered to expunge a 49 CFR 383.5 conviction for a person who held a CDL/CLP at the time of a 49 CFR 384.226 violation. The rules encoded here are the P.L.77-2025 current-code text.',
+      },
+    ],
     openQuestions: [
       {
         question:
-          'Confirm the scope of the post-2022 automatic expungement of dismissed-case arrests (§ 9-1), and the 2022 additions for infraction-adjudication arrests and diversion-participant eligibility (with prosecutor authorization). Wave 4 flags the scope. The tree tells non-conviction petitioners to check whether it was already done.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the § 9-3 exclusion list for Level 6 / Class D felonies (bodily-injury offenses, sex/violent offenders, etc.). The tree asks a person whether their offense is excluded from the § 9-3 mandatory path.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the § 9-5(b) never-expungeable list (murder/homicide-level, sex/violent-offender registry, sex crimes, official misconduct). The tree asks a person whether their offense is on it.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the conviction-petition filing fee? Wave 4 says § 9-1 arrest petitions are free by statute, and conviction petitions pay the civil filing fee (~$100 vicinity, county-set). Phone target.',
-        blocksFields: ['resources.remedies.conviction.fees', 'resources.remedies.conviction.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the "earlier with prosecutor\'s written consent" mechanics for the § 9-2 misdemeanour path and the § 9-5 serious-felony prosecutor-consent requirement. The tree uses the standard waits and notes the consent shortcuts in prose.',
+          'What is the conviction-petition filing FEE amount? The statute now settles the mechanics — conviction petitions pay the standard civil filing fee, the court may reduce or waive it for indigency (§ 35-38-9-8(d)), and arrest/non-conviction petitions and collateral-action requests are free (§§ 35-38-9-1(e), 9.5(e)). The exact dollar amount is county-set — confirm with the clerk of the convicting court.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Ind. Code § 35-38-9-1 (arrest/non-conviction expungement; automatic post-2022)', url: null, retrievedOn: null },
-      { id: 'Ind. Code § 35-38-9-2 (misdemeanour expungement; 5 yrs; mandatory)', url: null, retrievedOn: null },
-      { id: 'Ind. Code § 35-38-9-3 (Level 6/Class D felony; 8 yrs; mandatory; exclusion list)', url: null, retrievedOn: null },
-      { id: 'Ind. Code § 35-38-9-4 (Level 4/5 felony; 8 yrs; discretionary; marked-public)', url: null, retrievedOn: null },
-      { id: 'Ind. Code § 35-38-9-5 (serious felony; 10 yrs + prosecutor consent; discretionary)', url: null, retrievedOn: null },
-      { id: 'Ind. Code § 35-38-9-9 (one petition per lifetime; 365-day multi-county window)', url: null, retrievedOn: null },
+      { id: 'Ind. Code § 35-38-9-0.6 ((d) CDL carve-out — BMV cannot be ordered to expunge a 49 CFR 383.5 conviction for a CDL/CLP holder at the time of a 49 CFR 384.226 violation; P.L.77-2025)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-1 (arrest/non-conviction expungement — (b) AUTOMATIC for charges filed after 6/30/2022 (dismissal-all/acquittal/vacated), 60-day floor + up-to-1-yr prosecutor delay; (c) arrest with no charges, 1 yr, judge "shall immediately"; (d) pre-2022 petition path, 1 yr, earlier with prosecutor consent; (e) free; (a)(2) current pretrial-diversion bar unless prosecutor authorizes; (a)(1)(B) vacated conviction expungeable)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-2 (misdemeanor expungement — 5 yrs from conviction, mandatory "shall," earlier with prosecutor consent; (b) exclusions: 2+ deadly-weapon felonies not in the same episode, and sex/violent offenders (IC 11-8-8-5))', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-3 (Level 6/Class D felony — 8 yrs from conviction, mandatory; exclusions: elected/judicial-official misconduct, sex/violent offenders, felony bodily injury, perjury (35-44.1-2-1), official misconduct (35-44.1-1-1), IC 35-42-1 homicide, 35-42-3.5 trafficking, 35-42-4 sex offenses, 2+ deadly-weapon pattern — excluded felonies fall to § 4)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-4 (Level 4/5 felony — later of 8 yrs from conviction or 3 yrs post-sentence, discretionary "may," record marked expunged but stays public per § 7; exclusions route to § 5: felony death, serious-bodily-injury felony, official misconduct, SVF firearm 35-47-4-5)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-5 (serious felony — later of 10 yrs from conviction or 5 yrs post-sentence, discretionary + written prosecutor consent (e)(5), no conviction in prior 10 yrs; (a)(3) catch-all for felonies not otherwise provided; (b) NEVER list: sex/violent offenders, elected/judicial official misconduct in office, IC 35-42-1 incl. attempted murder, 35-42-3.5, 35-42-4 incl. attempts, 2+ deadly-weapon felonies, felony resulting in death, SVF firearm possession)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-6 (effect of expungement — (e) sex-offender registry unaffected; (f) DV-misdemeanor firearm rights NOT restored by expungement, restoration only via IC 35-47-4-7)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-7 (Level 4/5 expunged record stays publicly marked, not sealed)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-8 (petition procedure — (d) civil filing fee, court may reduce/waive for indigency; (g) prosecutor 30-day reply window, objection = hearing)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-8.5 (indeterminate-sentence offenses routed by current classification)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-9 (one conviction petition per lifetime — (c) prosecutor 30-day reply; (h) per-county consolidation; (i) 365-day multi-county window, conviction-only; (j) refile for unexpunged convictions (3-yr wait if discretionary denial); (k) good-faith/excusable-neglect valve for omitted convictions; (l) supplemental orders when the law later improves)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-9.5 ((e) collateral-action requests free)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-10 (civil-rights restoration — vote, hold office, serve on a jury, firearm proper-person status; unlawful-discrimination Class C infraction; the "has not been expunged" question-phrasing rule)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-9-11 (a plea-agreement waiver of the right to expungement is void)', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
+      { id: 'Ind. Code § 35-38-10-2 (trafficked-person conviction vacatur — preponderance showing (trafficked at the time, coerced/controlled, no bodily injury); vacated conviction then expungeable under § 35-38-9-1(a)(1)(B))', url: 'https://iga.in.gov/laws/2026/ic/titles/35', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -8240,16 +8244,27 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_in' },
-            { label: 'Dismissed / Arrested but not convicted', value: 'dismissed', next: 'eligible_arrest_in' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_arrest_in' },
-            { label: 'Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_trafficking_in' },
+            { label: 'Dismissed / Arrested but not convicted', value: 'dismissed', next: 'auto_in' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'auto_in' },
+            { label: 'Diversion completed / Pretrial diversion', value: 'deferred', next: 'diversion_in' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        // Trafficked-person vacatur (IC 35-38-10-2) — checked first: a coerced
+        // offense can be vacated, then expunged as a vacated conviction (1(a)(1)(B)).
+        conv_trafficking_in: {
+          type: 'boolean',
+          text: 'Were you coerced or controlled into committing this offense as a victim of human trafficking, and did it not cause bodily injury to another person?',
+          yes: 'eligible_trafficking_in',
+          no: 'excluded_in'
+        },
+        // The § 5(b) NEVER list — a comprehensive person-and-offense screen that
+        // also subsumes the § 2(b) misdemeanor bars (2+ deadly-weapon, sex/violent
+        // offender), so a registered offender's misdemeanor cannot false-eligible.
         excluded_in: {
           type: 'boolean',
-          text: 'Was the offense any of these: murder or a homicide-level offense, a sex crime or one requiring sex/violent-offender registration, or official misconduct by a public official?',
+          text: 'Do any of these apply: you are a registered sex or violent offender (IC 11-8-8-5); the offense is murder or another homicide offense (IC 35-42-1, including attempted murder), human trafficking (IC 35-42-3.5), or a sex offense (IC 35-42-4); it is a felony that caused someone\'s DEATH; you have two or more felony convictions for the unlawful use of a deadly weapon (not part of the same episode); it is unlawful firearm possession by a serious violent felon (IC 35-47-4-5); or you are an elected official or a judicial officer convicted of official misconduct in office?',
           yes: 'ineligible_excluded_in',
           no: 'level_in'
         },
@@ -8259,16 +8274,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           options: [
             { label: 'Misdemeanor (or a felony reduced to a misdemeanor)', value: 'misd', next: 'misd_date_in' },
             { label: 'Level 6 felony / Class D felony', value: 'l6', next: 'l6_excluded_in' },
-            { label: 'Level 4 or Level 5 felony', value: 'l45', next: 'l45_date_in' },
-            { label: 'A serious felony (serious bodily injury, elected-official misconduct)', value: 'serious', next: 'serious_in' },
+            { label: 'Level 4 or Level 5 felony', value: 'l45', next: 'l45_excluded_in' },
+            { label: 'A more serious felony', value: 'serious', next: 'serious_conv_date_in' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_in' }
           ]
-        },
-        l6_excluded_in: {
-          type: 'boolean',
-          text: 'Did the offense involve bodily injury to another person?',
-          yes: 'complex_l6_excluded_in',
-          no: 'l6_date_in'
         },
         misd_date_in: {
           type: 'date',
@@ -8280,47 +8289,99 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             nextFail: 'waiting_in'
           }
         },
+        // § 3 exclusions (bodily injury, perjury, official misconduct) do NOT dead-
+        // end — an excluded felony falls to the § 4 discretionary analysis (9-4(a)).
+        l6_excluded_in: {
+          type: 'boolean',
+          text: 'Did the offense involve bodily injury to another person, or is it perjury (IC 35-44.1-2-1) or official misconduct (IC 35-44.1-1-1)?',
+          yes: 'l45_excluded_in',
+          no: 'l6_date_in'
+        },
         l6_date_in: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 8, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-3 — Level 6/Class D felony; mandatory grant)' },
+            period: { amount: 8, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-3 — Level 6/Class D felony; mandatory grant; no felony or misdemeanour conviction in the previous 8 years)' },
             nextPass: 'other_records_mand_in',
             nextFail: 'waiting_in'
           }
         },
-        l45_date_in: {
+        // § 4 exclusions route UP to § 5 (serious-bodily-injury felony, official
+        // misconduct); felony-death and SVF-firearm are already caught by excluded_in.
+        l45_excluded_in: {
+          type: 'boolean',
+          text: 'Did the offense cause SERIOUS bodily injury, or is it official misconduct?',
+          yes: 'serious_conv_date_in',
+          no: 'l45_conv_date_in'
+        },
+        // § 4 dual anchor: LATER of 8 yrs from conviction or 3 yrs post-sentence.
+        l45_conv_date_in: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 8, unit: 'years', anchor: 'conviction, or 3 years post-sentence whichever later (Ind. Code § 35-38-9-4 — Level 4/5 felony; discretionary; record stays publicly marked)' },
+            period: { amount: 8, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-4 — Level 4/5; the later of 8 yrs from conviction or 3 yrs post-sentence; discretionary; record stays publicly marked)' },
+            nextPass: 'l45_release_date_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        l45_release_date_in: {
+          type: 'date',
+          text: 'When did you complete your sentence (including any probation or parole)?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'completion of sentence (Ind. Code § 35-38-9-4 — the 3-years-post-sentence prong; both this and the 8-yr-from-conviction prong must be met)' },
             nextPass: 'other_records_disc_in',
             nextFail: 'waiting_in'
           }
         },
-        serious_in: {
+        // § 5 dual anchor: LATER of 10 yrs from conviction or 5 yrs post-sentence
+        // (fixes the draft's conviction-only anchor). Plus written prosecutor consent.
+        serious_conv_date_in: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-5 — serious felony; discretionary; also requires the prosecutor\'s written consent)' },
+            period: { amount: 10, unit: 'years', anchor: 'conviction (Ind. Code § 35-38-9-5 — serious felony; the later of 10 yrs from conviction or 5 yrs post-sentence; discretionary; also requires the prosecutor\'s written consent)' },
+            nextPass: 'serious_release_date_in',
+            nextFail: 'waiting_in'
+          }
+        },
+        serious_release_date_in: {
+          type: 'date',
+          text: 'When did you complete your sentence (including any probation or parole)?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (Ind. Code § 35-38-9-5 — the 5-years-post-sentence prong; both this and the 10-yr-from-conviction prong must be met)' },
             nextPass: 'other_records_disc_in',
             nextFail: 'waiting_in'
           }
+        },
+        // Non-conviction: automatic for charges filed after 6/30/2022, else § 1(d).
+        auto_in: {
+          type: 'boolean',
+          text: 'Were the charges in this case FILED after June 30, 2022?',
+          yes: 'eligible_auto_in',
+          no: 'eligible_arrest_in'
+        },
+        // Diversion: completed = non-conviction (§ 1); the only bar is CURRENT
+        // participation, and even then the prosecutor can authorize (1(a)(2)).
+        diversion_in: {
+          type: 'boolean',
+          text: 'Are you CURRENTLY participating in a pretrial diversion program for this case (as opposed to having completed it)?',
+          yes: 'complex_diversion_in',
+          no: 'eligible_arrest_in'
         },
         // THE ONE-PETITION-TIMING gate. Shared per grant type so the "no" branch
         // keeps its track identity.
         other_records_mand_in: {
           type: 'boolean',
-          text: 'Do you have any OTHER arrests or convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
+          text: 'Do you have any OTHER convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
           yes: 'complex_timing_in',
           no: 'eligible_mandatory_in'
         },
         other_records_disc_in: {
           type: 'boolean',
-          text: 'Do you have any OTHER arrests or convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
+          text: 'Do you have any OTHER convictions on your Indiana record — in this county or any other — that you might also want expunged someday?',
           yes: 'complex_timing_in',
           no: 'eligible_discretionary_in'
         }
@@ -8333,61 +8394,68 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Indiana Legal Services)',
           citation: 'Ind. Code § 35-38-9 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Diversion Cases Need a Person',
-          message: 'Indiana expanded eligibility in 2022 to include some diversion participants (with prosecutor authorization), but the exact rules are not something this screening has researched in detail, so we would rather point you to someone than guess. And remember Indiana\'s one-petition-per-lifetime rule makes timing matter even here. Indiana Legal Services can tell you how your diversion is treated and how to time a petition.',
-          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
-          citation: 'Ind. Code § 35-38-9-1 (diversion treatment not yet detailed)'
+        eligible_trafficking_in: {
+          status: 'eligible',
+          title: 'A Trafficking-Coerced Conviction Can Be Vacated, Then Expunged',
+          message: 'Indiana has a specific, more generous path for this. If you were coerced or controlled into committing this offense as a victim of human trafficking and it did not cause bodily injury, you can move to have the conviction VACATED under IC 35-38-10-2 — the standard is a preponderance of the evidence, not the higher bar most relief requires. Once a conviction is vacated, it becomes a non-conviction that can then be expunged under § 35-38-9-1(a)(1)(B), the free non-conviction path — and that expungement does NOT use up your one lifetime conviction petition. Because this runs through a vacatur motion first and is fact-specific, do it with help: Indiana Legal Services handles trafficking-survivor cases.',
+          remedy: 'Vacate under IC 35-38-10-2, then expunge as a non-conviction (§ 35-38-9-1)',
+          citation: 'Ind. Code § 35-38-10-2; § 35-38-9-1(a)(1)(B)'
+        },
+        eligible_auto_in: {
+          status: 'eligible',
+          title: 'No Conviction, Charges Filed After June 2022 — Expunged AUTOMATICALLY',
+          message: 'This is Indiana\'s best case. Because your case ended without a conviction — a dismissal of all charges, an acquittal, or a vacated conviction — and the charges were filed after June 30, 2022, the court expunges it AUTOMATICALLY, with no petition and no fee (§ 35-38-9-1(b)). It takes effect no earlier than 60 days after the disposition, and a prosecutor can ask for up to a one-year delay, so it may already be done or on its way — check your record before filing anything. And a reassurance about Indiana\'s famous one-petition rule: expunging an arrest or non-conviction NEVER uses up your one lifetime conviction petition, so this costs you nothing on that front. Indiana Legal Services can confirm it went through.',
+          remedy: 'Automatic non-conviction expungement (§ 35-38-9-1(b)) — no petition, no fee; check your record',
+          citation: 'Ind. Code § 35-38-9-1(b)'
         },
         eligible_arrest_in: {
           status: 'eligible',
-          title: 'Arrest Without Conviction — Free Expungement (Maybe Already Done)',
-          message: 'Because this case did not end in a conviction, you can expunge the arrest under § 35-38-9-1 — it is free, and available 1 year after the arrest. Since 2022, Indiana also expunges some dismissed-case arrests AUTOMATICALLY, so check first whether yours was already done before filing anything. Here is the Indiana-specific thing to keep in mind even for a free arrest expungement: Indiana gives you ONE expungement petition in your lifetime for convictions, and while arrest expungements are treated more flexibly, if you also have convictions you may want expunged, it is worth talking to legal aid about sequencing before you file anything. Indiana Legal Services can advise.',
-          remedy: 'Arrest Expungement (§ 35-38-9-1) — free; check if already automatic',
+          title: 'Arrest Without Conviction — Free Expungement',
+          message: 'Because this case did not end in a conviction, you can expunge it under § 35-38-9-1 — it is FREE by statute. For an arrest where no charges were ever filed, you can petition 1 year later and the judge "shall immediately" order it (§ 1(c)); for a pre-July-2022 dismissal or acquittal, you file the § 1(d) petition (also 1 year, or earlier with the prosecutor\'s consent). One important reassurance about Indiana\'s one-petition-per-lifetime rule: it applies only to CONVICTION petitions — expunging an arrest or non-conviction never uses up your one shot. So there is no timing trap here; if you also have convictions to expunge later, this does not affect that. Indiana Legal Services can help you file.',
+          remedy: 'Arrest/non-conviction expungement (§ 35-38-9-1) — free; does not use your conviction petition',
           citation: 'Ind. Code § 35-38-9-1'
+        },
+        complex_diversion_in: {
+          status: 'complex',
+          title: 'Currently in Diversion — Almost There, but Not Yet',
+          message: 'A COMPLETED diversion ends without a conviction and is expungeable on the free non-conviction path — but because you are still CURRENTLY participating, the record is not yet eligible: § 35-38-9-1(a)(2) bars expungement while you are an active pretrial-diversion participant. There is a shortcut, though: the prosecutor can authorize expungement even during participation, so it is worth asking. Once you complete the program, come back and screen this as a non-conviction — it should be free and will not touch your one lifetime conviction petition. Indiana Legal Services can help you ask the prosecutor or time the filing.',
+          remedy: 'Finish diversion first (or ask the prosecutor to authorize) — then free non-conviction expungement',
+          citation: 'Ind. Code § 35-38-9-1(a)(2)'
         },
         eligible_mandatory_in: {
           status: 'eligible',
           title: 'Eligible — And the Grant Is Mandatory',
-          message: 'Based on your dates and the fact that you told us you have no other records to worry about, you appear eligible to expunge this conviction, and the good news is that for a misdemeanor or a Level 6 / Class D felony the grant is MANDATORY — if you meet the criteria, the court must grant it. Petition the convicting court; the prosecutor has 30 days to object, and a hearing is possible. One thing to double-check before filing, because it is the whole ballgame in Indiana: you get only ONE expungement petition in your lifetime, so make sure this really is everything you would want expunged. Indiana Legal Services can confirm before you use your shot.',
+          message: 'Based on your dates, you appear eligible to expunge this conviction, and the good news is that for a misdemeanor (§ 35-38-9-2, 5 years) or a Level 6 / Class D felony (§ 35-38-9-3, 8 years) the grant is MANDATORY — if you meet the criteria (period met, no pending charges, all fines/fees/costs/restitution paid, no disqualifying conviction in the lookback), the court MUST grant it. Petition the convicting court; the prosecutor has 30 days to object, and a hearing is possible. A few Indiana-specific things to know before and after: you get only ONE conviction petition in your lifetime, so make sure this is everything you would want expunged (a plea-agreement waiver of that right is void, § 35-38-9-11). Expungement restores your civil rights — voting, office, jury service, and firearm proper-person status — and it is unlawful discrimination to hold an expunged conviction against you (§ 35-38-9-10). But two things it does NOT do: it does not restore firearm rights lost from a domestic-violence misdemeanor (that needs the separate IC 35-47-4-7 process, § 9-6(f)), and it does not end a sex-offender registration duty (§ 9-6(e)). And if you hold a commercial driver license, note that the BMV cannot be ordered to expunge certain federal (CDL) traffic convictions (§ 35-38-9-0.6(d)). Indiana Legal Services can confirm before you use your shot.',
           remedy: 'Petition to Expunge (§ 35-38-9-2 / 9-3) — mandatory grant, one lifetime petition',
           citation: 'Ind. Code §§ 35-38-9-2, 35-38-9-3'
         },
         eligible_discretionary_in: {
           status: 'eligible',
           title: 'Eligible — But a Judge Decides, and the Record Stays Publicly Marked',
-          message: 'Based on your dates, you appear eligible to petition to expunge this felony — but set your expectations, because a higher-level felony works differently in Indiana. For a Level 4 or 5 felony, the grant is DISCRETIONARY: the judge weighs whether to grant it rather than being required to. And even when granted, the record is not hidden — it is publicly MARKED as "expunged" rather than sealed away. That is still meaningful relief (it carries legal protections against discrimination), but it is not the disappearance that the word suggests. The prosecutor has 30 days to object, and for the most serious felonies their written consent is required. Because this is discretionary and you get only one petition ever, this is worth doing with Indiana Legal Services.',
+          message: 'Based on your dates, you appear eligible to petition to expunge this felony — but set your expectations, because a higher-level felony works differently in Indiana. For a Level 4 or 5 felony (§ 35-38-9-4), and for a serious felony (§ 35-38-9-5), the grant is DISCRETIONARY: the judge weighs whether to grant it rather than being required to, and § 5 also requires the prosecutor\'s written consent. Both use a dual clock — the LATER of 8 years from conviction or 3 years post-sentence (§ 4), or 10 years / 5 years post-sentence (§ 5). And even when granted, the record is not hidden — it is publicly MARKED as "expunged" rather than sealed away (§ 35-38-9-7). That is still meaningful relief: it restores civil rights and carries anti-discrimination protection (§ 35-38-9-10), though it does not restore DV-misdemeanor firearm rights (§ 9-6(f)) or end a registration duty (§ 9-6(e)). Because this is discretionary and you get only one petition ever, this is worth doing with Indiana Legal Services.',
           remedy: 'Petition to Expunge (§ 35-38-9-4 / 9-5) — discretionary, record stays publicly marked',
           citation: 'Ind. Code §§ 35-38-9-4, 35-38-9-5'
         },
         complex_timing_in: {
           status: 'complex',
           title: 'You May Be Eligible — But in Indiana, Timing Is Everything',
-          message: 'This is the most important thing to understand about Indiana, and it is why we are not just telling you to go file. You appear to be past the waiting period for this case. But Indiana gives you exactly ONE expungement petition in your entire life. It has to include everything you want expunged, all at once — and if your records are in more than one county, all those petitions have to be filed within a single 365-day window and together they count as your one shot. Because you told us you have other records, filing now on just this case could BURN that one petition and leave the rest permanently on your record. Here is the strategic part: if your other records are not eligible yet, it is often far better to WAIT until they are, so a single petition can clear everything together. This is genuinely worth a conversation with a lawyer before you file anything — Indiana Legal Services and the indy.gov Second Chance program help people sequence exactly this, and getting it right once beats getting it wrong forever.',
-          remedy: 'Do NOT file yet — plan the timing with Indiana Legal Services (one petition, ever)',
+          message: 'This is the most important thing to understand about Indiana. You appear to be past the waiting period for this case. But your ONE lifetime CONVICTION petition has to include everything you want expunged, all at once — and if your records are in more than one county, those petitions must be filed within a single 365-day window and together count as your one shot (§ 35-38-9-9(h)-(i)). Because you told us you have other convictions, filing now on just this case could use up that petition before the others are ready. So the strategic move is often to WAIT until your other records are eligible, then file a single petition that catches everything. Two things soften the risk, and are worth knowing: a DENIED petition can be refiled for the convictions it did not reach (with a 3-year wait if the denial was discretionary, § 9(j)), and there is a good-faith safety valve for a conviction accidentally left out (§ 9(k)) plus supplemental orders if the law later improves (§ 9(l)). Still, getting the sequencing right the first time is far better — Indiana Legal Services and the indy.gov Second Chance program help people plan exactly this.',
+          remedy: 'Plan the timing before filing — one lifetime conviction petition (§ 35-38-9-9)',
           citation: 'Ind. Code § 35-38-9-9'
         },
         waiting_in: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Indiana\'s expungement waits run from your conviction: 5 years for a misdemeanor, 8 for a Level 6 or higher felony (or 3 years post-sentence, whichever is later, for the higher felonies), and 10 for the most serious. Based on your dates, yours has not run yet, and it also requires no new convictions and paid obligations. There is a silver lining to waiting in Indiana specifically: because you only get one petition ever, a not-yet-eligible record is a reason to hold off filing on your other cases too, so that one petition can eventually catch everything. Indiana Legal Services can help you plan the timing.',
-          remedy: 'Wait for the period — and use the time to line up all your records',
-          citation: 'Ind. Code § 35-38-9'
+          message: 'Indiana\'s conviction-expungement waits are 5 years for a misdemeanor and 8 years for a Level 6/Class D felony (from conviction), and for the higher felonies a DUAL clock: a Level 4/5 needs the later of 8 years from conviction or 3 years after you complete your sentence, and a serious felony needs the later of 10 years from conviction or 5 years after sentence completion. That post-sentence prong is the one that catches people — if you were released recently, a long-ago conviction date does not make you eligible yet. Based on your dates, yours has not run. It also requires no disqualifying convictions in the lookback and all fines, fees, costs, and restitution paid. A silver lining: because you get one conviction petition ever, a not-yet-eligible record is a reason to hold off filing on your other cases too, so a single petition can eventually catch everything. Indiana Legal Services can help you plan the timing.',
+          remedy: 'Wait for the period (note the post-sentence prong for higher felonies)',
+          citation: 'Ind. Code §§ 35-38-9-2, 9-3, 9-4, 9-5'
         },
         ineligible_excluded_in: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Expunged',
-          message: 'Indiana never expunges murder or homicide-level offenses, sex crimes or offenses requiring sex or violent-offender registration, or official misconduct by a public official. This is categorical. If you have other, eligible records, those may still be expungeable — but given Indiana\'s one-petition rule, how you handle them matters, so it is worth a conversation with Indiana Legal Services rather than filing on your own. If your offense is genuinely on this never-list, executive clemency is the remaining route.',
-          remedy: 'None (Never-Expungeable Offense) — clemency is the remaining route',
-          citation: 'Ind. Code § 35-38-9-5'
-        },
-        complex_l6_excluded_in: {
-          status: 'complex',
-          title: 'A Bodily-Injury Offense Needs a Closer Look',
-          message: 'A Level 6 or Class D felony is normally a mandatory expungement after 8 years — but offenses involving bodily injury to another person are treated differently and may fall outside that mandatory path or into a discretionary one. Because the § 9-3 exclusions are specific, we are not going to guess where yours lands. Indiana Legal Services can check your exact offense against the exclusion list — and given Indiana\'s one-petition-per-lifetime rule, having a lawyer look before you file is worth it regardless.',
-          remedy: 'Consult Legal Aid (Level 6 Bodily-Injury Exclusion)',
-          citation: 'Ind. Code § 35-38-9-3'
+          message: 'Indiana never expunges a specific list (§ 35-38-9-5(b)): offenses by a person required to register as a sex or violent offender; murder and other homicide offenses (including attempted murder); human trafficking and sex offenses (including attempts); a felony that caused someone\'s death; two or more felony convictions for the unlawful use of a deadly weapon; unlawful firearm possession by a serious violent felon; and official misconduct in office by an elected official or judicial officer. This is categorical, and executive clemency is the remaining route. One thing worth confirming rather than assuming: OFFICIAL MISCONDUCT is only a categorical bar for elected officials and judicial officers — a non-official convicted of official misconduct is NOT on the never-list and goes through the § 35-38-9-5 discretionary path instead, so if that is your situation, re-screen it as a serious felony. If you have other, eligible records, how you handle them matters given the one-petition rule — Indiana Legal Services can advise.',
+          remedy: 'None (Never-Expungeable, § 35-38-9-5(b)) — clemency is the remaining route',
+          citation: 'Ind. Code § 35-38-9-5(b)'
         },
         complex_level_in: {
           status: 'complex',
@@ -8405,14 +8473,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Petition for Expungement',
           formUrl: 'https://www.indianalegalservices.org/expungement',
           steps: [
-            'Before anything: remember you get ONE petition in your lifetime. Line up ALL your eligible records first — multi-county records are separate petitions filed within a single 365-day window.',
-            'File in the convicting court; the prosecutor has 30 days to object, and a hearing is possible.',
-            'Misdemeanors and Level 6 felonies are mandatory grants if you qualify; higher felonies are discretionary and the record stays publicly marked.',
+            'Before anything: you get ONE conviction petition in your lifetime (§ 35-38-9-9). Line up ALL your eligible convictions first — multi-county records are separate petitions filed within a single 365-day window. (Arrest/non-conviction expungements do NOT use it up.)',
+            'Confirm all fines, fees, costs, and restitution are paid — that is an eligibility requirement for the conviction paths.',
+            'File in the convicting court; the prosecutor has 30 days to object (§ 35-38-9-8(g)), and a hearing is possible.',
+            'Misdemeanors and Level 6 felonies are mandatory grants if you qualify; Level 4/5 and serious felonies are discretionary and the record stays publicly marked (§ 35-38-9-7). A serious felony also needs the prosecutor\'s written consent.',
             'This is worth doing with Indiana Legal Services so you do not waste your one petition.'
           ],
-          // null: Wave 4 gives "~$100 vicinity, county-set" and flags it.
-          fees: null,
-          feeWaiver: null,
+          // Statute-cited: § 35-38-9-8(d) — civil filing fee, court may reduce/waive
+          // for indigency. Exact amount is county-set (phone-tier).
+          fees: 'The standard civil filing fee applies (Ind. Code § 35-38-9-8(d)); the exact amount is county-set — confirm with the clerk of the convicting court.',
+          feeWaiver: 'The court may reduce or waive the filing fee for indigency (Ind. Code § 35-38-9-8(d)). Arrest/non-conviction petitions and collateral-action requests are free (§§ 35-38-9-1(e), 9.5(e)).',
           courtContact: 'The convicting court'
         },
         arrest: {

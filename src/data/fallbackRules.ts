@@ -4683,86 +4683,95 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // OKLAHOMA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  // OKLAHOMA — STATUTE-VERIFIED 2026-07-19. Diana read 22 O.S. §§ 18 (BOTH
+  // operative versions — v1 per Laws 2024 c. 452 §12, v2 per Laws 2024 c. 259 §1;
+  // dueling amendments, see revisor note), 18a, 19 (through 2025 c. 292), 19a,
+  // 19b, 19c, 991c (through 2025 c. 305) from the oscn.net Title 22 compilation.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md + Diana's 7/19 reads.
   //
-  // TWO different things are called expungement and the UI must keep them apart:
-  //   SECTION 18 (22 O.S. § 18) — seals the arrest AND the court record. The
-  //     real one.
-  //   SECTION 991(c) — a deferred-sentence cleanup that updates the disposition
-  //     to "pled not guilty, case dismissed" but does NOT seal the arrest
-  //     record. Weaker, and often paired with § 18.
+  // DUELING §18 VERSIONS: 2024 passed TWO conflicting amendments. v1 (c. 452, 16
+  // paragraphs) and v2 (c. 259, 15 paragraphs) are identical for ¶1-13; v1-only
+  // ¶14 is a two-felony-DEFERRED path. Identity theft = v1¶15/v2¶14; reclassified
+  // felony = v1¶16/v2¶15. For AUTOMATIC, v2 CONTROLS — §19(B) (2025 c. 292) uses
+  // v2's "clean slate eligible arrest record" term. We encode the UNION with
+  // per-node versionNotes; whether courts treat v1's ¶14 as operative is open.
   //
-  // THE SINGLE-SOURCE RULE is the branch generic tools miss. Automatic Clean
-  // Slate (HB 3316, § 18(B)-(C); processing legally began Nov 1, 2025) covers 11
-  // of the § 18(A) categories — BUT 2024's SB 1770 limited the automatic path
-  // for dismissals/misdemeanours to SINGLE-SOURCE records: any out-of-state or
-  // federal arrest kills the AUTOMATIC path (not the petition path). One node.
-  //
-  // Honesty note the package asks for: a conviction expunges to "partially
-  // sealed" — law enforcement can still see and use it. Said in the results.
+  // TWO remedies: petition §18 (seals arrest + court record) and automatic Clean
+  // Slate (§18(C)/§19(B), live since Nov 1, 2025, funding-dependent). SINGLE-SOURCE
+  // TRAP: automatic needs an OK-arrests-ONLY record — any out-of-state/federal/
+  // NSOR/NCIC entry kills automatic (petition unaffected). Sealing TIERS: non-
+  // conviction paths FULLY sealed (hidden from police too); conviction paths
+  // PARTIALLY sealed (police keep access, usable as priors). §991c deferred
+  // cleanup is a PARTIAL first stage — full §18 sealing still needs the ¶8/¶9
+  // petition. Strong general honest-no (§19(H),(J)).
   // ==========================================================================
   OK: {
     code: 'OK',
     name: 'Oklahoma',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
     terminology:
-      'In Oklahoma "expungement" means sealing — the records survive but are hidden. Two different '
-      + 'things share the name, and they are not the same: a SECTION 18 expungement seals both the '
-      + 'arrest record and the court record (this is the real one), while a SECTION 991(c) '
-      + 'expungement only cleans up a deferred sentence — it changes the disposition to show the '
-      + 'case was dismissed but does NOT seal the arrest record. There is also an automatic "Clean '
-      + 'Slate" path now rolling out. One honesty point: a conviction that is expunged becomes '
-      + '"partially sealed", which means law enforcement can still see and use it.',
+      'In Oklahoma "expungement" means SEALING — the records survive but are hidden. Two things share '
+      + 'the name: a SECTION 18 expungement seals both the arrest and the court record (the real one), '
+      + 'while a SECTION 991c cleanup only fixes a deferred sentence\'s disposition and does NOT seal '
+      + 'the arrest record. There is also an automatic "Clean Slate" path, live since November 1, 2025 '
+      + '(subject to funding), that reaches Oklahoma-ONLY records — any out-of-state or federal record '
+      + 'blocks the automatic route (but never the petition). Two honesty points: a non-conviction '
+      + 'sealing is one of the strongest in the country (hidden even from police), but an expunged '
+      + 'CONVICTION is only "partially sealed" — police keep access and can use it as a prior. And '
+      + 'once sealed, you and every agency may lawfully say the matter never happened (§ 22-19).',
     keyDates: [
       {
-        label: 'Automatic Clean Slate processing legally began',
+        label: 'Automatic Clean Slate processing live',
         date: '2025-11-01',
         kind: 'operative',
-        note: 'Effective Nov 1, 2022; automatic processing began Nov 1, 2025. OSBI is mid-implementation with a phased bridge plan — rollout status is an open question.',
+        note: 'The § 18(C) automatic trigger is "three years after November 1, 2022" = November 1, 2025 (now past). It is subject to "availability of funds," and OSBI is mid-implementation — operational status is an open question. OSBI: expungements@osbi.ok.gov, (405) 879-2641.',
+      },
+      {
+        label: 'Dueling 2024 §18 amendments (Laws 2024 c. 452 §12 and c. 259 §1)',
+        date: '2024',
+        kind: 'effective',
+        note: 'Two conflicting amendments to § 22-18 both remain in the code (v1 = c. 452, 16 paragraphs; v2 = c. 259, 15 paragraphs). ¶1-13 are identical. The v1-only ¶14 (two-felony-deferred) and the renumbered identity-theft/reclassified paragraphs are encoded with version notes; 2025 c. 292\'s § 19 amendments adopt v2 terminology for the automatic track.',
       },
     ],
     openQuestions: [
       {
         question:
-          'What is the current OSBI Clean Slate rollout status? Automatic processing legally began Nov 1, 2025 but OSBI is mid-implementation with a phased bridge. Verify on oklahoma.gov/osbi before any UI copy claims records are being processed now. OSBI answers email at expungements@osbi.ok.gov and phone (405) 879-2641.',
+          'The dueling § 22-18 amendments (Laws 2024 c. 452 §12 "v1" 16 paragraphs vs c. 259 §1 "v2" 15 paragraphs) both remain in the code. Confirm whether courts/OSBI treat v1\'s two-felony-DEFERRED ¶14 as operative, and whether any 2026 act harmonized the two versions. The tree encodes the union with version notes.',
         blocksFields: [],
       },
       {
         question:
-          'Did HB 3037 pass? Wave 2 flags a proposed change raising the fine-only misdemeanor threshold to $1,000 and cutting waits. Encode CURRENT law only — the tree uses the existing under-$501 fine-only threshold. Check the legislature site for HB 3037\'s fate before updating.',
+          'OPERATIONAL status of the November 1, 2025 automatic Clean Slate sweep — the § 18(C) trigger is past, but the path is subject to "availability of funds" and OSBI is mid-implementation. Verify with OSBI (phone/news tier) before any copy claims records are actively being processed.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the current § 18(A)(12)-(13) text on single-nonviolent-felony expungement, specifically any pardon prerequisites. Wave 2 flags this. The tree encodes the 5-year (one felony) and 10-year (two felonies) periods but the pardon-prerequisite detail is unverified.',
+          'Pull the cross-referenced offense lists: 57 O.S. § 571 (violent felonies — separates ¶9/¶12-eligible nonviolent felonies) and 21 O.S. § 13.1 (the felonies barred from ¶13 and v1-¶14). The exclusion screens key on those cross-references and ask the person until the lists are enumerated. Also the SORA (57 O.S. § 582/registerable) scope.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the OSBI arrest-record processing fee. Wave 2 gives "$150 (their own page)"; the court-record expungement is free. Confirm the $150 and whether any waiver exists.',
-        blocksFields: ['resources.remedies.section18.fees', 'resources.remedies.section18.feeWaiver', 'resources.remedies.section991c.fees', 'resources.remedies.section991c.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the SB 1770 single-source rule: any out-of-state or federal arrest disqualifies the AUTOMATIC path for dismissals and misdemeanours (not the petition path). The tree gates on this; confirm it applies only to the automatic path and only to those categories.',
+          'District-court filing fee and the OSBI order-processing fee amounts are set OUTSIDE the pulled sections — phone tier for both. Exceptions confirmed from text: ¶3 (DNA-innocence) petitions get all filing fees and court costs reimbursed (§ 19(R)); the automatic path involves no filing at all. Also confirm the § 19b Identity Theft Passport fee (OSBI rule).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the 57 O.S. § 571 violent-offense list that separates a "nonviolent felony" (expungeable) from a violent one (not). The tree asks a person whether their felony was violent; the list itself needs confirming.',
+          'Confirm the exact scope of 2025 c. 292\'s § 19 changes and 2025 c. 305\'s § 991c changes — the pulled text shows the history lines; verify no further-reaching substantive change before the next review.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: '22 O.S. § 18 (expungement categories; (A) petition; (B)-(C) automatic; (D) same-transaction)', url: null, retrievedOn: null },
-      { id: '22 O.S. § 19 (expungement procedure)', url: null, retrievedOn: null },
-      { id: '22 O.S. § 991(c) (deferred-sentence expungement)', url: null, retrievedOn: null },
-      { id: '57 O.S. § 571 (violent-offense list — separates nonviolent felony from violent)', url: null, retrievedOn: null },
-      { id: 'HB 3316 (Clean Slate — automatic expungement)', url: null, retrievedOn: null },
-      { id: 'SB 1770 of 2024 (single-source limitation on the automatic path)', url: null, retrievedOn: null },
+      { id: '22 O.S. § 18 (expungement authority — (A) the ¶1-16/¶1-15 petition catalog; (B) definitions incl. clean-slate-eligible-arrest-record + single-source (B)(2); (C) automatic categories; (D) same-transaction = one conviction for ¶10-13; (E) partial-seal list) — BOTH operative versions: v1 Laws 2024 c. 452 §12 (16 ¶), v2 Laws 2024 c. 259 §1 (15 ¶); ¶1-13 identical', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 18a (statutory expungement forms, incl. reclassified-felony)', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 19 (procedure — (B) automatic OSBI monthly sweep + 45-day objection [2025 c. 292]; (E) 30-day notice/hearing; (F) sequential multi-offense on ONE petition; (G) sealing standard + access-limiting middle option; (H)/(J) honest-no + no-disclosure-requirement; (O) 10-yr destruction option; (P) unsealing; (R) DNA fee reimbursement; (S) 30-day expedited hearing for DNA/pardon; (T) expunged offense not a prior for later §18 eligibility) — through 2025 c. 292', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 19a (identity-theft dismissal-time expungement on court/DA/defendant motion)', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 19b (OSBI Identity Theft Passport — sealed except to law enforcement; private entities need not honor)', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 19c (human-trafficking victim — prostitution-related charge OR conviction expunged for good cause on the court\'s own motion or petition; partial seal; no wait stated)', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '22 O.S. § 991c (deferred sentence — plea without judgment, up to 7 yr (+3 unpaid restitution); completion + all money paid → discharge, plea expunged, dismissal WITH prejudice, automatic court-record cleanup (PARTIAL: sealed to public, open to LE, usable as priors — full §18 sealing still needs the ¶8/¶9 petition); (E) retroactive; (H)/(I) exclusions; (F) acceleration caps) — through 2025 c. 305', url: 'https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKST22&level=1', retrievedOn: '2026-07-19' },
+      { id: '57 O.S. § 571 (violent-felony list), 21 O.S. § 13.1 (¶13 exclusion list), 57 O.S. § 582 (SORA registration) — referenced by the exclusion screens, NOT pulled — cite-only', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -4772,92 +4781,187 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'felony_or_misd_ok' },
-            { label: 'Dismissed', value: 'dismissed', next: 'single_source_ok' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_acquittal_ok' },
-            { label: 'Deferred Adjudication / Deferred sentence (Completed)', value: 'deferred', next: 'deferred_date_ok' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_traffick_ok' },
+            { label: 'Dismissed / Charges not filed', value: 'dismissed', next: 'dismissed_type_ok' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_p1_ok' },
+            { label: 'Deferred sentence (completed and dismissed)', value: 'deferred', next: 'deferred_class_ok' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        // THE SINGLE-SOURCE RULE — for dismissals (an automatic category).
-        single_source_ok: {
+        // Trafficking-victim prostitution (§ 22-19c) — routed before the catalog.
+        conv_traffick_ok: {
           type: 'boolean',
-          text: 'Do you have any arrest or criminal record OUTSIDE Oklahoma — in another state, or a federal case?',
-          yes: 'eligible_dismissal_petition_ok',
-          no: 'eligible_dismissal_auto_ok'
+          text: 'Was this a prostitution-related charge or conviction that arose from your being a victim of human trafficking?',
+          yes: 'eligible_trafficking_ok',
+          no: 'conv_path_ok'
         },
-        felony_or_misd_ok: {
+        conv_path_ok: {
           type: 'choice',
-          field: 'charge_type',
-          text: 'What was the level of the offense?',
+          text: 'Which of these best describes your conviction? (Oklahoma expunges from a specific catalog — § 22-18(A).)',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_sentence_ok' },
-            { label: 'Felony', value: 'felony', next: 'felony_violent_ok' },
-            { label: 'Infraction', value: 'infraction', next: 'misd_sentence_ok' }
+            { label: 'DNA evidence established my innocence after the conviction', value: 'dna', next: 'eligible_dna_ok' },
+            { label: 'The conviction was reversed and dismissed, OR I received a full Governor\'s pardon', value: 'reversal_pardon', next: 'eligible_reversal_ok' },
+            { label: 'My felony has since been reclassified to a misdemeanor', value: 'reclassified', next: 'reclassified_ok' },
+            { label: 'Someone stole my identity and I was charged in their place', value: 'identity', next: 'eligible_identity_ok' },
+            { label: 'Misdemeanor — fine only under $501, paid, with NO jail or suspended sentence', value: 'misd_fine', next: 'eligible_p10_ok' },
+            { label: 'Misdemeanor — with jail, a suspended sentence, or a fine over $500', value: 'misd_jail', next: 'p11_date_ok' },
+            { label: 'A single felony', value: 'felony_one', next: 'felony_one_screen_ok' },
+            { label: 'Two felonies', value: 'felony_two', next: 'felony_two_screen_ok' },
+            { label: 'Three or more felonies', value: 'felony_three', next: 'ineligible_count_ok' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_conv_ok' }
           ]
         },
-        misd_sentence_ok: {
-          type: 'choice',
-          text: 'What was the sentence for the misdemeanor?',
-          options: [
-            { label: 'A fine only, under $501, and it is paid', value: 'fine_only', next: 'eligible_fine_only_ok' },
-            { label: 'Jail time or a suspended sentence', value: 'jail', next: 'misd_jail_date_ok' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_misd_ok' }
-          ]
+        reclassified_ok: {
+          type: 'boolean',
+          text: 'Is it a nonviolent (not § 571) felony, are you not currently serving any sentence anywhere, has it been at least 30 days since you completed or had it commuted, and is all restitution paid in full?',
+          yes: 'eligible_reclassified_ok',
+          no: 'complex_conv_ok'
         },
-        misd_jail_date_ok: {
+        // ¶11: misd conviction w/ jail/suspended/fine>$500 — 5 yrs from END OF LAST
+        // misd sentence; automatic-eligible if single-source.
+        p11_date_ok: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete the sentence?',
+          text: 'When did you complete your most recent misdemeanor sentence? (You must also have no felony conviction and nothing pending.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — misdemeanour with jail/suspended sentence; no felony convictions, no pending charges)' },
-            nextPass: 'eligible_misd_ok',
+            period: { amount: 5, unit: 'years', anchor: 'end of the most recent misdemeanor sentence (22 O.S. § 18(A)¶11 — misd conviction w/ jail/suspended/fine>$500; no felony, nothing pending)' },
+            nextPass: 'p11_single_source_ok',
             nextFail: 'waiting_ok'
           }
         },
-        felony_violent_ok: {
+        p11_single_source_ok: {
           type: 'boolean',
-          text: 'Was the felony a violent offense on Oklahoma\'s list (57 O.S. § 571)?',
+          text: 'Do you have ANY arrest or record OUTSIDE Oklahoma — another state, a federal case, a National Sex Offender Registry entry, or an NCIC warrant?',
+          yes: 'eligible_conv_petition_ok',
+          no: 'eligible_conv_auto_ok'
+        },
+        // ¶12: single nonviolent felony — 5 yrs post-sentence, 7-yr misd screen, §571/13.1/SORA screens.
+        felony_one_screen_ok: {
+          type: 'boolean',
+          text: 'Is the felony on the 21 O.S. § 13.1 list, or does it require sex-offender registration (SORA)?',
+          yes: 'ineligible_1331_ok',
+          no: 'felony_one_violent_ok'
+        },
+        felony_one_violent_ok: {
+          type: 'boolean',
+          text: 'Is the felony a violent offense on the 57 O.S. § 571 list?',
+          yes: 'felony_p13_date_ok',
+          no: 'felony_one_misd_ok'
+        },
+        felony_one_misd_ok: {
+          type: 'boolean',
+          text: 'Have you had a SEPARATE misdemeanor conviction in the last 7 years, and do you have any other felony conviction ever, or anything pending?',
+          yes: 'p12_blocked_misd_ok',
+          no: 'felony_p12_date_ok'
+        },
+        felony_p12_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the sentence for the felony?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A)¶12 — single nonviolent non-§571 felony; no other felony ever, no separate misd in 7 yrs, nothing pending)' },
+            nextPass: 'eligible_p12_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        // ¶13: ≤2 felonies, none § 13.1, none SORA — 10 yrs post-sentence.
+        felony_two_screen_ok: {
+          type: 'boolean',
+          text: 'Is EITHER felony on the 21 O.S. § 13.1 list, or does either require sex-offender registration (SORA)?',
+          yes: 'ineligible_1331_ok',
+          no: 'felony_p13_date_ok'
+        },
+        felony_p13_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you complete the more recent sentence? (Nothing may be pending.)',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'completion of the most recent sentence (22 O.S. § 18(A)¶13 — up to two felonies, none § 13.1 or SORA; nothing pending)' },
+            nextPass: 'eligible_p13_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        // NON-CONVICTION.
+        dismissed_type_ok: {
+          type: 'choice',
+          text: 'Which best describes how the case ended? (These route very differently in Oklahoma.)',
+          options: [
+            { label: 'I was arrested but NO charges of any kind were ever filed', value: 'arrest', next: 'arrest_gate_ok' },
+            { label: 'Charges were filed but ALL were dismissed — NOT at the end of a deferred sentence', value: 'all_dismissed', next: 'p7_gate_ok' },
+            { label: 'Charges were dismissed at the END of a completed deferred sentence', value: 'after_deferred', next: 'deferred_class_ok' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_noncon_ok' }
+          ]
+        },
+        // ¶5 arrest, no charges filed + (SOL expired OR DA declined).
+        arrest_gate_ok: {
+          type: 'boolean',
+          text: 'Has the statute of limitations expired on the offense, OR did the district attorney decline to file charges?',
+          yes: 'noncon_single_source_ok',
+          no: 'complex_noncon_ok'
+        },
+        // ¶7 all dismissed + never felony-convicted + nothing pending + (SOL or no-refile).
+        p7_gate_ok: {
+          type: 'boolean',
+          text: 'Have you never been convicted of a felony, is nothing currently pending against you, and has the statute of limitations expired OR the DA confirmed the case will not be refiled?',
+          yes: 'noncon_single_source_ok',
+          no: 'complex_noncon_ok'
+        },
+        noncon_single_source_ok: {
+          type: 'boolean',
+          text: 'Do you have ANY arrest or record OUTSIDE Oklahoma — another state, a federal case, a National Sex Offender Registry entry, or an NCIC warrant?',
+          yes: 'eligible_noncon_petition_ok',
+          no: 'eligible_noncon_auto_ok'
+        },
+        // DEFERRED — ¶8 misd (1yr), ¶9 nonviolent felony (5yr), v1-¶14 two-felony (10yr).
+        deferred_class_ok: {
+          type: 'choice',
+          text: 'What was deferred? (A completed deferred sentence ends in dismissal, but the § 18 petition to fully seal it is separate from the § 991c cleanup.)',
+          options: [
+            { label: 'A misdemeanor deferred sentence', value: 'misd', next: 'deferred_misd_date_ok' },
+            { label: 'A single nonviolent felony (not § 571) deferred sentence', value: 'felony', next: 'deferred_felony_screen_ok' },
+            { label: 'TWO felony deferred sentences (neither § 13.1 nor SORA)', value: 'two_felony', next: 'deferred_two_screen_ok' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_deferred_ok' }
+          ]
+        },
+        deferred_misd_date_ok: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed at the end of the deferred sentence? (You must never have been felony-convicted, with nothing pending.)',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'dismissal after a misdemeanor deferred sentence (22 O.S. § 18(A)¶8 — 1 year; never felony-convicted, nothing pending)' },
+            nextPass: 'eligible_deferred_misd_ok',
+            nextFail: 'waiting_ok'
+          }
+        },
+        deferred_felony_screen_ok: {
+          type: 'boolean',
+          text: 'Is the felony a violent offense on the 57 O.S. § 571 list, or does it require sex-offender registration?',
           yes: 'ineligible_violent_ok',
-          no: 'felony_count_ok'
+          no: 'deferred_felony_date_ok'
         },
-        felony_count_ok: {
-          type: 'choice',
-          text: 'Counting your whole record: how many felony convictions do you have?',
-          options: [
-            { label: 'This is my only felony', value: 'one', next: 'felony_one_date_ok' },
-            { label: 'Two felonies total', value: 'two', next: 'felony_two_date_ok' },
-            { label: 'Three or more felonies', value: 'three_plus', next: 'ineligible_felony_count_ok' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felony_ok' }
-          ]
-        },
-        felony_one_date_ok: {
+        deferred_felony_date_ok: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When did you complete the sentence?',
+          text: 'When was the case dismissed at the end of the deferred sentence? (Never felony-convicted, nothing pending.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — single nonviolent felony; no other convictions)' },
-            nextPass: 'eligible_felony_ok',
+            period: { amount: 5, unit: 'years', anchor: 'dismissal after a nonviolent-felony deferred sentence (22 O.S. § 18(A)¶9 — 5 years; not § 571, never felony-convicted, nothing pending)' },
+            nextPass: 'eligible_deferred_felony_ok',
             nextFail: 'waiting_ok'
           }
         },
-        felony_two_date_ok: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the more recent sentence?',
-          validation: {
-            period: { amount: 10, unit: 'years', anchor: 'completion of sentence (22 O.S. § 18(A) — two nonviolent felonies)' },
-            nextPass: 'eligible_felony_ok',
-            nextFail: 'waiting_ok'
-          }
+        deferred_two_screen_ok: {
+          type: 'boolean',
+          text: 'Is EITHER of the two deferred felonies on the 21 O.S. § 13.1 list, or does either require sex-offender registration?',
+          yes: 'ineligible_1331_ok',
+          no: 'deferred_two_date_ok'
         },
-        deferred_date_ok: {
+        deferred_two_date_ok: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When was the case dismissed at the end of your deferred sentence?',
+          text: 'When was the more recent case dismissed at the end of the deferred sentence?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'dismissal after a deferred sentence (22 O.S. § 18(A) — 1 year)' },
-            nextPass: 'eligible_deferred_ok',
+            period: { amount: 10, unit: 'years', anchor: 'dismissal after the more recent deferred sentence (22 O.S. § 18(A)¶14 — two-felony deferred; 10 years; appears only in the c. 452 "v1" version of § 18)' },
+            nextPass: 'eligible_p14_ok',
             nextFail: 'waiting_ok'
           }
         }
@@ -4870,89 +4974,173 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (OSBI)',
           citation: '22 O.S. § 18 (which path applies depends on the disposition)'
         },
-        eligible_acquittal_ok: {
+        eligible_p1_ok: {
           status: 'eligible',
-          title: 'Acquitted — Eligible to Expunge',
-          message: 'Because you were acquitted, you are eligible for a Section 18 expungement — the strong kind that seals both the arrest and the court record. File the petition in the district court of the county of arrest, with notice to the district attorney, the arresting agency, and OSBI. The court-record part is free; OSBI charges a processing fee for the arrest record that we are still confirming. Legal Aid Services of Oklahoma and the OU/TU law-school expungement clinics can help you file.',
-          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
-          citation: '22 O.S. § 18'
+          title: 'Acquitted — One of Oklahoma\'s Strongest Seals',
+          message: 'Because you were acquitted, you qualify under § 18(A)¶1 — and this is one of the strongest seals in the country: a non-conviction paragraph gets FULLY sealed (§ 18(B)/(E)), meaning it is hidden from the public AND from law enforcement, retained only in the OSBI repository for research. It is also an AUTOMATIC Clean Slate category, so it may seal on its own without you filing — check with OSBI (expungements@osbi.ok.gov), since automatic processing began November 1, 2025 (subject to funding). If you would rather not wait, the § 18 petition is always open: file in the district court of the county of arrest, with 30-day notice to the DA, arresting agency, and OSBI. Once sealed, you and every agency may lawfully say it never happened (§ 22-19(H)).',
+          remedy: 'Automatic Clean Slate (check OSBI) or § 18 petition (¶1) — fully sealed',
+          citation: '22 O.S. §§ 18(A)¶1, 18(C), 19'
         },
-        eligible_dismissal_auto_ok: {
+        eligible_trafficking_ok: {
           status: 'eligible',
-          title: 'Dismissed, Oklahoma-Only Record — May Expunge Automatically',
-          message: 'Your case was dismissed and your record is Oklahoma-only, which matters: Oklahoma\'s automatic Clean Slate program covers dismissals, but a 2024 law (SB 1770) limits the AUTOMATIC path to "single-source" records — Oklahoma-only. Since yours qualifies, automatic processing may reach it without you filing anything. Automatic processing legally began November 1, 2025 and OSBI is still ramping up, so check your status with OSBI (expungements@osbi.ok.gov) rather than assume it is done. If you would rather not wait, the Section 18 petition path is always open — it seals both the arrest and court record. Note one thing: if this was a conviction rather than a true dismissal, an expunged conviction is only "partially sealed", meaning law enforcement can still see it.',
-          remedy: 'Automatic Clean Slate (check OSBI) or Section 18 petition',
-          citation: '22 O.S. § 18(A)-(C)'
+          title: 'Trafficking Survivor — a Dedicated Expungement Path',
+          message: 'Oklahoma has a specific path for a prostitution-related charge OR conviction that arose from your being a victim of human trafficking (§ 22-19c): a court can expunge it for good cause, on its own motion or on your petition, and there is no waiting period stated. This is a partial seal. Because it turns on the trafficking nexus, do it with help — survivor-focused advocates, Legal Aid Services of Oklahoma, and the law-school expungement clinics handle these. Once sealed, you may lawfully say the matter never happened (§ 22-19(H)).',
+          remedy: 'Trafficking-survivor expungement (§ 22-19c) — good cause, no wait stated',
+          citation: '22 O.S. § 19c'
         },
-        eligible_dismissal_petition_ok: {
+        eligible_dna_ok: {
           status: 'eligible',
-          title: 'Dismissed — Eligible to Petition (Automatic Path Blocked by an Out-of-State Record)',
-          message: 'Your case was dismissed, so you are eligible for a Section 18 expungement. Here is the wrinkle worth knowing: because you have a record outside Oklahoma, the AUTOMATIC Clean Slate path is not open to you — a 2024 law (SB 1770) limits automatic processing to "single-source", Oklahoma-only records. That does NOT affect your right to petition; the out-of-state record blocks only the automatic route, not the manual one. So file the Section 18 petition in the district court of the county of arrest, with notice to the DA, the arresting agency, and OSBI. Legal Aid Services of Oklahoma can help.',
-          remedy: 'Section 18 Expungement Petition (22 O.S. § 18) — automatic path blocked by out-of-state record',
-          citation: '22 O.S. §§ 18(A), 18(B)-(C)'
+          title: 'DNA-Established Innocence — Eligible, With Fees Reimbursed',
+          message: 'Because DNA evidence established your innocence after the conviction, you qualify under § 18(A)¶3 — a fully-sealed, non-conviction-tier seal (hidden even from police). Two perks the statute gives exonerees: you can demand an EXPEDITED hearing within 30 days of filing (§ 19(S)), and once granted, ALL your filing fees and court costs are reimbursed by court order (§ 19(R)). File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. The Oklahoma Innocence Project and Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 petition (¶3, DNA innocence) — 30-day expedited hearing, all fees reimbursed',
+          citation: '22 O.S. §§ 18(A)¶3, 19(R), 19(S)'
         },
-        eligible_fine_only_ok: {
+        eligible_reversal_ok: {
           status: 'eligible',
-          title: 'Fine-Only Misdemeanor — Eligible Now',
-          message: 'A misdemeanor that ended in a fine only of less than $501, with the fine paid, is eligible for a Section 18 expungement immediately — no waiting period. File the petition in the district court of the county of arrest. The court-record expungement is free; OSBI charges a processing fee for the arrest record that we are still confirming. (Note: a bill was proposed to raise this fine threshold and cut waiting periods, but this reflects current law — check with OSBI if your fine was higher.)',
-          remedy: 'Section 18 Expungement Petition (22 O.S. § 18) — immediate',
-          citation: '22 O.S. § 18(A)'
+          title: 'Reversed-and-Dismissed or Fully Pardoned — Eligible to Expunge',
+          message: 'You qualify under the § 18(A) catalog: a conviction that was reversed with a dismissal (¶2) is a fully-sealed non-conviction seal; a full Governor\'s pardon (¶4) is a partial seal, and it can also seal your Pardon and Parole Board pardon-application records from the public. A pardon petitioner can demand an expedited hearing within 30 days (§ 19(S)). File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. Legal Aid Services of Oklahoma and the law-school clinics can help.',
+          remedy: '§ 18 petition (¶2 reversed / ¶4 pardon) — expedited hearing available',
+          citation: '22 O.S. §§ 18(A)¶2, 18(A)¶4, 19(S)'
         },
-        eligible_misd_ok: {
+        eligible_reclassified_ok: {
           status: 'eligible',
-          title: 'Misdemeanor — Eligible to Expunge',
-          message: 'Based on your dates — 5 years since you completed the sentence, with no felony convictions and no pending charges — you are eligible for a Section 18 expungement of this misdemeanor. File the petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI; a hearing is typical. The court-record part is free; the OSBI arrest-record processing fee is something we are still confirming. An expunged conviction becomes "partially sealed" — hidden from the public, but law enforcement can still see it.',
-          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
-          citation: '22 O.S. § 18(A)'
+          title: 'Reclassified Felony (Now a Misdemeanor) — Eligible',
+          message: 'Because your felony has since been reclassified to a misdemeanor, it is nonviolent (not § 571), you are not currently serving any sentence anywhere, at least 30 days have passed since completion or commutation, and restitution is paid in full, you qualify under the reclassified-felony paragraph (§ 18(A)¶16 in the c. 452 version / ¶15 in the c. 259 version). Any treatment programs must be completed — late completion after an acceleration still counts. Use the statutory expungement form at § 18a. This is a partial seal (police keep access). File in the district court of the county of arrest. Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 reclassified-felony expungement (¶16/¶15) — statutory form at § 18a',
+          citation: '22 O.S. §§ 18(A), 18a'
         },
-        eligible_felony_ok: {
+        eligible_identity_ok: {
           status: 'eligible',
-          title: 'Nonviolent Felony — Eligible to Expunge',
-          message: 'Based on your dates and record, you appear eligible for a Section 18 expungement of this nonviolent felony — 5 years after completing the sentence for a single felony, or 10 years where you have two. File the petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. There is one detail we are still confirming: § 18 has pardon-related prerequisites for some felony expungements, so a legal aid clinic is worth using to make sure yours is not one of them. The court-record part is free; the OSBI processing fee is separate. An expunged conviction becomes "partially sealed" — law enforcement can still see it.',
-          remedy: 'Section 18 Expungement Petition (22 O.S. § 18)',
-          citation: '22 O.S. § 18(A)'
+          title: 'Identity Theft — Eligible, Plus an OSBI Passport',
+          message: 'Because you were charged in place of someone who appropriated your identity, you qualify under the identity-theft paragraph (§ 18(A)¶15 in the c. 452 version / ¶14 in the c. 259 version) — available in any posture. Two extra tools: a court can expunge an identity-theft charge at the time of dismissal on its own, the DA\'s, or your motion (§ 22-19a); and you can obtain an OSBI Identity Theft Passport (§ 22-19b), which is sealed except to law enforcement (private entities are not required to honor it, but it helps). This is a partial seal. Legal Aid Services of Oklahoma can help you use the right combination.',
+          remedy: '§ 18 identity-theft expungement (¶15/¶14) + § 22-19a/-19b tools',
+          citation: '22 O.S. §§ 18(A), 19a, 19b'
         },
-        eligible_deferred_ok: {
+        eligible_p10_ok: {
           status: 'eligible',
-          title: 'Completed Deferred Sentence — Two Steps Worth Taking',
-          message: 'Because your deferred sentence ended in dismissal more than a year ago, you have two things available and they do different jobs. A Section 991(c) expungement updates the court record to show you "pled not guilty, case dismissed" — but it does NOT seal the arrest record, so on its own it is only half the picture. A Section 18 expungement (available a year after the dismissal) seals both the arrest and the court record. Most people want both: 991(c) to correct the disposition and § 18 to seal the arrest. File in the district court of the county of arrest. Legal Aid Services of Oklahoma and the law-school clinics handle exactly this pairing.',
-          remedy: 'Section 991(c) + Section 18 Expungement (22 O.S. §§ 991(c), 18)',
-          citation: '22 O.S. §§ 991(c), 18(A)'
+          title: 'Fine-Only Misdemeanor — Eligible Immediately',
+          message: 'A misdemeanor conviction with a fine of less than $501, NO imprisonment or suspended sentence, and the fine paid, is expungeable under § 18(A)¶10 with NO waiting period — immediate once the fine is paid, provided you have no felony record and nothing pending. File the § 18 petition in the district court of the county of arrest. This is a PARTIAL seal (§ 18(E)): the public cannot see it, but law enforcement can, and it stays usable as a prior in a later prosecution without an unsealing order. If you have other records to clear, note that clearing the oldest first can help — an expunged offense does not count as a prior when testing your eligibility for the others (§ 19(T)), and multiple offenses in one county ride a single petition (§ 19(F)).',
+          remedy: '§ 18 expungement (¶10, fine-only) — immediate; partial seal',
+          citation: '22 O.S. § 18(A)¶10'
+        },
+        eligible_conv_auto_ok: {
+          status: 'eligible',
+          title: 'Misdemeanor Conviction — Eligible, and Possibly Automatic',
+          message: 'Based on your dates — 5 years since the end of your most recent misdemeanor sentence, no felony conviction, nothing pending — you qualify under § 18(A)¶11. Because your record is Oklahoma-ONLY, this is also an AUTOMATIC Clean Slate category (§ 18(C)), so it may seal on its own — check with OSBI (automatic processing began Nov 1, 2025, subject to funding). If it does not, or you would rather not wait, file the § 18 petition in the district court of the county of arrest. This is a PARTIAL seal (§ 18(E)): hidden from the public but visible to police and usable as a prior. If you have other records, clearing the oldest first helps — an expunged offense is not counted as a prior for the others (§ 19(T)), and multiple offenses in one county ride a single petition (§ 19(F)).',
+          remedy: 'Automatic Clean Slate (check OSBI) or § 18 petition (¶11) — partial seal',
+          citation: '22 O.S. §§ 18(A)¶11, 18(C)'
+        },
+        eligible_conv_petition_ok: {
+          status: 'eligible',
+          title: 'Misdemeanor Conviction — Eligible to Petition (Automatic Blocked)',
+          message: 'Based on your dates — 5 years since the end of your most recent misdemeanor sentence, no felony conviction, nothing pending — you qualify under § 18(A)¶11. One wrinkle: because you have a record OUTSIDE Oklahoma (another state, federal, a registry, or an NCIC entry), the AUTOMATIC Clean Slate path is blocked — it reaches only "single-source", Oklahoma-only records (§ 18(B)(2)). That does NOT affect your right to petition. File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. This is a PARTIAL seal — police keep access and can use it as a prior. If you have other records, clearing the oldest first helps (§ 19(T)/(F)). Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 petition (¶11) — automatic blocked by an out-of-state record; partial seal',
+          citation: '22 O.S. §§ 18(A)¶11, 18(B)(2)'
+        },
+        eligible_p12_ok: {
+          status: 'eligible',
+          title: 'Single Nonviolent Felony — Eligible to Expunge',
+          message: 'Based on your record — a single nonviolent (not § 571, not § 13.1, not SORA) felony, no other felony ever, no separate misdemeanor conviction in the last 7 years, nothing pending, and 5 years since you completed the sentence — you qualify under § 18(A)¶12. File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. This is a PARTIAL seal (§ 18(E)): hidden from the public but visible to law enforcement and usable as a prior. If you also have older records, clearing the oldest first can matter — an expunged offense is not counted as a prior when testing eligibility for the others (§ 19(T)), and offenses in one county ride a single petition (§ 19(F)). Legal Aid Services of Oklahoma and the law-school clinics can help.',
+          remedy: '§ 18 petition (¶12, single nonviolent felony) — partial seal',
+          citation: '22 O.S. § 18(A)¶12'
+        },
+        p12_blocked_misd_ok: {
+          status: 'waiting',
+          title: 'Single Felony — Blocked by a Recent Misdemeanor (Re-Test Soon)',
+          message: 'Your felony would qualify under the single-nonviolent-felony path (§ 18(A)¶12), which is faster (5 years post-sentence) — but that paragraph also requires no SEPARATE misdemeanor conviction in the last 7 years, no other felony ever, and nothing pending. Because you have a misdemeanor conviction inside that 7-year window (or another disqualifier), ¶12 is not open yet. The good news: this is a moving window, so once the misdemeanor is more than 7 years back, re-test — and separately, if you have no more than two felonies (none § 13.1 or SORA), the ¶13 path opens at 10 years regardless. Legal Aid Services of Oklahoma can map the exact date.',
+          remedy: 'Wait out the 7-year misdemeanor window for ¶12 (or 10 years for ¶13), then petition',
+          citation: '22 O.S. §§ 18(A)¶12, 18(A)¶13'
+        },
+        eligible_p13_ok: {
+          status: 'eligible',
+          title: 'Up to Two Felonies — Eligible at 10 Years',
+          message: 'Based on your record — no more than two felonies, neither on the 21 O.S. § 13.1 list and neither SORA-registerable, nothing pending, and 10 years since you completed the most recent sentence — you qualify under § 18(A)¶13. File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. This is a PARTIAL seal (§ 18(E)): hidden from the public but visible to law enforcement and usable as a prior. If you have multiple records, clearing the oldest first helps — an expunged offense is not counted as a prior for the others (§ 19(T)), and offenses in one county ride a single petition (§ 19(F)). Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 petition (¶13, up to two felonies) — 10 years; partial seal',
+          citation: '22 O.S. § 18(A)¶13'
+        },
+        ineligible_1331_ok: {
+          status: 'ineligible',
+          title: 'A § 13.1 or Registerable Offense Is Excluded',
+          message: 'Oklahoma\'s multi-felony expungement paths (§ 18(A)¶13, and the two-felony-deferred ¶14) exclude any felony on the 21 O.S. § 13.1 list and any offense requiring sex-offender registration. Because one of your offenses is in those categories, those paths are closed. Whether an offense is actually on § 13.1 or SORA-registerable is a specific legal determination worth confirming rather than assuming — the § 13.1 list is a defined set of serious felonies. A single such felony might still fit the ¶12 path if it is not § 571-violent; and a pardon is a separate route. Legal Aid Services of Oklahoma can check the classification.',
+          remedy: 'None on the multi-felony paths (§ 13.1 / SORA) — confirm the classification; ask about a pardon',
+          citation: '22 O.S. §§ 18(A)¶13; 21 O.S. § 13.1'
+        },
+        ineligible_violent_ok: {
+          status: 'ineligible',
+          title: 'A Violent (§ 571) Felony Blocks the Faster Paths',
+          message: 'A felony on Oklahoma\'s violent-offense list (57 O.S. § 571) cannot use the single-felony (§ 18(A)¶12) or nonviolent-felony-deferred (¶9) paths. Two things worth checking before treating this as final: whether the offense is actually on the § 571 list (that is a legal classification, not a description of what happened); and whether the ¶13 path is open instead — a violent felony that is NOT on the 21 O.S. § 13.1 list and not SORA-registerable can still be expunged at 10 years if you have no more than two felonies. A pardon is a separate route. Legal Aid Services of Oklahoma can check the § 571 and § 13.1 lists for you.',
+          remedy: 'None on the faster paths (§ 571) — check the ¶13 (10-year) route; ask about a pardon',
+          citation: '22 O.S. §§ 18(A)¶9, 18(A)¶12; 57 O.S. § 571'
+        },
+        ineligible_count_ok: {
+          status: 'ineligible',
+          title: 'Three or More Felonies Blocks the Catalog',
+          message: 'Oklahoma\'s felony expungement paragraphs reach at most two felonies (§ 18(A)¶13). With three or more felony convictions, the § 18 catalog is closed. One thing worth checking: under § 18(D), multiple offenses arising from the SAME transaction or occurrence count as a single conviction for ¶10-13 — so a record that looks like three felonies may legally be fewer. A pardon is also a separate route these limits do not govern (and a pardoned conviction has its own ¶4 path). Legal Aid Services of Oklahoma and the law-school clinics can count your record properly and apply the same-transaction rule.',
+          remedy: 'None (three or more felonies) — the same-transaction rule may reduce the count; ask about a pardon',
+          citation: '22 O.S. §§ 18(A), 18(D)'
+        },
+        eligible_noncon_auto_ok: {
+          status: 'eligible',
+          title: 'No Conviction, Oklahoma-Only Record — Possibly Automatic',
+          message: 'Because your case ended without a conviction (arrested with no charges, or all charges dismissed with never a felony conviction and the case time-barred or not to be refiled) and your record is Oklahoma-ONLY, this is an AUTOMATIC Clean Slate category (§ 18(C)) — it may seal on its own without you filing anything. Automatic processing began November 1, 2025 (subject to funding), and nobody is notified, so check with OSBI (expungements@osbi.ok.gov) rather than assume. This is a strong FULL seal for a true non-conviction — hidden even from police. If you would rather not wait, the § 18 petition is always open (§ 19(C)). One trap the automatic path adds: if you also have any out-of-state, federal, registry, or NCIC record, it would block the automatic route (but never the petition).',
+          remedy: 'Automatic Clean Slate (check OSBI) or § 18 petition (¶5/¶7) — full seal',
+          citation: '22 O.S. §§ 18(A), 18(C)'
+        },
+        eligible_noncon_petition_ok: {
+          status: 'eligible',
+          title: 'No Conviction — Eligible to Petition (Automatic Blocked)',
+          message: 'Because your case ended without a conviction (an arrest with no charges filed, or all charges dismissed with no felony record and the case time-barred or not to be refiled), you qualify under § 18(A)¶5 or ¶7. One wrinkle: because you have a record OUTSIDE Oklahoma (another state, federal, a registry, or an NCIC entry), the AUTOMATIC Clean Slate path is blocked — it reaches only "single-source", Oklahoma-only records (§ 18(B)(2)). That does NOT affect your right to petition. File the § 18 petition in the district court of the county of arrest, with notice to the DA, arresting agency, and OSBI. For a true non-conviction this is a strong FULL seal — hidden even from police. Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 petition (¶5/¶7) — automatic blocked by an out-of-state record; full seal',
+          citation: '22 O.S. §§ 18(A)¶5, 18(A)¶7, 18(B)(2)'
+        },
+        eligible_deferred_misd_ok: {
+          status: 'eligible',
+          title: 'Misdemeanor Deferred, Dismissed 1+ Year Ago — Eligible',
+          message: 'Because your misdemeanor deferred sentence was completed and dismissed more than a year ago, you have never been felony-convicted, and nothing is pending, you qualify under § 18(A)¶8. Two stages matter here, and they are separate: your § 991c completion should already have cleaned up the court record (plea expunged, dismissed with prejudice) — but that is only a PARTIAL cleanup, still open to law enforcement. The § 18(A)¶8 petition is what fully seals the arrest and court record together. Most people want both. File the § 18 petition in the district court of the county of arrest. This is a partial seal (police keep access), and clearing older records first helps (§ 19(T)/(F)). Legal Aid Services of Oklahoma handles this pairing.',
+          remedy: '§ 18 petition (¶8) after the § 991c cleanup — 1 year post-dismissal',
+          citation: '22 O.S. §§ 18(A)¶8, 991c'
+        },
+        eligible_deferred_felony_ok: {
+          status: 'eligible',
+          title: 'Nonviolent Felony Deferred, Dismissed 5+ Years Ago — Eligible',
+          message: 'Because your nonviolent (not § 571) felony deferred sentence was completed and dismissed more than 5 years ago, you have never been felony-convicted, and nothing is pending, you qualify under § 18(A)¶9. Note that ¶7 (the general all-dismissed path) EXPRESSLY excludes deferred-judgment dismissals — this ¶9 path is the correct route for them. As with the misdemeanor version, your § 991c completion cleaned up the court record partially (open to police); the § 18 petition is what fully seals it. File in the district court of the county of arrest. This is a partial seal, and clearing older records first helps (§ 19(T)/(F)). Legal Aid Services of Oklahoma can help.',
+          remedy: '§ 18 petition (¶9) after the § 991c cleanup — 5 years post-dismissal',
+          citation: '22 O.S. §§ 18(A)¶9, 991c'
+        },
+        eligible_p14_ok: {
+          status: 'eligible',
+          title: 'Two Felony Deferred Dismissals — Eligible at 10 Years (Version Caveat)',
+          message: 'Based on your record — two felony DEFERRED sentences completed and dismissed, neither on the 21 O.S. § 13.1 list and neither SORA-registerable, and 10 years since the more recent dismissal — you may qualify under § 18(A)¶14. One honest caveat we have to flag: this two-felony-deferred paragraph appears ONLY in the c. 452 version of § 18; the competing c. 259 version omits it, because 2024 passed two conflicting amendments and both remain in the code. So whether a court will apply ¶14 is genuinely uncertain, and this is exactly the kind of thing to take to a lawyer rather than rely on. Legal Aid Services of Oklahoma and the law-school clinics can tell you how courts in your district are treating it.',
+          remedy: '§ 18 petition (¶14, two felony deferred) — 10 years; note the dueling-version uncertainty',
+          citation: '22 O.S. § 18(A)¶14 (c. 452 version only)'
         },
         waiting_ok: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Oklahoma\'s Section 18 waiting periods depend on the offense: a misdemeanor with a jail or suspended sentence is 5 years after completion, a single nonviolent felony is 5 years, two nonviolent felonies are 10, and a deferred sentence clears 1 year after dismissal. Based on your dates, yours has not run yet, and it also requires no new convictions and no pending charges in the meantime. Once your period runs, Oklahoma\'s automatic Clean Slate program may reach an eligible case without you filing — though for now that path is still ramping up.',
+          message: 'Oklahoma\'s § 18 waiting periods depend on the paragraph: a misdemeanor conviction with jail/suspended sentence is 5 years after the end of your last misdemeanor sentence (¶11); a single nonviolent felony is 5 years post-sentence (¶12); up to two felonies are 10 years (¶13); a misdemeanor deferred dismissal is 1 year (¶8) and a nonviolent-felony deferred is 5 (¶9). Based on your dates, yours has not run yet, and it also requires no new convictions and nothing pending in the meantime. When your period runs, an Oklahoma-only record may seal automatically (Clean Slate) without you filing — check OSBI when the time comes.',
           remedy: 'Wait for the period to run, then petition or check OSBI',
           citation: '22 O.S. § 18(A)'
         },
-        ineligible_violent_ok: {
-          status: 'ineligible',
-          title: 'Violent Felonies Are Not Expungeable',
-          message: 'Felonies on Oklahoma\'s violent-offense list (57 O.S. § 571) cannot be expunged under Section 18. No waiting period changes that. Two things worth knowing before you take this as final: the § 571 list is specific, and whether an offense counts as "violent" is a legal classification rather than a description of what happened — so if you are not certain, it is worth confirming. And a pardon is a separate route. OSBI answers questions directly, and Legal Aid Services of Oklahoma can check the classification against § 571.',
-          remedy: 'None (Violent Felony under § 571) — confirm the classification; ask about a pardon',
-          citation: '22 O.S. § 18(A); 57 O.S. § 571'
-        },
-        ineligible_felony_count_ok: {
-          status: 'ineligible',
-          title: 'Three or More Felonies Blocks Section 18 Expungement',
-          message: 'Oklahoma\'s Section 18 expungement is not available once you have three or more felony convictions. There is one thing that can change this count, and it is worth checking: under § 18(D), multiple offenses arising from the SAME transaction count as a single conviction — so a record that looks like three felonies may legally be fewer. A pardon is also a separate route these limits do not govern. Legal Aid Services of Oklahoma and the law-school clinics can count your record properly and tell you whether the same-transaction rule brings you back under the limit.',
-          remedy: 'Consult Legal Aid (Felony Count) — the same-transaction rule may help',
-          citation: '22 O.S. §§ 18(A), 18(D)'
-        },
-        complex_misd_ok: {
+        complex_conv_ok: {
           status: 'complex',
-          title: 'We Need to Know the Sentence',
-          message: 'For a misdemeanor, Oklahoma\'s timing turns on the sentence: a fine only under $501 is immediate, while a jail or suspended sentence is 5 years after completion. Since you are not sure which yours was, we are not going to guess. Your court paperwork states the sentence, and OSBI answers questions by email (expungements@osbi.ok.gov) and phone. Legal Aid Services of Oklahoma can also read your record with you.',
-          remedy: 'Get Your Sentence Details First (court paperwork / OSBI)',
+          title: 'We Need to Match Your Conviction to the Catalog',
+          message: 'Oklahoma expunges convictions from a specific catalog (§ 18(A)) — a fine-only misdemeanor (immediate), a misdemeanor with jail/suspended sentence (5 years), a single nonviolent felony (5 years, with a 7-year no-misdemeanor screen), up to two non-§13.1/SORA felonies (10 years), a reclassified felony, a pardon, DNA innocence — and everything turns on which fits and how your felonies classify under § 571 and § 13.1. Since you are not sure, we are not going to guess. Your court paperwork and an OSBI record show the offense and its classification; Legal Aid Services of Oklahoma and the law-school clinics can match it to the right paragraph.',
+          remedy: 'Match Your Conviction to the § 18(A) Catalog (court paperwork / OSBI / legal aid)',
           citation: '22 O.S. § 18(A)'
         },
-        complex_felony_ok: {
+        complex_noncon_ok: {
           status: 'complex',
-          title: 'We Need Your Felony Count',
-          message: 'For a nonviolent felony, Oklahoma\'s timing depends on how many felonies are on your record: one is 5 years after completion, two is 10, and three or more is not eligible. And the same-transaction rule (§ 18(D)) can reduce that count, since offenses from a single incident count as one. Since you are not sure of your count, we are not going to guess — getting it wrong here changes the answer entirely. OSBI can tell you what your record shows, and Legal Aid Services of Oklahoma can apply the same-transaction rule for you.',
-          remedy: 'Get Your Felony Count First (OSBI / legal aid)',
-          citation: '22 O.S. §§ 18(A), 18(D)'
+          title: 'We Need the Exact Non-Conviction Details',
+          message: 'Oklahoma\'s non-conviction paths each have their own conditions: an arrest with no charges needs the statute of limitations to have run or the DA to have declined (§ 18(A)¶5); an all-dismissed case needs no felony record, nothing pending, and the SOL run or the DA to confirm no refile (¶7) — and ¶7 does NOT cover a deferred-sentence dismissal, which routes to ¶8 or ¶9 instead. Because you are not sure which fits, we are not going to guess. A certified disposition record from the clerk will say; Legal Aid Services of Oklahoma can read it with you.',
+          remedy: 'Get the exact disposition (clerk / OSBI / legal aid)',
+          citation: '22 O.S. §§ 18(A)¶5, 18(A)¶7'
+        },
+        complex_deferred_ok: {
+          status: 'complex',
+          title: 'We Need the Deferred-Sentence Details',
+          message: 'A completed deferred sentence in Oklahoma routes by what was deferred: a misdemeanor clears 1 year after the dismissal (§ 18(A)¶8), a single nonviolent (non-§571) felony at 5 years (¶9), and (in one of the two conflicting 2024 versions of § 18) two felonies at 10 years (¶14). Your § 991c completion should have cleaned up the court record already, but the full § 18 seal is a separate step. Since you are not sure of the details, we are not going to guess. Legal Aid Services of Oklahoma and the law-school clinics handle exactly this.',
+          remedy: 'Get the deferred-sentence details (court paperwork / legal aid)',
+          citation: '22 O.S. §§ 18(A)¶8, 18(A)¶9, 991c'
         }
       }
     },
@@ -4963,28 +5151,29 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Petition for Expungement (22 O.S. § 18)',
           formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
           steps: [
-            'Check first whether the automatic Clean Slate path applies — OSBI answers at expungements@osbi.ok.gov and (405) 879-2641. It only reaches Oklahoma-only ("single-source") records.',
-            'File the Section 18 petition in the district court of the county of arrest (one petition per county; multiple arrests in the same county can be combined).',
-            'Give notice to the district attorney, the arresting agency, and OSBI. A hearing is typical.',
-            'The court-record expungement is free; OSBI charges a processing fee for the arrest record.'
+            'Check first whether the automatic Clean Slate path applies — it reaches Oklahoma-ONLY ("single-source") records, and involves no filing at all. OSBI answers at expungements@osbi.ok.gov and (405) 879-2641.',
+            'Sequence multi-record cases: clear the OLDEST first — an expunged offense is not counted as a prior when testing your eligibility for the others (§ 19(T)) — and file all offenses in one county on a SINGLE petition (§ 19(F)).',
+            'File the § 18 petition in the district court where the arrest information is located, with 30-day notice to the DA, the arresting agency, OSBI, and anyone with relevant information; a hearing follows. Appeals go to the Supreme Court, with OSBI a necessary party.',
+            'A non-conviction paragraph is FULLY sealed (hidden from police too); a conviction paragraph is PARTIALLY sealed (police keep access, usable as priors). DNA-innocence (¶3) petitions get all fees and costs reimbursed (§ 19(R)) and a 30-day expedited hearing (§ 19(S)).'
           ],
-          // null: Wave 2 gives OSBI arrest-record processing fee "$150 (their
-          // own page)"; court-record expungement free. Flagged for confirmation.
-          fees: null,
-          feeWaiver: null,
-          courtContact: 'District court of the county of arrest; OSBI for the arrest record'
+          // Statute-cited: §§ 18-19 set NO fee stack; the district-court filing fee
+          // and OSBI order-processing fee are set outside these sections (phone tier).
+          fees: 'No statutory fee stack in 22 O.S. §§ 18-19; the district-court filing fee and the OSBI order-processing fee are set outside these sections — confirm the amounts by phone. The automatic Clean Slate path involves no filing at all.',
+          feeWaiver: 'A DNA-innocence (§ 18(A)¶3) petitioner has ALL filing fees and court costs reimbursed by court order once granted (§ 22-19(R)). The automatic Clean Slate path is free (no petition).',
+          courtContact: 'District court where the arrest information is located; OSBI for the arrest record'
         },
         section991c: {
-          name: 'Section 991(c) Expungement (deferred-sentence disposition cleanup)',
-          formName: 'Motion under 22 O.S. § 991(c)',
+          name: 'Section 991c Expungement (deferred-sentence disposition cleanup)',
+          formName: 'Motion under 22 O.S. § 991c',
           formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
           steps: [
-            'Confirm your deferred sentence ended in dismissal.',
-            'File the § 991(c) motion in the court that handled the case — it updates the disposition to "pled not guilty, case dismissed".',
-            'Understand its limit: § 991(c) does NOT seal the arrest record. Pair it with a Section 18 expungement (available 1 year after dismissal) to seal the arrest too.'
+            'On successful completion of a deferred sentence with all fines/fees/assessments paid, § 991c automatically cleans up the court record — plea expunged, disposition dismissed WITH prejudice, docket name deleted, public index obliterated (retroactive, § 991c(E)).',
+            'Understand the limit: this cleanup is PARTIAL — sealed to the public but open to law enforcement and admissible to prove priors. It does NOT seal the arrest record.',
+            'For a FULL seal (arrest + court record), file the separate § 18 petition — ¶8 for a misdemeanor (1 year after dismissal) or ¶9 for a nonviolent felony (5 years). Most people do both.'
           ],
-          fees: null,
-          feeWaiver: null,
+          // Statute-cited: § 991c sets no fee; the § 18 stage is phone-tier (above).
+          fees: 'Section 991c sets no separate fee in the pulled text; the paired § 18 stage carries the district-court/OSBI fees (phone tier — see the § 18 remedy).',
+          feeWaiver: 'Not applicable to the § 991c cleanup itself; see the § 18 remedy for the DNA-innocence reimbursement.',
           courtContact: 'The court that handled the case'
         }
       },

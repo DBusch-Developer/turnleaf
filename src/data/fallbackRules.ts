@@ -6826,82 +6826,92 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // TENNESSEE — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  // TENNESSEE — STATUTE-VERIFIED 2026-07-19 (Tennessee Code Unannotated, LexisNexis
+  // free public access; current through the 2026 Regular and 2nd Extraordinary
+  // Sessions). Diana read T.C.A. §§ 40-32-101 through -110, 40-15-105, 40-15-106,
+  // 40-35-313, and the effective-on-7/1/2026 version of § 40-32-107.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md + Diana's 7/19 reads.
   //
-  // THE QUIRK: since Jan 1, 2024, no conviction-expunction order may be entered
-  // without a TBI CERTIFICATE OF ELIGIBILITY attached — TBI certifies the
-  // offence qualifies (the court still decides). Every conviction result says
-  // this is the first step.
+  // The Acts 2025 ch. 268 reorganization is settled: § 40-32-101 is now DEFINITIONS
+  // ONLY. Non-conviction expunction → § 40-32-106(a); conviction eligibility →
+  // § 40-32-107; two-conviction path → § 40-32-107(b); procedure → § 40-32-108;
+  // effects/restoration → § 40-32-110.
   //
-  // Non-convictions expunge FREE and anytime (the statute declares no fee ever).
-  // Trap (persona from same-episode): convicted of ANY count from an episode and
-  // the rest generally can't be expunged (§ (a)(1)(E)).
+  // CONVICTION LOGIC INVERTS: felony eligibility is an enumerated INCLUSION list
+  // (Class C at 107(a)(1)(A), D at (a)(1)(B), E at (a)(1)(C)), not absence from an
+  // exclusion list. Misdemeanours are all eligible EXCEPT the ~45-entry list at
+  // 107(a)(1)(D) — which is why a domestic-assault misdemeanour must be caught here,
+  // not treated as eligible. TBI Certificate of Eligibility (§ 40-32-102(c)) must be
+  // attached before any conviction-expunction order. Non-conviction is free
+  // (106(a)(1) "without cost").
   //
-  // Convictions: single eligible conviction (misdemeanours + listed Class E
-  // felonies) at 5 years; a newer tier of certain Class C/D felonies at 10
-  // years. A two-conviction path (§ (k)) exists, once per lifetime.
+  // NOT PULLED: § 8-21-401 (the clerk-fee amount) and § 40-39-202 (sex-offender
+  // registry list, referenced by the diversion exclusions).
   // ==========================================================================
   TN: {
     code: 'TN',
     name: 'Tennessee',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
     terminology:
       'Tennessee says EXPUNCTION, and it means it — the public records are destroyed. Cases that '
-      + 'ended without a conviction (dismissed, nolle, no-bill, not guilty, an arrest with no '
-      + 'charge) can be expunged for FREE, and the law says so on purpose. Convictions are harder: '
-      + 'a single eligible conviction can be expunged after 5 years, and since January 2024 there '
-      + 'is a new step — you must first get a Certificate of Eligibility from the TBI confirming the '
-      + 'offense qualifies before a court will enter the order. DUI is never expungeable.',
+      + 'ended without a conviction (dismissed, nolle, no-bill, not guilty, an arrest with no charge) '
+      + 'are expunged for FREE, and the law says so on purpose (§ 40-32-106(a)). Convictions are '
+      + 'harder: only certain offenses qualify, after a wait (5 years for a misdemeanor or listed '
+      + 'Class E felony, 10 for a listed Class C or D felony), and before a court will enter the order '
+      + 'you must first attach a Certificate of Eligibility from the TBI confirming the offense '
+      + 'qualifies (§ 40-32-102(c), as amended by Acts 2025 ch. 268). The 2025 reorganization moved '
+      + 'the old § 40-32-101 rules into §§ 40-32-106 (non-convictions) and 40-32-107 (convictions). '
+      + 'DUI is never expungeable.',
     keyDates: [
       {
-        label: 'TBI Certificate of Eligibility required for conviction expunctions',
-        date: '2024-01-01',
-        kind: 'effective',
-        note: 'No conviction-expunction order may be entered without a TBI certificate confirming the offence qualifies. Adds a step and processing time to every conviction track.',
-      },
-      {
-        label: 'Statutory reorganization of § 40-32-101 into §§ 40-32-106/107',
+        label: 'Acts 2025, ch. 268 — expunction statute reorganized',
         date: '2025',
         kind: 'effective',
-        note: 'Wave 4 gives the year only, and flags that content is mid-renumbering — cite both old and new until settled; the AOC site says "updated information coming soon".',
+        note: 'Settled. § 40-32-101 is now definitions only; non-conviction rules moved to § 40-32-106, conviction rules to § 40-32-107, procedure to § 40-32-108, effects to § 40-32-110. Cite the new sections only.',
+      },
+      {
+        label: '§ 40-32-107 current version effective July 1, 2026',
+        date: '2026-07-01',
+        kind: 'effective',
+        note: 'The verified print is the effective-on-7/1/2026 version of § 40-32-107 (history includes 2026 ch. 719, ch. 930 §§ 2-3, and ch. 1061 § 2). Encoded lists/waits are this current text.',
+      },
+      {
+        label: '2026 ch. 719 — pardon-based conviction expunction (§ 40-32-107(d))',
+        date: '2026',
+        kind: 'effective',
+        note: 'Added a path for a positive parole-board vote plus a governor\'s pardon, with violent- and sexual-offense exclusions. Disclosed in prose.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the current statute numbering: Wave 4 flags a 2025 reorganization renumbering § 40-32-101 content into §§ 40-32-106/107, still settling. Cite both until confirmed. The AOC site itself says updated information is coming.',
+          'What is the TBI Certificate-of-Eligibility request process and turnaround? § 40-32-102(c) gives the mechanics (the certificate must be attached before a conviction-expunction order), but not the timing. Verify on TBI\'s site.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the newer 10-year felony tier: Wave 4 says certain Class C and D felonies were added at 10 years, and flags the exact (g)(1)(D)-(F) list — most older guides only mention Class E. The tree encodes a 10-year Class C/D track but the specific eligible-offence list needs confirming.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What is the TBI certificate-of-eligibility request process and turnaround? Wave 4 flags this as a new step (since Jan 2024) that adds processing time to every conviction track. Verify on TBI\'s site.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the clerk fee practice: Wave 4 says no state fee but the clerk may charge up to $100 (§ 8-21-401(b)(1)(D)(x)) for conviction/diversion expunctions, waived by indigency affidavit; dismissals are free. Confirm the current practice with a clerk (Davidson County).',
-        blocksFields: ['resources.remedies.conviction.fees'],
-      },
-      {
-        question:
-          'How are pretrial and judicial diversion completions treated, and confirm the same-episode trap (§ (a)(1)(E)): conviction of any count from an episode generally bars expunging the rest. The tree hedges diversions and discloses the same-episode rule in prose.',
+          'Confirm the clerk-fee AMOUNT and current practice. The statute is clear that a clerk fee applies to conviction (§ 40-32-108(a)) and diversion (§ 40-32-106(d)(3)) expunctions via § 8-21-401, and that non-conviction is free (§ 40-32-106(a)(1)). The "up to $100" figure and the indigency-waiver practice come from § 8-21-401, which was not pulled — confirm with a clerk (Davidson County).',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Tenn. Code Ann. § 40-32-101 (expunction; being renumbered to §§ 40-32-106/107 in 2025)', url: null, retrievedOn: null },
-      { id: 'Tenn. Code Ann. § 40-32-101(g) (conviction expunction; eligible offences; 5-yr and 10-yr tiers)', url: null, retrievedOn: null },
-      { id: 'Tenn. Code Ann. § 40-32-101(k) (two-conviction path; once per lifetime)', url: null, retrievedOn: null },
-      { id: 'Tenn. Code Ann. § 8-21-401(b)(1)(D)(x) (clerk fee up to $100)', url: null, retrievedOn: null },
-      { id: '2024 amendment (TBI certificate-of-eligibility requirement)', url: null, retrievedOn: null },
+      { id: 'Tenn. Code Ann. § 40-32-101 (expunction — DEFINITIONS ONLY after Acts 2025 ch. 268)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-102 ((c) TBI Certificate of Eligibility required before a conviction-expunction order; (c)(1) not required for § 106/§ 109 expunctions except diversion-based ones; (c)(3) required for § 107 conviction expunctions)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-103 (expunction of records — retrieved 2026-07-19)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-104 (expunction procedure — retrieved 2026-07-19)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-105 (trafficking-victim conviction expunction — 1-yr wait, no force/weapon element, victimization nexus, DA service)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-106 (non-conviction expunction; (a)(1) free/"without cost"; (a)(1)(H) mistaken-identity expedited; (a)(2)(A) order-of-protection successfully defended; (b)(3) NGRI/incompetent barred; (b)(4) same-episode; (c)(1) trafficking exception, (c)(2) destruction barred but database removal available; (d) diversion expunction — (d)(1) petition, (d)(2) sexual/violent-sexual excluded per § 40-39-202, (d)(3) clerk fee per § 8-21-401; (e)(2) acquittal free-expunction-on-the-spot)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-107 (conviction expunction eligibility — EFFECTIVE-ON-7/1/2026 version, retrieved 2026-07-19; (a)(1)(A)-(C) enumerated Class C/D/E inclusion lists [committed on/after 11/1/1989], (a)(1)(D) ~45-entry misdemeanor exclusion list, (a)(1)(E) pre-11/1/89 criteria, (a)(1)(F) single-episode counts as one; (a)(2) CDL/CMV controlled-substance bar; (a)(3)(A)(i) sequencing bar, (a)(3)(A)(ii) once-per-lifetime prior-expunction bar, (a)(3)(B) 5/10-yr waits, (a)(3)(C) sentence-complete-and-all-paid anchor; (b) two-conviction path, (b)(2) single-episode; (c) illegal registration/voting at 15 yrs; (d) pardon path [2026 ch. 719]; (e) recovery-court DUI-sequencing bypass)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-108 (conviction-expunction petition procedure — petition the court of conviction, clerk fee per § 8-21-401, DA served with 60 days to respond, order no sooner than day 61, rebuttable presumption of grant for (a)(1)(A)-(E) petitioners, 2-yr refiling bar after denial)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-109 (expunction of an arrest record with no court history)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-32-110 (legal effects — restoration to pre-arrest status, no perjury for denying the record, firearm-purchase eligibility restored if otherwise lawful)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-15-105 (pretrial diversion — successful completion supports a § 40-32-106(d) expunction)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-15-106 (pretrial diversion — retrieved 2026-07-19)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 40-35-313 (judicial diversion — successful completion supports expunction; (b) barred for § 40-39-202 sexual offenses)', url: 'https://www.lexisnexis.com/hottopics/tncode/', retrievedOn: '2026-07-19' },
+      { id: 'Tenn. Code Ann. § 8-21-401 (clerk fee for conviction/diversion expunctions; the "up to $100" amount) — cite-only, NOT pulled', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -6911,161 +6921,308 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_tn' },
-            { label: 'Dismissed / Nolle / No-billed / Never charged', value: 'dismissed', next: 'eligible_nonconviction_tn' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_tn' },
-            { label: 'Diversion completed (pretrial or judicial)', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'prior_expunction_tn' },
+            { label: 'Dismissed / Nolle / No-billed / Never charged', value: 'dismissed', next: 'noncon_ngri_tn' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'noncon_ngri_tn' },
+            { label: 'Diversion completed (pretrial or judicial)', value: 'deferred', next: 'diversion_sex_tn' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_tn: {
+        // Once per lifetime applies to EVERY conviction track (107(a)(3)(A)(ii)) —
+        // checked ahead of all of them.
+        prior_expunction_tn: {
           type: 'boolean',
-          text: 'Was the offense any of these: a DUI, a sexual offense, a vehicular assault, or a Class A or Class B felony?',
-          yes: 'ineligible_excluded_tn',
-          no: 'other_convictions_tn'
+          text: 'Have you EVER had a Tennessee conviction expunction granted before — under any of the conviction-expunction subsections (§ 40-32-107(a), (b), (c), or (e))?',
+          yes: 'ineligible_prior_tn',
+          no: 'trafficking_conv_tn'
         },
-        other_convictions_tn: {
+        // Trafficking-victim conviction path (§ 40-32-105) — its own shorter route.
+        trafficking_conv_tn: {
           type: 'boolean',
-          text: 'Apart from this case, do you have any other conviction on your record?',
-          yes: 'complex_multi_tn',
-          no: 'conv_level_tn'
+          text: 'Were you convicted of this offense as a direct result of being a victim of human trafficking, with no element of force and no weapon involved?',
+          yes: 'eligible_trafficking_conv_tn',
+          no: 'cdl_tn'
         },
-        conv_level_tn: {
+        // CDL / commercial-motor-vehicle controlled-substance bar (107(a)(2)).
+        cdl_tn: {
+          type: 'boolean',
+          text: 'Was this a controlled-substance offense committed in a motor vehicle while you held a commercial driver license or permit (CDL/CLP), or any offense you committed while operating a commercial motor vehicle?',
+          yes: 'ineligible_cdl_tn',
+          no: 'conv_type_tn'
+        },
+        conv_type_tn: {
           type: 'choice',
-          text: 'How was the offense classified? (Your court paperwork says. Tennessee expunges only certain levels.)',
+          text: 'How was this offense classified? (Your court paperwork says. Tennessee expunges only certain offenses.)',
           options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_tn' },
-            { label: 'Class E felony (theft, forgery, credit-card fraud, some drug possession)', value: 'e', next: 'e_date_tn' },
-            { label: 'Class C or D felony', value: 'cd', next: 'cd_date_tn' },
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_exclusion_tn' },
+            { label: 'Class E felony', value: 'e', next: 'felony_e_list_tn' },
+            { label: 'Class C or Class D felony', value: 'cd', next: 'felony_cd_list_tn' },
+            { label: 'Class A or Class B felony', value: 'ab', next: 'ineligible_excluded_tn' },
+            { label: 'DUI', value: 'dui', next: 'ineligible_dui_tn' },
+            { label: 'A sexual offense', value: 'sexual', next: 'ineligible_excluded_tn' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_tn' }
           ]
         },
-        misd_date_tn: {
+        // Misdemeanours are ALL eligible EXCEPT the ~45-entry list at 107(a)(1)(D).
+        // Catching domestic assault here is the top-priority correctness fix.
+        misd_exclusion_tn: {
+          type: 'boolean',
+          text: 'Is the misdemeanor any of these excluded offenses (§ 40-32-107(a)(1)(D)): assault or domestic assault (§ 39-13-101 / § 39-13-111); stalking; violating a protective order; indecent exposure; a weapon offense committed while prohibited from possessing one; DUI; child abuse or neglect — or another offense on that exclusion list?',
+          yes: 'ineligible_excluded_tn',
+          no: 'restitution_5_tn'
+        },
+        // Felony eligibility is an INCLUSION list — you must be ON it (107(a)(1)(C)).
+        felony_e_list_tn: {
+          type: 'boolean',
+          text: 'Is your Class E felony one of the offenses on Tennessee\'s eligible list at § 40-32-107(a)(1)(C)? These are theft/fraud/property/drug-weighted — for example theft, forgery, credit-card fraud, burglary other than of a habitation (§ 39-13-1002), and certain drug-possession offenses (committed on or after November 1, 1989).',
+          yes: 'restitution_5_tn',
+          no: 'ineligible_notlisted_tn'
+        },
+        felony_cd_list_tn: {
+          type: 'boolean',
+          text: 'Is your Class C or Class D felony one of the offenses on Tennessee\'s eligible list (§ 40-32-107(a)(1)(A) for Class C, (a)(1)(B) for Class D)? These lists are theft/fraud/property/drug-weighted (committed on or after November 1, 1989) — your court paperwork and the TBI certificate will confirm the exact offense.',
+          yes: 'restitution_10_tn',
+          no: 'ineligible_notlisted_tn'
+        },
+        // Clock does not start until the sentence is complete AND all fines,
+        // restitution, costs, and assessments are paid (107(a)(3)(C)).
+        restitution_5_tn: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you completed your sentence AND paid all fines, restitution, court costs, and assessments in the case?',
+          yes: 'date_5_tn',
+          no: 'waiting_tn'
+        },
+        date_5_tn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — single eligible misdemeanour)' },
-            nextPass: 'eligible_conviction_tn',
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence with all fines, restitution, costs, and assessments paid (T.C.A. § 40-32-107(a)(3)(B),(C) — misdemeanour or listed Class E felony)' },
+            nextPass: 'sequencing_tn',
             nextFail: 'waiting_tn'
           }
         },
-        e_date_tn: {
+        restitution_10_tn: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you completed your sentence AND paid all fines, restitution, court costs, and assessments in the case?',
+          yes: 'date_10_tn',
+          no: 'waiting_tn'
+        },
+        date_10_tn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — listed Class E felony)' },
-            nextPass: 'eligible_conviction_tn',
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence with all fines, restitution, costs, and assessments paid (T.C.A. § 40-32-107(a)(3)(B),(C) — listed Class C or D felony)' },
+            nextPass: 'sequencing_tn',
             nextFail: 'waiting_tn'
           }
         },
-        cd_date_tn: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, with all fines, costs, and restitution paid?',
-          validation: {
-            period: { amount: 10, unit: 'years', anchor: 'sentence completion, all obligations paid (T.C.A. § 40-32-101(g) — certain Class C/D felonies, newer tier)' },
-            nextPass: 'eligible_conviction_cd_tn',
-            nextFail: 'waiting_tn'
-          }
+        // Sequencing bar (107(a)(3)(A)(i)): the offense must PREDATE any conviction
+        // for an ineligible offense, including federal / out-of-state equivalents.
+        sequencing_tn: {
+          type: 'boolean',
+          text: 'Do you have a conviction for an offense that is NOT expungement-eligible — for example a DUI, a Class A or B felony, a sexual offense, or a federal or out-of-state equivalent — that happened BEFORE this offense?',
+          yes: 'dui_bypass_tn',
+          no: 'other_eligible_tn'
+        },
+        // Two-conviction path (107(b)) is checked AFTER single-offense eligibility so
+        // that an ineligible prior (e.g. a DUI) routes through sequencing/107(e)
+        // instead of being mistaken for a second eligible conviction.
+        other_eligible_tn: {
+          type: 'boolean',
+          text: 'Apart from this case, do you have another ELIGIBLE conviction from a SEPARATE incident that you also want to expunge?',
+          yes: 'complex_multi_tn',
+          no: 'eligible_conviction_tn'
+        },
+        // Recovery-court DUI-sequencing bypass (107(e)): reopens the bar when it
+        // trips solely on a single prior DUI and the (e) conditions are met.
+        dui_bypass_tn: {
+          type: 'boolean',
+          text: 'Is that earlier ineligible conviction a single DUI (§ 55-10-401) — with no more than one DUI in your lifetime — AND: this offense happened at least 10 years after that DUI, you successfully completed a certified recovery-court program, and this offense does not itself involve a motor vehicle together with alcohol or a controlled substance?',
+          yes: 'eligible_recovery_court_tn',
+          no: 'ineligible_sequencing_tn'
+        },
+        // Non-conviction subtree: NGRI/incompetent barred (106(b)(3)), then the
+        // same-episode softened rule (106(c)).
+        noncon_ngri_tn: {
+          type: 'boolean',
+          text: 'Did the case end in a verdict of not guilty by reason of insanity, or a finding that you were incompetent to stand trial?',
+          yes: 'ineligible_ngri_tn',
+          no: 'noncon_episode_tn'
+        },
+        noncon_episode_tn: {
+          type: 'boolean',
+          text: 'Were you CONVICTED of any other charge arising from the same incident as this one?',
+          yes: 'same_episode_tn',
+          no: 'eligible_nonconviction_tn'
+        },
+        // Diversion (106(d)): sexual / violent-sexual offenses (§ 40-39-202) are
+        // excluded; judicial diversion also barred for those (40-35-313(b)).
+        diversion_sex_tn: {
+          type: 'boolean',
+          text: 'Was the diverted offense a sexual offense or violent sexual offense (as listed in § 40-39-202)?',
+          yes: 'ineligible_diversion_sex_tn',
+          no: 'eligible_diversion_tn'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Tennessee treats non-convictions (free to expunge, anytime) very differently from convictions (a wait, plus a new TBI certificate step). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The tncourts.gov expungement page has the forms and current information, and county clerks can tell you your disposition.',
+          message: 'Tennessee treats non-convictions (free to expunge, anytime) very differently from convictions (a wait, plus the TBI certificate step). Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The tncourts.gov expungement page has the forms and current information, and county clerks can tell you your disposition.',
           remedy: 'Get Your Record First (tncourts.gov / court clerk)',
-          citation: 'T.C.A. § 40-32-101 (which path applies depends on the disposition)'
+          citation: 'T.C.A. §§ 40-32-106, 40-32-107 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Diversion Cases Need a Person',
-          message: 'Tennessee lets you expunge a completed pretrial or judicial diversion, and a fee applies to that. The exact eligibility and process are not something this screening has researched in detail, so we would rather point you to someone than guess. One thing worth knowing generally: if you were convicted of any count arising from the same episode as this case, that can block expunging the rest (§ (a)(1)(E)). The tncourts.gov expungement page and county legal aid can confirm your situation.',
-          remedy: 'Consult Legal Aid (Diversion Not Yet Detailed)',
-          citation: 'T.C.A. § 40-32-101 (diversion treatment not yet detailed)'
+        ineligible_prior_tn: {
+          status: 'ineligible',
+          title: 'A Prior Expunction Uses Up the One-Per-Lifetime Chance',
+          message: 'Tennessee\'s conviction expunction is a once-in-a-lifetime remedy. Because you have already had a conviction expunged under this statute — subsection (a), (b), (c), or (e) — a new conviction expunction is barred (§ 40-32-107(a)(3)(A)(ii)). That bar is specific to CONVICTION expunctions: a non-conviction (a dismissal, acquittal, or arrest that never led to a charge) can still be expunged for free and does not use up this chance, so run this again for any non-conviction on your record. Legal aid can confirm what your prior expunction covered.',
+          remedy: 'None (one conviction expunction per lifetime already used) — non-convictions still qualify',
+          citation: 'T.C.A. § 40-32-107(a)(3)(A)(ii)'
+        },
+        eligible_trafficking_conv_tn: {
+          status: 'eligible',
+          title: 'Trafficking-Survivor Path — a Shorter Route',
+          message: 'Tennessee has a distinct path for a conviction that resulted from being a victim of human trafficking (§ 40-32-105). It is shorter than the ordinary route: the wait is 1 year, and it is available where the offense had no element of force and no weapon was involved, so long as you can show the connection between the offense and your victimization. The district attorney is served. Because this path turns on establishing that trafficking connection, it is worth doing with help — legal aid and the tncourts.gov resources can guide it.',
+          remedy: 'Petition for trafficking-survivor conviction expunction (§ 40-32-105) — 1-year wait',
+          citation: 'T.C.A. § 40-32-105'
+        },
+        ineligible_cdl_tn: {
+          status: 'ineligible',
+          title: 'Commercial-Vehicle Offenses Are Excluded',
+          message: 'Tennessee excludes from expunction a controlled-substance offense committed in a motor vehicle while you held a commercial driver license or permit, and any offense committed while operating a commercial motor vehicle (§ 40-32-107(a)(2)). No waiting period changes that. If you have a different, eligible conviction or a non-conviction on your record, those may still qualify — run this again for them. Legal aid can confirm where your offense falls.',
+          remedy: 'None (Commercial-Vehicle Exclusion, § 40-32-107(a)(2))',
+          citation: 'T.C.A. § 40-32-107(a)(2)'
         },
         eligible_nonconviction_tn: {
           status: 'eligible',
           title: 'No Conviction — Free Expunction, Anytime',
-          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, no-billed, acquitted, or an arrest that never led to a charge — you can expunge it for FREE, and Tennessee law is explicit that no fee should ever be charged for this. There is no waiting period. File the petition in the court that handled the case. One thing to be aware of: if you were CONVICTED of any other count arising from the same incident, that can prevent expunging the rest (§ (a)(1)(E)) — so this cleanest path assumes nothing from that episode ended in a conviction.',
-          remedy: 'Expunction of a Non-Conviction (T.C.A. § 40-32-101) — free, anytime',
-          citation: 'T.C.A. § 40-32-101'
+          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, no-billed, acquitted, or an arrest that never led to a charge — you can expunge it for FREE, with no waiting period; the statute says so on purpose (§ 40-32-106(a)(1), "without cost"). File in the court that handled the case. A few things worth knowing: if you were ACQUITTED, the judge is required to ask at the not-guilty verdict and can order the free expunction on the spot, with no petition (§ 40-32-106(e)(2)); an arrest with no court history has its own expunction (§ 40-32-109); a mistaken-identity case has an expedited route (§ 40-32-106(a)(1)(H)); and successfully defending an order of protection is also expungeable (§ 40-32-106(a)(2)(A)). One caution: if you were CONVICTED of another charge from the same incident, the non-convicted charges cannot be destroyed — but you are still entitled to have them removed from the public databases (see the same-episode result).',
+          remedy: 'Expunction of a Non-Conviction (§ 40-32-106(a)) — free, anytime',
+          citation: 'T.C.A. § 40-32-106(a), (e)(2); §§ 40-32-109'
         },
         eligible_conviction_tn: {
           status: 'eligible',
-          title: 'Potentially Eligible to Expunge — One New Step to Know About',
-          message: 'Based on your dates — 5 years since you completed the sentence with all fines, costs, and restitution paid, and no other convictions — this conviction appears eligible for expunction under § 40-32-101(g). One step changed in January 2024 and it is worth planning for: before a court will enter the order, you must first obtain a Certificate of Eligibility from the TBI confirming the offense qualifies. That adds processing time, so start it early. Then file the petition in the court of conviction; the clerk may charge up to $100, waived if you cannot afford it. An expunction destroys the public record.',
-          remedy: 'TBI Certificate of Eligibility, then Expunction Petition (§ 40-32-101(g))',
-          citation: 'T.C.A. § 40-32-101(g)'
+          title: 'Potentially Eligible to Expunge This Conviction',
+          message: 'Based on your dates and record, this conviction appears eligible for expunction under § 40-32-107 — expunction destroys the public record. Two steps to plan for. First, before a court will enter the order you must attach a Certificate of Eligibility from the TBI confirming the offense qualifies (§ 40-32-102(c)) — start it early, it adds processing time. Then petition the court of conviction (§ 40-32-108): a clerk fee applies (via § 8-21-401; commonly cited as up to $100, waived if you cannot afford it), the district attorney is served and has 60 days to respond, and the court acts no sooner than day 61. There is good news in the procedure: for petitioners whose offense is on the (a)(1)(A)-(E) eligible lists, the statute gives a REBUTTABLE PRESUMPTION that the petition should be granted. Two honest notes: if a petition is denied you generally cannot refile for 2 years (§ 40-32-108); and the grant conditions do not include a separate automatic restitution bar beyond completing the sentence with everything paid, though a judge weighs the whole picture. Once granted, § 40-32-110 restores you to pre-arrest status: you may deny the record without committing perjury, and firearm-purchase eligibility is restored if you are otherwise lawful.',
+          remedy: 'TBI Certificate of Eligibility, then Expunction Petition (§§ 40-32-107, -108) — rebuttable presumption of grant',
+          citation: 'T.C.A. §§ 40-32-107, 40-32-108, 40-32-102(c), 40-32-110'
         },
-        eligible_conviction_cd_tn: {
+        eligible_recovery_court_tn: {
           status: 'eligible',
-          title: 'Possibly Eligible on the Newer 10-Year Felony Tier',
-          message: 'Tennessee recently added a path for certain Class C and D felonies at 10 years — most older guides do not mention it, so this may be newer than what you have read elsewhere. Based on your dates the 10 years appear met. Two things to confirm, though: whether YOUR specific offense is on the eligible list is exactly what we are still verifying, and it is also what the TBI Certificate of Eligibility (required since January 2024) will determine before a court acts. So the honest next step is to request that certificate — it both confirms eligibility and is required to proceed. A legal aid organization can help you check the offense against the current list first. The clerk may charge up to $100, waived for indigency.',
-          remedy: 'TBI Certificate of Eligibility (confirms the offence too), then Petition (§ 40-32-101(g))',
-          citation: 'T.C.A. § 40-32-101(g)'
+          title: 'Recovery-Court Bypass — Eligible Despite the Earlier DUI',
+          message: 'Normally a conviction that came AFTER a DUI cannot be expunged, because Tennessee requires an eligible offense to predate any ineligible conviction (§ 40-32-107(a)(3)(A)(i)). But § 40-32-107(e) reopens the door in exactly your situation: this offense is on the eligible lists, it happened at least 10 years after your single DUI, you completed a certified recovery-court program, you have no more than one lifetime DUI and no prior expunction, and this offense does not itself involve a vehicle plus alcohol or drugs. That means you can petition to expunge THIS offense (§ 40-32-108) even though the DUI sits earlier in time. The DUI itself remains never-expungeable. Because this is a specific, newer path, do it with help — you will still need the TBI Certificate of Eligibility (§ 40-32-102(c)).',
+          remedy: 'Petition to expunge via the recovery-court bypass (§ 40-32-107(e)) — the DUI itself stays',
+          citation: 'T.C.A. § 40-32-107(e)'
+        },
+        ineligible_sequencing_tn: {
+          status: 'ineligible',
+          title: 'An Earlier Ineligible Conviction Blocks This One',
+          message: 'Tennessee requires an eligible offense to have been committed BEFORE any conviction for an ineligible offense — a DUI, a Class A/B felony, a sexual offense, or a federal or out-of-state equivalent (§ 40-32-107(a)(3)(A)(i)). Because you have such a conviction that predates this offense, this one cannot be expunged under the ordinary path. Two things worth checking with a person before you accept this: if the only thing in the way is a single DUI, there is a narrow recovery-court bypass (§ 40-32-107(e)) that can still reach an offense committed 10+ years later; and any non-conviction on your record is unaffected and still free to expunge. Legal aid can map the sequence.',
+          remedy: 'None on the ordinary path (sequencing bar) — ask about the § 107(e) recovery-court bypass',
+          citation: 'T.C.A. § 40-32-107(a)(3)(A)(i)'
         },
         waiting_tn: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Tennessee\'s conviction expunction comes 5 years after you complete your sentence (with all fines, costs, and restitution paid) for a misdemeanor or listed Class E felony, and 10 years for the newer Class C/D felony tier. Based on your dates, yours has not run yet. Getting any outstanding fines or restitution paid matters, since the clock runs from full completion. When the time comes, remember the TBI certificate step added in 2024.',
-          remedy: 'Wait for the period (all obligations paid), then request the TBI certificate',
-          citation: 'T.C.A. § 40-32-101(g)'
+          message: 'Tennessee\'s conviction expunction comes 5 years after you complete your sentence for a misdemeanor or listed Class E felony, and 10 years for a listed Class C or D felony — and the clock does not even start until the sentence is complete AND all fines, restitution, court costs, and assessments are paid (§ 40-32-107(a)(3)(B),(C)). Based on your dates (or an unpaid balance), yours has not run yet. Clearing what you owe is what starts the clock. When the time comes, remember you must first get the TBI Certificate of Eligibility (§ 40-32-102(c)).',
+          remedy: 'Finish paying all obligations to start the clock, then wait the 5 or 10 years and request the TBI certificate',
+          citation: 'T.C.A. § 40-32-107(a)(3)(B),(C)'
         },
         ineligible_excluded_tn: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Expunged',
-          message: 'Tennessee does not expunge DUI convictions, sexual offenses, vehicular assault, or Class A and Class B felonies. For a DUI specifically, there is no expunction route, so be wary of any service suggesting one. If you have a non-conviction or a different, eligible conviction on your record, those may still qualify — run this again for them. Legal aid can confirm where your offense falls; the categories are specific.',
-          remedy: 'None (Excluded Offense)',
-          citation: 'T.C.A. § 40-32-101'
+          message: 'Some offenses are simply not on Tennessee\'s eligible list: Class A and Class B felonies, sexual offenses, and misdemeanors on the exclusion list at § 40-32-107(a)(1)(D) — which includes assault and domestic assault, stalking, protective-order violations, indecent exposure, weapon-while-prohibited offenses, and child abuse/neglect, among others. Because "eligible" is a specific statutory list rather than a description of how serious the offense feels, it is worth confirming with someone if you are unsure. Two things that may still help: a non-conviction on your record is free to expunge; and for some offenses a pardon-based path exists (§ 40-32-107(d), added in 2026 — a positive parole-board vote plus a governor\'s pardon, with violent- and sexual-offense exclusions). Legal aid can check both.',
+          remedy: 'None on the ordinary path (excluded offense) — ask about a non-conviction or the § 107(d) pardon path',
+          citation: 'T.C.A. § 40-32-107(a)(1)(D), (d)'
+        },
+        ineligible_dui_tn: {
+          status: 'ineligible',
+          title: 'DUI Is Never Expungeable',
+          message: 'Tennessee does not expunge a DUI conviction — there is no route for it, so be wary of any service that suggests one. Two honest exceptions to know about, neither of which clears the DUI itself: a DUI charge that ended WITHOUT a conviction (dismissed, reduced away, acquitted) can be expunged for free as a non-conviction; and if you later pick up an eligible offense, a single DUI does not permanently poison it — the § 40-32-107(e) recovery-court bypass can reach an eligible offense committed 10+ years after the DUI. But the DUI conviction itself stays. Legal aid can confirm.',
+          remedy: 'None for the DUI conviction (never expungeable)',
+          citation: 'T.C.A. § 40-32-107(a)(1)(D)(xlv)'
+        },
+        ineligible_notlisted_tn: {
+          status: 'ineligible',
+          title: 'This Felony Is Not on the Eligible List',
+          message: 'Tennessee expunges only the felonies that are specifically named on its eligible lists (§ 40-32-107(a)(1)(A) for Class C, (a)(1)(B) for Class D, (a)(1)(C) for Class E) — the lists are weighted toward theft, fraud, property, and drug offenses. Because your offense is not one of those, the ordinary conviction path does not reach it. This is exactly the kind of thing worth confirming with a person, since the lists are specific and long: legal aid or the TBI Certificate-of-Eligibility check can tell you definitively whether your exact offense is on the list. Any non-conviction on your record is unaffected and still free to expunge.',
+          remedy: 'None (felony not on the eligible list) — confirm the exact offense with legal aid / the TBI',
+          citation: 'T.C.A. § 40-32-107(a)(1)(A)-(C)'
         },
         complex_multi_tn: {
           status: 'complex',
           title: 'More Than One Conviction — Worth a Closer Look',
-          message: 'The simplest Tennessee expunction path is for a single eligible conviction with nothing else on your record. Because you have more than one conviction, your situation needs a closer look: Tennessee does have a two-conviction path (§ (k)) — up to two offenses, each independently eligible, both before any ineligible conviction — but it can only be used ONCE in a lifetime, so timing and which convictions to include actually matter. This is worth a person rather than a screening tool. Legal aid and the tncourts.gov expungement resources can map which of your convictions qualify and whether the two-conviction path is your best move.',
-          remedy: 'Consult Legal Aid (Multiple Convictions; the § (k) Two-Conviction Path)',
-          citation: 'T.C.A. § 40-32-101(k)'
+          message: 'The simplest Tennessee expunction path is for a single eligible conviction. Because you have more than one conviction from separate incidents, your situation needs a closer look. Tennessee does have a two-conviction path (§ 40-32-107(b)) — up to two offenses (two misdemeanors, or one felony and one misdemeanor), each independently on the eligible lists, each with its 5- or 10-year wait met, and never previously granted an expunction — but it can be used only ONCE in a lifetime, so which convictions to include and when to file actually matter. (Convictions from a single episode count as one, § 40-32-107(b)(2).) This is worth a person rather than a screening tool. Legal aid and the tncourts.gov expungement resources can map which of your convictions qualify.',
+          remedy: 'Consult Legal Aid (Multiple Convictions; the § 40-32-107(b) Two-Conviction Path)',
+          citation: 'T.C.A. § 40-32-107(b)'
         },
         complex_level_tn: {
           status: 'complex',
           title: 'We Need the Offense Classification',
-          message: 'In Tennessee the expunction wait depends on the class: 5 years for a misdemeanor or listed Class E felony, 10 for the newer Class C/D tier, and never for Class A/B felonies, DUI, or sexual offenses. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the tncourts.gov expungement page walks through the categories. Legal aid can also read your record with you.',
-          remedy: 'Get Your Offense Classification First (court paperwork / tncourts.gov)',
-          citation: 'T.C.A. § 40-32-101(g)'
+          message: 'In Tennessee the expunction analysis turns on exactly what the offense is: misdemeanors are eligible unless they are on the exclusion list; felonies are eligible only if they are named on the Class C, D, or E inclusion lists; and Class A/B felonies, sexual offenses, and DUI are never eligible. The wait is 5 years for a misdemeanor or listed Class E felony and 10 for a listed Class C/D. Since you are not sure of the classification, we are not going to guess. Your court paperwork states it, the tncourts.gov expungement page walks the categories, and the TBI Certificate-of-Eligibility check confirms it definitively.',
+          remedy: 'Get Your Offense Classification First (court paperwork / tncourts.gov / TBI)',
+          citation: 'T.C.A. § 40-32-107(a)(1)'
+        },
+        ineligible_ngri_tn: {
+          status: 'ineligible',
+          title: 'Insanity or Incompetency Findings Are Not Expunged',
+          message: 'Tennessee does not expunge a record where the case ended in a verdict of not guilty by reason of insanity, or a finding that the person was incompetent to stand trial (§ 40-32-106(b)(3)). We would rather tell you that plainly than have you spend on a petition that cannot succeed. If your record also includes an ordinary non-conviction or an eligible conviction, those may still qualify on their own — run this again for them, and legal aid can help you sort which is which.',
+          remedy: 'None (NGRI / incompetency finding, § 40-32-106(b)(3))',
+          citation: 'T.C.A. § 40-32-106(b)(3)'
+        },
+        same_episode_tn: {
+          status: 'complex',
+          title: 'Same Incident as a Conviction — Destruction Barred, but Database Removal Is Available',
+          message: 'This is the same-episode situation, and the rule is more forgiving than it used to be. Because you were convicted of another charge arising from the same incident, the non-convicted charges here cannot be DESTROYED (§ 40-32-106(b)(4)). But you are not stuck with them showing publicly: § 40-32-106(c)(2) entitles you to have those non-convicted charges REMOVED from the electronic databases — NCIC, the state repository, and court-clerk public databases — even though the paper file is not destroyed. There is also a fuller exception if the underlying conviction is one you were led into as a trafficking victim (§ 40-32-106(c)(1)). This is worth having legal aid file correctly so you get the database removal you are entitled to.',
+          remedy: 'Petition for database removal of the non-convicted charges (§ 40-32-106(c)(2)) — destruction barred by the same-episode conviction',
+          citation: 'T.C.A. § 40-32-106(b)(4), (c)(1), (c)(2)'
+        },
+        eligible_diversion_tn: {
+          status: 'eligible',
+          title: 'Completed Diversion — Petition to Expunge',
+          message: 'Because you successfully completed a pretrial diversion (§ 40-15-105) or a judicial diversion (§ 40-35-313), the charge was dismissed and you can petition to expunge it under § 40-32-106(d). Two things set this apart from an ordinary non-conviction: a clerk fee applies (via § 8-21-401, § 40-32-106(d)(3)) rather than being free, and because it is a diversion-based expunction you DO need the TBI Certificate of Eligibility first (§ 40-32-102(c)(1)). File in the court that handled the case. One caution carries over: if you were convicted of another charge from the same incident, that can limit what is destroyed (see the same-episode rule). Legal aid and the tncourts.gov resources can walk it.',
+          remedy: 'Petition to expunge a completed diversion (§ 40-32-106(d)) — clerk fee applies; TBI certificate required',
+          citation: 'T.C.A. §§ 40-32-106(d), 40-15-105, 40-35-313, 40-32-102(c)(1)'
+        },
+        ineligible_diversion_sex_tn: {
+          status: 'ineligible',
+          title: 'A Diverted Sexual Offense Cannot Be Expunged',
+          message: 'Tennessee bars expunction of a diversion when the diverted offense was a sexual or violent sexual offense listed in § 40-39-202 — this holds for both pretrial-diversion expunctions (§ 40-32-106(d)(2)) and judicial-diversion expunctions (§ 40-35-313(b)). No waiting period changes that. If you are uncertain whether your offense is on the § 40-39-202 list, it is worth confirming with a person, since the list is specific. Legal aid can check it and tell you whether any other record you have qualifies.',
+          remedy: 'None (diverted sexual offense, § 40-32-106(d)(2) / § 40-35-313(b))',
+          citation: 'T.C.A. §§ 40-32-106(d)(2), 40-35-313(b); § 40-39-202'
         }
       }
     },
     resources: {
       remedies: {
         conviction: {
-          name: 'Conviction Expunction (T.C.A. § 40-32-101(g))',
+          name: 'Conviction Expunction (T.C.A. § 40-32-107)',
           formName: 'Petition for Expunction (with TBI Certificate of Eligibility)',
           formUrl: 'https://www.tncourts.gov/programs/expunctions',
           steps: [
-            'Since January 2024, first request a Certificate of Eligibility from the TBI — it confirms the offense qualifies, and a court cannot enter the order without it. Start this early; it adds processing time.',
-            'File the petition in the court of conviction; the district attorney is served.',
-            'The clerk may charge up to $100; an indigency affidavit waives it.',
+            'First request a Certificate of Eligibility from the TBI (§ 40-32-102(c)) — it confirms the offense qualifies, and a court cannot enter the order without it. Start this early; it adds processing time.',
+            'File the petition in the court of conviction (§ 40-32-108); the district attorney is served and has 60 days to respond, and the court acts no sooner than day 61.',
+            'A clerk fee applies (via § 8-21-401); an indigency affidavit waives it. For offenses on the (a)(1)(A)-(E) lists, the statute presumes the petition should be granted.',
             'For a non-conviction instead, the expunction is free and needs no TBI certificate.'
           ],
-          // null: Wave 4 gives "up to $100, indigency waives" and flags the
-          // current practice.
-          fees: null,
-          // NOT null: the indigency waiver is a named, independent mechanism.
+          fees: 'A clerk fee applies via § 8-21-401 (commonly cited as up to $100; the exact amount was not pulled). An indigency affidavit waives it.',
           feeWaiver: 'An indigency affidavit waives the clerk fee.',
           courtContact: 'The court of conviction; TBI for the certificate'
         },
         nonconviction: {
-          name: 'Non-Conviction Expunction (T.C.A. § 40-32-101)',
+          name: 'Non-Conviction Expunction (T.C.A. § 40-32-106(a))',
           formName: 'Petition for Expunction (non-conviction)',
           formUrl: 'https://www.tncourts.gov/programs/expunctions',
           steps: [
             'For a dismissal, nolle, no-bill, acquittal, or arrest without charge, file in the court that handled the case.',
-            'No TBI certificate is needed for a non-conviction.',
-            'It is free — the statute is explicit that no fee should be charged.'
+            'No TBI certificate is needed for a non-conviction (§ 40-32-102(c)(1)), except a diversion-based expunction, which does need one.',
+            'It is free — § 40-32-106(a)(1) is explicit that it is "without cost".'
           ],
-          fees: '$0 — the statute declares no fee should ever be charged for a non-conviction expunction.',
+          fees: '$0 — § 40-32-106(a)(1) declares a non-conviction expunction is "without cost".',
           feeWaiver: 'Not applicable (free).',
           courtContact: 'The court that handled the case'
         }

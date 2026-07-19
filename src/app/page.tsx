@@ -6,6 +6,7 @@ import EligibilityWizard, { ConvictionRecord } from '../components/EligibilityWi
 import ResultsDisplay from '../components/ResultsDisplay';
 import CheckrReportDemo from '../components/CheckrReportDemo';
 import { StateRuleConfig } from '../data/fallbackRules';
+import type { ScreeningResultItem } from '../data/multiState';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
 import { ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
 import { usePublishScreen, type WillowScreen } from '../components/AssistantContext';
@@ -336,8 +337,7 @@ export default function Home() {
               />
             ) : (
               <ResultsDisplay
-                stateConfig={stateConfig}
-                results={results}
+                sections={[{ stateConfig, results: results as ScreeningResultItem[] }]}
                 onReset={handleReset}
               />
             )}

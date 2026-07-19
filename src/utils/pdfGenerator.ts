@@ -26,6 +26,11 @@ interface PDFStateInfo {
   }>;
 }
 
+interface PDFStateSection extends PDFStateInfo {
+  records: PDFRecord[];
+  summary?: string;
+}
+
 /**
  * What a null resource field says out loud.
  *
@@ -35,12 +40,7 @@ interface PDFStateInfo {
  */
 const NOT_VERIFIED = 'Not yet verified — ask the court clerk';
 
-export function generateReportPDF(
-  candidateName: string,
-  stateInfo: PDFStateInfo,
-  records: PDFRecord[],
-  aiSummary?: string
-) {
+export function generateReportPDF(candidateName: string, sections: PDFStateSection[]) {
   const doc = new jsPDF();
   let y = 20;
   const pageHeight = doc.internal.pageSize.height;
@@ -78,8 +78,7 @@ export function generateReportPDF(
   
   y = addTextWithWrapping('Turnleaf Expungement Screening Report', margin, y, 20, 'bold', [77, 124, 89]);
   y = addTextWithWrapping(`Prepared for: ${candidateName || 'Anonymous Candidate'}`, margin, y, 10, 'normal', [90, 98, 92]);
-  y = addTextWithWrapping(`State Checked: ${stateInfo.name} (Data Last Reviewed: ${stateInfo.lastReviewed} | Status: ${stateInfo.verificationStatus})`, margin, y, 10, 'normal', [90, 98, 92]);
-  
+
   y += 2;
   doc.setLineWidth(0.5);
   doc.setDrawColor(220, 224, 220);
@@ -95,64 +94,71 @@ export function generateReportPDF(
   doc.line(margin, y, margin + width, y);
   y += 6;
 
-  // AI/Plain-Language Summary
-  if (aiSummary) {
-    y = addTextWithWrapping('Plain-Language Summary:', margin, y, 12, 'bold', [77, 124, 89]);
-    y = addTextWithWrapping(aiSummary, margin, y, 9.5, 'normal', [30, 34, 31]);
-    y += 4;
-  }
+  sections.forEach((section, sIdx) => {
+    if (sIdx > 0) { doc.addPage(); y = 20; }
 
-  // Conviction details
-  y = addTextWithWrapping('Conviction Screening Detail:', margin, y, 13, 'bold', [77, 124, 89]);
-  y += 2;
-
-  records.forEach((record, index) => {
-    y = addTextWithWrapping(`${index + 1}. ${record.title} (${record.charge_type.toUpperCase()}) — Outcome: ${record.disposition.toUpperCase()}`, margin, y, 11, 'bold');
-    
-    let statusColor: [number, number, number] = [90, 98, 92];
-    if (record.resultStatus === 'eligible') statusColor = [30, 130, 76]; // Emerald
-    else if (record.resultStatus === 'waiting') statusColor = [217, 119, 6]; // Amber
-    else if (record.resultStatus === 'ineligible') statusColor = [192, 57, 43]; // Terracotta
-    else if (record.resultStatus === 'complex') statusColor = [45, 72, 52]; // Dark green
-
-    y = addTextWithWrapping(`Screening Result: ${record.resultTitle}`, margin + 5, y, 9.5, 'bold', statusColor);
-    y = addTextWithWrapping(`Rule Applied: ${record.resultMessage}`, margin + 5, y, 9.5, 'normal');
-    y = addTextWithWrapping(`Statute Citation: ${record.citation}`, margin + 5, y, 9, 'normal', [90, 98, 92]);
-    y += 3;
-  });
-
-  // Next Steps / Filing Instructions
-  const hasEligible = records.some(r => r.resultStatus === 'eligible');
-  if (hasEligible && Object.keys(stateInfo.remedies).length > 0) {
-    y = addTextWithWrapping('State Filing Actions & Forms:', margin, y, 13, 'bold', [77, 124, 89]);
+    y = addTextWithWrapping(`State Checked: ${section.name} (Data Last Reviewed: ${section.lastReviewed} | Status: ${section.verificationStatus})`, margin, y, 12, 'bold', [77, 124, 89]);
     y += 2;
 
-    Object.entries(stateInfo.remedies).forEach(([_, remedy]) => {
-      y = addTextWithWrapping(`Remedy: ${remedy.name}`, margin, y, 11, 'bold');
-      y = addTextWithWrapping(`Required Form: ${remedy.formName ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
-      // The link line is omitted entirely when unverified — printing
-      // "Download Link: null" in a document someone carries to a courthouse is
-      // worse than printing no line at all.
-      if (remedy.formUrl) {
-        y = addTextWithWrapping(`Download Link: ${remedy.formUrl}`, margin + 5, y, 8.5, 'normal', [77, 124, 89]);
-      }
-      y = addTextWithWrapping(`Court Fees: ${remedy.fees ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
-      y = addTextWithWrapping(`Fee Waiver Availability: ${remedy.feeWaiver ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
-      y = addTextWithWrapping(`Where to File: ${remedy.courtContact ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
-      
-      y = addTextWithWrapping('Filing Steps:', margin + 5, y, 9.5, 'bold');
-      remedy.steps.forEach((step, idx) => {
-        y = addTextWithWrapping(`[ ] Step ${idx + 1}: ${step}`, margin + 8, y, 9, 'normal');
-      });
+    // AI/Plain-Language Summary
+    if (section.summary) {
+      y = addTextWithWrapping('Plain-Language Summary:', margin, y, 12, 'bold', [77, 124, 89]);
+      y = addTextWithWrapping(section.summary, margin, y, 9.5, 'normal', [30, 34, 31]);
+      y += 4;
+    }
+
+    // Conviction details
+    y = addTextWithWrapping('Conviction Screening Detail:', margin, y, 13, 'bold', [77, 124, 89]);
+    y += 2;
+
+    section.records.forEach((record, index) => {
+      y = addTextWithWrapping(`${index + 1}. ${record.title} (${record.charge_type.toUpperCase()}) — Outcome: ${record.disposition.toUpperCase()}`, margin, y, 11, 'bold');
+
+      let statusColor: [number, number, number] = [90, 98, 92];
+      if (record.resultStatus === 'eligible') statusColor = [30, 130, 76]; // Emerald
+      else if (record.resultStatus === 'waiting') statusColor = [217, 119, 6]; // Amber
+      else if (record.resultStatus === 'ineligible') statusColor = [192, 57, 43]; // Terracotta
+      else if (record.resultStatus === 'complex') statusColor = [45, 72, 52]; // Dark green
+
+      y = addTextWithWrapping(`Screening Result: ${record.resultTitle}`, margin + 5, y, 9.5, 'bold', statusColor);
+      y = addTextWithWrapping(`Rule Applied: ${record.resultMessage}`, margin + 5, y, 9.5, 'normal');
+      y = addTextWithWrapping(`Statute Citation: ${record.citation}`, margin + 5, y, 9, 'normal', [90, 98, 92]);
       y += 3;
     });
-  }
 
-  // Legal Aid Directory Resources
-  y = addTextWithWrapping('Local Legal Assistance Resources:', margin, y, 13, 'bold', [77, 124, 89]);
-  y += 2;
-  stateInfo.legalAid.forEach(aid => {
-    y = addTextWithWrapping(`- ${aid.name}: ${aid.url}`, margin + 5, y, 9.5, 'normal');
+    // Next Steps / Filing Instructions
+    const hasEligible = section.records.some(r => r.resultStatus === 'eligible');
+    if (hasEligible && Object.keys(section.remedies).length > 0) {
+      y = addTextWithWrapping('State Filing Actions & Forms:', margin, y, 13, 'bold', [77, 124, 89]);
+      y += 2;
+
+      Object.entries(section.remedies).forEach(([_, remedy]) => {
+        y = addTextWithWrapping(`Remedy: ${remedy.name}`, margin, y, 11, 'bold');
+        y = addTextWithWrapping(`Required Form: ${remedy.formName ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+        // The link line is omitted entirely when unverified — printing
+        // "Download Link: null" in a document someone carries to a courthouse is
+        // worse than printing no line at all.
+        if (remedy.formUrl) {
+          y = addTextWithWrapping(`Download Link: ${remedy.formUrl}`, margin + 5, y, 8.5, 'normal', [77, 124, 89]);
+        }
+        y = addTextWithWrapping(`Court Fees: ${remedy.fees ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+        y = addTextWithWrapping(`Fee Waiver Availability: ${remedy.feeWaiver ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+        y = addTextWithWrapping(`Where to File: ${remedy.courtContact ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
+
+        y = addTextWithWrapping('Filing Steps:', margin + 5, y, 9.5, 'bold');
+        remedy.steps.forEach((step, idx) => {
+          y = addTextWithWrapping(`[ ] Step ${idx + 1}: ${step}`, margin + 8, y, 9, 'normal');
+        });
+        y += 3;
+      });
+    }
+
+    // Legal Aid Directory Resources
+    y = addTextWithWrapping('Local Legal Assistance Resources:', margin, y, 13, 'bold', [77, 124, 89]);
+    y += 2;
+    section.legalAid.forEach(aid => {
+      y = addTextWithWrapping(`- ${aid.name}: ${aid.url}`, margin + 5, y, 9.5, 'normal');
+    });
   });
 
   // Stamp headers and footers onto all pages

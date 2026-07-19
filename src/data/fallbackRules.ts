@@ -7060,10 +7060,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       + 'is the whole answer.',
     keyDates: [
       {
-        label: '2018 criminal justice reform',
+        label: 'St. 2018, c. 69 — criminal justice reform',
         date: '2018',
         kind: 'effective',
-        note: 'Cut the § 100A sealing waits to 3 years (misdemeanors) / 7 years (felonies) and created the expungement remedy (§§ 100E-100U). Year given; the exact effective day and session-law chapter are not pinned here.',
+        note: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform; emergency law). Act SECTIONS 186-187 cut the § 100A sealing waits from 5/10 to 3/7 years, SECTION 188 added the "except for convictions for resisting arrest" carve-out, and SECTION 195 created the expungement remedy (§§ 100E-100U). Per act SECTION 239, all of these took effect 6 months AFTER the act\'s approval — not on signing despite the emergency clause. The approval date is not in the session-law text; the exact effective day is not pinned here. Verified against the session-law PDF at research/statutes/MA/St2018-c69-2026-07-18.pdf.',
       },
       {
         label: 'Current § 100I expungement structure (2-record limit)',
@@ -7124,6 +7124,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       { id: 'M.G.L. c. 276 § 100K1/4 (mandatory expungement of decriminalized-amount marijuana offenses; court SHALL order within 30 days; St. 2022, c. 180, § 23)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100K1~4', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100L (expungement process — petition, DA objection window, hearing, written findings; scrubs police logs)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100L', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100N (expungement — sealing pending petition / related process)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100N', retrievedOn: '2026-07-18' },
+      { id: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform; §§ 186-188 cut the § 100A waits to 3/7 and added the resisting-arrest carve-out, § 195 created §§ 100E-100U, § 239 delayed them 6 months). PDF at research/statutes/MA/St2018-c69-2026-07-18.pdf', url: 'https://malegislature.gov/Laws/SessionLaws/Acts/2018/Chapter69', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100B (juvenile record sealing) — cite-only, pending pull', url: null, retrievedOn: null },
       { id: 'M.G.L. c. 127 § 152 (sealing of pardoned convictions — Healey marijuana pardon) — cite-only, pending pull', url: null, retrievedOn: null },
       { id: 'Commonwealth v. J.F., 491 Mass. 824 (2023) (mandatory § 100C sealing at disposition for acquittal/no-PC)', url: null, retrievedOn: null },

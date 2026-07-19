@@ -59,7 +59,11 @@ export default function EligibilityWizard({
   // exactly as before; a CA+TX session seeds a CA group and a TX group.
   useEffect(() => {
     if (prepopulatedRecords.length > 0) {
-      setRecords(prepopulatedRecords);
+      // Only seed records whose state is actually screenable here. A record for
+      // an in-research state has no config in `configs` (configFor → undefined,
+      // which would crash screenRecord / configs[group.state].name); that state
+      // is represented by its in-research note on the page, not screened here.
+      setRecords(prepopulatedRecords.filter(r => configs[r.state]));
       setShowCheckpoint(true); // Auto-advance to checkpoint for quick demo
     } else if (records.length === 0) {
       setRecords(states.map(s => makeEmptyRecord(s.code)));
@@ -293,9 +297,25 @@ export default function EligibilityWizard({
                   <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.75rem' }}>
                     Eligibility relies on exact dates, charge types, and outcomes. If you do not have your records:
                   </p>
+                  {/* State-NEUTRAL guidance: a multi-state session must never
+                      name one state's repository as if it were the person's.
+                      The referral is listed once PER screened state, so a TX
+                      charge never sees California's legal-aid link. */}
                   <ul style={{ fontSize: '0.85rem', paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <li><strong>In {states[0].name}:</strong> Request your official criminal history report (RAP Sheet) from the state repository.</li>
-                    <li>For help obtaining fee waivers to get your records, contact: <a href={states[0].resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{states[0].resources.legalAid[0].name}</a>.</li>
+                    <li><strong>In your state:</strong> Request your official criminal history report (RAP Sheet) from the state repository.</li>
+                    <li>
+                      For help obtaining fee waivers to get your records, contact:
+                      <ul style={{ paddingLeft: '1.2rem', marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        {states
+                          .filter(s => s.resources.legalAid[0])
+                          .map(s => (
+                            <li key={s.code}>
+                              {states.length > 1 && <strong>{s.name}: </strong>}
+                              <a href={s.resources.legalAid[0].url} target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', fontWeight: 600 }}>{s.resources.legalAid[0].name}</a>
+                            </li>
+                          ))}
+                      </ul>
+                    </li>
                   </ul>
                 </div>
               </div>

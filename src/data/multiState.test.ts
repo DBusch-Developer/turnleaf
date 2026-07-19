@@ -23,11 +23,17 @@ describe('screenRecord', () => {
     expect(['eligible', 'waiting', 'ineligible', 'complex']).toContain(item.resultStatus);
   });
 
-  it('the Thomas split: CA dismissed possession is not ineligible; TX convicted theft is not eligible', () => {
+  it('the Thomas split: each record resolves under its OWN state and is tagged with it', () => {
     const caItem = screenRecord(CA, {}, rec({ id: 'ca', state: 'CA', disposition: 'dismissed' }));
     const txItem = screenRecord(TX, {}, rec({ id: 'tx', state: 'TX', disposition: 'convicted', charge_type: 'misdemeanor' }));
-    expect(caItem.resultStatus).not.toBe('ineligible');
-    expect(txItem.resultStatus).not.toBe('eligible');
+    // Exact per-state outcomes — the whole point of routing each record to its
+    // own law: CA-dismissed clears, TX-convicted-misdemeanor does not. If these
+    // ever flip, the configs got crossed (the original headline bug).
+    expect(caItem.resultStatus).toBe('eligible');
+    expect(txItem.resultStatus).toBe('ineligible');
+    // And each result carries the state of the record it came from.
+    expect(caItem.state).toBe('CA');
+    expect(txItem.state).toBe('TX');
   });
 });
 

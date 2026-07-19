@@ -35,9 +35,12 @@ export default function Home() {
   const [prepopulatedRecords, setPrepopulatedRecords] = useState<ConvictionRecord[]>([]);
   const [results, setResults] = useState<any[] | null>(null);
   const [showCheckr, setShowCheckr] = useState(false);
-  // Not 'is it loading' — that is derived (see isOpeningState). This is the
-  // one thing the render cannot infer: whether the fetch came back empty.
-  const [loadFailed, setLoadFailed] = useState(false);
+  // Which selected states' config fetch FAILED, tracked per-state so one state
+  // going down never sinks the others. A code lands here only after its own
+  // fetch rejects; the render infers "opening" vs "empty" from this plus the
+  // two maps above (see isOpeningState). This is the one thing the render can't
+  // otherwise tell: a state stuck loading vs. one whose fetch came back empty.
+  const [failedByState, setFailedByState] = useState<Record<string, true>>({});
   const [showSelector, setShowSelector] = useState(false);
 
   // The state list lives HERE, not in StateSelector, and is fetched once.
@@ -90,56 +93,63 @@ export default function Home() {
    * spinner used to cover it, which is the only reason it went unnoticed.
    *
    * A state is loading when it has been chosen and nothing has come back for it
-   * yet. That is true on the very first render after the click, so there is no
-   * frame for the hole to open in. `loadFailed` is what distinguishes "still
-   * waiting" from "the fetch came back empty", so a real failure still reaches
-   * the error screen instead of spinning forever.
+   * yet — no config, no coming-soon entry, and no recorded failure. That is true
+   * on the very first render after the click, so there is no frame for the hole
+   * to open in. `failedByState` is what distinguishes "still waiting" from "the
+   * fetch failed", so a state that failed drops out of "opening" (and its peers
+   * screen on) instead of the whole session spinning forever.
    */
   const isOpeningState =
     selectedStateCodes.length > 0 &&
-    !loadFailed &&
-    selectedStateCodes.some(c => !configs[c] && !comingSoonByState[c]);
+    selectedStateCodes.some(c => !configs[c] && !comingSoonByState[c] && !failedByState[c]);
 
   // Fetch every selected state's config that we don't already hold. Runs
   // whenever the selection or either map changes; it only fetches the codes
   // still unresolved, so once all are in the maps it settles (no loop).
   useEffect(() => {
     if (selectedStateCodes.length === 0) {
-      setLoadFailed(false);
+      setFailedByState({});
       return;
     }
-    const toFetch = selectedStateCodes.filter(c => !configs[c] && !comingSoonByState[c]);
-    if (loadFailed || toFetch.length === 0) return;
+    // Only fetch codes still unresolved AND not already failed — a failed code
+    // stays failed (it doesn't re-enter the fetch set), so the effect settles.
+    const toFetch = selectedStateCodes.filter(c => !configs[c] && !comingSoonByState[c] && !failedByState[c]);
+    if (toFetch.length === 0) return;
 
     let cancelled = false;
     (async () => {
-      try {
-        const responses = await Promise.all(
-          toFetch.map(async (code) => {
-            const res = await fetch(`/api/states/${code}`);
-            if (!res.ok) throw new Error(`Failed to load ${code}`);
-            return { code, data: await res.json() };
-          })
-        );
-        if (cancelled) return;
-        const nextConfigs: Record<string, StateRuleConfig> = {};
-        const nextComingSoon: Record<string, ComingSoonConfig> = {};
-        for (const { code, data } of responses) {
+      // allSettled, not all: each state resolves independently, so one failed
+      // fetch no longer discards the configs that DID load. Successes commit to
+      // the maps; failures are recorded per-state and the good states screen on.
+      const settled = await Promise.allSettled(
+        toFetch.map(async (code) => {
+          const res = await fetch(`/api/states/${code}`);
+          if (!res.ok) throw new Error(`Failed to load ${code}`);
+          return { code, data: await res.json() };
+        })
+      );
+      if (cancelled) return;
+      const nextConfigs: Record<string, StateRuleConfig> = {};
+      const nextComingSoon: Record<string, ComingSoonConfig> = {};
+      const nextFailed: Record<string, true> = {};
+      settled.forEach((r, i) => {
+        if (r.status === 'fulfilled') {
+          const { code, data } = r.value;
           if (data && data.comingSoon) nextComingSoon[code] = data as ComingSoonConfig;
           else nextConfigs[code] = data as StateRuleConfig;
+        } else {
+          console.error('Failed to load state config:', r.reason);
+          nextFailed[toFetch[i]] = true;
         }
-        if (Object.keys(nextConfigs).length) setConfigs(prev => ({ ...prev, ...nextConfigs }));
-        if (Object.keys(nextComingSoon).length) setComingSoonByState(prev => ({ ...prev, ...nextComingSoon }));
-      } catch (err) {
-        if (cancelled) return;
-        console.error('Failed to load state config:', err);
-        setLoadFailed(true);
-      }
+      });
+      if (Object.keys(nextConfigs).length) setConfigs(prev => ({ ...prev, ...nextConfigs }));
+      if (Object.keys(nextComingSoon).length) setComingSoonByState(prev => ({ ...prev, ...nextComingSoon }));
+      if (Object.keys(nextFailed).length) setFailedByState(prev => ({ ...prev, ...nextFailed }));
     })();
     // A newer selection while a fetch is in flight must not have its response
     // land on top of the newer one.
     return () => { cancelled = true; };
-  }, [selectedStateCodes, configs, comingSoonByState, loadFailed]);
+  }, [selectedStateCodes, configs, comingSoonByState, failedByState]);
 
   // Load a Checkr mock report (FR-22)
   const closeCheckr = () => {
@@ -155,7 +165,7 @@ export default function Home() {
   const handleLoadMockReport = (mockRecords: ConvictionRecord[]) => {
     const codes = groupByState(mockRecords, r => r.state).map(g => g.state);
     setPrepopulatedRecords(mockRecords);
-    setLoadFailed(false); // A fresh selection deserves a fresh fetch attempt.
+    setFailedByState({}); // A fresh selection deserves a fresh fetch attempt.
     setSelectedStateCodes(codes);
     setResults(null); // Clear previous results
     closeCheckr();
@@ -180,7 +190,7 @@ export default function Home() {
     setComingSoonByState({});
     setPrepopulatedRecords([]);
     setResults(null);
-    setLoadFailed(false);
+    setFailedByState({});
     setShowSelector(true);
   };
 
@@ -239,6 +249,9 @@ export default function Home() {
   // the in-research ones get a compact inline note.
   const screenableCodes = selectedStateCodes.filter(c => configs[c]);
   const researchingCodes = selectedStateCodes.filter(c => comingSoonByState[c]);
+  // Did any selected state's fetch fail? Only meaningful once nothing else is
+  // renderable — see the error-fallback branch below.
+  const anyFailed = selectedStateCodes.some(c => failedByState[c]);
   const screenableConfigs = Object.fromEntries(screenableCodes.map(c => [c, configs[c]]));
   // One in-research state and nothing else must look exactly like today: the
   // full-screen honest panel, not the compact inline note.
@@ -267,7 +280,7 @@ export default function Home() {
         dataSource={dataSource}
         loading={loadingStates}
         pendingCodes={isOpeningState ? selectedStateCodes : []}
-        onContinue={(codes) => { setLoadFailed(false); setSelectedStateCodes(codes); }}
+        onContinue={(codes) => { setFailedByState({}); setSelectedStateCodes(codes); }}
       />
     </div>
   );
@@ -440,10 +453,13 @@ export default function Home() {
               </button>
             </div>
           </div>
-        ) : loadFailed ? (
-          /* Error fallback — LAST resort: selected codes, none screenable, none
-             in research, not opening, and a load actually failed. A partial
-             failure still screens the states that loaded (above). */
+        ) : anyFailed ? (
+          /* Error fallback — LAST resort: reached only when there are selected
+             codes but NONE is screenable, none in research, none still opening,
+             and at least one fetch failed. A partial failure never lands here:
+             the states that loaded are screened by the wizard branch above, and
+             any in-research ones show their notes — this shows only when every
+             selected state failed to load and there is nothing else to render. */
           <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
             <AlertTriangle size={48} style={{ color: 'var(--color-error)', margin: '0 auto 1rem' }} />
             <h3 style={{ marginBottom: '0.5rem' }}>Failed to Load Rules</h3>

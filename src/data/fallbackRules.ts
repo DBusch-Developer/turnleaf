@@ -3433,87 +3433,101 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   CO: {
     code: 'CO',
     name: 'Colorado',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave1_Draft_Package.md',
     terminology:
       'Colorado SEALS adult criminal records (C.R.S. 24-72-701 et seq.). It does not expunge them — '
-      + 'in Colorado "expungement" almost always means juvenile or underage records, so if you are '
-      + 'searching for help, search for sealing or you will find the wrong law. Two tracks: PETITION '
-      + 'sealing, where you file a motion in your own criminal case, and AUTOMATIC "Clean Slate" '
-      + 'sealing (SB22-099), which has been running since July 2024 and needs no petition and no fee. '
-      + 'Counter-intuitively, every petition period is SHORTER than its automatic counterpart — so '
-      + 'filing is usually faster than waiting.',
+      + 'in Colorado "expungement" almost always means juvenile or underage records, so search for '
+      + 'sealing or you will find the wrong law. Two tracks: PETITION sealing, a motion filed in your '
+      + 'own criminal case (since 2022 there is no separate civil action), and AUTOMATIC "Clean Slate" '
+      + 'sealing (C.R.S. 13-3-117), running since July 2024, no petition and no fee. Counter-intuitively, '
+      + 'every petition period is SHORTER than its automatic counterpart, so filing is usually faster '
+      + 'than waiting. Two money rules to know: owing RESTITUTION blocks sealing until it is paid or the '
+      + 'order is vacated, but unpaid fines, costs, and fees cannot even be considered against you. '
+      + 'Special paths cover marijuana possession, records with an intervening conviction (§ 709), '
+      + 'municipal offenses (§ 708), and pardons (§ 710).',
     keyDates: [
       {
-        label: 'Automatic Clean Slate sealing (SB22-099, C.R.S. 13-3-117) effective',
+        label: 'HB 19-1275 — sealing statutes partly recodified',
+        date: '2019-08-02',
+        kind: 'effective',
+        note: 'Part of the modern sealing framework was recodified here.',
+      },
+      {
+        label: 'SB 22-099 — in-case sealing, fines/fees barrier removed, automatic framework',
+        date: '2022-08-10',
+        kind: 'effective',
+        note: 'Moved petition sealing into the existing criminal case (no separate civil action), barred unpaid fines/costs/fees from being considered, and built the automatic Clean Slate framework (C.R.S. 13-3-117).',
+      },
+      {
+        label: 'Automatic Clean Slate sealing begins (misdemeanor/petty/drug, initial batch)',
         date: '2024-07-01',
         kind: 'effective',
-        note: 'Over 100,000 records were sealed in the first batch in August 2024.',
+        note: 'Over 100,000 records went in the first batch. Quarterly lists since. Name-based matching means eligible people genuinely fall through.',
       },
       {
-        label: 'Sealing moved into the criminal case — no separate civil action',
-        date: '2022',
+        label: 'HB 24-1432 — CBI legacy sealing costs waived; completion deadline June 30, 2026',
+        date: '2024-08-07',
         kind: 'effective',
-        note: 'Wave 1 gives the year only. This is why an older packet quotes a $224 civil filing fee that may no longer apply.',
+        note: 'Waived CBI fees for legacy sealing and required CBI to complete those seals by June 30, 2026 (C.R.S. 24-72-706(4)). That deadline has now passed, so any "CBI wants money to seal" advice is dead.',
       },
       {
-        label: 'HB24-1133 expanded non-conviction automation',
-        date: '2025',
-        kind: 'operative',
-        note: 'Wave 1 gives the year only ("implemented 2025").',
+        label: 'HB 24-1133 wave — automatic non-drug felonies, non-conviction backfill, § 711, remote hearings',
+        date: '2025-07-01',
+        kind: 'effective',
+        note: 'Added non-drug felonies to the automatic list, swept pre-August-2022 deferred judgments/acquittals/diversions onto sealing lists (13-3-117(5)), added § 711, allowed remote hearings, and added DA-notice own-motion arrest sealing (704(1.5)).',
+      },
+      {
+        label: 'SB 26-149 — competency-dismissal exclusion',
+        date: '2026-05-21',
+        kind: 'effective',
+        note: 'Reconfirmed that dismissals on competency grounds (16-8.5-109(4)/-113/-116) are NOT sealable (C.R.S. 24-72-705(1)(g)).',
       },
     ],
     openQuestions: [
       {
         question:
-          'CONFLICT: what is the petition sealing waiting period for eligible felonies (class 4-6, drug levels 2-4) under C.R.S. 24-72-706? Wave 1 records that one source says 3 years for most felonies and 5 for others, and says to read § 706 and encode the statute\'s own table. Because the sources disagree, no felony period is encoded — the tree routes to a result that says we do not know and tells the person how to find out. This is the top verification item for Colorado.',
+          'How often does the DA object to automatic sealing, and to petition sealing, in practice? The statute now sets the grounds precisely (13-3-117(3): technical objections for all offenses; a public-interest objection only for non-drug felonies, triggering notice and a § 706 hearing right), but the real-world frequency is a phone target.',
         blocksFields: [],
       },
       {
         question:
-          'CONFLICT: what does it cost to file a Motion to Seal (JDF 612), and can it be waived? Wave 1 gives $65 from statute-based sources versus $224 in an older judicial-district packet, and reads the $224 as the pre-2022 separate-civil-action fee that the 2022 simplification removed. Probably stale rather than wrong — but "probably" is not a fee. Ask a district court clerk. Confirm also that sealing a record which should have auto-sealed is free, and ask about the fee waiver (JDF 205) at the same time.',
-        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the exact class split for the 2-year petition period in § 706(1)(b): Wave 1 gives "class 2/3 misdemeanors, drug misdemeanors" but flags the split as needing verification against the statute text.',
+          'What is the municipal filing fee under C.R.S. 24-72-708(4)? The statute says a "filing fee required by law" applies to the municipal sealing petition — a different animal from the $65 state processing fee (which is statute-cited and waivable). Ask a municipal court clerk.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the sealing exclusion list against § 706(2), and specifically check theft. Wave 1\'s own persona 1 raises it: the rule of thumb is that eligible offences are those without a named victim, but theft HAS a victim and is nonetheless commonly listed as eligible. The tree does not encode the rule of thumb — it asks the statutory list — but the list itself needs confirming.',
+          'Does a completed DUI/DWAI DEFERRED JUDGMENT seal under current § 705? The statutory carve-outs no longer list it, but In re Harte excluded alcohol-driving deferrals under prior law. Ask legal aid before encoding — the tree routes DUI deferred judgments to the general non-conviction result but flags this.',
         blocksFields: [],
       },
       {
         question:
-          'What does a CBI criminal history report cost? Wave 1 gives "~$12.50 verify". It must be attached to the motion, so it is part of the real cost of filing.',
+          'Do C.R.S. 24-72-702 and -707 exist in the current table of contents, and if § 707 is a trafficking-survivor sealing section, its requirements should be pulled and cited (cite-don\'t-encode, like WA\'s survivor tracks) before any tree branch relies on them.',
         blocksFields: [],
       },
       {
         question:
-          'How often does the DA object to automatic sealing on public-safety grounds, and what happens when they do? Wave 1 notes the DA can object; a person told "your record may already be sealed" needs to know that is not guaranteed.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the non-conviction paths: arrests without charges auto-seal after 1 year for post-2022 offences, and acquittals/dismissals/completed deferred judgments seal through a simplified in-case process expanded by HB24-1133. What does a person actually do if it has not happened?',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What are the exact effective dates for the 2022 in-case simplification and the 2025 HB24-1133 implementation? Wave 1 gives years only.',
+          'The LexisNexis prints used for the 2026 chapters are pre-OLLS-certification text. Re-confirm the 2026 amendments (esp. SB 26-149 ch. 142 § 48 integration in § 705) against the certified C.R.S. once published.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'C.R.S. 24-72-701 et seq. (adult record sealing)', url: null, retrievedOn: null },
-      { id: 'C.R.S. 24-72-704 through -710 (petition sealing)', url: null, retrievedOn: null },
-      { id: 'C.R.S. 24-72-706 (waiting periods — felony period in conflict)', url: null, retrievedOn: null },
-      { id: 'C.R.S. 24-72-706(2) (exclusions)', url: null, retrievedOn: null },
-      { id: 'C.R.S. 13-3-117 (automatic Clean Slate sealing)', url: null, retrievedOn: null },
-      { id: 'SB22-099 (Clean Slate — automatic sealing, eff. July 1, 2024)', url: null, retrievedOn: null },
-      { id: 'HB24-1133 (2024 — expanded non-conviction automation)', url: null, retrievedOn: null },
+      { id: 'C.R.S. 24-72-701 (adult record sealing — definitions and general provisions) — LexisNexis print, current through 2026 Reg. Sess. ch. 137', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-703 (sealing procedure; (2)(a)(V) mandatory unsealing on a new conviction, (2)(c) copy of order; (3) one petition per case per 12 months; (12)(a) same-case rule, (12)(b) unpaid fines/costs/fees cannot be considered, (12)(d) CDL-traffic/felony-unlawful-sexual-behavior deferred-judgment ineligibility) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-704 (arrest records with no charges — CBI auto-sealing schedules, petition backstop free, 35-day self-vacating hearing, (1.5) DA-notice own-motion sealing) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-705 (non-conviction sealing at disposition, own motion, 28-day service; (1)(b) CBI auto-seal; (1)(d) VRA victim-notification window; (1)(g) competency-dismissal exclusion; (2) free written motion; (3) non-conviction behind a traffic conviction) — LexisNexis print, incl. SB 26-149 ch. 142 § 48', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-706 (conviction sealing; (1)(b) periods incl. (1)(b)(IV) 5-yr catchall, (1)(e) restitution bar, (1)(f) shall-seal tiers + no-new-conviction, (1)(g) discretionary balancing, (1)(h) $65 fee + waivers, (1)(i) pre-Oct-2013 drug classification, (2)(a) exclusion list, (2)(b) misdemeanor/petty DA-consent bypass, (4) CBI legacy-cost waiver) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-708 (municipal-offense sealing; (1) 3-yr clean track, (2) 10-yr second-chance track, (2)(c) DV factual-basis exclusion, (3) CDL-traffic exclusion, (4) filing fee, (5) screening/auto-grant/hearing/(5)(d) restitution) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-709 (multiple-conviction records; (2) periods/anchor, (3) prior-conviction caps, (4)(b) restitution bar, (5)(b) misdemeanor bypass) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-710 (sealing after a full and unconditional pardon; (2) no fee, (3) shall-seal presumption) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 24-72-711 (sealing category added by HB 24-1133; (2) free, (4) exempt from mandatory unsealing) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'C.R.S. 13-3-117 (automatic Clean Slate sealing; (1)(a)(II)/(1)(a.5)(II) periods, (3)(a) DA objection grounds, (3)(c) confidential defendant lookup site, (5) pre-2022 non-conviction backfill) — LexisNexis print', url: 'https://leg.colorado.gov/colorado-revised-statutes', retrievedOn: '2026-07-18' },
+      { id: 'SB 26-149 ch. 142 § 48 (competency-dismissal exclusion; integrated in § 705, eff. May 21, 2026) — signed act', url: 'https://leg.colorado.gov/bills/sb26-149', retrievedOn: '2026-07-18' },
+      { id: 'SB 22-099 (Clean Slate — in-case sealing, automatic framework, eff. Aug 10, 2022)', url: 'https://leg.colorado.gov/bills/sb22-099', retrievedOn: '2026-07-18' },
+      { id: 'HB 24-1133 (automatic non-drug felonies, pre-2022 non-conviction backfill, § 711, remote hearings)', url: 'https://leg.colorado.gov/bills/hb24-1133', retrievedOn: '2026-07-18' },
+      { id: 'HB 24-1432 (CBI sealing costs waived; completion deadline June 30, 2026)', url: 'https://leg.colorado.gov/bills/hb24-1432', retrievedOn: '2026-07-18' },
     ],
     rules: {
       startNode: 'disposition',
@@ -3524,24 +3538,49 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_co' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_co' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_co' },
-            // Colorado is the first state in either wave whose package actually
-            // covers completed deferred judgments — so this does not hedge.
-            { label: 'Deferred judgment completed', value: 'deferred', next: 'eligible_nonconviction_co' },
+            { label: 'Dismissed', value: 'dismissed', next: 'noncon_competency_co' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'noncon_competency_co' },
+            { label: 'Deferred judgment completed', value: 'deferred', next: 'noncon_competency_co' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        // Competency dismissals (16-8.5-109(4)/-113/-116) are NOT sealable
+        // (24-72-705(1)(g), reconfirmed by SB 26-149).
+        noncon_competency_co: {
+          type: 'boolean',
+          text: 'Was the case dismissed because of a competency (mental-competency-to-proceed) determination?',
+          yes: 'ineligible_competency_co',
+          no: 'eligible_nonconviction_co'
+        },
         excluded_co: {
           type: 'boolean',
-          text: 'Was the offense any of these: a class 1, 2 or 3 felony; a level 1 drug felony; DUI or DWAI; domestic violence; a crime of violence or an "extraordinary risk" crime; a sex offense; a crime against a victim protected by the Victim Rights Act; child abuse; or a traffic offense?',
-          yes: 'ineligible_serious_co',
+          text: 'Was the offense any of these: a class 1, 2 or 3 felony; a level 1 drug felony; DUI or DWAI; domestic violence; a crime of violence or an "extraordinary risk" crime; a sex offense or unlawful sexual behavior; a crime against a victim protected by the Victim Rights Act; child abuse; incest; identity theft; pandering; felony animal cruelty; or a traffic offense?',
+          yes: 'excluded_level_co',
           no: 'intervening_co'
         },
+        // 706(2)(b): an ineligible MISDEMEANOR or PETTY offense — including DV —
+        // can still be sealed with DA consent or the elevated showing. Split the
+        // exclusion so those reach the bypass instead of a flat no.
+        excluded_level_co: {
+          type: 'boolean',
+          text: 'Was that offense a MISDEMEANOR or a PETTY offense (as opposed to a felony, a traffic offense, or a DUI/DWAI)?',
+          yes: 'dv_bypass_co',
+          no: 'ineligible_serious_co'
+        },
+        // An intervening conviction is not a dead end — § 709 is the multi-
+        // conviction track built precisely for it.
         intervening_co: {
           type: 'boolean',
           text: 'Have you been convicted of anything since this case ended?',
-          yes: 'ineligible_intervening_co',
+          yes: 'seven09_level_co',
+          no: 'restitution_co'
+        },
+        // Restitution owed blocks sealing unless the order was vacated (706(1)(e),
+        // 703(12)(b) bars fines/costs/fees from being considered — restitution only).
+        restitution_co: {
+          type: 'boolean',
+          text: 'Do you still owe RESTITUTION on this case, and has the restitution order NOT been vacated? (Unpaid fines, court costs, and fees do NOT count against you — only restitution.)',
+          yes: 'ineligible_restitution_co',
           no: 'level_co'
         },
         level_co: {
@@ -3549,9 +3588,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'How was the offense classified? (Your court paperwork says — in Colorado the classification decides both whether you can seal and how long you wait.)',
           options: [
             { label: 'Civil infraction, petty offense, or drug petty offense', value: 'petty', next: 'date_1_co' },
+            { label: 'Marijuana possession (any classification)', value: 'marijuana', next: 'date_mj_co' },
             { label: 'Class 2 or 3 misdemeanor, or a drug misdemeanor', value: 'misd_23', next: 'date_2_co' },
             { label: 'Class 1 misdemeanor', value: 'misd_1', next: 'date_3_misd_co' },
-            { label: 'Felony — class 4, 5 or 6, or drug level 2, 3 or 4', value: 'felony_eligible', next: 'felony_unknown_co' },
+            { label: 'Class 4, 5 or 6 felony, or level 3 or 4 drug felony', value: 'felony_3', next: 'felony_3_date_co' },
+            { label: 'Level 2 drug felony, or another eligible felony', value: 'felony_5', next: 'felony_5_date_co' },
+            { label: 'Municipal ordinance violation', value: 'municipal', next: 'muni_subsequent_co' },
             { label: 'I was pardoned for this offense', value: 'pardoned', next: 'eligible_pardon_co' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_co' }
           ]
@@ -3562,7 +3604,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706 — petty offences)' },
+            period: { amount: 1, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(b) — petty offences; shall-seal on a clean record per 706(1)(f)(I))' },
             nextPass: 'date_1_auto_co',
             nextFail: 'waiting_co'
           }
@@ -3571,16 +3613,27 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'And the same date again, so we can check the automatic track: which came later, your final disposition or your release?',
           validation: {
-            period: { amount: 4, unit: 'years', anchor: 'final disposition or release — automatic sealing period for civil infractions (C.R.S. 13-3-117)' },
+            period: { amount: 4, unit: 'years', anchor: 'final disposition or release — automatic sealing period for civil infractions (C.R.S. 13-3-117(1)(a.5)(II)(A))' },
             nextPass: 'check_record_first_co',
-            nextFail: 'eligible_petition_faster_co'
+            nextFail: 'eligible_petition_shall_co'
+          }
+        },
+        // Marijuana possession: notwithstanding anything in part 7, the court
+        // SHALL seal on a clean record (706(1)(f)(I)) — petty tier regardless of class.
+        date_mj_co: {
+          type: 'date',
+          text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(f)(I) — marijuana possession; shall-seal notwithstanding part 7, regardless of classification)' },
+            nextPass: 'eligible_petition_shall_co',
+            nextFail: 'waiting_co'
           }
         },
         date_2_co: {
           type: 'date',
           text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706 — class 2/3 and drug misdemeanours)' },
+            period: { amount: 2, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(b) — class 2/3 and drug misdemeanours; shall-seal absent DA objection per 706(1)(f)(II))' },
             nextPass: 'date_2_auto_co',
             nextFail: 'waiting_co'
           }
@@ -3589,16 +3642,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'And the same date again, so we can check the automatic track: which came later, your final disposition or your release?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'final disposition or release — automatic sealing period for misdemeanours (C.R.S. 13-3-117)' },
+            period: { amount: 7, unit: 'years', anchor: 'final disposition or release — automatic sealing period for misdemeanours (C.R.S. 13-3-117(1)(a.5)(II)(B); drug convictions 13-3-117(1)(a)(II)(A))' },
             nextPass: 'check_record_first_co',
-            nextFail: 'eligible_petition_faster_co'
+            nextFail: 'eligible_petition_shall_co'
           }
         },
         date_3_misd_co: {
           type: 'date',
           text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706 — class 1 misdemeanours)' },
+            period: { amount: 3, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(b) — class 1 misdemeanours; discretionary (1)(g) balancing)' },
             nextPass: 'date_3_auto_co',
             nextFail: 'waiting_co'
           }
@@ -3607,24 +3660,118 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'date',
           text: 'And the same date again, so we can check the automatic track: which came later, your final disposition or your release?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'final disposition or release — automatic sealing period for misdemeanours (C.R.S. 13-3-117)' },
+            period: { amount: 7, unit: 'years', anchor: 'final disposition or release — automatic sealing period for misdemeanours (C.R.S. 13-3-117(1)(a.5)(II)(B))' },
             nextPass: 'check_record_first_co',
             nextFail: 'eligible_petition_discretion_co'
           }
         },
-        // THE FELONY CONFLICT. Wave 1's sources split between 3 years for most
-        // felonies and 5 for others. A period we cannot pin has no pass/fail —
-        // the type forbids it — so the only route is nextUnknown.
-        felony_unknown_co: {
+        // FELONY 3-YEAR TIER — class 4/5/6 and drug level 3/4 (706(1)(b)); auto at
+        // 10 years (13-3-117(1)(a.5)(II)(C) / drug felonies (1)(a)(II)(B)).
+        felony_3_date_co: {
           type: 'date',
-          text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision?',
+          text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
           validation: {
-            period: {
-              amount: null,
-              unit: 'years',
-              anchor: 'final disposition or release — the felony petition period under C.R.S. 24-72-706, which our sources report as either 3 or 5 years depending on the felony',
-            },
-            nextUnknown: 'complex_felony_period_co'
+            period: { amount: 3, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(b) — class 4/5/6 felony or drug level 3/4; a level 4 drug felony under 18-18-403.5(2.5) rides the 2-yr tier)' },
+            nextPass: 'felony_3_auto_co',
+            nextFail: 'waiting_co'
+          }
+        },
+        felony_3_auto_co: {
+          type: 'date',
+          text: 'And the same date again, so we can check the automatic track: which came later, your final disposition or your release?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'final disposition or release — automatic sealing period for felonies (C.R.S. 13-3-117(1)(a.5)(II)(C))' },
+            nextPass: 'check_record_first_co',
+            nextFail: 'eligible_petition_discretion_co'
+          }
+        },
+        // FELONY 5-YEAR TIER — the (1)(b)(IV) catchall, which includes LEVEL 2
+        // drug felonies; auto at 10 years.
+        felony_5_date_co: {
+          type: 'date',
+          text: 'Which came LATER: your final disposition in the case, or your release from any custody or supervision? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'final disposition or release, whichever is later (C.R.S. 24-72-706(1)(b)(IV) — catchall incl. level 2 drug felony)' },
+            nextPass: 'felony_5_auto_co',
+            nextFail: 'waiting_co'
+          }
+        },
+        felony_5_auto_co: {
+          type: 'date',
+          text: 'And the same date again, so we can check the automatic track: which came later, your final disposition or your release?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'final disposition or release — automatic sealing period for felonies (C.R.S. 13-3-117(1)(a.5)(II)(C); drug felonies (1)(a)(II)(B))' },
+            nextPass: 'check_record_first_co',
+            nextFail: 'eligible_petition_discretion_co'
+          }
+        },
+        // MUNICIPAL TRACK (§ 708) — a clean track and a second-chance track.
+        muni_subsequent_co: {
+          type: 'boolean',
+          text: 'Since this municipal case, have you had any NEW charge or conviction of any kind? (For the municipal clean track, even a later charge counts — this is stricter than the state rule.)',
+          yes: 'muni_2ndchance_co',
+          no: 'muni_clean_date_co'
+        },
+        muni_clean_date_co: {
+          type: 'date',
+          text: 'Which came LATER: your disposition in the municipal case, or your release from any custody or supervision? Enter that date.',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'disposition or release, whichever is later (C.R.S. 24-72-708(1) — municipal clean track; no new charge or conviction since; not a CDL/commercial-operator traffic offense)' },
+            nextPass: 'eligible_municipal_co',
+            nextFail: 'waiting_municipal_co'
+          }
+        },
+        muni_2ndchance_co: {
+          type: 'boolean',
+          text: 'That later case: was it a NON-felony that did NOT involve domestic violence, unlawful sexual behavior, or child abuse — AND does THIS municipal offense\'s factual basis not involve domestic violence?',
+          yes: 'muni_2nd_date_co',
+          no: 'ineligible_municipal_co'
+        },
+        muni_2nd_date_co: {
+          type: 'date',
+          text: 'Which came LATER: the SUBSEQUENT case\'s disposition, or your release from custody or supervision on it? Enter that date.',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the subsequent case\'s disposition or release, whichever is later (C.R.S. 24-72-708(2) — municipal/petty second-chance track)' },
+            nextPass: 'eligible_municipal_2nd_co',
+            nextFail: 'waiting_municipal_2nd_co'
+          }
+        },
+        // MULTI-CONVICTION TRACK (§ 709) — for records ineligible elsewhere because
+        // of an intervening conviction. Tiered by the highest offense.
+        seven09_level_co: {
+          type: 'choice',
+          text: 'Across ALL the convictions you want sealed, what is the most serious? (Section 709 is Colorado\'s path for a record with more than one conviction.)',
+          options: [
+            { label: 'Civil infraction or petty offense', value: 'petty', next: 'date_709_2_co' },
+            { label: 'Misdemeanor, drug misdemeanor, or level 4 drug felony', value: 'misd', next: 'date_709_5_co' },
+            { label: 'Felony', value: 'felony', next: 'date_709_10_co' }
+          ]
+        },
+        date_709_2_co: {
+          type: 'date',
+          text: 'Which is LATEST: the final disposition of these cases, your release from supervision, or your most recent (latest-in-time) conviction? Enter that date.',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'the later of final disposition, release, or the latest-in-time conviction (C.R.S. 24-72-709(2) — petty tier)' },
+            nextPass: 'eligible_709_co',
+            nextFail: 'waiting_709_co'
+          }
+        },
+        date_709_5_co: {
+          type: 'date',
+          text: 'Which is LATEST: the final disposition of these cases, your release from supervision, or your most recent (latest-in-time) conviction? Enter that date.',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of final disposition, release, or the latest-in-time conviction (C.R.S. 24-72-709(2) — misdemeanour/level-4-drug-felony tier)' },
+            nextPass: 'eligible_709_co',
+            nextFail: 'waiting_709_co'
+          }
+        },
+        date_709_10_co: {
+          type: 'date',
+          text: 'Which is LATEST: the final disposition of these cases, your release from supervision, or your most recent (latest-in-time) conviction? Enter that date.',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'the later of final disposition, release, or the latest-in-time conviction (C.R.S. 24-72-709(2) — felony tier)' },
+            nextPass: 'eligible_709_co',
+            nextFail: 'waiting_709_co'
           }
         }
       },
@@ -3636,75 +3783,129 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (CBI / court clerk)',
           citation: 'C.R.S. 24-72-701 et seq. (which path applies depends on the disposition)'
         },
+        ineligible_competency_co: {
+          status: 'ineligible',
+          title: 'A Competency Dismissal Cannot Be Sealed',
+          message: 'There is one narrow kind of dismissal Colorado does not seal: a case dismissed because of a mental-competency-to-proceed determination (under C.R.S. 16-8.5-109(4), -113, or -116). The 2026 law (SB 26-149, effective May 21, 2026) reconfirmed that carve-out at § 24-72-705(1)(g). If your case was NOT dismissed on competency grounds, come back and answer that question differently — most dismissals seal easily and for free. And because whether a dismissal was truly "on competency grounds" is a legal characterization, it is worth confirming with Expunge Colorado or Colorado Legal Services before accepting this.',
+          remedy: 'None (competency dismissal, § 24-72-705(1)(g)) — confirm the characterization with legal aid',
+          citation: 'C.R.S. 24-72-705(1)(g)'
+        },
         eligible_nonconviction_co: {
           status: 'eligible',
-          title: 'No Conviction — Sealing Should Be Simple, and May Be Done',
-          message: 'Because your case ended without a conviction, Colorado treats this as its easiest category. Acquittals, dismissals and completed deferred judgments are sealed through a simplified process handled inside your existing criminal case — no separate civil action, no waiting period. Arrests that never led to charges seal automatically after a year for offenses from 2022 onward, and a 2024 law (HB24-1133) expanded that automation further from 2025. So this may already be done: check with the Colorado Bureau of Investigation before you file anything. If it has not happened, sealing a record that should have sealed on its own is free. Expunge Colorado runs free pro bono clinics and this is exactly what they are for.',
-          remedy: 'Check with CBI first — simplified in-case sealing if needed',
-          citation: 'C.R.S. 24-72-701 et seq.; HB24-1133'
+          title: 'No Conviction — Sealing Should Be Automatic, and May Be Done',
+          message: 'Because your case ended without a conviction, Colorado gives this its strongest treatment. At disposition the court is supposed to seal it on its own motion, with no written pleadings, and serve the order within 28 days — that covers a dismissal, an acquittal, a completed diversion, and a completed deferred judgment where all counts were dismissed (§ 24-72-705(1)(a)). If the court missed it, CBI is supposed to seal it automatically from the disposition (705(1)(b)), and pre-August-2022 deferred judgments, acquittals and diversions were swept onto sealing lists by July 1, 2025 (13-3-117(5)). So this may already be done — check with CBI first, and if it has not happened, a written motion to seal is FREE and can be filed any time (705(2)). Arrests that never led to charges have their own automatic schedule (§ 24-72-704): post-January-2022 arrests auto-seal within 60 days after a chargeless year; older arrests are on a backlog that finishes January 1, 2027, so a pre-1997 arrest may still be pending. A few honest carve-outs: a case dismissed on competency grounds is not sealable; a non-conviction stuck behind a traffic conviction in the same case can still be sealed by motion (705(3)); and a victim-notification window applies to acquittals and Victim-Rights-Act dismissals, auto-granting at 35 days absent objection. Expunge Colorado runs free clinics for exactly this.',
+          remedy: 'Check with CBI first — free written motion (§ 24-72-705(2)) if it has not sealed',
+          citation: 'C.R.S. 24-72-705, 24-72-704, 13-3-117(5)'
+        },
+        dv_bypass_co: {
+          status: 'complex',
+          title: 'Ineligible on the Ordinary Track — But There Is a Second Door',
+          message: 'Your offense is on Colorado\'s exclusion list, but it is a misdemeanor or petty offense — and for those, including domestic-violence misdemeanors, there is a real second door most tools miss. Under § 24-72-706(2)(b), an otherwise-ineligible misdemeanor or petty offense can still be sealed EITHER with the district attorney\'s consent, OR on a showing by clear and convincing evidence that your need for sealing is significant and substantial, that you are no longer a threat to public safety, and that the public disclosure of the record is no longer necessary. Colorado\'s courts have held (People v. C.H.) that a court must actually consider this — it cannot refuse to look. This is an elevated, discretionary showing, not an automatic grant, so it genuinely calls for help: Expunge Colorado and Colorado Legal Services handle exactly these motions. Do not read the exclusion as the end of the road here.',
+          remedy: 'Elevated § 24-72-706(2)(b) showing (DA consent or clear-and-convincing) — take it to legal aid',
+          citation: 'C.R.S. 24-72-706(2)(b)'
         },
         check_record_first_co: {
           status: 'eligible',
           title: 'Your Record May Already Be Sealed — Check Before You File',
-          message: 'Start here, not with a motion or a fee. Colorado has been sealing eligible records AUTOMATICALLY since July 2024 under Clean Slate — no petition, no fee, and no notification. Over 100,000 records went in the first batch alone. Based on your dates you are past the automatic period for your offense, so there is a real chance this is already done. Find out before you spend anything: request your criminal history from the Colorado Bureau of Investigation and see what it shows. One caveat worth knowing rather than discovering: the District Attorney can object to automatic sealing on public-safety grounds, so automatic is not the same as guaranteed. If the automatic system did not reach you, the petition path is still open — a Motion to Seal (form JDF 612) filed in your existing criminal case — and sealing a record that should have auto-sealed is free.',
-          remedy: 'Check with CBI first — Motion to Seal (JDF 612) only if automatic sealing missed you',
-          citation: 'C.R.S. 13-3-117; C.R.S. 24-72-706'
+          message: 'Start here, not with a motion or a fee. Colorado has been sealing eligible records AUTOMATICALLY since July 2024 under Clean Slate (C.R.S. 13-3-117) — no petition, no fee, no notification — with quarterly lists, and non-drug felonies added July 2025. Based on your dates you are past the automatic period for your offense, so there is a real chance this is already done. But here is the honest catch: the matching is NAME-BASED with validation points, so eligible people genuinely fall through, and an intervening conviction or a case without final disposition on every charge is skipped. So the first thing to do is confirm — and Colorado built a specific tool for it: the state court administrator maintains a confidential website where you can check whether YOUR conviction was sealed (13-3-117(3)(c); coloradojudicial.gov). Check there first, then a CBI history as backup. The court does not mail you the sealing order (that would defeat the confidentiality), but you can obtain a copy under § 24-72-703(2)(c). On DA objections, the accurate picture: for any offense the DA has 45 days to object on technical grounds (a plea-agreement sealing waiver, a pending charge, an intervening conviction, or plain ineligibility); a public-interest objection exists ONLY for non-drug felonies, and it triggers notice to you and a right to a § 706 hearing. If automatic sealing missed you, the petition below is your route — and because your record SHOULD have auto-sealed, that petition\'s $65 fee is waived (§ 24-72-706(1)(h)(II)).',
+          remedy: 'Check coloradojudicial.gov (confidential lookup) first; petition with the fee WAIVED if it missed you',
+          citation: 'C.R.S. 13-3-117'
         },
-        // The inversion, said plainly — as in Utah.
-        eligible_petition_faster_co: {
+        eligible_petition_shall_co: {
           status: 'eligible',
-          title: 'Petitioning Now Is Faster Than Waiting',
-          message: 'Here is something counterintuitive and worth reading twice: for your offense, filing now is FASTER than waiting for Colorado\'s automatic system. Colorado has automatic Clean Slate sealing that costs nothing and needs no petition — but its waiting periods are LONGER than the petition\'s for the same offense. A petty offense can be petitioned at 1 year but is not automatically sealed until 4; a class 2 or 3 misdemeanor at 2 years versus 7. Based on your dates you have passed the petition threshold but not the automatic one, so waiting would cost you years you do not have to spend. If you would rather not file, you can wait — but you would be waiting longer on purpose. To petition: file a Motion to Seal Conviction Records (form JDF 612, instructions JDF 611) in your existing criminal case — since 2022 there is no separate civil action — attach a current CBI criminal history, and serve the District Attorney. Remote hearings are allowed. The filing fee is one of the things we are still verifying.',
-          remedy: 'File now — Motion to Seal (JDF 612). Do not wait for automatic sealing.',
-          citation: 'C.R.S. 24-72-706 (petition periods); C.R.S. 13-3-117 (automatic periods)'
+          title: 'Eligible to Petition Now — and Filing Beats Waiting',
+          message: 'Good news on two fronts. First, for your offense the court SHALL seal on a clean-record showing — a petty or civil-infraction offense (and, notwithstanding anything else, marijuana possession) under § 24-72-706(1)(f)(I), or a class 2/3 or drug misdemeanor absent a DA objection or a Victim-Rights-Act-victim hearing under 706(1)(f)(II). Second, filing now is FASTER than waiting: Colorado\'s automatic sealing runs 4 years for petty offenses and 7 for misdemeanors, but you can petition at 1 to 2. Based on your dates you are past the petition threshold and short of the automatic one, so waiting would cost you years. To petition: file a Motion to Seal (form JDF 612, instructions JDF 611) in your existing criminal case — no separate civil action since 2022 — attach a current CBI criminal history, and serve the District Attorney. Remote hearings are allowed. The processing fee is $65 (§ 24-72-706(1)(h)), waivable for indigency. Two things to carry with you: your criminal history must show no new conviction since the disposition/release, and in a multi-count case every conviction in the case must be sealable or none is (§ 24-72-703(12)). And know this going in — a NEW conviction after sealing mandatorily UNSEALS the record (§ 24-72-703(2)(a)(V)).',
+          remedy: 'Motion to Seal (JDF 612) — shall-seal tier; $65 (waivable); do not wait for automatic',
+          citation: 'C.R.S. 24-72-706(1)(f)'
         },
         eligible_petition_discretion_co: {
           status: 'eligible',
           title: 'Eligible to Petition — But the Court Decides',
-          message: 'Based on your dates you appear eligible to petition now, and filing beats waiting: the automatic period for a misdemeanor is 7 years, and you are past the 3-year petition threshold. One thing to go in knowing, though — for a class 1 misdemeanor the court does not simply grant it. The judge weighs your privacy interest against the public interest in the record staying open, so this is a decision rather than a formality, and how you present it matters. File a Motion to Seal (form JDF 612) in your existing criminal case, attach a current CBI criminal history, and serve the District Attorney, who may object. Remote hearings are allowed. Expunge Colorado runs free pro bono sealing clinics, and for a discretionary motion that help is worth taking.',
-          remedy: 'Motion to Seal (JDF 612) — court discretion applies',
-          citation: 'C.R.S. 24-72-706'
+          message: 'Based on your dates you appear eligible to petition now, and filing beats waiting: the automatic period is 7 years for a class 1 misdemeanor and 10 years for an eligible felony, while you can petition at 3 or 5. One thing to go in knowing — for a class 1 misdemeanor or a felony the court does NOT simply grant it. The judge weighs your privacy interest against the public interest in the record staying open (the § 24-72-706(1)(g) balancing), so this is a decision rather than a formality, and how you present it matters. File a Motion to Seal (form JDF 612) in your existing criminal case, attach a current CBI criminal history, and serve the District Attorney, who may object. The processing fee is $65 (§ 24-72-706(1)(h)), waivable for indigency. Your history must show no new conviction since disposition/release, and in a multi-count case every conviction must be sealable or none is (§ 24-72-703(12)). Know this too — a NEW conviction after sealing mandatorily UNSEALS the record (§ 24-72-703(2)(a)(V)). For a discretionary motion, Expunge Colorado\'s free clinics are worth taking.',
+          remedy: 'Motion to Seal (JDF 612) — discretionary (1)(g) balancing; $65 (waivable)',
+          citation: 'C.R.S. 24-72-706(1)(g)'
         },
         eligible_pardon_co: {
           status: 'eligible',
-          title: 'Pardoned — You Can Petition Immediately',
-          message: 'Because you were pardoned for this offense, Colorado lets you petition to seal it immediately — there is no waiting period to serve. File a Motion to Seal Conviction Records (form JDF 612) in your existing criminal case, attach a current CBI criminal history, and serve the District Attorney. Expunge Colorado runs free pro bono sealing clinics if you want help with the filing.',
-          remedy: 'Motion to Seal (JDF 612) — no waiting period after a pardon',
-          citation: 'C.R.S. 24-72-706'
+          title: 'Pardoned — the Court Should Seal, and the Presumption Is Yours',
+          message: 'A full and unconditional pardon changes the whole posture of a sealing request in Colorado. Under § 24-72-710 you can file a motion to seal at any time, there is NO fee, and the presumption flips in your favor: the court SHALL seal unless it finds by clear and convincing evidence that the public interest outweighs BOTH your privacy interest and the adverse consequences to you AND the intent of the pardon (§ 24-72-710(3)). That is a much friendlier standard than the ordinary discretionary balancing. (If the offense is a Victim-Rights-Act offense, or the DA objects, a hearing is still held.) File the motion in your existing criminal case and serve the District Attorney. And the standard caveat still applies — a new conviction after sealing mandatorily unseals the record (§ 24-72-703(2)(a)(V)). Expunge Colorado can help with the filing.',
+          remedy: 'Motion to Seal after a full pardon (§ 24-72-710) — no fee, shall-seal presumption',
+          citation: 'C.R.S. 24-72-710'
         },
-        // The honest answer when the sources disagree.
-        complex_felony_period_co: {
-          status: 'complex',
-          title: 'Eligible Felony — But We Cannot Tell You the Waiting Period',
-          message: 'Your offense is in the category Colorado CAN seal: class 4, 5 and 6 felonies and drug levels 2 through 4 are sealable, which is more than most states allow. What we cannot tell you is when. Our sources disagree about the waiting period — one says 3 years for most felonies, another says 5 for some — and we are not going to pick one and let you plan around a coin flip. So here is what to do instead. Colorado also seals eligible felonies automatically at 10 years, so if you are past that, check with the Colorado Bureau of Investigation first: it may already be done, and that costs nothing. If you are inside 10 years, you are very likely in the window where petitioning beats waiting — every Colorado petition period is shorter than its automatic counterpart — and a clerk or Expunge Colorado can tell you the exact date in about five minutes. Expunge Colorado runs free pro bono sealing clinics. Resolving this period is our top verification item for Colorado.',
-          remedy: 'Ask a clerk or Expunge Colorado for the exact period — then Motion to Seal (JDF 612)',
-          citation: 'C.R.S. 24-72-706 (felony petition period unresolved — sources conflict); C.R.S. 13-3-117'
+        eligible_709_co: {
+          status: 'eligible',
+          title: 'A Record With More Than One Conviction — the § 709 Track Fits',
+          message: 'A later conviction does not close the door in Colorado — § 24-72-709 exists precisely for records that are ineligible elsewhere because of an intervening conviction, and based on your dates you appear to meet its waiting period (measured from the later of final disposition, release, or your latest-in-time conviction): 2 years if the most serious offense is a petty offense, 5 for a misdemeanor or a level 4 drug felony, 10 for a felony. A few conditions to plan around: there are caps on how many prior separate-case convictions you can have (no more than five for the petty tier, four for the class 2/3 misdemeanor tier, three for the class 1 misdemeanor/felony tier — § 709(3)); the same exclusion list applies; you must not owe restitution (§ 709(4)(b)); and the District Attorney is given notice. If the records span different jurisdictions, you file a motion in each and cross-attach copies; a misdemeanor-only bypass is available with a limit of one Victim-Rights-Act misdemeanor (§ 709(5)(b)). And as always, a new conviction after sealing mandatorily unseals the record (§ 24-72-703(2)(a)(V)). This is intricate — Expunge Colorado\'s free clinics are built for exactly this.',
+          remedy: 'Multiple-conviction sealing motion (§ 24-72-709) — mind the prior-conviction caps',
+          citation: 'C.R.S. 24-72-709'
+        },
+        waiting_709_co: {
+          status: 'waiting',
+          title: 'Multiple-Conviction Sealing — the Period Has Not Run Yet',
+          message: 'Colorado\'s § 24-72-709 track for a record with more than one conviction runs from the later of your final disposition, your release, or your latest-in-time conviction: 2 years (petty tier), 5 (misdemeanor or level 4 drug felony), or 10 (felony). Based on your dates that has not run yet, and a new conviction would push the latest-in-time date forward and restart it. When it does run, note the other § 709 conditions — the prior-conviction caps (§ 709(3)), the restitution bar (§ 709(4)(b)), and the exclusion list. Expunge Colorado can map the exact date with you.',
+          remedy: 'Wait for the § 709 period from the latest-in-time conviction',
+          citation: 'C.R.S. 24-72-709(2)'
+        },
+        eligible_municipal_co: {
+          status: 'eligible',
+          title: 'Municipal Offense — Eligible on the Clean Track',
+          message: 'Colorado has a dedicated path for municipal ordinance violations (§ 24-72-708). On the clean track, a municipal offense is sealable 3 years after the later of your disposition or release, provided you have had no new CHARGE or conviction since — note that is stricter than the state rule, because even a later charge counts against you — and it is not a commercial-driver (CDL) traffic offense. Based on your dates you appear to qualify. The process: a screening, then the court grants it unless the prosecution objects, with a hearing within 42 days and the same privacy-versus-public-interest balancing (§ 708(5)). You must not owe restitution, though unpaid fines and fees cannot be counted against you (§ 708(5)(d)). A municipal filing fee may apply. And a new conviction after sealing mandatorily unseals the record (§ 24-72-703(2)(a)(V)). File in the municipal court that handled the case.',
+          remedy: 'Municipal sealing petition (§ 24-72-708(1)) — clean track, 3 years',
+          citation: 'C.R.S. 24-72-708(1)'
+        },
+        waiting_municipal_co: {
+          status: 'waiting',
+          title: 'Municipal Offense — 3-Year Clean Track Not Yet Met',
+          message: 'A municipal ordinance violation is sealable on the clean track 3 years after the later of your disposition or release, as long as you have had no new charge or conviction since (§ 24-72-708(1)). Based on your dates that has not run yet — and remember, for the municipal clean track even a later CHARGE resets it, not just a conviction. If a later conviction does land, there is still a second-chance track at 10 years; run this again if that happens.',
+          remedy: 'Wait for 3 years with no new charge (§ 24-72-708(1))',
+          citation: 'C.R.S. 24-72-708(1)'
+        },
+        eligible_municipal_2nd_co: {
+          status: 'eligible',
+          title: 'Municipal Offense — Eligible on the Second-Chance Track',
+          message: 'Even though you had a later case, Colorado\'s municipal second-chance track can still reach this offense (§ 24-72-708(2)). Because that later conviction was a non-felony that did not involve domestic violence, unlawful sexual behavior, or child abuse — and this municipal offense\'s own factual basis does not involve domestic violence — a municipal or petty offense becomes sealable 10 years after the SUBSEQUENT case\'s disposition or release. Based on your dates you appear past that mark. (Note: a municipal offense whose factual basis DOES involve domestic violence is excluded from this second-chance track, though Huffman holds it is not categorically excluded from the clean track.) The process, restitution bar, and fines-do-not-count rule are the same as the clean track (§ 708(5)), and a new conviction after sealing mandatorily unseals the record (§ 24-72-703(2)(a)(V)). File in the municipal court.',
+          remedy: 'Municipal sealing petition (§ 24-72-708(2)) — second-chance track, 10 years',
+          citation: 'C.R.S. 24-72-708(2)'
+        },
+        waiting_municipal_2nd_co: {
+          status: 'waiting',
+          title: 'Municipal Second-Chance Track — 10 Years Not Yet Met',
+          message: 'The municipal second-chance track seals a municipal or petty offense 10 years after the SUBSEQUENT case\'s disposition or release (§ 24-72-708(2)). Based on your dates that has not run yet. When it does — and as long as no further disqualifying conviction lands — this offense should become sealable. Expunge Colorado can confirm the exact date.',
+          remedy: 'Wait for 10 years from the subsequent case (§ 24-72-708(2))',
+          citation: 'C.R.S. 24-72-708(2)'
+        },
+        ineligible_municipal_co: {
+          status: 'ineligible',
+          title: 'Municipal Second-Chance Track Does Not Reach This',
+          message: 'The municipal second-chance track is not available here. It is closed if the later conviction was a felony, or involved domestic violence, unlawful sexual behavior, or child abuse, or if this municipal offense\'s own factual basis involves domestic violence (§ 24-72-708(2)(c)). Based on what you told us, one of those applies. This is a specific legal judgment, though, and the interaction of two records can be subtle — before accepting it, take it to Expunge Colorado or Colorado Legal Services, who handle municipal sealing and may see a route we cannot from a screening.',
+          remedy: 'Not eligible on the § 708(2) track — confirm with legal aid',
+          citation: 'C.R.S. 24-72-708(2)(c)'
         },
         waiting_co: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Colorado\'s petition periods run from your final disposition or your release, whichever came later, and they are short: 1 year for a civil infraction, petty offense or drug petty offense; 2 years for a class 2 or 3 misdemeanor or a drug misdemeanor; 3 years for a class 1 misdemeanor. Based on your dates yours has not run yet. Two things worth knowing: a new conviction in the meantime blocks sealing, so staying conviction-free is what gets you there. And when your date does arrive, filing will probably beat waiting — Colorado\'s automatic sealing takes 4 to 7 years for the same offenses.',
+          message: 'Colorado\'s petition periods run from your final disposition or your release, whichever came later, and they are short: 1 year for a civil infraction, petty, drug petty, or marijuana-possession offense; 2 years for a class 2/3 or drug misdemeanor; 3 years for a class 1 misdemeanor; 3 years for a class 4/5/6 or level 3/4 drug felony; 5 years for a level 2 drug felony. Based on your dates yours has not run yet. Two things worth knowing: a new conviction in the meantime blocks sealing (and would move you to the § 709 multiple-conviction track), so staying conviction-free is what gets you there. And when your date arrives, filing will probably beat waiting — Colorado\'s automatic sealing takes 4 to 10 years for the same offenses.',
           remedy: 'Wait for the petition period, then file JDF 612',
-          citation: 'C.R.S. 24-72-706'
+          citation: 'C.R.S. 24-72-706(1)(b)'
+        },
+        ineligible_restitution_co: {
+          status: 'waiting',
+          title: 'Outstanding Restitution Blocks Sealing — For Now',
+          message: 'Colorado will not seal a conviction while restitution ordered in the case is still owed, unless the restitution order has been vacated (§ 24-72-706(1)(e); § 24-72-709(4)(b) for multi-conviction records). This is a barrier you can clear rather than a permanent no — pay the restitution in full, or ask the court to vacate the order if there are grounds, and the sealing path reopens. Two things that are NOT barriers, and that people often confuse with restitution: unpaid fines, court costs, and fees cannot even be considered against your sealing (§ 24-72-703(12)(b)). So it is specifically restitution to a victim that has to be resolved. Expunge Colorado and Colorado Legal Services can help you sort out what is actually owed and whether the order can be addressed.',
+          remedy: 'Resolve restitution (pay in full or vacate the order), then seal — fines/costs do NOT block',
+          citation: 'C.R.S. 24-72-706(1)(e)'
         },
         ineligible_serious_co: {
           status: 'ineligible',
           title: 'Excluded Offense',
-          message: 'Colorado excludes a specific list from sealing: class 1, 2 and 3 felonies; level 1 drug felonies; DUI and DWAI; domestic violence; crimes of violence and "extraordinary risk" crimes; sex offenses; crimes against victims protected by the Victim Rights Act; child abuse; and traffic offenses. No waiting period changes that, and automatic sealing does not reach them either. DUI is the one that surprises people most — Colorado does not seal it however long ago it was. If you are not certain your offense is on that list, it is worth checking: Expunge Colorado runs free pro bono sealing clinics, and Colorado Legal Services can advise. A pardon is a separate path these exclusions do not govern — and a pardon lets you petition to seal immediately.',
-          remedy: 'None (Statutorily Excluded) — ask about a pardon',
+          message: 'Colorado excludes a specific list from sealing (§ 24-72-706(2)): class 1, 2 and 3 felonies; level 1 drug felonies; DUI and DWAI; domestic violence; crimes of violence, "extraordinary risk" crimes, and offenses with extraordinary aggravating circumstances; special-offender and pregnant-victim offenses; sex offenses and unlawful sexual behavior (18-3.5-103 included); crimes against Victim-Rights-Act victims; child abuse; incest (part 1, article 6, title 18); identity theft (18-5-902(1)); pandering (18-7-203); felony animal cruelty (18-9-202); and traffic offenses. The class 1-2-3 felony exclusion applies no matter which title of the code creates the offense (People v. Prendergast). No waiting period changes any of this, and automatic sealing does not reach these either. Two nuances worth knowing: DUI is the exclusion that surprises people most — Colorado does not seal it however long ago it was. And for drug offenses committed before October 2013, the class is determined as of the date of sealing (§ 706(1)(i)), and the class-1-2-3 felony exclusion carves out three older class-3 drug-possession statutes — so an old drug case may not be as excluded as it looks. A pardon is a separate path these exclusions do not govern. If you are not certain your offense is on the list, Expunge Colorado runs free clinics and Colorado Legal Services can advise.',
+          remedy: 'None (Statutorily Excluded) — ask about a pardon; old drug cases may be reclassified',
           citation: 'C.R.S. 24-72-706(2)'
-        },
-        ineligible_intervening_co: {
-          status: 'ineligible',
-          title: 'A Later Conviction Blocks Sealing',
-          message: 'Colorado requires you to have stayed conviction-free since the case you want sealed. A conviction after it blocks sealing of the earlier record — both by petition and automatically. This is not necessarily permanent: the newer conviction has its own waiting period, and once that runs you may be able to seal both. Come back and run this again using the newer conviction\'s details, or take it to one of Expunge Colorado\'s free pro bono clinics — the interaction between two records is exactly what they can untangle.',
-          remedy: 'None Yet (Later Conviction) — reassess from the newer conviction\'s dates',
-          citation: 'C.R.S. 24-72-706'
         },
         complex_level_co: {
           status: 'complex',
           title: 'We Need the Classification — It Decides Everything Here',
-          message: 'In Colorado the classification decides both whether you can seal and how long you wait: a petty offense clears in 1 year, a class 2 or 3 misdemeanor in 2, a class 1 misdemeanor in 3 with a hearing, and class 4-6 felonies are sealable on a period we are still verifying — while class 1-3 felonies are excluded entirely. Guessing would send you down the wrong path, so we will not. Your court paperwork states the classification. A CBI criminal history shows it. And Expunge Colorado runs free pro bono sealing clinics where someone will read it with you — which is the easiest way to find out.',
+          message: 'In Colorado the classification decides both whether you can seal and how long you wait: a petty offense clears in 1 year, a class 2 or 3 misdemeanor in 2, a class 1 misdemeanor in 3 with a hearing, a class 4/5/6 or level 3/4 drug felony in 3, and a level 2 drug felony in 5 — while class 1-3 felonies and level 1 drug felonies are excluded entirely. Guessing would send you down the wrong path, so we will not. Your court paperwork states the classification. A CBI criminal history shows it. And Expunge Colorado runs free pro bono sealing clinics where someone will read it with you — which is the easiest way to find out.',
           remedy: 'Get Your Classification First (court paperwork / CBI / Expunge Colorado)',
           citation: 'C.R.S. 24-72-706'
         }
@@ -3717,17 +3918,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Form JDF 612 (instructions JDF 611)',
           formUrl: 'https://www.coloradojudicial.gov/self-help/sealing-criminal-records',
           steps: [
-            'Check first whether Clean Slate already sealed it — request your criminal history from the Colorado Bureau of Investigation. Sealing has been automatic since July 2024, and over 100,000 records went in the first batch.',
+            'Check first whether it already sealed automatically — use the state court administrator\'s confidential lookup at coloradojudicial.gov (C.R.S. 13-3-117(3)(c)), then a CBI criminal history as backup. Sealing has been automatic since July 2024.',
+            'Make sure any restitution is paid or the order vacated (a precondition); unpaid fines, costs, and fees do NOT block sealing (§ 24-72-703(12)(b)). In a multi-count case, every conviction in the case must be sealable or none is (§ 24-72-703(12)(a)).',
             'Obtain a current CBI criminal history report to attach to the motion.',
-            'Complete form JDF 612 (instructions are in JDF 611) and file it IN your existing criminal case — since 2022 there is no separate civil action.',
-            'Serve the District Attorney, who may object.',
-            'Attend the hearing if one is set — remote hearings have been allowed since 2024. For a class 1 misdemeanor or a felony, the court weighs your privacy against the public interest, so expect a decision rather than a formality.'
+            'Complete form JDF 612 (instructions are in JDF 611) and file it IN your existing criminal case — since 2022 there is no separate civil action. Only one sealing petition per case is allowed per 12 months (§ 24-72-703(3)).',
+            'Serve the District Attorney, who may object. Attend the hearing if one is set — remote hearings are allowed. For a class 1 misdemeanor or a felony, the court weighs your privacy against the public interest, so expect a decision rather than a formality.',
+            'Know that a new conviction after sealing mandatorily UNSEALS the record (§ 24-72-703(2)(a)(V)).'
           ],
-          // null: Wave 1 gives $65 (statute-based sources) vs $224 (older
-          // judicial-district packet, probably the pre-2022 civil-action fee).
-          // Probably stale rather than wrong — but "probably" is not a fee.
-          fees: null,
-          feeWaiver: null,
+          // $65 processing fee is statute-cited at C.R.S. 24-72-706(1)(h).
+          fees: '$65 processing fee (C.R.S. 24-72-706(1)(h)).',
+          feeWaiver: 'Waived for indigency (JDF 205), and waived entirely when the record should have auto-sealed (C.R.S. 13-3-117), for the § 704 arrest backstop and non-conviction motions (§ 24-72-704(1.5)(c), 705(2)), and for § 711 and pardon (§ 710) motions. A separate municipal filing fee may apply under § 24-72-708(4).',
           courtContact: 'The court that handled your criminal case'
         }
       },

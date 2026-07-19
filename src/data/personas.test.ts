@@ -892,82 +892,192 @@ const NJ: Persona[] = [
 // ---------------------------------------------------------------------------
 const CO: Persona[] = [
   {
-    source: 'Wave 1 — CO persona 1',
-    package: 'class 5 felony theft (no named victim? theft has a victim — good edge case: theft IS listed as commonly eligible ⚠️ verify against § 706\'s actual list), 11 yrs clean → likely auto-sealed → check-record.',
+    source: 'CO 7/18 statute-verified — persona 1 (felony 10yr auto — reverse inversion)',
+    package: 'class 5 felony theft, 11 yrs clean → past the 10-yr automatic mark → check-record (the felony-period conflict is now RESOLVED to the 3-yr tier).',
     record: { title: 'Theft (class 5 felony)', charge_type: 'felony', disposition: 'convicted' },
     answers: {
-      excluded_co: false,   // theft is not on the § 706(2) list
-      intervening_co: false,
-      level_co: 'felony_eligible',
-      felony_unknown_co: '2015-07-15',   // 11 years — irrelevant, the period is null
+      excluded_co: false, intervening_co: false, restitution_co: false,
+      level_co: 'felony_3', felony_3_date_co: '2015-07-15', felony_3_auto_co: '2015-07-15',
     },
     expect: {
-      resultKey: 'complex_felony_period_co',
+      resultKey: 'check_record_first_co',
       reading:
-        'The package wants a check-record answer at 11 years, past the 10-year automatic period. It '
-        + 'lands on the felony-period conflict instead, because the tree cannot compute a period its '
-        + 'sources disagree on (3 vs 5 years) and the null period has only one route. The result is '
-        + 'still useful — it says the offence IS sealable, tells them to check with CBI since 11 '
-        + 'years is past the automatic mark, and names the conflict. But it is not the clean '
-        + '"already sealed, go check" the package asks for. Flagged approximate: resolving § 706 '
-        + 'lets the felony path split properly into check-record vs petition-faster.',
+        'FELONY PERIOD RESOLVED: class 5 felony = 3-yr petition tier, 10-yr automatic. 11 yrs is past '
+        + 'BOTH, so it lands on check_record_first_co (may already be auto-sealed; confidential '
+        + 'coloradojudicial.gov lookup). The old null-period complex_felony_period_co is deleted. '
+        + 'This is the "10yr auto passing where the petition already passed" direction.',
     },
-    expectIsApproximate: true,
     now: NOW,
   },
   {
-    source: 'Wave 1 — CO persona 2',
-    package: 'class 2 misdemeanor, 3 yrs clean → eligible-petition.',
+    source: 'CO 7/18 statute-verified — persona 2 (misd shall-seal, faster-to-file)',
+    package: 'class 2 misdemeanor, 3 yrs clean → past 2-yr petition, short of 7-yr automatic → shall-seal petition beats waiting.',
     record: { title: 'Class 2 Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
     answers: {
-      excluded_co: false,
-      intervening_co: false,
-      level_co: 'misd_23',
-      date_2_co: '2023-07-15',        // 3 yrs — past the 2-yr petition period
-      date_2_auto_co: '2023-07-15',   // but short of the 7-yr automatic one
+      excluded_co: false, intervening_co: false, restitution_co: false,
+      level_co: 'misd_23', date_2_co: '2023-07-15', date_2_auto_co: '2023-07-15',
     },
     expect: {
-      resultKey: 'eligible_petition_faster_co',
+      resultKey: 'eligible_petition_shall_co',
       reading:
-        'Past the 2-year petition threshold, four years short of the 7-year automatic one. So the '
-        + 'honest answer is the inversion: filing now beats waiting by four years. The package says '
-        + '"eligible-petition", which is what this is — the result just also explains WHY petitioning '
-        + 'rather than waiting. Exact.',
+        'Class 2/3 misdemeanor: 2-yr petition (met at 3yr), 7-yr automatic (not met). Shall-seal absent '
+        + 'DA objection (706(1)(f)(II)); filing beats waiting. Carries the $65-waivable fee and the '
+        + 'mandatory-unseal caveat.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — CO persona 3',
-    package: 'DUI → ineligible.',
+    source: 'CO 7/18 statute-verified — persona 3 (DUI excluded)',
+    package: 'DUI → § 706(2) exclusion, and a DUI is not a misdemeanor/petty for the bypass → flat ineligible.',
     record: { title: 'DUI', charge_type: 'misdemeanor', disposition: 'convicted' },
-    answers: { excluded_co: true },
+    answers: { excluded_co: true, excluded_level_co: false },
     expect: {
       resultKey: 'ineligible_serious_co',
       reading:
-        'DUI and DWAI are on Colorado\'s § 706(2) exclusion list — never sealable, however long ago. '
-        + 'The result calls it out as the one that surprises people most, and points at a pardon as '
-        + 'the separate path the exclusions do not govern. Exact.',
+        'DUI/DWAI on the § 706(2) list; the exclusion split routes traffic/DUI categories to '
+        + 'ineligible_serious_co (excluded_level_co = no). Result keeps the DUI-surprises-people line and '
+        + 'the pre-2013-drug-reclassification note.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — CO persona 4',
-    package: 'DV misdemeanor → ineligible.',
+    source: 'CO 7/18 statute-verified — persona 4 (DV misdemeanor → bypass)',
+    package: 'DV MISDEMEANOR → excluded on the ordinary track, but 706(2)(b) opens the second door → dv_bypass_co, NOT flat ineligible (regression-lock).',
     record: { title: 'Domestic Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
-    answers: { excluded_co: true },
-    expect: { resultKey: 'ineligible_serious_co', reading: 'Domestic violence is on the § 706(2) exclusion list regardless of classification. Exact.' },
+    answers: { excluded_co: true, excluded_level_co: true },
+    expect: {
+      resultKey: 'dv_bypass_co',
+      reading:
+        'EXCLUSION SPLIT: a DV misdemeanor is on the list, but as a misdemeanor it reaches the '
+        + '706(2)(b) bypass (DA consent or clear-and-convincing showing; People v. C.H.). The old tree '
+        + 'flat-ineligibled it — regression-locked.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 1 — CO persona 5',
-    package: 'dismissed case 2023 → simplified/auto path.',
+    source: 'CO 7/18 statute-verified — persona 5 (non-conviction)',
+    package: 'dismissed case 2023, not competency → simplified/auto non-conviction path.',
     record: { title: 'Dismissed Case', disposition: 'dismissed', disposition_date: '2023-06-01' },
+    answers: { noncon_competency_co: false },
     expect: {
       resultKey: 'eligible_nonconviction_co',
       reading:
-        'Dismissals seal through the simplified in-case process with no waiting period, and HB24-1133 '
-        + 'expanded the automation from 2025 — so it may already be done. The result leads with '
-        + 'checking CBI and notes that sealing a record which should have auto-sealed is free. Exact.',
+        'Non-competency dismissal → § 705 own-motion sealing / CBI auto-seal / free written-motion '
+        + 'backstop. May already be done — check CBI. Now statute-cited to 705/704/13-3-117(5).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 6 (felony 3-yr tier, faster-to-file)',
+    package: 'class 4 felony, 4 yrs clean → past 3-yr petition, short of 10-yr automatic → discretionary petition beats waiting.',
+    record: { title: 'Class 4 Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      excluded_co: false, intervening_co: false, restitution_co: false,
+      level_co: 'felony_3', felony_3_date_co: '2022-07-15', felony_3_auto_co: '2022-07-15',
+    },
+    expect: {
+      resultKey: 'eligible_petition_discretion_co',
+      reading:
+        'Class 4 felony = 3-yr petition tier (met at 4yr), 10-yr automatic (not met) → eligible_petition_'
+        + 'discretion_co with (1)(g) balancing. The "petition passed, auto not — faster to file" direction.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 7 (L2 drug felony 5-yr tier — the split)',
+    package: 'level 2 drug felony, 4 yrs clean → the (1)(b)(IV) catchall 5-yr tier is NOT met (a class 4 felony at the same 4 yrs WOULD pass the 3-yr tier) → waiting.',
+    record: { title: 'Level 2 Drug Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      excluded_co: false, intervening_co: false, restitution_co: false,
+      level_co: 'felony_5', felony_5_date_co: '2022-07-15',
+    },
+    expect: {
+      resultKey: 'waiting_co',
+      reading:
+        'FELONY SPLIT: level 2 drug felony rides the 5-yr (1)(b)(IV) catchall, not the 3-yr tier. 4 yrs '
+        + '< 5 → waiting. Same 4-yr date on a class 4 felony (persona 6) passes — that is the 3-vs-5 split.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 8 (restitution gate)',
+    package: 'eligible class 2 misdemeanor, time met, BUT restitution still owed → blocked at the restitution gate.',
+    record: { title: 'Class 2 Misdemeanor (restitution owed)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: false },
+    answers: { excluded_co: false, intervening_co: false, restitution_co: true },
+    expect: {
+      resultKey: 'ineligible_restitution_co',
+      reading:
+        'RESTITUTION GATE: owed restitution blocks conviction sealing (706(1)(e)) unless the order is '
+        + 'vacated — even when the waiting period is met. Result stresses that unpaid fines/costs/fees do '
+        + 'NOT block (703(12)(b)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 9 (intervening → § 709 track)',
+    package: 'record with an intervening conviction, highest offense a misdemeanor, latest conviction 6 yrs ago → the § 709 multi-conviction track, 5-yr tier met.',
+    record: { title: 'Misdemeanor (with a later conviction)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_co: false, intervening_co: true, seven09_level_co: 'misd', date_709_5_co: '2020-07-15' },
+    expect: {
+      resultKey: 'eligible_709_co',
+      reading:
+        'INTERVENING → § 709, not a dead end. Highest offense misdemeanor → 5-yr tier from the latest-in-'
+        + 'time conviction (2020+5=2025<2026) → eligible_709_co. Copy carries the prior-conviction caps '
+        + '(709(3)) and restitution bar (709(4)(b)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 10 (marijuana shall-seal)',
+    package: 'marijuana possession, 3 yrs → shall-seal petty tier regardless of classification (706(1)(f)(I)).',
+    record: { title: 'Marijuana Possession', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_co: false, intervening_co: false, restitution_co: false, level_co: 'marijuana', date_mj_co: '2023-07-15' },
+    expect: {
+      resultKey: 'eligible_petition_shall_co',
+      reading:
+        'MARIJUANA: notwithstanding part 7, the court SHALL seal on a clean record (706(1)(f)(I)), petty '
+        + 'tier (1yr) regardless of classification. 3yr > 1yr → eligible_petition_shall_co.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 11 (municipal second-chance)',
+    package: 'municipal offense with a later non-felony non-DV conviction, subsequent case 11 yrs ago → § 708(2) second-chance track at 10 yrs → eligible.',
+    record: { title: 'Municipal Ordinance Violation', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { excluded_co: false, intervening_co: false, restitution_co: false, level_co: 'municipal', muni_subsequent_co: true, muni_2ndchance_co: true, muni_2nd_date_co: '2015-07-15' },
+    expect: {
+      resultKey: 'eligible_municipal_2nd_co',
+      reading:
+        'MUNICIPAL SECOND-CHANCE (§ 708(2)): a later non-felony, non-DV/USB/child-abuse conviction, and '
+        + 'this municipal offense not DV-based → sealable 10 yrs after the subsequent case (2015+10=2025<2026).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 12 (pardon shall-seal presumption)',
+    package: 'pardoned offense → § 710 motion any time, no fee, shall-seal presumption.',
+    record: { title: 'Pardoned Offense', charge_type: 'felony', disposition: 'convicted' },
+    answers: { excluded_co: false, intervening_co: false, restitution_co: false, level_co: 'pardoned' },
+    expect: {
+      resultKey: 'eligible_pardon_co',
+      reading:
+        'PARDON cite fixed to § 24-72-710: after a full/unconditional pardon the presumption flips — court '
+        + 'SHALL seal unless clear-and-convincing public interest outweighs privacy + adverse consequences + '
+        + 'intent of the pardon (710(3)). No fee.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'CO 7/18 statute-verified — persona 13 (competency dismissal ineligible)',
+    package: 'case dismissed on competency grounds → NOT sealable (705(1)(g), SB 26-149).',
+    record: { title: 'Competency Dismissal', disposition: 'dismissed', disposition_date: '2024-01-01' },
+    answers: { noncon_competency_co: true },
+    expect: {
+      resultKey: 'ineligible_competency_co',
+      reading:
+        'COMPETENCY carve-out: a dismissal on competency grounds (16-8.5-109(4)/-113/-116) is excluded from '
+        + 'non-conviction sealing (705(1)(g)), reconfirmed by SB 26-149. Only competency dismissals hit this — '
+        + 'ordinary dismissals still seal.',
     },
     now: NOW,
   },

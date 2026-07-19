@@ -9931,86 +9931,97 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // LOUISIANA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  // LOUISIANA — STATUTE-VERIFIED 2026-07-19. Diana read La. C.Cr.P. arts. 893,
+  // 894, 971, 972, 973, 976, 977, 978, 983, 984, 985, 986, and 999 from
+  // legis.la.gov (retrieved 2026-07-19; 893 through 2024 acts, 978 through 2024
+  // No. 580, 983 through 2024 No. 270, 973 through 2023 No. 454, 999 = 2024 No. 270).
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md + Diana's 7/19 reads.
   //
-  // Highest fees, newest automation. Motion to expunge (CCrP arts. 971-995);
-  // records removed from public access, not destroyed; eligible = MANDATORY
-  // grant. Filed in the parish of arrest/conviction.
+  // MOTION-BASED only in the pulled text (no general automatic track — that would
+  // be Art. 999's automated pieces / SB-111, whose broader rollout stays an open
+  // question). Three motion types: non-conviction (976), misdemeanor (977), felony
+  // (978); set-aside fast paths feed from 893(E)/894(B); and Art. 999 is a FREE,
+  // no-motion EXPEDITED path for a 17-year-old arrestee's non-conviction.
   //
-  // THE MONEY-SAVING LEAD, on every eligible result: SB 111's automated BCII
-  // request process (live Jan 1, 2025) covers all art. 976/977/978-eligible
-  // records back to Jan 1, 2006 — submit basic info, Bureau expunges within 30
-  // days, FREE. So the copy says "try the free automated request before paying
-  // up to $550". Its operational reality is an open question.
+  // Remedy = removal from PUBLIC access only, never destruction (971). LIMITED
+  // right to deny (973(C)): you may deny the record to private employers/landlords/
+  // public, but NOT to law enforcement, prosecutors, courts, or licensing boards.
   //
-  // FELONY COUNT follows art. 978(F), NOT the guides: multiple felonies OK in a
-  // 10-year window if each is eligible (old one-shot limit repealed 2020).
-  // 978(E) surprise: six named violent offences ARE expungable after 10 yrs via
-  // contradictory hearing. COURT DEBT CANNOT BLOCK ELIGIBILITY — LA is the only
-  // state; the results say so and there is no restitution gate.
+  // FEES are the headline: up to $550 per motion (§ 983), NONREFUNDABLE even if
+  // denied. Fee-free only for certain NON-convictions (983(F)) — and completing
+  // pretrial diversion KILLS that waiver. Lead every result with the fee-free
+  // check before anyone pays. Marijuana first-offense possession: $300 cap that
+  // SUNSETS 8/1/2026 → $550.
   // ==========================================================================
   LA: {
     code: 'LA',
     name: 'Louisiana',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
     terminology:
-      'Louisiana uses a MOTION TO EXPUNGE (Code of Criminal Procedure arts. 971-995), which removes '
-      + 'a record from public access rather than destroying it — and if you are eligible, the grant '
-      + 'is mandatory. Two things make Louisiana distinctive. Since January 2025 there is an '
-      + 'automated, FREE request system for eligible records, so the first move is often to try that '
-      + 'before paying the fees, which otherwise run up to $550. And Louisiana is the only state '
-      + 'where court debt cannot block your eligibility — owing money does not stop you.',
+      'Louisiana clears a record by a MOTION TO EXPUNGE (Code of Criminal Procedure arts. 971-999). '
+      + 'Expungement here removes a record from PUBLIC access rather than destroying it (art. 971): '
+      + 'you may lawfully deny it to private employers, landlords, and the general public (art. 973(C)), '
+      + 'but law enforcement, prosecutors, the courts, and state licensing boards keep full access, and '
+      + 'the record still counts as a habitual-offender predicate. The thing to understand before you '
+      + 'file is the money: Louisiana\'s fees are the highest in the country — up to $550 per motion — '
+      + 'and they are NONREFUNDABLE even if the motion is denied. A fee waiver exists, but only for '
+      + 'certain non-conviction outcomes, and completing a pretrial diversion program quietly destroys '
+      + 'that waiver. So the first move is always to check whether you qualify to file for FREE before '
+      + 'paying anything.',
     keyDates: [
       {
-        label: 'SB 111 automated/free expungement request system (LSP BCII) live',
-        date: '2025-01-01',
-        kind: 'operative',
-        note: 'Covers art. 976/977/978-eligible records back to Jan 1, 2006. Submit basic info, Bureau expunges eligible records within 30 days, free. No damages remedy if records are missed. Verify the portal is operational.',
-      },
-      {
-        label: 'First-offence marijuana possession fee reduced to $300 (sunsets)',
+        label: 'First-offense marijuana-possession expungement fee $300 (sunsets to $550)',
         date: '2026-08-01',
         kind: 'deadline',
-        note: 'The reduced $300 fee for first-offence marijuana possession sunsets on this date, after which it reverts. Dated urgency for that specific case.',
+        note: 'La. C.Cr.P. art. 983(M): a first-offense marijuana-possession expungement is capped at $300 ($50 LBCII + $50 sheriff + $50 DA + $150 clerk) until Aug 1, 2026; on or after that date it reverts to the $550 schedule. Dated urgency for that specific case through 7/31/26.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Is the SB 111 automated expungement portal actually live and working? Wave 5 calls this the state\'s biggest story and says to verify operational reality — is the online portal live, what is it called, is it processing requests? The tree leads eligible results with "try the free automated request first"; confirm it exists before the copy leans on it. LSP BCII expungement page is the check.',
+          'Is there any BROADER automatic/automated expungement beyond Art. 999\'s free expedited path for a 17-year-old arrestee\'s non-conviction? The pulled Title XXXIV text is motion-based; the SB-111-style "automated Bureau request covering records back to 2006" is NOT in the pulled articles. Treat LA\'s general automatic track as UNVERIFIED and confirm whether any 2025-26 act funded or codified one outside Title XXXIV.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the art. 978(F) felony-count rule against the current article text: a person may expunge MORE THAN ONE felony in a 10-year period if each is eligible (the old 15-year/one-shot limit was repealed 2020). Wave 5 says encode from the article, not the guides that still say one-per-lifetime. The tree does not cap felonies; confirm.',
+          'Art. 973(E) has TWO texts: the baseline (encoded live) and an EXPANDED version (adds judges/magistrates/commissioners, bail-setting, and sentencing use of expunged records) that takes effect only upon legislative appropriation per Acts 2023 No. 454. Confirm the appropriation status before treating the expanded version as live — session-law / phone tier.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the fee structure: Wave 5 caps it at $550 ($250 LSP BCII + $50 sheriff + $50 DA + up to $200 clerk), nonrefundable, one fee per arrest event. First-offence marijuana possession is $300 until Aug 1, 2026. DA-certified fee waiver only for non-conviction outcomes with zero felony history; expedited (17-yr-old arrestee, 2025) and trafficking-victim paths fee-exempt. Confirm the clerk portion with a parish clerk.',
-        blocksFields: ['resources.remedies.expungement.fees'],
-      },
-      {
-        question:
-          'Confirm the art. 978(E) six-offence violent carve-out list (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, illegal use of weapons — expungable after 10 yrs via contradictory hearing) and the general exclusion list (crimes of violence R.S. 14:2(B), sex-registry, crimes against minors, domestic abuse battery, certain CDS). The tree asks these; confirm the lists.',
+          'Cite-only mechanics NOT pulled — pull before relying on their details: Art. 979 (service of the motion), Art. 980 (contradictory-hearing procedure for the 978(E) violent carve-out), Art. 982 (service of the 999 expedited order), Art. 985.1 (interim expungement of a felony arrest), R.S. 15:578.1 (the DWI-diversion 5-year-from-arrest text), R.S. 14:2(B)/890.3 (crime-of-violence designation), R.S. 15:587.1 (licensing-board background-check scope).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the art. 893/894 set-aside-and-dismiss immediate expungement path, and the non-conviction charging-time-limit waits (felony-hard-labour 6 yrs / other felony 4 / misdemeanour 2 / fine-only 6 mo where there was no prosecution). The tree routes deferred to an immediate set-aside result and non-convictions to a general result.',
+          'The clerk portion of the § 983 fee (up to $200) varies by parish. The statutory cap is encoded; confirm the actual clerk charge with the parish clerk of court where the motion is filed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Session-law sweep: the history lines in this pull end at the 2024 acts. Verify whether any 2025-26 act amended arts. 971-999 (especially the fee schedule, the 978 exclusion/CDS lists, or the marijuana-fee sunset) before the next review.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'La. Code Crim. Proc. art. 977 (misdemeanour expungement; 5-yr cleansing period)', url: null, retrievedOn: null },
-      { id: 'La. Code Crim. Proc. art. 978 (felony expungement; 10-yr; (E) violent carve-out; (F) multiple-felony rule)', url: null, retrievedOn: null },
-      { id: 'La. Code Crim. Proc. art. 976 (non-conviction expungement)', url: null, retrievedOn: null },
-      { id: 'La. Code Crim. Proc. arts. 893, 894 (set-aside-and-dismiss)', url: null, retrievedOn: null },
-      { id: 'La. Code Crim. Proc. art. 983 (expungement fees; $550 cap)', url: null, retrievedOn: null },
-      { id: 'SB 111 of 2023 (automated expungement request system, live Jan 1, 2025)', url: null, retrievedOn: null },
+      { id: 'La. C.Cr.P. art. 893 (felony deferral + set-aside/dismissal; (E) satisfactory-completion dismissal = acquittal effect, still a first-offender/habitual predicate, max twice; drug-court (E)(3) / intensive-incarceration (E)(4) twice; specialty-court (F)(5) once; deferral exclusions) — through 2024 acts', url: 'https://legis.la.gov/legis/law.aspx?d=112882', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 894 (misdemeanor deferral + set-aside/dismissal, acquittal effect; (B)(2) DWI set-aside once per 10 yrs, (B)(3) second DWI only after a DWI/sobriety-court program; (A)(5) OMV package + $50)', url: 'https://legis.la.gov/legis/law.aspx?d=112888', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 971 (expungement definitions/effect — removal from public access only, not destruction; (2),(5) usable by law enforcement + as a habitual-offender predicate; (3) TWIC/port-worker framing)', url: 'https://legis.la.gov/legis/law.aspx?d=919662', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 972 (definitions; (1) judge may sign the 999 expedited order; (4) interim expungement of a felony arrest ending in a misdemeanor conviction)', url: 'https://legis.la.gov/legis/law.aspx?d=919663', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 973 (effect/access; (C) limited right to deny except to Paragraph A entities; (A)/(B) who still sees it incl. licensing boards; (E) predicate use — baseline live, expanded version on appropriation per Acts 2023 No. 454; (F) LE license investigations; (G) news orgs; (H) sex-offender registration survives; (D) breach = contempt) — through 2023 No. 454', url: 'https://legis.la.gov/legis/law.aspx?d=919664', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 976 ((A) non-conviction expungement — SOL bar / DA declined incl. completed diversion / dismissal-quash-acquittal / factual-innocence w/ 15:572.8 compensation bypassing time limits; (B) DWI-arrest-diversion 5-yr-from-arrest trap, R.S. 15:578.1)', url: 'https://legis.la.gov/legis/law.aspx?d=919667', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 977 (misdemeanor conviction expungement; (A)(1) 894(B) set-aside immediate, (A)(2) 5 yrs since sentence + no FELONY conviction in the period + nothing pending + DA certification; (C) exclusions — sex-offense arrest per 15:541, domestic abuse battery, stalking 14:40.2; (D) first-offense marijuana 90-day fast path)', url: 'https://legis.la.gov/legis/law.aspx?d=919669', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 978 (felony conviction expungement; (A)(1) 893(E) set-aside immediate, (A)(2) 10 yrs + no conviction of ANY offense in the preceding 10 yrs + nothing pending + DA certification, (A)(3) first-offender-pardon entitlement if not COV/sex; (B) never-list — COV 14:2(B) except (E), sex/minor 15:541, heavy CDS, DAB, w/ CDS exceptions; (E) six-offense violent carve-out via contradictory hearing; (F) multiple felonies allowed in a 10-yr period) — through 2024 No. 580', url: 'https://legis.la.gov/legis/law.aspx?d=919670', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 983 (fees — $550 cap: LBCII $250 + sheriff $50 + DA $50 + clerk ≤$200; (C),(E) nonrefundable even if denied; (F) fee-free non-conviction cert (no diversion); (G) juvenile-drug-court + 999 exempt; (H) trafficking-victim waives fees AND time delays; (I) wrongful-conviction; (J) pardoned except first-offender pardon still pays; (K) one fee per arrest; (L) IFP per CCP 5181; (M) marijuana $300 until 8/1/2026) — through 2024 No. 270', url: 'https://legis.la.gov/legis/law.aspx?d=919675', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 984 (DWI supplement — OMV certified compliance letter + $50 OMV cost on top of § 983; clerk mails plea record/fingerprints/556 proof to OMV or reuses the 894 letter)', url: 'https://legis.la.gov/legis/law.aspx?d=919676', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 985 (expungement by redaction of a co-defendant\'s record on petition; redacted records stay public)', url: 'https://legis.la.gov/legis/law.aspx?d=919677', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 986 (mandatory statutory forms — arts. 987-995, 998; clerks reject non-standard forms)', url: 'https://legis.la.gov/legis/law.aspx?d=919679', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. art. 999 (FREE expedited no-motion expungement — 17 at arrest, Title 14/40 offense, DA declined-all/dismissal/quash/acquittal, no conviction from the incident; judge may sign per 972(1), served per 982, fee-exempt per 983(G)(2)) — Acts 2024 No. 270', url: 'https://legis.la.gov/legis/law.aspx?d=1386722', retrievedOn: '2026-07-19' },
+      { id: 'La. C.Cr.P. arts. 979, 980, 982, 985.1 (service; contradictory-hearing; 999 service; interim-expungement mechanics) — cite-only, NOT pulled', url: null, retrievedOn: null },
+      { id: 'R.S. 15:578.1 (DWI-diversion 5-yr-from-arrest), 15:541 (sex-offense definition), 15:572.8 (wrongful-conviction compensation), 15:587.1 (licensing background-check scope), 14:2(B)/890.3 (crime-of-violence designation) — cross-refs, cite-only, NOT pulled', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -10020,70 +10031,123 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_la' },
-            { label: 'Dismissed / Refused prosecution', value: 'dismissed', next: 'nonconviction_la' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_la' },
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_trafficking_la' },
+            { label: 'Dismissed / Refused prosecution', value: 'dismissed', next: 'noncon_age_la' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'noncon_age_la' },
             { label: 'Set aside and dismissed (Art. 893/894) / Diversion completed', value: 'deferred', next: 'eligible_setaside_la' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_la: {
+        // CONVICTION PATHS -----------------------------------------------------
+        // Human-trafficking victim (983(H)): a prosecutor certification waives ALL
+        // § 977/978 time delays AND all fees — checked first, before any wait.
+        conv_trafficking_la: {
           type: 'boolean',
-          text: 'Was the offense any of these: a crime of violence, a sex offense requiring registration, a crime against a minor, domestic abuse battery, or certain controlled-substance offenses?',
-          yes: 'violent_carveout_la',
-          no: 'level_la'
+          text: 'Was this offense committed as a result of your being a victim of human trafficking, and can a prosecutor certify that (by a preponderance of the evidence)?',
+          yes: 'eligible_trafficking_la',
+          no: 'conv_marijuana_la'
         },
-        // THE SURPRISE-YES — inside the excluded path.
-        violent_carveout_la: {
+        // Marijuana first offense (977(D)): a 90-day fast path, notwithstanding
+        // anything else — checked before the ordinary misd/felony split.
+        conv_marijuana_la: {
           type: 'boolean',
-          text: 'Was the offense specifically one of these six: aggravated battery, second-degree battery, aggravated criminal damage to property, simple robbery, purse snatching, or illegal use of weapons? (Louisiana allows expunging these six after 10 years even though they are violent.)',
-          yes: 'felony_978e_date_la',
-          no: 'ineligible_excluded_la'
+          text: 'Was this a FIRST-OFFENSE conviction for possession of marijuana, THC, or a marijuana derivative?',
+          yes: 'marijuana_date_la',
+          no: 'conv_level_la'
         },
-        level_la: {
+        marijuana_date_la: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 90, unit: 'days', anchor: 'conviction (La. C.Cr.P. art. 977(D) — first-offense marijuana possession; 90 days after conviction, notwithstanding anything else)' },
+            nextPass: 'eligible_marijuana_la',
+            nextFail: 'waiting_marijuana_la'
+          }
+        },
+        conv_level_la: {
           type: 'choice',
-          text: 'What was the level of the offense?',
+          text: 'What was the level of the conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'dwi_la' },
-            { label: 'Felony', value: 'felony', next: 'felony_date_la' },
-            { label: 'Infraction', value: 'infraction', next: 'dwi_la' },
+            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_excluded_la' },
+            { label: 'Felony', value: 'felony', next: 'felony_type_la' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_la' }
           ]
         },
-        dwi_la: {
+        // Misdemeanor exclusions (977(C)): sex-offense arrest (15:541), domestic
+        // abuse battery, stalking (14:40.2).
+        misd_excluded_la: {
           type: 'boolean',
-          text: 'Was this a DWI (driving while intoxicated)?',
-          yes: 'dwi_date_la',
+          text: 'Did this misdemeanor arise from a sex-offense arrest (R.S. 15:541), or is it domestic abuse battery or stalking (R.S. 14:40.2)?',
+          yes: 'ineligible_misd_excluded_la',
+          no: 'misd_dwi_la'
+        },
+        misd_dwi_la: {
+          type: 'boolean',
+          text: 'Was this misdemeanor a DWI (operating while intoxicated)?',
+          yes: 'dwi_conv_date_la',
           no: 'misd_date_la'
         },
+        // 977(A)(2): 5 years since sentence completion, with no FELONY conviction
+        // in that period (misdemeanor convictions do NOT interrupt), nothing
+        // pending, and a DA certification attached.
         misd_date_la: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence, including any probation or parole?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence/probation/parole, conviction-free (La. C.Cr.P. art. 977 — misdemeanour; one per 5-year period)' },
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 977(A)(2) — misdemeanor; no FELONY conviction in the 5-yr period, nothing pending, DA certification; a later misdemeanor does NOT interrupt)' },
             nextPass: 'eligible_misd_la',
-            nextFail: 'waiting_la'
+            nextFail: 'waiting_misd_la'
           }
         },
-        dwi_date_la: {
+        dwi_conv_date_la: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence for the DWI?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 977 — DWI; limited to one per 10 years; +$50 OMV fee)' },
+            period: { amount: 5, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 977 — DWI misdemeanor; requires the § 984 OMV package + $50; DWI set-aside limited to once per 10 yrs)' },
             nextPass: 'eligible_dwi_la',
-            nextFail: 'waiting_la'
+            nextFail: 'waiting_misd_la'
           }
         },
+        // FELONY type — routes to the right eligibility rule / never-list.
+        felony_type_la: {
+          type: 'choice',
+          text: 'Which best describes the felony? (Louisiana\'s felony rules turn on the category — your court paperwork has it.)',
+          options: [
+            { label: 'A controlled-substance (drug) offense', value: 'cds', next: 'felony_cds_la' },
+            { label: 'A crime of violence', value: 'cov', next: 'felony_cov_la' },
+            { label: 'A sex offense, an offense against a minor, or domestic abuse battery', value: 'sex', next: 'ineligible_felony_sex_la' },
+            { label: 'Some other felony', value: 'other', next: 'felony_date_la' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_la' }
+          ]
+        },
+        // 978(B)(3) CDS: only HEAVY CDS (manufacture/distribution punishable > 5 yrs
+        // without a pardon or 893(E) hook) is barred; everything lighter is eligible.
+        felony_cds_la: {
+          type: 'boolean',
+          text: 'Was it simple possession, possession-with-intent, or any drug offense punishable by 5 years or less — as opposed to manufacture or distribution punishable by MORE than 5 years?',
+          yes: 'felony_date_la',
+          no: 'ineligible_felony_cds_la'
+        },
+        // 978(E) six-offense carve-out from the crime-of-violence bar.
+        felony_cov_la: {
+          type: 'boolean',
+          text: 'Was it specifically one of these six: aggravated battery, second-degree battery, aggravated criminal damage to property, simple robbery, purse snatching, or illegal use of weapons/dangerous instrumentalities? (Louisiana allows expunging these six after 10 years even though they are crimes of violence.)',
+          yes: 'felony_978e_date_la',
+          no: 'ineligible_felony_cov_la'
+        },
+        // 978(A)(2): 10 years since sentence completion, with no conviction of ANY
+        // criminal offense in the preceding 10 years, nothing pending, DA cert.
         felony_date_la: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete your sentence, including any probation or parole?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'completion of sentence/probation/parole, conviction-free with DA certification (La. C.Cr.P. art. 978 — felony; multiple felonies allowed in a 10-yr window per 978(F))' },
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 978(A)(2) — felony; NO conviction of any offense in the preceding 10 yrs, nothing pending, DA certification; multiple felonies allowed per 978(F))' },
             nextPass: 'eligible_felony_la',
-            nextFail: 'waiting_la'
+            nextFail: 'waiting_felony_la'
           }
         },
         felony_978e_date_la: {
@@ -10091,10 +10155,50 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition_date',
           text: 'When did you complete your sentence, including any probation or parole?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'completion of sentence/probation/parole (La. C.Cr.P. art. 978(E) — one of the six carve-out offences; via a contradictory hearing)' },
+            period: { amount: 10, unit: 'years', anchor: 'completion of sentence (La. C.Cr.P. art. 978(E) — one of the six carve-out offences; 10 yrs, no other conviction in the period, nothing pending, DA cert; via a contradictory hearing under Art. 980)' },
             nextPass: 'eligible_978e_la',
-            nextFail: 'waiting_la'
+            nextFail: 'waiting_felony_la'
           }
+        },
+        // NON-CONVICTION PATHS -------------------------------------------------
+        // Age gate first: 17 at arrest opens the FREE Art. 999 expedited path.
+        noncon_age_la: {
+          type: 'choice',
+          text: 'How old were you at the time of the ARREST for this case?',
+          options: [
+            { label: '17 or younger', value: 'minor', next: 'noncon_999_la' },
+            { label: '18 or older', value: 'adult', next: 'noncon_dwi_la' }
+          ]
+        },
+        // Art. 999: 17 at arrest, Title 14/40 offense, no conviction from the incident.
+        noncon_999_la: {
+          type: 'boolean',
+          text: 'Was the offense a Louisiana Title 14 (criminal) or Title 40 (drug) offense, and did NO misdemeanor or felony conviction result from that arrest incident?',
+          yes: 'eligible_999_la',
+          no: 'noncon_dwi_la'
+        },
+        // 976(B) DWI-diversion trap: 5 years from the ARREST date.
+        noncon_dwi_la: {
+          type: 'boolean',
+          text: 'Was this a DWI arrest that was resolved through a pretrial diversion program?',
+          yes: 'dwi_diversion_date_la',
+          no: 'noncon_diversion_la'
+        },
+        dwi_diversion_date_la: {
+          type: 'date',
+          text: 'When were you ARRESTED for the DWI? (This wait runs from the arrest date, not the disposition.)',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'arrest date (La. C.Cr.P. art. 976(B) — DWI arrest resolved by pretrial diversion; 5 years from arrest, R.S. 15:578.1)' },
+            nextPass: 'eligible_noncon_la',
+            nextFail: 'waiting_dwi_diversion_la'
+          }
+        },
+        // The 983(F) fee-free split: completing pretrial diversion kills the waiver.
+        noncon_diversion_la: {
+          type: 'boolean',
+          text: 'Did your case end because you COMPLETED a pretrial diversion program (as opposed to an acquittal, a dismissal, or the DA simply declining to prosecute)?',
+          yes: 'eligible_noncon_diversion_la',
+          no: 'eligible_noncon_la'
         }
       },
       results: {
@@ -10103,68 +10207,138 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           title: 'We Need the Case Outcome First',
           message: 'Louisiana treats convictions, non-convictions, and set-aside dispositions on different tracks. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. The Justice & Accountability Center of Louisiana ((504) 273-1091) runs workshops and has the CLEAN JACKET eligibility app, and an LSP Right to Review fingerprint check is recommended before filing.',
           remedy: 'Get Your Record First (JAC of Louisiana / LSP Right to Review)',
-          citation: 'La. C.Cr.P. arts. 971-995 (which path applies depends on the disposition)'
+          citation: 'La. C.Cr.P. arts. 971-999 (which path applies depends on the disposition)'
         },
-        nonconviction_la: {
+        eligible_999_la: {
           status: 'eligible',
-          title: 'No Conviction — Expungeable (Try the Free Automated Request First)',
-          message: 'Because your case ended without a conviction — dismissed, acquitted, or refused for prosecution — it is expungeable. Start with the cheapest route: since January 2025, Louisiana has an automated request system that expunges eligible records for FREE, so try that before paying anything. If you need to file a motion instead, a DA-certified fee waiver is available for non-conviction outcomes when you have no felony history. And a Louisiana-specific reassurance: court debt does NOT block your eligibility here — owing money does not stop you. The Justice & Accountability Center can help.',
-          remedy: 'Try the free automated request; else a non-conviction motion (art. 976)',
-          citation: 'La. C.Cr.P. art. 976'
+          title: 'Free Expedited Expungement — No Motion, No Cost',
+          message: 'You appear to qualify for Louisiana\'s best-case path. Because you were 17 or younger at the time of the arrest, the offense was a Title 14 or Title 40 offense, and no conviction resulted from that arrest, Article 999 makes expungement expedited and FREE: you are entitled to it (the judge may sign the order without a motion, Art. 972(1)), there is no cost (fee-exempt, § 983(G)(2)), and none of the usual waiting periods apply. This is true even if your case ended in a completed pretrial diversion — unlike an ADULT diversion, which loses the fee waiver. Because it is a newer path (Acts 2024 No. 270), the Justice & Accountability Center can help you make sure the court applies it. Once done, the record is removed from public access (not destroyed): you may deny it to private employers and the public, but law enforcement, prosecutors, courts, and licensing boards keep access (art. 973).',
+          remedy: 'Art. 999 expedited expungement — entitled, no motion, no fee',
+          citation: 'La. C.Cr.P. art. 999; art. 983(G)(2)'
+        },
+        eligible_noncon_la: {
+          status: 'eligible',
+          title: 'No Conviction — Expungeable, and You May Qualify to File FREE',
+          message: 'Because your case ended without a conviction — an acquittal, a dismissal, or the DA declining to prosecute within the time limit — you can expunge it under Article 976. The most important thing to do BEFORE paying anything: check the fee-free path. Louisiana waives ALL fees (§ 983(F)) if the DA certifies you have no felony convictions and no pending felony charges AND your case ended in an acquittal after trial, or in a dismissal/declination with NO pretrial diversion, or you were an identity-theft victim. If that fits you, this is free. (If it does not, the ordinary motion runs up to $550, nonrefundable — and you can ask the court to let you file as indigent under CCP art. 5181.) Once expunged, the record is removed from public access but not destroyed (art. 971): you may lawfully deny it to private employers, landlords, and the public (art. 973(C)), but law enforcement, prosecutors, courts, and state licensing boards keep full access. The Justice & Accountability Center can help you file.',
+          remedy: 'Non-conviction expungement (art. 976) — check the § 983(F) fee-free certification first',
+          citation: 'La. C.Cr.P. art. 976; art. 983(F)'
+        },
+        eligible_noncon_diversion_la: {
+          status: 'eligible',
+          title: 'No Conviction After Diversion — Expungeable, but the Fee Waiver Is Gone',
+          message: 'Because you completed a pretrial diversion program, your case counts as a non-conviction and IS expungeable under Article 976 — but there is a trap worth naming plainly: completing diversion KILLS the fee waiver. The § 983(F) fee-free path is only for acquittals, dismissals, or declinations WITHOUT diversion, so as a diversion completer you would pay the ordinary motion fees, up to $550, and they are nonrefundable even if the motion is denied. Two things that help: you can ask the court to let you file as an indigent (in forma pauperis) under CCP art. 5181 and defer the costs; and if you were a victim of human trafficking, § 983(H) waives all fees (and all time delays). Once expunged, the record is removed from public access but not destroyed (art. 971) — you may deny it to private employers and the public, but not to law enforcement, prosecutors, courts, or licensing boards (art. 973). The Justice & Accountability Center can help.',
+          remedy: 'Non-conviction expungement (art. 976) — diversion means you pay (up to $550); ask about IFP (CCP 5181)',
+          citation: 'La. C.Cr.P. art. 976; art. 983(F)'
+        },
+        waiting_dwi_diversion_la: {
+          status: 'waiting',
+          title: 'DWI Diversion — Five-Year Wait From the ARREST',
+          message: 'A DWI arrest resolved through pretrial diversion has its own trap: it cannot be expunged until 5 years have passed from the ARREST date, not from the disposition (Art. 976(B), cross-referencing R.S. 15:578.1). Based on the arrest date you gave, those 5 years have not run yet. Come back when they have. When you do file, note that a DWI expungement also needs the Office of Motor Vehicles compliance package plus a $50 OMV cost on top of the regular fees (Art. 984), and completing diversion means you would not qualify for the § 983(F) fee waiver.',
+          remedy: 'Wait for 5 years from the DWI arrest (art. 976(B))',
+          citation: 'La. C.Cr.P. art. 976(B)'
         },
         eligible_setaside_la: {
           status: 'eligible',
           title: 'Set Aside and Dismissed — Immediate Expungement Path',
-          message: 'Because your case was set aside and dismissed under Article 893 or 894 (Louisiana\'s version of a deferred disposition), you have an immediate path to expungement — no lengthy waiting period. Try the free automated request system first (live since January 2025); if you need to file a motion, do so in the parish of the case. Remember that in Louisiana, court debt does not block eligibility. The Justice & Accountability Center and their CLEAN JACKET app can confirm your route.',
-          remedy: 'Expungement after a 893/894 set-aside — try the automated request first',
+          message: 'Because your case was set aside and dismissed after a deferral (Article 893 for a felony, Article 894 for a misdemeanor), you have an IMMEDIATE path — no waiting period. A 893(E) felony set-aside feeds straight into Art. 978(A)(1); a 894(B) misdemeanor set-aside into Art. 977(A)(1). The dismissal has the effect of an acquittal, though the record can still be used as a first-offender or habitual-offender predicate, and this relief is limited to twice per person for most deferrals. A few things to plan around: if the underlying charge was a DWI, an Art. 894 DWI set-aside is limited to once every 10 years (a second one in the same decade requires completing a DWI/sobriety-court program), and a DWI expungement needs the OMV package plus $50 (Art. 984). File in the parish of the case using the mandatory statutory forms (Art. 986) — clerks reject non-standard forms. The Justice & Accountability Center can confirm your route.',
+          remedy: 'Immediate expungement after a 893(E)/894(B) set-aside (arts. 977(A)(1), 978(A)(1))',
           citation: 'La. C.Cr.P. arts. 893, 894'
+        },
+        eligible_trafficking_la: {
+          status: 'eligible',
+          title: 'Human-Trafficking Victim — Waits and Fees Waived',
+          message: 'Louisiana treats this differently, and much more generously. If a prosecutor certifies (by a preponderance of the evidence) that this offense resulted from your being a victim of human trafficking, § 983(H) waives ALL of the usual Article 977/978 time delays AND all fees — so you do not have to wait out the 5- or 10-year cleansing period, and you do not pay the up-to-$550 costs. The prosecutor certification is the key that unlocks it, so the first step is working with a lawyer or advocate to obtain it. The Justice & Accountability Center of Louisiana handles trafficking-survivor expungements and can help you seek the certification and file. Once expunged, the record leaves public access but is not destroyed (art. 971); you may deny it to private employers and the public, though law enforcement, prosecutors, courts, and licensing boards keep access (art. 973).',
+          remedy: 'Trafficking-victim expungement (art. 983(H)) — time delays AND fees waived; needs prosecutor certification',
+          citation: 'La. C.Cr.P. art. 983(H)'
+        },
+        eligible_marijuana_la: {
+          status: 'eligible',
+          title: 'First-Offense Marijuana — Fast Path, and a Fee Deadline',
+          message: 'A first-offense conviction for possession of marijuana, THC, or a derivative has Louisiana\'s fastest conviction path: you can move to expunge just 90 DAYS after the conviction, notwithstanding the usual waits (Art. 977(D)). And there is time-sensitive money news: the filing fee for a first-offense marijuana-possession expungement is capped at $300 (instead of the usual $550) until AUGUST 1, 2026 — on or after that date it reverts to $550 (Art. 983(M)). So if this is you, filing before August 1, 2026 saves you $250. File in the court where the case was, using the special petition form. Once expunged, the record leaves public access but is not destroyed (art. 971), and you may deny it to private employers and the public though not to law enforcement or licensing boards (art. 973). The Justice & Accountability Center can help you file quickly.',
+          remedy: 'Move to expunge 90 days after conviction (art. 977(D)) — $300 fee until Aug 1, 2026, then $550',
+          citation: 'La. C.Cr.P. art. 977(D); art. 983(M)'
+        },
+        waiting_marijuana_la: {
+          status: 'waiting',
+          title: 'First-Offense Marijuana — Wait 90 Days From Conviction',
+          message: 'A first-offense marijuana-possession conviction can be expunged, but not until 90 days after the conviction (Art. 977(D)). Based on your date, those 90 days have not passed yet. The moment they do, you can file — and watch the fee deadline: the reduced $300 cap for first-offense marijuana possession lasts only until August 1, 2026, after which it reverts to $550 (Art. 983(M)). If your 90 days land before that date, filing promptly saves you $250.',
+          remedy: 'Wait until 90 days after conviction, then file (art. 977(D)) — mind the Aug 1, 2026 fee sunset',
+          citation: 'La. C.Cr.P. art. 977(D)'
         },
         eligible_misd_la: {
           status: 'eligible',
-          title: 'Misdemeanor, 5+ Years Clean — Expungeable (Try Automated First)',
-          message: 'Based on your dates — 5 years conviction-free since completing your sentence — this misdemeanor is expungeable under Article 977, and if you are eligible the grant is mandatory. Do the cheap thing first: try Louisiana\'s free automated request system (live since January 2025) before paying, since it covers eligible records at no cost. If you file a motion instead, it goes in the parish of the case and the fees are capped at $550. Two Louisiana specifics worth knowing: you can use the misdemeanor expungement once per 5-year period, and court debt does not block your eligibility. The Justice & Accountability Center can help.',
-          remedy: 'Try the free automated request; else a motion (art. 977)',
-          citation: 'La. C.Cr.P. art. 977'
+          title: 'Misdemeanor, 5+ Years — Expungeable',
+          message: 'Based on your dates — 5 years since you completed your sentence, with no FELONY conviction in that period and nothing pending — this misdemeanor is expungeable under Article 977(A)(2). One point that trips people up: for a misdemeanor, the clean-period test is felony-free, so a LATER misdemeanor conviction does NOT interrupt your eligibility. The district attorney must certify the clean period and that nothing is pending, and that certification is attached to your motion. On money: a conviction motion is not fee-free — budget for up to $550 (LBCII $250 + sheriff $50 + DA $50 + clerk up to $200), collected at filing and NONREFUNDABLE even if the motion is denied (Art. 983); you can ask to file as indigent under CCP art. 5181. File in the parish of the case using the mandatory forms (Art. 986). Once expunged, the record leaves public access but is not destroyed (art. 971): you may deny it to private employers, landlords, and the public (art. 973(C)), but not to law enforcement, prosecutors, courts, or state licensing boards. The Justice & Accountability Center can help.',
+          remedy: 'Misdemeanor expungement motion (art. 977(A)(2)) — DA certification; up to $550, nonrefundable',
+          citation: 'La. C.Cr.P. art. 977(A)(2)'
+        },
+        waiting_misd_la: {
+          status: 'waiting',
+          title: 'Misdemeanor — Five-Year Period Not Yet Met',
+          message: 'A misdemeanor conviction expunges 5 years after you complete the sentence, as long as you have had no FELONY conviction in that period and nothing is pending (Art. 977(A)(2)). Based on your dates, those 5 years have not run yet. A reassurance for the wait: it is felony-free that matters here, so a later MISDEMEANOR does not push the clock out — only a new felony would. When you get there, the DA certifies the clean period and you file in the parish of the case (fees up to $550, nonrefundable; IFP available). If this was a set-aside under Art. 894, the path is immediate instead — come back and select that.',
+          remedy: 'Wait for 5 felony-free years (art. 977(A)(2))',
+          citation: 'La. C.Cr.P. art. 977(A)(2)'
+        },
+        ineligible_misd_excluded_la: {
+          status: 'ineligible',
+          title: 'This Misdemeanor Is Excluded From Expungement',
+          message: 'Louisiana excludes three misdemeanor categories from the Art. 977 expungement: a misdemeanor arising from a sex-offense arrest (R.S. 15:541), domestic abuse battery, and stalking (R.S. 14:40.2). No waiting period changes that. One narrower path may remain in the sex-offense-arrest situation: an interim expungement of the arrest under Art. 985.1 can be available in some circumstances — its mechanics are outside what we have confirmed, so this is worth taking to a person. The Justice & Accountability Center can check whether any route fits your specific case.',
+          remedy: 'Excluded misdemeanor (art. 977(C)) — ask about the Art. 985.1 interim path for a sex-offense arrest',
+          citation: 'La. C.Cr.P. art. 977(C)'
         },
         eligible_dwi_la: {
           status: 'eligible',
-          title: 'DWI, 5+ Years Clean — Expungeable, With Two Catches',
-          message: 'A DWI can be expunged in Louisiana 5 years after you complete the sentence — with two DWI-specific catches worth knowing. You can only expunge a DWI once every 10 years, and there is an extra $50 fee to the Office of Motor Vehicles on top of the regular costs. Try the free automated request system first (live since January 2025) to see whether it handles yours. If you file a motion, it goes in the parish of the case, fees capped at $550 plus the $50 OMV fee. Court debt does not block your eligibility in Louisiana. The Justice & Accountability Center can confirm the timing.',
-          remedy: 'Expunge a DWI (art. 977) — once per 10 years, +$50 OMV fee',
-          citation: 'La. C.Cr.P. art. 977'
+          title: 'DWI Conviction, 5+ Years — Expungeable, With Two Catches',
+          message: 'A DWI conviction can be expunged 5 years after you complete the sentence (Art. 977), with two DWI-specific catches. First, the paperwork: a DWI expungement needs the Office of Motor Vehicles certified compliance letter plus a $50 OMV cost, on top of the regular § 983 fees (Art. 984). Second, if your DWI was handled as an Art. 894 set-aside, that relief is limited to once every 10 years. Budget for up to $550 plus the $50 OMV cost, collected at filing and nonrefundable even if denied; IFP is available under CCP art. 5181. File in the parish of the case using the mandatory forms. Once expunged, the record leaves public access but is not destroyed (art. 971) — you may deny it to private employers and the public, not to law enforcement, courts, or licensing boards (art. 973). The Justice & Accountability Center can confirm the timing.',
+          remedy: 'DWI expungement (art. 977) — needs the § 984 OMV package + $50; up to $550, nonrefundable',
+          citation: 'La. C.Cr.P. art. 977; art. 984'
         },
         eligible_felony_la: {
           status: 'eligible',
-          title: 'Felony, 10+ Years Clean — Expungeable (and Not Just One)',
-          message: 'Based on your dates — 10 years conviction-free since completing your sentence — this felony appears expungeable under Article 978, with the district attorney certifying your clean record. One thing many guides get wrong, so it is worth stating: Louisiana no longer limits you to one felony expungement for life. Under the current article, you can expunge more than one felony within a 10-year period as long as each is eligible (the old one-shot limit was repealed in 2020). Try the free automated request system first (live since January 2025). If you file a motion, it goes in the parish of the case, fees capped at $550. And court debt does not block your eligibility. The Justice & Accountability Center and their CLEAN JACKET app can help.',
-          remedy: 'Try the free automated request; else a motion (art. 978) — multiple felonies allowed',
-          citation: 'La. C.Cr.P. art. 978'
+          title: 'Felony, 10+ Years — Expungeable (and Not Just One)',
+          message: 'Based on your dates — 10 years since you completed your sentence — this felony appears expungeable under Article 978(A)(2), provided you have NO conviction of any criminal offense in the 10 years preceding the motion and nothing pending, with the district attorney certifying that clean record. Note the standard is stricter than the misdemeanor one: for a felony, ANY conviction in the 10-year window (misdemeanor or felony) interrupts it. One thing many guides get wrong: Louisiana no longer limits you to one felony expungement for life — you can expunge MORE THAN ONE felony within a 10-year period if each independently qualifies (Art. 978(F), 2024 No. 580; the old one-shot limit is repealed). A felony conviction motion is not fee-free: budget up to $550, collected at filing and NONREFUNDABLE even if denied (Art. 983); IFP is available under CCP art. 5181. File in the parish of the case using the mandatory forms (Art. 986). Once expunged, the record leaves public access but is not destroyed (art. 971): you may deny it to private employers and the public (art. 973(C)), but law enforcement, prosecutors, courts, and licensing boards keep access, and it stays a habitual-offender predicate. The Justice & Accountability Center can help.',
+          remedy: 'Felony expungement motion (art. 978(A)(2)) — multiple felonies allowed (978(F)); up to $550, nonrefundable',
+          citation: 'La. C.Cr.P. art. 978(A)(2)'
+        },
+        waiting_felony_la: {
+          status: 'waiting',
+          title: 'Felony — Ten-Year Period Not Yet Met',
+          message: 'A felony expunges 10 years after you complete the sentence, and unlike the misdemeanor test, it requires NO conviction of any offense — misdemeanor or felony — in the 10 years preceding the motion, with nothing pending (Art. 978(A)(2), or Art. 978(E) for one of the six violent carve-outs). Based on your dates, those 10 years have not run yet, and any new conviction restarts the clock. When you get there, the DA certifies the clean period, and you can expunge more than one qualifying felony in the same decade (Art. 978(F)). If instead this felony was a 893(E) set-aside, the path is immediate — come back and select that.',
+          remedy: 'Wait for 10 conviction-free years (art. 978(A)(2))',
+          citation: 'La. C.Cr.P. art. 978(A)(2)'
         },
         eligible_978e_la: {
           status: 'eligible',
-          title: 'One of the Six — Expungeable Despite Being a Violent Offense',
-          message: 'This is a route many people do not know exists. Louisiana generally does not expunge crimes of violence — but there is a specific exception for six offenses (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, and illegal use of weapons), and yours appears to be one of them. After 10 years, these can be expunged through a contradictory hearing (a hearing where the district attorney can weigh in). Based on your dates, the 10 years appear met. Because this route involves a hearing and is specific, it is worth doing with help: the Justice & Accountability Center handles exactly these. Court debt does not block your eligibility. The free automated system may not cover a hearing-based path, so plan on the motion.',
-          remedy: 'Expungement via contradictory hearing (art. 978(E)) — one of the six carve-out offences',
+          title: 'One of the Six — Expungeable Despite Being a Crime of Violence',
+          message: 'This is a route many people do not know exists. Louisiana generally does not expunge crimes of violence — but six are carved out (aggravated battery, second-degree battery, aggravated criminal damage to property, simple robbery, purse snatching, and illegal use of weapons/dangerous instrumentalities), and yours appears to be one. After 10 years — with no other conviction in the period and nothing pending, and the DA\'s certification — these can be expunged through a CONTRADICTORY HEARING, where the district attorney can weigh in (Art. 978(E), heard under Art. 980). Based on your dates, the 10 years appear met. Because this route runs through a hearing and is specific, do it with help: the Justice & Accountability Center handles exactly these. Budget for the § 983 fees (up to $550, nonrefundable; IFP available). Once expunged, the record leaves public access but is not destroyed (art. 971) and stays a habitual-offender predicate.',
+          remedy: 'Expungement via contradictory hearing (art. 978(E)) — one of the six carve-outs; up to $550',
           citation: 'La. C.Cr.P. art. 978(E)'
         },
-        waiting_la: {
-          status: 'waiting',
-          title: 'Cleansing Period Not Yet Met',
-          message: 'Louisiana\'s "cleansing periods" run conviction-free from when you complete your sentence, probation, and parole: 5 years for a misdemeanor or DWI, 10 years for a felony (including the six violent-offense carve-outs). Based on your dates, yours has not run yet, and it requires staying conviction-free. One reassurance for the meantime: unlike almost everywhere else, court debt does NOT delay or block your Louisiana expungement — so an unpaid balance is not something holding your clock back. When the time comes, try the free automated request system first.',
-          remedy: 'Wait for the cleansing period (court debt does not block it)',
-          citation: 'La. C.Cr.P. arts. 977, 978'
-        },
-        ineligible_excluded_la: {
+        ineligible_felony_sex_la: {
           status: 'ineligible',
-          title: 'This Offense Cannot Be Expunged',
-          message: 'Louisiana excludes crimes of violence generally, sex offenses requiring registration, crimes against minors, domestic abuse battery, and certain controlled-substance offenses from expungement. No waiting period changes that. There is one important exception you should rule out first, because it catches people: six specific violent offenses (aggravated battery, second-degree battery, aggravated criminal damage, simple robbery, purse snatching, illegal use of weapons) CAN be expunged after 10 years — so if your offense might be one of those, it is worth confirming. Otherwise, a first-offender pardon (Louisiana\'s automatic constitutional pardon) can open an expungement path for some non-violent offenses. The Justice & Accountability Center can check where yours falls.',
-          remedy: 'None (Excluded Offense) — rule out the six carve-outs; ask about a first-offender pardon',
-          citation: 'La. C.Cr.P. art. 978'
+          title: 'This Felony Cannot Be Expunged',
+          message: 'Louisiana does not expunge a felony sex offense or offense against a minor victim (as defined in R.S. 15:541 — this reaches some older offenses that would now qualify), or domestic abuse battery. No waiting period changes that. Two narrow notes rather than false hope: a pre-August-2001 carnal-knowledge conviction (14:80) can sometimes be expunged if its elements match the current misdemeanor 14:80.1, with a 15:542(F) registration-waiver order as proof; and a sex-offender-registration duty survives expungement anyway (art. 973(H)), so clearing the record would not end registration. Because these classifications are specific and consequential, take this to the Justice & Accountability Center rather than accept it outright.',
+          remedy: 'None (excluded felony — sex/minor/DAB, art. 978(B)) — confirm the classification with legal aid',
+          citation: 'La. C.Cr.P. art. 978(B)'
+        },
+        ineligible_felony_cds_la: {
+          status: 'ineligible',
+          title: 'Heavy Controlled-Substance Felony — Generally Not Expungeable',
+          message: 'Most drug felonies in Louisiana CAN be expunged — simple possession, possession-with-intent, anything punishable by 5 years or less, anything set aside under Art. 893(E), and anything you are entitled to a first-offender pardon for. What stays barred is the heavy end: manufacture or distribution punishable by MORE than 5 years, without a pardon or a 893(E) set-aside hook (Art. 978(B)). Based on what you told us, yours is in that heavier category. Two things worth checking before accepting this, because they genuinely reopen the door: whether the offense was actually set aside under Art. 893(E), and whether you are entitled to a first-offender pardon (La. Const. art. IV § 5(E)(1)) — either one can make even a heavier CDS offense expungeable. The Justice & Accountability Center can check both.',
+          remedy: 'Generally none (heavy CDS, art. 978(B)) — but a 893(E) set-aside or first-offender pardon can reopen it',
+          citation: 'La. C.Cr.P. art. 978(B)'
+        },
+        ineligible_felony_cov_la: {
+          status: 'ineligible',
+          title: 'Crime of Violence — Not Expungeable',
+          message: 'Louisiana does not expunge a felony crime of violence (R.S. 14:2(B)), and yours is not one of the six offenses the law specifically carves out. No waiting period changes that. The one thing worth ruling out first, because it catches people: the six carve-out offenses (aggravated battery, second-degree battery, aggravated criminal damage to property, simple robbery, purse snatching, illegal use of weapons/dangerous instrumentalities) CAN be expunged after 10 years through a contradictory hearing — so if there is any chance yours is actually one of those, it is worth confirming. Otherwise, a first-offender pardon may open a path for some non-violent offenses, but not for a crime of violence. The Justice & Accountability Center can check where yours falls.',
+          remedy: 'None (crime of violence, art. 978(B)(1)) — rule out the six-offense carve-out first',
+          citation: 'La. C.Cr.P. art. 978(B)(1)'
         },
         complex_level_la: {
           status: 'complex',
           title: 'We Need the Offense Level',
-          message: 'In Louisiana the cleansing period depends on the level: 5 years for a misdemeanor or DWI, 10 for a felony. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the Justice & Accountability Center\'s CLEAN JACKET app can help you check your eligibility. An LSP Right to Review fingerprint check will also show your record.',
+          message: 'In Louisiana the path and the cleansing period depend on the level and category: 5 years for a misdemeanor, 10 for a felony, with felony rules that turn on whether it is a drug offense, a crime of violence, or a sex/minor offense. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and the Justice & Accountability Center\'s CLEAN JACKET app can help you check your eligibility. An LSP Right to Review fingerprint check will also show your record.',
           remedy: 'Get Your Offense Level First (court paperwork / CLEAN JACKET)',
           citation: 'La. C.Cr.P. arts. 977, 978'
         }
@@ -10173,21 +10347,19 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     resources: {
       remedies: {
         expungement: {
-          name: 'Motion to Expunge (La. C.Cr.P. arts. 971-995)',
-          formName: 'Standardized statewide expungement forms (art. 992) / the automated request system',
+          name: 'Motion to Expunge (La. C.Cr.P. arts. 971-999)',
+          formName: 'Mandatory statutory forms (arts. 987-995, 998; art. 986 requires them — clerks reject others)',
           formUrl: 'https://www.lsp.org/services/legal/expungements/',
           steps: [
-            'Try the FREE automated request system first (live since January 2025) — it expunges eligible records back to 2006 within 30 days at no cost. This can save you up to $550.',
-            'If you file a motion, do it in the parish of the arrest or conviction, using the standardized statewide forms.',
-            'Budget for the capped fees ($550 max: $250 LSP BCII, $50 sheriff, $50 DA, up to $200 clerk) — first-offense marijuana possession is $300 until August 1, 2026.',
-            'Court debt does NOT block your eligibility in Louisiana. An LSP Right to Review fingerprint check before filing is recommended.'
+            'FIRST, check whether you can file for FREE before paying: § 983(F) waives all fees for certain non-convictions (DA certifies no felony convictions + nothing pending, and the case ended in acquittal, or dismissal/declination WITHOUT diversion, or identity theft). Human-trafficking victims (§ 983(H)) and the Art. 999 expedited path are also fee-exempt. Completing a pretrial diversion program KILLS the § 983(F) waiver.',
+            'File the motion in the parish of the arrest or conviction, using the mandatory statutory forms (Art. 986).',
+            'Budget the § 983 cap: $550 max per motion ($250 LBCII + $50 sheriff + $50 DA + up to $200 clerk), collected at filing and NONREFUNDABLE even if the motion is denied. One fee per arrest event. First-offense marijuana possession is capped at $300 until Aug 1, 2026, then $550. A DWI adds a $50 OMV cost (Art. 984).',
+            'If you cannot afford it, you can ask to file as an indigent (in forma pauperis) under CCP art. 5181 and defer the costs. An LSP Right to Review fingerprint check before filing is recommended.'
           ],
-          // null: Wave 5 gives the $550 cap breakdown but flags the clerk portion
-          // and the various exemptions/reductions.
-          fees: null,
-          // NOT null: the DA-certified and specialty waivers are named mechanisms.
-          feeWaiver: 'A DA-certified fee waiver is available for non-conviction outcomes with no felony history; expedited (17-year-old arrestee) and trafficking-victim paths are fee-exempt.',
-          courtContact: 'The parish of arrest or conviction; LSP BCII for the automated request'
+          // Statute-cited exact numbers (§ 983); marijuana $300 sunsets 8/1/2026.
+          fees: 'Up to $550 per motion, NONREFUNDABLE even if denied (La. C.Cr.P. art. 983): LBCII $250 + sheriff $50 + DA $50 + clerk up to $200. One fee per arrest event. First-offense marijuana possession capped at $300 until Aug 1, 2026, then $550 (art. 983(M)). A DWI adds a $50 OMV cost (art. 984).',
+          feeWaiver: 'Fee-free for certain non-convictions with a DA certification (no felony convictions/nothing pending; acquittal, or dismissal/declination without pretrial diversion, or identity-theft victim — art. 983(F)); completing diversion KILLS this waiver. Also fee-exempt: human-trafficking victims (which also waives all time delays, art. 983(H)), wrongful-conviction recipients (art. 983(I)), juvenile-drug-court completers and the Art. 999 expedited path (art. 983(G)). In forma pauperis available under CCP art. 5181 (art. 983(L)).',
+          courtContact: 'The parish of arrest or conviction (clerk of court)'
         }
       },
       legalAid: [

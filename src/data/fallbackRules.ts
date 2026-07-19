@@ -7060,10 +7060,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       + 'is the whole answer.',
     keyDates: [
       {
-        label: 'St. 2018, c. 69 — criminal justice reform',
-        date: '2018',
+        label: 'St. 2018, c. 69 — sealing waits cut + expungement created (effective Oct 13, 2018)',
+        date: '2018-10-13',
         kind: 'effective',
-        note: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform; emergency law). Act SECTIONS 186-187 cut the § 100A sealing waits from 5/10 to 3/7 years, SECTION 188 added the "except for convictions for resisting arrest" carve-out, and SECTION 195 created the expungement remedy (§§ 100E-100U). Per act SECTION 239, all of these took effect 6 months AFTER the act\'s approval — not on signing despite the emergency clause. The approval date is not in the session-law text; the exact effective day is not pinned here. Verified against the session-law PDF at research/statutes/MA/St2018-c69-2026-07-18.pdf.',
+        note: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform), signed April 13, 2018 as an emergency law. Act SECTIONS 186-187 cut the § 100A sealing waits from 5/10 to 3/7 years, SECTION 188 added the "except for convictions for resisting arrest" carve-out, and SECTION 195 created the expungement remedy (§§ 100E-100U). Per act SECTION 239 these took effect 6 months after signing — October 13, 2018 — despite the emergency clause. Effective date pre-computed by the Trial Court Law Libraries at mass.gov/lists/mass-general-laws-c276 ("Amended by St.2018, c. 69, §§ 186 to 192, effective October 13, 2018"). Proof at research/statutes/MA/St2018-c69-2026-07-18.pdf and ma-c276-effective-dates-2026-07-18.png.',
       },
       {
         label: 'Current § 100I expungement structure (2-record limit)',
@@ -7124,11 +7124,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       { id: 'M.G.L. c. 276 § 100K1/4 (mandatory expungement of decriminalized-amount marijuana offenses; court SHALL order within 30 days; St. 2022, c. 180, § 23)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100K1~4', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100L (expungement process — petition, DA objection window, hearing, written findings; scrubs police logs)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100L', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100N (expungement — sealing pending petition / related process)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100N', retrievedOn: '2026-07-18' },
-      { id: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform; §§ 186-188 cut the § 100A waits to 3/7 and added the resisting-arrest carve-out, § 195 created §§ 100E-100U, § 239 delayed them 6 months). PDF at research/statutes/MA/St2018-c69-2026-07-18.pdf', url: 'https://malegislature.gov/Laws/SessionLaws/Acts/2018/Chapter69', retrievedOn: '2026-07-18' },
+      { id: 'St. 2018, c. 69 (An Act Relative to Criminal Justice Reform; §§ 186-188 cut the § 100A waits to 3/7 and added the resisting-arrest carve-out, § 195 created §§ 100E-100U; signed Apr 13, 2018, these sections effective Oct 13, 2018 per § 239). PDF at research/statutes/MA/St2018-c69-2026-07-18.pdf', url: 'https://malegislature.gov/Laws/SessionLaws/Acts/2018/Chapter69', retrievedOn: '2026-07-18' },
+      { id: 'Trial Court Law Libraries — M.G.L. c. 276 section index (per-section effective-date lines; states "St.2018, c. 69, §§ 186 to 192, effective October 13, 2018" for § 100A and § 195 for §§ 100E-100U). Cited for the effective-date line, not the "unofficial" text. Screenshot at research/statutes/MA/ma-c276-effective-dates-2026-07-18.png', url: 'https://www.mass.gov/lists/mass-general-laws-c276', retrievedOn: '2026-07-18' },
       { id: 'M.G.L. c. 276 § 100B (juvenile record sealing) — cite-only, pending pull', url: null, retrievedOn: null },
       { id: 'M.G.L. c. 127 § 152 (sealing of pardoned convictions — Healey marijuana pardon) — cite-only, pending pull', url: null, retrievedOn: null },
       { id: 'Commonwealth v. J.F., 491 Mass. 824 (2023) (mandatory § 100C sealing at disposition for acquittal/no-PC)', url: null, retrievedOn: null },
-      { id: 'Commonwealth v. Pon (good-cause / "substantial justice" standard for discretionary § 100C sealing) — reporter cite pending pull', url: null, retrievedOn: null },
+      { id: 'Commonwealth v. Pon, 469 Mass. 296 (2014) (good-cause / "substantial justice" standard for discretionary § 100C sealing)', url: 'https://masscases.com/cases/sjc/469/469mass296.html', retrievedOn: '2026-07-18' },
       { id: 'In the Matter of Expungement, 489 Mass. 67 (2022) (expungement is discretionary "best interests of justice" even when eligible — never automatic)', url: null, retrievedOn: null },
     ],
     rules: {
@@ -7282,9 +7283,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         dismissed_100c_ma: {
           status: 'eligible',
           title: 'Dismissed — You Can Seal It Now, No Waiting Period',
-          message: 'Because your case was dismissed or nolle prossed, you can petition the court to seal it right away under § 100C — no waiting period. It is a court petition, and the judge weighs whether sealing serves "substantial justice" under the good-cause standard of Commonwealth v. Pon — so it is discretionary, not automatic. It is a good option for people who do not want to wait out the administrative timeline. One honest caveat: after a later guilty verdict, sealed records can become available again to probation and (except for not-guilty/no-bill/no-probable-cause cases) to a court for sentencing. Greater Boston Legal Services can help you file.',
+          message: 'Because your case was dismissed or nolle prossed, you can petition the court to seal it right away under § 100C — no waiting period. It is a court petition, and the judge weighs whether sealing serves "substantial justice" under the good-cause standard of Commonwealth v. Pon, 469 Mass. 296 (2014) — so it is discretionary, not automatic. It is a good option for people who do not want to wait out the administrative timeline. One honest caveat: after a later guilty verdict, sealed records can become available again to probation and (except for not-guilty/no-bill/no-probable-cause cases) to a court for sentencing. Greater Boston Legal Services can help you file.',
           remedy: 'Court Petition to Seal a Non-Conviction (§ 100C) — no wait, "substantial justice" standard',
-          citation: 'M.G.L. c. 276 § 100C; Commonwealth v. Pon'
+          citation: 'M.G.L. c. 276 § 100C; Commonwealth v. Pon, 469 Mass. 296 (2014)'
         },
         eligible_seal_ma: {
           status: 'eligible',

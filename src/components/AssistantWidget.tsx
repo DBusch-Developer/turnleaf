@@ -124,8 +124,8 @@ export default function AssistantWidget() {
           boxShadow: '0 8px 32px rgba(77, 124, 89, 0.35)',
         }}
       >
-        <img src="/willow/welcoming.png" alt="" width={46} height={46}
-          style={{ width: 46, height: 46, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 18%', background: 'var(--color-primary-light)', border: '2px solid rgba(255,255,255,0.7)' }} />
+        <img src="/willow/welcoming.png" alt="" width={56} height={56}
+          style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 15%', background: 'var(--color-primary-light)', border: '2px solid rgba(255,255,255,0.7)' }} />
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
           <MessageCircle size={16} /> Ask Willow
         </span>
@@ -138,14 +138,14 @@ export default function AssistantWidget() {
       className="glass-card animate-slide-up"
       style={{
         position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 50,
-        width: 'min(370px, calc(100vw - 2rem))', maxHeight: '70vh',
+        width: 'min(460px, calc(100vw - 2rem))', maxHeight: '78vh',
         display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0,
       }}
     >
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.85rem 1rem', borderBottom: '1px solid var(--color-card-border)' }}>
-        <img src={FACE[face]} alt="Willow" width={52} height={52}
-          style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 18%', background: 'var(--color-primary-light)', border: '2px solid var(--color-card-border)' }} />
+        <img src={FACE[face]} alt="Willow" width={64} height={64}
+          style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 15%', background: 'var(--color-primary-light)', border: '2px solid var(--color-card-border)' }} />
         <div style={{ flex: 1 }}>
           <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, color: 'var(--color-text)' }}>Willow</div>
           <div style={{ fontSize: '0.7rem', color: 'var(--color-text-light)' }}>Turnleaf Assistant</div>
@@ -179,11 +179,11 @@ export default function AssistantWidget() {
       {/* Message list */}
       <div ref={listRef} style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {isFresh ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          <div style={{ margin: '-0.75rem -1rem 0.25rem' }}>
             <img
               src="/willow/intro-card.png"
               alt="Willow, the Turnleaf assistant — a friendly guide to understanding your options with clear, honest answers grounded in verified law."
-              style={{ width: '100%', borderRadius: '14px', border: '1px solid var(--color-card-border)', display: 'block' }}
+              style={{ width: '100%', display: 'block', borderBottom: '1px solid var(--color-card-border)' }}
             />
           </div>
         ) : (

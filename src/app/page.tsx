@@ -6,9 +6,9 @@ import EligibilityWizard, { ConvictionRecord } from '../components/EligibilityWi
 import ResultsDisplay from '../components/ResultsDisplay';
 import CheckrReportDemo from '../components/CheckrReportDemo';
 import { StateRuleConfig } from '../data/fallbackRules';
-import type { ScreeningResultItem } from '../data/multiState';
+import { groupByState, type ScreeningResultItem } from '../data/multiState';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
-import { ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight, BookOpen, ExternalLink } from 'lucide-react';
 import { usePublishScreen, type WillowScreen } from '../components/AssistantContext';
 
 // The four steps of the screening, in order. The number is not decoration —
@@ -21,9 +21,13 @@ const STEPS = [
 ];
 
 export default function Home() {
-  const [selectedStateCode, setSelectedStateCode] = useState<string | null>(null);
-  const [stateConfig, setStateConfig] = useState<StateRuleConfig | null>(null);
-  const [comingSoon, setComingSoon] = useState<ComingSoonConfig | null>(null);
+  // A screening session holds a SET of states, not one. Each resolves into
+  // exactly one of the two maps below: a screenable StateRuleConfig, or an
+  // in-research ComingSoonConfig. Everything downstream (wizard, results,
+  // Willow) is derived by filtering these against selectedStateCodes.
+  const [selectedStateCodes, setSelectedStateCodes] = useState<string[]>([]);
+  const [configs, setConfigs] = useState<Record<string, StateRuleConfig>>({});
+  const [comingSoonByState, setComingSoonByState] = useState<Record<string, ComingSoonConfig>>({});
   // NOTE: the screened `records` state was removed with ResultsDisplay's
   // hardcoded waiting-period table — nothing reads it now. When the engine
   // starts reporting which period decided a result, the display will need the
@@ -91,47 +95,51 @@ export default function Home() {
    * waiting" from "the fetch came back empty", so a real failure still reaches
    * the error screen instead of spinning forever.
    */
-  const isOpeningState = Boolean(selectedStateCode) && !stateConfig && !comingSoon && !loadFailed;
+  const isOpeningState =
+    selectedStateCodes.length > 0 &&
+    !loadFailed &&
+    selectedStateCodes.some(c => !configs[c] && !comingSoonByState[c]);
 
-  // Fetch state config when selected
+  // Fetch every selected state's config that we don't already hold. Runs
+  // whenever the selection or either map changes; it only fetches the codes
+  // still unresolved, so once all are in the maps it settles (no loop).
   useEffect(() => {
-    if (!selectedStateCode) {
-      setStateConfig(null);
-      setComingSoon(null);
+    if (selectedStateCodes.length === 0) {
       setLoadFailed(false);
       return;
     }
-    
+    const toFetch = selectedStateCodes.filter(c => !configs[c] && !comingSoonByState[c]);
+    if (loadFailed || toFetch.length === 0) return;
+
     let cancelled = false;
-    async function fetchStateConfig() {
-      setLoadFailed(false);
+    (async () => {
       try {
-        const res = await fetch(`/api/states/${selectedStateCode}`);
+        const responses = await Promise.all(
+          toFetch.map(async (code) => {
+            const res = await fetch(`/api/states/${code}`);
+            if (!res.ok) throw new Error(`Failed to load ${code}`);
+            return { code, data: await res.json() };
+          })
+        );
         if (cancelled) return;
-        if (res.ok) {
-          const data = await res.json();
-          if (cancelled) return;
-          if (data && data.comingSoon) {
-            setComingSoon(data as ComingSoonConfig);
-            setStateConfig(null);
-          } else {
-            setStateConfig(data);
-            setComingSoon(null);
-          }
-        } else {
-          setLoadFailed(true);
+        const nextConfigs: Record<string, StateRuleConfig> = {};
+        const nextComingSoon: Record<string, ComingSoonConfig> = {};
+        for (const { code, data } of responses) {
+          if (data && data.comingSoon) nextComingSoon[code] = data as ComingSoonConfig;
+          else nextConfigs[code] = data as StateRuleConfig;
         }
+        if (Object.keys(nextConfigs).length) setConfigs(prev => ({ ...prev, ...nextConfigs }));
+        if (Object.keys(nextComingSoon).length) setComingSoonByState(prev => ({ ...prev, ...nextComingSoon }));
       } catch (err) {
         if (cancelled) return;
         console.error('Failed to load state config:', err);
         setLoadFailed(true);
       }
-    }
-    fetchStateConfig();
-    // A second choice while the first is in flight must not have its response
+    })();
+    // A newer selection while a fetch is in flight must not have its response
     // land on top of the newer one.
     return () => { cancelled = true; };
-  }, [selectedStateCode]);
+  }, [selectedStateCodes, configs, comingSoonByState, loadFailed]);
 
   // Load a Checkr mock report (FR-22)
   const closeCheckr = () => {
@@ -141,9 +149,13 @@ export default function Home() {
     }
   };
 
-  const handleLoadMockReport = (mockRecords: ConvictionRecord[], stateCode: string) => {
+  // The Checkr handoff derives which states to screen from the records
+  // themselves — a CA+TX report opens a CA+TX session, so each charge is
+  // screened under its own state's law (the headline multi-state fix).
+  const handleLoadMockReport = (mockRecords: ConvictionRecord[]) => {
+    const codes = groupByState(mockRecords, r => r.state).map(g => g.state);
     setPrepopulatedRecords(mockRecords);
-    setSelectedStateCode(stateCode);
+    setSelectedStateCodes(codes);
     setResults(null); // Clear previous results
     closeCheckr();
   };
@@ -162,11 +174,12 @@ export default function Home() {
    * `showSelector` stays true so the list is what they land on.
    */
   const handleReset = () => {
-    setSelectedStateCode(null);
-    setStateConfig(null);
-    setComingSoon(null);
+    setSelectedStateCodes([]);
+    setConfigs({});
+    setComingSoonByState({});
     setPrepopulatedRecords([]);
     setResults(null);
+    setLoadFailed(false);
     setShowSelector(true);
   };
 
@@ -177,7 +190,7 @@ export default function Home() {
   };
 
   // The landing page: hero, then the four steps, then the way in.
-  const onLanding = !selectedStateCode && !showSelector;
+  const onLanding = selectedStateCodes.length === 0 && !showSelector;
 
   // The landing shows the oak in its own hero band. Every screen past it —
   // states, wizard, results — sits directly on the full-page photo instead, so
@@ -192,19 +205,49 @@ export default function Home() {
   // question to the state on screen instead of asking "which state?" first.
   const publishScreen = usePublishScreen();
   useEffect(() => {
+    const hasScreenable = selectedStateCodes.some(c => configs[c]);
+    const hasResearching = selectedStateCodes.some(c => comingSoonByState[c]);
     const screen: WillowScreen = onLanding
       ? 'landing'
       : isOpeningState
         ? 'loading'
-        : comingSoon
-          ? 'coming-soon'
-          : stateConfig
-            ? (results ? 'results' : 'wizard')
-            : 'selector';
-    const stateName =
-      stateConfig?.name ?? states.find(s => s.code === selectedStateCode)?.name ?? null;
-    publishScreen({ selectedStateCode, stateName, screen });
-  }, [onLanding, isOpeningState, comingSoon, stateConfig, results, selectedStateCode, states, publishScreen]);
+        : results
+          ? 'results'
+          : hasScreenable
+            ? 'wizard'
+            : hasResearching
+              ? 'coming-soon'
+              : 'selector';
+    const stateNames = selectedStateCodes.map(
+      c => configs[c]?.name ?? comingSoonByState[c]?.name ?? states.find(s => s.code === c)?.name ?? c
+    );
+    // Singular fields carry a value ONLY when exactly one state is selected;
+    // with several, Willow falls back to asking which state — that's intended.
+    const single = selectedStateCodes.length === 1;
+    publishScreen({
+      selectedStateCode: single ? selectedStateCodes[0] : null,
+      stateName: single ? stateNames[0] : null,
+      selectedStateCodes,
+      stateNames,
+      screen,
+    });
+  }, [onLanding, isOpeningState, results, selectedStateCodes, configs, comingSoonByState, states, publishScreen]);
+
+  // Partition the session: which selected states are screenable (have a config)
+  // vs. still in research (coming-soon). The wizard screens the screenable ones;
+  // the in-research ones get a compact inline note.
+  const screenableCodes = selectedStateCodes.filter(c => configs[c]);
+  const researchingCodes = selectedStateCodes.filter(c => comingSoonByState[c]);
+  const screenableConfigs = Object.fromEntries(screenableCodes.map(c => [c, configs[c]]));
+  // One in-research state and nothing else must look exactly like today: the
+  // full-screen honest panel, not the compact inline note.
+  const soloComingSoon =
+    selectedStateCodes.length === 1 ? comingSoonByState[selectedStateCodes[0]] : undefined;
+  // Results are grouped by state, each section carrying its own state's config.
+  const sections = results
+    ? groupByState(results as ScreeningResultItem[], r => r.state)
+        .map(g => ({ stateConfig: configs[g.state], results: g.items }))
+    : [];
 
   return (
     <div style={{
@@ -304,7 +347,7 @@ export default function Home() {
            * The outer animate-fade-in went with it: the card already has its
            * own entrance, and two animations on the same element stacking is
            * what read as choppy. */}
-        {!selectedStateCode || isOpeningState ? (
+        {selectedStateCodes.length === 0 || isOpeningState ? (
           /* Step 1: choose a state */
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <button
@@ -318,29 +361,57 @@ export default function Home() {
               states={states}
               dataSource={dataSource}
               loading={loadingStates}
-              pendingCode={isOpeningState ? selectedStateCode : null}
-              onSelectState={setSelectedStateCode}
+              pendingCode={isOpeningState ? (selectedStateCodes[0] ?? null) : null}
+              onSelectState={(code) => setSelectedStateCodes([code])}
             />
           </div>
-        ) : comingSoon ? (
-          /* State not yet researched: honest in-research panel with real referrals */
-          <ComingSoonPanel config={comingSoon} onReset={handleReset} />
-        ) : stateConfig ? (
-          /* Eligibility check flow */
+        ) : soloComingSoon ? (
+          /* Single in-research state: honest full-screen panel, identical to before */
+          <ComingSoonPanel config={soloComingSoon} onReset={handleReset} />
+        ) : results ? (
+          /* Results: one stacked section per state, each under its own law */
+          <ResultsDisplay sections={sections} onReset={handleReset} />
+        ) : screenableCodes.length > 0 ? (
+          /* Eligibility check flow — screens each screenable state; any
+             in-research states in the same session get a compact inline note. */
           <div>
-            {!results ? (
-              <EligibilityWizard
-                configs={{ [stateConfig.code]: stateConfig }}
-                prepopulatedRecords={prepopulatedRecords}
-                onScreeningComplete={handleScreeningComplete}
-                onReset={handleReset}
-              />
-            ) : (
-              <ResultsDisplay
-                sections={[{ stateConfig, results: results as ScreeningResultItem[] }]}
-                onReset={handleReset}
-              />
+            {researchingCodes.length > 0 && (
+              <div style={{ maxWidth: '800px', margin: '0 auto 1rem' }}>
+                {researchingCodes.map(c => {
+                  const cs = comingSoonByState[c];
+                  const ref = cs.referrals[0];
+                  return (
+                    <div
+                      key={c}
+                      className="glass-card"
+                      style={{ padding: '0.9rem 1.1rem', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem' }}
+                    >
+                      <BookOpen size={18} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
+                      <span style={{ flex: 1, color: 'var(--color-text-muted)' }}>
+                        <strong style={{ color: 'var(--color-text)' }}>{cs.name}</strong> is still in research — we won&apos;t screen it.
+                      </span>
+                      {ref && (
+                        <a
+                          href={ref.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-secondary"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap' }}
+                        >
+                          {ref.name} <ExternalLink size={14} />
+                        </a>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             )}
+            <EligibilityWizard
+              configs={screenableConfigs}
+              prepopulatedRecords={prepopulatedRecords}
+              onScreeningComplete={handleScreeningComplete}
+              onReset={handleReset}
+            />
           </div>
         ) : (
           /* Error Fallback state */

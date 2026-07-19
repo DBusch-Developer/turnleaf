@@ -7,14 +7,18 @@ import AssistantWidget from './AssistantWidget';
 export type WillowScreen = 'landing' | 'selector' | 'loading' | 'coming-soon' | 'wizard' | 'results';
 
 export interface ScreenContextValue {
-  selectedStateCode: string | null;
-  stateName: string | null;
+  selectedStateCode: string | null;   // populated only when exactly one state
+  stateName: string | null;           // populated only when exactly one state
+  selectedStateCodes: string[];
+  stateNames: string[];
   screen: WillowScreen;
 }
 
 const DEFAULT_SCREEN: ScreenContextValue = {
   selectedStateCode: null,
   stateName: null,
+  selectedStateCodes: [],
+  stateNames: [],
   screen: 'landing',
 };
 

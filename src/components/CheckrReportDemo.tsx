@@ -5,8 +5,9 @@ import { ConvictionRecord } from './EligibilityWizard';
 import { X, ChevronDown, CheckCircle2, AlertTriangle, ArrowRight, Fingerprint, Search, ShieldCheck, Landmark } from 'lucide-react';
 
 interface CheckrReportDemoProps {
-  /** Hand the report's records to Turnleaf's screening engine. */
-  onRunScreening: (records: ConvictionRecord[], stateCode: string) => void;
+  /** Hand the report's records to Turnleaf's screening engine. The engine
+   *  derives which states to screen from the records themselves. */
+  onRunScreening: (records: ConvictionRecord[]) => void;
   onClose: () => void;
 }
 
@@ -109,7 +110,7 @@ export default function CheckrReportDemo({ onRunScreening, onClose }: CheckrRepo
       prison_sentenced: r.prison_sentenced || false,
       restitution_paid: r.restitution_paid !== undefined ? r.restitution_paid : true,
     }));
-    onRunScreening(records, report.records[0]?.state || 'CA');
+    onRunScreening(records);
   };
 
   const consider = report?.status === 'consider';

@@ -7020,8 +7020,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // MASSACHUSETTS — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md
+  // MASSACHUSETTS — STATUTE-VERIFIED 2026-07-18 against malegislature.gov texts
+  // of M.G.L. c. 276 §§ 100A, 100C, 100E-100L, 100N.
+  // Source: research/waves/Turnleaf_Wave4_Draft_Package.md + Diana's 7/18 pull.
   //
   // THE FLAGSHIP QUIRK, and the best UX in the country: administrative SEALING
   // of a conviction is ONE FORM, BY MAIL, FREE, NO COURT, and NON-DISCRETIONARY
@@ -7033,15 +7034,21 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   // 100U, narrow). Expungement is the exception (offence before 21st birthday,
   // max 2 lifetime, ~20 excluded categories); sealing is the product.
   //
-  // Waits from disposition or release (whichever later), reset by intervening
-  // convictions/incarceration: misdemeanours 3 yrs, felonies 7, sex offences 15
-  // (and registry-required cannot seal at all).
+  // § 100A waits are a LOOKBACK from the request date, NOT a reset-from-anchor:
+  // the disposition + any incarceration/custody must have ended ≥ 3 yrs (misd) /
+  // 7 (felony) ago, AND no MA guilty finding in the preceding 3/7 yrs (a new
+  // guilty finding pushes the request out; NG/dismissal/nolle/no-bill do not).
+  // Sex offences: 15 yrs and no registration duty anywhere; ever level 2/3 =
+  // never. Whole-record § 100A(5) block: a firearms-licensing / c. 268A ethics /
+  // c. 268 public-justice conviction ANYWHERE on the record blocks the whole
+  // administrative request (100C and the 100K error path are unaffected).
   // ==========================================================================
   MA: {
     code: 'MA',
     name: 'Massachusetts',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave4_Draft_Package.md',
     terminology:
       'Massachusetts has two remedies, and the common one is unusually easy. SEALING hides your '
@@ -7051,34 +7058,77 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       + 'is no discretion to say no. EXPUNGEMENT permanently destroys the record but is deliberately '
       + 'narrow, mostly for offenses committed before the person turned 21. For most people, sealing '
       + 'is the whole answer.',
-    keyDates: [],
+    keyDates: [
+      {
+        label: '2018 criminal justice reform',
+        date: '2018',
+        kind: 'effective',
+        note: 'Cut the § 100A sealing waits to 3 years (misdemeanors) / 7 years (felonies) and created the expungement remedy (§§ 100E-100U). Year given; the exact effective day and session-law chapter are not pinned here.',
+      },
+      {
+        label: 'Current § 100I expungement structure (2-record limit)',
+        date: '2020',
+        kind: 'effective',
+        note: 'St. 2020, c. 253, § 120 set the current § 100I text, including the max-2-records structure. The session law was approved Dec 31, 2020; the exact § 120 effective day is unconfirmed — see open questions.',
+      },
+      {
+        label: '§ 100K1/4 mandatory marijuana expungement',
+        date: '2022-11-09',
+        kind: 'effective',
+        note: 'St. 2022, c. 180, § 23: the court SHALL order expungement of decriminalized-amount marijuana offenses within 30 days of the petition, notwithstanding §§ 100I and 100J.',
+      },
+      {
+        label: 'Governor Healey blanket marijuana-possession pardon',
+        date: '2024-03-13',
+        kind: 'operative',
+        note: 'Blanket pardon of prior misdemeanor marijuana-possession convictions for people 21+ on that date; pardoned convictions are sealed under c. 127, § 152.',
+      },
+    ],
     openQuestions: [
       {
         question:
-          'Confirm the current Petition to Seal form name/number. Wave 4 gives "TC-005" but flags it. Verify on the mass.gov "Seal your criminal record" page along with the current Commissioner of Probation mailing address.',
+          'Confirm the current Petition to Seal form name/number (Wave 4 gives "TC-005") and the Commissioner of Probation mailing address on the mass.gov "Seal your criminal record" page. Phone/site check.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm which offense categories are ineligible for administrative sealing under § 100A. Wave 4 flags the list (firearms-licensing statutes, some state-ethics offenses). The tree asks a person whether their offense is in one of these categories.',
+          'Confirm the iCORI self-request fee (Wave 4: $25, waivable if unaffordable). Phone/site check.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the § 100J expungement exclusion list (~20 categories: ABDW, firearms, OUI, restraining-order violations, sex offenses) and the § 100E-100U mechanics: offense before the 21st birthday, 3-yr misd / 7-yr felony waits, max 2 lifetime, no subsequent cases. The expungement path is disclosed but not fully branched.',
+          'Does a SUBSEQUENT continuance-without-a-finding (CWOF) during someone else\'s § 100A waiting period interrupt it? A CWOF ends in a dismissal and is not a "guilty finding" under condition (3), but confirm with GBLS before asserting it never interrupts.',
         blocksFields: [],
       },
       {
         question:
-          'How are completed diversions and continuances-without-a-finding (CWOF) treated for sealing? Standing call-sheet question. Wave 4 does not detail these.',
+          'Confirm the exact effective date of St. 2020, c. 253, § 120 (the current § 100I 2-record structure) from the session law before encoding a precise day in keyDates.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Recheck the 194th-session expungement-expansion bills (successors to H.4325) after the session ends — the bill has been filed and died three sessions running, so watch rather than assume any change.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Mass. Gen. Laws c. 276 § 100A (administrative sealing of convictions)', url: null, retrievedOn: null },
-      { id: 'Mass. Gen. Laws c. 276 § 100C (court sealing of non-convictions)', url: null, retrievedOn: null },
-      { id: 'Mass. Gen. Laws c. 276 §§ 100E-100U (expungement — narrow)', url: null, retrievedOn: null },
-      { id: 'Mass. Gen. Laws c. 276 § 100J (expungement exclusion list)', url: null, retrievedOn: null },
+      { id: 'M.G.L. c. 276 § 100A (administrative sealing of convictions; 3/7-yr lookback waits; ¶2 reclassification rules; (5) whole-record firearms/ethics/public-justice block)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100A', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100C (non-conviction sealing; mandatory opt-out seal on acquittal/no-bill/no-PC; discretionary court petition on dismissal/nolle — "substantial justice")', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100C', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100E (expungement — definitions; destruction, not concealment)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100E', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100F (expungement of juvenile records before 21)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100F', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100G (expungement of adult convictions before 21)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100G', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100H (expungement of non-conviction records before 21)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100H', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100I (expungement eligibility — before 21, 3/7-yr waits, max 2 records, otherwise-clear-record requirements)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100I', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100J (expungement exclusion list — death/serious-injury, armed, elderly/disabled victims, sex offenses, all c. 265 felonies, firearms, restraining-order violations, c. 265 § 13M, all of c. 90 § 24)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100J', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100K (expungement of records from errors — false ID/identity theft, no-longer-a-crime, LE/witness/court error, fraud on the court; clear-and-convincing)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100K', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100K1/4 (mandatory expungement of decriminalized-amount marijuana offenses; court SHALL order within 30 days; St. 2022, c. 180, § 23)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100K1~4', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100L (expungement process — petition, DA objection window, hearing, written findings; scrubs police logs)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100L', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100N (expungement — sealing pending petition / related process)', url: 'https://malegislature.gov/Laws/GeneralLaws/PartIV/TitleII/Chapter276/Section100N', retrievedOn: '2026-07-18' },
+      { id: 'M.G.L. c. 276 § 100B (juvenile record sealing) — cite-only, pending pull', url: null, retrievedOn: null },
+      { id: 'M.G.L. c. 127 § 152 (sealing of pardoned convictions — Healey marijuana pardon) — cite-only, pending pull', url: null, retrievedOn: null },
+      { id: 'Commonwealth v. J.F., 491 Mass. 824 (2023) (mandatory § 100C sealing at disposition for acquittal/no-PC)', url: null, retrievedOn: null },
+      { id: 'Commonwealth v. Pon (good-cause / "substantial justice" standard for discretionary § 100C sealing) — reporter cite pending pull', url: null, retrievedOn: null },
+      { id: 'In the Matter of Expungement, 489 Mass. 67 (2022) (expungement is discretionary "best interests of justice" even when eligible — never automatic)', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -7088,46 +7138,121 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'seal_ineligible_ma' },
-            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'eligible_court_seal_ma' },
-            { label: 'Acquitted / No probable cause / No-billed', value: 'acquitted', next: 'eligible_auto_seal_ma' },
-            { label: 'Diversion completed / Continuance without a finding', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'special_remedy_ma' },
+            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'dismissed_100c_ma' },
+            { label: 'Acquitted / No probable cause / No-billed', value: 'acquitted', next: 'acquittal_100c_ma' },
+            { label: 'Continuance without a finding (CWOF) / Diversion completed', value: 'deferred', next: 'cwof_ma' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        seal_ineligible_ma: {
-          type: 'boolean',
-          text: 'Was the offense a sex offense that requires you to register, a firearms-licensing offense, or a state-ethics offense?',
-          yes: 'complex_ineligible_ma',
-          no: 'seal_level_ma'
-        },
-        seal_level_ma: {
+        // Special remedies come FIRST because they are not blocked by the § 100A(5)
+        // whole-record bar: marijuana expungement (§ 100K1/4) and the § 100K
+        // error-correction path stand on their own statutes.
+        special_remedy_ma: {
           type: 'choice',
-          field: 'charge_type',
-          text: 'What was the level of the offense?',
+          text: 'A few Massachusetts offenses have their own special path. Does any of these describe your case?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_ma' },
-            { label: 'Felony', value: 'felony', next: 'felony_date_ma' },
-            { label: 'Infraction', value: 'infraction', next: 'misd_date_ma' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_level_ma' }
+            { label: 'It was marijuana possession or cultivation — or a distribution / possession-with-intent charge — in an amount that has since been decriminalized', value: 'marijuana', next: 'marijuana_ma' },
+            { label: 'This record comes from mistaken or false identification or identity theft, a demonstrable error by police / a witness / court staff, or fraud on the court', value: 'error', next: 'error_100k_ma' },
+            { label: 'None of these', value: 'none', next: 'whole_record_gate_ma' }
           ]
         },
+        // § 100A(5) whole-record block — gate one, highest priority. ANY case on
+        // the record, not just this one.
+        whole_record_gate_ma: {
+          type: 'boolean',
+          text: 'Does your record — ANY case on it, not just this one — include a conviction under the firearms licensing laws (c. 140 §§ 121-131H), the state ethics law (c. 268A), or a c. 268 crime against public justice such as perjury, escape, or witness intimidation? (Resisting arrest does NOT count.)',
+          yes: 'whole_record_block_ma',
+          no: 'level_ma'
+        },
+        // Gate two + level, with the § 100A ¶2 pro-user reclassification rules and
+        // the routes to the sex-offense, decriminalized, and expungement branches.
+        // ASKED (no field): several options are outside the charge_type domain.
+        level_ma: {
+          type: 'choice',
+          text: 'How is this offense best described? (Massachusetts reclassifies some offenses in your favor.)',
+          options: [
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_ma' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_ma' },
+            { label: 'It was a felony when I was convicted, but the same conduct is a misdemeanor today', value: 'reduced', next: 'misd_date_ma' },
+            { label: 'A violation of a restraining or harassment-prevention order (c. 209A § 7 or c. 258E § 9)', value: 'ro_violation', next: 'felony_date_ma' },
+            { label: 'Conduct that is no longer a crime in Massachusetts', value: 'decrim', next: 'decrim_seal_ma' },
+            { label: 'A sex offense (one that can require sex-offender registration)', value: 'sex', next: 'sex_registry_ma' },
+            { label: 'The offense happened before my 21st birthday (check expungement)', value: 'under21', next: 'expunge_exclusion_ma' },
+            { label: 'A civil infraction (e.g., a civil motor-vehicle citation)', value: 'infraction', next: 'infraction_ma' },
+            { label: 'I can\'t tell what level it was', value: 'unsure', next: 'misd_date_ma' }
+          ]
+        },
+        // § 100A misdemeanor wait — a 3-year LOOKBACK, not a reset-from-anchor.
         misd_date_ma: {
           type: 'date',
-          text: 'Which came LATER: the disposition of the case, or your release from any incarceration? Enter that date. (A later conviction or incarceration resets this clock.)',
+          text: 'Enter the date the case ended — counting the LATER of the disposition or the end of any incarceration or custody. (The 3-year wait also requires no guilty finding anywhere in Massachusetts in the last 3 years — motor-vehicle offenses fined $50 or less don\'t count — plus a sworn statement that you have no out-of-state or federal convictions and were not imprisoned anywhere during the window.)',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'the later of disposition or release (M.G.L. c. 276 § 100A — misdemeanours; reset by intervening convictions/incarceration)' },
+            period: { amount: 3, unit: 'years', anchor: 'the later of disposition or end of incarceration/custody (M.G.L. c. 276 § 100A(1),(3),(4) — misdemeanor; 3-year lookback with no MA guilty finding in the window)' },
             nextPass: 'eligible_seal_ma',
             nextFail: 'waiting_ma'
           }
         },
+        // § 100A felony wait — 7-year lookback.
         felony_date_ma: {
           type: 'date',
-          text: 'Which came LATER: the disposition of the case, or your release from any incarceration? Enter that date. (A later conviction or incarceration resets this clock.)',
+          text: 'Enter the date the case ended — counting the LATER of the disposition or the end of any incarceration or custody. (The 7-year wait also requires no guilty finding anywhere in Massachusetts in the last 7 years — motor-vehicle offenses fined $50 or less don\'t count — plus a sworn statement that you have no out-of-state or federal convictions and were not imprisoned anywhere during the window.)',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'the later of disposition or release (M.G.L. c. 276 § 100A — felonies; reset by intervening convictions/incarceration)' },
+            period: { amount: 7, unit: 'years', anchor: 'the later of disposition or end of incarceration/custody (M.G.L. c. 276 § 100A(2),(3),(4) — felony; 7-year lookback with no MA guilty finding in the window)' },
             nextPass: 'eligible_seal_ma',
             nextFail: 'waiting_ma'
+          }
+        },
+        // Sex offenses (§ 100A ¶2(6)): ever level 2/3 = never; active duty to
+        // register = waiting-with-conditions; otherwise a 15-year clock.
+        sex_registry_ma: {
+          type: 'choice',
+          text: 'For this sex offense, what is your registration status?',
+          options: [
+            { label: 'I have EVER been classified as a Level 2 or Level 3 sex offender', value: 'level23', next: 'sex_ineligible_ma' },
+            { label: 'I currently have a duty to register as a sex offender (in Massachusetts or any other state)', value: 'active', next: 'sex_waiting_ma' },
+            { label: 'I have no current duty to register and was never classified Level 2 or Level 3', value: 'clear', next: 'sex_date_ma' }
+          ]
+        },
+        sex_date_ma: {
+          type: 'date',
+          text: 'Enter the LATEST of: the case disposition, the end of any incarceration, or the end of any supervision or probation. (A sex offense seals only 15 years after that, and only while no registration duty exists anywhere.)',
+          validation: {
+            period: { amount: 15, unit: 'years', anchor: 'the latest of disposition, end of incarceration, or end of supervision/probation (M.G.L. c. 276 § 100A ¶2(6) — sex offense; 15 years and no registration duty)' },
+            nextPass: 'sex_eligible_ma',
+            nextFail: 'sex_waiting_ma'
+          }
+        },
+        // Expungement branch (§§ 100E-100L): § 100J exclusions first, then the
+        // § 100I wait (7 yrs any felony / 3 yrs misdemeanors only).
+        expunge_exclusion_ma: {
+          type: 'boolean',
+          text: 'For expungement, is the offense any of these? Anything that caused or was meant to cause death or serious injury; anything committed while armed with a dangerous weapon; an offense against an elderly or disabled victim; any sex offense; ANY felony against the person (c. 265); a firearms offense (c. 140 §§ 121-131Q, or c. 269 § 10(a)-(d) or § 10E); a restraining-order violation; assault and battery on a family or household member (c. 265 § 13M); or ANY offense under c. 90 § 24 — which sweeps in not just OUI but also negligent operation and leaving the scene?',
+          yes: 'expunge_excluded_ma',
+          no: 'expunge_level_ma'
+        },
+        expunge_level_ma: {
+          type: 'boolean',
+          text: 'For the expungement waiting period, is any offense you would petition to expunge a felony?',
+          yes: 'expunge_felony_date_ma',
+          no: 'expunge_misd_date_ma'
+        },
+        expunge_felony_date_ma: {
+          type: 'date',
+          text: 'Enter the date the offense(s) ended — counting the end of any incarceration, custody, OR probation. (Expungement needs 7 years since then when any offense is a felony.)',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'end of the offenses including incarceration, custody, or probation (M.G.L. c. 276 § 100I — 7 years when any petitioned offense is a felony)' },
+            nextPass: 'expunge_eligible_ma',
+            nextFail: 'expunge_waiting_ma'
+          }
+        },
+        expunge_misd_date_ma: {
+          type: 'date',
+          text: 'Enter the date the offense(s) ended — counting the end of any incarceration, custody, OR probation. (Expungement needs 3 years since then when every offense is a misdemeanor.)',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'end of the offenses including incarceration, custody, or probation (M.G.L. c. 276 § 100I — 3 years when all petitioned offenses are misdemeanors)' },
+            nextPass: 'expunge_eligible_ma',
+            nextFail: 'expunge_waiting_ma'
           }
         }
       },
@@ -7139,54 +7264,117 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (iCORI)',
           citation: 'M.G.L. c. 276 §§ 100A, 100C (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Diversion and CWOF Cases Need a Person',
-          message: 'Massachusetts sealing rules are screened here for convictions and non-convictions. How a completed diversion or a continuance without a finding (CWOF) is treated is not something this screening has researched in detail, and we would rather point you to someone than guess — these often resolve favorably, so it is worth asking. Greater Boston Legal Services has strong CORI self-help materials and can tell you how your disposition is treated.',
-          remedy: 'Consult Legal Aid (Diversion / CWOF Not Yet Detailed)',
-          citation: 'M.G.L. c. 276 § 100A (treatment of diversions not yet detailed)'
-        },
-        eligible_auto_seal_ma: {
+        cwof_ma: {
           status: 'eligible',
-          title: 'Acquittal or No-Bill — Sealed Automatically',
-          message: 'Because your case ended in an acquittal, a finding of no probable cause, or a no-bill, Massachusetts seals it AUTOMATICALLY at disposition under § 100C — there is nothing you need to do. If your record still shows it, you can ask the court to confirm the sealing was applied. An iCORI self-request will let you check what your record shows.',
-          remedy: 'Automatic Court Sealing (§ 100C) — already applied',
-          citation: 'M.G.L. c. 276 § 100C'
+          title: 'A CWOF Ends in a Dismissal — Two Good Paths',
+          message: 'A continuance without a finding (CWOF) or a completed diversion ends in a DISMISSAL, not a conviction — Massachusetts treats it as a non-conviction disposition (§ 100E\'s scheme; § 100A ¶2(3)). That gives you two routes, and you can pick. Right now: petition the court to seal it under § 100C with NO waiting period (the judge weighs whether sealing serves "substantial justice," Commonwealth v. Pon). Or, once 3 years (misdemeanor-level) or 7 years (felony-level) have passed, mail the § 100A form to the Commissioner of Probation for near-automatic administrative sealing. One honest caveat: a later guilty verdict can make even a sealed record available again to probation and, except for not-guilty/no-bill/no-probable-cause cases, to a court for sentencing. Greater Boston Legal Services can help you choose and file.',
+          remedy: 'Seal now via § 100C (no wait), or mail the § 100A form after the 3/7-year mark',
+          citation: 'M.G.L. c. 276 §§ 100C, 100A ¶2(3); 100E'
         },
-        eligible_court_seal_ma: {
+        acquittal_100c_ma: {
+          status: 'eligible',
+          title: 'Acquittal or No-Bill — the Commissioner MUST Seal',
+          message: 'Because your case ended in an acquittal, a finding of no probable cause, or a no-bill, Massachusetts law says the Commissioner SHALL seal it at disposition under § 100C — sealing is mandatory here (the statute, confirmed in Commonwealth v. J.F., 491 Mass. 824 (2023)). One nuance worth knowing: this sealing is OPT-OUT. If for some reason you need the record to stay open — for example, to bring a civil suit over the arrest — you can ask in writing that it NOT be sealed. If your record still shows the case, you can ask the court to confirm the sealing was applied; an iCORI self-request lets you check.',
+          remedy: 'Mandatory § 100C sealing at disposition (opt-out on written request)',
+          citation: 'M.G.L. c. 276 § 100C; Commonwealth v. J.F., 491 Mass. 824 (2023)'
+        },
+        dismissed_100c_ma: {
           status: 'eligible',
           title: 'Dismissed — You Can Seal It Now, No Waiting Period',
-          message: 'Because your case was dismissed or nolle prossed, you can petition the court to seal it right away under § 100C — no waiting period. It is a court petition (the judge weighs whether sealing serves "substantial justice"), which makes it a good option for people who do not want to wait out the administrative timeline. This is separate from the mail-in administrative sealing that applies to convictions. Greater Boston Legal Services can help you file.',
-          remedy: 'Court Petition to Seal a Non-Conviction (§ 100C) — no wait',
-          citation: 'M.G.L. c. 276 § 100C'
+          message: 'Because your case was dismissed or nolle prossed, you can petition the court to seal it right away under § 100C — no waiting period. It is a court petition, and the judge weighs whether sealing serves "substantial justice" under the good-cause standard of Commonwealth v. Pon — so it is discretionary, not automatic. It is a good option for people who do not want to wait out the administrative timeline. One honest caveat: after a later guilty verdict, sealed records can become available again to probation and (except for not-guilty/no-bill/no-probable-cause cases) to a court for sentencing. Greater Boston Legal Services can help you file.',
+          remedy: 'Court Petition to Seal a Non-Conviction (§ 100C) — no wait, "substantial justice" standard',
+          citation: 'M.G.L. c. 276 § 100C; Commonwealth v. Pon'
         },
         eligible_seal_ma: {
           status: 'eligible',
           title: 'Mail One Form — They Cannot Say No',
-          message: 'This is the good news, and it is genuinely simple. Based on your dates, you can seal this conviction administratively under § 100A — and that means ONE form, mailed to the Commissioner of Probation, with no fee, no court, and no hearing. Once the wait is met (3 years for a misdemeanor, 7 for a felony, from the later of your disposition or release), the Commissioner MUST seal it. There is no discretion and no reason they can give to refuse. Mail the Petition to Seal to the Commissioner of Probation, One Ashburton Place, Room 405, Boston, MA 02108. That is the whole process for most people. Greater Boston Legal Services has the current form and a plain-language walkthrough.',
+          message: 'This is the good news, and it is genuinely simple. Based on your dates, you can seal this conviction administratively under § 100A — ONE form, mailed to the Commissioner of Probation, with no fee, no court, and no hearing. Once the wait is met — 3 years for a misdemeanor, 7 for a felony, measured so the disposition and any incarceration or custody ended at least that long ago — the Commissioner MUST seal it, with no discretion to refuse. Two conditions ride along, both about your recent record rather than this case: no guilty finding anywhere in Massachusetts in the last 3 (or 7) years — a motor-vehicle offense fined $50 or less does not count — and you will sign a statement that you have no out-of-state or federal convictions and were not imprisoned anywhere during the window. Mail the Petition to Seal to the Commissioner of Probation, One Ashburton Place, Room 405, Boston, MA 02108. Greater Boston Legal Services has the current form and a plain-language walkthrough.',
           remedy: 'Mail the Petition to Seal to the Commissioner of Probation (§ 100A) — free, non-discretionary',
-          citation: 'M.G.L. c. 276 § 100A'
+          citation: 'M.G.L. c. 276 § 100A(1)-(4)'
         },
         waiting_ma: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Massachusetts administrative sealing comes 3 years after a misdemeanor or 7 years after a felony, measured from the later of your disposition or your release from any incarceration. Based on your dates, that has not run yet — and note that a later conviction or incarceration resets the clock. The good news for when you get there: sealing is a single mailed form, free, with no court and no discretion. Staying case-free is what gets you to it.',
-          remedy: 'Wait for the period, then mail one form (no fee, no court)',
-          citation: 'M.G.L. c. 276 § 100A'
+          message: 'Massachusetts administrative sealing comes 3 years after a misdemeanor or 7 years after a felony, measured so that the disposition and any incarceration or custody ended at least that long ago. Based on your dates, that has not run yet. This is a lookback, not a clock that resets: it does not restart from zero, but a NEW guilty finding in Massachusetts pushes your request out until you again have 3 (or 7) clean years — subsequent cases that end in not guilty, dismissal, nolle prosequi, or no-bill do NOT interrupt you (§ 100A ¶2(3)). The good news for when you get there: sealing is a single mailed form, free, with no court and no discretion.',
+          remedy: 'Wait out the 3/7-year lookback, then mail one form (no fee, no court)',
+          citation: 'M.G.L. c. 276 § 100A(1)-(4)'
         },
-        complex_ineligible_ma: {
-          status: 'complex',
-          title: 'This Offense Category Needs a Closer Look',
-          message: 'A sex offense that requires registration cannot be sealed while the registration duty continues (and sex offenses have a longer 15-year track even when sealable), and firearms-licensing and state-ethics offenses have their own limits on administrative sealing. Because these categories are specific and the rules differ within them, we are not going to give you a flat yes or no — it is worth having someone look. Greater Boston Legal Services handles exactly these situations and can tell you whether a sealing or the narrower expungement route fits.',
-          remedy: 'Consult Legal Aid (Registration / Firearms / Ethics Offense)',
-          citation: 'M.G.L. c. 276 § 100A'
+        decrim_seal_ma: {
+          status: 'eligible',
+          title: 'No Longer a Crime — Sealable Right Away',
+          message: 'If the conduct is no longer a crime in Massachusetts, § 100A ¶2(2) lets it be sealed FORTHWITH — with no waiting period at all. The one thing to confirm is that the old offense\'s elements do not survive under some other, still-current crime; if they do, the ordinary wait applies instead. Assuming they do not, mail the § 100A Petition to Seal to the Commissioner of Probation, One Ashburton Place, Room 405, Boston, MA 02108 — free, no court. (If the offense was a decriminalized-amount marijuana matter, there is an even stronger route: mandatory expungement under § 100K1/4 — worth asking Greater Boston Legal Services about.)',
+          remedy: 'Mail the § 100A Petition to Seal now — no wait (offense no longer a crime)',
+          citation: 'M.G.L. c. 276 § 100A ¶2(2)'
         },
-        complex_level_ma: {
+        infraction_ma: {
           status: 'complex',
-          title: 'We Need the Offense Level',
-          message: 'In Massachusetts the administrative sealing wait is 3 years for a misdemeanor and 7 for a felony. Since you are not sure which yours was, we are not going to guess. Your court paperwork states it, and an iCORI self-request will show it. Once you know, sealing is a single mailed form with no fee and no court — Greater Boston Legal Services has the walkthrough.',
-          remedy: 'Get Your Offense Level First (court paperwork / iCORI)',
-          citation: 'M.G.L. c. 276 § 100A'
+          title: 'Civil Infractions Usually Are Not on Your Criminal Record',
+          message: 'A civil motor-vehicle infraction is not a criminal disposition, and civil infractions generally do not appear on a CORI at all — so there is often nothing to seal. Massachusetts also excepts motor-vehicle offenses with a fine of $50 or less from every one of the disqualifying rules in this area. If you are not sure what shows on your record, an iCORI self-request ($25, waived if you cannot afford it) will tell you. If it turns out the matter was actually a criminal charge, come back and screen it by its real disposition.',
+          remedy: 'Likely nothing to seal — check iCORI to confirm what shows',
+          citation: 'M.G.L. c. 276 § 100A (sub-$50 motor-vehicle offenses excepted throughout)'
+        },
+        whole_record_block_ma: {
+          status: 'complex',
+          title: 'A Conviction on Your Record Blocks Administrative Sealing',
+          message: 'Massachusetts § 100A(5) blocks the ENTIRE administrative sealing request — for every case on your record, not just this one — while your record carries a conviction under the firearms licensing laws (c. 140 §§ 121-131H), the state ethics law (c. 268A), or a c. 268 crime against public justice (perjury, escape, witness intimidation). This is a hard limit on the mail-in § 100A path specifically. Two things it does NOT touch: the § 100C court-sealing path for non-convictions still works, and the § 100K error-correction path is unaffected. It is worth having Greater Boston Legal Services confirm the disqualifying conviction is really in one of those chapters — the categories are specific — and map what remains open to you.',
+          remedy: 'Consult Legal Aid — confirm the disqualifying conviction and remaining options',
+          citation: 'M.G.L. c. 276 § 100A (first paragraph and condition (5))'
+        },
+        sex_ineligible_ma: {
+          status: 'ineligible',
+          title: 'Ever Classified Level 2 or 3 — Not Sealable',
+          message: 'Massachusetts permanently bars sealing for anyone who has EVER been classified as a Level 2 or Level 3 sex offender (§ 100A ¶2(6)) — that classification does not age out, and no waiting period changes it. We are not going to soften that, but it is worth having a legal aid attorney confirm your classification history against the Sex Offender Registry Board records, since the level determines everything here. Greater Boston Legal Services can help you check.',
+          remedy: 'None for sealing (ever level 2/3) — have GJP/GBLS confirm your classification',
+          citation: 'M.G.L. c. 276 § 100A ¶2(6)'
+        },
+        sex_waiting_ma: {
+          status: 'waiting',
+          title: 'A Sex Offense Cannot Seal While You Must Register',
+          message: 'For a sex offense, Massachusetts requires BOTH that 15 years have passed (from the later of disposition, incarceration, or the end of supervision or probation) AND that you have no duty to register anywhere — in Massachusetts, in any other state, or a duty you would have if you lived in Massachusetts — whichever is longer (§ 100A ¶2(6)). Because a registration duty is still in place (or the 15 years have not run), sealing is not available yet. This assumes you were never classified Level 2 or 3 — that classification is a permanent bar. Greater Boston Legal Services can tell you when your registration duty ends and the 15-year clock is met.',
+          remedy: 'Wait for 15 years AND the end of any registration duty (whichever is longer)',
+          citation: 'M.G.L. c. 276 § 100A ¶2(6)'
+        },
+        sex_eligible_ma: {
+          status: 'eligible',
+          title: 'Sex Offense — 15 Years Met, No Registration Duty',
+          message: 'Based on what you entered — 15 years since the later of disposition, incarceration, or the end of supervision/probation, no current duty to register anywhere, and never a Level 2 or 3 classification — this sex offense can be sealed under § 100A ¶2(6). It is the same mail-in administrative path as any other conviction: the Petition to Seal, mailed to the Commissioner of Probation, free and without a court hearing. Because the registration and classification facts are decisive and specific, it is worth having Greater Boston Legal Services confirm them before you file.',
+          remedy: 'Mail the § 100A Petition to Seal (15-year sex-offense track) — confirm registration status with GBLS',
+          citation: 'M.G.L. c. 276 § 100A ¶2(6)'
+        },
+        marijuana_ma: {
+          status: 'eligible',
+          title: 'Marijuana — Three Ways to Clear It, Strongest First',
+          message: 'For marijuana in a now-decriminalized amount, Massachusetts gives you unusually strong options. STRONGEST: § 100K1/4 (St. 2022, c. 180, § 23) — for possession or cultivation in the amounts decriminalized by the 2008, 2016, and 2017 acts, INCLUDING distribution or possession-with-intent charges based on those amounts, the court SHALL order EXPUNGEMENT (the record is destroyed) within 30 days of your petition, with no age limit, no record cap, and no waiting period, notwithstanding the usual §§ 100I/100J limits. It is a special petition form, filed in the court where the case was. SECOND: if you were 21 or older on March 13, 2024, Governor Healey\'s blanket pardon covers prior marijuana-possession convictions, and pardoned convictions are sealed under c. 127, § 152. THIRD, as a mail-in fallback: because these offenses are no longer crimes, § 100A ¶2(2) lets you seal forthwith with no wait. Greater Boston Legal Services can help you use the strongest route that fits.',
+          remedy: 'Petition for mandatory § 100K1/4 marijuana expungement (court shall grant in 30 days); pardon-sealing and § 100A ¶2(2) as backups',
+          citation: 'M.G.L. c. 276 § 100K1/4 (St. 2022, c. 180, § 23); c. 127 § 152; § 100A ¶2(2)'
+        },
+        error_100k_ma: {
+          status: 'complex',
+          title: 'The Error Path — Expungement With No Waits or Limits',
+          message: 'Massachusetts has a separate expungement route for records that should not exist, and it ignores the usual limits — § 100K applies to any disposition, any age, with no waiting period and no record cap ("notwithstanding §§ 100I and 100J"). It reaches records created by false identification or identity theft, an offense that is no longer a crime (unless its elements survive elsewhere), a demonstrable error by law enforcement, a witness, or court employees, or fraud on the court. This is especially the route when someone else\'s conduct landed on your record through identity theft. It is a petition decided on a clear-and-convincing standard, in the court\'s best-interests discretion, with a hearing on request and written findings — so it is fact-specific and worth doing with help. Greater Boston Legal Services handles exactly these cases.',
+          remedy: 'Petition for § 100K error-based expungement (clear-and-convincing; no waits or record limits)',
+          citation: 'M.G.L. c. 276 § 100K'
+        },
+        expunge_excluded_ma: {
+          status: 'complex',
+          title: 'Not Expungeable — but You Can Very Likely Still SEAL',
+          message: 'The offense falls in one of § 100J\'s expungement-exclusion categories — anything causing or meant to cause death or serious injury, anything committed while armed, offenses against elderly or disabled victims, any sex offense, every felony against the person (c. 265), firearms offenses, restraining-order violations, assault and battery on a household member (c. 265 § 13M), or anything under c. 90 § 24 (which includes not just OUI but negligent operation and leaving the scene). So expungement — which DESTROYS the record — is off the table. That is far less limiting than it sounds: for almost everyone, SEALING is the real remedy, and it is easy here — a single mailed § 100A form, free, non-discretionary once the 3-year (misdemeanor) or 7-year (felony) lookback is met. Go back and screen this as an ordinary conviction to see your sealing timeline, and Greater Boston Legal Services can confirm both.',
+          remedy: 'Expungement excluded (§ 100J) — pursue § 100A sealing instead',
+          citation: 'M.G.L. c. 276 § 100J'
+        },
+        expunge_eligible_ma: {
+          status: 'eligible',
+          title: 'You May Be Eligible to Petition for Expungement',
+          message: 'Based on your dates and offense, you appear to meet the § 100I gateway for expungement — every offense before your 21st birthday, past the 7-year (any felony) or 3-year (misdemeanors-only) wait counting incarceration, custody, and probation, and not on the § 100J exclusion list. Two big caveats this screening cannot check for you: expungement requires that you have essentially NOTHING else on your record in Massachusetts (§ 100I(4)) or anywhere else (§ 100I(5)) — except sub-$50 motor-vehicle matters — and no more than 2 records in a lifetime, with same-incident offenses merged. And it is never automatic: even when you are eligible, the court decides on a "best interests of justice" standard and must make written findings (In the Matter of Expungement, 489 Mass. 67 (2022)). You petition the Commissioner, the DA gets an objection window (60 days for convictions, 30 for non-convictions), a hearing follows within 21 days if the DA objects, and the court may otherwise grant without one. Because expungement DESTROYS the record (it even scrubs police logs, § 100L) while sealing only hides it, and because the eligible group is deliberately tiny, most people are better served by sealing — but if you qualify, this is the strongest relief there is. Greater Boston Legal Services can help you weigh and file.',
+          remedy: 'Petition the Commissioner for § 100E-100L expungement (discretionary; written findings even when eligible)',
+          citation: 'M.G.L. c. 276 §§ 100I, 100L; In the Matter of Expungement, 489 Mass. 67 (2022)'
+        },
+        expunge_waiting_ma: {
+          status: 'waiting',
+          title: 'Expungement Wait Not Yet Met',
+          message: 'Expungement of an offense committed before your 21st birthday needs 7 years to have passed for any felony, or 3 years when every offense is a misdemeanor — counting the end of incarceration, custody, AND probation (§ 100I). Based on your dates, that has not run yet. When it does, remember expungement is still discretionary and narrow — and that SEALING is available much sooner and is what most people actually use: a single mailed § 100A form once the 3-year (misdemeanor) / 7-year (felony) sealing lookback is met. Greater Boston Legal Services can map both timelines for you.',
+          remedy: 'Wait out the § 100I expungement period — or seal now/sooner via § 100A',
+          citation: 'M.G.L. c. 276 § 100I'
         }
       }
     },

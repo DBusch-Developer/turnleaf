@@ -56,6 +56,7 @@ interface Persona {
 
 const base: ConvictionRecord = {
   id: 'p',
+  state: 'CA',
   title: 'Offense',
   charge_type: 'misdemeanor',
   disposition: 'convicted',

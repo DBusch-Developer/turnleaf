@@ -41,6 +41,7 @@ export default function EligibilityWizard({
   const addEmptyRecord = () => {
     const newRecord: ConvictionRecord = {
       id: Math.random().toString(36).substr(2, 9),
+      state: stateConfig.code,
       title: '',
       charge_type: 'misdemeanor',
       disposition: 'convicted',

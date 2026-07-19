@@ -22,6 +22,10 @@
 /** What a person tells us about one charge. Held in browser state; never persisted. */
 export interface ConvictionRecord {
   id: string;
+  /** Which state's law screens this record. A 2-letter code, e.g. 'CA'.
+   *  Record metadata, NOT a rule field — the engine never reads it and it is
+   *  absent from RecordField/FIELD_DOMAINS. It only groups and routes records. */
+  state: string;
   title: string;
   charge_type: 'misdemeanor' | 'felony' | 'infraction' | 'unknown';
   disposition: 'convicted' | 'dismissed' | 'deferred' | 'acquitted' | 'unknown';

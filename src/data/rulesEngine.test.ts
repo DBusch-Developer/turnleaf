@@ -9,6 +9,7 @@ import type { ConvictionRecord } from './screening';
 
 const rec = (o: Partial<ConvictionRecord> = {}): ConvictionRecord => ({
   id: 'r1',
+  state: 'CA',
   title: 'Petty Theft',
   charge_type: 'misdemeanor',
   disposition: 'convicted',

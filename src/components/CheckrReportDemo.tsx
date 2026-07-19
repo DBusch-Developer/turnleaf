@@ -100,6 +100,7 @@ export default function CheckrReportDemo({ onRunScreening, onClose }: CheckrRepo
     if (!report) return;
     const records: ConvictionRecord[] = report.records.map((r, i) => ({
       id: r.id || `rec_${i}`,
+      state: r.state,
       title: r.title,
       charge_type: r.charge_type,
       disposition: r.disposition,

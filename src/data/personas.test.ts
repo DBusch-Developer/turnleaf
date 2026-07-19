@@ -438,85 +438,131 @@ const TX: Persona[] = [
 // ---------------------------------------------------------------------------
 const UT: Persona[] = [
   {
-    source: 'Wave 1 — UT persona 1',
-    package: 'class B misd, closed 5 yrs ago, clean history → eligible (automatic track + petition option).',
-    record: { title: 'Class B Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
-    answers: {
-      pending_charges_ut: false,
-      count_limits_ut: 'within',
-      supervision_ut: false,
-      disqualifiers_ut: false,
-      offense_level_ut: 'b',
-      // Utah's clock runs from CASE CLOSURE — asked, not read off the form.
-      closure_b_ut: '2021-07-15',
-      closure_b_auto_ut: '2021-07-15',
-    },
-    expect: {
-      resultKey: 'eligible_petition_faster_ut',
-      reading:
-        'Closed 5 years ago. Class B: petition at 4 years (passed), automatic at 6 (NOT passed). So '
-        + 'the person sits BETWEEN the thresholds, and the honest answer is the counterintuitive '
-        + 'one — petitioning now is faster than waiting for the automatic system. The package says '
-        + '"automatic track + petition option", which reads as though both are available now; at 5 '
-        + 'years the automatic track has not arrived. Flagged approximate: if the package is right, '
-        + 'the automatic period is not 6 years and the inversion open question resolves differently.',
-    },
-    expectIsApproximate: true,
+    source: 'UT 7/19 statute-verified — persona 1 (class B clean-slate automatic)',
+    package: 'class B misd theft, 6 yrs clean, fines paid -> automatic clean-slate eligible; court/BCI-only scope note.',
+    record: { title: 'Class B Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'b', cs_b_ut: false, cb_date_ut: '2020-01-01', cb_auto_date_ut: '2020-01-01' },
+    expect: { resultKey: 'eligible_auto_ut', reading: 'Class B, not clean-slate-excluded, 6yr passes both the 4yr petition and 6yr automatic (§ 205) -> eligible_auto_ut. Copy carries the § 207(4) court/BCI-only scope limit + petition-for-full-agency-clearance.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — UT persona 2',
-    package: 'eligible felony, closed 4 yrs ago → waiting, date = closure+7y.',
-    record: { title: 'Eligible Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
-    answers: {
-      pending_charges_ut: false,
-      count_limits_ut: 'within',
-      supervision_ut: false,
-      disqualifiers_ut: false,
-      offense_level_ut: 'felony',
-      closure_felony_ut: '2022-07-15',
-    },
-    expect: { resultKey: 'waiting_ut', reading: 'Felony: 7 years from case closure. Closed 2022, so 4 years elapsed of 7. Waiting. Exact.' },
+    source: 'UT 7/19 statute-verified — persona 2 (class B, wants full agency clearance -> petition 303)',
+    package: 'same class B but the person wants the arresting agency cleared too -> petition route via § 303 (4yr B wait met).',
+    record: { title: 'Class B Misdemeanor (agency clearance wanted)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'b', cs_b_ut: false, cb_date_ut: '2020-01-01', cb_auto_date_ut: '2020-01-01' },
+    expect: { resultKey: 'eligible_auto_ut', reading: 'Same routing as persona 1 -> eligible_auto_ut, whose copy explains that automatic clears courts/BCI only (§ 207) and a § 303 petition (4yr B, met) reaches ALL agencies via § 307 — the reason to petition.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — UT persona 3',
-    package: '2 non-drug felonies → ineligible (count limit).',
+    source: 'UT 7/19 statute-verified — persona 3 (class A 76-18-207 possession -> the only class A that is automatic)',
+    package: 'class A misd drug possession (§ 76-18-207), 7 yrs -> automatic eligible (the ONLY class A on the clean-slate track).',
+    record: { title: 'Class A Drug Possession (§ 76-18-207)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'a_drug', a_drug_date_ut: '2019-01-01', a_drug_auto_date_ut: '2019-01-01' },
+    expect: { resultKey: 'eligible_auto_ut', reading: 'Class A 76-18-207 possession is the one class A on the automatic track: petition 5yr + automatic 7yr both met (2019) -> eligible_auto_ut.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 4 (class A assault -> automatic excluded, petition 5yr)',
+    package: 'class A misd assault (Title 76 Ch. 5) -> not on the clean-slate track, petition § 303 at 5yr.',
+    record: { title: 'Class A Assault', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'a_other', a_other_date_ut: '2020-01-01' },
+    expect: { resultKey: 'eligible_petition_ut', reading: 'A class A non-drug (assault) is not clean-slate-eligible; petition-only at 5yr (2020+5=2025<2026) -> eligible_petition_ut (BCI cert then petition).' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 5 (DV misd + protective order -> disqualified)',
+    package: 'DV misdemeanor with a protective order in effect -> automatic-excluded, and the § 303 protective-order disqualifier blocks the petition too.',
+    record: { title: 'Domestic Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: true },
+    expect: { resultKey: 'ineligible_protective_ut', reading: 'A DV misd is clean-slate-excluded (§ 205(3)(f)(viii)); § 303 has no DV exclusion, but ANY protective order/stalking injunction in effect disqualifies -> ineligible_protective_ut (a timing bar).' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 6 (unpaid restitution -> blocked both tracks)',
+    package: 'otherwise clean-slate-eligible class B but restitution unpaid -> automatic blocked (receivable) AND cert blocked (§ 303(1)(b)).',
+    record: { title: 'Class B (restitution owed)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: false },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false },
+    expect: { resultKey: 'ineligible_restitution_ut', reading: 'Unpaid restitution is a hard gate on both tracks (§ 303(1)(b); § 205 unsatisfied-receivable exclusion). restitution_ut reads restitution_paid=false -> ineligible_restitution_ut. Fully within the person\'s control to clear.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 7 (2 non-drug felonies -> count limit)',
+    package: '2 non-drug felonies in separate episodes -> cert denied at the § 303(4) count-limit master gate.',
     record: { title: 'Second Non-Drug Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
-    answers: { pending_charges_ut: false, count_limits_ut: 'over_limits' },
-    expect: {
-      resultKey: 'ineligible_counts_ut',
-      reading:
-        'Two or more non-drug felonies is clause (a) of the § 303(4) cap. The gate fires BEFORE any '
-        + 'per-conviction check, which is what Wave 1 asks for. Exact — though the person has to '
-        + 'self-assess the count, which is the known limitation.',
-    },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'over_limits' },
+    expect: { resultKey: 'ineligible_counts_ut', reading: 'Two non-drug felonies is clause (a) of the § 303(4) cap -> ineligible_counts_ut. The gate fires before any per-conviction check.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — UT persona 4',
-    package: 'dismissal with prejudice 60 days ago → eligible-automatic.',
-    record: { title: 'Dismissed Charge', disposition: 'dismissed', disposition_date: '2026-05-16' },
-    answers: { dismissal_prejudice_ut: 'with' },
-    expect: {
-      resultKey: 'eligible_dismissal_ut',
-      reading:
-        'Dismissed with prejudice, 60 days ago; the threshold is 30 days, so it has passed. The '
-        + 'package calls this "eligible-automatic". Utah\'s automatic track covers misdemeanour-level '
-        + 'CONVICTIONS (§ 77-40a-205); Wave 1 gives dismissals a 30/180-day PETITION period, and no '
-        + 'automatic dismissal path. Reading it as the petition path with its short wait. Flagged '
-        + 'approximate: if dismissals really are automatic, this needs its own branch and the person '
-        + 'should be told to check rather than file.',
-    },
-    expectIsApproximate: true,
+    source: 'UT 7/19 statute-verified — persona 8 (2 felonies BUT 10 yrs clean -> decade bump, eligible)',
+    package: 'same 2 non-drug felonies but 10+ years clean -> the § 303(7) decade bump raises the limit to 3, so within limits -> eligible felony petition.',
+    record: { title: 'Non-Drug Felony (10 yrs clean)', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'felony', felony_date_ut: '2015-01-01' },
+    expect: { resultKey: 'eligible_petition_ut', reading: 'DECADE BUMP: 10 yrs clean raises the 2-felony limit to 3, so the person answers within -> felony 7yr wait (2015+7=2022<2026) -> eligible_petition_ut.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — UT persona 5',
-    package: 'class A misd, on parole → ineligible-for-now.',
-    record: { title: 'Class A Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted' },
-    answers: { pending_charges_ut: false, count_limits_ut: 'within', supervision_ut: true },
-    expect: { resultKey: 'ineligible_supervision_ut', reading: 'On parole → the supervision bar fires. "For now" is the point: the result says it is a timing bar and that the clock starts at case closure. Exact.' },
+    source: 'UT 7/19 statute-verified — persona 9 (3rd-degree felony 7yr -> cert eligible)',
+    package: 'eligible 3rd-degree felony, 7 yrs from release -> § 303 cert eligible.',
+    record: { title: 'Third-Degree Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'felony', felony_date_ut: '2019-01-01' },
+    expect: { resultKey: 'eligible_petition_ut', reading: 'Eligible felony, 7yr from conviction/release (2019+7=2026-01<2026-07) -> eligible_petition_ut (BCI cert, then petition; reaches all agencies).' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 10 (first-degree felony -> never)',
+    package: 'first-degree felony -> never-eligible (§ 303(2)(a)).',
+    record: { title: 'First-Degree Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: true },
+    expect: { resultKey: 'ineligible_never_ut', reading: 'First-degree felony is on the § 303(2)(a) never-list -> ineligible_never_ut (notes the age-14-17 exception and pardon).' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 11 (registerable at application -> never)',
+    package: 'offense requiring sex/kidnap/child-abuse registration at application time -> never-eligible.',
+    record: { title: 'Registerable Offense', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: true },
+    expect: { resultKey: 'ineligible_never_ut', reading: 'The registration bar (§ 303(2)(a)) applies whether registration was required at sentencing OR now -> ineligible_never_ut.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 12 (acquittal 61 days -> § 206 automatic)',
+    package: 'acquittal on all charges, 61 days ago -> automatic expungement (§ 206, 60 days).',
+    record: { title: 'Acquittal', disposition: 'acquitted', disposition_date: '2026-05-10' },
+    answers: {},
+    expect: { resultKey: 'eligible_acquittal_auto_ut', reading: 'Acquittal-all + 60 days (61 elapsed) -> § 77-40a-206 automatic expungement, no petition/cert/fee. NGRI excluded; courts/BCI only unless you petition.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 13 (dismissal without prejudice 180 days -> § 302 cert)',
+    package: 'dismissed without prejudice, prosecutor silent, 180+ days -> § 302 non-conviction certificate path.',
+    record: { title: 'Dismissed Without Prejudice', disposition: 'dismissed', disposition_date: '2025-11-01' },
+    answers: { dismissal_prejudice_ut: 'without', dismiss_wop_date_ut: '2025-11-01' },
+    expect: { resultKey: 'eligible_noncon_cert_ut', reading: 'Dismissal without prejudice + 180 days (or prosecutor consent) -> § 77-40a-302 non-conviction certificate (no issuance fee), then petition -> eligible_noncon_cert_ut.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 14 (DUI misd -> 10yr petition)',
+    package: 'misdemeanor DUI, 11 yrs from release -> § 303 10-year wait met (excluded from both traffic deletion and clean-slate).',
+    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'dui', dui_date_ut: '2015-01-01' },
+    expect: { resultKey: 'eligible_petition_ut', reading: 'Misd DUI is petition-only at 10yr (2015+10=2025<2026) -> eligible_petition_ut. DUI is excluded from the § 101(24) traffic definition and from clean-slate, so neither free track reaches it.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 15 (pending felony -> blocks all but traffic)',
+    package: 'non-traffic conviction with a pending felony charge -> blocked (pending gate); traffic deletion is the only exception.',
+    record: { title: 'Class B (pending felony charge)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    answers: { traffic_conv_ut: false, pending_ut: true },
+    expect: { resultKey: 'ineligible_pending_ut', reading: 'A pending case blocks expungement -> ineligible_pending_ut; the result notes that an eligible TRAFFIC offense is deleted regardless of pending charges (§ 202), the one exception.' },
+    now: NOW,
+  },
+  {
+    source: 'UT 7/19 statute-verified — persona 16 (traffic deletion)',
+    package: 'class B traffic offense (not DUI), 7 yrs -> automatic DELETION under § 202.',
+    record: { title: 'Class B Traffic Offense', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-06-01' },
+    answers: { traffic_conv_ut: true, traffic_class_ut: 'b', traffic_b_date_ut: '2019-06-01' },
+    expect: { resultKey: 'eligible_traffic_deletion_ut', reading: 'A non-DUI class B traffic offense is DELETED (not sealed) automatically at 6yr (§ 202) -> eligible_traffic_deletion_ut. Works even with pending charges; DUI is excluded from the traffic definition.' },
     now: NOW,
   },
 ];

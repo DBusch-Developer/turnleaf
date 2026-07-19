@@ -6202,13 +6202,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // NORTH CAROLINA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md
+  // NORTH CAROLINA — STATUTE-VERIFIED 2026-07-18. Diana read the official ncleg.gov
+  // PDFs of G.S. 15A-145.5 (full, post-SL2025-71 text), 15A-146 (full),
+  // 15A-145.8 (full), and Session Law 2025-71 (full). The Wave 3 draft's rules
+  // are CONFIRMED against the post-amendment statute text.
+  // Source: research/waves/Turnleaf_Wave3_Draft_Package.md + Diana's 7/18 reads.
   //
   // The most category-heavy expunction statute in the country, with a fresh
-  // 2025 cut. S.L. 2025-71 (petitions on/after July 9, 2025) dropped the wait
-  // for ONE nonviolent misdemeanour from 5 years to 3 — most guides online
-  // still say 5. Encoded at 3, cited to the current § 15A-145.5(c)(1)(a) text.
+  // 2025 cut. S.L. 2025-71, s. 12(a) (petitions on/after July 9, 2025) dropped
+  // the wait for ONE nonviolent misdemeanour from 5 years to 3 — most guides
+  // online still say 5. Encoded at 3, § 15A-145.5(c)(1)a.
   //
   // The two statutes the tree needs: § 15A-146 (dismissals/not-guilty) and
   // § 15A-145.5 (nonviolent convictions).
@@ -6219,13 +6222,19 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   // long ago. That is its own node, reached only for the 2-3 felony count.
   //
   // Date nodes ASK for "the later of conviction or sentence completion" — the
-  // anchor is not the single date the form collects.
+  // anchor is not the single date the form collects. Felony anchors also carry
+  // the 5-year no-misdemeanour-lookback ((c1)(1)b, (c3)(4)).
+  //
+  // NOT READ: § 15A-145.8A (offense committed under 18, tried/convicted as an
+  // adult). The 15A-145.8 PDF covers remand-to-juvenile only. A "convicted as an
+  // adult for an under-18 offense" path stays unrouted — see open questions.
   // ==========================================================================
   NC: {
     code: 'NC',
     name: 'North Carolina',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-18',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-18',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
     terminology:
       'North Carolina says EXPUNCTION (and also expungement) — the record is destroyed. The rules '
@@ -6246,43 +6255,33 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         label: 'Automatic expunction of non-convictions (§ 15A-146) resumed under SB 565',
         date: '2024-07-08',
         kind: 'operative',
-        note: 'Dismissals/not-guilty on/after Dec 1, 2021 expunge automatically 180-210 days after disposition. Paused Aug 2022, resumed July 8, 2024 — verify it is still running. Plea-agreement dismissals are NOT automatic.',
+        note: 'A case with all charges disposed on/after Dec 1, 2021 and all dismissed/not-guilty/not-responsible expunges automatically 180-210 days after disposition (§ 15A-146(a4)). A case with a felony charge dismissed per plea agreement is excepted (whole case; petition route remains). Framework statute-confirmed; the 2022 pause / July 8, 2024 resumption is operational — verify it is still running.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Is the § 15A-146 automatic expunction of non-convictions still running? Wave 3 says it paused Aug 2022 and resumed July 8, 2024 under SB 565, and flags it for verification. Confirm on the current status before UI copy promises automatic expunction — the tree tells people to check rather than assume.',
+          'Is the § 15A-146(a4) automatic expunction currently being PROCESSED by the AOC? The statutory framework is now confirmed (180-210 days, Dec 1 2021 trigger, felony-plea-agreement case exception). The only open part is operational: Wave 3 says the process paused Aug 2022 and resumed July 8, 2024 under SB 565 — a secondary-source claim. The tree tells people to check their record rather than assume.',
         blocksFields: [],
       },
       {
         question:
-          'What is the current conviction-expunction filing fee? Wave 3 gives "$175, waived for indigent petitioners" and flags it. Non-conviction petitions are generally free. Confirm with a clerk of superior court.',
-        blocksFields: ['resources.remedies.conviction.fees'],
-      },
-      {
-        question:
-          'Confirm the prior-§15A-145.5-expunction limits in subsections (c4)/(c5): Wave 3 says a misdemeanour expunction generally bars a later one and flags the legacy clauses. The tree discloses this in prose but cannot count a person\'s prior expunctions.',
+          'Does a deferred-prosecution or conditional-discharge dismissal ALSO qualify for the § 15A-146(a4) automatic path, or is it petition-only? § 146(d) implies a petition (it carries the $175 fee); the statute text does not say whether the automatic path also reaches these dismissals.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the full "nonviolent" exclusion list against § 15A-145.5(a): Class A-G felonies, Class A1 misdemeanours, any assault-element offence, registry offences, listed sex/stalking offences, meth/heroin/PWISD-cocaine felonies, CMV felonies, DWI, and attempts at any. The tree asks a person to self-assess this.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'How are completed diversions and deferred-prosecution dismissals treated? Wave 3 says deferred-prosecution dismissals are not free like other non-conviction petitions but does not detail eligibility. Standing call-sheet question for every state.',
+          'ADD SECTION: § 15A-145.8A (offense committed while under 18 but tried/convicted as an adult) was NOT read on 7/18 — the 15A-145.8 PDF covers remand-to-juvenile only. A "convicted as an adult for an under-18 offense" path stays unrouted until GS_15A-145.8A.pdf is read. One-download fix.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'N.C. Gen. Stat. § 15A-145.5 (expunction of nonviolent convictions; waits; the 24-month felony window)', url: null, retrievedOn: null },
-      { id: 'N.C. Gen. Stat. § 15A-145.5(c)(1)(a) (one-nonviolent-misdemeanour wait — 3 yrs since S.L. 2025-71)', url: null, retrievedOn: null },
-      { id: 'N.C. Gen. Stat. § 15A-146 (expunction of dismissals/not-guilty; automatic path)', url: null, retrievedOn: null },
-      { id: 'N.C. Gen. Stat. § 14-54(a) (felony breaking & entering — 15-yr expunction wait)', url: null, retrievedOn: null },
-      { id: 'S.L. 2025-71 (2025 — misdemeanour wait cut)', url: null, retrievedOn: null },
-      { id: 'S.L. 2021 / SB 565 (automatic non-conviction expunction; pause and resumption)', url: null, retrievedOn: null },
+      { id: 'N.C. Gen. Stat. § 15A-145.5 (nonviolent-conviction expunction; (a) nonviolent exclusions, (a1) DWI bar; (c)(1)a 3-yr single misd [SL2025-71 s.12(a)], (c)(1)b 7-yr multi-misd, (c)(2)a 10-yr one felony, (c)(2)a1 15-yr 14-54(a) felony, (c)(2)b 20-yr 2-3 felonies, (c3)(4b) 24-month committed window; (c1)(5)/(c2)(5)/(c3)(5) restitution bar; (c1)(7) one-shot acknowledgment; (c4) 120-day multi-county; (c5) pre-Dec-1-2021 legacy; (c2) "shall" vs (c3) "may"; (g) $175 fee, indigent exempt)', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/PDF/BySection/Chapter_15A/GS_15A-145.5.pdf', retrievedOn: '2026-07-18' },
+      { id: 'N.C. Gen. Stat. § 15A-146 (non-conviction expunction; (a)/(a1)/(a2) petition routes ["shall" for sole dismissal and not-guilty, discretionary per-charge in mixed cases]; (a4) automatic by operation of law 180-210 days for cases with all charges disposed on/after Dec 1 2021 and all dismissed/NG/NR, EXCEPT any case with a felony charge dismissed per plea agreement; (a5) arresting agency keeps investigative records; (a6) no hearing generally; (b) civil license-revocation expunction except § 20-16.2; (d) $175 fee ONLY for deferred-prosecution / conditional-discharge dismissals, indigent exempt)', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/PDF/BySection/Chapter_15A/GS_15A-146.pdf', retrievedOn: '2026-07-18' },
+      { id: 'N.C. Gen. Stat. § 15A-145.8 (charges remanded/removed to district court for juvenile adjudication — court SHALL order expunction of all remanded charges, including DNA-record purge)', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/PDF/BySection/Chapter_15A/GS_15A-145.8.pdf', retrievedOn: '2026-07-18' },
+      { id: 'N.C. Gen. Stat. § 14-54(a) as rewritten by S.L. 2025-71, s. 10(d) (felony breaking & entering — the 15-yr path per § 15A-145.5(c)(2)a1; NOTE the (a1) breaking-or-entering-with-intent-to-terrorize/injure offense is EXCLUDED from expunction per § 15A-145.5(a)(7a), a different subsection). URL points at the SL2025-71 PDF that rewrote it.', url: 'https://www.ncleg.gov/EnactedLegislation/SessionLaws/PDF/2025-2026/SL2025-71.pdf', retrievedOn: '2026-07-18' },
+      { id: 'S.L. 2025-71 (s. 12(a) rewrote § 15A-145.5(c)(1)a five years -> three; s. 12(b) effective when the act became law, applying to petitions filed on/after; approved 9:30 a.m. July 9, 2025)', url: 'https://www.ncleg.gov/EnactedLegislation/SessionLaws/PDF/2025-2026/SL2025-71.pdf', retrievedOn: '2026-07-18' },
+      { id: 'S.L. 2021 / SB 565 (AOC automation of § 15A-146(a4) automatic non-conviction expunction; the 2022 pause / July 2024 resumption is operational, not in the statute text) — cite-only, pending pull', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -6295,13 +6294,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'nonviolent_nc' },
             { label: 'Dismissed', value: 'dismissed', next: 'nonconviction_nc' },
             { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconviction_nc' },
-            { label: 'Deferred prosecution / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
+            { label: 'Deferred prosecution / Conditional discharge / Diversion completed (dismissed)', value: 'deferred', next: 'eligible_deferred_nc' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         nonviolent_nc: {
           type: 'boolean',
-          text: 'Was the offense any of these: a Class A through G felony; a Class A1 misdemeanor; any offense with an assault element; a sex or stalking offense, or one requiring registration; a methamphetamine, heroin, or cocaine-trafficking felony; a commercial-vehicle felony; a DWI; or an attempt at any of these?',
+          text: 'Was the offense any of these: a Class A through G felony; a Class A1 misdemeanor; any offense with an assault element; a sex or stalking offense, or any offense requiring registration (whether or not you are currently required to register); a Chapter 90 felony involving methamphetamine or heroin, or possession with intent to sell or deliver — or sell and deliver — cocaine; a commercial-vehicle felony; breaking or entering with intent to terrorize or injure (G.S. 14-54(a1)); a DWI; or an attempt at any of these?',
           yes: 'ineligible_excluded_nc',
           no: 'restitution_nc'
         },
@@ -6325,18 +6324,18 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         misd_date_nc: {
           type: 'date',
-          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date. (The clock runs conviction-free from then.)',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date. (During the 3 years you must have no new felony or non-traffic misdemeanor conviction.)',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5(c)(1)(a) — one nonviolent misdemeanour; cut from 5 to 3 by S.L. 2025-71)' },
+            period: { amount: 3, unit: 'years', anchor: 'the later of conviction or sentence completion; no felony/non-traffic-misdemeanor conviction during the period (N.C. Gen. Stat. § 15A-145.5(c)(1)a, (c1)(1)a — one nonviolent misdemeanour; cut from 5 to 3 by S.L. 2025-71 s. 12(a))' },
             nextPass: 'eligible_conviction_nc',
             nextFail: 'waiting_nc'
           }
         },
         multi_misd_date_nc: {
           type: 'date',
-          text: 'Which came LATER for your MOST RECENT case: the conviction, or completing the sentence? Enter that date.',
+          text: 'Which came LATER for your MOST RECENT case: the conviction, or completing the sentence? Enter that date. (During the 7 years you must have no new felony or non-traffic misdemeanor conviction.)',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'the later of the last conviction or its sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — multiple nonviolent misdemeanours)' },
+            period: { amount: 7, unit: 'years', anchor: 'the later of the last conviction or its sentence completion; no felony/non-traffic-misdemeanor conviction during the period (N.C. Gen. Stat. § 15A-145.5(c)(1)b, (c1)(1)a — multiple nonviolent misdemeanours)' },
             nextPass: 'eligible_conviction_nc',
             nextFail: 'waiting_nc'
           }
@@ -6349,18 +6348,18 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         felony_one_date_nc: {
           type: 'date',
-          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date.',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date. (For a felony you must also have no non-traffic misdemeanor conviction in the 5 years before you petition, and no new felony during the waiting period.)',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — one nonviolent felony)' },
+            period: { amount: 10, unit: 'years', anchor: 'the later of conviction or sentence completion; no felony during the period AND no non-traffic misdemeanor in the 5 years preceding the petition (N.C. Gen. Stat. § 15A-145.5(c)(2)a, (c1)(1)b, (c3)(4) — one nonviolent felony)' },
             nextPass: 'eligible_conviction_nc',
             nextFail: 'waiting_nc'
           }
         },
         felony_be_date_nc: {
           type: 'date',
-          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date.',
+          text: 'Which came LATER: your conviction, or completing your sentence? Enter that date. (For a felony you must also have no non-traffic misdemeanor conviction in the 5 years before you petition, and no new felony during the waiting period.)',
           validation: {
-            period: { amount: 15, unit: 'years', anchor: 'the later of conviction or sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — felony breaking & entering, G.S. 14-54(a))' },
+            period: { amount: 15, unit: 'years', anchor: 'the later of conviction or sentence completion; no felony during the period AND no non-traffic misdemeanor in the 5 years preceding the petition (N.C. Gen. Stat. § 15A-145.5(c)(2)a1, (c1)(1)b, (c3)(4) — felony breaking & entering, G.S. 14-54(a))' },
             nextPass: 'eligible_conviction_nc',
             nextFail: 'waiting_nc'
           }
@@ -6374,9 +6373,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         felony_multi_date_nc: {
           type: 'date',
-          text: 'Which came LATER for your MOST RECENT of those felonies: the conviction, or completing the sentence? Enter that date.',
+          text: 'Which came LATER for your MOST RECENT of those felonies: the conviction, or completing the sentence? Enter that date. (For felonies you must also have no non-traffic misdemeanor conviction in the 5 years before you petition, and no new felony during the waiting period.)',
           validation: {
-            period: { amount: 20, unit: 'years', anchor: 'the later of the last conviction or its sentence completion, conviction-free (N.C. Gen. Stat. § 15A-145.5 — 2-3 nonviolent felonies within a 24-month window)' },
+            period: { amount: 20, unit: 'years', anchor: 'the later of the last conviction or its sentence completion; no felony during the period AND no non-traffic misdemeanor in the 5 years preceding the petition (N.C. Gen. Stat. § 15A-145.5(c)(2)b, (c1)(1)b, (c3)(4) — 2-3 nonviolent felonies within a 24-month window)' },
             nextPass: 'eligible_conviction_nc',
             nextFail: 'waiting_nc'
           }
@@ -6390,26 +6389,26 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (NC Second Chance Alliance)',
           citation: 'N.C. Gen. Stat. §§ 15A-145.5, 15A-146 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Deferred Prosecution and Diversion Need a Person',
-          message: 'North Carolina\'s expunction rules are screened here for convictions, dismissals, and acquittals. Deferred-prosecution dismissals are treated differently — they are not free like other non-conviction petitions, and the eligibility details are not something this screening has fully researched — so we would rather point you to someone than guess. The NC Second Chance Alliance runs statewide clinics and can tell you how your disposition is treated.',
-          remedy: 'Consult Legal Aid (Deferred Prosecution / Diversion Not Yet Screened)',
-          citation: 'N.C. Gen. Stat. § 15A-146 (deferred-prosecution treatment not yet detailed)'
+        eligible_deferred_nc: {
+          status: 'eligible',
+          title: 'Deferred Prosecution / Conditional Discharge — Petition to Expunge',
+          message: 'A completed deferred prosecution or conditional discharge ends in a DISMISSAL, and North Carolina lets you petition to expunge it under § 15A-146. There is one difference from an ordinary dismissal: § 15A-146(d) charges a $175 filing fee for deferred-prosecution and conditional-discharge dismissals specifically — but it is waived if you cannot afford it. There is no waiting period and no prior-conviction bar for this non-conviction petition. Use the AOC-CR non-conviction expunction forms in the county of the case. One honest caveat: whether this kind of dismissal ALSO rides the automatic path (§ 15A-146(a4), for cases disposed on/after Dec 1, 2021) is not answered by the statute text — so petition rather than assume it was done for you. The NC Second Chance Alliance can help.',
+          remedy: 'Petition to expunge a deferred-prosecution / conditional-discharge dismissal (§ 15A-146(d)) — $175, indigent exempt',
+          citation: 'N.C. Gen. Stat. § 15A-146(d)'
         },
         nonconviction_nc: {
           status: 'eligible',
           title: 'No Conviction — Likely Expungeable, Possibly Already Done',
-          message: 'Because your case ended without a conviction, North Carolina has a fast path for you, and part of it may already have happened. Dismissals and not-guilty verdicts from December 1, 2021 onward are expunged AUTOMATICALLY, about 180 to 210 days after the case ends — a process that paused in 2022 and resumed in July 2024, so check rather than assume. Two things to know: if your dismissal came as part of a plea agreement, it is NOT automatic and you would petition instead; and older non-convictions can be petitioned with no waiting period, no prior-conviction bar, and generally no fee. Request your record to see whether the automatic expunction went through; if not, the petition (the AOC-CR-281/287/298 forms) is straightforward. The NC Second Chance Alliance can help.',
-          remedy: 'Automatic or petition expunction of a non-conviction (§ 15A-146) — check your record',
-          citation: 'N.C. Gen. Stat. § 15A-146'
+          message: 'Because your case ended without a conviction, North Carolina has a fast path for you, and part of it may already have happened. Under § 15A-146(a4), a case where every charge was disposed on or after December 1, 2021 and every charge ended in a dismissal, not-guilty, or not-responsible is expunged AUTOMATICALLY by operation of law, about 180 to 210 days after disposition. The statutory framework is confirmed; what we cannot confirm is whether the AOC is currently processing these — the automation paused in 2022 and reportedly resumed in July 2024 — so check your record rather than assume. The big exception: if the case included a felony charge that was dismissed as part of a plea agreement, the automatic path does not apply to the WHOLE case — but you can still petition. Three honest limits worth knowing: these petitions generally need no hearing (§ 15A-146(a6)); a related civil license revocation can be expunged along with the charge, except a § 20-16.2 revocation (§ 15A-146(b)); and the arresting agency may keep its own investigative records (§ 15A-146(a5)). Request your record to see whether the automatic expunction went through; if not, the petition (AOC-CR non-conviction forms) is straightforward. The NC Second Chance Alliance can help.',
+          remedy: 'Automatic (§ 15A-146(a4)) or petition expunction of a non-conviction — check your record',
+          citation: 'N.C. Gen. Stat. § 15A-146(a4), (a5), (a6), (b)'
         },
         eligible_conviction_nc: {
           status: 'eligible',
           title: 'Potentially Eligible to Expunge This Conviction',
-          message: 'Based on your dates and record, you appear eligible to petition to EXPUNGE this nonviolent conviction under § 15A-145.5 — expunction destroys the record rather than just hiding it. If this is a single nonviolent misdemeanor, note that the wait is now 3 years, cut from 5 by a July 2025 law that most online guides have not caught up to. File in the county of conviction using the AOC-CR-281/287/298 forms; the district attorney and any victim are notified, and a judge may order an SBI or FBI record check. The filing fee for a conviction expunction is reportedly $175, waived if you cannot afford it — we are confirming the current amount. One thing worth raising with legal aid: a prior expunction under this statute can limit a later one, so if you have used one before, confirm you are still eligible. The NC Second Chance Alliance runs free clinics.',
-          remedy: 'Petition to Expunge a Conviction (§ 15A-145.5)',
-          citation: 'N.C. Gen. Stat. § 15A-145.5'
+          message: 'Based on your dates and record, you appear eligible to petition to EXPUNGE this nonviolent conviction under § 15A-145.5 — expunction destroys the record rather than just hiding it. If this is a single nonviolent misdemeanor, note that the wait is now 3 years, cut from 5 by a July 2025 law (S.L. 2025-71) that most online guides have not caught up to. File in the county of conviction using the AOC-CR-281/287/298 forms; the district attorney and any victim are notified, and a judge may order an SBI or FBI record check. The fee is $175 (§ 15A-145.5(g)) and does not apply if you cannot afford it. Two things worth planning around. First, whether the judge MUST grant it depends on the level: a misdemeanor expunction is mandatory once the findings are met ("shall", (c2)), while a felony expunction is discretionary ("may", (c3)). Second — and this is the trap — you effectively get one shot per category: expunging a single nonviolent misdemeanor before the 7-year mark forfeits the later multiple-misdemeanor route, and expunging one felony before the 20-year mark forfeits the multiple-felony route (§ 15A-145.5(c1)(7)). So if you have more convictions that will become eligible later, weigh filing now against waiting to clear them together. If your records are in more than one county, all the petitions must be filed within a 120-day window ((c4)). The NC Second Chance Alliance runs free clinics.',
+          remedy: 'Petition to Expunge a Conviction (§ 15A-145.5) — $175, indigent exempt; mind the one-shot-per-category trap',
+          citation: 'N.C. Gen. Stat. § 15A-145.5(c2)/(c3), (c1)(7), (c4), (g)'
         },
         waiting_nc: {
           status: 'waiting',
@@ -6456,14 +6455,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formUrl: 'https://www.ncsecondchance.org',
           steps: [
             'Confirm the offense is "nonviolent" under the statute and that any restitution is paid.',
-            'File the AOC-CR petition in the county of conviction; the district attorney and any victim are notified.',
-            'A judge may order an SBI or FBI record check.',
-            'The filing fee is reportedly $175, waived if you cannot afford it.'
+            'Prepare the § 15A-145.5(c1) petition materials: your own affidavit of good moral character, plus TWO character affidavits from people unrelated to you and to each other.',
+            'File in the county of conviction (multi-county records: all petitions within a 120-day window). The SBI/AOC record check is part of the petition form itself.',
+            'The district attorney is served and has 30 days to object (extendable); any victim is notified and may be heard.'
           ],
-          // null: Wave 3 gives "$175, waived for indigent" and flags it.
-          fees: null,
-          // NOT null: the indigency waiver is a named, independent mechanism.
-          feeWaiver: 'The $175 fee is waived for petitioners who cannot afford it (indigent).',
+          fees: '$175 (G.S. 15A-145.5(g)); does not apply to indigent petitioners.',
+          // NOT null: the indigency exemption is a named, independent mechanism.
+          feeWaiver: 'The $175 fee does not apply to petitioners who cannot afford it (indigent).',
           courtContact: 'Clerk of Superior Court, county of conviction'
         },
         nonconviction: {
@@ -6471,13 +6469,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'AOC-CR non-conviction expunction forms',
           formUrl: 'https://www.ncsecondchance.org',
           steps: [
-            'Check first whether it was expunged automatically — dismissals and not-guilty verdicts from Dec 1, 2021 onward expunge about 180-210 days after disposition (the process resumed July 2024).',
-            'If your dismissal was part of a plea agreement, it is NOT automatic — petition instead.',
-            'Older non-convictions can be petitioned with no waiting period and no prior-conviction bar.',
-            'Non-conviction petitions are generally free (deferred-prosecution dismissals are an exception).'
+            'Check first whether it was expunged automatically — a case with all charges disposed on/after Dec 1, 2021 and all dismissed/not-guilty/not-responsible expunges by operation of law about 180-210 days after disposition (§ 15A-146(a4)).',
+            'If the case had a felony charge dismissed as part of a plea agreement, the automatic path does not apply to the whole case — petition instead.',
+            'Older non-convictions can be petitioned with no waiting period and no prior-conviction bar; no hearing is generally needed (§ 15A-146(a6)).',
+            'Most non-conviction petitions are free; deferred-prosecution / conditional-discharge dismissals carry a $175 fee (§ 15A-146(d)), waived if you cannot afford it.'
           ],
-          fees: '$0 for most non-conviction petitions (deferred-prosecution dismissals are an exception).',
-          feeWaiver: 'Not applicable to the generally free non-conviction petitions.',
+          fees: '$0, EXCEPT $175 for deferred-prosecution / conditional-discharge dismissals (G.S. 15A-146(d)); indigent exempt.',
+          feeWaiver: 'The $175 deferred-prosecution / conditional-discharge fee does not apply to indigent petitioners; other non-conviction petitions are free.',
           courtContact: 'Clerk of Superior Court, county of the case'
         }
       },

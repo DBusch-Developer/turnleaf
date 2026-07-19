@@ -1367,6 +1367,20 @@ const NC: Persona[] = [
     expect: { resultKey: 'ineligible_felony_window_nc', reading: 'THE TRAP. 2004 and 2009 are >24 months apart, so the multiple-felony route is closed however long ago - it is about WHEN they were committed, not elapsed time. The window node answers no. Exact.' },
     now: NOW,
   },
+  {
+    source: 'Diana 7/18 - NC deferred prosecution',
+    package: 'completed deferred prosecution -> dismissal petitionable under 146(d) (the $175 non-conviction petition), not a legal-aid hedge.',
+    record: { title: 'Deferred Prosecution (dismissed)', disposition: 'deferred', disposition_date: '2023-01-01' },
+    expect: { resultKey: 'eligible_deferred_nc', reading: '146(d) confirms deferred-prosecution / conditional-discharge dismissals are petitionable under § 15A-146 with a $175 fee (indigent exempt); no wait. Upgraded from the old unknown_deferred hedge to a real eligible path, with the honest caveat that whether (a4) automatic also reaches it is unstated. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NC felony plea-agreement dismissal',
+    package: 'charge dismissed Dec-2021+ as part of a FELONY plea agreement -> the (a4) automatic path is knocked out for the whole case; petition route remains.',
+    record: { title: 'Dismissed via felony plea agreement', disposition: 'dismissed', disposition_date: '2022-06-01' },
+    expect: { resultKey: 'nonconviction_nc', reading: 'Routes to the non-conviction result, whose copy now carries the § 15A-146(a4) felony-plea-agreement exception: a case with a felony charge dismissed per plea agreement is NOT auto-expunged (whole case), but the § 15A-146 petition remains. The tree does not branch on plea-agreement (a copy nuance), so it lands on nonconviction_nc. Exact.' },
+    now: NOW,
+  },
 ];
 
 // ---------------------------------------------------------------------------

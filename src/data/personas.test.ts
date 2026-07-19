@@ -1300,57 +1300,83 @@ const VA: Persona[] = [
 // ---------------------------------------------------------------------------
 const MN: Persona[] = [
   {
-    source: 'Wave 2 — MN persona 1',
-    package: 'misdemeanor theft, discharged 2021, clean -> likely already auto-expunged -> check-record.',
-    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-01-01' },
-    answers: { registration_mn: false, excluded_mn: false, level_mn: 'misd', misd_date_mn: '2021-01-01' },
-    expect: { resultKey: 'check_record_first_mn', reading: 'Misdemeanour, 2yr from discharge (2021+2=2023<2026). ~94% done by spring 2026 -> the strongest check-record copy. Exact.' },
+    source: 'MN 7/19 statute-verified — persona 1 (misd auto-eligible + DHS note)',
+    package: 'misdemeanor theft, discharged 2.5 yrs ago, clean -> automatic-eligible; result carries the DHS/DCYF/Health scope-limit note.',
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'misd', misd_auto_excl_mn: false, misd_date_mn: '2024-01-01' },
+    expect: { resultKey: 'eligible_auto_mn', reading: 'Misdemeanour, not on the § 609A.015 subd 3 exclusion list, 2yr from discharge (2024+2=2026-01<2026-07) -> automatic. Copy carries the DHS/DCYF/Health scope limit + 30/60-day BCA timing + agencies-still-see-it note.' },
     now: NOW,
   },
   {
-    source: 'Wave 2 — MN persona 2',
-    package: 'gross misdemeanor discharged 2024 -> waiting (2027).',
-    record: { title: 'Gross Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-01-01' },
-    answers: { registration_mn: false, excluded_mn: false, level_mn: 'gross', gross_date_mn: '2024-01-01' },
-    expect: { resultKey: 'waiting_mn', reading: 'Gross misdemeanour, 3yr from discharge (2024+3=2027>2026) -> waiting. Exact.' },
+    source: 'MN 7/19 statute-verified — persona 2 (609.2242 misd auto-excluded -> petition)',
+    package: 'misdemeanor assault (§ 609.2242) discharged 10 yrs ago -> automatic-INELIGIBLE, but petition 3(a)(3) at 2yr (extraordinary remedy).',
+    record: { title: 'Misdemeanor Assault (§ 609.2242)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2016-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'misd', misd_auto_excl_mn: true, misd_petition_date_mn: '2016-01-01' },
+    expect: { resultKey: 'eligible_petition_extraordinary_mn', reading: '§ 609.2242 is on the automatic misd-exclusion list -> auto out; but the petition track has NO offense exclusions, so § 609A.02 subd 3(a)(3) petition is available at 2yr. Extraordinary remedy, clear-and-convincing burden.' },
     now: NOW,
   },
   {
-    source: 'Wave 2 — MN persona 3',
-    package: '5th-degree drug felony discharged 2023 -> waiting (2027, 4-yr).',
-    record: { title: '5th-Degree Drug Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-01-01' },
-    answers: { registration_mn: false, excluded_mn: false, level_mn: 'drug5', drug5_date_mn: '2023-01-01' },
-    expect: { resultKey: 'waiting_mn', reading: '5th-degree drug felony, 4yr from discharge (2023+4=2027>2026) -> waiting. Exact.' },
+    source: 'MN 7/19 statute-verified — persona 3 (152.025 felony, both tracks)',
+    package: '5th-degree drug felony (§ 152.025), discharged 4 yrs ago -> automatic 4yr AND petition 3(a)(6) -> automatic-eligible.',
+    record: { title: '5th-Degree Drug Felony (§ 152.025)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2022-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'drug5', felony_152_date_mn: '2022-01-01' },
+    expect: { resultKey: 'eligible_auto_mn', reading: '§ 152.025 is on BOTH tracks: automatic at 4yr (2022+4=2026-01<2026-07) -> eligible_auto_mn (petition 3(a)(6) is the same 4yr fallback).' },
     now: NOW,
   },
   {
-    source: 'Wave 2 — MN persona 4',
-    package: 'DWI misdemeanor -> excluded from automatic -> verify whether excluded from petition too -> likely "not eligible / legal aid".',
-    record: { title: 'DWI', charge_type: 'misdemeanor', disposition: 'convicted' },
-    answers: { registration_mn: false, excluded_mn: true },
-    expect: {
-      resultKey: 'complex_excluded_mn',
-      reading:
-        'DWI is out of the automatic path; whether the petition path reaches it is exactly what Wave 2 '
-        + 'flags as unverified. The tree routes to a hedge that says automatic is out, petition being '
-        + 'confirmed, consult legal aid - rather than guessing eligible or ineligible. Exact.',
-    },
+    source: 'MN 7/19 statute-verified — persona 4 (152.023s2 felony, auto-excluded -> petition 3(a)(8))',
+    package: 'felony § 152.023 subd 2, discharged 5 yrs ago -> carved OUT of the automatic felony list, but on the 3(b) petition list -> petition 3(a)(8) at 4yr.',
+    record: { title: 'Felony § 152.023 subd 2', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'felony', felony_auto_list_mn: false, felony_petition_list_mn: true, felony_petition_date_mn: '2019-01-01' },
+    expect: { resultKey: 'eligible_petition_mn', reading: '§ 152.023 subd 2 is in the automatic-track MINUS set (auto out) but on the § 609A.02 subd 3(b) petition list -> petition 3(a)(8) at 4yr (2019+4=2023<2026) -> eligible_petition_mn.' },
     now: NOW,
   },
   {
-    source: 'Wave 2 — MN persona 5',
-    package: 'eligible-list felony discharged 2020, new misdemeanor 2023 -> clock broken -> recompute from 2023 discharge.',
-    record: { title: 'Eligible-List Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-01-01' },
-    answers: { registration_mn: false, excluded_mn: false, level_mn: 'felony', felony_eligible_mn: true, felony_date_mn: '2023-01-01' },
-    expect: {
-      resultKey: 'waiting_mn',
-      reading:
-        'THE CLOCK-BREAK QUIRK, and it resolves cleanly. A new non-petty offence resets the 5-year '
-        + 'eligible-felony clock to the newer discharge (2023). 2023 + 5 = 2028, and it is 2026, so '
-        + 'the honest answer is WAITING — which is exactly what the tree returns once the recomputed '
-        + '2023 date is used. My first reading guessed check-record; the tree was right and I was '
-        + 'wrong, which is the fixture working. Exact.',
-    },
+    source: 'MN 7/19 statute-verified — persona 5 (609.13-reduced felony -> petition 3(a)(7))',
+    package: 'felony reduced to a misdemeanor by a stay of imposition -> automatic-INELIGIBLE per subd 3(d), petition 3(a)(7).',
+    record: { title: 'Felony reduced via stay of imposition', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: true },
+    expect: { resultKey: 'eligible_petition_609_13_mn', reading: 'THE 609.13 TRAP: a felony reduced to GM/misd stays at felony level for the automatic track (subd 3(d)) -> auto out. Relief valve is petition § 609A.02 subd 3(a)(7) (4yr if on list, else 5). Not treated at the reduced level.' },
+    now: NOW,
+  },
+  {
+    source: 'MN 7/19 statute-verified — persona 6 (dismissed after filing -> automatic, no wait)',
+    package: 'charges dismissed after filing, not incompetency -> automatic non-conviction, no wait, burden on the state for a petition.',
+    record: { title: 'Dismissed After Filing', disposition: 'dismissed', disposition_date: '2025-03-01' },
+    answers: { dismissed_incompetency_mn: false },
+    expect: { resultKey: 'eligible_noncon_mn', reading: 'Dismissal after filing (not incompetency) -> § 609A.015 subd 1 automatic, no wait. Copy: NGRI is not favorable, incompetency excluded, and a resolved-in-favor petition flips the burden to the state + fee waived.' },
+    now: NOW,
+  },
+  {
+    source: 'MN 7/19 statute-verified — persona 7 (243.166 registration -> hard no)',
+    package: 'predatory-offender-registration offense -> never expungeable, both tracks.',
+    record: { title: 'Registration Offense', charge_type: 'felony', disposition: 'convicted' },
+    answers: { registration_mn: true },
+    expect: { resultKey: 'ineligible_registration_mn', reading: '§ 243.166 registrable offense -> hard lifetime bar on both tracks (§ 609A.02 subd 4).' },
+    now: NOW,
+  },
+  {
+    source: 'MN 7/19 statute-verified — persona 8 (first-time 152.025 possession -> mandatory deferral)',
+    package: 'first-time 5th-degree drug possession (§ 152.025 subd 2), pre-sentence, no priors -> mandatory § 152.18 deferral -> discharge -> automatic expungement.',
+    record: { title: 'First-Time § 152.025 subd 2 Possession', charge_type: 'felony', disposition: 'deferred' },
+    answers: { deferral_type_mn: 'deferral152', deferral_152_mn: true },
+    expect: { resultKey: 'eligible_deferral_152_mn', reading: 'First-time § 152.025 subd 2 possession with no priors -> § 152.18 MANDATORY deferral as of right -> discharge -> automatic expungement (§ 609A.015 subd 1) + status restoration (honest-no). Raise it at the plea stage.' },
+    now: NOW,
+  },
+  {
+    source: 'MN 7/19 statute-verified — persona 9 (169A.25 GM auto-excluded -> petition 3(a)(4))',
+    package: '2nd-degree DWI gross misdemeanor (§ 169A.25), discharged 10 yrs ago -> automatic-INELIGIBLE, petition 3(a)(4) at 3yr open.',
+    record: { title: '2nd-Degree DWI (§ 169A.25, gross misd)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2016-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'gross', gross_auto_excl_mn: true, gross_petition_date_mn: '2016-01-01' },
+    expect: { resultKey: 'eligible_petition_extraordinary_mn', reading: '§ 169A.25 is on the automatic GM-exclusion list -> auto out; but a 2nd-deg DWI GM is petition-eligible (§ 609A.02 subd 3(a)(4)) at 3yr because the petition track has no offense exclusions. Extraordinary remedy.' },
+    now: NOW,
+  },
+  {
+    source: 'MN 7/19 statute-verified — persona 10 (robbery petition -> firearm-bar warning)',
+    package: 'simple robbery (crime of violence) on the 3(b) petition list, discharged 7 yrs ago -> petition grant; result carries the firearm-bar warning.',
+    record: { title: 'Simple Robbery', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-01-01' },
+    answers: { registration_mn: false, conv_609_13_mn: false, conv_level_mn: 'felony', felony_auto_list_mn: false, felony_petition_list_mn: true, felony_petition_date_mn: '2019-01-01' },
+    expect: { resultKey: 'eligible_petition_mn', reading: 'Robbery (crime of violence) on the § 609A.02 subd 3(b) petition list -> petition 3(a)(8) at 4yr -> eligible_petition_mn, whose copy carries the § 609A.03 subd 5a firearm-bar warning (a crime-of-violence expungement order = lifetime firearm bar unless restored).' },
     now: NOW,
   },
 ];

@@ -5193,91 +5193,89 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // MINNESOTA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md
+  // MINNESOTA — STATUTE-VERIFIED 2026-07-19. Diana read the 2025 MN Statutes
+  // (§§ 609A.01, 609A.015, 609A.02, 609A.025, 609A.03, 609A.035, 609A.04, 609A.05,
+  // 152.18) from revisor.mn.gov, incl. 1Sp2025 c3 art16 s18.
+  // Source: research/waves/Turnleaf_Wave2_Draft_Package.md + Diana's 7/19 reads.
   //
-  // "Expungement" here means court-ordered SEALING — the statute explicitly
-  // prohibits destruction. Multiple tracks; the automatic one is the headline:
-  // § 609A.015, live Jan 1, 2025, and NEARLY DONE — the BCA reported ~94% of
-  // ~2 million eligible records expunged by spring 2026. So Minnesota gets the
-  // strongest check-record-first copy of any state in Waves 1-2: "most eligible
-  // records have already been expunged — check yours."
-  //
-  // The clock quirk worth encoding: automatic periods run from discharge of
-  // sentence, and a new NON-PETTY offence during the wait breaks the clock and
-  // it recomputes from the newer discharge (persona 5).
-  //
-  // Individuals are NOT notified when expunged — checking is on them.
+  // "Expungement" here means court-ordered SEALING (§ 609A.01) — destruction is
+  // forbidden. TWO tracks, modeled separately because scope and burden differ:
+  //   A. AUTOMATIC "Clean Slate" (§ 609A.015, eff. 1/1/25, retroactive; BCA-
+  //      executed, no filing, no fee) — but with LONG offense-exclusion lists by
+  //      level, and it never reaches DHS/DCYF/Health records.
+  //   B. PETITION (§ 609A.02 grounds / § 609A.03 procedure) — reaches what the
+  //      automatic track excludes (a DWI GM is petition-eligible even though
+  //      automatic-excluded), but it is an EXTRAORDINARY remedy: the petitioner
+  //      proves benefit by clear-and-convincing (burden FLIPS to the state only
+  //      for resolved-in-favor / crime-victim-nexus petitions).
+  // Side doors: prosecutor-agreement shall-seal (§ 609A.025), pardon auto-order
+  // (§ 609A.035). Hard bar: § 243.166 registrable offenses, never, both tracks.
+  // 609.13 TRAP: a felony reduced to GM/misd stays INELIGIBLE for automatic —
+  // relief is petition § 609A.02 subd 3(a)(7). Honest-no (status-restoration +
+  // "may deny") only for 152.18 drug sealings and crime-victim-nexus cases.
   // ==========================================================================
   MN: {
     code: 'MN',
     name: 'Minnesota',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
     terminology:
-      'In Minnesota "expungement" means the court orders your record SEALED — the statute '
-      + 'specifically forbids destroying it, so sealing is as far as it goes. There are several '
-      + 'routes. AUTOMATIC "Clean Slate" expungement (§ 609A.015) went live January 1, 2025 and is '
-      + 'nearly finished — most eligible records are already sealed. A PETITION route (§§ 609A.02 / '
-      + '609A.03) covers what the automatic process misses and reaches records the automatic one '
-      + 'cannot, such as those held by health-licensing boards. A prosecutor can also agree to '
-      + 'sealing without a petition (§ 609A.025). Cannabis has its own tracks.',
+      'In Minnesota "expungement" means the court orders your record SEALED — the statute forbids '
+      + 'destroying it. There are two main tracks. AUTOMATIC "Clean Slate" expungement (§ 609A.015) '
+      + 'went live January 1, 2025 and is retroactive: the Bureau of Criminal Apprehension seals '
+      + 'eligible records on its own, with no filing and no fee — but it excludes a long list of '
+      + 'offenses by level, and it does not reach records held by the Departments of Human Services, '
+      + 'Children/Youth/Families, or Health. The PETITION route (§§ 609A.02 / 609A.03) reaches what '
+      + 'the automatic track cannot — a DWI, for example, is petition-eligible even though it is '
+      + 'excluded from the automatic path — but it is an EXTRAORDINARY remedy you have to prove is '
+      + 'worth granting, unless your case ended in your favor. A prosecutor can also agree to sealing '
+      + 'without a petition (§ 609A.025), and a pardon triggers an automatic sealing order (§ 609A.035). '
+      + 'A predatory-offender-registration offense (§ 243.166) can never be expunged, on either track.',
     keyDates: [
       {
-        label: 'Automatic Clean Slate expungement (§ 609A.015) live',
+        label: 'Automatic Clean Slate expungement (§ 609A.015) effective — retroactive',
         date: '2025-01-01',
         kind: 'effective',
-        note: 'The BCA began sending records April 2025 and sealing from June 2025; ~94% of ~2 million eligible records expunged by spring 2026, remainder in judicial review. The strongest automatic-track status of any state in Waves 1-2.',
-      },
-      {
-        label: 'Automatic petty-cannabis expungement (§ 609A.055) completed',
-        date: '2024-05',
-        kind: 'operative',
-        note: 'Wave 2 gives month and year only.',
+        note: 'The BCA seals qualifying records on its own, no petition and no fee. It is RETROACTIVE to offenses that met the criteria before 1/1/25 and were in the BCA system as of 1/1/25. The BCA determines eligibility within 30 days of a wait ending, re-reviews annually, and seals 60 days after judicial notice (subd 5).',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the exact § 609A.015 subd. 3(b) exclusion lists and the § 609A.02 subd. 3 lists — secondary sources paraphrase them loosely. Wave 2 flags DWI, domestic assault, harassment/stalking, and 4th-degree assault as carve-outs; the precise lists need pulling from the statute.',
+          'Is there a 2026 Regular Session amendment to § 609A.015? The revisor page banners one, but it is not in the 2025 print pulled. The rules here reflect the 2025 text plus 1Sp2025 c3 art16 s18; re-confirm against the certified 2026 text once published.',
         blocksFields: [],
       },
       {
         question:
-          'Is DWI excluded from the PETITION track as well as the automatic one? Wave 2 flags this specifically — read § 609A.02 subd. 3 against § 609A.015 subd. 3(b). The tree currently routes DWI to a hedge that says the automatic path is out and the petition path is unconfirmed.',
+          'Pull the CANNABIS expungement paths — §§ 609A.017, 609A.055 (automatic petty-cannabis), and 609A.06 (Cannabis Expungement Board, felony cannabis) — referenced in § 609A.01 but NOT pulled. Minnesota cannabis routing stays draft until those sections are read.',
         blocksFields: [],
       },
       {
         question:
-          'What is the current petition filing fee? Wave 2 gives "~$300-ish, in-forma-pauperis waiver available" and flags it. Confirm the current amount with a district court.',
-        blocksFields: ['resources.remedies.petition.fees'],
-      },
-      {
-        question:
-          'Confirm the § 609.13 quirk: a felony deemed a misdemeanor via stay of imposition does NOT become automatic-eligible through the demotion — separate petition rules with 4/5-year splits apply. The tree does not currently special-case this; it is disclosed as an open question.',
+          'What is the petition filing fee amount? A fee applies per § 357.021 subd 2 clause (1), but the dollar amount is not in the pulled text — confirm with a district court. It is waivable for indigency, and MUST be waived for a resolved-in-favor petition (§ 609A.03).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the § 609A.015 rollout is as complete as reported (~94% by spring 2026) and the BCA record-check path. This is the strongest automatic-track claim in the app, so it is worth confirming before the copy leans on it.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'How are completed diversions and stays of adjudication treated beyond the 1-year automatic period Wave 2 gives? The tree encodes the 1-year automatic diversion period; confirm the boundaries.',
+          'Pull the § 299C.11 / § 13.82 arrest-record-return path (return/destruction of arrest records where no charge or a favorable outcome) — not in this pull; it is a separate mechanism from § 609A sealing.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Minn. Stat. § 609A.015 (automatic Clean Slate expungement; periods; exclusions subd. 3(b))', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609A.02 (petition expungement; eligible-felony list subd. 3(b); exclusions subd. 3)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609A.03 (petition expungement procedure)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609A.025 (prosecutor-agreed sealing — no petition)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609A.055 (automatic petty-cannabis expungement)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609A.06 (Cannabis Expungement Board — felony cannabis)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 609.13 (felony deemed misdemeanour — stay of imposition quirk)', url: null, retrievedOn: null },
-      { id: 'Minn. Stat. § 243.166 (predatory-offender registration — never expungable)', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609A.015 (automatic Clean Slate expungement — subd 1 non-convictions [dismissal after filing except incompetency; 152.18 discharge; resolved-in-favor; NGRI not favorable; 590.11 exoneration favorable], subd 2 diversion/stay non-felony 1-yr, subd 3 convictions by level with waits + offense-exclusion lists + subd 3(d) 609.13 trap, subd 5 BCA 30/60-day timing, scope limits subds 1(d)/2(c)/3(f) — no DHS/DCYF/Health) — 2025 Statutes incl. 1Sp2025 c3 art16 s18', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.015', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.02 (petition grounds — subd 1 152.18 discharge, subd 2 juvenile-certified-as-adult, subd 3(a)(1) resolved-in-favor no wait, (2) diversion/stay 1yr [no non-felony limit], (3) petty/misd 2yr, (4) gross misd 3yr, (5) GM-deemed-misd 3yr, (6) felony 152.025 4yr, (7) felony-deemed-GM/misd 4/5yr, (8) 3(b)-list felony 4yr; subd 3(b) the 53-offense eligible-felony list; subd 4 § 243.166 hard bar)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.02', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.025 (prosecutor-agreed sealing — shall seal without petition; victim-notification effort; agreement may predate a diversion dismissal)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.025', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.03 (petition procedure — fee per § 357.021 subd 2(1), waivable/waived for resolved-in-favor; service by mail on prosecutor + agencies; hearing ≥60 days; subd 5 burden [extraordinary remedy, clear-and-convincing; FLIPS to state for 3(a)(1)/(2)]; subd 5(e) inadmissible in negligent-hiring suits; subd 5a firearm bar for crime-of-violence; subd 6 status-restoration for 152.18; subd 6a crime-victim-nexus; subd 7a agencies open without order + DHS/PELSB reach; subd 9 auto-stay + agency appeal window)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.03', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.035 (pardon extraordinary → automatic court sealing order)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.035', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.01 (chapter remedy is SEALING only; references cannabis §§ 609A.017/.055/.06)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.01', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.04 (civil remedy for improper disclosure of a sealed record)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.04', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 609A.05 (employer/landlord no duty to disclose a sealed record)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/609A.05', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 152.18 (drug-possession deferral — court MAY defer first-time possession, MUST defer first-time 152.025 subd 2; discharge → automatic expungement + status restoration; subd 3 pre-1976 marijuana cite-only)', url: 'https://www.revisor.mn.gov/statutes/2025/cite/152.18', retrievedOn: '2026-07-19' },
+      { id: 'Minn. Stat. § 243.166 (predatory-offender registration — never expungable; hard bar via § 609A.02 subd 4) — cite-only', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. § 609.13 (felony deemed GM/misdemeanor — the automatic-track trap, § 609A.015 subd 3(d)) — cite-only', url: null, retrievedOn: null },
+      { id: 'Minn. Stat. §§ 609A.017, 609A.055, 609A.06 (cannabis expungement paths — NOT pulled, routing stays draft) — cite-only', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -5288,90 +5286,191 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'What was the outcome of the case?',
           options: [
             { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'registration_mn' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_mn' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_mn' },
-            { label: 'Diversion / Stay of adjudication (Completed)', value: 'deferred', next: 'diversion_date_mn' },
+            { label: 'Dismissed', value: 'dismissed', next: 'dismissed_incompetency_mn' },
+            { label: 'Acquitted / Resolved in my favor', value: 'acquitted', next: 'eligible_noncon_mn' },
+            { label: 'Diversion / Stay of adjudication (Completed), or a first-time drug-possession deferral', value: 'deferred', next: 'deferral_type_mn' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        // Hard bar first (§ 609A.02 subd 4): registrable offences never expunge.
         registration_mn: {
           type: 'boolean',
-          text: 'Does the offense require you to register as a predatory offender?',
+          text: 'Does the offense require you to register as a predatory offender under Minn. Stat. § 243.166?',
           yes: 'ineligible_registration_mn',
-          no: 'excluded_mn'
+          no: 'conv_609_13_mn'
         },
-        excluded_mn: {
+        // The 609.13 TRAP (§ 609A.015 subd 3(d)): a felony reduced to a GM/misd by a
+        // stay of imposition stays AUTOMATIC-INELIGIBLE — relief is petition 3(a)(7).
+        conv_609_13_mn: {
           type: 'boolean',
-          text: 'Was the offense a DWI, a domestic assault, a harassment or stalking offense, or a 4th-degree assault?',
-          yes: 'complex_excluded_mn',
-          no: 'level_mn'
+          text: 'Was this originally a FELONY that was later reduced to a gross misdemeanor or misdemeanor by a stay of imposition (Minn. Stat. § 609.13)?',
+          yes: 'eligible_petition_609_13_mn',
+          no: 'conv_level_mn'
         },
-        level_mn: {
+        conv_level_mn: {
           type: 'choice',
-          text: 'How was the offense classified? (Your court paperwork says — Minnesota\'s waiting period depends on it.)',
+          text: 'How was the conviction classified? (Your court paperwork says — the track and waiting period depend on it.)',
           options: [
-            { label: 'Petty misdemeanor or misdemeanor', value: 'misd', next: 'misd_date_mn' },
-            { label: 'Gross misdemeanor', value: 'gross', next: 'gross_date_mn' },
-            { label: '5th-degree drug (controlled substance) felony', value: 'drug5', next: 'drug5_date_mn' },
-            { label: 'Another felony', value: 'felony', next: 'felony_eligible_mn' },
+            { label: 'Petty misdemeanor', value: 'petty', next: 'petty_auto_excl_mn' },
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_auto_excl_mn' },
+            { label: 'Gross misdemeanor', value: 'gross', next: 'gross_auto_excl_mn' },
+            { label: '5th-degree drug possession felony (§ 152.025)', value: 'drug5', next: 'felony_152_date_mn' },
+            { label: 'Another felony', value: 'felony', next: 'felony_auto_list_mn' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_mn' }
           ]
+        },
+        // Petty misd: automatic reaches all EXCEPT motor-vehicle traffic regs.
+        petty_auto_excl_mn: {
+          type: 'boolean',
+          text: 'Was the petty misdemeanor for a motor-vehicle operation or parking traffic regulation?',
+          yes: 'misd_petition_date_mn',
+          no: 'petty_date_mn'
+        },
+        petty_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 subd 3 — petty misdemeanor; no new non-petty conviction during the wait, nothing pending)' },
+            nextPass: 'eligible_auto_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        // Misd automatic-exclusion list (§ 609A.015 subd 3).
+        misd_auto_excl_mn: {
+          type: 'boolean',
+          text: 'Is the misdemeanor any of these AUTOMATIC-excluded offenses: DWI (§§ 169A.20/169A.27), violating an order for protection (§ 518B.01), assault (§§ 609.224, 609.2242), interference with privacy (§ 609.746), harassment/stalking (§ 609.748), obstructing legal process (§ 609.78), falsely reporting a crime (§ 609.79), indecent exposure (§ 617.23), or a domestic-abuse no-contact order (§ 629.75)?',
+          yes: 'misd_petition_date_mn',
+          no: 'misd_date_mn'
         },
         misd_date_mn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you discharged from your sentence for this case?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — petty misdemeanours and misdemeanours; no new non-petty offence during the wait)' },
-            nextPass: 'check_record_first_mn',
+            period: { amount: 2, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 subd 3 — misdemeanor; no new non-petty conviction during the wait, nothing pending)' },
+            nextPass: 'eligible_auto_mn',
             nextFail: 'waiting_mn'
           }
+        },
+        // Petition path for automatic-excluded misdemeanors/petty-traffic (2yr, 3(a)(3)).
+        misd_petition_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.02 subd 3(a)(3) — petty/misdemeanor petition; petition track has NO offense exclusions)' },
+            nextPass: 'eligible_petition_extraordinary_mn',
+            nextFail: 'waiting_petition_mn'
+          }
+        },
+        // Gross misd automatic-exclusion list (§ 609A.015 subd 3).
+        gross_auto_excl_mn: {
+          type: 'boolean',
+          text: 'Is the gross misdemeanor any of these AUTOMATIC-excluded offenses: a 2nd-degree DWI or test-refusal (§§ 169A.25/169A.26), criminal vehicular operation causing great bodily harm or death (§ 169.13 subd 1), assault (§§ 609.2113 subd 3, 609.2231, 609.224, 609.2242, 609.233), an OFP violation (§ 518B.01 subd 14), criminal sexual conduct (§ 609.3451), malicious punishment of a child (§ 609.377), escape (§ 609.485), concealing a criminal proceeds/aiding offender (§ 609.498), theft-from-person (§ 609.582 subd 4), interference with privacy (§ 609.746), harassment/stalking (§§ 609.748, 609.749), obstructing legal process (§ 609.78), indecent exposure (§ 617.23), harassing/obscene communication (§ 617.261), or a domestic-abuse no-contact order (§ 629.75)?',
+          yes: 'gross_petition_date_mn',
+          no: 'gross_date_mn'
         },
         gross_date_mn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you discharged from your sentence for this case?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — gross misdemeanours; no new non-petty offence during the wait)' },
-            nextPass: 'check_record_first_mn',
+            period: { amount: 3, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 subd 3 — gross misdemeanor; no new non-petty conviction during the wait, nothing pending)' },
+            nextPass: 'eligible_auto_mn',
             nextFail: 'waiting_mn'
           }
         },
-        drug5_date_mn: {
+        // Petition path for automatic-excluded gross misdemeanors (3yr, 3(a)(4)).
+        gross_petition_date_mn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you discharged from your sentence for this case?',
           validation: {
-            period: { amount: 4, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — 5th-degree drug felony; no new non-petty offence during the wait)' },
-            nextPass: 'check_record_first_mn',
+            period: { amount: 3, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.02 subd 3(a)(4) — gross-misdemeanor petition; NO offense exclusions on the petition track, so a 2nd-deg DWI is petition-eligible)' },
+            nextPass: 'eligible_petition_extraordinary_mn',
+            nextFail: 'waiting_petition_mn'
+          }
+        },
+        // § 152.025 5th-degree drug possession felony — on BOTH tracks (auto 4yr).
+        felony_152_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 subd 3 / § 609A.02 subd 3(a)(6) — § 152.025 felony; automatic 4 yrs; no new non-petty conviction during the wait)' },
+            nextPass: 'eligible_auto_mn',
             nextFail: 'waiting_mn'
           }
         },
-        felony_eligible_mn: {
+        // Other felony: on the automatic-eligible felony list (3(b) MINUS the
+        // automatic-excluded offenses)?
+        felony_auto_list_mn: {
           type: 'boolean',
-          text: 'Is this offense on Minnesota\'s list of expungement-eligible felonies (roughly 50 offenses — drug possession, theft, forgery, and financial crimes)? If you are not sure, answer no.',
-          yes: 'felony_date_mn',
+          text: 'Is your felony on Minnesota\'s AUTOMATIC-eligible felony list — the § 609A.02 subd 3(b) list of ~53 offenses (drug, theft, forgery, and financial crimes) MINUS a handful the automatic track carves out (e.g., § 152.023 subd 2, § 152.024 subd 2, § 609.582 subd 3(a))? If you are not sure, answer no.',
+          yes: 'felony_auto_date_mn',
+          no: 'felony_petition_list_mn'
+        },
+        felony_auto_date_mn: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When were you discharged from your sentence for this case?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 subd 3 — listed automatic-eligible felony; no new non-petty conviction during the wait)' },
+            nextPass: 'eligible_auto_mn',
+            nextFail: 'waiting_mn'
+          }
+        },
+        // Not automatic-eligible, but on the broader § 609A.02 subd 3(b) petition list?
+        felony_petition_list_mn: {
+          type: 'boolean',
+          text: 'Is your felony on the § 609A.02 subd 3(b) eligible-felony PETITION list (the broader ~53-offense list, which includes some the automatic track excludes, such as § 152.023 subd 2)? If you are not sure, answer no.',
+          yes: 'felony_petition_date_mn',
           no: 'complex_felony_mn'
         },
-        felony_date_mn: {
+        felony_petition_date_mn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When were you discharged from your sentence for this case?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.015 — listed eligible felonies; no new non-petty offence during the wait)' },
-            nextPass: 'check_record_first_mn',
-            nextFail: 'waiting_mn'
+            period: { amount: 4, unit: 'years', anchor: 'discharge of sentence (Minn. Stat. § 609A.02 subd 3(a)(8) — 3(b)-list felony petition; 4 yrs)' },
+            nextPass: 'eligible_petition_mn',
+            nextFail: 'waiting_petition_mn'
           }
+        },
+        // Non-conviction: dismissal after filing is automatic EXCEPT incompetency.
+        dismissed_incompetency_mn: {
+          type: 'boolean',
+          text: 'Was the case dismissed because you were found incompetent to proceed?',
+          yes: 'ineligible_incompetency_mn',
+          no: 'eligible_noncon_mn'
+        },
+        // Deferred: completed diversion/stay (auto 1yr) vs a first-time drug deferral.
+        deferral_type_mn: {
+          type: 'choice',
+          text: 'Which best describes it?',
+          options: [
+            { label: 'A completed diversion or stay of adjudication', value: 'diversion', next: 'diversion_date_mn' },
+            { label: 'A first-time drug-possession case where I am seeking (or in) a § 152.18 deferral / stay of adjudication', value: 'deferral152', next: 'deferral_152_mn' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_diversion_mn' }
+          ]
         },
         diversion_date_mn: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did you complete the diversion or the stay of adjudication?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'completion of diversion or stay of adjudication (Minn. Stat. § 609A.015 — non-felony)' },
-            nextPass: 'check_record_first_mn',
+            period: { amount: 1, unit: 'years', anchor: 'completion of diversion or stay of adjudication (Minn. Stat. § 609A.015 subd 2 — automatic, non-felony, 1 yr with no new charge; petty misdemeanor excepted)' },
+            nextPass: 'eligible_diversion_mn',
             nextFail: 'waiting_mn'
           }
+        },
+        // § 152.18 mandatory deferral for a first-time § 152.025 subd 2 possession.
+        deferral_152_mn: {
+          type: 'boolean',
+          text: 'Is this a first-time 5th-degree drug POSSESSION (§ 152.025 subd 2), with no prior drug-diversion, no prior § 152.18 discharge, no prior felony in any jurisdiction, and no prior § 152.025 gross misdemeanor?',
+          yes: 'eligible_deferral_152_mn',
+          no: 'complex_diversion_mn'
         }
       },
       results: {
@@ -5382,54 +5481,103 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (BCA)',
           citation: 'Minn. Stat. § 609A.015 (which path applies depends on the disposition)'
         },
-        eligible_nonconviction_mn: {
+        eligible_auto_mn: {
           status: 'eligible',
-          title: 'No Conviction — Likely Already Expunged, No Wait',
-          message: 'Because your case ended without a conviction, it is eligible for expungement with no waiting period — and Minnesota\'s automatic Clean Slate program, which is nearly complete, has very likely already sealed it. Nobody is notified when this happens, so the way to know is to check: run a BCA criminal history search. If it has not been sealed, the petition route is available, and a prosecutor can also agree to sealing without a petition (§ 609A.025).',
-          remedy: 'Automatic expungement (check BCA) — no waiting period',
-          citation: 'Minn. Stat. §§ 609A.015, 609A.025'
-        },
-        check_record_first_mn: {
-          status: 'eligible',
-          title: 'Most Eligible Records Are Already Sealed — Check Yours',
-          message: 'This is the strongest starting point of any state we cover. Minnesota\'s automatic Clean Slate program went live in January 2025 and by spring 2026 had already expunged about 94% of the roughly two million eligible records. Based on your dates you are past the waiting period for your offense, so there is a very good chance yours is already sealed. The catch is that nobody is notified when it happens — so you have to check. Run a BCA criminal history search to see. If yours is in the small remainder still in judicial review, it is on its way and there is nothing to file for the automatic path. If for some reason it was missed, the petition route (§§ 609A.02/609A.03) reaches records the automatic process cannot — including those held by health-licensing boards — and a prosecutor can agree to sealing without a petition at all (§ 609A.025).',
-          remedy: 'Check your record with the BCA — automatic expungement is nearly complete',
+          title: 'Likely Automatic — Check Your Record First',
+          message: 'Based on your dates and offense, this looks eligible for Minnesota\'s AUTOMATIC Clean Slate expungement (§ 609A.015) — no petition, no fee, no filing. The BCA determines eligibility within 30 days after your waiting period ends, re-reviews annually, and seals the record 60 days after judicial notice; nobody is notified, so the way to know is to check your record with the BCA. Two honest limits worth knowing. First, the automatic seal does NOT reach records held by the Departments of Human Services, Children/Youth/Families, or Health — those need a petition directed to the commissioner. Second, "expunged" here means SEALED, and even sealed, criminal-justice agencies can still see it for investigation, prosecution, or sentencing (and DHS/PELSB can reach a sealed conviction unless the order is specifically directed to them). If the automatic path missed you or you need the agency records reached, the petition route (§§ 609A.02/609A.03) is available — and a prosecutor can agree to sealing without a petition at all (§ 609A.025). The Volunteer Lawyers Network runs free clinics.',
+          remedy: 'Check your BCA record — automatic sealing (§ 609A.015); petition for DHS/DCYF/Health records',
           citation: 'Minn. Stat. § 609A.015'
         },
         waiting_mn: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Minnesota\'s automatic expungement comes after a wait that depends on the level: 1 year for a completed diversion, 2 years for a misdemeanor, 3 for a gross misdemeanor, 4 for a 5th-degree drug felony, and 5 for other eligible felonies — all measured from discharge of your sentence. Based on your dates, yours has not run yet. One thing worth knowing: a new non-petty offense during the wait breaks the clock, and it restarts from the newer discharge. Once your period runs, the sealing is automatic — Minnesota is doing this without petitions for eligible records — so check your BCA record when the time comes.',
-          remedy: 'Wait for the period to run, then check the BCA',
+          title: 'Automatic Waiting Period Not Yet Met',
+          message: 'Minnesota\'s automatic expungement (§ 609A.015) comes after a wait measured from discharge of your sentence: 1 year for a completed diversion or stay, 2 years for a petty misdemeanor or misdemeanor, 3 for a gross misdemeanor, 4 for a § 152.025 drug felony, and 5 for another listed eligible felony. Based on your dates, yours has not run yet, and it also requires no new NON-petty conviction during the wait and nothing pending when the BCA reviews. Once your period runs, the sealing is automatic — nothing to file — so check your BCA record when the time comes. If you cannot wait, a petition (§ 609A.02) may be available sooner in some situations, and a prosecutor can agree to sealing at any time (§ 609A.025).',
+          remedy: 'Wait for the automatic period, then check the BCA (or ask about an early petition)',
           citation: 'Minn. Stat. § 609A.015'
+        },
+        eligible_petition_extraordinary_mn: {
+          status: 'eligible',
+          title: 'Automatic Path Is Out — But You Can Petition',
+          message: 'Your offense is carved out of Minnesota\'s AUTOMATIC expungement — but here is the important thing most tools get wrong: the PETITION track (§ 609A.02) does NOT carry the same exclusions, so it is available to you even though Clean Slate is not (a DWI, for example, is petition-eligible). Based on your dates you are past the petition waiting period for your level (2 years for a petty/misdemeanor under § 609A.02 subd 3(a)(3), 3 years for a gross misdemeanor under 3(a)(4)). Set expectations, though: petition sealing is an EXTRAORDINARY remedy — YOU have to prove, by clear and convincing evidence, that the benefit to you outweighs the public interest in keeping the record open (§ 609A.03 subd 5). You file in the district court of the case, serve the prosecutor and affected agencies by mail, and there is a hearing at least 60 days later. If your offense is a crime of violence (§ 624.712 subd 5), know one consequence going in: an expungement order carries a LIFETIME firearm prohibition unless you get federal relief or a § 609.165 restoration. The Volunteer Lawyers Network runs free expungement clinics — for a discretionary petition, that help is worth taking.',
+          remedy: 'Petition to seal (§ 609A.02) — extraordinary remedy, clear-and-convincing; crime-of-violence = firearm bar',
+          citation: 'Minn. Stat. §§ 609A.02, 609A.03'
+        },
+        eligible_petition_mn: {
+          status: 'eligible',
+          title: 'Eligible to Petition to Seal This Felony',
+          message: 'Your felony is on Minnesota\'s eligible-felony petition list (§ 609A.02 subd 3(b)), and based on your dates you are past the 4-year waiting period from discharge (§ 609A.02 subd 3(a)(8)). This is the petition route, not automatic. Set expectations: petition sealing is an EXTRAORDINARY remedy — YOU must prove, by clear and convincing evidence, that the benefit to you outweighs the public interest in keeping the record accessible (§ 609A.03 subd 5). File in the district court of the case, serve the prosecutor and every affected agency by mail, and expect a hearing at least 60 days out; a granted order is auto-stayed 60 days for a possible agency appeal (subd 9). One consequence to plan for if this is a crime of violence (§ 624.712 subd 5): an expungement order carries a LIFETIME firearm prohibition unless you obtain federal relief or a § 609.165 restoration. A prosecutor can also agree to sealing without a petition (§ 609A.025). The Volunteer Lawyers Network can help you file.',
+          remedy: 'Petition to seal a felony (§ 609A.02 subd 3(a)(8)) — extraordinary remedy; crime-of-violence = firearm bar',
+          citation: 'Minn. Stat. §§ 609A.02, 609A.03'
+        },
+        eligible_petition_609_13_mn: {
+          status: 'eligible',
+          title: 'Reduced Felony — Automatic Is Out, but Petition Is In',
+          message: 'This is a trap Minnesota built into the automatic law, and it is worth understanding. Because your offense was originally a FELONY that a stay of imposition later reduced to a gross misdemeanor or misdemeanor (§ 609.13), the AUTOMATIC track treats it at its felony level and does not reach it (§ 609A.015 subd 3(d)) — so Clean Slate will not seal it on its own. The relief valve is the PETITION: § 609A.02 subd 3(a)(7) covers exactly this situation, at 4 years from discharge if the offense is on the eligible-felony list (§ 609A.02 subd 3(b)) or 5 years otherwise. Petition sealing is an extraordinary remedy — you prove the benefit outweighs the public interest by clear and convincing evidence (§ 609A.03 subd 5) — and if the underlying felony is a crime of violence, an order carries a lifetime firearm bar unless restored. File in the district court of the case; the Volunteer Lawyers Network can help.',
+          remedy: 'Petition to seal a stay-of-imposition-reduced felony (§ 609A.02 subd 3(a)(7)) — 4 or 5 yrs',
+          citation: 'Minn. Stat. §§ 609A.02 subd 3(a)(7), 609A.015 subd 3(d)'
+        },
+        waiting_petition_mn: {
+          status: 'waiting',
+          title: 'Petition Waiting Period Not Yet Met',
+          message: 'Because your offense is carved out of the automatic track, the petition route (§ 609A.02) is the path — but the waiting period from discharge of your sentence has not run yet: 2 years for a petty/misdemeanor (subd 3(a)(3)), 3 for a gross misdemeanor (3(a)(4)), 4 for an eligible-list felony (3(a)(8)). Based on your dates, come back when it runs. When you do, remember petition sealing is an extraordinary remedy you have to prove is warranted (§ 609A.03 subd 5), and a prosecutor can agree to sealing without a petition at any time (§ 609A.025), which is worth asking about.',
+          remedy: 'Wait for the petition period from discharge (§ 609A.02)',
+          citation: 'Minn. Stat. § 609A.02'
+        },
+        eligible_noncon_mn: {
+          status: 'eligible',
+          title: 'Resolved in Your Favor — Automatic, No Wait, and the Burden Is on the State',
+          message: 'Because your case was resolved in your favor — dismissed after charging, acquitted, or ended without a conviction — it is eligible for automatic expungement with NO waiting period (§ 609A.015 subd 1), and the BCA seals these on its own. Nobody is notified, so check your record with the BCA. Two things to know. First, one narrow carve-out: a dismissal because you were found incompetent to proceed is NOT sealable, and an NGRI (not-guilty-by-reason-of-mental-illness) finding does not count as "in your favor" (a § 590.11 exoneration order, by contrast, does). Second, if you need to petition — for example to reach agency records the automatic seal does not touch — a resolved-in-favor petition is the strong one: the court SHALL grant it unless the agency proves by clear and convincing evidence that the public interest in keeping it open outweighs sealing (§ 609A.03 subd 5), and the filing fee MUST be waived. A prosecutor can also agree to sealing without a petition (§ 609A.025). The Volunteer Lawyers Network can help.',
+          remedy: 'Automatic (check BCA) — or a resolved-in-favor petition (burden on the state, fee waived)',
+          citation: 'Minn. Stat. §§ 609A.015 subd 1, 609A.03 subd 5'
+        },
+        ineligible_incompetency_mn: {
+          status: 'ineligible',
+          title: 'An Incompetency Dismissal Cannot Be Sealed',
+          message: 'There is one narrow kind of dismissal Minnesota does not seal: a case dismissed because you were found incompetent to proceed (§ 609A.015 subd 1). It is excluded from the automatic non-conviction sealing, and it does not fit the resolved-in-favor petition ground either. If your case was NOT dismissed on competency grounds, come back and answer that question differently — most dismissals seal easily and automatically. Because whether a dismissal was truly "on competency grounds" is a legal characterization, it is worth confirming with the Volunteer Lawyers Network before accepting this.',
+          remedy: 'None (incompetency dismissal, § 609A.015 subd 1) — confirm the characterization with legal aid',
+          citation: 'Minn. Stat. § 609A.015 subd 1'
+        },
+        eligible_diversion_mn: {
+          status: 'eligible',
+          title: 'Completed Diversion — Likely Automatic',
+          message: 'Because you completed a diversion or a stay of adjudication on a non-felony and a year has passed with no new charge, it is eligible for automatic expungement (§ 609A.015 subd 2) — no petition, no fee. Check your BCA record to see whether it has been sealed. If you need the petition route instead (for example to reach agency records the automatic seal does not touch), note a useful difference: on the PETITION track a diversion/stay ground (§ 609A.02 subd 3(a)(2)) does NOT carry the automatic track\'s non-felony limit, so it can reach a felony-level stay of adjudication after 1 year. And a prosecutor can agree to sealing without a petition — the agreement can even predate the dismissal in a diversion case (§ 609A.025). The Volunteer Lawyers Network can help.',
+          remedy: 'Check your BCA record — automatic (§ 609A.015 subd 2); petition (§ 609A.02) has no felony limit',
+          citation: 'Minn. Stat. §§ 609A.015 subd 2, 609A.02 subd 3(a)(2)'
+        },
+        eligible_deferral_152_mn: {
+          status: 'eligible',
+          title: 'First-Time Drug Possession — a Deferral You May Be Entitled To',
+          message: 'This is one of Minnesota\'s strongest doors, and it is worth knowing before sentencing. For a first-time 5th-degree drug POSSESSION (§ 152.025 subd 2), if you have no prior drug-diversion, no prior § 152.18 discharge, and no prior felony, the court MUST defer the proceedings without entering a conviction (§ 152.18) — a deferral as of right, not a favor. You are placed on probation; complete it, and the charge is DISCHARGED and dismissed with no conviction ever entered. From there, two good things follow: the discharge is eligible for AUTOMATIC expungement (§ 609A.015 subd 1), and § 152.18 restores you to your pre-offense status — one of the few Minnesota sealings after which you may lawfully say it did not happen. Because this is decided at the plea/sentencing stage, raise it with your defense lawyer or a public defender NOW; the Volunteer Lawyers Network and Legal Rights Center can also help.',
+          remedy: 'Ask for the mandatory § 152.18 deferral (first-time § 152.025 possession) — then automatic expungement',
+          citation: 'Minn. Stat. §§ 152.18, 609A.015 subd 1',
+        },
+        complex_diversion_mn: {
+          status: 'complex',
+          title: 'Your Diversion or Deferral Needs a Person',
+          message: 'How your specific diversion, stay of adjudication, or drug deferral is treated depends on details this screening cannot resolve — the offense level, whether a conviction was entered, and prior history all matter. Rather than guess, take it to someone: the Volunteer Lawyers Network runs free expungement clinics, and a public defender can tell you whether a § 152.18 deferral is available if the case is still open. If you completed a non-felony diversion or stay a year ago with no new charge, it may already be sealing automatically (§ 609A.015 subd 2) — check your BCA record.',
+          remedy: 'Consult Legal Aid (Diversion / Deferral) — check the BCA for an automatic seal',
+          citation: 'Minn. Stat. §§ 609A.015 subd 2, 152.18'
         },
         ineligible_registration_mn: {
           status: 'ineligible',
           title: 'Predatory-Offender Registration Blocks Expungement',
-          message: 'An offense that requires predatory-offender registration under Minn. Stat. § 243.166 cannot be expunged in Minnesota — not automatically and not by petition. This is a hard bar in the statute. If you are uncertain whether your offense actually carries a registration requirement, that is worth confirming rather than assuming, and the Volunteer Lawyers Network expungement clinics can check.',
-          remedy: 'None (Registration Offense) — confirm the registration requirement',
-          citation: 'Minn. Stat. § 243.166'
-        },
-        complex_excluded_mn: {
-          status: 'complex',
-          title: 'DWI and Certain Assaults Need a Closer Look',
-          message: 'DWI, domestic assault, harassment and stalking offenses, and 4th-degree assault are carved out of Minnesota\'s AUTOMATIC expungement — so the Clean Slate program will not seal them on its own. What we cannot yet tell you cleanly is whether the PETITION route is open to them: the exclusion lists for the automatic and petition tracks are not identical, and we are still confirming exactly where DWI in particular falls. Rather than guess in either direction, this is one to take to a person: the Volunteer Lawyers Network runs free expungement clinics, and a petition under § 609A.02 may well be available even though the automatic path is not.',
-          remedy: 'Consult Legal Aid (Automatic Path Excluded; Petition Path Being Confirmed)',
-          citation: 'Minn. Stat. §§ 609A.015 subd. 3(b), 609A.02 subd. 3'
+          message: 'An offense that requires predatory-offender registration under Minn. Stat. § 243.166 cannot be expunged in Minnesota — not automatically and not by petition. This is a hard, lifetime bar in the statute (§ 609A.02 subd 4), on both tracks. If you are uncertain whether your offense actually carries a registration requirement, that is worth confirming rather than assuming, and the Volunteer Lawyers Network expungement clinics can check.',
+          remedy: 'None (Registration Offense, § 609A.02 subd 4) — confirm the registration requirement',
+          citation: 'Minn. Stat. §§ 243.166, 609A.02 subd 4'
         },
         complex_level_mn: {
           status: 'complex',
           title: 'We Need the Offense Classification',
-          message: 'In Minnesota the waiting period depends on the level: 2 years for a misdemeanor, 3 for a gross misdemeanor, 4 for a 5th-degree drug felony, 5 for other eligible felonies. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, a BCA criminal history search shows it, and the Volunteer Lawyers Network can read your record with you.',
+          message: 'In Minnesota the track and the waiting period depend on the level: 2 years for a petty/misdemeanor, 3 for a gross misdemeanor, 4 for a § 152.025 drug felony, 5 for another listed felony — and whether the automatic track even reaches your offense depends on level-specific exclusion lists. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, a BCA criminal history search shows it, and the Volunteer Lawyers Network can read your record with you.',
           remedy: 'Get Your Offense Classification First (court paperwork / BCA)',
-          citation: 'Minn. Stat. § 609A.015'
+          citation: 'Minn. Stat. §§ 609A.015, 609A.02'
         },
         complex_felony_mn: {
           status: 'complex',
           title: 'Whether This Felony Is Eligible Needs Checking',
-          message: 'Minnesota expunges only a specific list of about 50 felonies — drug possession, theft, forgery, financial crimes, and similar — and not felonies generally. Whether yours is on that list decides everything, and it is not something to guess at. The list is in § 609A.02 subd. 3(b); a BCA record will identify your exact offense, and the Volunteer Lawyers Network expungement clinics can check it against the list. One more wrinkle worth mentioning to them: a felony that was reduced to a misdemeanor by a stay of imposition does NOT automatically become expungement-eligible through that reduction — it has its own petition rules.',
-          remedy: 'Check the Felony List (§ 609A.02 subd. 3(b)) with legal aid',
-          citation: 'Minn. Stat. §§ 609A.02, 609.13'
+          message: 'Minnesota expunges felonies by PETITION only for a specific list of about 53 offenses (§ 609A.02 subd 3(b)) — drug, theft, forgery, and financial crimes — not felonies generally, and the automatic track reaches an even narrower subset. Whether yours is on the list decides everything, and it is not something to guess at. A BCA record will identify your exact offense, and the Volunteer Lawyers Network expungement clinics can check it against § 609A.02 subd 3(b). If it is not on the list, the petition still exists in principle as an extraordinary remedy for other grounds, but that is exactly the kind of thing to take to a lawyer.',
+          remedy: 'Check the Felony List (§ 609A.02 subd 3(b)) with legal aid',
+          citation: 'Minn. Stat. § 609A.02 subd 3(b)'
         }
       }
     },
@@ -5440,15 +5588,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'MN Judicial Branch Expungement forms packet',
           formUrl: 'https://www.mncourts.gov/Help-Topics/Expungement.aspx',
           steps: [
-            'Check first whether the automatic program already sealed it — run a BCA criminal history search. Most eligible records are already done.',
-            'If you need to petition, complete the MN Judicial Branch expungement packet and file in the district court of the case.',
-            'Serve the agencies. The petition route reaches records the automatic process cannot, including those held by health-licensing boards.',
-            'Before petitioning, it can be worth asking the prosecutor about agreed sealing under § 609A.025 — it skips the petition entirely.'
+            'Check first whether the automatic program (§ 609A.015) already sealed it — run a BCA criminal history search. The automatic track does NOT reach DHS/DCYF/Health records; those need a petition directed to the commissioner.',
+            'Consider the side doors first: a prosecutor can agree to sealing without a petition (§ 609A.025 — the agreement can even predate a diversion dismissal), and a pardon triggers an automatic sealing order (§ 609A.035).',
+            'If you petition, complete the MN Judicial Branch expungement packet and file in the district court of the case; serve the prosecutor and every affected agency by mail. The hearing is at least 60 days after service, and a granted order is auto-stayed 60 days for a possible agency appeal (§ 609A.03 subd 9).',
+            'Understand the burden: petition sealing is an extraordinary remedy you prove by clear and convincing evidence — EXCEPT for a resolved-in-favor or crime-victim-nexus petition, where the court shall grant unless the state proves otherwise (§ 609A.03 subd 5).',
+            'Protections once sealed: an employer or landlord has no duty to disclose it (§ 609A.05), improper disclosure carries a civil remedy (§ 609A.04), and the sealed record is inadmissible against the discloser in a negligent-hiring suit (§ 609A.03 subd 5(e)). If the offense is a crime of violence, note that an expungement order carries a lifetime firearm bar unless restored (§ 609A.03 subd 5a).'
           ],
-          // null: Wave 2 gives "~$300-ish, in-forma-pauperis waiver available".
-          fees: null,
-          // NOT null: the waiver mechanism is named independently of the amount.
-          feeWaiver: 'A fee waiver (in forma pauperis) is available if you cannot afford the filing fee.',
+          // Statute-cited: fee per § 357.021 subd 2(1) — amount not in the text.
+          fees: 'A filing fee applies per Minn. Stat. § 357.021 subd 2 clause (1); the dollar amount is not in the expungement statute — confirm with the district court.',
+          feeWaiver: 'The fee is waivable for indigency (in forma pauperis), and it MUST be waived for a resolved-in-favor petition (Minn. Stat. § 609A.03).',
           courtContact: 'District court of the case'
         }
       },

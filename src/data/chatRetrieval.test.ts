@@ -34,6 +34,12 @@ describe('detectStateCodes', () => {
   test('returns empty when nothing is named and no current state', () => {
     expect(detectStateCodes('what is expungement?', null)).toEqual([]);
   });
+  test('falls back to the whole on-screen set (multi-state) when nothing is named', () => {
+    expect(detectStateCodes('what is the waiting period?', ['CA', 'TX'])).toEqual(['CA', 'TX']);
+  });
+  test('a named state still overrides the on-screen set', () => {
+    expect(detectStateCodes('specifically in Texas though', ['CA', 'TX'])).toEqual(['TX']);
+  });
   test('detects two states named by uppercase code', () => {
     expect(new Set(detectStateCodes('compare CA and NY please', null))).toEqual(new Set(['CA', 'NY']));
   });

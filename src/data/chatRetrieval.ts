@@ -33,10 +33,16 @@ const CODE_MATCH_EXCLUSIONS: Set<string> = new Set([
  * case-insensitively (longest first, so "West Virginia" is consumed before
  * "Virginia" can match its tail); two-letter codes are matched ONLY as
  * standalone uppercase tokens in the original text, so the words "in"/"or"/"me"
- * are never mistaken for Indiana/Oregon/Maine. Falls back to the state the user
- * is currently viewing when nothing is named.
+ * are never mistaken for Indiana/Oregon/Maine. Falls back to the state(s) the
+ * user is currently viewing when nothing is named — in a multi-state screening
+ * that is the whole on-screen set, so an unqualified "what's the waiting period?"
+ * defaults to every state in view rather than to nothing. (The route still caps
+ * the result and the model still refuses to synthesize across states.)
  */
-export function detectStateCodes(message: string, currentStateCode: string | null): string[] {
+export function detectStateCodes(
+  message: string,
+  currentState: string | string[] | null,
+): string[] {
   const found: string[] = [];
   let scan = ` ${message.toLowerCase()} `;
   const byLength = [...stateDirectory].sort((a, b) => b.name.length - a.name.length);
@@ -52,7 +58,10 @@ export function detectStateCodes(message: string, currentStateCode: string | nul
     if (CODE_MATCH_EXCLUSIONS.has(code)) continue;
     if (new RegExp(`\\b${code}\\b`).test(message)) found.push(code);
   }
-  if (found.length === 0 && currentStateCode) return [currentStateCode.toUpperCase()];
+  if (found.length === 0) {
+    const defaults = Array.isArray(currentState) ? currentState : currentState ? [currentState] : [];
+    return defaults.map(c => c.toUpperCase());
+  }
   return found;
 }
 

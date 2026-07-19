@@ -40,7 +40,7 @@ const GREETING: AssistantMessage = {
 };
 
 export default function AssistantWidget() {
-  const { selectedStateCode, stateName } = useAssistantScreen();
+  const { selectedStateCode, selectedStateCodes, stateName } = useAssistantScreen();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<AssistantMessage[]>([GREETING]);
   const [input, setInput] = useState('');
@@ -77,7 +77,10 @@ export default function AssistantWidget() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, stateCode: selectedStateCode, history }),
+        // Send the whole on-screen set so an unqualified question in a
+        // multi-state screening defaults to those states (stateCode stays for
+        // back-compat and the single-state case).
+        body: JSON.stringify({ message: text, stateCode: selectedStateCode, stateCodes: selectedStateCodes, history }),
       });
       const data = await res.json();
       setMessages(prev => [

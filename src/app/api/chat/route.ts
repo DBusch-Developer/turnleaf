@@ -31,6 +31,7 @@ Never combine tiers or reason across multiple states' laws to synthesize an answ
 interface ChatBody {
   message?: unknown;
   stateCode?: unknown;
+  stateCodes?: unknown;
   history?: unknown;
 }
 
@@ -42,6 +43,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid input parameters' }, { status: 400 });
     }
     const stateCode = typeof body.stateCode === 'string' ? body.stateCode.toUpperCase() : null;
+    // The state(s) the person is viewing. In a multi-state screening this is the
+    // whole on-screen set, so an unqualified question defaults to those states
+    // rather than to none; falls back to the single stateCode for older callers.
+    const stateCodes = Array.isArray(body.stateCodes)
+      ? body.stateCodes.filter((c): c is string => typeof c === 'string').map(c => c.toUpperCase())
+      : null;
+    const seedStates = stateCodes && stateCodes.length ? stateCodes : stateCode;
     const history = Array.isArray(body.history)
       ? body.history
           .filter(
@@ -51,7 +59,7 @@ export async function POST(request: Request) {
           .slice(-6)
       : [];
 
-    const codes = detectStateCodes(message, stateCode).slice(0, 3);
+    const codes = detectStateCodes(message, seedStates).slice(0, 3);
     const bundles: ContextBundle[] = [];
     const outOfScope: string[] = [];
     for (const code of codes) {

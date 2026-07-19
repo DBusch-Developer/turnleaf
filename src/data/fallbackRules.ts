@@ -10418,76 +10418,97 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   },
 
   // ==========================================================================
-  // ALABAMA — DRAFT. Nothing below is phone-verified; see openQuestions.
-  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md
+  // ALABAMA — STATUTE-VERIFIED 2026-07-19. Diana read Ala. Code §§ 15-27-1
+  // (through Act 2024-407), 15-27-2 (through Act 2021-482), 15-27-3, 15-27-4
+  // (through Act 2021-286), 15-27-5 (through Act 2025-427), 15-27-6 from
+  // alison.legislature.state.al.us.
+  // Source: research/waves/Turnleaf_Wave5_Draft_Package.md + Diana's 7/19 reads.
   //
-  // Broad-ish law, brutal fee. Ala. Code § 15-27 (2014 + 2021 REDEEMER Act). No
-  // automatic anything. THE HEADLINE IS THE FEE: $500 administrative filing fee
-  // per case/arrest event (raised from $300; Act 2024-407) — the highest flat
-  // fee in the country alongside Louisiana. One fee covers multiple charges from
-  // the same arrest. Indigency relief exists (the main AL call question). The
-  // fee leads the copy.
-  //
-  // Non-convictions: petition after 90 days (dismissed-with-prejudice, no-bill,
-  // acquittal, unconditional nolle); diversion/specialty-court completions 1 yr.
-  // Misdemeanour convictions (REDEEMER): 3 yrs; DUI counts as serious traffic
-  // (explicitly since Jul 1, 2023) so never. Felonies: pardon-first + 180 days.
+  // Single petition system, circuit court criminal division, exclusive
+  // jurisdiction (15-27-1(d)). Misdemeanor charges/convictions → § 15-27-1;
+  // felonies → § 15-27-2. THE HEADLINES: (1) the $500 admin fee per ARREST, a
+  // condition precedent to any ruling, waivable only on an indigency affidavit —
+  // and even a no-probable-cause finding does NOT waive it (15-27-4). (2) Felony
+  // CONVICTIONS are PARDON-GATED (15-27-2(c)) — no time-based route; a pardon with
+  // rights restored + 180 days is the only path (except the trafficking trio).
+  // (3) HONEST-NO with an AFFIRMATIVE DISCLOSURE DUTY (15-27-6): the person must
+  // volunteer the expunged record to licensing agencies, utilities, and banks.
+  // DA/OPS keeps every record permanently. First petition = strong grant
+  // presumption; the NUMBER after that is discretionary (15-27-5, Act 2025-427).
   // ==========================================================================
   AL: {
     code: 'AL',
     name: 'Alabama',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave5_Draft_Package.md',
     terminology:
-      'Alabama EXPUNGEMENT (Ala. Code § 15-27) is reasonably broad in what it covers but expensive '
-      + 'to use: there is a flat $500 administrative filing fee per arrest event, one of the highest '
-      + 'in the country, though one fee covers all the charges from a single arrest and an indigency '
-      + 'waiver exists. Nothing is automatic — everything is a petition to the circuit court. '
-      + 'Non-convictions can be petitioned relatively quickly; misdemeanor convictions after 3 years '
-      + 'under the 2021 REDEEMER Act; and felonies only after a full pardon.',
+      'Alabama EXPUNGEMENT (Ala. Code § 15-27) is a single petition system filed in the circuit court '
+      + 'of the county where the charges were filed. Two things dominate. The FEE: a flat $500 '
+      + 'administrative fee per arrest — a condition precedent to any ruling, on top of court costs — '
+      + 'waivable only if you file an Affidavit of Substantial Hardship and are found indigent (and a '
+      + 'finding that your arrest lacked probable cause waives court costs but NOT the $500). And the '
+      + 'STRUCTURE: non-convictions are petitionable relatively quickly; misdemeanor convictions after '
+      + '3 years under the REDEEMER Act; but a felony CONVICTION has no time-based route at all — the '
+      + 'only path is a full pardon with rights restored, then expungement 180 days later. Once '
+      + 'expunged you may deny it happened — but you have an affirmative DUTY to disclose it anyway to '
+      + 'licensing agencies, utilities, and banks, and the District Attorney keeps every record.',
     keyDates: [
       {
         label: '$500 administrative filing fee (raised from $300, Act 2024-407)',
         date: '2024-10-01',
         kind: 'effective',
-        note: 'Per case/arrest event. One fee covers multiple charges from the same arrest. Confirm the current amount.',
+        note: 'Per ARREST — one fee covers multiple charges from a single arrest; multiple arrests pay one each (§ 15-27-4). A condition precedent to any ruling. Waived on an indigency finding; a no-probable-cause finding waives court costs but NOT the $500.',
       },
       {
-        label: 'REDEEMER Act — misdemeanour conviction expungement',
+        label: 'REDEEMER Act — misdemeanor conviction expungement',
         date: '2021-07-01',
         kind: 'effective',
-        note: '3 years from conviction. DUI was explicitly made a "serious traffic" offence (never expungeable) as of July 1, 2023.',
+        note: '3 years from conviction, all money paid; excludes violent, sex, moral-turpitude, and serious-traffic (DUI) offenses, and CDL offenses committed in a commercial vehicle (§ 15-27-1(b)).',
+      },
+      {
+        label: 'Act 2025-427 — discretion shape codified (§ 15-27-5)',
+        date: '2025',
+        kind: 'effective',
+        note: 'No RIGHT to expungement; denial is within the court\'s sole discretion — BUT the court SHALL grant when reasonably satisfied the requirements are met. The court has explicit discretion over the NUMBER of cases expunged after the first (a first qualifying petition carries a strong grant presumption). Whether a dismissal was part of a negotiated plea is a hearing factor.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the current administrative filing fee: Wave 5 gives $500 per case/arrest event (raised from $300 by Act 2024-407, effective Oct 1, 2024) and flags it. This is the main Alabama call. Confirm the amount and, critically, the § 15-27-4 indigency-relief mechanics with a circuit clerk.',
-        blocksFields: ['resources.remedies.expungement.fees'],
-      },
-      {
-        question:
-          'Confirm the § 15-27-2.1 lifetime cap: Wave 5 says secondary sources report 2 misdemeanour-conviction expungements lifetime, and flags verifying the section text. The tree does not gate on this (it cannot count priors); it is disclosed in prose.',
+          'Pull §§ 15-27-7 (criminal-justice/DA inspection), 15-27-9 (order mechanics), 15-27-10 (exception to order scope), 15-27-16 (disclosure limits) — all referenced by the pulled text but not yet read; the effect/disclosure copy relies on their cross-references.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the felony pardon-then-expunge mechanics: a full pardon with restoration of civil and political rights from the Board of Pardons and Paroles, plus 180 days from the certificate, not violent/sex/moral-turpitude/serious-traffic, 1 pardoned-felony expungement lifetime. Also the Act 2015-185 reclassified-felony exception (15-yr clean record).',
+          'Pull the cross-referenced offense lists — § 12-25-32 (violent offenses), § 15-20A-5 (sex offenses), § 17-3-30.1 (moral-turpitude offenses) — and Title 32 Ch. 5A Art. 9 (serious traffic). The exclusion screens key on those cross-references and ask the person until the lists are enumerated.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the moral-turpitude offence list that bars misdemeanour-conviction expungement alongside violent, sex, and serious-traffic offences. The tree asks a person whether their offence is excluded; the moral-turpitude list is specific and needs confirming.',
+          'Board of Pardons and Paroles application mechanics — the felony-conviction path requires a full pardon with rights restored FIRST, but the pardon process itself is outside Chapter 15-27. Confirm the current pardon-application timeline and criteria (phone/pull tier) for the "pardon first" guidance.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Session sweep: verify whether any 2025-26 act other than Act 2025-427 amended §§ 15-27-1 through -16, and confirm the youthful-offender interaction (Chapter 15-19) referenced by § 15-27-1(b).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The § 15-27-3(c) victim-notice cross-reference points to "(4)a. of Section 15-27-2," which reflects pre-amendment numbering (the current § 15-27-2 renumbered). The tree applies victim notice to violent-offense-related petitions and flags the drafting artifact; confirm the intended target on the next pull.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Ala. Code § 15-27-1 (non-conviction expungement)', url: null, retrievedOn: null },
-      { id: 'Ala. Code § 15-27-2 (misdemeanour/felony conviction expungement; REDEEMER Act)', url: null, retrievedOn: null },
-      { id: 'Ala. Code § 15-27-2.1 (lifetime caps)', url: null, retrievedOn: null },
-      { id: 'Ala. Code § 15-27-4 (fees; indigency relief)', url: null, retrievedOn: null },
-      { id: 'Act 2024-407 ($500 fee); REDEEMER Act 2021; Act 2015-185 (reclassified felonies)', url: null, retrievedOn: null },
+      { id: 'Ala. Code § 15-27-1 (misdemeanor/violation/traffic/municipal — (a) non-conviction grounds [dismissed-with-prejudice/no-bill/not-guilty/unconditional-nolle +90 days; quashed +SOL-or-confirmation; program dismissal +1yr; dismissed-without-prejudice +1yr +not-refiled +no conviction in prior 2yr; trafficking victim], (b) REDEEMER conviction path [probation+all-money paid, 3yr, CDL/violent/sex/moral-turpitude/serious-traffic exclusions + Act 2015-185 reclassification exception], (c) disclosure carve-outs, (d) exclusive circuit-court jurisdiction) — through Act 2024-407', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-1', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code § 15-27-2 (felony — (a) non-conviction grounds identical to misd EXCEPT (a)(7) dismissed-without-prejudice needs 5yr + not-refiled + no conviction in prior 5yr; (b) trafficking violent-conviction carve-out [promoting prostitution 1st 13A-12-111, DV-3rd 13A-6-132(d), obscene-matter-<17 13A-12-197]; (c) PARDON-GATED conviction path [pardon w/ rights restored + 180 days + not violent/sex/moral-turpitude/serious-traffic + CDL screen; no time-based route]; (d) disclosure) — through Act 2021-482', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-2', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code § 15-27-3 (procedure — sworn perjury statement listing ALL prior expungement applications/grants, certified arrest/disposition record, certified ACJIC criminal record required as exhibits; (c) DA + victim 45-day objection window)', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-3', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code § 15-27-4 (fees — $500 admin per arrest, condition precedent, on top of docket/costs; one per arrest; Affidavit of Substantial Hardship → court SHALL waive if indigent; (d) no-probable-cause finding waives court costs but NOT the $500) — through Act 2021-286', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-4', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code § 15-27-5 (hearing/discretion — 45-day objection; objection → hearing ≥30 days out, Rules of Evidence, oral argument; (b) factors incl. negotiated-plea dismissal; (d)/(e) no right, sole discretion to deny, SHALL grant when satisfied, discretion over NUMBER after the first; abuse-of-discretion appeal) — through Act 2025-427', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-5', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code § 15-27-6 (effects — order reaches court + all agency + LE records EXCEPT privileged Pardons/Paroles reports and ALL DA/OPS records (kept permanently); (b) honest-no [deemed never occurred, no disclosure duty on employment/credit] BUT AFFIRMATIVE DUTY to disclose to government licensing agencies, utilities, and banks/financial institutions, who may inspect after filing court notice)', url: 'https://alison.legislature.state.al.us/code-of-alabama?section=15-27-6', retrievedOn: '2026-07-19' },
+      { id: 'Ala. Code §§ 15-27-7 (CJ/DA inspection), 15-27-9 (order mechanics), 15-27-10 (order-scope exception), 15-27-16 (disclosure limits); §§ 12-25-32 (violent list), 15-20A-5 (sex list), 17-3-30.1 (moral-turpitude list); Title 32 Ch. 5A Art. 9 (serious traffic) — referenced, NOT pulled — cite-only', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -10497,63 +10518,197 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_al' },
-            { label: 'Dismissed with prejudice / No-billed / Charges dropped', value: 'dismissed', next: 'nonconv_date_al' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_al' },
-            { label: 'Diversion / Drug court / Mental health court / Veterans court (Completed)', value: 'deferred', next: 'diversion_date_al' },
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_class_al' },
+            { label: 'Dismissed / No-billed / Nolle prossed / Quashed', value: 'dismissed', next: 'noncon_subtype_al' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'noncon_90_al' },
+            { label: 'Court program completed (drug/mental-health/veterans court, diversion, deferred prosecution)', value: 'deferred', next: 'program_date_al' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_al: {
-          type: 'boolean',
-          text: 'Was the offense a violent offense, a sex offense, a DUI or other serious traffic offense, or a "moral turpitude" offense?',
-          yes: 'excluded_path_al',
-          no: 'conv_level_al'
+        // NON-CONVICTION (§ 15-27-1(a) misd / § 15-27-2(a) felony). Grounds share
+        // the same shape; only the dismissed-WITHOUT-prejudice numbers differ by class.
+        noncon_subtype_al: {
+          type: 'choice',
+          text: 'How exactly did the case end? (Your dismissal order says which — the wait and conditions differ.)',
+          options: [
+            { label: 'Dismissed WITH prejudice, no-billed by a grand jury, or nolle prossed WITHOUT conditions (and not refiled)', value: 'clean90', next: 'noncon_90_al' },
+            { label: 'Nolle prossed WITH conditions', value: 'nolle_cond', next: 'complex_nolle_al' },
+            { label: 'Indictment quashed', value: 'quashed', next: 'noncon_quashed_al' },
+            { label: 'Dismissed WITHOUT prejudice', value: 'without', next: 'wop_class_al' },
+            { label: 'The offense happened while I was a victim of human trafficking', value: 'trafficking', next: 'eligible_trafficking_al' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_noncon_al' }
+          ]
         },
-        excluded_path_al: {
-          type: 'boolean',
-          text: 'Was it specifically a DUI?',
-          yes: 'ineligible_dui_al',
-          no: 'conv_level_al_excluded'
+        noncon_90_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did the case end (dismissal, no-bill, or acquittal)?',
+          validation: {
+            period: { amount: 90, unit: 'days', anchor: 'dismissal-with-prejudice / no-bill / unconditional nolle / acquittal (Ala. Code §§ 15-27-1(a), 15-27-2(a) — 90 days)' },
+            nextPass: 'eligible_noncon_al',
+            nextFail: 'waiting_noncon_al'
+          }
         },
-        conv_level_al: {
+        noncon_quashed_al: {
+          type: 'boolean',
+          text: 'Has the statute of limitations expired on the offense, OR has the prosecutor confirmed the case will not be refiled?',
+          yes: 'eligible_noncon_al',
+          no: 'complex_noncon_al'
+        },
+        // Dismissed WITHOUT prejudice: misd = 1yr + no conviction in prior 2yr;
+        // felony = 5yr + no conviction in prior 5yr (§ 15-27-2(a)(7)).
+        wop_class_al: {
+          type: 'choice',
+          text: 'Was the most serious charge a misdemeanor (or violation/traffic) or a FELONY?',
+          options: [
+            { label: 'Misdemeanor / violation / traffic', value: 'misd', next: 'wop_misd_refiled_al' },
+            { label: 'Felony', value: 'felony', next: 'wop_felony_refiled_al' }
+          ]
+        },
+        wop_misd_refiled_al: {
+          type: 'boolean',
+          text: 'Has the case been refiled?',
+          yes: 'ineligible_refiled_al',
+          no: 'wop_misd_clean_al'
+        },
+        wop_misd_clean_al: {
+          type: 'boolean',
+          text: 'In the 2 years before you would file, have you had ANY conviction — felony, misdemeanor, violation, or traffic (minor traffic offenses do not count)?',
+          yes: 'ineligible_wop_clean_al',
+          no: 'wop_misd_date_al'
+        },
+        wop_misd_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed without prejudice?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'dismissal without prejudice (Ala. Code § 15-27-1(a) — misdemeanor; 1 year, not refiled, no conviction in prior 2 yrs)' },
+            nextPass: 'eligible_noncon_al',
+            nextFail: 'waiting_noncon_al'
+          }
+        },
+        wop_felony_refiled_al: {
+          type: 'boolean',
+          text: 'Has the case been refiled?',
+          yes: 'ineligible_refiled_al',
+          no: 'wop_felony_clean_al'
+        },
+        wop_felony_clean_al: {
+          type: 'boolean',
+          text: 'In the 5 years before you would file, have you had ANY conviction — felony, misdemeanor, violation, or traffic (minor traffic offenses do not count)?',
+          yes: 'ineligible_wop_clean_al',
+          no: 'wop_felony_date_al'
+        },
+        wop_felony_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When was the case dismissed without prejudice?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'dismissal without prejudice (Ala. Code § 15-27-2(a)(7) — FELONY; 5 years, not refiled, no conviction in prior 5 yrs)' },
+            nextPass: 'eligible_noncon_al',
+            nextFail: 'waiting_noncon_al'
+          }
+        },
+        program_date_al: {
+          type: 'date',
+          field: 'disposition_date',
+          text: 'When did you successfully complete the court program?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'successful program completion (Ala. Code §§ 15-27-1(a)(6), 15-27-2(a) — 1 year; expungement may also be ordered as a program condition)' },
+            nextPass: 'eligible_program_al',
+            nextFail: 'waiting_program_al'
+          }
+        },
+        // CONVICTION.
+        conv_class_al: {
           type: 'choice',
           text: 'What was the level of the conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'misd_date_al' },
-            { label: 'Felony', value: 'felony', next: 'pardon_path_al' },
-            { label: 'Infraction', value: 'infraction', next: 'misd_date_al' },
+            { label: 'Misdemeanor / violation / traffic / municipal ordinance', value: 'misd', next: 'misd_excluded_al' },
+            { label: 'Felony', value: 'felony', next: 'felony_trafficking_al' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_al' }
           ]
         },
-        misd_date_al: {
+        // MISDEMEANOR CONVICTION (§ 15-27-1(b), REDEEMER).
+        misd_excluded_al: {
+          type: 'boolean',
+          text: 'Is the offense any of these: a violent offense (§ 12-25-32), a sex offense (§ 15-20A-5), a serious traffic offense such as a DUI (Title 32, Ch. 5A, Art. 9), or a moral-turpitude offense (§ 17-3-30.1)?',
+          yes: 'misd_reclassified_al',
+          no: 'misd_cdl_al'
+        },
+        misd_reclassified_al: {
+          type: 'boolean',
+          text: 'Is it a FELONY that was reclassified to a misdemeanor by Act 2015-185, AND have you been arrest-free (minor traffic aside) for 15 years before filing?',
+          yes: 'misd_cdl_al',
+          no: 'ineligible_excluded_al'
+        },
+        misd_cdl_al: {
+          type: 'boolean',
+          text: 'Is this a commercial-driving (CDL) offense under 49 CFR 383.51 that you committed while operating a commercial motor vehicle or while holding a CDL/CLP?',
+          yes: 'ineligible_cdl_al',
+          no: 'misd_restitution_al'
+        },
+        misd_restitution_al: {
+          type: 'boolean',
+          field: 'restitution_paid',
+          text: 'Have you completed all probation/parole AND paid ALL fines, costs, restitution, and court-ordered amounts in full?',
+          yes: 'misd_conv_date_al',
+          no: 'ineligible_restitution_al'
+        },
+        misd_conv_date_al: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When were you convicted? (You must also have completed all supervision and paid everything owed.)',
+          text: 'When were you convicted?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction, supervision complete and all paid (Ala. Code § 15-27-2 — misdemeanour; REDEEMER Act)' },
+            period: { amount: 3, unit: 'years', anchor: 'conviction date (Ala. Code § 15-27-1(b) — misdemeanor conviction, REDEEMER; 3 years, all money paid)' },
             nextPass: 'eligible_misd_al',
-            nextFail: 'waiting_al'
+            nextFail: 'waiting_misd_al'
           }
         },
-        nonconv_date_al: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When was the case dismissed, no-billed, or acquitted?',
-          validation: {
-            period: { amount: 90, unit: 'days', anchor: 'dismissal/no-bill/acquittal (Ala. Code § 15-27-1 — non-conviction; 90 days)' },
-            nextPass: 'eligible_nonconviction_al',
-            nextFail: 'waiting_nonconv_al'
-          }
+        // FELONY CONVICTION (§ 15-27-2) — trafficking carve-out first, then pardon-gated.
+        // DRAFTING ARTIFACT (not resolved silently): § 15-27-3(c)'s victim-notice
+        // cross-reference to "(4)a. of Section 15-27-2" reflects PRE-amendment
+        // numbering — the current § 15-27-2 was renumbered. We apply victim notice
+        // to violent-offense-related petitions (a process step, not a tree gate) and
+        // flag the artifact here + in open questions; confirm the intended target on
+        // the next pull rather than guessing which subsection it now points to.
+        felony_trafficking_al: {
+          type: 'boolean',
+          text: 'Were you convicted of promoting prostitution 1st (§ 13A-12-111), third-degree domestic violence (§ 13A-6-132(d)), or production of obscene matter involving a person under 17 (§ 13A-12-197) — AND was the offense committed during, and because of, your being a victim of human trafficking?',
+          yes: 'eligible_trafficking_felony_al',
+          no: 'felony_pardon_al'
         },
-        diversion_date_al: {
+        felony_pardon_al: {
+          type: 'boolean',
+          text: 'Have you received a full PARDON, with restoration of your civil and political rights, from the Alabama Board of Pardons and Paroles?',
+          yes: 'felony_excluded_al',
+          no: 'pardon_first_al'
+        },
+        felony_excluded_al: {
+          type: 'boolean',
+          text: 'Is the offense a violent offense (§ 12-25-32), a sex offense (§ 15-20A-5), a serious traffic offense, or a moral-turpitude offense (§ 17-3-30.1)?',
+          yes: 'felony_reclassified_al',
+          no: 'felony_cdl_al'
+        },
+        felony_reclassified_al: {
+          type: 'boolean',
+          text: 'Is it a felony reclassified by Act 2015-185, with 15 years arrest-free (minor traffic aside) before filing?',
+          yes: 'felony_cdl_al',
+          no: 'ineligible_felony_excluded_al'
+        },
+        felony_cdl_al: {
+          type: 'boolean',
+          text: 'Is this a commercial-driving (CDL) offense under 49 CFR 383.51 that you committed while operating a commercial motor vehicle or while holding a CDL/CLP?',
+          yes: 'ineligible_cdl_al',
+          no: 'felony_pardon_date_al'
+        },
+        felony_pardon_date_al: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the diversion or specialty-court program?',
+          text: 'When did the Board of Pardons and Paroles issue your pardon certificate?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'completion of diversion/specialty court (Ala. Code § 15-27-1 — 1 year)' },
-            nextPass: 'eligible_nonconviction_al',
-            nextFail: 'waiting_nonconv_al'
+            period: { amount: 180, unit: 'days', anchor: 'pardon certificate issuance (Ala. Code § 15-27-2(c) — felony conviction; 180 days after the pardon with rights restored)' },
+            nextPass: 'eligible_felony_al',
+            nextFail: 'waiting_pardon_al'
           }
         }
       },
@@ -10565,61 +10720,145 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (circuit clerk / MVLP)',
           citation: 'Ala. Code § 15-27 (which path applies depends on the disposition)'
         },
-        eligible_nonconviction_al: {
+        eligible_noncon_al: {
           status: 'eligible',
-          title: 'No Conviction — Eligible to Petition (Mind the Fee)',
-          message: 'Because your case ended without a conviction — dismissed with prejudice, no-billed, acquitted, or a completed diversion — you are eligible to petition to expunge it, and there is no limit on how many non-conviction expungements you can get. The catch in Alabama is the cost: there is a $500 administrative filing fee per arrest event (though one fee covers all the charges from the same arrest), plus court costs. That fee is the single most important thing to plan for. Critically, Alabama has an indigency provision that can waive or reduce it if you cannot afford it — asking the circuit clerk about that is the most valuable question you can ask. File in the circuit court of the county where the charges were filed.',
-          remedy: 'Non-Conviction Expungement Petition (§ 15-27-1) — ask about the indigency waiver',
-          citation: 'Ala. Code § 15-27-1'
+          title: 'No Conviction — Eligible to Petition (Do the Hardship Affidavit First)',
+          message: 'Because your case ended without a conviction and the short wait has run, you can petition to expunge it (§§ 15-27-1(a), 15-27-2(a)). Before anything else, deal with the fee, because in Alabama it is the whole ballgame: there is a $500 administrative fee per ARREST (one fee covers all charges from the same arrest), and it is a condition precedent to any ruling — the court will not act until it is paid or waived. So the FIRST thing to do is file an Affidavit of Substantial Hardship with your petition: if the court finds you indigent, it SHALL waive the $500 (§ 15-27-4). Note one trap: even a judicial finding that your arrest lacked probable cause waives court costs but NOT the $500 — only indigency does. Order a certified ACJIC criminal-history record before you file; it is a required exhibit (§ 15-27-3). File in the circuit court of the county where the charges were filed. Once expunged, agencies will say no record exists — but the District Attorney keeps every record permanently (§ 15-27-6).',
+          remedy: 'Non-conviction expungement (§ 15-27-1/-2) — file the Affidavit of Substantial Hardship first',
+          citation: 'Ala. Code §§ 15-27-1, 15-27-4'
+        },
+        waiting_noncon_al: {
+          status: 'waiting',
+          title: 'Non-Conviction — Short Wait Not Yet Met',
+          message: 'A non-conviction is expungeable a short time after the disposition: 90 days for a dismissal with prejudice, a no-bill, an unconditional nolle prosequi, or an acquittal; and for a dismissal WITHOUT prejudice, 1 year for a misdemeanor or 5 years for a felony (plus not-refiled and a clean record in the prior 2 or 5 years). Based on your dates, that period has not run yet. Come back when it has — and plan for the $500 fee, or the Affidavit of Substantial Hardship if you cannot afford it.',
+          remedy: 'Wait out the short period, then petition (Affidavit of Substantial Hardship if needed)',
+          citation: 'Ala. Code §§ 15-27-1, 15-27-2'
+        },
+        complex_nolle_al: {
+          status: 'complex',
+          title: 'A Conditional Nolle Prosequi Needs a Closer Look',
+          message: 'Alabama\'s quick 90-day non-conviction path is for a nolle prosequi entered WITHOUT conditions (§ 15-27-1(a)(4)). Because yours came with conditions, it does not fit that ground — but it may fit another route, most likely the court-program path (if the conditions were a diversion or deferred-prosecution program, expungement is available 1 year after successful completion, and may even have been ordered as part of the program). Because which ground applies turns on exactly how the case was disposed, this is worth a person\'s eyes: the Montgomery Volunteer Lawyers Program can read your disposition and match it to the right path.',
+          remedy: 'Consult Legal Aid (conditional nolle — likely the program path, § 15-27-1(a)(6))',
+          citation: 'Ala. Code § 15-27-1(a)'
+        },
+        complex_noncon_al: {
+          status: 'complex',
+          title: 'We Need the Exact Disposition',
+          message: 'Alabama\'s non-conviction grounds each have their own timing and conditions — a dismissal with prejudice (90 days) is treated very differently from a dismissal without prejudice (1 year for a misdemeanor / 5 for a felony, plus a clean-record test) or a quashed indictment (which needs the statute of limitations to have run or the prosecutor to confirm no refile). Because you are not sure exactly how the case ended, we are not going to guess — the difference changes both eligibility and timing. Your court paperwork or a certified disposition record from the clerk will say; the Montgomery Volunteer Lawyers Program can read it with you.',
+          remedy: 'Get the exact disposition (court paperwork / clerk / MVLP)',
+          citation: 'Ala. Code §§ 15-27-1(a), 15-27-2(a)'
+        },
+        ineligible_refiled_al: {
+          status: 'ineligible',
+          title: 'A Refiled Case Is Not Yet Expungeable',
+          message: 'Because your case was dismissed WITHOUT prejudice and has been refiled, it does not qualify for expungement yet — the without-prejudice path requires that the case NOT be refiled (§§ 15-27-1(a), 15-27-2(a)(7)). This is a timing bar, not a permanent one: once the refiled case resolves, how it ends will determine your route, so it is worth waiting for that outcome. The Montgomery Volunteer Lawyers Program can advise once it does.',
+          remedy: 'None Yet (refiled) — reassess once the refiled case resolves',
+          citation: 'Ala. Code §§ 15-27-1(a), 15-27-2(a)'
+        },
+        ineligible_wop_clean_al: {
+          status: 'ineligible',
+          title: 'A Recent Conviction Blocks the Without-Prejudice Path',
+          message: 'A case dismissed WITHOUT prejudice can be expunged only if you have had no conviction — felony, misdemeanor, violation, or non-minor traffic — in the years before you file (2 years for a misdemeanor case, 5 years for a felony case; §§ 15-27-1(a), 15-27-2(a)(7)). Because you told us there was a conviction in that window, this path is not available yet. Note that a MINOR traffic offense would not have counted. This can change with time as the window moves forward; the Montgomery Volunteer Lawyers Program can help you time it.',
+          remedy: 'None Yet (recent conviction, without-prejudice cleanliness) — the window moves with time',
+          citation: 'Ala. Code §§ 15-27-1(a), 15-27-2(a)'
+        },
+        eligible_trafficking_al: {
+          status: 'eligible',
+          title: 'Human-Trafficking Victim — Eligible to Petition',
+          message: 'Alabama has a specific path for a charge that arose from your being a victim of human trafficking (§§ 15-27-1(a), 15-27-2(a)): you can petition to expunge it on a showing, by a preponderance of the evidence, that the offense occurred during the trafficking and would not have occurred but for it. A conviction of your trafficker under § 13A-6-152 or § 13A-6-153 is supporting evidence, but is NOT required. Because this is a fact-specific showing, do it with help — survivor-focused advocates and the Montgomery Volunteer Lawyers Program handle these. The $500 fee still applies, so file the Affidavit of Substantial Hardship if you cannot afford it.',
+          remedy: 'Trafficking-victim expungement (§ 15-27-1(a)/-2(a)) — preponderance showing; hardship affidavit if needed',
+          citation: 'Ala. Code §§ 15-27-1(a), 15-27-2(a)'
+        },
+        eligible_program_al: {
+          status: 'eligible',
+          title: 'Court Program Completed — Eligible One Year After',
+          message: 'Because you successfully completed a court program — drug court, mental-health court, veterans court, a diversion program, or a court-approved deferred prosecution — you can petition to expunge the charge 1 year after completion (§§ 15-27-1(a)(6), 15-27-2(a)). One thing worth checking first: expungement can be ordered as a CONDITION of the program itself, so it may already have been done — ask the court or your program. If not, file the petition (with the $500 fee, or the Affidavit of Substantial Hardship if you cannot afford it) in the circuit court of the county where the charge was filed. Order a certified ACJIC record first — it is a required exhibit.',
+          remedy: 'Program-completion expungement (§ 15-27-1(a)(6)) — 1 year; check if already ordered',
+          citation: 'Ala. Code §§ 15-27-1(a)(6), 15-27-2(a)'
+        },
+        waiting_program_al: {
+          status: 'waiting',
+          title: 'Court Program — One-Year Wait Not Yet Met',
+          message: 'A charge dismissed through a completed court program (drug/mental-health/veterans court, diversion, deferred prosecution) is expungeable 1 year after successful completion (§ 15-27-1(a)(6)). Based on your dates, that year has not run yet. Come back when it has — and check whether the expungement was ordered as part of the program itself, which would mean it is already done.',
+          remedy: 'Wait for 1 year after program completion',
+          citation: 'Ala. Code § 15-27-1(a)(6)'
         },
         eligible_misd_al: {
           status: 'eligible',
-          title: 'Misdemeanor Conviction — Eligible Under REDEEMER (Mind the Fee)',
-          message: 'Based on your dates — 3 years since conviction, with all supervision complete and everything paid — this misdemeanor appears eligible for expungement under Alabama\'s 2021 REDEEMER Act. Two things to plan for. The fee: $500 per arrest event, the main hurdle, though one fee covers all charges from the same arrest — and there is an indigency provision to ask the clerk about if you cannot afford it. And a lifetime limit: Alabama caps how many misdemeanor-conviction expungements you can get, so it is worth being deliberate. File in the circuit court of the county where the charges were filed.',
-          remedy: 'Misdemeanor Expungement Petition (§ 15-27-2) — ask about the indigency waiver',
-          citation: 'Ala. Code § 15-27-2'
+          title: 'Misdemeanor Conviction — Eligible Under REDEEMER',
+          message: 'Based on your dates — 3 years since conviction, with all supervision complete and everything owed paid in full — this misdemeanor appears eligible under the REDEEMER Act (§ 15-27-1(b)). A few Alabama specifics. On money: the $500 fee per arrest is a condition precedent — file the Affidavit of Substantial Hardship with your petition if you cannot afford it, and order a certified ACJIC record as a required exhibit (§ 15-27-3). On the grant: there is no RIGHT to expungement, but the court SHALL grant when it is reasonably satisfied the requirements are met (§ 15-27-5) — a FIRST qualifying petition carries a strong presumption, while the court has discretion over the NUMBER after that. And on effects: once expunged you may deny it happened — but you have an affirmative DUTY to disclose it anyway to government licensing agencies, utilities, and banks/financial institutions (§ 15-27-6), and the District Attorney keeps its own copy permanently. File in the circuit court of the county where the charges were filed.',
+          remedy: 'Misdemeanor expungement (§ 15-27-1(b)) — hardship affidavit if needed; affirmative disclosure duty applies',
+          citation: 'Ala. Code §§ 15-27-1(b), 15-27-4, 15-27-6'
         },
-        waiting_al: {
+        waiting_misd_al: {
           status: 'waiting',
-          title: 'Three-Year Wait Not Yet Met',
-          message: 'A misdemeanor conviction becomes expungeable in Alabama 3 years after conviction, provided all supervision is complete and everything owed is paid. Based on your dates, that has not run yet. Getting any outstanding balance paid matters, since the requirements include full payment. When the time comes, remember to budget for the $500 fee — and ask about the indigency waiver.',
-          remedy: 'Wait for 3 years (supervision complete, all paid)',
-          citation: 'Ala. Code § 15-27-2'
+          title: 'Misdemeanor — Three-Year Wait Not Yet Met',
+          message: 'A misdemeanor conviction becomes expungeable under the REDEEMER Act 3 years after conviction, provided all probation/parole is complete and every fine, cost, and restitution amount is paid (§ 15-27-1(b)). Based on your dates, that has not run yet. Paying any outstanding balance matters — unpaid money is its own separate block. When the time comes, budget for the $500 fee or the Affidavit of Substantial Hardship.',
+          remedy: 'Wait for 3 years (all supervision complete, all money paid)',
+          citation: 'Ala. Code § 15-27-1(b)'
         },
-        waiting_nonconv_al: {
-          status: 'waiting',
-          title: 'Short Wait Not Yet Met',
-          message: 'A non-conviction can be expunged 90 days after the dismissal, no-bill, or acquittal, and a completed diversion after 1 year. Based on your dates, that short period has not quite run yet. Come back when it has — and budget for the $500 fee, or ask the clerk about the indigency waiver.',
-          remedy: 'Wait out the short period (90 days / 1 year)',
-          citation: 'Ala. Code § 15-27-1'
-        },
-        ineligible_dui_al: {
-          status: 'ineligible',
-          title: 'DUI Cannot Be Expunged',
-          message: 'As of July 1, 2023, Alabama explicitly treats a DUI as a "serious traffic" offense, which cannot be expunged. This is a firm rule, so be cautious of any service suggesting otherwise. If you have a non-conviction or a different, eligible conviction on your record, those may still qualify — run this again for them. The Montgomery Volunteer Lawyers Program can confirm your options.',
-          remedy: 'None (DUI / Serious Traffic)',
-          citation: 'Ala. Code § 15-27-2'
-        },
-        conv_level_al_excluded: {
+        ineligible_excluded_al: {
           status: 'ineligible',
           title: 'This Offense Is Excluded From Expungement',
-          message: 'Alabama does not expunge violent offenses, sex offenses, or "moral turpitude" offenses. No waiting period changes that for a conviction. Because "moral turpitude" is a specific legal category and not always obvious, if you are not certain your offense is actually on that list it is worth confirming rather than assuming. For a felony, the route may still exist through a pardon (see below). The Montgomery Volunteer Lawyers Program can check where your offense falls.',
-          remedy: 'None (Excluded Offense) — confirm the classification; a pardon may help a felony',
-          citation: 'Ala. Code § 15-27-2'
+          message: 'Alabama\'s conviction-expungement paths exclude violent offenses (§ 12-25-32), sex offenses (§ 15-20A-5), serious traffic offenses like DUI (Title 32, Ch. 5A, Art. 9), and moral-turpitude offenses (§ 17-3-30.1). Because the offense you described is in one of those categories, no waiting period changes it. Two things worth doing rather than assuming: those categories are defined by specific statutory lists that are worth confirming your offense is actually on (for example whether a domestic-violence offense counts as "violent" under § 12-25-32 is a legal classification); and there is a narrow exception — a felony reclassified to a misdemeanor by Act 2015-185, with 15 years arrest-free, can still qualify. For a felony conviction, a pardon opens a separate route. The Montgomery Volunteer Lawyers Program can check where your offense falls.',
+          remedy: 'None (excluded offense) — confirm the classification; Act 2015-185 exception; a pardon may help a felony',
+          citation: 'Ala. Code §§ 15-27-1(b), 15-27-2(c)'
         },
-        pardon_path_al: {
+        ineligible_cdl_al: {
+          status: 'ineligible',
+          title: 'A Commercial-Driving Offense Is Excluded',
+          message: 'Alabama does not expunge a commercial-driving (CDL) offense under 49 CFR 383.51 that you committed while operating a commercial motor vehicle or while holding a CDL or commercial learner\'s permit (§§ 15-27-1(b), 15-27-2(c)). This mirrors the rule in other states — CDL offenses are held to a stricter standard because of the federal commercial-driver framework. If the offense was NOT a commercial-driving offense, run this again and answer that question differently. The Montgomery Volunteer Lawyers Program can confirm.',
+          remedy: 'None (CDL commercial-driving offense) — confirm it was actually a CDL offense',
+          citation: 'Ala. Code §§ 15-27-1(b), 15-27-2(c)'
+        },
+        ineligible_restitution_al: {
+          status: 'ineligible',
+          title: 'Unpaid Money Blocks the Conviction Path',
+          message: 'Alabama\'s misdemeanor-conviction expungement (§ 15-27-1(b)) requires that you have completed all probation and parole AND paid every fine, cost, restitution, and court-ordered amount in full — proven by court and agency records. Because there is still money owed, this path is blocked. The good news is that it is within your control: paying the balance clears this specific block, and then the 3-year clock (from the conviction date) is what remains. Ask the court clerk what your current balance is; the Montgomery Volunteer Lawyers Program can help you sort it out.',
+          remedy: 'Pay all fines, costs, and restitution in full, then re-check the 3-year wait',
+          citation: 'Ala. Code § 15-27-1(b)'
+        },
+        eligible_trafficking_felony_al: {
+          status: 'eligible',
+          title: 'Trafficking-Related Felony — a Rare Carve-Out From the Violent Bar',
+          message: 'This is a narrow but important exception. Three otherwise-violent felony convictions — promoting prostitution 1st degree (§ 13A-12-111), third-degree domestic violence (§ 13A-6-132(d)), and production of obscene matter involving a person under 17 (§ 13A-12-197) — CAN be expunged if the offense was committed during, and because of, your being a victim of human trafficking (§ 15-27-2(b)). You show this by a preponderance of the evidence; a conviction of your trafficker under § 13A-6-152 or § 13A-6-153 is supporting evidence but is not required. This carve-out overrides the usual violent-offense bar, and it does not require a pardon first. Because it is fact-specific and consequential, do it with a survivor-focused advocate or the Montgomery Volunteer Lawyers Program. The $500 fee still applies (file the hardship affidavit if you cannot afford it).',
+          remedy: 'Trafficking-related felony expungement (§ 15-27-2(b)) — overrides the violent bar; no pardon needed',
+          citation: 'Ala. Code § 15-27-2(b)'
+        },
+        pardon_first_al: {
           status: 'complex',
-          title: 'For a Felony, the Path Runs Through a Pardon First',
-          message: 'Alabama does not expunge a felony conviction directly — but it is a road, not a wall. The route is to obtain a FULL PARDON with restoration of your civil and political rights from the Board of Pardons and Paroles first, and then, 180 days after the pardon certificate, you can petition to expunge (for one pardoned felony in your lifetime, and not for violent, sex, moral-turpitude, or serious-traffic offenses). There is also a narrower path for certain felonies reclassified by a 2015 law if you have a 15-year clean record. It is more steps and it carries the $500 expungement fee at the end, but people do complete it. The Board of Pardons and Paroles handles the pardon, and the Montgomery Volunteer Lawyers Program can map the full sequence.',
-          remedy: 'Full Pardon (Board of Pardons and Paroles), then Expungement 180 days later',
-          citation: 'Ala. Code § 15-27-2'
+          title: 'A Felony Conviction Needs a Pardon FIRST — There Is No Time-Based Route',
+          message: 'We will be straight with you, because Alabama is unusual here: there is NO waiting period that makes a felony conviction expungeable on its own — no "clean for X years" path, however long ago it was. The only route is a PARDON. Specifically: first obtain a full pardon WITH restoration of your civil and political rights from the Alabama Board of Pardons and Paroles; then, 180 days after the pardon certificate issues, you can petition to expunge (§ 15-27-2(c)) — provided the offense is not violent, a sex offense, moral turpitude, or serious traffic (a felony reclassified by Act 2015-185 with 15 years clean is a narrow exception, and trafficking-related convictions have their own carve-out). So the real next step is the pardon application, not an expungement petition. The Board of Pardons and Paroles handles pardons; the Montgomery Volunteer Lawyers Program can map the full sequence.',
+          remedy: 'Apply for a full pardon (Board of Pardons and Paroles) first, then expunge 180 days later (§ 15-27-2(c))',
+          citation: 'Ala. Code § 15-27-2(c)'
+        },
+        eligible_felony_al: {
+          status: 'eligible',
+          title: 'Pardoned Felony — Eligible to Petition to Expunge',
+          message: 'Because you have a full pardon with your civil and political rights restored, the offense is not excluded (not violent, a sex offense, moral turpitude, or serious traffic), and more than 180 days have passed since the pardon certificate, you appear eligible to petition to expunge this felony conviction under § 15-27-2(c). File in the circuit court of the county where the charges were filed; order a certified ACJIC record as a required exhibit, and budget for the $500 fee (or the Affidavit of Substantial Hardship). As with any Alabama expungement, once granted you may deny it happened — but you have an affirmative DUTY to disclose it to government licensing agencies, utilities, and banks (§ 15-27-6), and the District Attorney keeps its copy permanently. The Montgomery Volunteer Lawyers Program can help you file.',
+          remedy: 'Expunge a pardoned felony (§ 15-27-2(c)) — 180 days met; affirmative disclosure duty applies',
+          citation: 'Ala. Code §§ 15-27-2(c), 15-27-6'
+        },
+        waiting_pardon_al: {
+          status: 'waiting',
+          title: 'Pardoned Felony — 180-Day Wait Not Yet Met',
+          message: 'You have the pardon, which is the hard part — but Alabama requires 180 days to pass after the pardon certificate issues before you can petition to expunge a felony conviction (§ 15-27-2(c)). Based on your dates, those 180 days have not run yet. Come back when they have; you file in the circuit court of the county where the charges were filed, and the $500 fee (or the hardship affidavit) applies.',
+          remedy: 'Wait for 180 days after the pardon certificate, then petition',
+          citation: 'Ala. Code § 15-27-2(c)'
+        },
+        ineligible_felony_excluded_al: {
+          status: 'ineligible',
+          title: 'This Pardoned Felony Is Still Excluded by Its Category',
+          message: 'Even with a pardon, Alabama does not expunge a felony conviction that is a violent offense (§ 12-25-32), a sex offense (§ 15-20A-5), a moral-turpitude offense (§ 17-3-30.1), or a serious traffic offense — the pardon does not override those categorical exclusions (§ 15-27-2(c)). Two things worth checking rather than assuming: whether your offense is actually on the relevant statutory list (those lists are specific), and whether it is one of the three trafficking-related convictions that ARE expungeable when the offense resulted from your being trafficked (§ 15-27-2(b)). The Montgomery Volunteer Lawyers Program can confirm both.',
+          remedy: 'None (excluded category, even with a pardon) — confirm the classification and the trafficking carve-out',
+          citation: 'Ala. Code § 15-27-2(c)'
         },
         complex_level_al: {
           status: 'complex',
           title: 'We Need the Conviction Level',
-          message: 'In Alabama the path is different by level: a misdemeanor can be expunged 3 years after conviction, while a felony requires a full pardon first. Since you are not sure which yours is, we are not going to guess, especially given the $500 fee at stake. Your court paperwork states it, and the Montgomery Volunteer Lawyers Program can read your record with you.',
+          message: 'In Alabama the path is completely different by level: a misdemeanor can be expunged 3 years after conviction, while a felony conviction has NO time-based route at all — it requires a full pardon first, then expungement 180 days later. Since you are not sure which yours is, we are not going to guess, especially given the $500 fee at stake. Your court paperwork states it, and the Montgomery Volunteer Lawyers Program can read your record with you.',
           remedy: 'Get Your Conviction Level First (court paperwork / MVLP)',
-          citation: 'Ala. Code § 15-27-2'
+          citation: 'Ala. Code §§ 15-27-1(b), 15-27-2(c)'
         }
       }
     },
@@ -10630,17 +10869,15 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Petition for Expungement (circuit court)',
           formUrl: 'https://eforms.alacourt.gov',
           steps: [
-            'Confirm eligibility: non-convictions after 90 days (diversion after 1 year), misdemeanor convictions after 3 years, felonies only after a full pardon plus 180 days.',
-            'File in the circuit court of the county where the charges were filed.',
-            'Budget for the $500 administrative filing fee per arrest event (one fee covers all charges from the same arrest), plus court costs.',
-            'If you cannot afford it, ask the clerk about the § 15-27-4 indigency provision — this is the most important question in an Alabama expungement.'
+            'Confirm eligibility: non-convictions after 90 days (dismissal without prejudice: 1 yr misd / 5 yr felony; program completion: 1 yr); misdemeanor convictions after 3 years; a felony CONVICTION only after a full pardon with rights restored, then 180 days (§ 15-27-2(c)).',
+            'Order a certified ACJIC criminal-history record and a certified arrest/disposition record — both are required exhibits, along with a sworn statement listing ALL your prior expungement applications and grants (§ 15-27-3).',
+            'File in the circuit court (criminal division) of the county where the charges were filed. The $500 administrative fee (one per arrest) is a CONDITION PRECEDENT — the court will not rule until it is paid or waived.',
+            'If you cannot afford it, file an Affidavit of Substantial Hardship WITH the petition — if the court finds you indigent, it SHALL waive the $500. (A no-probable-cause finding waives court costs but not the $500.) The DA and any victim get 45 days to object.'
           ],
-          // null: Wave 5 gives $500 (Act 2024-407) but flags confirming the
-          // current amount and the indigency mechanics.
-          fees: null,
-          // NOT null: the indigency provision is a named, independent mechanism.
-          feeWaiver: 'Alabama\'s § 15-27-4 has an indigency provision that can waive or reduce the fee — ask the clerk.',
-          courtContact: 'Circuit court of the county where the charges were filed'
+          // Statute-cited exact fee (§ 15-27-4).
+          fees: '$500 administrative fee per ARREST (one fee covers all charges from the same arrest; multiple arrests pay one each), a condition precedent to any ruling, on top of the docket fee and court costs (Ala. Code § 15-27-4).',
+          feeWaiver: 'File an Affidavit of Substantial Hardship with the petition; if found indigent, the court SHALL waive the $500 (§ 15-27-4). A judicial finding that the arrest lacked probable cause waives court costs and docket fees but NOT the $500.',
+          courtContact: 'Circuit court (criminal division) of the county where the charges were filed'
         }
       },
       legalAid: [

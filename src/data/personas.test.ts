@@ -792,94 +792,99 @@ const PA: Persona[] = [
 // ---------------------------------------------------------------------------
 const NJ: Persona[] = [
   {
-    source: 'Wave 1 — NJ persona 1',
-    package: 'one indictable (burglary 3rd), 6 yrs post-everything, fines paid → eligible-standard.',
+    source: 'Wave 1 — NJ persona 1 (updated)',
+    package: 'one indictable (burglary 3rd), 6 yrs post-everything, fines paid, nothing since → eligible-standard.',
     record: { title: 'Burglary (3rd degree indictable)', charge_type: 'felony', disposition: 'convicted' },
-    answers: {
-      title39_nj: false,
-      marijuana_nj: false,
-      excluded_nj: false,
-      count_profile_nj: 'standard',
-      date_5_nj: '2020-07-15',   // 6 yrs past the latest of the four events
-    },
-    expect: {
-      resultKey: 'eligible_standard_nj',
-      reading:
-        'One indictable, no exclusions, 6 years past the latest of conviction / payment / '
-        + 'completion / release → the standard 5-year path. Third-degree burglary is not on the '
-        + '2C:52-2(b) list. Exact.',
-    },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'one_indictable', date_5_nj: '2020-07-15' },
+    expect: { resultKey: 'eligible_standard_nj', reading: 'One indictable, not on 2C:52-2(b), not distribution, no prior expungement, 6 yrs past the latest of the four events -> standard 5-yr path (2C:52-2(a)). Copy now states free-by-statute and earlier-convictions-do-not-bar. Exact.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — NJ persona 2',
-    package: 'one indictable + 2 DP, 4 yrs, pending job offer → complex/possible early pathway.',
+    source: 'Wave 1 — NJ persona 2 (updated)',
+    package: 'one indictable + 2 DP, 4 yrs, pending job offer -> early-pathway complex.',
     record: { title: 'Indictable Offense', charge_type: 'felony', disposition: 'convicted' },
-    answers: {
-      title39_nj: false,
-      marijuana_nj: false,
-      excluded_nj: false,
-      count_profile_nj: 'standard',   // one indictable + 2 DP is inside 1 + 3
-      date_5_nj: '2022-07-15',        // 4 yrs — short of 5
-      date_4_nj: '2022-07-15',        // but past 4
-    },
-    expect: {
-      resultKey: 'complex_early_nj',
-      reading:
-        'Four years in: short of the standard 5 but past the 4-year "compelling circumstances" '
-        + 'threshold. That is a discretionary judgment about the person\'s situation — a pending job '
-        + 'offer is exactly the kind of thing courts weigh — so the tree routes to legal aid rather '
-        + 'than deciding. Exact: the package asks for complex/possible-early and that is what it gets.',
-    },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'one_indictable', date_5_nj: '2022-07-15', date_4_nj: '2022-07-15' },
+    expect: { resultKey: 'complex_early_nj', reading: 'Four years in: short of the standard 5 but past the 4-yr "compelling circumstances" mark for an indictable record -> discretionary early-pathway complex. Exact.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — NJ persona 3',
-    package: '2 indictables, latest closed 11 yrs ago, none excluded → eligible-clean-slate.',
-    record: { title: 'Indictable Offense (second)', charge_type: 'felony', disposition: 'convicted' },
-    answers: {
-      title39_nj: false,
-      marijuana_nj: false,
-      excluded_nj: false,
-      count_profile_nj: 'clean_slate',   // 2 indictables is outside 1 + 3
-      date_10_nj: '2015-07-15',          // 11 yrs from the most recent
-    },
-    expect: {
-      resultKey: 'eligible_clean_slate_nj',
-      reading:
-        'Two indictables puts the record outside the standard limits, which is precisely who Clean '
-        + 'Slate (2C:52-5.3) exists for: the ENTIRE record, 10 years from the most recent conviction, '
-        + 'regardless of count. 11 years clears it. Exact.',
-    },
+    source: 'Wave 1 — NJ persona 3 (updated)',
+    package: 'separate unrelated convictions beyond the standard limits, latest closed 11 yrs ago -> clean slate.',
+    record: { title: 'Indictable Offense (beyond standard limits)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'beyond', date_10_nj: '2015-07-15' },
+    expect: { resultKey: 'eligible_clean_slate_nj', reading: 'Beyond the standard limits -> Clean Slate (2C:52-5.3): entire record, 10 yrs from most recent conviction. 11 yrs clears it. Copy adds the automation-end / restoration notes. Exact.' },
     now: NOW,
   },
   {
     source: 'Wave 1 — NJ persona 4',
-    package: 'DWI → not expungable (Title 39).',
+    package: 'DWI -> not expungable (Title 39).',
     record: { title: 'DWI', charge_type: 'misdemeanor', disposition: 'convicted' },
     answers: { title39_nj: true },
-    expect: {
-      resultKey: 'ineligible_title39_nj',
-      reading:
-        'Asked first and answered in one question. Title 39 motor vehicle offences sit outside the '
-        + 'expungement statute entirely — no waiting period, no Clean Slate, nothing. Wave 1 calls '
-        + 'this a common user confusion; a hard no delivered immediately beats five questions and '
-        + 'then a no. Exact.',
-    },
+    expect: { resultKey: 'ineligible_title39_nj', reading: 'Title 39 motor-vehicle offences sit outside the expungement statute entirely. Asked first, answered in one question. Exact.' },
     now: NOW,
   },
   {
-    source: 'Wave 1 — NJ persona 5',
-    package: 'marijuana possession 2015 → eligible-immediate.',
+    source: 'Wave 1 — NJ persona 5 (updated) / operation-of-law',
+    package: 'marijuana possession -> expunged BY OPERATION OF LAW (6.1); check record, 5.1 backstop.',
     record: { title: 'Marijuana Possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-01-01' },
-    answers: { title39_nj: false, marijuana_nj: true },
-    expect: {
-      resultKey: 'eligible_marijuana_nj',
-      reading:
-        'Since 2021 legalisation most marijuana offences are treated as DP-level and expungable '
-        + 'immediately — no waiting period, no date node. Asked before the exclusion list and the '
-        + 'count profile because it short-circuits both. Exact.',
-    },
+    answers: { title39_nj: false, marijuana_nj: true, marijuana_type_nj: 'possession' },
+    expect: { resultKey: 'eligible_marijuana_ool_nj', reading: 'A marijuana-only possession case was expunged by operation of law (2C:52-6.1), sentence and unpaid assessments vacated -> check-record-first result, with the 2C:52-5.1 anytime petition (court SHALL grant) as the backstop. Replaces the old generic marijuana result. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ crime spree',
+    package: 'interdependent/closely-related crime spree across years -> 5-yr path, NOT clean slate.',
+    record: { title: 'Crime-spree convictions', charge_type: 'felony', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'crime_spree', date_5_nj: '2020-01-01' },
+    expect: { resultKey: 'eligible_standard_nj', reading: 'ADDED PRONG: an interdependent/closely-related crime spree is a 5-yr standard prong (2C:52-2(a)), not a clean-slate case. Draft was missing this. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ single judgment',
+    package: 'multiple convictions all entered in a single judgment of conviction -> 5-yr path.',
+    record: { title: 'Multiple convictions (single judgment)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'single_judgment', date_5_nj: '2020-01-01' },
+    expect: { resultKey: 'eligible_standard_nj', reading: 'ADDED PRONG: multiple convictions in a single judgment of conviction are a 5-yr standard prong (2C:52-2(a)), not clean slate. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ prior expungement',
+    package: 'a prior expungement was granted -> standard/DP closed, clean-slate-only result (14(e)).',
+    record: { title: 'Indictable (prior expungement used)', charge_type: 'felony', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: true },
+    expect: { resultKey: 'complex_prior_expungement_nj', reading: 'RECAST once-per-lifetime as the 2C:52-14(e) previous-expungement bar: it closes the standard/DP paths but expressly leaves clean slate, ordinances, non-convictions, and hypodermic paraphernalia open. Gate sits ahead of the count profile. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ DP-only early path',
+    package: 'DP-only record, ~3.5 yrs out -> the 3-yr DP early pathway complex, NOT waiting.',
+    record: { title: 'DP offense (DP-only record)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: false, excluded_nj: false, distribution_nj: false, prior_expungement_nj: false, count_profile_nj: 'dp_only', date_5_dp_nj: '2023-01-01', date_3_dp_nj: '2023-01-01' },
+    expect: { resultKey: 'complex_early_nj', reading: 'CONFIRMED 3-yr DP early path (2C:52-3): DP-only, 3 yrs elapsed (2023-01 -> 2026), short of 5 -> fails date_5_dp, passes date_3_dp -> early-pathway complex, not waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ plea-bargain dismissal',
+    package: 'charge dismissed as part of a plea bargain with a conviction -> barred UNTIL the conviction is expunged (bar lifts).',
+    record: { title: 'Plea-bargain dismissal', disposition: 'dismissed' },
+    answers: { dismissal_pleabargain_nj: true },
+    expect: { resultKey: 'complex_pleabargain_dismissal_nj', reading: '2C:52-6(a)(3)/14(c): a plea-bargain dismissal is barred until the related conviction is itself expunged — but the bar LIFTS then, framed as a "not yet" with a sequencing path, not a flat no. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ PTI completion',
+    package: 'PTI completed, case dismissed 7 months ago -> eligible (6-month bar met).',
+    record: { title: 'PTI completed', disposition: 'deferred' },
+    answers: { diversion_type_nj: 'pti', diversion_date_nj: '2025-12-15' },
+    expect: { resultKey: 'eligible_diversion_nj', reading: 'Diversion branch (replaces unknown_deferred): PTI/CD/conditional-dismissal expungeable 6 months after the dismissal order (2C:52-6(c)(1)); 7 months out -> eligible. Vet/MH would be anytime. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Diana 7/18 - NJ marijuana distribution 2 yrs',
+    package: 'marijuana distribution (35-5(b)(11)) 2 yrs out -> waiting (3-yr path).',
+    record: { title: 'Marijuana distribution (2C:35-5(b)(11))', charge_type: 'felony', disposition: 'convicted' },
+    answers: { title39_nj: false, marijuana_nj: true, marijuana_type_nj: 'distribution', mj_dist_date_nj: '2024-07-15' },
+    expect: { resultKey: 'waiting_mj_dist_nj', reading: '35-5(b)(11) marijuana distribution has its own 3-yr path (2C:52-5.1(b)); 2 yrs out -> waiting, not the operation-of-law clearance (which is for possession/small only). Exact.' },
     now: NOW,
   },
 ];

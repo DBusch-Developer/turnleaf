@@ -4116,78 +4116,122 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   // 2025 (~50k done, 100k+ expected). Every automatic result says "may have
   // been or will be erased — check", never "done".
   // ==========================================================================
+  // ==========================================================================
+  // CONNECTICUT — STATUTE-CITED (verified 2026-07-19). Terminology: ERASURE.
+  // Diana read from cga.ct.gov (retrieved 2026-07-19): CGS 54-142a (through
+  // PA 23-204), 54-142c, 54-142d, 54-142e (through PA 23-134), 54-56e (through
+  // PA 24-20), 54-56g, 54-56l, 54-130a (through PA 23-47), 54-76o.
+  //
+  // Connecticut has ONE word — ERASURE — and an erased record makes you
+  // "deemed to have never been arrested" with a statutory right to SWEAR IT
+  // UNDER OATH (§ 54-142a(g)(2)). That is the strongest honest-no in the 50
+  // states; lead with it.
+  //
+  // Routes:
+  //   NON-CONVICTION (a)/(b): not-guilty or dismissal erases automatically on
+  //     expiry of the appeal period. EXCLUDES NGRI / not-criminally-responsible.
+  //   NOLLE (c): 13 months after a nolle -> erasure. A bare "prosecutor stopped
+  //     prosecuting" is NOT a nolle — case law (286 C. 666) requires an overt
+  //     state continuance request, then the defendant MOVES to nolle.
+  //   CLEAN SLATE (e): two tiers, BOTH clocked from the MOST RECENT judgment of
+  //     conviction (any new conviction resets the clock for everything):
+  //       7 yr  — misdemeanor / MV violation max <=1 yr, EXCEPT DUI (14-227a).
+  //       10 yr — class D/E felony, unclassified felony max <=5 yr, MV >1 & <=5
+  //               yr, AND 14-227a DUI (added by PA 23-169/23-204 — if a tree
+  //               excludes DUI outright it is STALE).
+  //     Mechanism splits by OFFENSE date: on/after 1/1/2000 -> by operation of
+  //     law; before -> free OCCA-form petition. Classification judged by the law
+  //     in effect at offense time ((e)(1)(B)).
+  //   PARDON (d + 54-130a): an ABSOLUTE pardon erases the whole record and is
+  //     the fallback door for Clean-Slate-excluded convictions. PROVISIONAL
+  //     pardons and certificates of rehabilitation do NOT erase.
+  //   Plus: decriminalized-offense petition (142d, immediate), under-18
+  //     misdemeanors (142f), Youthful Offender (54-76o), and diversion feeders
+  //     (AR 54-56e, supervised 54-56l, alcohol-ed 54-56g [CLOSED since 4/1/22]).
+  //
+  // Whole-record trap (i): no erasure of history referencing multiple counts
+  // until ALL counts qualify — but public electronic records of the erasable
+  // charge ARE erased even in mixed cases ((i)(2)).
+  // ==========================================================================
   CT: {
     code: 'CT',
     name: 'Connecticut',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
     terminology:
       'Connecticut says ERASURE — its single word for what other states split into expungement and '
-      + 'sealing. An erased record is treated as never having existed, and you may lawfully deny it. '
-      + 'Three routes. AUTOMATIC "Clean Slate" erasure clears many post-2000 convictions with no '
-      + 'petition. PETITION erasure (form JD-CR-202, free) covers pre-2000 convictions and cannabis. '
-      + 'And an ABSOLUTE PARDON from the Board of Pardons and Paroles — which in Connecticut is not '
-      + 'just clemency but a full erasure of your entire record, and is the route for the serious '
-      + 'felonies the other two do not reach.',
+      + 'sealing. An erased record makes you "deemed to have never been arrested," and § 54-142a(g)(2) '
+      + 'lets you SWEAR that under oath — the strongest honest-no in the country. Routes: NON-CONVICTION '
+      + 'erasure (dismissals, acquittals, nolles) is automatic. CLEAN SLATE erasure clears many '
+      + 'convictions — automatically for offenses on/after 1/1/2000, by a free OCCA-form petition for '
+      + 'earlier ones. A decriminalized offense (142d) and cannabis erase on a petition the court must '
+      + 'grant immediately. And an ABSOLUTE PARDON from the Board of Pardons and Paroles erases the '
+      + 'ENTIRE record — the route for the serious convictions Clean Slate excludes. A provisional '
+      + 'pardon or certificate of rehabilitation does NOT erase.',
     keyDates: [
       {
-        label: 'Clean Slate automatic erasures resumed after delays',
-        date: '2025-10',
-        kind: 'operative',
-        note: 'Wave 2 gives month and year only. Delayed for years by data-system problems; ~50,000 convictions erased so far, 100,000+ expected. "Eligible" does not yet mean "erased".',
+        label: 'Clean Slate erasure operative (PA 21-32 as amended)',
+        date: '2023-01-01',
+        kind: 'effective',
+        note: 'PA 21-32 as amended by 22-26, 23-134, 23-169, 23-204. The statute is unconditional — no funding contingency in the text — but the automated-erasure IT rollout was delayed in practice; "eligible" does not yet guarantee "erased".',
       },
       {
-        label: 'Clean Slate Act (Public Act 21-42) — automatic erasure of post-2000 convictions',
-        date: '2021',
-        kind: 'effective',
-        note: 'Wave 2 gives the year only.',
+        label: 'Clean Slate mechanism split by offense date',
+        date: '2000-01-01',
+        kind: 'operative',
+        note: 'An offense committed on/after this date erases by operation of law; an earlier offense erases by a free OCCA-form petition. Classification and max sentence are judged by the law in effect at offense time (§ 54-142a(e)(1)(B)).',
+      },
+      {
+        label: 'Alcohol Education Program closed to new applications',
+        date: '2022-04-01',
+        kind: 'operative',
+        note: '§ 54-56g(j) — this DUI-era diversion no longer accepts applicants; cases completed before closure still dismiss and erase.',
       },
     ],
     openQuestions: [
       {
         question:
-          'What is the current Clean Slate rollout status, and how does a person check whether their own record has been erased yet? Wave 2 says erasures resumed October 2025 with ~50k of 100k+ done, and that individuals are not notified. Confirm the status page (portal.ct.gov/cleanslate) and the record-check process before any UI copy claims completeness.',
+          '2024–2026 session sweep: § 54-142a is encoded through PA 23-204 and § 54-142e through PA 23-134. Confirm no later (2024–2026) public act amended the erasure statutes before any UI copy claims completeness.',
         blocksFields: [],
       },
       {
         question:
-          'DUI CONFLICT: is a DUI (Conn. Gen. Stat. § 14-227a) eligible for automatic erasure? One attorney source says DUIs are eligible; the state\'s own petition-form guidance blocks § 14-227a where there is a repeat within 10 years — which reads as first-offence eligible, repeat blocked. Read § 54-142a(e)(2)(C) and encode exactly what it says. The tree currently routes DUI to the exclusion gate as a question rather than assuming.',
+          'Operational status of the automated erasure rollout: the statute is unconditional, but implementation was delayed in practice and individuals are not notified. Confirm the current status page (portal.ct.gov/cleanslate) and the record-check process — "eligible" is not yet "erased" (news/phone tier).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the § 54-142a(e)(2)(C) exclusion list in full: family violence crimes (§ 46b-38a), sex offences requiring registration, and crimes with a maximum sentence over 5 years even where the actual sentence was less. The tree asks a person to self-assess this; the exact list needs confirming against the statute.',
+          'Definitions cited but not pulled: § 46b-38a (family violence crime — the (e)(2)(A) exclusion) and § 54-250 (nonviolent/sexually violent offense — the (e)(2)(B) exclusion). The tree asks the person to self-assess membership; the exact definitional lists are cite-only here.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the automatic erasure waiting periods against § 54-142a(e): misdemeanours 7 years, and class D/E and unclassified felonies with maximum terms of 5 years or less at 10 years — both measured from the person\'s MOST RECENT conviction of any crime.',
+          'Feeder programs referenced but not pulled: § 54-56i / § 54-56q (drug education) and § 46b-38c (family violence education) — their mechanics and how completion feeds § 54-142a erasure are cite-only.',
         blocksFields: [],
       },
       {
         question:
-          'How are completed deferrals/diversions (including accelerated rehabilitation) treated for erasure? Not covered in Wave 2 — standing call-sheet question for every state.',
+          'Adjacent erasure routes not pulled: § 46b-146 (juvenile delinquency erasure) and § 29-15 (return of fingerprints). Out of scope for this pass; route juvenile matters to counsel.',
         blocksFields: [],
       },
       {
         question:
-          'Is petition erasure (form JD-CR-202) and cannabis erasure genuinely free, and pardon applications too? Wave 2 says all three are free; confirm at the counter and on the Board of Pardons page.',
-        blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
-      },
-      {
-        question:
-          'What is the exact effective date of the resumed automatic erasures and of Public Act 21-42? Wave 2 gives month/year and year only.',
-        blocksFields: [],
+          'Absolute-pardon application mechanics and fees are set by the Board of Pardons and Paroles outside the statute (§ 54-130a fixes the 3-year misdemeanor / 5-year felony application windows, not the process or cost). Confirm the current BOPP process and any fee (phone tier).',
+        blocksFields: ['resources.remedies.pardon.fees'],
       },
     ],
     sources: [
-      { id: 'Conn. Gen. Stat. § 54-142a (erasure of criminal records)', url: null, retrievedOn: null },
-      { id: 'Conn. Gen. Stat. § 54-142a(e) (automatic Clean Slate erasure; periods; exclusions (e)(2)(C))', url: null, retrievedOn: null },
-      { id: 'Conn. Gen. Stat. § 54-130a (absolute pardon — Board of Pardons and Paroles)', url: null, retrievedOn: null },
-      { id: 'Conn. Gen. Stat. § 46b-38a (family violence crimes — automatic-erasure exclusion)', url: null, retrievedOn: null },
-      { id: 'Conn. Gen. Stat. § 14-227a (DUI — erasure eligibility in conflict)', url: null, retrievedOn: null },
-      { id: 'Public Act 21-42 (Clean Slate Act)', url: null, retrievedOn: null },
+      { id: 'Conn. Gen. Stat. § 54-142a (erasure of criminal records — non-conviction (a)/(b), nolle (c), pardon (d), Clean Slate (e), under-18 (f), effect/honest-no (g), disclosure exceptions (h), multi-count rule (i), immigration access (j), no fee (k); through PA 23-204)', url: 'https://www.cga.ct.gov/current/pub/chap_961a.htm', retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-142c (victim access to erased-record information within 2 years; false representation is a class D felony)', url: 'https://www.cga.ct.gov/current/pub/chap_961a.htm', retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-142d (erasure of decriminalized offenses — court SHALL immediately erase on petition)', url: 'https://www.cga.ct.gov/current/pub/chap_961a.htm', retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-142e (erased-record data to consumer reporting agencies; 30-day permanent-deletion duty; CUTPA enforcement; through PA 23-134)', url: 'https://www.cga.ct.gov/current/pub/chap_961a.htm', retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-56e (Accelerated Rehabilitation — $35/$100 fees waived on indigency; exclusion list (c); twice-lifetime; completion -> dismissal; through PA 24-20)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-56g (Alcohol Education Program — closed to new applications on/after 4/1/2022 per (j))', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-56l (Supervised Diversionary Program — psychiatric disabilities/veterans; CSSD police-notification database persists 5 years per (j))', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-130a (Board of Pardons and Paroles — absolute pardon; 3-yr misdemeanor / 5-yr felony application windows; provisional pardon and certificate of rehabilitation do not erase; through PA 23-47)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Conn. Gen. Stat. § 54-76o (Youthful Offender — automatic erasure on discharge + reaching 21 with no pre-21 felony conviction; YO status is not a conviction)', url: null, retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -4197,169 +4241,386 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conviction_era_ct' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconviction_ct' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconviction_ct' },
-            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_type_ct' },
+            { label: 'Dismissed / Nolle (charges dropped)', value: 'dismissed', next: 'dismissed_type_ct' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'acquittal_ngri_ct' },
+            { label: 'Deferred / Diversion program', value: 'deferred', next: 'diversion_type_ct' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition_ct' }
           ]
         },
-        conviction_era_ct: {
+        // ---- NON-CONVICTION: acquittal, with the NGRI carve-out (a)/(b) ----
+        acquittal_ngri_ct: {
           type: 'boolean',
-          text: 'Was this conviction entered on or after January 1, 2000?',
-          yes: 'excluded_ct',
-          no: 'pre2000_ct'
+          text: 'Was the finding "not guilty by reason of insanity" (NGRI), or "guilty but not criminally responsible" because of mental disease or defect?',
+          yes: 'ngri_excluded_ct',
+          no: 'eligible_nonconviction_ct'
         },
-        pre2000_ct: {
-          type: 'boolean',
-          text: 'Was this a cannabis possession offense?',
-          yes: 'eligible_cannabis_ct',
-          no: 'eligible_petition_ct'
+        // ---- NON-CONVICTION: dismissal / nolle routing ----
+        dismissed_type_ct: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'The charge was dismissed, or you were found not guilty', value: 'dismissal', next: 'nonconv_multicount_ct' },
+            { label: 'The prosecutor entered a nolle (nolle prosequi)', value: 'nolle', next: 'nolle_date_ct' },
+            { label: 'The prosecutor got a continuance and simply stopped prosecuting (no formal nolle entered)', value: 'nolle_continuance', next: 'nolle_continuance_ct' },
+            { label: 'The case was dismissed after you completed a diversionary program (AR, supervised diversion)', value: 'after_diversion', next: 'eligible_diversion_erasure_ct' }
+          ]
         },
-        excluded_ct: {
+        nolle_date_ct: {
+          type: 'date',
+          text: 'What is the date the nolle was entered?',
+          validation: {
+            period: { amount: 13, unit: 'months', anchor: 'entry of the nolle (Conn. Gen. Stat. § 54-142a(c))' },
+            nextPass: 'eligible_nolle_ct',
+            nextFail: 'waiting_nolle_ct'
+          }
+        },
+        // Whole-record trap (i): a non-conviction sitting in a file that also
+        // holds a non-erasable conviction is blocked at the record level — but
+        // public electronic records of the erasable charge erase anyway ((i)(2)).
+        nonconv_multicount_ct: {
           type: 'boolean',
-          text: 'Was the offense any of these: a family violence crime, an offense requiring sex offender registration, a DUI, or any offense whose MAXIMUM possible sentence was more than 5 years — even if the sentence you actually received was shorter?',
+          text: 'Did this SAME case file (the same information / docket) also include another charge that ended in a conviction which is NOT itself erasable?',
+          yes: 'nonconv_mixed_ct',
+          no: 'eligible_nonconviction_ct'
+        },
+        // ---- DIVERSION feeders ----
+        diversion_type_ct: {
+          type: 'choice',
+          text: 'Which diversionary program was it?',
+          options: [
+            { label: 'Accelerated Rehabilitation (AR)', value: 'ar', next: 'ar_status_ct' },
+            { label: 'Supervised Diversionary Program (psychiatric disability / veteran)', value: 'supervised', next: 'supervised_status_ct' },
+            { label: 'Alcohol Education Program', value: 'alcohol_ed', next: 'alcohol_ed_status_ct' },
+            { label: 'Drug education, family-violence education, or another program', value: 'other', next: 'other_diversion_ct' }
+          ]
+        },
+        ar_status_ct: {
+          type: 'boolean',
+          text: 'Have you completed the program and had the charge dismissed?',
+          yes: 'eligible_diversion_erasure_ct',
+          no: 'ar_pending_ct'
+        },
+        supervised_status_ct: {
+          type: 'boolean',
+          text: 'Have you completed the program and had the charge dismissed?',
+          yes: 'eligible_supervised_erasure_ct',
+          no: 'supervised_pending_ct'
+        },
+        alcohol_ed_status_ct: {
+          type: 'boolean',
+          text: 'Did you complete the Alcohol Education Program and have the charge dismissed?',
+          yes: 'eligible_diversion_erasure_ct',
+          no: 'alcohol_ed_closed_ct'
+        },
+        // ---- CONVICTION: route by conviction sub-type ----
+        conv_type_ct: {
+          type: 'choice',
+          text: 'Which best describes this conviction?',
+          options: [
+            { label: 'The conduct has since been decriminalized (e.g., cannabis possession under half an ounce)', value: 'decriminalized', next: 'eligible_decrim_ct' },
+            { label: 'A misdemeanor you committed while under age 18', value: 'under18', next: 'under18_era_ct' },
+            { label: 'It was a Youthful Offender adjudication (you were 16 or 17)', value: 'yo', next: 'yo_screen_ct' },
+            { label: 'A standard adult conviction', value: 'standard', next: 'conv_excluded_ct' }
+          ]
+        },
+        under18_era_ct: {
+          type: 'choice',
+          text: 'When was the offense committed? (Motor-vehicle / Title 14 offenses do not qualify for this under-18 route.)',
+          options: [
+            { label: 'Between January 1, 2000 and June 30, 2012', value: 'band', next: 'eligible_under18_auto_ct' },
+            { label: 'Before January 1, 2000', value: 'pre2000', next: 'eligible_under18_petition_ct' },
+            { label: 'July 1, 2012 or later', value: 'after', next: 'under18_after_ct' }
+          ]
+        },
+        yo_screen_ct: {
+          type: 'boolean',
+          text: 'Have you been discharged from the Youthful Offender sentence, reached age 21, and had no felony conviction before turning 21?',
+          yes: 'eligible_yo_ct',
+          no: 'yo_pending_ct'
+        },
+        // ---- CLEAN SLATE machinery for a standard adult conviction ----
+        conv_excluded_ct: {
+          type: 'boolean',
+          text: 'Does this conviction fall into any Clean Slate exclusion? (A) a family-violence crime committed on/after 1/1/2000; (B) a sexual offense listed under § 54-250; (C) any offense on the (e)(2)(C) statute list (assault of an elderly/disabled/pregnant person, firearms, strangulation, voyeurism, burglary/robbery of an occupied dwelling, arson, and the other listed sections); or (D) a DUI (§ 14-227a) where you have ANOTHER DUI within the 10 years FOLLOWING it.',
           yes: 'pardon_path_ct',
-          no: 'offense_class_ct'
+          no: 'conv_precond_ct'
         },
-        offense_class_ct: {
+        conv_precond_ct: {
+          type: 'boolean',
+          text: 'Have you completed ALL of these: every term of incarceration and parole/supervision for this and any other Connecticut conviction on/after 1/1/2000; all probation for any such conviction; AND you have no pending criminal charge in Connecticut? (An unpaid fine does NOT count against you here — it survives erasure but does not block it.)',
+          yes: 'conv_tier_ct',
+          no: 'conv_precond_block_ct'
+        },
+        conv_tier_ct: {
           type: 'choice',
-          field: 'charge_type',
-          text: 'What was the level of the offense?',
+          text: 'Under the law in effect when you committed the offense, what was it? (Connecticut judges the class and maximum by the law at offense time.)',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'auto_date_misd_ct' },
-            { label: 'Felony', value: 'felony', next: 'felony_class_ct' },
-            { label: 'Infraction', value: 'infraction', next: 'auto_date_misd_ct' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'complex_class_ct' }
+            { label: 'A misdemeanor or motor-vehicle violation with a maximum sentence of 1 year or less — but NOT a DUI', value: 'tier7', next: 'conv_clock7_ct' },
+            { label: 'A class D or E felony, an unclassified felony with a max of 5 years or less, a motor-vehicle violation with a max over 1 and up to 5 years, OR a DUI (§ 14-227a)', value: 'tier10', next: 'conv_clock10_ct' },
+            { label: 'A more serious felony (class A, B, or C, or a maximum over 5 years)', value: 'above', next: 'pardon_path_ct' }
           ]
         },
-        felony_class_ct: {
-          type: 'choice',
-          text: 'What class of felony was it? (Your sentencing paperwork says. Connecticut automatically erases only the lower-level felonies.)',
-          options: [
-            { label: 'Class D or E felony, or an unclassified felony with a maximum term of 5 years or less', value: 'low', next: 'auto_date_felony_ct' },
-            { label: 'Class A, B, or C felony (or maximum term over 5 years)', value: 'high', next: 'pardon_path_ct' },
-            { label: 'I don\'t know the class', value: 'unsure', next: 'complex_class_ct' }
-          ]
-        },
-        // THE CLOCK QUIRK. Both automatic date nodes ask for the MOST RECENT
-        // conviction date, not this offence's date — that is the § 54-142a(e)
-        // trigger, and it is what generic tools miss.
-        auto_date_misd_ct: {
+        // BOTH clocks run from the MOST RECENT judgment of conviction on the
+        // whole record, not this offense — § 54-142a(e). A newer conviction
+        // resets it for everything. (Narrow (e)(4) exception: a pre-10/1/2015
+        // § 21a-279(c) drug-possession conviction is not counted as the most
+        // recent — a screener caveat, surfaced in copy, not encoded here.)
+        conv_clock7_ct: {
           type: 'date',
-          text: 'What is the date of your MOST RECENT conviction of any crime — not just this case, but the latest conviction on your whole record? (Connecticut measures the wait from that date, and a newer conviction restarts it.)',
+          text: 'What is the date the court entered your MOST RECENT judgment of conviction of any crime — not just this case, but the latest conviction on your whole record?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'the person\'s most recent conviction of any crime (Conn. Gen. Stat. § 54-142a(e) — misdemeanours)' },
-            nextPass: 'check_record_first_ct',
-            nextFail: 'waiting_ct'
+            period: { amount: 7, unit: 'years', anchor: 'the court\'s entry of the most recent judgment of conviction (Conn. Gen. Stat. § 54-142a(e) — 7-year tier)' },
+            nextPass: 'conv_mechanism_ct',
+            nextFail: 'waiting_cleanslate_ct'
           }
         },
-        auto_date_felony_ct: {
+        conv_clock10_ct: {
           type: 'date',
-          text: 'What is the date of your MOST RECENT conviction of any crime — not just this case, but the latest conviction on your whole record? (Connecticut measures the wait from that date, and a newer conviction restarts it.)',
+          text: 'What is the date the court entered your MOST RECENT judgment of conviction of any crime — not just this case, but the latest conviction on your whole record?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'the person\'s most recent conviction of any crime (Conn. Gen. Stat. § 54-142a(e) — class D/E and low unclassified felonies)' },
-            nextPass: 'check_record_first_ct',
-            nextFail: 'waiting_ct'
+            period: { amount: 10, unit: 'years', anchor: 'the court\'s entry of the most recent judgment of conviction (Conn. Gen. Stat. § 54-142a(e) — 10-year tier)' },
+            nextPass: 'conv_mechanism_ct',
+            nextFail: 'waiting_cleanslate_ct'
           }
+        },
+        conv_mechanism_ct: {
+          type: 'boolean',
+          text: 'Was the offense committed on or after January 1, 2000?',
+          yes: 'eligible_cleanslate_auto_ct',
+          no: 'eligible_cleanslate_petition_ct'
         }
       },
       results: {
-        unknown_disposition: {
+        unknown_disposition_ct: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Connecticut\'s erasure rules split on how the case ended: dismissals, acquittals and nolles are already erased automatically, while convictions run through the Clean Slate clock, a petition, or a pardon depending on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your conviction record through the Connecticut Judicial Branch, or ask the clerk of the sentencing court. Clean Slate CT (cleanslatect.org) also has an eligibility-date calculator.',
+          message: 'Connecticut\'s erasure rules split on how the case ended: dismissals, acquittals and nolles erase automatically, while convictions run through the Clean Slate clock, a decriminalization petition, or a pardon depending on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable — and guessing would be worse than saying nothing. Request your conviction record through the Connecticut Judicial Branch, or ask the clerk of the sentencing court. Clean Slate CT (cleanslatect.org) also has an eligibility-date calculator.',
           remedy: 'Get Your Record First (CT Judicial Branch / Clean Slate CT)',
           citation: 'Conn. Gen. Stat. § 54-142a (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
-          status: 'complex',
-          title: 'Deferred and Diverted Cases Need a Person',
-          message: 'Connecticut\'s erasure rules are screened here for convictions, dismissals, and acquittals. How a completed diversion — including accelerated rehabilitation — is treated for erasure is not something this screening has researched yet, and we would rather tell you that than guess. Clean Slate CT and Connecticut Legal Services can confirm how your disposition is treated.',
-          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
-          citation: 'Conn. Gen. Stat. § 54-142a (treatment of diversions not yet researched)'
+        ngri_excluded_ct: {
+          status: 'ineligible',
+          title: 'This Finding Is Excluded From Automatic Erasure',
+          message: 'Connecticut\'s automatic non-conviction erasure does NOT reach a finding of not guilty by reason of insanity, or guilty-but-not-criminally-responsible because of mental disease or defect — the statute carves these out of the (a)/(b) erasure. This is not the same as an ordinary acquittal, which erases automatically. That does not necessarily mean nothing can be done, but it is outside this screening: talk to a Connecticut attorney or Connecticut Legal Services about your specific record and any separate relief that may apply.',
+          remedy: 'Consult an attorney (NGRI/mental-disease findings are carved out)',
+          citation: 'Conn. Gen. Stat. § 54-142a(a), (b)'
         },
         eligible_nonconviction_ct: {
           status: 'eligible',
-          title: 'Non-Conviction — Already Erased',
-          message: 'Because your case ended without a conviction, Connecticut has almost certainly already erased it — dismissals and acquittals erase automatically, and a nolle erases 13 months after it is entered. This is long-standing law, not the new Clean Slate program, so it does not depend on the current rollout. You do not need to file anything. If your record still shows the case, request your conviction record through the Connecticut Judicial Branch to confirm the erasure went through, and if it did not, the clerk of the court that heard the case can correct it. Once erased, you may lawfully state the case never happened.',
+          title: 'Non-Conviction — Erased Automatically',
+          message: 'Because your case ended without a conviction, Connecticut erases it AUTOMATICALLY once the appeal period expires (or, if there was an appeal, once it is finally decided in your favor). You do not file anything. This is long-standing law, not the new Clean Slate program, so it does not depend on that rollout. Once erased, § 54-142a(g)(2) says you are "deemed to have never been arrested" — and you may SWEAR that under oath. If your record still shows the case, request your conviction record through the Connecticut Judicial Branch to confirm the erasure went through; if a private background check still reports it, § 54-142e forces reporting agencies to purge erased records within 30 days and gives you a remedy.',
           remedy: 'Automatic Erasure of Non-Convictions (already applied) — confirm with the Judicial Branch',
-          citation: 'Conn. Gen. Stat. § 54-142a'
+          citation: 'Conn. Gen. Stat. § 54-142a(a), (b), (g)(2)'
         },
-        check_record_first_ct: {
+        eligible_nolle_ct: {
           status: 'eligible',
-          title: 'Your Record May Already Be Erased — Check Before Anything Else',
-          message: 'Start by checking. Connecticut erases eligible convictions AUTOMATICALLY under Clean Slate — no petition, no fee, and no notification. Based on your dates you are past the waiting period for your offense (7 years for a misdemeanor, 10 for a low-level felony, both measured from your most recent conviction of any crime). The program was delayed for years and only resumed in October 2025, so it is working through a backlog and "eligible" does not yet guarantee "done" — but there is a real chance yours is erased or soon will be. Check your status on the state\'s Clean Slate page (portal.ct.gov/cleanslate) or by requesting your conviction record through the Judicial Branch. Clean Slate CT (cleanslatect.org) has a calculator for the dates. If yours has not been reached, there is nothing to file — the erasure is automatic once the program gets to it; court debt does not block it, though the debt itself survives.',
-          remedy: 'Check your Clean Slate status (portal.ct.gov/cleanslate) — erasure is automatic',
-          citation: 'Conn. Gen. Stat. § 54-142a(e)'
+          title: 'Nolle — Erased 13 Months After Entry',
+          message: 'A charge the prosecutor nolled erases automatically 13 months after the nolle is entered, and by your date that period has passed — so it should already be erased. You do not file anything. Once erased you are "deemed to have never been arrested" and may say so under oath (§ 54-142a(g)(2)). Confirm with the Connecticut Judicial Branch if your record still shows it; and if a background-check company still reports it, § 54-142e requires them to purge erased records within 30 days.',
+          remedy: 'Automatic Erasure 13 Months After Nolle (already applied) — confirm with the Judicial Branch',
+          citation: 'Conn. Gen. Stat. § 54-142a(c), (g)(2)'
         },
-        eligible_petition_ct: {
-          status: 'eligible',
-          title: 'Pre-2000 Conviction — Petition to Erase (Free)',
-          message: 'Because your conviction is from before January 1, 2000, it falls outside the automatic Clean Slate program, but you can petition to erase it — and it is free. File form JD-CR-202 in the court where you were sentenced, one form per docket number. There is no filing fee. If your record has more than one old case, you file for each separately.',
-          remedy: 'Petition for Erasure (form JD-CR-202) — free',
-          citation: 'Conn. Gen. Stat. § 54-142a'
+        waiting_nolle_ct: {
+          status: 'waiting',
+          title: 'Nolle — Erases at 13 Months',
+          message: 'A nolled charge erases automatically, but only 13 months after the nolle was entered, and by your date that period has not run yet. There is nothing to file — when the 13 months are up the erasure happens by operation of law. Note the trap: if the prosecutor merely got a continuance and stopped prosecuting without entering a formal nolle, the 13-month clock has not started; case law requires an overt continuance request by the state, after which you can move to have a nolle entered.',
+          remedy: 'Wait for the 13-month nolle period — then automatic',
+          citation: 'Conn. Gen. Stat. § 54-142a(c)'
         },
-        eligible_cannabis_ct: {
+        nolle_continuance_ct: {
+          status: 'complex',
+          title: 'A Continuance Is Not Yet a Nolle',
+          message: 'If the prosecutor simply obtained a continuance and stopped moving the case, that is NOT the same as an entered nolle — and the 13-month erasure clock does not start until a nolle is actually entered. Connecticut case law (State v. cases construing § 54-142a) requires an explicit, overt request by the state to continue, after 13 months of no prosecution, before you move the court to enter a nolle; the erasure pipeline then runs from that entry. This is worth having a Connecticut attorney or Connecticut Legal Services confirm on your specific docket, because getting the nolle entered is the step that starts everything.',
+          remedy: 'Move for a nolle to be entered (then the 13-month clock runs) — get counsel',
+          citation: 'Conn. Gen. Stat. § 54-142a(c)'
+        },
+        nonconv_mixed_ct: {
+          status: 'complex',
+          title: 'Mixed Case File — Whole-Record Erasure Is Blocked, But Public Records Still Erase',
+          message: 'Here is Connecticut\'s whole-record trap: when a single case file references multiple counts, the criminal-history record cannot be erased until EVERY count qualifies — so a non-erasable conviction in the same file holds up erasure of the whole history record (§ 54-142a(i)). But it is not all-or-nothing: the qualified electronic records released to the public that reference your erasable charge ARE erased even in a mixed case ((i)(2)) — the narrative portions of police reports are the exception. Because the accounting here is docket-specific, have a Connecticut attorney or Clean Slate CT look at the actual file to see exactly what erases and what remains.',
+          remedy: 'Partial erasure of public electronic records; whole-record blocked — review the file with counsel',
+          citation: 'Conn. Gen. Stat. § 54-142a(i)(1), (i)(2)'
+        },
+        eligible_diversion_erasure_ct: {
           status: 'eligible',
-          title: 'Cannabis Possession — Free Erasure, No Waiting Period',
-          message: 'Cannabis possession offenses have their own erasure path in Connecticut, and it is the easiest one: no waiting period and no fee. This covers possession of up to 4 ounces from October 2015 to January 2021, and pre-2000 cannabis possession. Many qualifying cannabis records were already erased automatically, so check your record first through the Judicial Branch — if yours was not, the petition is free.',
-          remedy: 'Cannabis Erasure — free, no waiting period',
-          citation: 'Conn. Gen. Stat. § 54-142a'
+          title: 'Diversion Completed — Dismissal Erases',
+          message: 'When you complete a diversionary program and the charge is dismissed, that dismissal is a non-conviction — and Connecticut erases it automatically under § 54-142a, the same as any other dismissal. You do not file anything; the erasure follows the dismissal. Once erased you are "deemed to have never been arrested" and may say so under oath (§ 54-142a(g)(2)). If your record still shows the case, confirm with the Connecticut Judicial Branch.',
+          remedy: 'Automatic Erasure Following Dismissal — confirm with the Judicial Branch',
+          citation: 'Conn. Gen. Stat. §§ 54-56e, 54-142a'
+        },
+        ar_pending_ct: {
+          status: 'waiting',
+          title: 'Finish Accelerated Rehabilitation — Then the Dismissal Erases',
+          message: 'You are on the right path. Accelerated Rehabilitation runs up to 2 years; when you complete it the charge is dismissed, and that dismissal erases automatically under § 54-142a. The application and participation fees are $35 and $100, but both are WAIVED if you are indigent or represented by a public defender (§ 54-56e(g)). Keep to the program\'s conditions; on completion there is nothing extra to file for the erasure. Connecticut Legal Services can help if a condition becomes hard to meet.',
+          remedy: 'Complete AR (fees waived if indigent) — dismissal then erases',
+          citation: 'Conn. Gen. Stat. § 54-56e(g)'
+        },
+        eligible_supervised_erasure_ct: {
+          status: 'eligible',
+          title: 'Supervised Diversion Completed — Dismissal Erases',
+          message: 'Completing the Supervised Diversionary Program dismisses the charge, and that dismissal erases automatically under § 54-142a — the same as any non-conviction. One thing to know: the Court Support Services Division keeps its police-notification database entry for 5 years after your participation (§ 54-56l(j)), separate from the court record erasure. That does not undo the erasure of your criminal-history record; it is an internal notification record. Confirm the court-record erasure with the Connecticut Judicial Branch.',
+          remedy: 'Automatic Erasure Following Dismissal (CSSD notification persists 5 years)',
+          citation: 'Conn. Gen. Stat. §§ 54-56l, 54-142a'
+        },
+        supervised_pending_ct: {
+          status: 'waiting',
+          title: 'Finish Supervised Diversion — Then the Dismissal Erases',
+          message: 'You are on the right path. Completing the Supervised Diversionary Program dismisses the charge, and that dismissal erases under § 54-142a. Keep to the program\'s conditions; on completion there is nothing extra to file for the erasure. Note that the Court Support Services Division retains a police-notification database entry for 5 years after participation (§ 54-56l(j)) — an internal record separate from the court-record erasure. Connecticut Legal Services can help if a condition becomes hard to meet.',
+          remedy: 'Complete supervised diversion — dismissal then erases',
+          citation: 'Conn. Gen. Stat. § 54-56l'
+        },
+        alcohol_ed_closed_ct: {
+          status: 'complex',
+          title: 'The Alcohol Education Program Is Closed',
+          message: 'The Alcohol Education Program stopped accepting new applications on and after April 1, 2022 (§ 54-56g(j)) — so it is no longer a route into diversion for a DUI. If you completed the program before it closed and your charge was dismissed, that dismissal erases automatically under § 54-142a; confirm with the Connecticut Judicial Branch. If you are looking at a current DUI, this program is not available and a DUI conviction runs through the Clean Slate 10-year tier instead (§ 14-227a is included there) — a Connecticut attorney or Clean Slate CT can walk you through the current options.',
+          remedy: 'Program closed (since 4/1/2022) — completed cases erase; new DUIs use Clean Slate',
+          citation: 'Conn. Gen. Stat. § 54-56g(j)'
+        },
+        other_diversion_ct: {
+          status: 'complex',
+          title: 'This Program Needs a Person',
+          message: 'Drug-education and family-violence-education diversion programs feed into Connecticut\'s erasure system, but their exact mechanics — and precisely how completion translates into erasure — are not something this screening has pulled yet, and we would rather say so than guess. Completing a diversionary program and getting the charge dismissed generally erases under § 54-142a, but confirm the specifics with Connecticut Legal Services or the Court Support Services Division for your program.',
+          remedy: 'Consult Legal Aid (program mechanics not yet screened)',
+          citation: 'Conn. Gen. Stat. § 54-142a (feeder-program mechanics not yet researched)'
+        },
+        eligible_decrim_ct: {
+          status: 'eligible',
+          title: 'Decriminalized Offense — the Court Must Erase It, Immediately',
+          message: 'When conduct has since been decriminalized, Connecticut gives you a direct route: you petition, and the court SHALL immediately erase the record (§ 54-142d) — no waiting period. Cannabis possession of less than half an ounce qualifies (the Supreme Court confirmed this in 315 Conn. 861, since the conduct was decriminalized under § 21a-279a). Many qualifying cannabis records were already erased automatically, so check your record first with the Connecticut Judicial Branch; if yours was not reached, the petition is free. One caveat: a probation violation that was based on the decriminalized offense is not itself erased (332 Conn. 639).',
+          remedy: 'Petition to Erase a Decriminalized Offense — court must grant immediately, free',
+          citation: 'Conn. Gen. Stat. § 54-142d'
+        },
+        eligible_under18_auto_ct: {
+          status: 'eligible',
+          title: 'Under-18 Misdemeanor — Erased by Operation of Law',
+          message: 'A misdemeanor you committed while under 18, with an offense date between January 1, 2000 and June 30, 2012, is erased BY OPERATION OF LAW under § 54-142a(f) — the paper records are deemed erased and you do not file anything. This does not cover motor-vehicle/Title 14 offenses or § 51-164r violations. If your record still shows it, confirm with the Connecticut Judicial Branch. Once erased you are "deemed to have never been arrested" and may say so under oath.',
+          remedy: 'Automatic Erasure of the Under-18 Misdemeanor — confirm with the Judicial Branch',
+          citation: 'Conn. Gen. Stat. § 54-142a(f)'
+        },
+        eligible_under18_petition_ct: {
+          status: 'eligible',
+          title: 'Under-18 Misdemeanor (Pre-2000) — Petition, Court Must Erase',
+          message: 'For a misdemeanor committed while under 18 with an offense date before January 1, 2000, you petition and the court SHALL erase it under § 54-142a(f). This does not cover motor-vehicle/Title 14 offenses or § 51-164r violations. There is no fee for a § 54-142a petition (§ 54-142a(k)). One limit: this route is not available if a non-erasable conviction arose from the same information as the under-18 charge.',
+          remedy: 'Petition to Erase the Under-18 Misdemeanor — court must grant, free',
+          citation: 'Conn. Gen. Stat. § 54-142a(f)'
+        },
+        under18_after_ct: {
+          status: 'complex',
+          title: 'This Under-18 Case Needs a Different Route',
+          message: 'The § 54-142a(f) under-18 erasure covers misdemeanors with offense dates from January 1, 2000 through June 30, 2012. An offense on or after July 1, 2012 falls outside it — it may instead be a juvenile-delinquency matter with its own erasure under § 46b-146, or, if it was handled as an adult conviction, it may run through the Clean Slate clock. This screening has not pulled the juvenile-erasure mechanics, so rather than guess: Connecticut Legal Services or the Court Support Services Division can identify the right route for your specific case.',
+          remedy: 'Consult Legal Aid (juvenile/Clean Slate route depends on the case)',
+          citation: 'Conn. Gen. Stat. §§ 54-142a(f), 46b-146'
+        },
+        eligible_yo_ct: {
+          status: 'eligible',
+          title: 'Youthful Offender — Erased Automatically',
+          message: 'A Youthful Offender adjudication is not a conviction, and Connecticut erases the record AUTOMATICALLY once you have been discharged and have reached 21 without a felony conviction before that age (§ 54-76o). You do not file anything. Because YO status was never a conviction to begin with, and the record is erased on top of that, you can treat this as behind you. If a record still appears, confirm the erasure with the Connecticut Judicial Branch.',
+          remedy: 'Automatic Erasure of the YO Record — confirm with the Judicial Branch',
+          citation: 'Conn. Gen. Stat. § 54-76o'
+        },
+        yo_pending_ct: {
+          status: 'waiting',
+          title: 'Youthful Offender — Erases Once You Turn 21 (Clean)',
+          message: 'Your Youthful Offender record erases automatically, but only once two things are true: you have been discharged from the YO sentence, and you have reached age 21 without any felony conviction before that age (§ 54-76o). Until then it is not yet erased. There is nothing to file — the erasure is by operation of law once the conditions are met. YO status is not a conviction in the meantime. If you pick up a felony before 21, this automatic route closes and you would look to the Clean Slate or pardon routes instead.',
+          remedy: 'Wait for discharge + age 21 (no pre-21 felony) — then automatic',
+          citation: 'Conn. Gen. Stat. § 54-76o'
         },
         pardon_path_ct: {
           status: 'complex',
-          title: 'Your Path Is a Pardon — And in Connecticut That Means Full Erasure',
-          message: 'Connecticut does not automatically erase this offense — but do not read that as a dead end, because Connecticut\'s pardon is unusual and strong. An ABSOLUTE PARDON from the Board of Pardons and Paroles erases your ENTIRE record, and it is how the state clears serious felonies, family violence offenses, and anything with a maximum sentence over 5 years. You can apply 3 years after a misdemeanor conviction or 5 years after a felony, as long as you have no pending charges, are not on probation or parole, and have had no nolle in the last 13 months. It is free, and hearings are held virtually. This is a real route that most people do not know exists — the Board of Pardons and Paroles (ct.gov/bopp) has pre-screening resources, and Connecticut Legal Services can help you prepare.',
-          remedy: 'Absolute Pardon Application (Board of Pardons and Paroles) — free, full erasure',
-          citation: 'Conn. Gen. Stat. § 54-130a'
+          title: 'Your Path Is an Absolute Pardon — And in Connecticut That Means Full Erasure',
+          message: 'Connecticut\'s Clean Slate program does not automatically reach this conviction — but do not read that as a dead end, because Connecticut\'s pardon is unusually strong. An ABSOLUTE PARDON from the Board of Pardons and Paroles erases your ENTIRE record (§§ 54-142a(d), 54-130a), and it is the route for serious felonies, family-violence convictions, and offenses Clean Slate excludes. The Board accepts applications 3 years after a misdemeanor or violation conviction and 5 years after a felony (§ 54-130a(c)), earlier for extraordinary circumstances, and a denial must come with a written statement of the factors considered (§ 54-130a(h)). Be careful about the two look-alikes: a PROVISIONAL pardon and a certificate of rehabilitation help with employment and licensing but do NOT erase your record and do not relieve you of disclosing it (§ 54-130a(f)). Only the absolute pardon erases. The Board of Pardons and Paroles (ct.gov/bopp) has pre-screening resources, and Connecticut Legal Services can help you prepare.',
+          remedy: 'Absolute Pardon Application (Board of Pardons and Paroles) — full erasure',
+          citation: 'Conn. Gen. Stat. §§ 54-142a(d), 54-130a'
         },
-        waiting_ct: {
+        conv_precond_block_ct: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Connecticut\'s automatic erasure comes 7 years after a misdemeanor conviction, or 10 years after a low-level felony — but here is the part that catches people out, and it is worth understanding: the clock runs from your MOST RECENT conviction of any crime, not from this case. A newer conviction restarts it for everything. Based on the date you gave, the period has not run yet. Staying conviction-free is what gets you there, and once the period runs the erasure is automatic — court debt does not block it. If you would rather not wait, an absolute pardon from the Board of Pardons and Paroles is available to apply for sooner (3 years for a misdemeanor, 5 for a felony).',
-          remedy: 'Wait for the automatic period, or apply for a pardon sooner',
+          title: 'Finish Your Sentence First — Then Clean Slate Can Run',
+          message: 'Clean Slate erasure has three preconditions, and one of them is not met yet: you must have completed all incarceration and parole for this and any other post-2000 Connecticut conviction, completed all probation for any such conviction, and have no pending Connecticut charge (§ 54-142a(e)(3)). An open probation term — even on a different 2021 case — holds up erasure for everything until it is finished. This is about supervision, not money: an unpaid fine does NOT block erasure (it survives, but it does not stop the clock). Once you have completed supervision and have nothing pending, the Clean Slate clock (7 or 10 years from your most recent conviction) is what governs.',
+          remedy: 'Complete all supervision + clear pending charges — then Clean Slate applies',
+          citation: 'Conn. Gen. Stat. § 54-142a(e)(3)'
+        },
+        waiting_cleanslate_ct: {
+          status: 'waiting',
+          title: 'Clean Slate Clock Not Yet Run',
+          message: 'Connecticut\'s Clean Slate erasure comes 7 years after a misdemeanor (or low-max MV violation) or 10 years after a class D/E or low-level felony — but here is the part that catches people out: the clock runs from your MOST RECENT judgment of conviction of ANY crime, not from this case. A newer conviction restarts it for everything awaiting erasure. Based on the date you gave, the period has not run yet. Staying conviction-free is what gets you there, and the erasure is then automatic (for a post-2000 offense) or a free petition (pre-2000) — an unpaid fine does not block it. One narrow exception that may help: a pre-October-2015 drug-possession conviction under § 21a-279(c) does not count as your "most recent" offense for this clock. If you would rather not wait, an absolute pardon is available to apply for sooner (3 years for a misdemeanor, 5 for a felony).',
+          remedy: 'Wait for the Clean Slate period, or apply for a pardon sooner',
           citation: 'Conn. Gen. Stat. §§ 54-142a(e), 54-130a'
         },
-        complex_class_ct: {
-          status: 'complex',
-          title: 'We Need the Offense Class',
-          message: 'In Connecticut the class of the offense decides which erasure path you take and how long you wait — a misdemeanor is 7 years, a class D/E or low-level felony is 10, and the more serious felonies go through a pardon instead. Guessing would send you down the wrong path, so we will not. Your sentencing paperwork states the class, and Clean Slate CT (cleanslatect.org) can read your record with you. Connecticut Legal Services also helps for free.',
-          remedy: 'Get Your Offense Class First (sentencing paperwork / Clean Slate CT)',
-          citation: 'Conn. Gen. Stat. § 54-142a(e)'
+        eligible_cleanslate_auto_ct: {
+          status: 'eligible',
+          title: 'Clean Slate — Erased by Operation of Law',
+          message: 'Your conviction meets a Clean Slate tier and the offense was on or after January 1, 2000, so it erases BY OPERATION OF LAW — automatically, no petition and no fee (§ 54-142a(e)). Based on your dates you are past the waiting period (7 years for a misdemeanor, 10 for a low-level felony or a DUI, measured from your most recent conviction of any crime). The automated rollout was delayed in practice, so "eligible" does not yet guarantee "done" — check your status at portal.ct.gov/cleanslate or by requesting your record from the Judicial Branch. An unpaid fine does not block the erasure, though the debt itself survives. Once erased you are "deemed to have never been arrested" and may swear it under oath (§ 54-142a(g)(2)); and if a background-check company still reports the record, § 54-142e requires it purged within 30 days and gives you a remedy.',
+          remedy: 'Automatic Clean Slate Erasure — check status at portal.ct.gov/cleanslate',
+          citation: 'Conn. Gen. Stat. § 54-142a(e), (g)(2)'
+        },
+        eligible_cleanslate_petition_ct: {
+          status: 'eligible',
+          title: 'Clean Slate (Pre-2000 Offense) — Free Petition to Erase',
+          message: 'Your conviction meets a Clean Slate tier, but because the offense was committed before January 1, 2000 the erasure is not automatic — you petition for it, on the OCCA petition form, and there is no fee (§ 54-142a(k)). Based on your dates you are past the waiting period (7 years for a misdemeanor, 10 for a low-level felony, measured from your most recent conviction of any crime). File one petition per case in the court where you were sentenced. Once erased you are "deemed to have never been arrested" and may swear it under oath (§ 54-142a(g)(2)). The clerk of the sentencing court provides the current form; Clean Slate CT can help you prepare it.',
+          remedy: 'Petition to Erase (pre-2000 Clean Slate offense) — free',
+          citation: 'Conn. Gen. Stat. § 54-142a(e), (k)'
         }
       }
     },
     resources: {
       remedies: {
-        petition: {
-          name: 'Petition for Erasure (pre-2000 convictions and cannabis)',
-          formName: 'Form JD-CR-202',
+        cleanSlate: {
+          name: 'Clean Slate Erasure (convictions — automatic for post-2000 offenses)',
+          formName: 'None for automatic erasure; OCCA petition form for pre-2000 offenses',
           formUrl: 'https://portal.ct.gov/cleanslate',
           steps: [
-            'For a post-2000 conviction, there is nothing to file — erasure is automatic once the Clean Slate program reaches it. Check your status at portal.ct.gov/cleanslate first.',
-            'For a pre-2000 conviction or a cannabis offense, complete form JD-CR-202.',
-            'File it in the court where you were sentenced — one form per docket number.',
-            'There is no filing fee.'
+            'For an offense on/after January 1, 2000, there is nothing to file — erasure is by operation of law once the waiting period runs and the preconditions are met. Check your status at portal.ct.gov/cleanslate.',
+            'The waiting period is 7 years (misdemeanor / low-max MV violation) or 10 years (class D/E felony, unclassified felony max 5 years or less, MV violation over 1 and up to 5 years, or a § 14-227a DUI), measured from your MOST RECENT judgment of conviction of any crime.',
+            'Confirm the three preconditions (§ 54-142a(e)(3)): all incarceration/parole complete, all probation complete for post-2000 CT convictions, and no pending CT charge.',
+            'The automated rollout was delayed in practice, so "eligible" does not yet guarantee "erased" — verify with the Judicial Branch if your status page has not updated.'
           ],
-          // null: Wave 2 says petition, cannabis and pardon applications are all
-          // free, but flags it for confirmation at the counter.
-          fees: null,
-          feeWaiver: null,
+          fees: '$0 — automatic Clean Slate erasure has no application and no fee.',
+          feeWaiver: 'Not applicable — there is no fee to waive.',
+          courtContact: 'Connecticut Judicial Branch (record check) / portal.ct.gov/cleanslate'
+        },
+        petition: {
+          name: 'Petition for Erasure (pre-2000 convictions, decriminalized offenses, cannabis)',
+          formName: 'OCCA § 54-142a petition form (the clerk provides the current form number)',
+          formUrl: 'https://portal.ct.gov/cleanslate',
+          steps: [
+            'For a pre-2000 conviction that meets a Clean Slate tier, or a decriminalized offense (§ 54-142d), file the § 54-142a petition in the court where you were sentenced — one petition per docket number.',
+            'For a decriminalized offense, the court SHALL erase it immediately; cannabis possession under half an ounce qualifies.',
+            'There is no filing fee for any § 54-142a petition (§ 54-142a(k)).',
+            'The clerk of the sentencing court provides the current form; Clean Slate CT can help you prepare it.'
+          ],
+          fees: '$0 — no fee for any § 54-142a petition (§ 54-142a(k)).',
+          feeWaiver: 'Not applicable — there is no fee to waive.',
           courtContact: 'The court where you were sentenced'
+        },
+        diversion: {
+          name: 'Diversion Feeders (Accelerated Rehabilitation, Supervised Diversionary Program)',
+          formName: 'Program application (through the court / Court Support Services Division)',
+          formUrl: 'https://portal.ct.gov/cleanslate',
+          steps: [
+            'Accelerated Rehabilitation (§ 54-56e) is discretionary for crimes/MV violations "not of a serious nature," with an exclusion list (class A/B felonies, DUI, sex offenses, and others); completion dismisses the charge and the dismissal erases under § 54-142a.',
+            'AR fees are $35 (application) + $100 (participation), both WAIVED on indigency or public-defender status (§ 54-56e(g)); AR is limited to twice in a lifetime.',
+            'The Supervised Diversionary Program (§ 54-56l) serves people with psychiatric disabilities and veterans; completion dismisses and erases, but the CSSD police-notification database entry persists 5 years (§ 54-56l(j)).',
+            'The Alcohol Education Program (§ 54-56g) has been CLOSED to new applications since April 1, 2022.'
+          ],
+          fees: 'Accelerated Rehabilitation: $35 application + $100 participation, both waived on indigency or public-defender status (§ 54-56e(g)).',
+          feeWaiver: 'AR fees waived on a showing of indigency or representation by a public defender (§ 54-56e(g)).',
+          courtContact: 'The sentencing court / Court Support Services Division'
         },
         pardon: {
           name: 'Absolute Pardon (Board of Pardons and Paroles) — full erasure',
-          formName: 'Absolute Pardon Application',
-          formUrl: 'https://www.ct.gov/bopp',
+          formName: 'Absolute Pardon Application (Board of Pardons and Paroles)',
+          formUrl: 'https://portal.ct.gov/BOPP',
           steps: [
-            'Confirm you are eligible to apply: 3 years since a misdemeanor conviction or 5 years since a felony, no pending charges, not on probation or parole, no nolle in the last 13 months.',
-            'Apply through the Board of Pardons and Paroles (ct.gov/bopp) — the application is free.',
-            'Use the Board\'s pre-screening resources before applying.',
-            'Hearings are held virtually. An absolute pardon erases your entire record.'
+            'Confirm you are within the application window: 3 years after a misdemeanor or violation conviction, 5 years after a felony (§ 54-130a(c)); earlier for extraordinary circumstances.',
+            'Apply to the Board of Pardons and Paroles; an ABSOLUTE pardon erases your entire record (§§ 54-142a(d), 54-130a).',
+            'Do not confuse it with a PROVISIONAL pardon or a certificate of rehabilitation — those help with employment/licensing but do NOT erase and do not relieve disclosure (§ 54-130a(f)).',
+            'A denial must come with a written statement of the factors considered (§ 54-130a(h)); use the Board\'s pre-screening resources, and Connecticut Legal Services can help you prepare.'
           ],
-          fees: '$0 — the pardon application is free.',
-          feeWaiver: 'Not applicable',
+          // null: § 54-130a fixes the application windows but not the process or
+          // any fee — the BOPP sets those outside the statute. Blocked by the
+          // pardon-mechanics open question rather than guessed.
+          fees: null,
+          feeWaiver: 'The Board of Pardons and Paroles sets its own process; confirm any fee and waiver with the Board.',
           courtContact: 'Connecticut Board of Pardons and Paroles'
         }
       },

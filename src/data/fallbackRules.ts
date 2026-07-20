@@ -4649,78 +4649,115 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   // terminated in the accused's favour is mandatory-expungeable IMMEDIATELY,
   // even with other ineligible convictions on the record (§ 4373).
   // ==========================================================================
+  // ==========================================================================
+  // DELAWARE — STATUTE-CITED (verified 2026-07-19). Terminology: EXPUNGEMENT.
+  // Diana read 11 Del. C. Subchapter VII in full from delcode.delaware.gov (§§
+  // 4371, 4372 through 83 Del. Laws c. 418, 4373, 4373A per 83 Del. Laws c. 265,
+  // 4374 through 85 Del. Laws c. 142, 4375, 4376, 4377; 4378 repealed), retrieved
+  // 2026-07-19.
+  //
+  // THREE tiers + a pardon door:
+  //   (A) MANDATORY — application to the State Bureau of Identification, NOT a
+  //       court filing (§ 4373). Tier 1 (a)(1): priors IRRELEVANT — terminated-
+  //       in-favor (no wait), violations-only case (3 yr), marijuana/paraphernalia
+  //       and underage-alcohol (immediate). Tier 2 (a)(2): NO disqualifying prior/
+  //       subsequent convictions — misdemeanor(s) (5 yr), § 4756 drug possession
+  //       (5 yr), six enumerated felonies (10 yr).
+  //   (B) AUTOMATIC (§ 4373A) — the exact 4373-eligible universe, swept monthly by
+  //       SBI since 8/1/2024, no application, NO objection mechanism, petition
+  //       backstop if missed, no damages claim. DE's automatic runs without a
+  //       prosecutor veto.
+  //   (C) DISCRETIONARY court petition (§ 4374, Superior or Family Court) —
+  //       petitioner proves MANIFEST INJUSTICE by a preponderance (burden on the
+  //       PETITIONER, unlike OR). Non-4373(b) misd 3 yr; 4373(b)-listed misd 7 yr;
+  //       felony 7 yr; multi-case misd/violations 5 yr. Title 21 carve-in trio
+  //       only (§ 4374(i)): 2810, 4175, 4176A.
+  //   (D) PARDON (§ 4375) — unconditional Governor's pardon opens a discretionary
+  //       petition for otherwise-excluded convictions, EXCEPT six never-expungeable
+  //       even pardoned: 632, 635, 636, 772, 773, 778(1)-(3).
+  //
+  // GLOBAL GATES (§ 4372): pending charges block (underage-alcohol, § 4764(c)
+  // marijuana, and Title 21 charges DON'T count as pending); currently serving
+  // blocks; absolute never-list (f)(3): 628A, 766, 767, 791, 1106. ONCE-RULES
+  // (f)(4), DISCRETIONARY-ONLY: felony after a prior felony-expungement never;
+  // any expungement in the last 10 yr bars another. MONEY GATE (l): fines/fees/
+  // restitution paid, BUT non-willful nonpayment lets the court grant and waive/
+  // convert. NEVER-COUNT PRIORS (g)/(h): underage alcohol, § 4764 marijuana,
+  // § 4771 paraphernalia, all Title 21 — strip before any clean-record test.
+  // STALE-CASE RULE (4372(b)(7)): a 7+ yr case with no disposition is terminated
+  // in favor unless active warrant / activity in 12 mo / non-favorable charges.
+  //
+  // EFFECTS: honest-no PLUS anti-inquiry — need not disclose AND may not be ASKED
+  // (§ 4372(d)); disclosing an expunged record is a class B misdemeanor (§ 4376(f)).
+  // ==========================================================================
   DE: {
     code: 'DE',
     name: 'Delaware',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave2_Draft_Package.md',
     terminology:
-      'Delaware says EXPUNGEMENT, and it has two petition versions plus an automatic one. MANDATORY '
-      + 'expungement runs through the State Bureau of Identification (SBI): if your case fits a '
-      + 'listed category, they MUST expunge it — a judge is not involved. DISCRETIONARY expungement '
-      + 'runs through the court, where a judge decides whether keeping the record would be a '
-      + '"manifest injustice". AUTOMATIC "Clean Slate" expungement has, since August 2024, been '
-      + 'clearing the mandatory-eligible cases with no application at all — and if it has not reached '
-      + 'yours yet, you keep the right to apply for the mandatory expungement yourself.',
+      'Delaware says EXPUNGEMENT — records destroyed, segregated, or placed in State Bureau of Identification '
+      + 'custody (§ 4372(c)(4)) — and once expunged you not only need not disclose it, you may not lawfully be '
+      + 'ASKED about it (§ 4372(d)); disclosing an expunged record is itself a crime. There are three tiers plus '
+      + 'a pardon door. MANDATORY expungement runs through SBI (not a court): if your case fits a listed '
+      + 'category, SBI MUST grant it. AUTOMATIC "Clean Slate" expungement has, since August 2024, been clearing '
+      + 'that same mandatory-eligible universe every month with no application and no prosecutor veto — and if it '
+      + 'has not reached yours, you keep the right to apply. DISCRETIONARY expungement runs through the court, '
+      + 'where the PETITIONER must show that keeping the record would be a "manifest injustice." And an '
+      + 'unconditional Governor\'s pardon (§ 4375) opens a discretionary petition for most otherwise-excluded '
+      + 'convictions.',
     keyDates: [
       {
-        label: 'Automatic Clean Slate expungement processing began',
-        date: '2024-08',
+        label: 'Automatic Clean Slate expungement sweep began (§ 4373A)',
+        date: '2024-08-01',
         kind: 'operative',
-        note: 'Wave 2 gives month and year only. Covers the mandatory-eligible universe; rollout completeness is an open question.',
+        note: 'Since this date SBI sweeps the mandatory-eligible (§ 4373) universe monthly, with no application and no objection mechanism. A missed case keeps the SBI-application backstop; there is no damages claim if the sweep misses it. Operational completeness is an open question.',
       },
       {
         label: 'Clean Slate Act (SB 111 / SB 112) enacted',
         date: '2021',
         kind: 'effective',
-        note: 'Wave 2 gives the year only.',
+        note: 'Wave 2 gives the year only. The (f)(4)(b) 10-year prior-expungement bar counts grants after 12/27/2019.',
       },
     ],
     openQuestions: [
       {
         question:
-          'WHICH felonies are on the § 4373 mandatory felony list (the 10-year path)? Wave 2 flags that the source text cut off here — the felony list itself was not captured. The tree routes an eligible-list felony to a result that says its dates but flags that the list membership needs confirming against § 4373.',
+          'Fee amounts: the SBI mandatory-expungement application fee is set by regulation, and the Superior/Family Court discretionary-petition fee is a court schedule — neither dollar amount is in the statute. Confirm both (phone tier).',
+        blocksFields: ['resources.remedies.mandatory.fees', 'resources.remedies.discretionary.fees'],
+      },
+      {
+        question:
+          'Cite-only cross-references not pulled: the 11 § 4201(c) violent-felony list (the § 4374(b) discretionary exclusion), the subchapter VI, chapter 5 subparts A/B/C/F misdemeanors (a § 4373(b) exclusion), 16 § 1136, 31 § 3913, 31 § 309 (Beau Biden Act), and the 10 § 901 family-relationship definition for the DV two-part test. The tree asks the person to self-assess membership; the exact lists need confirming.',
         blocksFields: [],
       },
       {
         question:
-          'What is the current fingerprinting fee for mandatory expungement through SBI? Wave 2 gives "$52 (ACLU-DE figure)" and marks it for verification. And is there any waiver? Ask SBI/DSP directly.',
-        blocksFields: ['resources.remedies.mandatory.fees', 'resources.remedies.mandatory.feeWaiver'],
-      },
-      {
-        question:
-          'What is the court fee for a discretionary expungement petition? § 4374(j) authorises a "reasonable fee" but does not state an amount. And can it be waived? Get the number from a Superior Court clerk.',
-        blocksFields: ['resources.remedies.discretionary.fees', 'resources.remedies.discretionary.feeWaiver'],
-      },
-      {
-        question:
-          'What is the current status and completeness of the automatic Clean Slate rollout? Wave 2 says processing began August 2024 and to verify completeness on delaware.gov before any UI copy claims records are already done.',
+          'Operational status of the § 4373A monthly automatic sweep: the statute is unconditional, but "eligible" is not yet "expunged" if the sweep has not reached a case. Confirm current completeness before UI copy claims records are already done (news/phone tier).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the § 4372(f) exclusion list: Title 21 motor-vehicle offences including DUI (with narrow § 4374(i)(2) exceptions), violent felonies (§ 4201(c) list), and DV / child-victim / vulnerable-adult crimes (barred from mandatory, 7-year discretionary or pardon instead). Also confirm the prior-expungement-within-10-years and felony-after-felony-expungement bars.',
+          'The delta of 85 Del. Laws c. 142 §10 is integrated into this 2025 print of § 4374; note only — confirm no substantive change to the encoded discretionary waits/exclusions was missed.',
         blocksFields: [],
       },
       {
         question:
-          'How are completed deferrals/diversions (including Probation Before Judgment) treated for expungement? Standing call-sheet question for every state — Wave 2 does not cover it.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'What are the exact effective dates for the August 2024 automatic-processing start and the 2021 Clean Slate Act? Wave 2 gives month/year and year only.',
+          'Juvenile expungement (Title 10) was not pulled — it is a separate track from the adult subchapter VII rules encoded here; route juvenile matters to counsel (cite-only).',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: '11 Del. C. § 4372 (definitions; exclusions at (f))', url: null, retrievedOn: null },
-      { id: '11 Del. C. § 4373 (mandatory expungement — SBI)', url: null, retrievedOn: null },
-      { id: '11 Del. C. § 4374 (discretionary expungement — court; (j) reasonable fee)', url: null, retrievedOn: null },
-      { id: '11 Del. C. § 4375 (post-pardon expungement)', url: null, retrievedOn: null },
-      { id: '11 Del. C. § 4201(c) (violent felony list — exclusion)', url: null, retrievedOn: null },
-      { id: 'SB 111 / SB 112 of 2021 (Clean Slate — automatic expungement)', url: null, retrievedOn: null },
+      { id: '11 Del. C. § 4371 (subchapter VII purpose)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4372 (definitions; terminated-in-favor (b) incl. PBJ and stale-case (b)(7); global exclusions/gates (f); never-count priors (g)/(h); money gate (l); effects/anti-inquiry (d)/(e); registry carve-outs (j)/(k); through 83 Del. Laws c. 418)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4373 (mandatory expungement — SBI; tier 1 (a)(1) priors-irrelevant, tier 2 (a)(2) no-disqualifying-priors; exclusions (b) DV/child/vulnerable/24-item misd list route to discretionary)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4373A (automatic expungement — monthly SBI sweep since 8/1/2024, no application/objection, petition backstop (d), no cause of action (e); per 83 Del. Laws c. 265)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4374 (discretionary expungement — court; (a) waits 3/7/7/5, (b) exclusions, (c)-(h),(j) procedure/manifest-injustice/petitioner burden, (i) Title 21 carve-in trio 2810/4175/4176A, (k) deemed-dismissed; through 85 Del. Laws c. 142)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4375 (post-pardon expungement — unconditional pardon opens discretionary petition; six offenses never expungeable even pardoned: 632, 635, 636, 772, 773, 778(1)-(3))', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4376 (effects of expungement; no-record replies; disclosure a class B misdemeanor (f); reconviction reopening (h))', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
+      { id: '11 Del. C. § 4377 (SBI notice of orders to federal law enforcement)', url: 'https://delcode.delaware.gov/title11/c043/sc07/', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -4730,94 +4767,204 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'excluded_de' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_favorable_de' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_favorable_de' },
-            { label: 'Deferred / Diversion completed', value: 'deferred', next: 'unknown_deferred' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Convicted (Guilty / No Contest)', value: 'convicted', next: 'conv_type_de' },
+            { label: 'Dismissed / no charges filed / old unresolved case', value: 'dismissed', next: 'nonconv_type_de' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_pending_de' },
+            { label: 'Deferred / Diversion (including Probation Before Judgment)', value: 'deferred', next: 'deferred_de' },
+            { label: 'I don\'t know how it ended', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_de: {
-          type: 'boolean',
-          text: 'Was the offense any of these: a motor-vehicle offense under Title 21 including DUI, a violent felony, or a crime involving domestic violence, a child victim, or a vulnerable adult?',
-          yes: 'excluded_path_de',
-          no: 'marijuana_de'
-        },
-        excluded_path_de: {
-          type: 'boolean',
-          text: 'Was it specifically a Title 21 motor-vehicle offense or a DUI?',
-          yes: 'ineligible_title21_de',
-          no: 'discretionary_de'
-        },
-        marijuana_de: {
-          type: 'boolean',
-          text: 'Was this a marijuana or paraphernalia possession offense, or an underage-alcohol offense?',
-          yes: 'eligible_immediate_de',
-          no: 'other_convictions_de'
-        },
-        other_convictions_de: {
-          type: 'boolean',
-          text: 'Apart from this case, do you have ANY other conviction on your record — anywhere, ever?',
-          yes: 'has_record_de',
-          no: 'offense_level_de'
-        },
-        offense_level_de: {
+        // ---- Non-conviction: terminated in favor (4372(b)) ----
+        nonconv_type_de: {
           type: 'choice',
-          field: 'charge_type',
-          text: 'What was the level of the offense?',
+          text: 'How did the case end without a conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misdemeanor', next: 'mandatory_misd_date_de' },
-            { label: 'Felony', value: 'felony', next: 'mandatory_felony_date_de' },
-            { label: 'Infraction', value: 'infraction', next: 'mandatory_violation_date_de' }
+            { label: 'All charges dismissed, nolle, or a mix of dismissal and acquittal', value: 'all_dismissed', next: 'nonconv_pending_de' },
+            { label: 'You were arrested but no charges were ever filed (and it has been over a year)', value: 'no_charges', next: 'eligible_favorable_de' },
+            { label: 'An old case (7+ years) with no disposition, or marked unknown / still "pending" on your record', value: 'stale', next: 'stale_de' }
           ]
         },
-        // No other convictions at all -> the clean mandatory path (5yr misd).
-        mandatory_misd_date_de: {
+        nonconv_pending_de: {
+          type: 'boolean',
+          text: 'Do you have any pending criminal charge? (Pending underage-alcohol, personal-use marijuana under 16 § 4764(c), and Title 21 motor-vehicle charges do NOT count here.)',
+          yes: 'ineligible_pending_de',
+          no: 'eligible_favorable_de'
+        },
+        stale_de: {
+          type: 'boolean',
+          text: 'Is the case at least 7 years old, with NO active warrant, no documented case activity in the last 12 months, and no non-eligible charges in it?',
+          yes: 'eligible_stale_favorable_de',
+          no: 'unknown_disposition'
+        },
+        deferred_de: {
+          type: 'boolean',
+          text: 'Did you complete Probation Before Judgment (PBJ) and receive a discharge order?',
+          yes: 'nonconv_pending_de',
+          no: 'unknown_deferred_de'
+        },
+        // ---- Conviction: route by offense type first ----
+        conv_type_de: {
+          type: 'choice',
+          text: 'What kind of offense is the conviction?',
+          options: [
+            { label: 'A Title 21 motor-vehicle / traffic offense (including DUI)', value: 'traffic', next: 'traffic_de' },
+            { label: 'Marijuana or paraphernalia possession, or underage alcohol', value: 'marijuana_alcohol', next: 'eligible_immediate_de' },
+            { label: 'Vehicular assault 2nd (628A), incest (766), unlawful sexual contact 3rd (767), coercion (791), or unlawfully dealing with a child (1106)', value: 'neverlist', next: 'ineligible_neverlist_de' },
+            { label: 'Another kind of offense', value: 'standard', next: 'conv_serving_de' }
+          ]
+        },
+        traffic_de: {
+          type: 'boolean',
+          text: 'Was it specifically one of these three: driving after judgment prohibited (21 § 2810), reckless driving (21 § 4175), or operation of a vehicle causing death (21 § 4176A)?',
+          yes: 'eligible_discretionary_traffic_de',
+          no: 'ineligible_traffic_de'
+        },
+        conv_serving_de: {
+          type: 'boolean',
+          text: 'Are you currently serving a sentence of incarceration, parole, or probation on ANY case?',
+          yes: 'ineligible_serving_de',
+          no: 'conv_money_de'
+        },
+        conv_money_de: {
+          type: 'boolean',
+          text: 'Have all fines, fees, and restitution on this case been paid in full?',
+          yes: 'conv_level_de',
+          no: 'conv_money_willful_de'
+        },
+        conv_money_willful_de: {
+          type: 'boolean',
+          text: 'Was the nonpayment NON-willful — that is, you have been unable to afford it rather than simply choosing not to pay?',
+          yes: 'eligible_money_waiver_de',
+          no: 'ineligible_money_de'
+        },
+        conv_level_de: {
+          type: 'choice',
+          text: 'What is the level of THIS conviction?',
+          options: [
+            { label: 'A violation (lowest level)', value: 'violation', next: 'violation_wait_de' },
+            { label: 'A misdemeanor', value: 'misdemeanor', next: 'misd_excl_de' },
+            { label: 'Drug possession under 16 § 4756', value: 'drug_poss', next: 'drug_priors_de' },
+            { label: 'A felony', value: 'felony', next: 'felony_type_de' }
+          ]
+        },
+        violation_wait_de: {
           type: 'date',
-          field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction (11 Del. C. § 4373 — misdemeanour mandatory expungement, no other convictions)' },
-            nextPass: 'check_record_first_de',
+            period: { amount: 3, unit: 'years', anchor: 'conviction (11 Del. C. § 4373(a)(1)(b) — violations-only case, mandatory)' },
+            nextPass: 'eligible_mandatory_t1_de',
             nextFail: 'waiting_de'
           }
         },
-        mandatory_violation_date_de: {
+        misd_excl_de: {
+          type: 'boolean',
+          text: 'Is the misdemeanor on the § 4373(b) mandatory-exclusion list — a domestic-violence crime (a qualifying relationship AND a listed offense), a child-victim or vulnerable-adult offense, or one of the listed misdemeanors (resisting arrest 1257, hate crime 1304, peeping 820, and the others in § 4373(b))?',
+          yes: 'misd7_wait_de',
+          no: 'misd_priors_de'
+        },
+        misd_priors_de: {
+          type: 'boolean',
+          text: 'Ignoring underage-alcohol, personal-use marijuana (§ 4764), paraphernalia (§ 4771), and any Title 21 convictions (which never count), do you have any OTHER disqualifying conviction on your record?',
+          yes: 'disc_multi_wait_de',
+          no: 'misd5_wait_de'
+        },
+        misd5_wait_de: {
           type: 'date',
-          field: 'disposition_date',
           text: 'When were you convicted?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction (11 Del. C. § 4373 — violation mandatory expungement)' },
-            nextPass: 'check_record_first_de',
+            period: { amount: 5, unit: 'years', anchor: 'conviction (11 Del. C. § 4373(a)(2)(a) — misdemeanor, no disqualifying priors, mandatory tier 2)' },
+            nextPass: 'eligible_mandatory_t2_de',
             nextFail: 'waiting_de'
           }
         },
-        mandatory_felony_date_de: {
+        misd7_wait_de: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you convicted, or released — whichever was later?',
+          text: 'When were you convicted, or released from custody — whichever was later?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'conviction or release, whichever later (11 Del. C. § 4373 — listed-felony mandatory expungement)' },
-            nextPass: 'eligible_felony_list_de',
+            period: { amount: 7, unit: 'years', anchor: 'the later of conviction or release (11 Del. C. § 4374(a)(2) — § 4373(b)-listed misdemeanor, discretionary)' },
+            nextPass: 'eligible_discretionary_excl_de',
             nextFail: 'waiting_de'
           }
         },
-        // Has other convictions -> discretionary (court) path.
-        has_record_de: {
+        drug_priors_de: {
+          type: 'boolean',
+          text: 'Ignoring the never-count convictions (underage alcohol, § 4764 marijuana, § 4771 paraphernalia, Title 21), do you have any OTHER disqualifying conviction on your record?',
+          yes: 'disc_multi_wait_de',
+          no: 'drug5_wait_de'
+        },
+        drug5_wait_de: {
+          type: 'date',
+          text: 'When were you convicted?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'conviction (11 Del. C. § 4373(a)(2)(b) — § 4756 drug possession, mandatory tier 2)' },
+            nextPass: 'eligible_mandatory_t2_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        felony_type_de: {
           type: 'choice',
-          text: 'Roughly how much else is on your record?',
+          text: 'Which best describes the felony?',
           options: [
-            { label: 'One or more other misdemeanors or violations, no felonies', value: 'misd_multi', next: 'discretionary_multi_date_de' },
-            { label: 'A felony', value: 'felony', next: 'discretionary_de' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_record_de' }
+            { label: 'One of the six enumerated felonies (16 § 4757 / § 4758 / § 4760, § 828 burglar\'s tools, § 861(b)(2) forgery 2nd, § 903 unlawful payment-card use)', value: 'enumerated', next: 'felony_dv_de' },
+            { label: 'Another felony', value: 'other', next: 'felony_disc_de' }
           ]
         },
-        discretionary_multi_date_de: {
+        felony_dv_de: {
+          type: 'boolean',
+          text: 'Did this offense have a domestic-violence, child, or vulnerable-adult victim?',
+          yes: 'felony_disc_de',
+          no: 'felony_priors_de'
+        },
+        felony_priors_de: {
+          type: 'boolean',
+          text: 'Ignoring the never-count convictions (underage alcohol, § 4764 marijuana, § 4771 paraphernalia, Title 21), do you have any OTHER disqualifying conviction on your record?',
+          yes: 'felony_disc_de',
+          no: 'felony10_wait_de'
+        },
+        felony10_wait_de: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When was your MOST RECENT case resolved?',
+          text: 'When were you convicted, or released from custody — whichever was later?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'most recent case (11 Del. C. § 4374 — multiple violations/misdemeanours, discretionary)' },
+            period: { amount: 10, unit: 'years', anchor: 'the later of conviction or release (11 Del. C. § 4373(a)(2)(c) — enumerated felony, mandatory tier 2)' },
+            nextPass: 'eligible_mandatory_t2_felony_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        felony_disc_de: {
+          type: 'boolean',
+          text: 'Is the felony a violent felony (listed in 11 § 4201(c)) or otherwise on the discretionary exclusion list (16 § 1136, 31 § 3913, or a Beau Biden Act physical/sexual-assault felony)?',
+          yes: 'felony_pardon_de',
+          no: 'disc_oncebar_de'
+        },
+        felony_pardon_de: {
+          type: 'boolean',
+          text: 'Is the offense one of these six — manslaughter (632), murder 2nd (635), murder 1st (636), rape 2nd (772), rape 1st (773), or first-degree sexual abuse of a child by a person in a position of trust (778(1)-(3))?',
+          yes: 'ineligible_pardon_neverlist_de',
+          no: 'pardon_route_de'
+        },
+        disc_oncebar_de: {
+          type: 'choice',
+          text: 'Have either of these happened? (These bar only the discretionary court path — not mandatory or automatic.)',
+          options: [
+            { label: 'This felony conviction was entered AFTER you already had a felony expungement granted', value: 'felony_after', next: 'ineligible_once_felony_de' },
+            { label: 'You had ANY expungement granted in the last 10 years', value: 'within10', next: 'ineligible_once_10yr_de' },
+            { label: 'Neither', value: 'neither', next: 'felony_disc_wait_de' }
+          ]
+        },
+        felony_disc_wait_de: {
+          type: 'date',
+          text: 'When were you convicted, or released from custody — whichever was later?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'the later of conviction or release (11 Del. C. § 4374(a)(3) — felony, discretionary, no disqualifying priors)' },
+            nextPass: 'eligible_discretionary_felony_de',
+            nextFail: 'waiting_de'
+          }
+        },
+        disc_multi_wait_de: {
+          type: 'date',
+          text: 'When was your MOST RECENT case resolved (conviction or release, whichever is later)?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of conviction or release on the most recent case (11 Del. C. § 4374(a)(4) — multiple violations/misdemeanors, discretionary)' },
             nextPass: 'eligible_discretionary_de',
             nextFail: 'waiting_de'
           }
@@ -4827,78 +4974,162 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Delaware\'s expungement rules split sharply on how the case ended: a case that ended in your favor is expungeable immediately even if you have other convictions, while a conviction runs through the mandatory or discretionary path depending on your record. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable. Request a Certified Delaware Criminal History from SBI, or ask the court that handled the case. The ACLU of Delaware runs free expungement workshops.',
+          message: 'Delaware\'s expungement rules split sharply on how the case ended: a case that ended in your favor is expungeable immediately even if you have other convictions, while a conviction runs through the mandatory, automatic, or discretionary path depending on your record. Because the outcome is unclear, this screening cannot tell you anything reliable. Request a Certified Delaware Criminal History from SBI, or ask the court that handled the case. The ACLU of Delaware runs free expungement workshops.',
           remedy: 'Get Your Record First (SBI / court clerk)',
           citation: '11 Del. C. §§ 4373, 4374 (which path applies depends on the disposition)'
         },
-        unknown_deferred: {
+        unknown_deferred_de: {
           status: 'complex',
-          title: 'Deferred and Diverted Cases Need a Person',
-          message: 'Delaware\'s expungement rules are screened here for convictions, dismissals, and acquittals. How a completed diversion — including Probation Before Judgment — is treated is not something this screening has researched yet, and we would rather tell you that than guess. The ACLU of Delaware and the Delaware Center for Justice can confirm how your disposition is treated.',
-          remedy: 'Consult Legal Aid (Diversion Not Yet Screened)',
-          citation: '11 Del. C. §§ 4373, 4374 (treatment of diversions not yet researched)'
+          title: 'This Diversion Needs a Person',
+          message: 'A completed Probation Before Judgment with a discharge order counts as a favorable termination in Delaware — but if your diversion is still in progress or is a different kind of program, how it is treated for expungement depends on the specifics, and we would rather say so than guess. The ACLU of Delaware and the Delaware Center for Justice can confirm how your disposition is treated and whether it feeds the mandatory/automatic path.',
+          remedy: 'Consult Legal Aid (diversion status not yet resolved)',
+          citation: '11 Del. C. § 4372(b) (PBJ favorable; other diversions fact-specific)'
         },
         eligible_favorable_de: {
           status: 'eligible',
           title: 'Case Ended in Your Favor — Expungeable Now, Whatever Else Is on Your Record',
-          message: 'This is Delaware\'s strongest rule and it works in your favor: because the case ended without a conviction — dismissed or acquitted — you are entitled to a MANDATORY expungement immediately, and it does not matter what else is on your record. Other convictions, even ineligible ones, do not block this. It may already have happened automatically since August 2024, so check first: request a Certified Delaware Criminal History from the State Bureau of Identification. If it has not been done, you can apply to SBI for the mandatory expungement yourself.',
-          remedy: 'Mandatory Expungement — favorable termination (11 Del. C. § 4373), check SBI first',
-          citation: '11 Del. C. § 4373'
+          message: 'This is Delaware\'s strongest rule and it works in your favor: because the case ended without a conviction — acquittal, dismissal, nolle, a completed Probation Before Judgment, or an arrest where no charges were filed — you are entitled to a MANDATORY expungement, with no waiting period, and it does not matter what else is on your record (§ 4372(b), § 4373(a)(1)(a)). Other convictions, even ineligible ones, do not block this. Since August 2024 it may already have happened AUTOMATICALLY — DE\'s automatic sweep runs without a prosecutor veto — so check first: request a Certified Delaware Criminal History from the State Bureau of Identification. If the sweep has not reached yours, apply to SBI yourself. Once expunged, you not only need not disclose it, you may not lawfully be asked about it (§ 4372(d)).',
+          remedy: 'Mandatory / Automatic Expungement — favorable termination (§ 4373(a)(1)(a)), check SBI first',
+          citation: '11 Del. C. §§ 4372(b), 4373(a)(1)(a), 4373A'
+        },
+        eligible_stale_favorable_de: {
+          status: 'eligible',
+          title: 'Old Case With No Disposition — Deemed Terminated in Your Favor',
+          message: 'Delaware has a rule for exactly this situation: a case that is at least 7 years old whose charges have no disposition (or show as unknown, unobtainable, or pending) is DEEMED terminated in your favor (§ 4372(b)(7)) — unless there is an active warrant, documented case activity in the last 12 months, or non-favorable charges in the case. Because yours meets that rule, it is treated as a favorable termination and qualifies for mandatory (and automatic) expungement, regardless of what else is on your record. Request a Certified Delaware Criminal History from SBI to confirm the case is coded this way; the ACLU of Delaware\'s workshops can help if the record needs correcting.',
+          remedy: 'Mandatory Expungement via the stale-case rule (§ 4372(b)(7)) — confirm with SBI',
+          citation: '11 Del. C. § 4372(b)(7)'
+        },
+        ineligible_pending_de: {
+          status: 'waiting',
+          title: 'A Pending Charge Blocks This — For Now',
+          message: 'Delaware will not expunge a record while you have a pending criminal charge (§ 4372(f)) — with the exception that pending underage-alcohol, personal-use marijuana, and Title 21 motor-vehicle charges do not count. This is a "for now," not a permanent no: once the pending matter resolves, a favorable termination can be expunged immediately and a conviction on its normal schedule. The ACLU of Delaware can help you come back to this once the pending case is closed.',
+          remedy: 'Resolve the pending charge first, then apply',
+          citation: '11 Del. C. § 4372(f)'
         },
         eligible_immediate_de: {
           status: 'eligible',
           title: 'Marijuana or Underage-Alcohol Offense — Immediate Mandatory Expungement',
-          message: 'Marijuana and paraphernalia possession, and underage-alcohol offenses, get a mandatory expungement in Delaware with no waiting period. This may already have happened automatically since August 2024 — check by requesting a Certified Delaware Criminal History from SBI. If it has not, you can apply to SBI for the mandatory expungement.',
-          remedy: 'Mandatory Expungement — immediate (11 Del. C. § 4373), check SBI first',
-          citation: '11 Del. C. § 4373'
+          message: 'Marijuana and paraphernalia possession, and underage-alcohol offenses, get a MANDATORY expungement in Delaware with no waiting period — and on this tier (§ 4373(a)(1)) prior and subsequent convictions are irrelevant, so other things on your record do not block it. This may already have happened automatically since August 2024 — check by requesting a Certified Delaware Criminal History from SBI. If it has not, apply to SBI for the mandatory expungement.',
+          remedy: 'Mandatory Expungement — immediate (§ 4373(a)(1)(c)/(d)), priors irrelevant',
+          citation: '11 Del. C. § 4373(a)(1)(c), (d)'
         },
-        check_record_first_de: {
-          status: 'eligible',
-          title: 'Your Record May Already Be Expunged — Check Before You Apply',
-          message: 'Start by checking. Since August 2024, Delaware has been expunging mandatory-eligible cases AUTOMATICALLY under Clean Slate — no application and no fee. Based on your dates you appear to be in that eligible group (a misdemeanor with no other convictions after 5 years, or a violation after 3), so there is a real chance it is already done. Request a Certified Delaware Criminal History from the State Bureau of Identification to see. If the automatic system has not reached you yet, you keep the right to apply for the mandatory expungement yourself — SBI must grant it if you fit the category. That route involves fingerprinting and an SBI application, and the fee is one of the things we are still confirming.',
-          remedy: 'Check with SBI first — apply for mandatory expungement if it has not happened',
-          citation: '11 Del. C. § 4373'
+        ineligible_neverlist_de: {
+          status: 'ineligible',
+          title: 'This Offense Can Never Be Expunged',
+          message: 'A short list of offenses is absolutely barred from expungement in Delaware, by any route including a pardon (§ 4372(f)(3)): vehicular assault in the second degree (628A), incest (766), unlawful sexual contact in the third degree (767), coercion (791), and unlawfully dealing with a child (1106). Because your offense is on that list, there is no expungement path. If you are uncertain your offense is truly one of these, it is worth confirming with counsel — the ACLU of Delaware runs free expungement workshops that can check.',
+          remedy: 'None (absolute § 4372(f)(3) bar) — confirm the exact offense with counsel',
+          citation: '11 Del. C. § 4372(f)(3)'
         },
-        eligible_felony_list_de: {
+        ineligible_traffic_de: {
+          status: 'ineligible',
+          title: 'Title 21 Motor-Vehicle Offenses Are Not Expungeable',
+          message: 'Motor-vehicle offenses under Title 21 — including DUI and speeding — are excluded from expungement in Delaware (§ 4372(f)), with only three narrow exceptions that go through the discretionary court path: driving after judgment prohibited (21 § 2810), reckless driving (21 § 4175), and operation of a vehicle causing death (21 § 4176A). Everything else under Title 21 is barred. A DUI is also a driving-record matter separate from your criminal record. If you were unconditionally pardoned, § 4375 may still open a door. The ACLU of Delaware runs free expungement workshops if you are unsure which code your offense falls under.',
+          remedy: 'None (Title 21) — only 2810 / 4175 / 4176A qualify, discretionary',
+          citation: '11 Del. C. §§ 4372(f), 4374(i)'
+        },
+        eligible_discretionary_traffic_de: {
+          status: 'complex',
+          title: 'A Title 21 Carve-In — Discretionary Only',
+          message: 'Most Title 21 offenses can never be expunged, but yours is one of the three that CAN — driving after judgment prohibited (§ 2810), reckless driving (§ 4175), or operation of a vehicle causing death (§ 4176A) — and only through the DISCRETIONARY court path (§ 4374(i)). That means a judge decides, and you (the petitioner) must show that keeping the record would be a "manifest injustice." The normal discretionary waiting periods and the requirement to attach your criminal history apply. Because it is discretionary and offense-specific, this is a good one to bring to counsel — the ACLU of Delaware runs free expungement workshops.',
+          remedy: 'Discretionary petition for a Title 21 carve-in offense (§ 4374(i)) — manifest injustice',
+          citation: '11 Del. C. § 4374(i)'
+        },
+        ineligible_serving_de: {
+          status: 'waiting',
+          title: 'Finish Your Sentence First',
+          message: 'Delaware will not expunge a record while you are currently serving a sentence of incarceration, parole, or probation on any case (§ 4372(f)(5)). This is not a permanent no: once you complete supervision and the waiting period for your offense has run, the mandatory, automatic, or discretionary route opens depending on your record. The ACLU of Delaware can help you plan the timing.',
+          remedy: 'Complete all supervision, then the level-based path',
+          citation: '11 Del. C. § 4372(f)(5)'
+        },
+        eligible_money_waiver_de: {
           status: 'eligible',
-          title: 'Possible Mandatory Felony Expungement — One Thing to Confirm',
-          message: 'Based on your dates — 10 years since conviction or release, with no other convictions — you may qualify for a mandatory expungement of this felony under 11 Del. C. § 4373. There is one thing we cannot confirm for you: § 4373 lists which specific felonies are eligible for this path, and we have not been able to verify the full list, so whether YOUR felony is on it is the open question. That is exactly what the State Bureau of Identification checks, so applying will answer it, and the ACLU of Delaware\'s expungement workshops can check before you file. Do not assume either way until the offense is confirmed against the § 4373 list.',
-          remedy: 'Mandatory Expungement if the felony is on the § 4373 list — confirm with SBI',
-          citation: '11 Del. C. § 4373'
+          title: 'Unpaid Balance — But Non-Willful Nonpayment Does Not Have to Block You',
+          message: 'Delaware normally requires that all fines, fees, and restitution be paid before an expungement (§ 4372(l)) — but there is an important relief valve: if your nonpayment is NON-willful (you have been unable to afford it, not simply choosing not to pay), the court may grant the expungement anyway and either WAIVE the outstanding amount or convert it to a civil judgment. Because this waiver runs through the court, your route is a discretionary petition even if your offense would otherwise be mandatory-eligible; raise the non-willful-nonpayment finding in the petition. The ACLU of Delaware\'s free workshops handle exactly this.',
+          remedy: 'Discretionary expungement with a § 4372(l) non-willful-nonpayment waiver',
+          citation: '11 Del. C. § 4372(l)'
+        },
+        ineligible_money_de: {
+          status: 'waiting',
+          title: 'Pay the Balance First',
+          message: 'Delaware requires all fines, fees, and restitution on the case to be paid before an expungement (§ 4372(l)). Because there is an outstanding balance and it is not a case of being unable to afford it, the balance has to be cleared first. Once it is paid, the mandatory, automatic, or discretionary route opens depending on your record and the waiting period. If you genuinely cannot afford the balance, the non-willful-nonpayment path (a court waiver) may be available — the ACLU of Delaware can help you determine which applies.',
+          remedy: 'Pay the outstanding balance, then apply',
+          citation: '11 Del. C. § 4372(l)'
+        },
+        eligible_mandatory_t1_de: {
+          status: 'eligible',
+          title: 'Violations-Only Case, 3+ Years — Mandatory Expungement',
+          message: 'A case that resulted only in violation convictions gets a MANDATORY expungement 3 years after the conviction (§ 4373(a)(1)(b)) — and on this tier prior and subsequent convictions are irrelevant. By your dates the 3 years have passed. Since August 2024 it may already have happened automatically, with no application and no fee — request a Certified Delaware Criminal History from SBI to check. If not, apply to SBI, which must grant it. Once expunged, you may not lawfully be asked about it.',
+          remedy: 'Mandatory Expungement — violations-only case, 3 years (§ 4373(a)(1)(b))',
+          citation: '11 Del. C. § 4373(a)(1)(b)'
+        },
+        eligible_mandatory_t2_de: {
+          status: 'eligible',
+          title: 'Eligible for Mandatory Expungement (5 Years, Clean Record)',
+          message: 'Based on your dates — 5 years since conviction — and a record with no disqualifying prior or subsequent convictions, this qualifies for a MANDATORY expungement (§ 4373(a)(2)): SBI must grant it. Note what does NOT count against you here: underage-alcohol, personal-use marijuana, paraphernalia, and all Title 21 convictions are stripped out before the clean-record test (§ 4372(g)/(h)). Since August 2024 it may already have happened automatically — request a Certified Delaware Criminal History from SBI to check first. If not, apply to SBI (fingerprinting plus the application). Once expunged, you may not lawfully be asked to disclose it (§ 4372(d)).',
+          remedy: 'Mandatory Expungement — misdemeanor / § 4756 possession, 5 years (§ 4373(a)(2)), check SBI first',
+          citation: '11 Del. C. § 4373(a)(2)(a), (b)'
+        },
+        eligible_mandatory_t2_felony_de: {
+          status: 'eligible',
+          title: 'Enumerated Felony, 10+ Years — Mandatory Expungement',
+          message: 'Your felony is one of the six that Delaware makes MANDATORILY expungeable (§ 4373(a)(2)(c)) after 10 years from conviction or release, whichever is later, provided you have no disqualifying prior or subsequent convictions — and by your dates that period is met. Never-count convictions (underage alcohol, § 4764 marijuana, § 4771 paraphernalia, Title 21) are stripped before that test. SBI must grant it, and the automatic sweep may already have done so — request a Certified Delaware Criminal History to check. If you have several eligible cases, they can be combined into one application. The ACLU of Delaware\'s workshops can help.',
+          remedy: 'Mandatory Expungement — enumerated felony, 10 years (§ 4373(a)(2)(c)), check SBI first',
+          citation: '11 Del. C. § 4373(a)(2)(c)'
+        },
+        eligible_discretionary_excl_de: {
+          status: 'complex',
+          title: 'Excluded Misdemeanor — Discretionary Petition at 7 Years',
+          message: 'Your misdemeanor is on the § 4373(b) exclusion list (a domestic-violence, child-victim, or listed offense such as resisting arrest or a hate crime), which keeps it off the automatic/mandatory track — but it is NOT a dead end: it goes to a DISCRETIONARY court petition after 7 years from conviction or release, with no disqualifying prior or subsequent convictions (§ 4374(a)(2)). By your dates the 7 years are met. "Discretionary" means you (the petitioner) must show, by a preponderance and with specific facts, that keeping the record would be a "manifest injustice" — the burden is on you, not the State. Order your Certified Delaware Criminal History first and attach it, or the petition is rejected. This is a strong candidate for the ACLU of Delaware\'s free workshops.',
+          remedy: 'Discretionary Expungement — § 4373(b)-listed misdemeanor, 7 years (§ 4374(a)(2))',
+          citation: '11 Del. C. § 4374(a)(2)'
+        },
+        eligible_discretionary_felony_de: {
+          status: 'complex',
+          title: 'Felony — Discretionary Petition at 7 Years (Manifest Injustice)',
+          message: 'Your felony is not on the six-felony mandatory list, so its route is a DISCRETIONARY court petition after 7 years from conviction or release, with no disqualifying prior or subsequent convictions (§ 4374(a)(3)) — and by your dates that is met. A judge decides, and you (the petitioner) carry the burden: you must show by a preponderance, with specific facts, that continued existence of the record would work a "manifest injustice." The State is the party defendant and the AG has 120 days to respond; it is usually decided without a hearing. Order your Certified Delaware Criminal History and attach it — a missing history means summary rejection. Bring this to the ACLU of Delaware\'s free workshops.',
+          remedy: 'Discretionary Expungement — felony, 7 years (§ 4374(a)(3)) — manifest injustice',
+          citation: '11 Del. C. § 4374(a)(3)'
         },
         eligible_discretionary_de: {
-          status: 'eligible',
-          title: 'Discretionary Expungement — A Judge Decides',
-          message: 'Because you have more than one case on your record, your route is a DISCRETIONARY expungement through the court rather than the automatic mandatory one. Based on your dates — 5 years since your most recent case — you are eligible to petition. Understand what "discretionary" means: a judge decides whether keeping the record would be a "manifest injustice", so this is an argument you make rather than a box you tick, and how you present it matters. File the petition in the Superior Court for the county of your most recent case; you MUST attach your criminal history or the petition is rejected outright. The Attorney General gets 120 days to object, and any victim is consulted. The court fee is set by the court and is something we are still confirming. The ACLU of Delaware runs free expungement workshops and this is a good one to bring to them.',
-          remedy: 'Discretionary Expungement Petition (11 Del. C. § 4374) — Superior Court',
-          citation: '11 Del. C. § 4374'
-        },
-        discretionary_de: {
           status: 'complex',
-          title: 'Discretionary Expungement — And Worth a Person\'s Help',
-          message: 'Your record includes a felony, which puts you on the DISCRETIONARY path: a court, not SBI, decides, and it weighs whether keeping the record would be a "manifest injustice". The waiting periods here are longer — generally 7 years for a felony, or for misdemeanors on the excluded list — and the exact eligibility depends on which offenses are involved. This is fact-specific enough that we are not going to finish the screening for you and risk getting it wrong. Two routes worth knowing: if you were unconditionally pardoned, § 4375 opens discretionary expungement for almost anything. And the ACLU of Delaware runs free expungement workshops built for exactly this. Bring your criminal history — you will need it either way.',
-          remedy: 'Discretionary Expungement or Post-Pardon (11 Del. C. §§ 4374, 4375) — consult legal aid',
-          citation: '11 Del. C. §§ 4374, 4375'
+          title: 'Multiple Cases — Discretionary Petition at 5 Years',
+          message: 'Because you have more than one case on your record, your route is a DISCRETIONARY multiple-case petition (§ 4374(a)(4)): eligible 5 years after your most recent conviction or release, provided every case would be eligible on its own and any other convictions are ones that would be mandatory-eligible standing alone. By your dates you are past the 5 years. A judge decides on a "manifest injustice" standard, with the burden on you. File in the Superior Court for the county of your most recent case (Family Court if all charges were Family Court); attach your Certified Delaware Criminal History or the petition is rejected. The AG gets 120 days to object, and any victim is consulted. The ACLU of Delaware runs free workshops for exactly this.',
+          remedy: 'Discretionary multiple-case petition, 5 years (§ 4374(a)(4))',
+          citation: '11 Del. C. § 4374(a)(4)'
         },
-        ineligible_title21_de: {
+        ineligible_once_felony_de: {
           status: 'ineligible',
-          title: 'Title 21 Motor-Vehicle Offenses Are Mostly Not Expungeable',
-          message: 'Motor-vehicle offenses under Title 21 — including DUI — are largely excluded from expungement in Delaware, whether mandatory or discretionary. There are a couple of narrow exceptions in § 4374(i)(2), but they are narrow. If you were unconditionally pardoned, § 4375 may open a discretionary expungement even here. A DUI is also a driving-record matter separate from your criminal record. If you are not certain your offense is a Title 21 offense rather than a criminal-code one, it is worth checking — the ACLU of Delaware runs free expungement workshops.',
-          remedy: 'Generally None (Title 21) — ask about the § 4374(i)(2) exceptions or a pardon',
-          citation: '11 Del. C. §§ 4372(f), 4374(i)(2)'
+          title: 'A Felony After a Prior Felony Expungement Cannot Be Discretionarily Expunged',
+          message: 'Delaware has a hard once-rule for the discretionary path: a felony conviction that was entered AFTER you had already been granted a felony expungement can never be expunged through the court (§ 4372(f)(4)(a)). This bar applies only to the discretionary route — it does NOT apply to the mandatory or automatic paths, so if any of your cases are favorable terminations or fit a mandatory category, those can still be expunged. For this felony specifically, an unconditional pardon (§ 4375) is the remaining avenue. The ACLU of Delaware can help you sort out which of your cases fall where.',
+          remedy: 'None discretionary (§ 4372(f)(4)(a)) — mandatory paths and a pardon remain',
+          citation: '11 Del. C. § 4372(f)(4)(a)'
+        },
+        ineligible_once_10yr_de: {
+          status: 'waiting',
+          title: 'A Recent Expungement Blocks Another Discretionary One',
+          message: 'Delaware bars a discretionary expungement if you have had ANY expungement granted in the previous 10 years (§ 4372(f)(4)(b), counting grants after December 27, 2019). Because your last expungement is inside that window, a new discretionary petition is blocked until 10 years have passed from it. Importantly, this bar applies ONLY to the discretionary path — mandatory and automatic expungements are unaffected, so a favorable termination or a mandatory-category case can still be cleared now. The ACLU of Delaware can help you identify which of your cases still qualify on the mandatory track.',
+          remedy: 'Wait 10 years from the last expungement for another discretionary one (§ 4372(f)(4)(b))',
+          citation: '11 Del. C. § 4372(f)(4)(b)'
+        },
+        pardon_route_de: {
+          status: 'complex',
+          title: 'Your Path Is a Pardon First — Then a Discretionary Petition',
+          message: 'This felony is excluded from the ordinary discretionary path (for example, a violent felony under 11 § 4201(c)) — but it is not necessarily a dead end. An unconditional Governor\'s pardon opens the door: once pardoned, you may file a discretionary expungement petition under the § 4374 procedures (§ 4375). The pardon comes first, through the Board of Pardons and the Governor; the expungement petition follows. One hard limit to know: six offenses can never be expunged even with a pardon — manslaughter (632), murder 2nd (635), murder 1st (636), rape 2nd (772), rape 1st (773), and first-degree sexual abuse of a child by a person in a position of trust (778(1)-(3)). Yours is not one of those, so the pardon-then-petition route is open. The ACLU of Delaware and the Delaware Center for Justice can help.',
+          remedy: 'Pardon first, then discretionary petition (§ 4375)',
+          citation: '11 Del. C. § 4375'
+        },
+        ineligible_pardon_neverlist_de: {
+          status: 'ineligible',
+          title: 'This Offense Cannot Be Expunged Even With a Pardon',
+          message: 'Delaware allows a pardon to open an expungement for most excluded convictions — but six offenses are barred from expungement even after an unconditional pardon (§ 4375): manslaughter (632), murder in the second degree (635), murder in the first degree (636), rape in the second degree (772), rape in the first degree (773), and first-degree sexual abuse of a child by a person in a position of trust (778(1)-(3)). Because your offense is one of these, there is no expungement route, pardon or not. A pardon may still carry other benefits worth discussing with counsel — the ACLU of Delaware and the Delaware Center for Justice can advise.',
+          remedy: 'None (§ 4375 six-offense hard stop) — a pardon may still have other benefits',
+          citation: '11 Del. C. § 4375'
         },
         waiting_de: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Delaware\'s expungement waiting periods depend on the path: a mandatory misdemeanor expungement comes 5 years after conviction (with no other convictions at all), a violation after 3 years, and a listed felony 10 years after conviction or release. Based on your dates, yours has not run yet. Delaware also expunges mandatory-eligible cases automatically now, so once your period runs relief may arrive without you filing. If your record has more than one case, a discretionary path with different timing may apply instead.',
+          message: 'Delaware\'s expungement waiting periods depend on the path: a violations-only case is 3 years, a clean-record misdemeanor or § 4756 possession 5 years, an enumerated felony 10 years, and the discretionary court routes run 3, 5, or 7 years depending on the offense. Based on your dates, yours has not run yet. Delaware also expunges mandatory-eligible cases automatically now, so once your period runs, relief may arrive without you filing. The ACLU of Delaware runs free expungement workshops that can help you time it.',
           remedy: 'Wait for the period to run, then check with SBI',
-          citation: '11 Del. C. §§ 4373, 4374'
-        },
-        complex_record_de: {
-          status: 'complex',
-          title: 'Your Record Needs Sorting Out — By a Person',
-          message: 'Which Delaware path you take depends on exactly what else is on your record: a clean record points to the mandatory (SBI) path, other misdemeanors or violations point to a 5-year discretionary path, and a felony changes the analysis again. Since you are not sure what your record holds, we are not going to guess — and the good news is that finding out is a concrete step. Request a Certified Delaware Criminal History from SBI; you need it for any petition anyway. The ACLU of Delaware runs free expungement workshops where someone will read it with you.',
-          remedy: 'Get Your Criminal History First (SBI) — then reassess',
           citation: '11 Del. C. §§ 4373, 4374'
         }
       }
@@ -4910,30 +5141,60 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'SBI Mandatory Expungement Application',
           formUrl: 'https://courts.delaware.gov/help/expungement/',
           steps: [
-            'Check first whether Clean Slate already did it — request a Certified Delaware Criminal History from SBI.',
+            'Check first whether the automatic Clean Slate sweep already did it — request a Certified Delaware Criminal History from SBI.',
             'If not, complete fingerprinting and obtain your Certified Delaware Criminal History through SBI.',
-            'Submit the SBI mandatory expungement application. If you fit the category, SBI must grant it.',
-            'The courts.delaware.gov expungement packet is the full how-to.'
+            'Submit the SBI mandatory expungement application. If you fit a § 4373 category, SBI MUST grant it — no judge, no prosecutor veto.',
+            'Multiple mandatory-eligible cases can be combined into one application (§ 4373(a)(2)(c)).'
           ],
-          // null: Wave 2 gives "$52 fingerprinting (ACLU-DE figure)" and flags it.
+          // null: the SBI application fee is set by regulation, not the statute
+          // (open question a); blocked rather than guessed.
           fees: null,
-          feeWaiver: null,
+          feeWaiver: 'Mandatory expungement is by SBI application; the fee is set by regulation — ask SBI/DSP about the current amount and any waiver.',
+          courtContact: 'Delaware State Bureau of Identification (SBI)'
+        },
+        automatic: {
+          name: 'Automatic Clean Slate Expungement (11 Del. C. § 4373A)',
+          formName: 'None — no application required',
+          formUrl: 'https://courts.delaware.gov/help/expungement/',
+          steps: [
+            'Since August 1, 2024, SBI sweeps the § 4373-eligible universe monthly — no application, no fee, and no prosecutor objection window.',
+            'Request a Certified Delaware Criminal History from SBI to see whether your case has already cleared.',
+            'If the sweep missed your case, the SBI mandatory-application backstop remains (§ 4373A(d)).',
+            'There is no damages claim if the automatic sweep misses an eligible case (§ 4373A(e)).'
+          ],
+          fees: '$0 — automatic expungement requires no application and no fee.',
+          feeWaiver: 'Not applicable — there is no fee.',
           courtContact: 'Delaware State Bureau of Identification (SBI)'
         },
         discretionary: {
-          name: 'Discretionary Expungement (Superior Court, 11 Del. C. § 4374)',
+          name: 'Discretionary Expungement (Superior or Family Court, 11 Del. C. § 4374)',
           formName: 'Petition for Discretionary Expungement',
           formUrl: 'https://courts.delaware.gov/help/expungement/',
           steps: [
-            'Obtain your Certified Delaware Criminal History — you MUST attach it or the petition is summarily rejected.',
-            'File the petition in the Superior Court for the county of your most recent case (Family Court if all charges were Family Court; it accepts email filing at FC_Expungement@delaware.gov).',
-            'The Attorney General has 120 days to object, and any victim is consulted.',
-            'Be ready to show that keeping the record would be a "manifest injustice" — this path is discretionary.'
+            'Order your Certified Delaware Criminal History and ATTACH it — a missing history means summary rejection.',
+            'File in the Superior Court for the county of your most recent case (Family Court if all charges were Family Court).',
+            'The Attorney General is served and has 120 days to respond; the AG reports the victim\'s position; it is usually decided without a hearing.',
+            'You (the petitioner) must prove, by a preponderance and with specific facts, that continued existence of the record works a "manifest injustice."'
           ],
-          // null: § 4374(j) authorises a "reasonable fee" without an amount.
+          // null: the court petition fee is a court schedule, not in the statute
+          // (open question a); blocked rather than guessed.
           fees: null,
-          feeWaiver: null,
+          feeWaiver: 'The court petition fee is a court schedule; ask a Superior/Family Court clerk about the amount and any waiver. A § 4372(l) non-willful-nonpayment finding lets the court waive or convert outstanding fines.',
           courtContact: 'Superior Court (or Family Court), county of the most recent case'
+        },
+        pardon: {
+          name: 'Post-Pardon Expungement (11 Del. C. § 4375)',
+          formName: 'Board of Pardons application, then a § 4374 discretionary petition',
+          formUrl: 'https://courts.delaware.gov/help/expungement/',
+          steps: [
+            'Apply to the Board of Pardons for an unconditional Governor\'s pardon of the excluded conviction.',
+            'Once pardoned, file a discretionary expungement petition under the § 4374 procedures (§ 4375).',
+            'Six offenses can never be expunged even pardoned: 632, 635, 636, 772, 773, 778(1)-(3).',
+            'Attach your Certified Delaware Criminal History to the § 4374 petition.'
+          ],
+          fees: 'The pardon application goes through the Board of Pardons (its own process); the follow-on § 4374 petition carries the court schedule fee (amount unconfirmed, phone tier).',
+          feeWaiver: 'Ask the Board of Pardons about its process and any fee; the § 4374 petition follows the court fee schedule.',
+          courtContact: 'Delaware Board of Pardons, then Superior/Family Court'
         }
       },
       legalAid: [

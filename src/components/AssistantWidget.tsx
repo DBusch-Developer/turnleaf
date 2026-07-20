@@ -46,7 +46,6 @@ export default function AssistantWidget() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
   // On mobile the labelled pill covers too much of the screen, so the closed
@@ -128,38 +127,23 @@ export default function AssistantWidget() {
   };
 
   if (!open) {
-    // Mobile: a compact round GREEN button with just Willow's head. On hover /
-    // focus it expands LEFTWARD into a pill — the head pushes out to the left
-    // and "Ask Willow" appears to its right, matching the desktop layout.
+    // Mobile: a compact round GREEN button with just Willow's head — the
+    // btn-primary padding shows as a green ring around the avatar.
     if (isMobile) {
       return (
         <button
           aria-label="Open Willow, the Turnleaf assistant"
           onClick={() => setOpen(true)}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onFocus={() => setHovered(true)}
-          onBlur={() => setHovered(false)}
           className="btn btn-primary"
           style={{
             position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 50,
-            borderRadius: '50px', padding: '0.4rem',
-            paddingRight: hovered ? '1rem' : '0.4rem',
-            display: 'flex', alignItems: 'center', overflow: 'hidden',
+            padding: '0.4rem', borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 8px 32px rgba(77, 124, 89, 0.35)',
-            transition: 'padding-right 0.25s ease',
           }}
         >
           <img src="/willow/welcoming.png" alt="" width={56} height={56}
-            style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 15%', background: 'var(--color-primary-light)', border: '2px solid rgba(255,255,255,0.7)', display: 'block', flexShrink: 0 }} />
-          <span style={{
-            display: 'flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap',
-            maxWidth: hovered ? '150px' : '0px', opacity: hovered ? 1 : 0,
-            marginLeft: hovered ? '0.5rem' : '0px', overflow: 'hidden',
-            transition: 'max-width 0.28s ease, opacity 0.22s ease, margin-left 0.28s ease',
-          }}>
-            <MessageCircle size={16} /> Ask Willow
-          </span>
+            style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', objectPosition: 'center 15%', background: 'var(--color-primary-light)', border: '2px solid rgba(255,255,255,0.7)', display: 'block' }} />
         </button>
       );
     }

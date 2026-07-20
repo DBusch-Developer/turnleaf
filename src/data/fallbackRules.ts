@@ -13658,56 +13658,117 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       ]
     }
   },
+  // ==========================================================================
+  // NEVADA — STATUTE-CITED (verified 2026-07-19). Terminology: SEALING. Diana
+  // read NRS 179 from leg.state.nv.us (retrieved 2026-07-19): 179.245 (through
+  // 2025 Stats. 773), 179.255 (through 2021), 179.259, 179.271, 179.275,
+  // 179.285, 179.295. NRS 179.2445 (presumption text), 179.301 (effect
+  // exceptions), and the feeder statutes were NOT pulled — their operation is
+  // encoded from the pulled cross-references and flagged (open question a).
+  //
+  // CONVICTION tiers (179.245(1)), from the LATER of release from custody or
+  // discharge from parole/probation (misd tiers from release or end of suspended
+  // sentence): (a) cat A / crime of violence / residential burglary (205.060) 10
+  // yr; (b) cat B/C/D 5 yr; (c) cat E 2 yr; (d) gross misd 2 yr; (e) 7-yr tier
+  // (422.540-.570 welfare fraud, non-felony DUI 484C.110/.120, misd battery-DV
+  // 33.018); (f) misd battery/harassment/stalking/protection-order 2 yr; (g)
+  // other misd 1 yr. CLEANLINESS (subsec 5): within the wait, no pending charge
+  // and no conviction of ANY offense except minor traffic.
+  //
+  // NEVER-LIST (179.245(6)/(10)): crime against a child, the (10)(b) 18-item
+  // sexual-offense list, home invasion w/ deadly weapon (205.067), FELONY DUI
+  // (484C.400(1)(c), 484C.430, DUI homicide), felony boating-UI. DUI CARVE-BACK
+  // (7): a 484C.110/.120 offense punished as 484C.400(1)(b) (2nd offense) seals
+  // via the 7-yr tier — INCLUDING a 3rd-offense charge that entered judgment as
+  // (1)(b) through the 484C.392 statewide monitoring program.
+  //
+  // PRESUMPTION (179.2445 unpulled; mechanics from 179.245(4)/179.255(6)):
+  // stipulation -> SHALL seal; no objection within 30 days + findings -> seal
+  // WITHOUT a hearing; objection -> hearing, SHALL seal UNLESS the objector
+  // rebuts the presumption (objector-side burden).
+  //
+  // Other routes: NON-CONVICTION (179.255) — dismissal any time, acquittal
+  // SHALL-seal (7)(a), declination at earliest of SOL / 8 yr / stipulation with
+  // an unseal-risk caveat (9). REENTRY (179.259) — single nonviolent felony, 4 yr
+  // after a reentry program, licensing-board + Insurance-Division inspection
+  // survives. DECRIMINALIZED (179.271) — free REQUEST, 10-judicial-day objection,
+  // the cannabis route. EFFECTS (179.285): rights restored immediately (vote,
+  // office, jury) but NOT firearms; 179.301 (unpulled) carves exceptions — keep
+  // effect copy qualified. Multi-record: 179.295(4) lets a court CONSIDER prior
+  // sealed proceedings (discretionary), NOT a hard lookback.
+  // ==========================================================================
   NV: {
     code: 'NV',
     name: 'Nevada',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
     terminology:
-      'Nevada uses RECORD SEALING — NRS 179.245 for convictions, NRS 179.255 for non-convictions. There is '
-      + 'no automation; you petition. The waiting periods ladder by offense level, running from your release '
-      + 'or discharge. The single most important thing to understand is the PACKAGE RULE: Nevada seals your '
-      + 'record as one complete set, so a single case that is not yet eligible blocks the WHOLE petition, and '
-      + 'a new conviction resets the clock. Non-convictions, by contrast, can be sealed immediately with no '
-      + 'wait — something people often do not realize. Sealing restores your right to vote, hold office, and '
-      + 'sit on a jury, but NOT firearm rights (that needs a pardon).',
+      'Nevada SEALS records — NRS 179.245 for convictions, NRS 179.255 for non-convictions — and once sealed, '
+      + 'the proceedings are deemed never to have occurred and you may answer accordingly to any inquiry, '
+      + 'including employment (a general honest-no). Sealing also RESTORES your civil rights immediately — to '
+      + 'vote, hold office, and serve on a jury — though it does NOT restore firearm rights without an '
+      + 'unrestricted pardon. You petition; there is no automation. Conviction waits ladder by offense level '
+      + '(10 / 5 / 2 / 1 years, with a special 7-year tier for welfare fraud, non-felony DUI, and misdemeanor '
+      + 'domestic-violence battery), running from your release or discharge, and you must stay conviction-free '
+      + 'during the wait. A rebuttable presumption favors sealing: if the prosecutor agrees, or simply does not '
+      + 'object within 30 days, the court seals. Non-convictions seal with no wait, decriminalized offenses '
+      + '(like cannabis possession) seal by a free request, and a completed reentry program opens an early path.',
     keyDates: [
       {
-        label: 'Marijuana (<=2.5 oz) decriminalized-offense sealing, immediate (AB 192)',
-        date: '2019',
+        label: 'NRS 179.245 conviction-sealing text current through 2025 Stats. 773',
+        date: '2025',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. Records of now-decriminalized minor marijuana possession can be sealed immediately.',
+        note: 'Diana read § 179.245 through 2025 Stats. 773. The delta of that chapter is integrated into this print; note only (open question f).',
       },
       {
-        label: 'Pardoned convictions become sealable on receipt of the pardon',
-        date: '2021',
+        label: 'Marijuana decriminalization opens the free § 179.271 sealing request',
+        date: '2017',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. A pardoned conviction can be sealed once the pardon is received.',
+        note: 'Records of now-decriminalized minor cannabis possession are sealed by a free written REQUEST to the convicting court under § 179.271, not the general § 179.245 petition.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm when the sealing waiting clock starts — specifically whether "release or discharge" requires fines/fees paid. Wave 6 notes practitioner sources say completion includes fines but flags the clock start for verification. The tree runs each ladder period from release/discharge; confirm whether unpaid financial obligations delay the clock.',
+          'REQUIRED PULLS: NRS 179.2445 (the rebuttable-presumption text, and any crime-of-violence definition it carries) and NRS 179.301 (the exceptions to the effect of sealing — likely where gaming/licensing carve-outs live). The presumption mechanics here are encoded from § 179.245(4)/§ 179.255(6), and the effect copy is kept qualified until § 179.301 is read.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the 1-year general (catch-all) misdemeanor tier from the statute. Wave 6 lists it but flags it for confirmation against NRS 179.245. The tree routes "other misdemeanors" to a 1-year wait; confirm.',
+          'Unpulled cross-referenced routes (cite-only until read): NRS 179.247, 179.2595, 453.3365 (drug set-aside sealing), 176.211 / 176A.245 / 176A.265 / 176A.295 (deferred/probation feeders), 201.354, 34.970, 174.034.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the sealing cost reality. Wave 6 says there is no single statutory fee — the cost is SCOPE reports from each arresting agency, a criminal-history record, and certified copies, roughly $150 all-in self-filed in Las Vegas Justice Court (practitioner figure), plus a months-long Carson City Repository backlog to actually seal after the order. The fees and feeWaiver fields are null pending this; the Nevada Legal Services Record Sealing Manual and the Eighth Judicial District are the checks.',
-        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+          'Whether NRS chapter 179 contains a refile-after-denial waiting rule (check the table of contents around § 179.265). Do not assert one until confirmed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'County filing-fee amounts for a § 179.245/§ 179.255 sealing petition are not stated in the text — they vary by county (phone tier). Note: a sex-trafficking victim (§ 179.245(9)) pays NO fee of any kind.',
+        blocksFields: ['resources.remedies.sealing.fees'],
+      },
+      {
+        question:
+          'NRS 179D.0357 (the crime-against-a-child list that the § 179.245(6) never-list references) was not pulled — cite-only; the tree asks the person to self-assess "crime against a child."',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Delta of 2025 Stats. 773 versus the prior § 179.245 text is integrated into this print; note only — confirm no substantive change to the encoded tiers/exclusions was missed.',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Nev. Rev. Stat. § 179.245 (conviction sealing; tiered waits)', url: null, retrievedOn: null },
-      { id: 'Nev. Rev. Stat. § 179.255 (non-conviction sealing; immediate)', url: null, retrievedOn: null },
-      { id: 'Nev. Rev. Stat. § 179.2445 (rebuttable presumption in favor of sealing)', url: null, retrievedOn: null },
-      { id: 'AB 192 of 2019 (sealing of decriminalized minor marijuana possession)', url: null, retrievedOn: null },
+      { id: 'Nev. Rev. Stat. § 179.245 (conviction sealing; (1) tiered waits, (4) presumption mechanics, (5) cleanliness, (6)/(10) never-list + 18-item sexual-offense list, (7) DUI carve-back, (9) sex-trafficking-victim fee waiver; through 2025 Stats. 773)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec245', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.255 (non-conviction sealing — dismissal any time, acquittal shall-seal (7)(a), declination SOL/8-yr/stipulation (7)(b), declination unseal risk (9); through 2021)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec255', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.259 (reentry-program sealing — 4 yr, single nonviolent felony; licensing-board and Division of Insurance inspection survives)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec259', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.271 (decriminalized-offense sealing — free written request, 10-judicial-day objection, traffic excluded)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec271', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.275 (custodian duties on a sealing order)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec275', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.285 (effect of sealing — deemed never occurred, honest-no, immediate civil-rights restoration, firearms not restored)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec285', retrievedOn: '2026-07-19' },
+      { id: 'Nev. Rev. Stat. § 179.295 (reopening sealed records; (4) court MAY consider prior sealed proceedings on a later petition — discretionary)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec295', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -13717,160 +13778,309 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nv' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_nv' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_nv' },
-            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'eligible_nonconv_nv' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_nv' },
+            { label: 'Dismissed / prosecutor declined', value: 'dismissed', next: 'nonconv_type_nv' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_acquittal_nv' },
+            { label: 'Diversion / set-aside completed', value: 'deferred', next: 'eligible_deferred_nv' },
+            { label: 'I don\'t know how it ended', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_nv: {
-          type: 'boolean',
-          text: 'Was the offense any of these: a crime against a child, a sex offense, a felony DUI, or home invasion with a deadly weapon?',
-          yes: 'ineligible_excluded_nv',
-          no: 'package_rule_nv'
+        // ---- route a conviction: special routes first ----
+        conv_type_nv: {
+          type: 'choice',
+          text: 'Which best describes the conviction?',
+          options: [
+            { label: 'The conduct has since been decriminalized (e.g., cannabis possession)', value: 'decriminalized', next: 'decrim_nv' },
+            { label: 'You completed a DOC or court reentry program (NRS 209.4886/.4888, 213.625/.632)', value: 'reentry', next: 'reentry_nv' },
+            { label: 'Another conviction', value: 'standard', next: 'conv_neverlist_nv' }
+          ]
         },
-        package_rule_nv: {
+        decrim_nv: {
           type: 'boolean',
-          text: 'Nevada seals your record as one complete set. Do you have ANY other criminal case that is not yet eligible to be sealed — for example a more recent conviction, or another case still inside its waiting period?',
-          yes: 'complex_package_nv',
-          no: 'level_nv'
+          text: 'Was it a traffic offense? (Traffic offenses are excluded from the decriminalized-offense route.)',
+          yes: 'conv_neverlist_nv',
+          no: 'eligible_decrim_nv'
         },
-        level_nv: {
+        reentry_nv: {
+          type: 'boolean',
+          text: 'Is this a SINGLE nonviolent felony conviction (offenses from the same transaction count as one), and NOT a crime against a child or a sexual offense?',
+          yes: 'reentry_date_nv',
+          no: 'conv_neverlist_nv'
+        },
+        reentry_date_nv: {
+          type: 'date',
+          text: 'When did you complete the reentry program?',
+          validation: {
+            period: { amount: 4, unit: 'years', anchor: 'completion of a DOC or judicial reentry program (NRS 179.259)' },
+            nextPass: 'eligible_reentry_nv',
+            nextFail: 'waiting_nv'
+          }
+        },
+        conv_neverlist_nv: {
+          type: 'boolean',
+          text: 'Is the offense any of these NEVER-sealable crimes: a crime against a child; a sexual offense (sexual assault, lewdness with a child, child sexual-abuse material, and the others on the § 179.245(10)(b) list); home invasion with a deadly weapon (205.067); or felony boating-under-the-influence?',
+          yes: 'ineligible_neverlist_nv',
+          no: 'conv_dui_nv'
+        },
+        conv_dui_nv: {
+          type: 'boolean',
+          text: 'Was this a DUI offense (NRS 484C)?',
+          yes: 'dui_tier_nv',
+          no: 'conv_level_nv'
+        },
+        dui_tier_nv: {
+          type: 'choice',
+          text: 'Which best describes the DUI?',
+          options: [
+            { label: 'A first- or second-offense DUI (a non-felony DUI, or one punished as 484C.400(1)(b))', value: 'second', next: 'date7_nv' },
+            { label: 'A third-offense DUI that entered judgment as a SECOND offense because you completed the 484C.392 statewide monitoring program', value: 'third_program', next: 'date7_nv' },
+            { label: 'A third-offense FELONY DUI (484C.400(1)(c)) with no program, or a DUI causing death or serious injury', value: 'third_felony', next: 'ineligible_neverlist_nv' }
+          ]
+        },
+        conv_level_nv: {
           type: 'choice',
           text: 'How would you describe the offense?',
           options: [
-            { label: 'Category A felony, a crime of violence, or residential burglary', value: 'catA', next: 'date10_nv' },
+            { label: 'Category A felony, a crime of violence, or residential burglary (205.060)', value: 'catA', next: 'date10_nv' },
             { label: 'Category B, C, or D felony', value: 'catBCD', next: 'date5_nv' },
             { label: 'Category E felony', value: 'catE', next: 'date2_nv' },
             { label: 'Gross misdemeanor', value: 'gross', next: 'date2_nv' },
-            { label: 'Misdemeanor DV battery, misdemeanor DUI, or welfare fraud', value: 'misd7', next: 'date7_nv' },
-            { label: 'Misdemeanor battery, harassment, stalking, or protection-order violation', value: 'misd2', next: 'date2_nv' },
+            { label: 'Welfare fraud (422.540-.570), or misdemeanor battery constituting domestic violence (33.018)', value: 'misd7', next: 'date7_nv' },
+            { label: 'Misdemeanor battery (200.481), harassment (200.571), stalking (200.575), or a protection-order violation', value: 'misd2', next: 'date2_nv' },
             { label: 'Another misdemeanor', value: 'misd1', next: 'date1_nv' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nv' }
           ]
         },
         date10_nv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          text: 'When were you released from custody or discharged from parole/probation on this case — whichever was later?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category A felony, crime of violence, or residential burglary)' },
-            nextPass: 'eligible_conviction_nv',
+            period: { amount: 10, unit: 'years', anchor: 'the later of release or discharge (NRS 179.245(1)(a) — cat A felony, crime of violence, or residential burglary)' },
+            nextPass: 'cleanliness_nv',
             nextFail: 'waiting_nv'
           }
         },
         date5_nv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          text: 'When were you released from custody or discharged from parole/probation on this case — whichever was later?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category B, C, or D felony)' },
-            nextPass: 'eligible_conviction_nv',
+            period: { amount: 5, unit: 'years', anchor: 'the later of release or discharge (NRS 179.245(1)(b) — cat B/C/D felony)' },
+            nextPass: 'cleanliness_nv',
             nextFail: 'waiting_nv'
           }
         },
         date2_nv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          text: 'When were you released from custody, discharged from probation, or (for a misdemeanor) did your suspended sentence end — whichever was latest?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — Category E felony, gross misdemeanor, or misd. battery/harassment/stalking/protection-order violation)' },
-            nextPass: 'eligible_conviction_nv',
+            period: { amount: 2, unit: 'years', anchor: 'the latest of release/discharge/end of suspended sentence (NRS 179.245(1)(c),(d),(f) — cat E felony, gross misd, or misd battery/harassment/stalking/protection-order)' },
+            nextPass: 'cleanliness_nv',
             nextFail: 'waiting_nv'
           }
         },
         date7_nv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          text: 'When were you released from custody, discharged from probation, or did your suspended sentence end — whichever was latest?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — misdemeanor DV battery, misdemeanor DUI, or welfare fraud)' },
-            nextPass: 'eligible_conviction_nv',
+            period: { amount: 7, unit: 'years', anchor: 'the latest of release/discharge/end of suspended sentence (NRS 179.245(1)(e) — welfare fraud, non-felony DUI, misd battery-DV)' },
+            nextPass: 'cleanliness_nv',
             nextFail: 'waiting_nv'
           }
         },
         date1_nv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you released or discharged from this case (custody, probation, or parole)?',
+          text: 'When were you released, discharged, or did your suspended sentence end — whichever was latest?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'from release/discharge (NRS 179.245 — general misdemeanor)' },
-            nextPass: 'eligible_conviction_nv',
+            period: { amount: 1, unit: 'years', anchor: 'the latest of release/discharge/end of suspended sentence (NRS 179.245(1)(g) — general misdemeanor)' },
+            nextPass: 'cleanliness_nv',
             nextFail: 'waiting_nv'
           }
+        },
+        cleanliness_nv: {
+          type: 'boolean',
+          text: 'During your waiting period, did you stay clear — no pending charges and no new conviction of ANY offense (other than a minor moving or parking traffic violation)?',
+          yes: 'conv_objection_nv',
+          no: 'ineligible_cleanliness_nv'
+        },
+        conv_objection_nv: {
+          type: 'choice',
+          text: 'How do you expect the prosecutor to respond to your sealing petition?',
+          options: [
+            { label: 'The prosecutor stipulates (agrees) to sealing', value: 'stipulate', next: 'eligible_stipulate_nv' },
+            { label: 'No stipulation, but no written objection within 30 days', value: 'no_objection', next: 'eligible_nohearing_nv' },
+            { label: 'The prosecutor files a written objection', value: 'object', next: 'eligible_hearing_nv' }
+          ]
+        },
+        // ---- non-conviction (179.255) ----
+        nonconv_type_nv: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'The charge was dismissed', value: 'dismissal', next: 'eligible_dismissal_nv' },
+            { label: 'The prosecutor DECLINED to prosecute (no charge pursued)', value: 'declined', next: 'declined_nv' }
+          ]
+        },
+        declined_nv: {
+          type: 'boolean',
+          text: 'Has one of these happened: the statute of limitations has run, OR it has been 8 years since the arrest, OR the prosecutor stipulated to sealing?',
+          yes: 'eligible_declined_nv',
+          no: 'waiting_declined_nv'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Nevada seals convictions and non-convictions differently — non-convictions can be sealed immediately, while convictions ladder by level from your release date. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. A Nevada criminal-history (SCOPE) report or your court paperwork will show the disposition; the Nevada Legal Services Record Sealing Manual explains the tracks.',
+          message: 'Nevada seals convictions and non-convictions differently — non-convictions can be sealed with no wait, while convictions ladder by level from your release date. Because the outcome is unclear, this screening cannot tell you anything reliable yet. A Nevada criminal-history (SCOPE) report or your court paperwork will show the disposition; the Nevada Legal Services Record Sealing Manual explains the tracks.',
           remedy: 'Get Your Record First (SCOPE / court paperwork)',
           citation: 'Nev. Rev. Stat. §§ 179.245, 179.255 (the route depends on the disposition)'
         },
-        eligible_nonconv_nv: {
+        eligible_decrim_nv: {
           status: 'eligible',
-          title: 'No Conviction — Sealable Immediately',
-          message: 'Because your case ended without a conviction — dismissed, acquitted, or a completed diversion — Nevada lets you seal it IMMEDIATELY, with no waiting period. People often do not realize this is available. You petition under NRS 179.255; there is a rebuttable presumption in your favor, and if the prosecutor stipulates, the court must seal. The main cost is gathering the records (SCOPE reports, criminal history, certified copies) rather than a single filing fee. The Nevada Legal Services Record Sealing Manual walks through it.',
-          remedy: 'Non-conviction sealing (NRS 179.255) — no wait',
-          citation: 'Nev. Rev. Stat. § 179.255'
+          title: 'Decriminalized Offense — Free Request to Seal',
+          message: 'Because the conduct has since been decriminalized — cannabis possession is the common example — Nevada gives you a simpler, FREE route than the usual petition: you file a written REQUEST (not a petition) with the court that convicted you, at no cost (NRS 179.271). The prosecutor has 10 judicial days to object; if none, the court SHALL grant it, and even over an objection the court must grant unless the prosecutor proves good cause by clear and convincing evidence. Traffic offenses are excluded from this route. Once sealed, the matter is deemed never to have occurred and your civil rights are restored. Nevada Legal Services can help you file the request.',
+          remedy: 'Decriminalized-offense sealing request (NRS 179.271) — free',
+          citation: 'Nev. Rev. Stat. § 179.271'
         },
-        eligible_conviction_nv: {
+        eligible_reentry_nv: {
           status: 'eligible',
-          title: 'Waiting Period Met — Sealing Available',
-          message: 'Based on your dates, the waiting period for your offense level has passed, running from your release or discharge (10 years for the most serious, down through 5, 2, and 1 year for lesser offenses; 7 years for misdemeanor DV battery, misdemeanor DUI, or welfare fraud). Nevada applies a rebuttable presumption in your favor, and if the prosecutor stipulates the court must seal. Remember the package rule: everything you want sealed has to be eligible at once. There is no single filing fee — budget for record-gathering (SCOPE reports, criminal history, certified copies), and expect a months-long Repository backlog to actually seal after the order. Sealing restores voting, office, and jury rights, but not firearms. Nevada Legal Services can help.',
-          remedy: 'Conviction sealing petition (NRS 179.245)',
-          citation: 'Nev. Rev. Stat. § 179.245'
+          title: 'Reentry Program Completed — Early Sealing Available',
+          message: 'Completing a Department of Corrections or judicial reentry program opens an early sealing path: 4 years after completion, the court may seal a SINGLE nonviolent felony conviction without a hearing (NRS 179.259) — unless Parole and Probation shows good cause and asks for one. By your dates the 4 years are met. Two limits: crimes against a child and sexual offenses are excluded, and if you work in a licensed profession, note that professional licensing boards and the Division of Insurance keep the right to inspect records sealed under this section. Once sealed, your civil rights (vote, office, jury) are restored, though not firearms. Nevada Legal Services can help.',
+          remedy: 'Reentry-program sealing (NRS 179.259) — 4 years, single nonviolent felony',
+          citation: 'Nev. Rev. Stat. § 179.259'
         },
-        waiting_nv: {
-          status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Nevada\'s sealing waiting periods run from your release or discharge and ladder by level: 10 years for the most serious offenses, 5 for mid-level felonies, 2 for the lowest felony and gross misdemeanors, 7 for misdemeanor DV battery / DUI / welfare fraud, and 1 year for other misdemeanors. Based on your dates, yours has not passed yet — and note a new conviction would reset the clock. When the time comes, the Nevada Legal Services Record Sealing Manual is the self-help authority.',
-          remedy: 'Wait for the NRS 179.245 period (a new conviction resets it)',
-          citation: 'Nev. Rev. Stat. § 179.245'
-        },
-        ineligible_excluded_nv: {
+        ineligible_neverlist_nv: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Sealed',
-          message: 'Nevada never seals certain offenses: crimes against children, sex offenses, felony DUI, and home invasion with a deadly weapon. No waiting period changes that. For an offense like this, a pardon from the State Board of Pardons is the remaining route — and a pardoned conviction can then be sealed. Nevada Legal Services can explain the pardon process and check whether any of your other cases might be sealable on their own.',
-          remedy: 'None (Excluded Offense) — a pardon can open a sealing path',
-          citation: 'Nev. Rev. Stat. § 179.245'
-        },
-        complex_package_nv: {
-          status: 'complex',
-          title: 'The Package Rule May Be Blocking You',
-          message: 'This is Nevada\'s most important and least-known rule. Nevada seals your record as one complete SET — so even if the offense you asked about is eligible, a single OTHER case that is not yet eligible (a more recent conviction, or another case still inside its waiting period) blocks the entire petition. Because you told us there is such a case, sealing is likely blocked until that case also becomes eligible. This is not necessarily a permanent no: once every case is past its own waiting period, the whole set can be sealed together. Nevada Legal Services can map out when that happens for your specific record.',
-          remedy: 'Wait until every case is eligible — the package must clear together',
-          citation: 'Nev. Rev. Stat. § 179.245'
+          message: 'Nevada never seals a set of the most serious offenses (NRS 179.245(6), (10)): crimes against a child, sexual offenses (the 18 offenses on the § 179.245(10)(b) list), home invasion with a deadly weapon, a felony DUI (a third-offense DUI, or one causing death or serious injury), and felony boating-under-the-influence. No waiting period changes that. For an offense like this, a pardon from the State Board of Pardons Commissioners is the remaining route — a pardoned conviction can then be sealed. If you have OTHER, non-excluded cases, those may still be sealable on their own. Nevada Legal Services can explain the pardon process.',
+          remedy: 'None (never-sealable offense) — a pardon can open a sealing path',
+          citation: 'Nev. Rev. Stat. § 179.245(6), (10)'
         },
         complex_level_nv: {
           status: 'complex',
           title: 'We Need the Offense Level',
           message: 'Nevada\'s waiting period depends closely on the exact level — the category of felony, or which kind of misdemeanor. Since you are not sure which yours is, we are not going to guess between a 1-year and a 10-year wait. A SCOPE criminal-history report or your court paperwork states it, and the Nevada Legal Services Record Sealing Manual can help you read it.',
           remedy: 'Get the Offense Level First (SCOPE / court paperwork)',
-          citation: 'Nev. Rev. Stat. § 179.245'
+          citation: 'Nev. Rev. Stat. § 179.245(1)'
+        },
+        waiting_nv: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Nevada\'s sealing waiting periods run from the LATER of your release or discharge and ladder by level: 10 years for a category A felony, crime of violence, or residential burglary; 5 for a category B/C/D felony; 2 for a category E felony or gross misdemeanor; 7 for welfare fraud, non-felony DUI, or misdemeanor domestic-violence battery; 2 for misdemeanor battery/harassment/stalking/protection-order violations; and 1 year for other misdemeanors (NRS 179.245(1)). Based on your dates, yours has not passed yet — and a new conviction during the wait restarts the requirement. When the time comes, the Nevada Legal Services Record Sealing Manual is the self-help authority.',
+          remedy: 'Wait for the NRS 179.245(1) period (stay conviction-free during it)',
+          citation: 'Nev. Rev. Stat. § 179.245(1)'
+        },
+        ineligible_cleanliness_nv: {
+          status: 'waiting',
+          title: 'A Conviction During the Wait Blocks This — For Now',
+          message: 'Nevada requires that during your waiting period you had no pending charges and no conviction of ANY offense, other than a minor moving or standing traffic violation (NRS 179.245(5)). Because you picked up a conviction inside that window, the sealing is blocked for now — in effect the clock restarts from the later event. This is not a permanent no: once enough conviction-free time has passed for every case on your record, sealing becomes available again. Nevada Legal Services can help you map out when your record clears.',
+          remedy: 'Stay conviction-free through the full waiting period, then re-apply',
+          citation: 'Nev. Rev. Stat. § 179.245(5)'
+        },
+        eligible_stipulate_nv: {
+          status: 'eligible',
+          title: 'Eligible — Prosecutor Stipulates, Court Must Seal',
+          message: 'Lead with the good news: on sealing, your civil rights are restored immediately — the right to vote, hold office, and serve on a jury — and you may thereafter answer any inquiry, including from employers, as though the matter never happened (NRS 179.285). (Sealing does not restore firearm rights; that needs an unrestricted pardon, and § 179.301 carries some other exceptions we still need to read.) You meet the waiting period and cleanliness requirement, and because the prosecutor stipulates to sealing, the court SHALL grant it under the rebuttable presumption (NRS 179.245(4), operationalizing § 179.2445). Attach a current verified Central Repository criminal-history record — order that first. A sex-trafficking victim pays no fee of any kind. Nevada Legal Services can help.',
+          remedy: 'Conviction sealing with a prosecutor stipulation (NRS 179.245(4)) — shall-seal',
+          citation: 'Nev. Rev. Stat. §§ 179.245(4), 179.285'
+        },
+        eligible_nohearing_nv: {
+          status: 'eligible',
+          title: 'Eligible — Sealing Likely Without a Hearing',
+          message: 'Lead with the good news: sealing restores your civil rights immediately — vote, hold office, serve on a jury — and lets you answer any inquiry, including employment, as though the matter never happened (NRS 179.285); firearm rights are the exception and need an unrestricted pardon. You meet the waiting period and cleanliness requirement, and Nevada applies a rebuttable presumption in your favor (NRS 179.245(4)): if the prosecutor does not file a written objection within 30 days of notice, the court may seal WITHOUT a hearing. Attach a current verified Central Repository criminal-history record to the petition — order that first, it is a required exhibit. If more than one case is on your record, a court may consider prior sealed proceedings (§ 179.295(4)), but that is discretionary, not an automatic bar. Nevada Legal Services can help.',
+          remedy: 'Conviction sealing petition (NRS 179.245) — no objection, no hearing',
+          citation: 'Nev. Rev. Stat. §§ 179.245(1), (4), 179.285'
+        },
+        eligible_hearing_nv: {
+          status: 'complex',
+          title: 'Eligible — But Expect a Hearing on the Objection',
+          message: 'You meet the waiting period and cleanliness requirement, so you are eligible to petition — but because the prosecutor has objected in writing, there will be a hearing. Here is the key point in your favor: the rebuttable presumption still applies, so the court SHALL seal UNLESS the objecting party presents evidence sufficient to REBUT the presumption (NRS 179.245(4), operationalizing § 179.2445) — the burden is on the objector, not you. Attach a current verified Central Repository criminal-history record. If you succeed, sealing restores your civil rights (vote, office, jury) and lets you answer any inquiry as though it never happened; firearms need a pardon. A contested hearing is a good one to bring to Nevada Legal Services or the Legal Aid Center of Southern Nevada.',
+          remedy: 'Conviction sealing over an objection (NRS 179.245(4)) — objector must rebut the presumption',
+          citation: 'Nev. Rev. Stat. § 179.245(4)'
+        },
+        eligible_dismissal_nv: {
+          status: 'eligible',
+          title: 'Dismissed Charge — Sealable Any Time',
+          message: 'Because your case was dismissed without a conviction, Nevada lets you petition to seal it AT ANY TIME, with no waiting period (NRS 179.255) — people often do not realize this is available. The same presumption applies: if the prosecutor stipulates, or simply does not object within 30 days, the court seals, potentially without a hearing. Attach a current verified Central Repository criminal-history record — order that first. Once sealed, the matter is deemed never to have occurred, your civil rights are restored, and you may answer any inquiry accordingly. A sex-trafficking victim pays no fee of any kind. Nevada Legal Services can help you file.',
+          remedy: 'Non-conviction sealing (NRS 179.255) — any time, no wait',
+          citation: 'Nev. Rev. Stat. § 179.255'
+        },
+        eligible_acquittal_nv: {
+          status: 'eligible',
+          title: 'Acquittal — the Court Must Seal',
+          message: 'Because you were acquitted (found not guilty), Nevada gives you the strongest non-conviction path: on a showing of the acquittal with no evidence of further action, the court SHALL seal the records (NRS 179.255(7)(a)) — mandatory, and available at any time with no waiting period. Attach a current verified Central Repository criminal-history record to the petition. Once sealed, the matter is deemed never to have occurred, your civil rights are restored, and you may answer any inquiry accordingly. A sex-trafficking victim pays no fee of any kind. Nevada Legal Services can help you file.',
+          remedy: 'Acquittal sealing (NRS 179.255(7)(a)) — mandatory, any time',
+          citation: 'Nev. Rev. Stat. § 179.255(7)(a)'
+        },
+        eligible_declined_nv: {
+          status: 'eligible',
+          title: 'Prosecutor Declined — Sealable Now (One Caveat)',
+          message: 'When the prosecutor declined to pursue charges, Nevada lets you seal the record once the earliest of these has happened: the statute of limitations has run, 8 years have passed since the arrest, or the prosecutor stipulates (NRS 179.255(7)(b)) — and by your answer one of those is met, so you can petition now (the court has discretion here). One honest caveat specific to a declination: the prosecutor may still refile within the statute of limitations, and automatically gets to inspect the records if they do (NRS 179.255(9)) — so this kind of sealing is not fully final until the limitations period closes. Attach a current verified Central Repository criminal-history record. Nevada Legal Services can help.',
+          remedy: 'Declined-prosecution sealing (NRS 179.255(7)(b)) — note the refile/inspection caveat',
+          citation: 'Nev. Rev. Stat. § 179.255(7)(b), (9)'
+        },
+        waiting_declined_nv: {
+          status: 'waiting',
+          title: 'Declined Prosecution — Not Sealable Yet',
+          message: 'When the prosecutor declined to pursue charges but the case could still be refiled, Nevada lets you seal only once the EARLIEST of these has happened: the statute of limitations has run, 8 years have passed since your arrest, or the prosecutor stipulates to sealing (NRS 179.255(7)(b)). Based on your answer, none of those is met yet, so the record cannot be sealed at this point. Once one of them occurs, you can petition — and if the prosecutor stipulates, that alone opens it immediately. Nevada Legal Services can help you track the timing.',
+          remedy: 'Wait for the SOL, 8 years, or a stipulation (NRS 179.255(7)(b))',
+          citation: 'Nev. Rev. Stat. § 179.255(7)(b)'
+        },
+        eligible_deferred_nv: {
+          status: 'eligible',
+          title: 'Diversion / Set-Aside Completed — Sealable',
+          message: 'A completed diversion that ended in dismissal, or a problem-gambling-court set-aside (NRS 458A.240), is treated as a non-conviction for sealing purposes and can be sealed under NRS 179.255, with no waiting period. The rebuttable presumption applies — a prosecutor stipulation or no objection within 30 days can get it sealed without a hearing. Attach a current verified Central Repository criminal-history record, which you order first. Because diversion and set-aside dispositions can be coded in different ways, it is worth confirming your exact disposition — Nevada Legal Services and the Legal Aid Center of Southern Nevada do this regularly. Once sealed, your civil rights are restored and you may answer any inquiry accordingly.',
+          remedy: 'Sealing of a completed diversion / set-aside (NRS 179.255) — no wait',
+          citation: 'Nev. Rev. Stat. § 179.255'
         }
       }
     },
     resources: {
       remedies: {
-        expungement: {
+        sealing: {
           name: 'Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)',
-          formName: 'Nevada Legal Services Record Sealing Manual / Eighth Judicial District forms',
+          formName: 'Nevada Legal Services Record Sealing Manual / district-court sealing forms',
           formUrl: 'https://nlslaw.net/record-sealing/',
           steps: [
-            'Confirm your offense is not one Nevada never seals (crimes against children, sex offenses, felony DUI, home invasion with a deadly weapon).',
-            'Check the package rule first: every case you want sealed must be past its own waiting period, because Nevada seals the whole set at once.',
-            'Gather the records: SCOPE reports from each arresting agency, your criminal history, and certified copies — there is no single statutory filing fee.',
-            'File the petition; there is a rebuttable presumption in your favor and a 30-day objection window. Expect a months-long Repository backlog to actually seal after the order.'
+            'Confirm your offense is not on the never-list (crimes against a child, sexual offenses, home invasion with a deadly weapon, felony DUI, felony boating-UI).',
+            'Order a current VERIFIED Central Repository criminal-history record — it is a required exhibit; a petition without it can be rejected.',
+            'Check the waiting period for your level (10 / 5 / 2 / 7 / 1 years) from the later of release or discharge, and confirm you stayed conviction-free during it.',
+            'File the petition; a rebuttable presumption favors sealing. A stipulation or no objection within 30 days can get it sealed without a hearing; expect a Repository backlog to actually seal after the order.'
           ],
-          // null: Wave 6 says there is no single statutory fee — cost is record-gathering,
-          // roughly $150 all-in per a practitioner figure that is flagged for verification,
-          // so the fee and any waiver are unknown.
+          // null: county filing-fee amounts are not in the statute and vary by
+          // county (open question d); blocked rather than guessed. A sex-trafficking
+          // victim pays no fee of any kind (§ 179.245(9)).
           fees: null,
-          feeWaiver: null,
-          courtContact: 'The court where the case was decided (Las Vegas Justice Court / Eighth Judicial District)'
+          feeWaiver: 'A sex-trafficking victim (trafficked when the crime was committed, NRS 179.245(9)) pays NO fee of any kind — filing, fingerprints, records, and certified copies are all free, on a certification statement in the petition. For everyone else, the county filing-fee amount is unconfirmed (phone tier).',
+          courtContact: 'The court where the case was decided'
+        },
+        decriminalized: {
+          name: 'Decriminalized-Offense Sealing Request (Nev. Rev. Stat. § 179.271)',
+          formName: 'Written request to the convicting court (not a petition)',
+          formUrl: 'https://nlslaw.net/record-sealing/',
+          steps: [
+            'File a written REQUEST (not a petition) with the court that entered the conviction — for cannabis possession and other now-decriminalized conduct.',
+            'There is no fee.',
+            'The prosecutor has 10 judicial days to object; with no objection the court SHALL grant it.',
+            'Over an objection, the court must still grant unless the prosecutor proves good cause by clear and convincing evidence. Traffic offenses are excluded.'
+          ],
+          fees: '$0 — a § 179.271 decriminalized-offense request has no fee.',
+          feeWaiver: 'Not applicable — there is no fee.',
+          courtContact: 'The court that entered the conviction'
+        },
+        reentry: {
+          name: 'Reentry-Program Sealing (Nev. Rev. Stat. § 179.259)',
+          formName: 'Petition to seal after a reentry program',
+          formUrl: 'https://nlslaw.net/record-sealing/',
+          steps: [
+            'Available 4 years after completing a DOC or judicial reentry program (NRS 209.4886/.4888, 213.625/.632), for a SINGLE nonviolent felony conviction.',
+            'Crimes against a child and sexual offenses are excluded.',
+            'The court may seal without a hearing unless Parole and Probation shows good cause and requests one.',
+            'Note: professional licensing boards and the Division of Insurance retain the right to inspect records sealed under this section.'
+          ],
+          fees: 'Same petition costs as a § 179.245 sealing; the county filing-fee amount is unconfirmed (phone tier).',
+          feeWaiver: 'A sex-trafficking victim pays no fee (§ 179.245(9)); otherwise confirm the county fee.',
+          courtContact: 'The court where the conviction was entered'
         }
       },
       legalAid: [

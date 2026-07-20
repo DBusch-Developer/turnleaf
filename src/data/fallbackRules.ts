@@ -12645,55 +12645,118 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       ]
     }
   },
+  // ==========================================================================
+  // OREGON — STATUTE-CITED (verified 2026-07-19). Terminology: SET ASIDE. Diana
+  // read ORS 137.225 (2025 edition, history through 2025 c.349, incl. the 2025
+  // c.395 session note) and 137.226 from oregonlegislature.gov, retrieved
+  // 2026-07-19. This entry REPLACES the pre-SB-397 draft wholesale — the old
+  // universal 3-yr wait, 10/20-yr B-felony conduct rule, $265 fee, and once-per-
+  // decade limit were all stale.
+  //
+  // Single motion-based set-aside (ORS 137.225). NO court filing fee — ORS 21.135
+  // is expressly waived ((1)(g)); a fingerprint card goes to OSP with every
+  // motion, and conviction motions pay one OSP record-check fee (amount phone
+  // tier). Conviction motions file in the court of conviction; arrest/citation/
+  // declination motions in the county of arrest.
+  //
+  // CONVICTION WAITS (1)(b), from the LATER of conviction or release: Class B
+  // felony 7 yr; Class C felony (and contempt for violating an abuse/person-crime
+  // order) 5 yr; Class A misdemeanor 3 yr; Class B/C misd, violation, other
+  // contempt 1 yr. Sentence must be fully performed (still on supervision =
+  // ineligible, (1)(a)); revoked probation -> later of 3 yr from revocation or
+  // the (1)(b) date ((1)(e)); reclassification uses the reduced class ((1)(f)).
+  //
+  // OREGON'S SIGNATURE TRAPS:
+  //   - Traffic offenses (incl. DUII) are NEVER set aside ((7)(a)(A)) — the
+  //     permanent DUII conviction bar. A completed DUII DIVERSION dismissal is
+  //     ALSO barred ((8)(a)) — "success" is a permanent record.
+  //   - CLEANLINESS LOOKBACK ((7)(a)(B)/(b)) mirrors the wait (7/5/3/1 yr): any
+  //     other conviction in the window blocks — INCLUDING same-episode AND
+  //     already-SET-ASIDE convictions — except MV violations and 475.896 drug
+  //     possession, and except a SINGLE non-MV violation which is forgiven.
+  //   - Grant is presumptive ((3)): no DA objection in 120 days -> SHALL grant;
+  //     objection -> the STATE must show by clear-and-convincing a public-safety
+  //     risk from criminal behavior/character-regulatory violations ONLY — NOT
+  //     unpaid debts, civil liability, or MV violations.
+  //
+  // Sex crimes are excluded EXCEPT two narrow gates ((6)): (A) a 163A.140(1)(a)
+  // crime with judicial relief from reporting + no other barred convictions; or
+  // (B) the Class C felony close-in-age gate. Marijuana fast paths (137.226):
+  // under-21-at-conviction -> 1 yr; pre-4/21/2017 conduct -> reclassify under
+  // current law first. 2025 c.395: pre-7/1/2015 sub-ounce marijuana fines expired
+  // 9/26/2025 and are deemed satisfied for set-aside.
+  // ==========================================================================
   OR: {
     code: 'OR',
     name: 'Oregon',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
     terminology:
-      'Oregon calls it SETTING ASIDE a conviction (ORS 137.225), which seals the record. The 2022 overhaul '
-      + '(SB 397) shortened the waiting periods dramatically and made many older convictions newly eligible — '
-      + 'a Class B felony that once carried a 20-year wait now runs 7 years, so a lot of people became eligible '
-      + 'without realizing it. A 2025 amendment went further: expired money-judgment obligations now count as '
-      + '"sentence complete," so old unpaid fines whose judgments have lapsed no longer block you. Filing is '
-      + 'FREE (SB 397 eliminated the court fee); only a State Police record-check fee remains. Two traps to '
-      + 'know: DUII and other traffic offenses are excluded, and a completed DUII DIVERSION does not qualify '
-      + 'either. Counties can be slow — backlogs run up to about two years.',
+      'Oregon SETS ASIDE a conviction (ORS 137.225), which seals the record — and once set aside you are '
+      + 'deemed never to have been convicted, arrested, cited, or charged, and may answer accordingly on any '
+      + 'question (a full honest-no). It is one free, motion-based route: the court filing fee is expressly '
+      + 'waived, though a fingerprint card goes to the State Police and conviction motions pay one State Police '
+      + 'record-check fee. Waits run from the later of conviction or release — 7 years (Class B felony), 5 '
+      + '(Class C), 3 (Class A misdemeanor), 1 (lesser) — and the sentence must be fully performed. Two traps '
+      + 'define Oregon: TRAFFIC offenses including DUII can NEVER be set aside (a completed DUII diversion '
+      + 'cannot either), and a strict cleanliness lookback counts even already-set-aside convictions against '
+      + 'you. Marijuana has its own fast paths (ORS 137.226).',
     keyDates: [
       {
-        label: 'SB 397 set-aside overhaul takes effect (ORS 137.225)',
+        label: 'SB 397 set-aside overhaul effective (ORS 137.225)',
         date: '2022-01-01',
         kind: 'effective',
-        note: 'Shortened waits (Class B felony 20 yrs -> 7 yrs, etc.) and eliminated the court filing fee. Made many older convictions newly eligible — a key "you may already qualify" fact.',
+        note: 'Shortened the waits (Class B felony to 7 years, etc.), eliminated the court filing fee, and made grant presumptive. Many older convictions became newly eligible — a key "you may already qualify" fact.',
       },
       {
-        label: 'Amendment: expired money-judgment obligations count as sentence-complete',
-        date: '2025',
-        kind: 'effective',
-        note: 'Chapter 395 of 2025. Wave 6 gives the year only. Unpaid old LFOs whose money judgments have expired no longer block a set-aside.',
+        label: 'Pre-7/1/2015 sub-ounce marijuana fine obligations expire (2025 c.395)',
+        date: '2025-09-26',
+        kind: 'operative',
+        note: 'The 2025 c.395 session note: monetary obligations on pre-7/1/2015 sub-ounce marijuana municipal/justice-court judgments expired on this date and are deemed satisfied for set-aside purposes — those unpaid fines no longer block the sentence-completion gate.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the Oregon State Police record-check / fingerprint fee amount. Wave 6 flags a conflict: $33 (Powell Law) vs $80 (fingerprint-card provisions/others). One OSP fee covers filings across multiple counties. The court filing fee itself was eliminated by SB 397. The fees and feeWaiver fields are null pending this amount; an OSP or circuit-court call is the check.',
-        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
-      },
-      {
-        question:
-          'Confirm the ORS 137.225 dismissal subsection against the current text. Wave 6 flags a known drafting error (an old subsection (9) cross-reference) that made SOME dismissed charges wait conviction-length periods rather than being expungeable anytime; a practitioner article flagged it unfixed as of 2024. The tree treats dismissals/acquittals as expungeable with essentially no wait but names this caveat; confirm the current statute and county practice (Multnomah).',
+          'Oregon Criminal Justice Commission person-felony / person-misdemeanor definitions (OAR crime-category rules) are cross-referenced by ORS 137.225(5)/(6) but not pulled — the tree asks the person to self-assess "person felony." Pull the OAR crime-category list before any UI claims a definitive person-felony determination.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the 2025 chapter 395 amendment (expired money-judgment obligations count as sentence-complete) and the county backlog reality (~2 years, practitioner-documented). The tree tells people old expired-judgment LFOs no longer block them and sets an honest timeline expectation; confirm both against current practice.',
+          'Oregon State Police criminal-record-check fee amount for conviction set-aside motions: ORS 137.225(2)(d) sets it at OSP actual cost (capped), one fee total across counties, but the dollar amount is in OSP practice, not the statute. Confirm the current amount (phone tier).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'ORS 166.429 (the Class B felony carve-out that stays excluded) and ORS 475.896 (the drug-enforcement-misdemeanor possession excluded from the cleanliness lookback) were not pulled — cite-only until confirmed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'ORS 475C.397 (a separate marijuana conviction set-aside route referenced by the 2025 c.395 material) was not pulled — flag as a possible parallel path to 137.226 and confirm whether it offers broader or different relief.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'ORS 163A.140 / 163A.145 / 163A.150 (the sex-offender reporting-relief mechanics that open the (6)(A) sex-crime exception) were not pulled — cite-only; the tree asks whether reporting relief was granted rather than screening its criteria.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'The exact delta of 2025 c.349 versus the prior ORS 137.225 text is integrated into this 2025-edition print; note only — confirm no substantive change to the encoded waits/exclusions was missed.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Juvenile set-aside (ORS 419A series) was not pulled — out of scope for this pass; route juvenile matters to counsel.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Or. Rev. Stat. § 137.225 (set-aside; SB 397 of 2021 eff. 2022; ch. 395 of 2025; waits and exclusions)', url: null, retrievedOn: null },
-      { id: 'Or. Rev. Stat. § 475C.397 (marijuana conviction set-aside; anytime, no fees, no fingerprints)', url: null, retrievedOn: null },
+      { id: 'Or. Rev. Stat. § 137.225 (set aside conviction/arrest/charge; (1) waits and filing rules, (2) fees/fingerprints/objection window, (3) grant presumption and clear-and-convincing state burden, (5) eligible convictions, (6) exclusions incl. sex-crime gates, (7) traffic exclusion + cleanliness lookback, (8) non-conviction exclusions, (9)–(11) effects/unseal; 2025 edition through 2025 c.349, incl. 2025 c.395 note)', url: 'https://www.oregonlegislature.gov/bills_laws/ors/ors137.html', retrievedOn: '2026-07-19' },
+      { id: 'Or. Rev. Stat. § 137.226 (marijuana set-aside fast paths — (1) under-21-at-conviction, 1 year; (2) pre-4/21/2017 conduct reclassified under current law; 2025 edition)', url: 'https://www.oregonlegislature.gov/bills_laws/ors/ors137.html', retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -12703,147 +12766,429 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_or' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_or' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_or' },
-            { label: 'Diversion completed', value: 'deferred', next: 'diversion_duii_or' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_or' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_type_or' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_type_or' },
+            { label: 'Diversion program', value: 'deferred', next: 'deferred_type_or' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition_or' }
           ]
         },
-        excluded_or: {
-          type: 'boolean',
-          text: 'Was the offense any of these: a Class A felony, a person felony, a sex offense, an offense with a child or elderly victim, or a traffic offense (including DUII)?',
-          yes: 'ineligible_excluded_or',
-          no: 'level_or'
-        },
-        level_or: {
+        // ---- route a conviction by special type first ----
+        conv_type_or: {
           type: 'choice',
-          text: 'What was the level of the conviction?',
+          text: 'Which best describes the conviction?',
           options: [
-            { label: 'Class B felony (non-person, non-firearms)', value: 'felonyB', next: 'felonyB_date_or' },
-            { label: 'Class C felony', value: 'felonyC', next: 'felonyC_date_or' },
-            { label: 'Class A misdemeanor', value: 'misdA', next: 'misdA_date_or' },
-            { label: 'Class B or C misdemeanor, violation, or contempt', value: 'misdBC', next: 'misdBC_date_or' },
+            { label: 'A traffic offense (including DUII)', value: 'traffic', next: 'ineligible_traffic_or' },
+            { label: 'A marijuana offense (possession, delivery, or manufacture)', value: 'marijuana', next: 'mj_conviction_or' },
+            { label: 'Another kind of conviction (or a contempt finding)', value: 'standard', next: 'conv_excluded_or' }
+          ]
+        },
+        // ---- Channel: general 137.225 conviction ----
+        conv_excluded_or: {
+          type: 'boolean',
+          text: 'Was the offense any of these excluded categories: a Class A felony; a PERSON felony (as classified by the Criminal Justice Commission) or ORS 166.429; criminal mistreatment of a victim 65+ or a child; endangering the welfare of a minor constituting child abuse; criminally negligent homicide; or assault in the third degree under ORS 163.165(1)(h)?',
+          yes: 'ineligible_excluded_or',
+          no: 'conv_sex_or'
+        },
+        conv_sex_or: {
+          type: 'boolean',
+          text: 'Was the offense a sex crime?',
+          yes: 'sex_gate_or',
+          no: 'conv_supervision_or'
+        },
+        sex_gate_or: {
+          type: 'choice',
+          text: 'Sex crimes are excluded except two narrow situations. Does either apply?',
+          options: [
+            { label: 'It is an ORS 163A.140(1)(a)-listed crime, you were judicially RELIEVED of sex-offender reporting (163A.145/.150), and you have no other barred convictions', value: 'relief', next: 'conv_supervision_or' },
+            { label: 'It is a Class C felony meeting the close-in-age gate (you under 16 at the offense, victim 12+, lack of consent due solely to age, all counts the same victim, no other barred convictions)', value: 'closein', next: 'sex_closein_or' },
+            { label: 'Neither of those applies', value: 'neither', next: 'ineligible_sex_or' }
+          ]
+        },
+        sex_closein_or: {
+          type: 'boolean',
+          text: 'Was the age gap between you and the victim under 2 years 180 days (automatic), OR between 2 years 180 days and 3 years 180 days with a court "interests of justice" finding?',
+          yes: 'conv_supervision_or',
+          no: 'ineligible_sex_or'
+        },
+        conv_supervision_or: {
+          type: 'boolean',
+          text: 'Have you fully completed your sentence — including any probation, parole, or post-prison supervision — so that you are no longer under supervision on this case? (Old unpaid marijuana fines whose judgments have expired count as satisfied.)',
+          yes: 'conv_revoked_or',
+          no: 'ineligible_supervision_or'
+        },
+        conv_revoked_or: {
+          type: 'boolean',
+          text: 'Was your probation on this case ever revoked?',
+          yes: 'conv_revoked_date_or',
+          no: 'conv_level_or'
+        },
+        conv_revoked_date_or: {
+          type: 'date',
+          text: 'What is the date your probation was revoked?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'probation revocation — the wait becomes the later of 3 years from revocation or the (1)(b) period (ORS 137.225(1)(e))' },
+            nextPass: 'conv_level_or',
+            nextFail: 'waiting_revocation_or'
+          }
+        },
+        conv_level_or: {
+          type: 'choice',
+          text: 'What was the level of the conviction? (If a court reduced the offense to a lower class, use the reduced class — Oregon measures the wait by the reduced level.)',
+          options: [
+            { label: 'Class B felony', value: 'felonyB', next: 'felonyB_wait_or' },
+            { label: 'Class C felony, or contempt for violating an order related to abuse or a person crime', value: 'felonyC', next: 'felonyC_wait_or' },
+            { label: 'Class A misdemeanor', value: 'misdA', next: 'misdA_wait_or' },
+            { label: 'Class B or C misdemeanor, violation, or other contempt', value: 'misdBC', next: 'misdBC_wait_or' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_or' }
           ]
         },
-        diversion_duii_or: {
+        felonyB_wait_or: {
+          type: 'date',
+          text: 'What is the LATER of: the date you were convicted, or the date you were released from imprisonment on this case?',
+          validation: {
+            period: { amount: 7, unit: 'years', anchor: 'the later of conviction or release (ORS 137.225(1)(b) — Class B felony)' },
+            nextPass: 'felonyB_lookback_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        felonyC_wait_or: {
+          type: 'date',
+          text: 'What is the LATER of: the date you were convicted, or the date you were released from imprisonment on this case?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of conviction or release (ORS 137.225(1)(b) — Class C felony / abuse-order contempt)' },
+            nextPass: 'felonyC_lookback_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        misdA_wait_or: {
+          type: 'date',
+          text: 'What is the LATER of: the date you were convicted, or the date you were released from custody on this case?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'the later of conviction or release (ORS 137.225(1)(b) — Class A misdemeanor)' },
+            nextPass: 'misdA_lookback_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        misdBC_wait_or: {
+          type: 'date',
+          text: 'What is the LATER of: the date you were convicted, or the date you were released from custody on this case?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'the later of conviction or release (ORS 137.225(1)(b) — Class B/C misdemeanor, violation, other contempt)' },
+            nextPass: 'misdBC_lookback_or',
+            nextFail: 'waiting_or'
+          }
+        },
+        // Cleanliness lookback ((7)(a)(B)/(b)): counts every other conviction in
+        // the window — including SET-ASIDE and same-episode ones — except MV
+        // violations and 475.896, and forgives a SINGLE non-MV violation.
+        felonyB_lookback_or: {
+          type: 'choice',
+          text: 'In the 7 years immediately before now, how many OTHER convictions do you have — counting already-set-aside convictions and same-incident convictions, but NOT motor-vehicle violations or ORS 475.896 drug-possession?',
+          options: [
+            { label: 'None', value: 'none', next: 'conv_objection_or' },
+            { label: 'Just one, and it was a non-traffic VIOLATION', value: 'one_violation', next: 'conv_objection_or' },
+            { label: 'One or more (anything other than a single violation)', value: 'other', next: 'ineligible_lookback_or' }
+          ]
+        },
+        felonyC_lookback_or: {
+          type: 'choice',
+          text: 'In the 5 years immediately before now, how many OTHER convictions do you have — counting already-set-aside convictions and same-incident convictions, but NOT motor-vehicle violations or ORS 475.896 drug-possession?',
+          options: [
+            { label: 'None', value: 'none', next: 'conv_objection_or' },
+            { label: 'Just one, and it was a non-traffic VIOLATION', value: 'one_violation', next: 'conv_objection_or' },
+            { label: 'One or more (anything other than a single violation)', value: 'other', next: 'ineligible_lookback_or' }
+          ]
+        },
+        misdA_lookback_or: {
+          type: 'choice',
+          text: 'In the 3 years immediately before now, how many OTHER convictions do you have — counting already-set-aside convictions and same-incident convictions, but NOT motor-vehicle violations or ORS 475.896 drug-possession?',
+          options: [
+            { label: 'None', value: 'none', next: 'conv_objection_or' },
+            { label: 'Just one, and it was a non-traffic VIOLATION', value: 'one_violation', next: 'conv_objection_or' },
+            { label: 'One or more (anything other than a single violation)', value: 'other', next: 'ineligible_lookback_or' }
+          ]
+        },
+        misdBC_lookback_or: {
+          type: 'choice',
+          text: 'In the 1 year immediately before now, how many OTHER convictions do you have — counting already-set-aside convictions and same-incident convictions, but NOT motor-vehicle violations or ORS 475.896 drug-possession?',
+          options: [
+            { label: 'None', value: 'none', next: 'conv_objection_or' },
+            { label: 'Just one, and it was a non-traffic VIOLATION', value: 'one_violation', next: 'conv_objection_or' },
+            { label: 'One or more (anything other than a single violation)', value: 'other', next: 'ineligible_lookback_or' }
+          ]
+        },
+        conv_objection_or: {
           type: 'boolean',
-          text: 'Was this a DUII (driving-under-the-influence) diversion?',
-          yes: 'ineligible_duii_or',
-          no: 'nonconv_or'
+          text: 'Do you expect the prosecutor (district attorney) to OBJECT to your motion?',
+          yes: 'conv_objection_grounds_or',
+          no: 'eligible_conviction_or'
         },
-        felonyB_date_or: {
+        conv_objection_grounds_or: {
+          type: 'choice',
+          text: 'What would the objection be based on?',
+          options: [
+            { label: 'Only unpaid fines, debts, civil/monetary matters, or motor-vehicle violations', value: 'debts_only', next: 'eligible_conviction_objection_debts_or' },
+            { label: 'Criminal behavior or character-related regulatory concerns (a public-safety argument)', value: 'safety', next: 'eligible_conviction_hearing_or' }
+          ]
+        },
+        // ---- Channel: marijuana fast paths (137.226) ----
+        mj_conviction_or: {
+          type: 'choice',
+          text: 'Tell us about the marijuana conviction:',
+          options: [
+            { label: 'You were UNDER 21 when you were convicted', value: 'under21', next: 'mj_under21_or' },
+            { label: 'The conduct was before April 21, 2017', value: 'pre2017', next: 'mj_pre2017_or' },
+            { label: 'Neither — a more recent conviction, and you were 21 or older', value: 'other_mj', next: 'conv_excluded_or' }
+          ]
+        },
+        mj_under21_or: {
+          type: 'boolean',
+          text: 'Have you performed your sentence, and have you had no other convictions since (not counting motor-vehicle violations)?',
+          yes: 'mj_under21_date_or',
+          no: 'conv_excluded_or'
+        },
+        mj_under21_date_or: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you convicted, or released from custody — whichever was later?',
+          text: 'What is the date of the judgment of conviction?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait, supervision complete (ORS 137.225 — Class B felony)' },
-            nextPass: 'eligible_conviction_or',
-            nextFail: 'waiting_or'
+            period: { amount: 1, unit: 'years', anchor: 'the judgment of conviction (ORS 137.226(1) — under-21 marijuana, 1 year)' },
+            nextPass: 'eligible_mj_under21_or',
+            nextFail: 'waiting_mj_or'
           }
         },
-        felonyC_date_or: {
+        mj_pre2017_or: {
+          type: 'boolean',
+          text: 'Was this a pre-July-1-2015 conviction for possession of less than an ounce, with only an unpaid fine still outstanding?',
+          yes: 'eligible_mj_pre2015_fine_or',
+          no: 'eligible_mj_pre2017_reclass_or'
+        },
+        // ---- Channel: non-conviction (1)(c)/(d) ----
+        nonconv_type_or: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'The charge was dismissed, or you were acquitted', value: 'acquittal_dismissal', next: 'nonconv_traffic_or' },
+            { label: 'You were arrested or cited but NO charge was ever filed, and the prosecutor declined', value: 'declination', next: 'nonconv_declination_date_or' }
+          ]
+        },
+        nonconv_traffic_or: {
+          type: 'boolean',
+          text: 'Was the dismissed or acquitted matter a traffic VIOLATION citation, or a DUII?',
+          yes: 'ineligible_nonconv_traffic_or',
+          no: 'nonconv_pending_or'
+        },
+        nonconv_pending_or: {
+          type: 'boolean',
+          text: 'Do you have any pending criminal charge, or a pending contempt-of-court charge for violating an order related to abuse?',
+          yes: 'ineligible_pending_or',
+          no: 'eligible_nonconv_or'
+        },
+        nonconv_declination_date_or: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you convicted, or released from custody — whichever was later?',
+          text: 'What is the date the prosecutor declined to file (or the date the arrest/citation record was made, if later)?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait, supervision complete (ORS 137.225 — Class C felony)' },
-            nextPass: 'eligible_conviction_or',
-            nextFail: 'waiting_or'
+            period: { amount: 60, unit: 'days', anchor: 'the prosecutor\'s declination (ORS 137.225(1)(c) — no accusatory instrument filed, 60 days)' },
+            nextPass: 'eligible_declination_or',
+            nextFail: 'waiting_declination_or'
           }
         },
-        misdA_date_or: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When were you convicted, or released from custody — whichever was later?',
-          validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait (ORS 137.225 — Class A misdemeanor)' },
-            nextPass: 'eligible_conviction_or',
-            nextFail: 'waiting_or'
-          }
-        },
-        misdBC_date_or: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When were you convicted, or released from custody — whichever was later?',
-          validation: {
-            period: { amount: 1, unit: 'years', anchor: 'conviction or release, whichever later, no other convictions during the wait (ORS 137.225 — Class B/C misdemeanor, violation, contempt)' },
-            nextPass: 'eligible_conviction_or',
-            nextFail: 'waiting_or'
-          }
+        // ---- Channel: diversion ----
+        deferred_type_or: {
+          type: 'choice',
+          text: 'What kind of diversion was it?',
+          options: [
+            { label: 'A DUII diversion', value: 'duii', next: 'ineligible_duii_diversion_or' },
+            { label: 'Another diversion that ended in the charge being dismissed', value: 'other', next: 'nonconv_pending_or' }
+          ]
         }
       },
       results: {
-        unknown_disposition: {
+        unknown_disposition_or: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
           message: 'Oregon treats convictions and non-convictions differently, and the outcome decides the whole route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an Oregon State Police record check will show the disposition; Legal Aid Services of Oregon (1-800-351-7248) can help you read it.',
           remedy: 'Get Your Record First (court paperwork / OSP)',
           citation: 'Or. Rev. Stat. § 137.225 (the route depends on the disposition)'
         },
-        eligible_conviction_or: {
-          status: 'eligible',
-          title: 'Waiting Period Met — Set-Aside Available',
-          message: 'Based on your dates, your waiting period under ORS 137.225 has passed (7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, 1 for lesser misdemeanors and violations), you have had no other convictions during that time, and any supervision is complete. Two things worth knowing: the 2022 SB 397 overhaul made many older convictions newly eligible — so this may be newer than you think — and since a 2025 amendment, old unpaid fines whose money judgments have expired no longer block you. Filing is FREE; only a State Police record-check fee applies (the amount is something we are confirming), and one such fee covers filings in multiple counties. Expect the county to be slow — backlogs can run up to about two years. Legal Aid Services of Oregon can help.',
-          remedy: 'Set-aside petition (ORS 137.225) — free to file',
-          citation: 'Or. Rev. Stat. § 137.225'
-        },
-        nonconv_or: {
-          status: 'eligible',
-          title: 'No Conviction — Expungeable (One Caveat to Confirm)',
-          message: 'Because your case ended without a conviction — dismissed, acquitted, or a non-DUII diversion — Oregon generally lets you set it aside with essentially no waiting period (arrests that never led to a charge have a short 60-day wait). Filing is free apart from the State Police record-check fee. One honest caveat: there is a known drafting error in ORS 137.225 that, as of 2024, some practitioners said could make certain DISMISSED charges wait a conviction-length period in some counties — it is on our list to verify against the current statute. So if a clerk pushes back on timing, that is why; Legal Aid Services of Oregon can help you navigate it.',
-          remedy: 'Set-aside of a non-conviction (ORS 137.225) — confirm the dismissal-timing caveat',
-          citation: 'Or. Rev. Stat. § 137.225'
-        },
-        ineligible_duii_or: {
+        ineligible_traffic_or: {
           status: 'ineligible',
-          title: 'DUII Diversion — Not Eligible to Set Aside',
-          message: 'This is one of Oregon\'s traps, and it catches people. Even though you completed a DUII diversion and the charge was dismissed, Oregon does NOT allow a DUII diversion dismissal to be set aside — DUII is treated as a traffic offense, and those are excluded whether they end in conviction or diversion. So there is no set-aside route here. If you have OTHER, non-traffic offenses on your record, those may still qualify on their own; and it is worth confirming your exact disposition with Legal Aid Services of Oregon, since diversion records are handled unusually.',
-          remedy: 'None (DUII diversion is excluded) — screen any non-traffic offenses separately',
-          citation: 'Or. Rev. Stat. § 137.225'
-        },
-        waiting_or: {
-          status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Oregon\'s set-aside waiting periods run from your conviction or release, whichever is later, with no other convictions in between: 7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, and 1 year for lesser misdemeanors and violations. Based on your dates, yours has not passed yet. When it does, filing is free apart from a State Police record-check fee. Legal Aid Services of Oregon can help you prepare.',
-          remedy: 'Wait for the ORS 137.225 period',
-          citation: 'Or. Rev. Stat. § 137.225'
+          title: 'Traffic Offenses (Including DUII) Cannot Be Set Aside',
+          message: 'This is Oregon\'s hardest line: a state or municipal TRAFFIC OFFENSE conviction can never be set aside (ORS 137.225(7)(a)(A)) — and because a DUII is treated as a traffic offense, a DUII CONVICTION is permanently barred, with no waiting period that changes it. There is no set-aside route for this conviction. If you have OTHER, non-traffic offenses on your record, those may still qualify on their own tracks, and a Governor\'s pardon is the only avenue for the traffic conviction itself. Legal Aid Services of Oregon can help you screen the rest of your record.',
+          remedy: 'None (traffic/DUII convictions are permanently excluded) — screen non-traffic offenses separately',
+          citation: 'Or. Rev. Stat. § 137.225(7)(a)(A)'
         },
         ineligible_excluded_or: {
           status: 'ineligible',
-          title: 'This Offense Is Excluded',
-          message: 'Oregon excludes several categories from set-aside: Class A felonies, person felonies, sex offenses, offenses with a child or elderly victim, and traffic offenses including DUII. No waiting period changes that for the excluded offense. Two things worth knowing: marijuana convictions have their own separate path (ORS 475C.397) that is available anytime with no fees and no fingerprints, so if yours was marijuana-related, ask about that; and a Governor\'s pardon remains a route for otherwise-excluded offenses. Legal Aid Services of Oregon can help you check.',
-          remedy: 'None for the excluded offense — ask about the marijuana path (475C.397) or a pardon',
-          citation: 'Or. Rev. Stat. § 137.225'
+          title: 'This Offense Is Excluded From Set-Aside',
+          message: 'Oregon excludes several categories from set-aside (ORS 137.225(6)): Class A felonies; person felonies (as the Criminal Justice Commission classifies them) and ORS 166.429; criminal mistreatment of an elderly (65+) or child victim; endangering the welfare of a minor that constitutes child abuse; criminally negligent homicide; and third-degree assault under 163.165(1)(h). No waiting period changes that for an excluded offense. A Governor\'s pardon remains a route for otherwise-excluded convictions, and if any part of your record is NOT excluded, screen those separately. Legal Aid Services of Oregon can help.',
+          remedy: 'None for the excluded offense — ask about a pardon; screen non-excluded offenses',
+          citation: 'Or. Rev. Stat. § 137.225(6)'
+        },
+        ineligible_sex_or: {
+          status: 'ineligible',
+          title: 'This Sex Crime Is Excluded',
+          message: 'Oregon excludes sex crimes from set-aside except two narrow situations, and neither applies here: (A) a specific listed crime where a court has RELIEVED you of sex-offender reporting and you have no other barred convictions, or (B) a Class C felony meeting a precise close-in-age gate. Because your offense fits neither, the set-aside route is closed. If you believe you might qualify for reporting relief (ORS 163A.140/.145/.150), that is the door to the (A) exception and is worth exploring with counsel. Legal Aid Services of Oregon can help you check.',
+          remedy: 'None (sex crime, outside both narrow gates) — explore reporting relief with counsel',
+          citation: 'Or. Rev. Stat. § 137.225(6)'
+        },
+        ineligible_supervision_or: {
+          status: 'waiting',
+          title: 'Finish Your Sentence First',
+          message: 'Oregon requires that your sentence be FULLY complied with and performed before a conviction can be set aside — if you are still under any supervision (probation, parole, or post-prison supervision) on this case, you are not yet eligible (ORS 137.225(1)(a)). This is not a permanent no: once you complete supervision and the waiting period for your offense level has run, the route opens. One relief to know: old unpaid marijuana fines whose money judgments have expired count as satisfied, so those do not hold you here. Legal Aid Services of Oregon can help you time it.',
+          remedy: 'Complete all supervision, then the level-based waiting period',
+          citation: 'Or. Rev. Stat. § 137.225(1)(a)'
+        },
+        waiting_revocation_or: {
+          status: 'waiting',
+          title: 'Revoked Probation Adds a Wait',
+          message: 'When probation is revoked, Oregon lengthens the wait: you must wait the LATER of 3 years from the revocation or the normal period for your offense level (ORS 137.225(1)(e)). Based on your revocation date, the 3-year mark has not passed yet. Once it does — and the level-based period has also run, with your record clean in the lookback window — the set-aside route opens. Legal Aid Services of Oregon can help you work out the exact date.',
+          remedy: 'Wait the later of 3 years from revocation or the level period',
+          citation: 'Or. Rev. Stat. § 137.225(1)(e)'
         },
         complex_level_or: {
           status: 'complex',
           title: 'We Need the Conviction Level',
           message: 'In Oregon the waiting period depends on the exact level — Class B felony (7 years), Class C felony (5), Class A misdemeanor (3), or lesser (1). Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and an Oregon State Police record check will show it. Legal Aid Services of Oregon can help you read it.',
           remedy: 'Get the Conviction Level First (court paperwork / OSP)',
-          citation: 'Or. Rev. Stat. § 137.225'
+          citation: 'Or. Rev. Stat. § 137.225(1)(b)'
+        },
+        waiting_or: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'Oregon\'s set-aside waiting periods run from the LATER of your conviction or your release from custody: 7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, and 1 year for lesser misdemeanors, violations, and contempt (ORS 137.225(1)(b)). Based on your dates, yours has not passed yet. When it does, filing is free apart from a State Police record-check fee, and once granted you may lawfully deny the conviction ever happened. Legal Aid Services of Oregon can help you prepare.',
+          remedy: 'Wait for the level-based period (later of conviction or release)',
+          citation: 'Or. Rev. Stat. § 137.225(1)(b)'
+        },
+        ineligible_lookback_or: {
+          status: 'ineligible',
+          title: 'The Cleanliness Lookback Blocks This — For Now',
+          message: 'Here is Oregon\'s signature trap. Even past the waiting period, you must have had NO other conviction in the lookback window (the same length as your wait — 7/5/3/1 years immediately before filing), and this window counts things people do not expect: same-incident convictions count, and even convictions you already had SET ASIDE still count against you (ORS 137.225(7)(a)(B), (7)(b)). The one forgiveness is a SINGLE non-traffic violation; motor-vehicle violations and ORS 475.896 drug-possession are excluded from the count. Because you have more than that in the window, the set-aside is blocked until those convictions age out of it. Legal Aid Services of Oregon can help you map the window.',
+          remedy: 'Wait until the lookback window clears (set-aside and same-episode convictions count)',
+          citation: 'Or. Rev. Stat. § 137.225(7)(a)(B), (7)(b)'
+        },
+        eligible_conviction_or: {
+          status: 'eligible',
+          title: 'Waiting Period Met — Set-Aside Available (Free to File)',
+          message: 'Based on your dates, your ORS 137.225 waiting period has passed (7 years for a Class B felony, 5 for a Class C, 3 for a Class A misdemeanor, 1 for lesser offenses), your sentence is fully performed, and your record is clean in the lookback window. File the motion in the court where you were convicted. Filing is FREE — the court fee is expressly waived (ORS 137.225(1)(g)); you send a fingerprint card to the State Police and pay one State Police record-check fee (one fee covers filings in multiple counties). Because there is no expected objection, the court SHALL grant it (ORS 137.225(3)(b)). Once set aside, you are deemed never to have been convicted, arrested, or charged, and may answer accordingly on any question. Expect the county to be slow — backlogs can run up to about two years. Legal Aid Services of Oregon can help.',
+          remedy: 'Set-aside motion (ORS 137.225) — free to file, shall-grant absent objection',
+          citation: 'Or. Rev. Stat. § 137.225(1)(b), (3)(b)'
+        },
+        eligible_conviction_objection_debts_or: {
+          status: 'eligible',
+          title: 'Eligible — And Unpaid Debts Cannot Defeat It',
+          message: 'You meet the waiting period and the cleanliness lookback, so you are eligible — and the basis you expect the prosecutor to raise cannot legally defeat the motion. When the state objects, the court SHALL still grant the set-aside UNLESS it makes written findings, by CLEAR AND CONVINCING evidence, that your post-conviction circumstances and behavior create a public-safety risk — and it may consider ONLY criminal behavior or character-related regulatory violations. It expressly may NOT weigh nonpunitive civil liability, monetary obligations (unpaid fines or debts), or motor-vehicle violations (ORS 137.225(3)(a)). So an objection resting only on money owed does not meet the standard. Filing is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help you make this point at the hearing.',
+          remedy: 'Set-aside despite a debt-based objection (ORS 137.225(3)(a)) — money owed is not a lawful ground',
+          citation: 'Or. Rev. Stat. § 137.225(3)(a)'
+        },
+        eligible_conviction_hearing_or: {
+          status: 'complex',
+          title: 'Eligible — But Expect a Hearing on a Public-Safety Objection',
+          message: 'You meet the waiting period and the cleanliness lookback, so you are eligible to move for a set-aside. Because you expect the prosecutor to object on public-safety grounds, there will be a hearing — but the burden is on the STATE, not you: the court SHALL grant the set-aside UNLESS the prosecutor proves by CLEAR AND CONVINCING evidence that your post-conviction circumstances and behavior create a public-safety risk, considering only criminal behavior or character-related regulatory violations (ORS 137.225(3)(a)). The victim may give a statement. This is a strong presumption in your favor, but a contested hearing is one to bring with counsel. Filing itself is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help.',
+          remedy: 'Set-aside with a contested hearing (ORS 137.225(3)(a)) — state carries the clear-and-convincing burden',
+          citation: 'Or. Rev. Stat. § 137.225(3)(a)'
+        },
+        eligible_mj_under21_or: {
+          status: 'eligible',
+          title: 'Under-21 Marijuana Conviction — Set-Aside After One Year',
+          message: 'Oregon gives a fast path for a marijuana offense you were convicted of while under 21: you can move to set it aside just ONE YEAR after the judgment, as long as you have performed your sentence and have had no other convictions since (motor-vehicle violations do not count) — ORS 137.226(1). By your dates you are past that year. Filing is free apart from the State Police record-check fee, and once set aside you may lawfully deny the conviction. Legal Aid Services of Oregon can help you file.',
+          remedy: 'Under-21 marijuana set-aside (ORS 137.226(1)) — 1 year from judgment',
+          citation: 'Or. Rev. Stat. § 137.226(1)'
+        },
+        waiting_mj_or: {
+          status: 'waiting',
+          title: 'Marijuana Set-Aside — One Year Not Yet Passed',
+          message: 'The under-21 marijuana fast path lets you set the conviction aside one year after the judgment, provided you have performed your sentence and had no other convictions since (ORS 137.226(1)). Based on your judgment date, that one year has not passed yet. Once it does, filing is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help you prepare.',
+          remedy: 'Wait for one year from the judgment (ORS 137.226(1))',
+          citation: 'Or. Rev. Stat. § 137.226(1)'
+        },
+        eligible_mj_pre2015_fine_or: {
+          status: 'eligible',
+          title: 'Pre-2015 Sub-Ounce Marijuana — Old Fine Deemed Satisfied',
+          message: 'Your conviction is a pre-July-1-2015 possession of less than an ounce, and the only thing outstanding is an old fine. A 2025 change (the 2025 c.395 session note) expired those pre-2015 sub-ounce marijuana money obligations as of September 26, 2025, and deems them satisfied for set-aside purposes — so the unpaid fine no longer blocks you at the sentence-completion gate. Combined with the marijuana reclassification rule (ORS 137.226(2)), this old conviction is set-aside eligible now. Filing is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help you file.',
+          remedy: 'Set-aside a pre-2015 sub-ounce marijuana conviction (2025 c.395 fine override + ORS 137.226(2))',
+          citation: 'Or. Rev. Stat. § 137.226(2) (with the 2025 c.395 note)'
+        },
+        eligible_mj_pre2017_reclass_or: {
+          status: 'eligible',
+          title: 'Pre-2017 Marijuana — Reclassify Under Current Law First',
+          message: 'For marijuana conduct before April 21, 2017, Oregon does not use the old classification: for set-aside eligibility the offense is treated AS IF current law applied — or as a Class C misdemeanor if the conduct is no longer a crime (ORS 137.226(2)). That reclassification usually drops the offense into a much shorter waiting tier than the original charge carried, so many pre-2017 marijuana convictions are eligible now. The practical step is to reclassify first, then apply the (shorter) wait for the current-law class. Filing is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help you work out the current-law class and file.',
+          remedy: 'Reclassify a pre-2017 marijuana conviction under current law, then set aside (ORS 137.226(2))',
+          citation: 'Or. Rev. Stat. § 137.226(2)'
+        },
+        eligible_nonconv_or: {
+          status: 'eligible',
+          title: 'No Conviction — Set-Aside Available Any Time',
+          message: 'Because your case ended without a conviction — an acquittal or a dismissal (including a completed non-DUII diversion that was dismissed) — Oregon lets you set it aside AT ANY TIME, with no waiting period (ORS 137.225(1)(d)), as long as you have no pending charge. The court SHALL grant it. Filing is free apart from the State Police record-check fee. Once set aside, the arrest, citation, and charge records are sealed, and you are deemed never to have been arrested, cited, or charged — you may answer accordingly on any question. Legal Aid Services of Oregon can help you file.',
+          remedy: 'Set-aside of a non-conviction (ORS 137.225(1)(d)) — any time, shall-grant',
+          citation: 'Or. Rev. Stat. § 137.225(1)(d)'
+        },
+        ineligible_nonconv_traffic_or: {
+          status: 'ineligible',
+          title: 'A Dismissed Traffic Matter Is Excluded',
+          message: 'Oregon excludes dismissed traffic-VIOLATION citations from set-aside, and it excludes a DUII arrest or citation that was dismissed through completion of DUII DIVERSION (ORS 137.225(8)) — the "second DUII bar," where finishing diversion still leaves a permanent record. So this particular matter cannot be set aside. If you have OTHER, non-traffic non-convictions, those can be set aside any time. Legal Aid Services of Oregon can help you sort out which records qualify.',
+          remedy: 'None (dismissed traffic/DUII-diversion matter is excluded) — screen non-traffic records',
+          citation: 'Or. Rev. Stat. § 137.225(8)'
+        },
+        ineligible_pending_or: {
+          status: 'ineligible',
+          title: 'A Pending Charge Blocks This — For Now',
+          message: 'Oregon will not set aside a record while you have a pending criminal charge, or a pending contempt-of-court charge for violating an order related to abuse (ORS 137.225(7)(a)(C)). This is a "for now," not a permanent no: once the pending matter resolves, a non-conviction can be set aside any time and a conviction on its normal schedule. Legal Aid Services of Oregon can help you come back to this once the pending case is closed.',
+          remedy: 'Resolve the pending charge first, then re-apply',
+          citation: 'Or. Rev. Stat. § 137.225(7)(a)(C)'
+        },
+        eligible_declination_or: {
+          status: 'eligible',
+          title: 'Arrest With No Charge Filed — Set-Aside After 60 Days',
+          message: 'When you were arrested or cited but no accusatory instrument was ever filed and the prosecutor declined, you can move to set the record aside 60 days after the declination, in the county of the arrest (ORS 137.225(1)(c)) — and by your date that has passed. The court SHALL grant it, and filing is free apart from the State Police record-check fee. One honest caveat specific to this route: a declination set-aside can be UNSEALED by the prosecutor within the statute of limitations if they later decide to prosecute, with written notice to you (ORS 137.225(11)(b)). That is uncommon, but it is the one way this kind of set-aside is not fully final. Legal Aid Services of Oregon can help you file.',
+          remedy: 'Set-aside of a declined arrest (ORS 137.225(1)(c)) — 60 days; note the unseal caveat',
+          citation: 'Or. Rev. Stat. § 137.225(1)(c), (11)(b)'
+        },
+        waiting_declination_or: {
+          status: 'waiting',
+          title: 'Declined Arrest — 60 Days Not Yet Passed',
+          message: 'For an arrest or citation where no charge was filed and the prosecutor declined, you can move to set the record aside 60 days after the declination (ORS 137.225(1)(c)). Based on your date, those 60 days have not passed yet. Once they do, filing is free apart from the State Police record-check fee, and the court shall grant it — though note a declination set-aside can later be unsealed by the prosecutor within the statute of limitations if they decide to prosecute. Legal Aid Services of Oregon can help you file when the time comes.',
+          remedy: 'Wait 60 days from the declination (ORS 137.225(1)(c))',
+          citation: 'Or. Rev. Stat. § 137.225(1)(c)'
+        },
+        ineligible_duii_diversion_or: {
+          status: 'ineligible',
+          title: 'DUII Diversion — Not Eligible to Set Aside',
+          message: 'This is one of Oregon\'s traps, and it catches people. Even though you completed a DUII diversion and the charge was dismissed, Oregon does NOT allow a DUII-diversion dismissal to be set aside (ORS 137.225(8)) — DUII is treated as a traffic offense, and finishing diversion leaves a permanent record. So there is no set-aside route here. If you have OTHER, non-traffic offenses on your record, those may still qualify on their own; and it is worth confirming your exact disposition with Legal Aid Services of Oregon, since diversion records are handled unusually.',
+          remedy: 'None (DUII diversion is excluded) — screen any non-traffic offenses separately',
+          citation: 'Or. Rev. Stat. § 137.225(8)'
         }
       }
     },
     resources: {
       remedies: {
-        expungement: {
+        setAside: {
           name: 'Set Aside a Conviction (ORS 137.225)',
-          formName: 'Oregon Judicial Department set-aside forms',
+          formName: 'Oregon Judicial Department set-aside (motion) forms + OSP fingerprint card',
           formUrl: 'https://www.courts.oregon.gov/forms/Pages/set-aside.aspx',
           steps: [
-            'Confirm your offense is not excluded (Class A / person felonies, sex offenses, child/elder-victim offenses, traffic including DUII). Marijuana convictions use the separate, anytime, free path in ORS 475C.397.',
-            'Check the waiting period for your level (7 / 5 / 3 / 1 years) from conviction or release, whichever is later — SB 397 shortened these, so you may already qualify.',
-            'File in the sentencing court. The court filing fee was eliminated; a State Police record-check fee remains (one fee covers multiple counties).',
-            'Expect a wait — the DA has 120 days to object and county backlogs can run up to about two years. Legal Aid Services of Oregon can help.'
+            'Confirm your offense is not excluded (Class A / person felonies, sex crimes outside the two narrow gates, elder/child-victim offenses; traffic and DUII are permanently barred).',
+            'Check the waiting period for your level (7 / 5 / 3 / 1 years) from the later of conviction or release, confirm your sentence is fully performed, and confirm the cleanliness lookback window is clear (set-aside and same-episode convictions count; a single non-MV violation is forgiven).',
+            'File the motion in the court of conviction (arrest/declination motions go to the county of arrest). Filing is FREE — ORS 21.135 is expressly waived; send a fingerprint card to the State Police.',
+            'The DA has 120 days to object; with no objection the court shall grant. County backlogs can run up to about two years. Legal Aid Services of Oregon can help.'
           ],
-          // null: SB 397 eliminated the filing fee, but the remaining OSP record-check
-          // fee conflicts in the sources ($33 vs $80), so the total is unknown — and
-          // with it, whether any waiver applies.
-          fees: null,
-          feeWaiver: null,
-          courtContact: 'The sentencing court; Oregon State Police for the record check'
+          fees: 'No court filing fee — ORS 21.135 is expressly waived (ORS 137.225(1)(g)). A fingerprint card goes to Oregon State Police with every motion; conviction motions also pay ONE OSP criminal-record-check fee (set by OSP at actual cost, capped, covering filings across multiple counties) — amount unconfirmed (phone tier). The prosecutor may not charge anything (ORS 137.225(2)(e)).',
+          feeWaiver: 'There is no court filing fee to waive. Confirm the OSP record-check fee amount with Oregon State Police; one fee covers multiple counties.',
+          courtContact: 'The court of conviction (arrest/declination motions: the county of arrest); Oregon State Police for the record check'
+        },
+        marijuanaSetAside: {
+          name: 'Marijuana Set-Aside Fast Paths (ORS 137.226)',
+          formName: 'Oregon Judicial Department set-aside (motion) forms',
+          formUrl: 'https://www.courts.oregon.gov/forms/Pages/set-aside.aspx',
+          steps: [
+            'If you were under 21 when convicted of a marijuana offense: move to set it aside one year after the judgment, if your sentence is performed and you have had no other convictions since (ORS 137.226(1)).',
+            'If the conduct was before April 21, 2017: the offense is reclassified under CURRENT law (or as a Class C misdemeanor if no longer a crime) for eligibility — usually a much shorter wait (ORS 137.226(2)).',
+            'Pre-July-1-2015 sub-ounce marijuana fines expired 9/26/2025 (2025 c.395) and are deemed satisfied, so an old unpaid fine does not block you.',
+            'Filing is free apart from the State Police record-check fee. Legal Aid Services of Oregon can help.'
+          ],
+          fees: 'Same as the general set-aside: no court filing fee; the OSP record-check fee applies (amount unconfirmed, phone tier).',
+          feeWaiver: 'No court filing fee to waive; confirm the OSP record-check fee with Oregon State Police.',
+          courtContact: 'The court of conviction; Oregon State Police for the record check'
         }
       },
       legalAid: [

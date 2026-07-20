@@ -12049,59 +12049,121 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       ]
     }
   },
+  // ==========================================================================
+  // KENTUCKY — STATUTE-CITED (verified 2026-07-19). Terminology: EXPUNGEMENT
+  // (but KY's statutory definition is background-check-SCOPED — removal so the
+  // record does not appear on official state-performed background checks, not
+  // physical destruction; keep copy accurate). Diana read from
+  // apps.legislature.ky.gov (retrieved 2026-07-19): KRS 431.073 (2023 ch. 87,
+  // effective UNTIL 4/30/2027), 431.076 (through 2020 ch. 45), 431.078 (through
+  // 2016 ch. 94), 431.079 (through 2019 ch. 188), 218A.275, 218A.276.
+  //
+  // FOUR channels:
+  //   (A) FELONY vacate-and-expunge (431.073) — a motion in the original case.
+  //       (1)(a) enumerated Class D list; (1)(b) same-incident series; (1)(c)
+  //       full pardon; (1)(d) the 2019 expansion: ANY Class D felony (multiple
+  //       allowed) EXCEPT 189A.010/508.032/519.055, abuse of public office, a
+  //       sex offense, an offense against a child, or one causing serious bodily
+  //       injury/death. Wait: 5 yr after sentence OR probation/parole completion,
+  //       whichever LATER. Two burden modes on (1)(d): no objection / 120-day
+  //       silence -> vacate WITHOUT hearing (6); objection -> APPLICANT proves by
+  //       clear and convincing evidence, balancing test (4). TWO-STAGE FEE TRAP:
+  //       $50 filing (10) + $250 expungement fee on grant (11) — installments,
+  //       expungement NOT complete until paid in full. Effects (7)/(8): removed
+  //       from systems, no background-check appearance, no disclosure duty, and
+  //       VOTING RIGHTS RESTORED — lead the felony copy with voting.
+  //   (B) NON-CONVICTION (431.076) — AUTOMATIC opt-out tier (1)(a) for
+  //       dispositions on/after 7/15/2020 (acquittal / all-charges dismissed WITH
+  //       prejudice, NOT a plea-deal dismissal): court expunges at 30 days unless
+  //       the person objects. NOT retroactive. Petition tier (1)(b): 60 days
+  //       after acquittal/with-prejudice; without-prejudice = felony 3 yr / misd
+  //       1 yr; court SHALL grant (3)(a). Never-indicted tier (1)(c): 6 months
+  //       after a grand-jury hold. NEVER expunges DCBS records (4). No fee in the
+  //       text; 431.079 certification does NOT apply to 076.
+  //   (C) MISDEMEANOR/violation/traffic-infraction conviction (431.078): (1)(a)
+  //       single / same-incident -> SHALL; (1)(b) multi-incident -> MAY. Wait 5
+  //       yr; ENHANCEMENT TRAP (4)(d) — an enhanceable offense must age out of its
+  //       enhancement window. $100 fee ($50 nonrefundable).
+  //   (D) DRUG VOIDING feeders: 218A.275 (first-offense possession 1415/1416/1417)
+  //       -> set aside + void + seal, ONCE per lifetime, barred by a prior
+  //       218A.14151 dismissal. 218A.276 (marijuana/synthetic/salvia) -> same
+  //       shape but NO first-offense and NO once-only limit (encode the
+  //       asymmetry). Both feed 431.078's no-wait exception.
+  //   Conviction petitions (073, 078) additionally require the 431.079 KSP+AOC
+  //   certification of eligibility (fee amount is in KSP regulation, not the
+  //   statute -> phone tier). 431.073 current text expires 4/30/2027; successor
+  //   version unpulled (open question a).
+  // ==========================================================================
   KY: {
     code: 'KY',
     name: 'Kentucky',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-19',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-19',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
     terminology:
-      'Kentucky uses EXPUNGEMENT, and almost everything runs through one document: a CERTIFICATE OF '
-      + 'ELIGIBILITY from the State Police / Administrative Office of the Courts (KRS § 431.079), required '
-      + 'before you file a petition under § 431.073 (Class D felonies), § 431.076 (non-convictions), or '
-      + '§ 431.078 (misdemeanors). The certificate costs $40, is valid for only 30 days once issued, and — '
-      + 'this is the dominant practical fact — the State Police say it averages 4-5 MONTHS to process. So '
-      + 'the real advice is: start the certificate first and plan around the wait, even if your eligibility '
-      + 'date is still ahead of you. The one exception is non-convictions since July 15, 2020, which are '
-      + 'automatic and need no certificate. (Drug offenses also have a separate void-and-seal path under '
-      + 'KRS §§ 218A.275(8), 218A.276.)',
+      'Kentucky uses EXPUNGEMENT — but note the statutory definition is background-check-scoped: it means '
+      + 'removal so the record does not appear on official state-performed background checks (KRS § 431.079(3)), '
+      + 'not physical destruction. Four channels. A FELONY is VACATED and expunged by motion in the original '
+      + 'case (§ 431.073) — and a felony expungement RESTORES your voting rights. NON-CONVICTIONS (§ 431.076) '
+      + 'are automatic for acquittals and with-prejudice dismissals on or after July 15, 2020 (the court acts at '
+      + '30 days unless you object), and by petition otherwise. MISDEMEANORS (§ 431.078) are expunged by petition '
+      + 'after 5 years. And DRUG POSSESSION has its own void-and-seal path (§§ 218A.275, 218A.276) with no waiting '
+      + 'period. Conviction petitions (§§ 431.073, 431.078) require a § 431.079 Certificate of Eligibility from '
+      + 'the State Police and AOC; non-conviction petitions do not.',
     keyDates: [
       {
-        label: 'Automatic non-conviction expungement begins (KRS § 431.076)',
+        label: 'Automatic non-conviction expungement begins (KRS § 431.076(1)(a))',
         date: '2020-07-15',
         kind: 'operative',
-        note: 'Acquittals and dismissals-with-prejudice on or after this date are expunged automatically, 30 days after the case ends — no petition, no certificate. Does NOT cover plea-deal dismissals. Older cases use the petition route.',
+        note: 'For dispositions on or after this date, an acquittal or a dismissal-with-prejudice of ALL charges (not in exchange for a guilty plea to another charge) is expunged automatically 30 days after the case ends, unless the person objects. NOT retroactive — earlier dispositions use the petition tier.',
       },
       {
-        label: 'Amendment allowing MULTIPLE Class D felony expungements (KRS § 431.073)',
-        date: '2023-06-29',
-        kind: 'effective',
-        note: 'The 2023 amendment repealed the once-per-lifetime limit; a person may now expunge more than one qualifying Class D felony. Older guides still say once-only — encode from the amended statute. Flagged for confirmation against current text.',
+        label: 'KRS § 431.073 current text effective until this date',
+        date: '2027-04-30',
+        kind: 'operative',
+        note: 'The 2023 ch. 87 text of the felony vacate-and-expunge statute is effective until April 30, 2027; a successor version takes over after that and has not been pulled (open question a). Encode the current text; re-verify the felony path before 4/30/2027.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the full KRS § 431.078 misdemeanor exclusion list. Wave 6 gives 5-year eligibility for most misdemeanors/violations but excludes sex offenses and offenses against children, and flags the full exclusion list as needing the statute text. The tree asks a sex-offense/child-offense exclusion; confirm the complete list.',
+          'SUCCESSOR VERSION of KRS § 431.073: the encoded text is the 2023 ch. 87 version, effective only until April 30, 2027. Pull the successor version and diff the felony vacate-and-expunge rules (list, exclusions, fees, burden modes) before that date — the current print expires.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the 2023 amendment (eff. Jun 29, 2023) to KRS § 431.073 allows expunging MULTIPLE qualifying Class D felonies, not one per lifetime. Wave 6 persona 4 (two Class D felonies, separate incidents) is the verify-then-encode branch and says to encode from the amended statute. The tree does not cap Class D felonies at one; confirm against the current text.',
+          '2024–2026 session sweep for the non-felony sections: § 431.076 is encoded through 2020 ch. 45, § 431.078 through 2016 ch. 94, and § 431.079 through 2019 ch. 188. Confirm no later (2024–2026) public act amended them before any UI copy claims completeness.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the State Police certificate backlog (KSP\'s own page says 4-5 months to process the § 431.079 Certificate of Eligibility) and confirm no automation exists: Wave 6 says SB 290 (automatic expungement) failed in the 2026 session. The tree tells conviction-eligible people to start the certificate first and plan around the wait, and is petition-only for convictions; confirm both facts.',
+          'KSP § 431.079 Certificate of Eligibility fee: the statute sets the certification requirement but the fee AMOUNT is fixed by KSP regulation, not the statute text. Confirm the current amount (phone tier).',
+        blocksFields: ['resources.remedies.certificate.fees'],
+      },
+      {
+        question:
+          'KRS § 27A.099 (the sealing-exception cited in the drug-voiding sealing provisions of §§ 218A.275/218A.276) was not pulled — confirm what access it preserves to sealed drug records.',
         blocksFields: [],
+      },
+      {
+        question:
+          'KRS § 218A.14151 (deferred-prosecution) was not pulled — it is the disqualifier for a § 218A.275 first-offense set-aside (a prior 14151 dismissal bars it). Cite-only feeder; confirm its mechanics.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Whether a § 431.076 non-conviction expungement carries any court filing fee in practice: no fee appears in the statute text and the § 431.079 certification does not apply, so it is encoded as free — confirm at the clerk (phone tier).',
+        blocksFields: ['resources.remedies.nonConviction.fees'],
       },
     ],
     sources: [
-      { id: 'Ky. Rev. Stat. § 431.073 (Class D felony expungement; 5-yr wait; multiple-felony amendment 2023)', url: null, retrievedOn: null },
-      { id: 'Ky. Rev. Stat. § 431.078 (misdemeanor expungement; 5-yr wait; $100 filing fee)', url: null, retrievedOn: null },
-      { id: 'Ky. Rev. Stat. § 431.076 (non-conviction expungement; automatic since Jul 15, 2020)', url: null, retrievedOn: null },
-      { id: 'Ky. Rev. Stat. § 431.079 (Certificate of Eligibility; $40; 30-day validity; KSP/AOC)', url: null, retrievedOn: null },
-      { id: 'Ky. Rev. Stat. §§ 218A.275(8), 218A.276 (drug-offense void-and-seal)', url: null, retrievedOn: null },
+      { id: 'Ky. Rev. Stat. § 431.073 (felony vacate-and-expunge; (1)(a) enumerated Class D list, (1)(b) same-incident series, (1)(c) full pardon, (1)(d) 2019 any-Class-D expansion with exclusions; 5-yr wait; two-burden procedure; $50 + $250 fees; voting restoration; 2023 ch. 87 text effective until 4/30/2027)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Ky. Rev. Stat. § 431.076 (non-conviction expungement; automatic opt-out tier on/after 7/15/2020, petition tier, never-indicted tier; DCBS-records carve-out; through 2020 ch. 45)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Ky. Rev. Stat. § 431.078 (misdemeanor/violation/traffic-infraction expungement; single SHALL / multi MAY; 5-yr wait; enhancement trap (4)(d); $100 fee; through 2016 ch. 94)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Ky. Rev. Stat. § 431.079 (Certificate of Eligibility — KSP + AOC certification required for conviction expungements (073, 078), not for 076; background-check-scoped definition of expungement; through 2019 ch. 188)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Ky. Rev. Stat. § 218A.275 (first-offense possession set-aside/void + seal; once per lifetime; barred by prior 218A.14151 dismissal; 27A.099 sealing exception)', url: null, retrievedOn: '2026-07-19' },
+      { id: 'Ky. Rev. Stat. § 218A.276 (marijuana/synthetic/salvia possession void + seal; NO first-offense requirement and NO once-only limit)', url: null, retrievedOn: '2026-07-19' },
     ],
     rules: {
       startNode: 'disposition',
@@ -12111,168 +12173,470 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ky' },
-            { label: 'Dismissed', value: 'dismissed', next: 'dismissal_ky' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'dismissal_ky' },
-            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'dismissal_ky' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_ky' },
+            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_type_ky' },
+            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_type_ky' },
+            { label: 'Diversion / deferred program', value: 'deferred', next: 'deferred_ky' },
+            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition_ky' }
           ]
         },
-        dismissal_ky: {
-          type: 'boolean',
-          text: 'Was the case dismissed WITH PREJUDICE, or were you acquitted (found not guilty) — as opposed to a dismissal that was part of a plea deal?',
-          yes: 'auto_cutoff_ky',
-          no: 'petition_dismissal_ky'
-        },
-        auto_cutoff_ky: {
-          type: 'boolean',
-          text: 'Did the case end (the dismissal or acquittal) on or after July 15, 2020?',
-          yes: 'check_record_auto_ky',
-          no: 'petition_dismissal_ky'
-        },
-        level_ky: {
+        // ---- Channel B: NON-CONVICTION (431.076) ----
+        nonconv_type_ky: {
           type: 'choice',
-          text: 'What was the level of the conviction?',
+          text: 'How did the case end without a conviction?',
           options: [
-            { label: 'Misdemeanor or violation', value: 'misd', next: 'misd_excluded_ky' },
-            { label: 'Class D felony (the lowest felony level)', value: 'felonyD', next: 'felonyD_eligible_ky' },
-            { label: 'Class A, B, or C felony', value: 'felonyABC', next: 'ineligible_felony_ky' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ky' }
+            { label: 'Acquitted, or ALL charges dismissed WITH prejudice (not in exchange for a guilty plea to another charge)', value: 'acquittal_dismissal', next: 'nonconv_auto_cutoff_ky' },
+            { label: 'Dismissed as part of a plea deal (in exchange for pleading guilty to a different charge)', value: 'plea_dismissal', next: 'nonconv_plea_ineligible_ky' },
+            { label: 'Dismissed WITHOUT prejudice', value: 'without_prejudice', next: 'nonconv_wop_level_ky' },
+            { label: 'A felony charged in District Court, held to the grand jury, but never indicted', value: 'never_indicted', next: 'nonconv_neverindicted_ky' }
           ]
         },
+        nonconv_auto_cutoff_ky: {
+          type: 'boolean',
+          text: 'Did the case end (the acquittal or with-prejudice dismissal) on or after July 15, 2020?',
+          yes: 'eligible_nonconv_auto_ky',
+          no: 'eligible_nonconv_petition_ky'
+        },
+        nonconv_wop_level_ky: {
+          type: 'choice',
+          text: 'Was the charge that was dismissed without prejudice a felony or a misdemeanor?',
+          options: [
+            { label: 'Felony', value: 'felony', next: 'nonconv_wop_felony_date_ky' },
+            { label: 'Misdemeanor', value: 'misd', next: 'nonconv_wop_misd_date_ky' }
+          ]
+        },
+        nonconv_wop_felony_date_ky: {
+          type: 'date',
+          text: 'What is the date of the dismissal order?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'the dismissal order (Ky. Rev. Stat. § 431.076(1)(b) — felony dismissed without prejudice)' },
+            nextPass: 'eligible_nonconv_petition_ky',
+            nextFail: 'waiting_nonconv_ky'
+          }
+        },
+        nonconv_wop_misd_date_ky: {
+          type: 'date',
+          text: 'What is the date of the dismissal order?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'the dismissal order (Ky. Rev. Stat. § 431.076(1)(b) — misdemeanor dismissed without prejudice)' },
+            nextPass: 'eligible_nonconv_petition_ky',
+            nextFail: 'waiting_nonconv_ky'
+          }
+        },
+        // ---- Channel routing for a CONVICTION ----
+        conv_type_ky: {
+          type: 'choice',
+          text: 'What kind of conviction is it?',
+          options: [
+            { label: 'A felony', value: 'felony', next: 'felony_class_ky' },
+            { label: 'A misdemeanor, violation, or traffic infraction', value: 'misd', next: 'misd_excluded_ky' },
+            { label: 'A FIRST-offense drug possession (KRS 218A.1415 / .1416 / .1417)', value: 'drug_first', next: 'drug275_ky' },
+            { label: 'Marijuana, synthetic-drug, or salvia possession', value: 'drug_mj', next: 'drug276_ky' }
+          ]
+        },
+        // ---- Channel A: FELONY vacate-and-expunge (431.073) ----
+        // NOTE (versionNote): this encodes the 2023 ch. 87 text of § 431.073,
+        // effective UNTIL 4/30/2027. Successor version unpulled (open question a).
+        felony_class_ky: {
+          type: 'choice',
+          text: 'What class of felony was it? (Kentucky vacates and expunges Class D felonies; higher classes only after a full pardon.)',
+          options: [
+            { label: 'Class D felony (lowest level), or a pre-1/1/1975 offense punishable by 5 years or less', value: 'classD', next: 'felony_exclusion_ky' },
+            { label: 'Class A, B, or C felony', value: 'higher', next: 'felony_higher_ky' },
+            { label: 'Any felony (any class) that received a FULL pardon', value: 'pardoned', next: 'eligible_felony_pardon_ky' }
+          ]
+        },
+        felony_exclusion_ky: {
+          type: 'boolean',
+          text: 'Was it any of these: a violation of KRS 189A.010 (DUI), 508.032 (assault on a family/household member or certain protected victims), or 519.055; abuse of public office; a sex offense; an offense committed against a child; or an offense that resulted in serious bodily injury or death?',
+          yes: 'felony_excluded_ky',
+          no: 'felony_list_ky'
+        },
+        felony_list_ky: {
+          type: 'choice',
+          text: 'Is your Class D felony one of the specifically ENUMERATED offenses in KRS 431.073(1)(a) — the theft (514.030–.160), forgery (516.030/.060/.090/.108), possession (218A cluster), criminal mischief, and other listed sections — or a single-incident series of them?',
+          options: [
+            { label: 'Yes, it is on the (1)(a) enumerated list (or a same-incident series of listed offenses)', value: 'listed', next: 'felony_date_ky' },
+            { label: 'No / not sure — but it is a Class D felony not on the exclusion list', value: 'not_listed', next: 'felony_1d_date_ky' }
+          ]
+        },
+        felony_date_ky: {
+          type: 'date',
+          text: 'What is the LATER of: the date you completed your sentence, or the date you successfully completed probation or parole?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of sentence completion or successful probation/parole completion (Ky. Rev. Stat. § 431.073(2)(a) — enumerated Class D)' },
+            nextPass: 'felony_findings_ky',
+            nextFail: 'waiting_felony_ky'
+          }
+        },
+        felony_findings_ky: {
+          type: 'boolean',
+          text: 'In the 5 years before filing, have you had no new felony or misdemeanor conviction, and do you have no felony or misdemeanor proceeding pending or being instituted?',
+          yes: 'eligible_felony_list_ky',
+          no: 'felony_findings_block_ky'
+        },
+        felony_1d_date_ky: {
+          type: 'date',
+          text: 'What is the LATER of: the date you completed your sentence, or the date you successfully completed probation or parole?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'the later of sentence completion or successful probation/parole completion (Ky. Rev. Stat. § 431.073(2)(a) — (1)(d) any Class D)' },
+            nextPass: 'felony_1d_findings_ky',
+            nextFail: 'waiting_felony_ky'
+          }
+        },
+        felony_1d_findings_ky: {
+          type: 'boolean',
+          text: 'In the 5 years before filing, have you had no new felony or misdemeanor conviction and nothing pending? (For this broad Class D route the court also weighs your rehabilitation and any recidivism risk.)',
+          yes: 'felony_1d_objection_ky',
+          no: 'felony_findings_block_ky'
+        },
+        felony_1d_objection_ky: {
+          type: 'boolean',
+          text: 'Do you expect the prosecutor (Commonwealth) to OBJECT to your application?',
+          yes: 'eligible_felony_1d_hearing_ky',
+          no: 'felony_paid_ky'
+        },
+        felony_paid_ky: {
+          type: 'boolean',
+          text: 'If the court grants the vacatur, a $250 expungement fee is entered (installments allowed over 18+ months). Has that $250 been paid IN FULL? (The expungement is not complete until it is.)',
+          yes: 'eligible_felony_1d_noobjection_ky',
+          no: 'felony_pending_payment_ky'
+        },
+        // ---- Channel C: MISDEMEANOR conviction (431.078) ----
         misd_excluded_ky: {
           type: 'boolean',
           text: 'Was the offense a sex offense, or an offense against a child?',
-          yes: 'ineligible_excluded_ky',
+          yes: 'misd_excluded_result_ky',
+          no: 'misd_series_ky'
+        },
+        misd_series_ky: {
+          type: 'choice',
+          text: 'Is this a single conviction (or several charges from the SAME incident), or convictions from MULTIPLE separate incidents?',
+          options: [
+            { label: 'A single conviction, or charges from the same incident', value: 'single', next: 'misd_enhance_ky' },
+            { label: 'Convictions from multiple separate incidents', value: 'multi', next: 'misd_multi_enhance_ky' }
+          ]
+        },
+        misd_enhance_ky: {
+          type: 'boolean',
+          text: 'Is this offense subject to a second-or-subsequent-offense enhancement whose enhancement window is still OPEN (has not yet expired)?',
+          yes: 'misd_enhance_block_ky',
           no: 'misd_date_ky'
         },
         misd_date_ky: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including any probation?',
+          text: 'What is the LATER of: the date you completed your sentence, or the date you completed probation?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence or probation (Ky. Rev. Stat. § 431.078 — misdemeanor)' },
-            nextPass: 'eligible_misd_ky',
-            nextFail: 'waiting_ky'
+            period: { amount: 5, unit: 'years', anchor: 'the later of sentence or probation completion (Ky. Rev. Stat. § 431.078 — misdemeanor)' },
+            nextPass: 'misd_findings_ky',
+            nextFail: 'waiting_misd_ky'
           }
         },
-        felonyD_eligible_ky: {
-          type: 'choice',
-          text: 'Kentucky expunges about 61 enumerated Class D felonies (plus same-incident offenses, pardoned felonies, and multiple qualifying felonies since 2023). Is your Class D felony one of the eligible enumerated offenses?',
-          options: [
-            { label: 'Yes, it is one of the eligible offenses', value: 'eligible', next: 'felonyD_date_ky' },
-            { label: 'No, it is not on the eligible list', value: 'not_eligible', next: 'ineligible_felonyD_ky' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felonyD_list_ky' }
-          ]
+        misd_findings_ky: {
+          type: 'boolean',
+          text: 'In the 5 years before filing, have you had no felony or misdemeanor conviction, and is nothing pending?',
+          yes: 'eligible_misd_ky',
+          no: 'misd_findings_block_ky'
         },
-        felonyD_date_ky: {
+        misd_multi_enhance_ky: {
+          type: 'boolean',
+          text: 'Is any of these offenses subject to a second-or-subsequent-offense enhancement whose enhancement window is still OPEN?',
+          yes: 'misd_enhance_block_ky',
+          no: 'misd_multi_date_ky'
+        },
+        misd_multi_date_ky: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including any probation or parole?',
+          text: 'What is the LATER of: the date you completed your last sentence, or the date you completed probation, across these cases?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'completion of sentence/probation/parole, no new convictions in the prior 5 years and none pending (Ky. Rev. Stat. § 431.073 — Class D felony)' },
-            nextPass: 'eligible_felonyD_ky',
-            nextFail: 'waiting_ky'
+            period: { amount: 5, unit: 'years', anchor: 'the later of sentence or probation completion (Ky. Rev. Stat. § 431.078(1)(b) — multiple incidents)' },
+            nextPass: 'misd_multi_findings_ky',
+            nextFail: 'waiting_misd_ky'
           }
+        },
+        misd_multi_findings_ky: {
+          type: 'boolean',
+          text: 'In the 5 years before filing, have you had no new felony or misdemeanor conviction, and is nothing pending?',
+          yes: 'eligible_misd_multi_ky',
+          no: 'misd_findings_block_ky'
+        },
+        // ---- Channel D: DRUG VOIDING feeders ----
+        drug275_ky: {
+          type: 'boolean',
+          text: 'Have you completed the required treatment/probation/sentence; is this your first such set-aside (it is allowed only ONCE per lifetime); and have you NOT previously had a deferred-prosecution dismissal under KRS 218A.14151?',
+          yes: 'eligible_drug275_ky',
+          no: 'drug275_block_ky'
+        },
+        drug276_ky: {
+          type: 'boolean',
+          text: 'Have you completed the required treatment/probation/sentence for this possession charge?',
+          yes: 'eligible_drug276_ky',
+          no: 'drug276_pending_ky'
+        },
+        // ---- deferred / diversion routing ----
+        deferred_ky: {
+          type: 'choice',
+          text: 'What kind of diversion was it?',
+          options: [
+            { label: 'A first-offense drug-possession program (KRS 218A.1415 / .1416 / .1417)', value: 'drug_first', next: 'drug275_ky' },
+            { label: 'A marijuana / synthetic-drug / salvia possession program', value: 'drug_mj', next: 'drug276_ky' },
+            { label: 'Another diversion that ended in the charge being dismissed', value: 'dismissed', next: 'nonconv_auto_cutoff_ky' }
+          ]
         }
       },
       results: {
-        unknown_disposition: {
+        unknown_disposition_ky: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Kentucky handles convictions and non-convictions on very different tracks — non-convictions since July 15, 2020 are automatic, while convictions require a Certificate of Eligibility and a petition. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. A KSP criminal-history request or your court paperwork will show the disposition; the Department of Public Advocacy expungement guide explains the tracks.',
+          message: 'Kentucky handles convictions and non-convictions on very different tracks — non-convictions since July 15, 2020 are automatic, felonies are vacated by motion in the original case, misdemeanors need a Certificate of Eligibility and a petition, and drug possession has its own void-and-seal route. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. A KSP criminal-history request or your court paperwork will show the disposition; the Department of Public Advocacy expungement guide explains the tracks.',
           remedy: 'Get Your Record First (KSP / court paperwork)',
           citation: 'Ky. Rev. Stat. §§ 431.073, 431.076, 431.078 (which path applies depends on the disposition)'
         },
-        check_record_auto_ky: {
+        eligible_nonconv_auto_ky: {
           status: 'eligible',
-          title: 'Likely Already Expunged Automatically — Check Your Record',
-          message: 'Because your case was a dismissal-with-prejudice or an acquittal that ended on or after July 15, 2020, Kentucky expunges it AUTOMATICALLY — 30 days after the case ended, with no petition, no certificate, and no fee (KRS § 431.076). So the honest first step is not to file anything but to CHECK whether it has already come off: request your KSP criminal-history record and look. If it is still showing after well past 30 days, the Department of Public Advocacy or a legal-aid expungement clinic can help you follow up. Note this automatic path does not cover dismissals that were part of a plea deal.',
-          remedy: 'Check your record — it should already be expunged (§ 431.076)',
-          citation: 'Ky. Rev. Stat. § 431.076'
+          title: 'Non-Conviction — Expunged Automatically (Opt-Out)',
+          message: 'Because your case was an acquittal or a with-prejudice dismissal of all charges (not a plea-deal dismissal) that ended on or after July 15, 2020, Kentucky expunges it AUTOMATICALLY: the court orders expungement 30 days after the case ends UNLESS you object, with no petition, no Certificate of Eligibility, and no fee (KRS § 431.076(1)(a)). So the honest first step is to CHECK, not file — request your KSP criminal-history record and confirm it came off. One thing that never gets expunged: Department for Community Based Services (DCBS) records are carved out by statute. Once expunged, the matter is deemed never to have occurred and you may lawfully deny it.',
+          remedy: 'Automatic expungement at 30 days unless you object (§ 431.076(1)(a)) — check your record',
+          citation: 'Ky. Rev. Stat. § 431.076(1)(a)'
         },
-        petition_dismissal_ky: {
+        eligible_nonconv_petition_ky: {
           status: 'eligible',
-          title: 'Non-Conviction — Expungeable by Petition',
-          message: 'Because your case ended without a conviction, it can be expunged — but not automatically, either because it ended before July 15, 2020 or because it was a plea-deal dismissal rather than a dismissal-with-prejudice or acquittal. You file a petition (KRS § 431.076), and for non-convictions there is NO filing fee (confirmed by the Department of Public Advocacy). There is a 60-day waiting period on the older petition route. Because plea-deal and diversion dismissals can be handled differently, this is worth doing with help: the DPA and legal-aid expungement clinics do exactly this.',
-          remedy: 'Non-conviction expungement petition (§ 431.076) — no filing fee',
-          citation: 'Ky. Rev. Stat. § 431.076'
+          title: 'Non-Conviction — Expungeable by Petition (Court Must Grant)',
+          message: 'Your case ended without a conviction, but it is not on the automatic track — either it ended before July 15, 2020, or it was a without-prejudice dismissal that has now aged past its wait (3 years for a felony, 1 year for a misdemeanor). You file a petition under KRS § 431.076, and a properly brought petition SHALL be granted (§ 431.076(3)(a)). There is no filing fee in the statute for a non-conviction expungement, and the § 431.079 certificate does not apply here. DCBS records are never expunged. The Department of Public Advocacy and legal-aid expungement clinics do exactly this.',
+          remedy: 'Non-conviction expungement petition (§ 431.076) — mandatory grant, no statutory fee',
+          citation: 'Ky. Rev. Stat. § 431.076(1)(b), (3)(a)'
+        },
+        nonconv_plea_ineligible_ky: {
+          status: 'ineligible',
+          title: 'A Plea-Deal Dismissal Is Not Expungeable Here',
+          message: 'When a charge was dismissed in exchange for your pleading guilty to a DIFFERENT charge, KRS § 431.076 does not treat it as an expungeable non-conviction — both the automatic tier and the petition tier exclude a dismissal made in exchange for a guilty plea to another charge. The route that matters is whatever happened to the charge you actually pleaded to: if that was a misdemeanor or an eligible Class D felony, it may be expungeable on its own track. A Department of Public Advocacy expungement guide or a legal-aid clinic can look at the whole disposition and point you to the right route.',
+          remedy: 'None under § 431.076 — screen the charge you pleaded to instead',
+          citation: 'Ky. Rev. Stat. § 431.076(1)(a), (1)(b)'
+        },
+        nonconv_neverindicted_ky: {
+          status: 'eligible',
+          title: 'Felony Charge, Never Indicted — Expungeable by Petition',
+          message: 'A felony that was charged in District Court, held to the grand jury, but never indicted has its own route (KRS § 431.076(1)(c)): you may petition 6 months after the case was held to the grand jury. The petition is served on the county and Commonwealth\'s attorneys, who have 90 days to respond. If no one responds, the court dismisses the charge without prejudice and expunges it; if there is a response but still no indictment 90 days later, it is dismissed and expunged then. There is no filing fee in the statute and no certificate is required. The Department of Public Advocacy can help you file.',
+          remedy: 'Never-indicted felony petition (§ 431.076(1)(c)) — 6 months after the grand-jury hold',
+          citation: 'Ky. Rev. Stat. § 431.076(1)(c)'
+        },
+        waiting_nonconv_ky: {
+          status: 'waiting',
+          title: 'Non-Conviction — Wait Not Yet Met',
+          message: 'A charge dismissed WITHOUT prejudice can be expunged, but only after it has aged: 3 years for a felony, 1 year for a misdemeanor, measured from the dismissal order (KRS § 431.076(1)(b)). Based on your date, that period has not run yet. There is nothing to pre-file; once the period passes, a properly brought petition SHALL be granted, with no statutory filing fee. The Department of Public Advocacy can help when the time comes.',
+          remedy: 'Wait out the without-prejudice period (felony 3 yr / misd 1 yr), then petition',
+          citation: 'Ky. Rev. Stat. § 431.076(1)(b)'
+        },
+        felony_higher_ky: {
+          status: 'ineligible',
+          title: 'Class A, B, or C Felony — Pardon First',
+          message: 'Kentucky\'s felony vacate-and-expunge reaches Class D felonies (the lowest level). A Class A, B, or C felony cannot be vacated and expunged unless it has first received a FULL pardon — and a pardoned felony then becomes expungeable under § 431.073(1)(c). So the route here is a Governor\'s pardon; the Department of Public Advocacy can explain that process.',
+          remedy: 'None directly (higher-level felony) — a full pardon opens § 431.073(1)(c)',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(c)'
+        },
+        eligible_felony_pardon_ky: {
+          status: 'eligible',
+          title: 'Pardoned Felony — Expungeable',
+          message: 'A felony that received a FULL pardon is expungeable under KRS § 431.073(1)(c), regardless of its class. You file the vacate-and-expunge motion in the original criminal case; a Certificate of Eligibility (§ 431.079) is required, and the two-stage fee applies ($50 to file, $250 due on the order — payable in installments, and the expungement is not complete until it is paid in full). On vacatur the record is removed from the state systems, does not appear on official background checks, carries no disclosure duty, and your voting rights are restored (absent another bar). The Department of Public Advocacy and fee-help clinics can assist.',
+          remedy: 'Vacate-and-expunge a pardoned felony (§ 431.073(1)(c)) — certificate first',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(c)'
+        },
+        felony_excluded_ky: {
+          status: 'ineligible',
+          title: 'This Felony Is Excluded From the Class D Expansion',
+          message: 'The broad Class D route (KRS § 431.073(1)(d)) reaches any Class D felony EXCEPT a short list: a DUI (KRS 189A.010), an assault under 508.032, a 519.055 violation, abuse of public office, a sex offense, an offense committed against a child, or an offense that resulted in serious bodily injury or death. Because yours is on that exclusion list, this route is closed. A full Governor\'s pardon would open § 431.073(1)(c). The Department of Public Advocacy can help you check where yours falls and explain the pardon process.',
+          remedy: 'None under (1)(d) (excluded offense) — a full pardon opens (1)(c)',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(d)'
+        },
+        eligible_felony_list_ky: {
+          status: 'eligible',
+          title: 'Class D Felony (Enumerated) — Vacate and Expunge, Voting Rights Restored',
+          message: 'Lead with the good news: when this Class D felony is vacated and expunged, your VOTING RIGHTS are restored (absent another bar), the record is removed from state systems, it does not appear on official state-performed background checks, and you have no duty to disclose it on employment, credit, or other applications (KRS § 431.073(7), (8)). Your offense is on the § 431.073(1)(a) enumerated list, and by your dates the 5-year wait (measured from the LATER of sentence or probation/parole completion) is met, with no disqualifying convictions in the prior 5 years. Two steps and a fee trap: first get the § 431.079 Certificate of Eligibility from the State Police (the long pole); then file the motion — $50 to file, and $250 due if it is granted. That $250 can be paid in installments over 18+ months, but the expungement is NOT complete until it is paid in full. Fee-help clinics (Louisville Goodwill / Urban League) and the Department of Public Advocacy can help.',
+          remedy: 'Vacate-and-expunge an enumerated Class D felony (§ 431.073(1)(a)) — voting restored on completion',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(a), (7), (8)'
+        },
+        felony_findings_block_ky: {
+          status: 'waiting',
+          title: 'A Recent Conviction (or Pending Case) Blocks This — For Now',
+          message: 'The felony vacate-and-expunge findings require that you have had NO felony or misdemeanor conviction in the 5 years before filing, and nothing pending or being instituted (KRS § 431.073(3)). A conviction within that window, or an open case, holds this up until it ages out or resolves. This is not a permanent no — once you have a clean 5-year window and nothing pending, and the offense itself is 5 years past sentence/probation completion, the route reopens. The Department of Public Advocacy can help you time it.',
+          remedy: 'Clear the 5-year-before-filing window and any pending case, then re-apply',
+          citation: 'Ky. Rev. Stat. § 431.073(3)'
+        },
+        waiting_felony_ky: {
+          status: 'waiting',
+          title: 'Felony — 5-Year Wait Not Yet Met',
+          message: 'The felony vacate-and-expunge wait is 5 years, measured from the LATER of your sentence completion or your successful probation/parole completion (KRS § 431.073(2)(a)). Based on your date, that period has not run yet. A Kentucky-specific tip for the meantime: the § 431.079 Certificate of Eligibility takes months to process at the State Police, so many people start it a few months before their eligibility date so the paperwork is ready. The Department of Public Advocacy expungement guide explains the timing.',
+          remedy: 'Wait for the 5-year period (later of sentence / probation-parole completion)',
+          citation: 'Ky. Rev. Stat. § 431.073(2)(a)'
+        },
+        eligible_felony_1d_hearing_ky: {
+          status: 'complex',
+          title: 'Class D Felony (Broad Route) — Eligible, But Expect a Hearing',
+          message: 'Your offense qualifies under the broad Class D route (KRS § 431.073(1)(d)) — any Class D felony not on the exclusion list, and MULTIPLE eligible felonies can be handled together. Because you expect the prosecutor to object, the statute puts the burden on YOU: at a hearing (held within 120 days of filing) you must prove by CLEAR AND CONVINCING evidence that vacatur is consistent with public welfare and safety, that you have behaved in a manner warranting it, and that it is in the interests of justice — the court weighs whether the harm to you clearly outweighs the public interest (§ 431.073(4)). The victim is heard, and the prosecutor may show extraordinary circumstances. On success, your voting rights are restored and the record is removed. The two-stage fee still applies ($50 + $250, expungement not final until the $250 is paid). This is a case to bring with counsel — the Department of Public Advocacy can help.',
+          remedy: 'Broad Class D expungement with prosecutor objection (§ 431.073(1)(d), (4)) — clear-and-convincing hearing',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(d), (4)'
+        },
+        eligible_felony_1d_noobjection_ky: {
+          status: 'eligible',
+          title: 'Class D Felony (Broad Route) — Vacate Without a Hearing, Voting Restored',
+          message: 'Lead with the good news: on completion your VOTING RIGHTS are restored (absent another bar), the record is removed from state systems, it does not appear on official background checks, and you owe no disclosure duty (KRS § 431.073(7), (8)). Your offense qualifies under the broad Class D route (§ 431.073(1)(d)) — any Class D felony not on the exclusion list, and MULTIPLE eligible felonies can be brought in one application. Because there is no prosecutor objection (or 120 days pass with no response), the court MAY vacate WITHOUT a hearing (§ 431.073(6)). Two steps and a fee trap: get the § 431.079 Certificate of Eligibility first; then file — $50 to file, and $250 due on the order. You have paid that $250 in full, so the expungement is complete. Fee-help clinics and the Department of Public Advocacy can assist.',
+          remedy: 'Broad Class D expungement, no objection (§ 431.073(1)(d), (6)) — voting restored on completion',
+          citation: 'Ky. Rev. Stat. § 431.073(1)(d), (6), (7), (8)'
+        },
+        felony_pending_payment_ky: {
+          status: 'complex',
+          title: 'Vacated — But the Expungement Is Pending Payment',
+          message: 'Here is Kentucky\'s two-stage fee trap made concrete: your felony can be VACATED, but the expungement is NOT complete until the $250 expungement fee is paid IN FULL (KRS § 431.073(11)). Because that $250 is still outstanding, your status is "vacated, expungement pending payment" — the record has not fully cleared yet. The good news is the fee can be paid in installments (per KRS § 534.020), the court sets a compliance date at least 18 months out, and non-payment is handled by a show-cause appearance, NOT jail. Once the $250 is paid, the expungement completes: the record is removed, does not appear on background checks, and your voting rights are restored. Fee-help clinics (Louisville Goodwill / Urban League) exist precisely for this.',
+          remedy: 'Pay the $250 expungement fee (installments allowed) to complete the expungement (§ 431.073(11))',
+          citation: 'Ky. Rev. Stat. § 431.073(11)'
+        },
+        misd_excluded_result_ky: {
+          status: 'ineligible',
+          title: 'This Misdemeanor Is Excluded',
+          message: 'Kentucky\'s misdemeanor expungement excludes a sex offense and an offense committed against a child, and no waiting period changes that (KRS § 431.078(4)). For an offense that is truly excluded, a Governor\'s pardon is the remaining route. The Department of Public Advocacy can help you check where yours falls.',
+          remedy: 'None (excluded offense) — ask about a pardon',
+          citation: 'Ky. Rev. Stat. § 431.078(4)'
+        },
+        misd_enhance_block_ky: {
+          status: 'waiting',
+          title: 'Enhancement Window Still Open — Not Yet',
+          message: 'Kentucky adds a trap on top of the 5-year wait: if the offense is subject to a second-or-subsequent-offense enhancement, it cannot be expunged until that enhancement window has EXPIRED (KRS § 431.078(4)(d)) — even if the 5 years are otherwise met. So an enhanceable offense has to age out of its enhancement period first. This is not a permanent no; once the enhancement window closes and the 5-year wait is met with a clean record, the misdemeanor becomes expungeable. The Department of Public Advocacy can help you work out the enhancement window for your specific offense.',
+          remedy: 'Wait for the enhancement window to expire, then the 5-year misdemeanor route',
+          citation: 'Ky. Rev. Stat. § 431.078(4)(d)'
         },
         eligible_misd_ky: {
           status: 'eligible',
-          title: 'Misdemeanor, 5+ Years — Expungeable (Start the Certificate First)',
-          message: 'Based on your dates — 5 years since completing your sentence or probation — your misdemeanor is expungeable under KRS § 431.078. Here is the Kentucky-specific advice that matters: start the Certificate of Eligibility FIRST. It costs $40, is valid only 30 days once issued, and the State Police say it takes 4-5 months to process, so it is the long pole. The petition itself carries a $100 filing fee. Total is roughly $140. Fee-help clinics (Louisville Goodwill / Urban League) can assist. The Department of Public Advocacy expungement guide walks through the steps.',
-          remedy: 'Misdemeanor expungement (§ 431.078) — get the § 431.079 certificate first',
-          citation: 'Ky. Rev. Stat. § 431.078'
+          title: 'Misdemeanor, 5+ Years — Expungeable (Court Must Grant)',
+          message: 'Based on your dates — 5 years since the later of completing your sentence or your probation — your misdemeanor is expungeable under KRS § 431.078, and for a single conviction (or same-incident charges) with the findings met, the court SHALL grant it (§ 431.078(1)(a)). Here is the Kentucky-specific advice that matters: get the § 431.079 Certificate of Eligibility from the State Police first — it is the long pole. The petition itself carries a $100 fee ($50 of it nonrefundable). Once expunged, the offense does not appear on official state-performed background checks and you have no duty to disclose it. Fee-help clinics (Louisville Goodwill / Urban League) can assist, and the Department of Public Advocacy expungement guide walks through the steps.',
+          remedy: 'Misdemeanor expungement (§ 431.078(1)(a)) — get the § 431.079 certificate first',
+          citation: 'Ky. Rev. Stat. § 431.078(1)(a)'
         },
-        eligible_felonyD_ky: {
-          status: 'eligible',
-          title: 'Class D Felony, 5+ Years — Expungeable (Plan Around the Certificate)',
-          message: 'Based on your dates — 5 years since completing your sentence, probation, or parole, with no new convictions in the prior 5 years and none pending — your Class D felony appears eligible under KRS § 431.073. Start the Certificate of Eligibility first: $40, valid 30 days, and 4-5 months to process at the State Police, so build your timeline around it. The petition costs $50 to file plus $250 due if it is granted (payable over 18 months — the expungement is not final until it is paid), roughly $340 all-in with the certificate. And one thing many guides get wrong: since a 2023 amendment, you can expunge MORE THAN ONE qualifying Class D felony, not just one for life. Fee-help clinics (Louisville Goodwill / Urban League) and the Department of Public Advocacy can help.',
-          remedy: 'Class D felony expungement (§ 431.073) — certificate first; multiple felonies allowed since 2023',
-          citation: 'Ky. Rev. Stat. § 431.073'
+        eligible_misd_multi_ky: {
+          status: 'complex',
+          title: 'Multiple-Incident Misdemeanors — Expungeable, But Discretionary',
+          message: 'You have misdemeanor convictions from multiple separate incidents. These are still expungeable under KRS § 431.078, but the court MAY grant expungement rather than SHALL — it is discretionary for a multi-incident series (§ 431.078(1)(b)), unlike the mandatory single-conviction route. The 5-year wait and the findings still apply, and your dates meet them. Get the § 431.079 Certificate of Eligibility first; the petition fee is $100 ($50 nonrefundable). Because the court has discretion here, presenting your rehabilitation well matters — the Department of Public Advocacy and legal-aid clinics can help you put the strongest petition forward.',
+          remedy: 'Multiple-incident misdemeanor expungement (§ 431.078(1)(b)) — discretionary; certificate first',
+          citation: 'Ky. Rev. Stat. § 431.078(1)(b)'
         },
-        waiting_ky: {
+        misd_findings_block_ky: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Kentucky\'s waiting period is 5 years from completing your sentence (and, for a Class D felony, with no new convictions in the prior 5 years). Based on your dates, yours has not passed yet. Here is a Kentucky-specific tip for the meantime: because the Certificate of Eligibility takes 4-5 months to process, many people start that process a few months before their eligibility date so the paperwork is ready when the wait ends. The Department of Public Advocacy expungement guide explains the timing.',
-          remedy: 'Wait for the 5-year period — but start the certificate a few months early',
-          citation: 'Ky. Rev. Stat. §§ 431.073, 431.078'
+          title: 'A Recent Conviction (or Pending Case) Blocks This — For Now',
+          message: 'The misdemeanor expungement findings require that you have had NO felony or misdemeanor conviction in the 5 years before filing, with nothing pending (KRS § 431.078(4), (5)). A conviction inside that window, or an open case, holds this up until it ages out or resolves. It is not a permanent no — once you have a clean 5-year-before-filing window and nothing pending, and the offense itself is 5 years past sentence/probation completion, the route reopens. The Department of Public Advocacy can help you time it.',
+          remedy: 'Clear the 5-year-before-filing window and any pending case, then re-apply',
+          citation: 'Ky. Rev. Stat. § 431.078(4), (5)'
         },
-        ineligible_excluded_ky: {
-          status: 'ineligible',
-          title: 'This Offense Is Excluded',
-          message: 'Kentucky\'s misdemeanor expungement excludes sex offenses and offenses against children, and no waiting period changes that. (The full exclusion list is something we are confirming against the statute.) For an offense that is truly excluded, a Governor\'s pardon is the remaining route. The Department of Public Advocacy can help you check where yours falls.',
-          remedy: 'None (Excluded Offense) — ask about a pardon',
+        waiting_misd_ky: {
+          status: 'waiting',
+          title: 'Misdemeanor — 5-Year Wait Not Yet Met',
+          message: 'Kentucky\'s misdemeanor expungement wait is 5 years, measured from the later of your sentence completion or your probation completion (KRS § 431.078). Based on your date, yours has not passed yet. One Kentucky-specific tip: the § 431.079 Certificate of Eligibility takes months to process, so many people start it a few months before their eligibility date so the paperwork is ready when the wait ends. If your offense was instead a drug possession, ask about the § 218A.275/.276 void-and-seal routes, which have no waiting period.',
+          remedy: 'Wait for the 5-year period — but start the certificate a few months early',
           citation: 'Ky. Rev. Stat. § 431.078'
         },
-        ineligible_felonyD_ky: {
-          status: 'ineligible',
-          title: 'This Class D Felony Is Not on the Eligible List',
-          message: 'Kentucky expunges only about 61 enumerated Class D felonies. Because yours is not one of them, the standard expungement route does not apply. Two things can still open a door: if the felony was pardoned, pardoned felonies are expungeable; and same-incident offenses can sometimes be swept in with an eligible one. Because this is list-specific, it is worth confirming with help — the Department of Public Advocacy and legal-aid clinics can check the enumerated list against your exact offense.',
-          remedy: 'None on the standard list — check pardon / same-incident paths',
-          citation: 'Ky. Rev. Stat. § 431.073'
+        eligible_drug275_ky: {
+          status: 'eligible',
+          title: 'First-Offense Possession — Set Aside and Voided (No Waiting Period)',
+          message: 'For a first-offense drug possession (KRS 218A.1415/.1416/.1417), once you satisfactorily complete treatment, probation, or the sentence, the court may SET ASIDE AND VOID the conviction and issue a certificate to that effect (KRS § 218A.275) — with no waiting period. A voided conviction is not treated as a conviction for any disqualification. The records are sealed against the court, agencies, and law enforcement (with a narrow KRS § 27A.099 exception, and a narrow inspection carve-out to verify eligibility), and agencies certify completion within 60 days. Two limits to know: this set-aside is available only ONCE in your lifetime, and you are ineligible if you previously had a deferred-prosecution dismissal under KRS § 218A.14151. This route also feeds the § 431.078 no-wait exception. The Department of Public Advocacy can help.',
+          remedy: 'Set aside and void a first-offense possession (§ 218A.275) — no wait, once only',
+          citation: 'Ky. Rev. Stat. § 218A.275'
         },
-        ineligible_felony_ky: {
-          status: 'ineligible',
-          title: 'Class A, B, or C Felony — Pardon Only',
-          message: 'Kentucky\'s felony expungement reaches only Class D felonies (the lowest level). Class A, B, and C felonies cannot be expunged except when they have been pardoned. So the route here is a Governor\'s pardon; if one is granted, the pardoned felony then becomes expungeable. The Department of Public Advocacy can explain the pardon process.',
-          remedy: 'None (higher-level felony) — a pardon can open an expungement path',
-          citation: 'Ky. Rev. Stat. § 431.073'
-        },
-        complex_level_ky: {
+        drug275_block_ky: {
           status: 'complex',
-          title: 'We Need the Conviction Level',
-          message: 'In Kentucky the route depends heavily on the level: misdemeanors and about 61 enumerated Class D felonies can be expunged, while Class A/B/C felonies cannot (except by pardon). Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a KSP criminal-history request will show it. The Department of Public Advocacy can help you read it.',
-          remedy: 'Get the Conviction Level First (court paperwork / KSP)',
-          citation: 'Ky. Rev. Stat. §§ 431.073, 431.078'
+          title: 'First-Offense Voiding — One Condition Is Not Met',
+          message: 'The § 218A.275 set-aside for a first-offense possession has three gates, and one of them is not met: you must have satisfactorily completed treatment/probation/the sentence; the set-aside is available only ONCE per lifetime; and it is barred if you previously had a deferred-prosecution dismissal under KRS § 218A.14151. If you simply have not finished the program yet, finish it — the void-and-seal becomes available on completion with no waiting period. If you have already used this once, or a prior 218A.14151 dismissal bars it, a Department of Public Advocacy expungement guide or a legal-aid clinic can look at whether another route (for example, § 431.078 after the 5-year wait) fits.',
+          remedy: 'Finish the program, or check whether a once-only / prior-14151 bar applies',
+          citation: 'Ky. Rev. Stat. § 218A.275'
         },
-        complex_felonyD_list_ky: {
-          status: 'complex',
-          title: 'We Need to Match Your Felony to the Eligible List',
-          message: 'Kentucky\'s Class D felony expungement covers about 61 specific, enumerated offenses. Whether yours qualifies depends on matching your exact offense to that list — something we are not going to guess at. Your court paperwork names the precise statute you were convicted under, and the Department of Public Advocacy expungement guide (or a legal-aid clinic) can check it against the eligible list. If it is on the list and 5 years have passed, the certificate-first process applies.',
-          remedy: 'Match Your Offense to the § 431.073 List (DPA / court paperwork)',
-          citation: 'Ky. Rev. Stat. § 431.073'
+        eligible_drug276_ky: {
+          status: 'eligible',
+          title: 'Marijuana/Synthetic/Salvia Possession — Voided and Sealed (No Waiting Period)',
+          message: 'For possession of marijuana, a synthetic drug, or salvia, once you satisfactorily complete treatment, probation, or the sentence, the court may void the conviction and seal the records (KRS § 218A.276) — with no waiting period. Unlike the first-offense route, this one has NO first-offense requirement and NO once-per-lifetime limit in the statute, so it remains available even if you have used a drug-voiding route before. The records are sealed against the court, agencies, and law enforcement (with the narrow KRS § 27A.099 exception), and agencies certify within 60 days. This route also feeds the § 431.078 no-wait exception. The Department of Public Advocacy can help.',
+          remedy: 'Void and seal a marijuana/synthetic/salvia possession (§ 218A.276) — no wait, no once-only limit',
+          citation: 'Ky. Rev. Stat. § 218A.276'
+        },
+        drug276_pending_ky: {
+          status: 'waiting',
+          title: 'Finish the Program — Then Voiding Is Available',
+          message: 'The § 218A.276 void-and-seal for a marijuana, synthetic-drug, or salvia possession becomes available once you satisfactorily complete the required treatment, probation, or sentence — there is no waiting period beyond that. Finish the program, and the court may then void the conviction and seal the records, with no first-offense requirement and no once-per-lifetime limit. The Department of Public Advocacy can help when you get there.',
+          remedy: 'Complete the program, then void and seal (§ 218A.276)',
+          citation: 'Ky. Rev. Stat. § 218A.276'
         }
       }
     },
     resources: {
       remedies: {
-        expungement: {
-          name: 'Expungement (Ky. Rev. Stat. §§ 431.073, 431.076, 431.078; certificate § 431.079)',
-          formName: 'AOC expungement forms + Certificate of Eligibility application',
+        felonyVacate: {
+          name: 'Felony Vacate-and-Expunge (Ky. Rev. Stat. § 431.073; certificate § 431.079)',
+          formName: 'AOC vacate-and-expunge motion + § 431.079 Certificate of Eligibility',
           formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
           steps: [
-            'For a conviction, request the Certificate of Eligibility FIRST (KRS § 431.079): $40, valid only 30 days once issued, and 4-5 months to process at the State Police — it is the long pole, so start it early.',
-            'For a non-conviction that ended on or after July 15, 2020 (dismissal-with-prejudice or acquittal), do NOT file — it should be automatic; check your KSP record instead.',
-            'File the petition in the court of conviction: misdemeanors $100 (§ 431.078); Class D felonies $50 to file plus $250 due on grant, payable over 18 months (§ 431.073); non-convictions have no filing fee.',
-            'Use a fee-help clinic (Louisville Goodwill / Urban League) or the Department of Public Advocacy guide if the fees are a barrier.'
+            'Get the § 431.079 Certificate of Eligibility from the State Police and AOC first — it is the long pole; a background check certifies you are eligible.',
+            'File the vacate-and-expunge motion in the ORIGINAL criminal case. On a (1)(d) application, no prosecutor objection (or 120 days of silence) lets the court vacate without a hearing; an objection triggers a clear-and-convincing hearing where you carry the burden.',
+            'Pay the $50 filing fee (nonrefundable). If granted, a $250 expungement fee is entered — payable in installments over 18+ months; the expungement is NOT complete until it is paid in full.',
+            'On completion, voting rights are restored (absent another bar) and the record is removed from state systems.'
           ],
-          // NOT null: statutory fees are given precisely — $40 certificate, $100
-          // misdemeanor, $50 + $250 Class D felony. Non-convictions have no fee.
-          fees: '$40 Certificate of Eligibility (KRS § 431.079). Misdemeanor petition: $100 (§ 431.078). Class D felony petition: $50 to file plus $250 due if granted, payable over 18 months (§ 431.073). Non-conviction petitions: no filing fee.',
-          feeWaiver: 'Non-conviction petitions carry no filing fee (DPA-confirmed). For conviction fees, fee-help clinics (Louisville Goodwill / Urban League) assist people who cannot pay.',
-          courtContact: 'The court of conviction; KSP/AOC for the Certificate of Eligibility'
+          fees: '$50 filing fee, nonrefundable (KRS § 431.073(10)); plus a $250 expungement fee due if granted, payable in installments per KRS § 534.020 — the expungement is not complete until it is paid in full (§ 431.073(11)). Separate § 431.079 certificate fee (KSP regulation).',
+          feeWaiver: 'No statutory waiver; the $250 may be paid in installments over 18+ months, and non-payment is a show-cause matter, not jail. Fee-help clinics (Louisville Goodwill / Urban League) assist people who cannot pay.',
+          courtContact: 'The court where the conviction was entered (motion in the original case)'
+        },
+        misdemeanor: {
+          name: 'Misdemeanor Expungement (Ky. Rev. Stat. § 431.078; certificate § 431.079)',
+          formName: 'AOC expungement petition + § 431.079 Certificate of Eligibility',
+          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          steps: [
+            'Get the § 431.079 Certificate of Eligibility first (background check; KSP/AOC).',
+            'File the petition in the court of conviction after the 5-year wait (later of sentence or probation completion) and once any enhancement window has expired.',
+            'A single conviction (or same-incident charges) with the findings met SHALL be granted; a multiple-incident series is discretionary.',
+            'Pay the $100 petition fee ($50 of it nonrefundable).'
+          ],
+          fees: '$100 petition fee, of which $50 is nonrefundable (KRS § 431.078). Separate § 431.079 certificate fee (KSP regulation).',
+          feeWaiver: 'No statutory waiver; fee-help clinics (Louisville Goodwill / Urban League) assist people who cannot pay. Pre-2013 traffic-infraction denials may be refiled free (§ 431.078(12)).',
+          courtContact: 'The court of conviction (or the county-of-residence District Court for pre-1992 convictions)'
+        },
+        nonConviction: {
+          name: 'Non-Conviction Expungement (Ky. Rev. Stat. § 431.076)',
+          formName: 'AOC non-conviction expungement petition (no certificate required)',
+          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          steps: [
+            'For an acquittal or all-charges with-prejudice dismissal on/after July 15, 2020, do NOT file — the court expunges automatically at 30 days unless you object; check your KSP record instead.',
+            'For earlier dispositions, or a without-prejudice dismissal that has aged past its wait (felony 3 years / misdemeanor 1 year), file the petition; a properly brought petition SHALL be granted.',
+            'No § 431.079 Certificate of Eligibility is required for a non-conviction expungement.',
+            'DCBS (Department for Community Based Services) records are never expunged.'
+          ],
+          // null: no fee appears in the § 431.076 text and the § 431.079
+          // certification does not apply, so it is encoded as free — but the
+          // clerk-counter practice is unconfirmed (open question f).
+          fees: null,
+          feeWaiver: 'No § 431.079 certificate is required, and no filing fee appears in the § 431.076 text; confirm any counter fee with the clerk.',
+          courtContact: 'The court where the case was heard'
+        },
+        certificate: {
+          name: 'Certificate of Eligibility (Ky. Rev. Stat. § 431.079 — required for conviction expungements)',
+          formName: '§ 431.079 Certificate of Eligibility application (KSP + AOC background check)',
+          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          steps: [
+            'Required before filing a conviction expungement under § 431.073 (felony) or § 431.078 (misdemeanor); NOT required for a § 431.076 non-conviction.',
+            'The State Police run a background check and the AOC certifies eligibility; KSP regulations govern.',
+            'Start it early — the certification is the long pole in the process.',
+            '"Expungement" in §§ 431.073/.076/.078/.079 means removal so the record does not appear on official state-performed background checks (§ 431.079(3)) — background-check-scoped, not physical destruction.'
+          ],
+          // null: § 431.079 requires the certification but the FEE AMOUNT is set by
+          // KSP regulation, not the statute text (open question c).
+          fees: null,
+          feeWaiver: 'The certificate fee amount is set by KSP regulation, not the statute; ask KSP about the current amount and any waiver.',
+          courtContact: 'Kentucky State Police / Administrative Office of the Courts'
+        },
+        drugVoiding: {
+          name: 'Drug-Possession Voiding and Sealing (Ky. Rev. Stat. §§ 218A.275, 218A.276)',
+          formName: 'Motion to set aside/void and seal (in the original case)',
+          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          steps: [
+            'On satisfactory completion of treatment/probation/the sentence, move to set aside and void the conviction — no waiting period.',
+            '§ 218A.275 (first-offense possession) is available ONCE per lifetime and is barred by a prior § 218A.14151 deferred-prosecution dismissal.',
+            '§ 218A.276 (marijuana/synthetic/salvia) has NO first-offense requirement and NO once-only limit.',
+            'A voided conviction is not a conviction for any disqualification; the records are sealed (with a narrow § 27A.099 exception). This also feeds the § 431.078 no-wait exception.'
+          ],
+          fees: '$0 — no fee is stated in KRS § 218A.275 or § 218A.276.',
+          feeWaiver: 'Not applicable — no fee is stated in the statute.',
+          courtContact: 'The court where the conviction was entered'
         }
       },
       legalAid: [

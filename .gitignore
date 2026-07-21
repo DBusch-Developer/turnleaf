@@ -136,3 +136,6 @@ dist
 .pnp.*
 # Playwright MCP session artifacts
 .playwright-mcp/
+
+# Demo video renders (large binaries)
+scripts/demo/out/

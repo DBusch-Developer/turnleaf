@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 2`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**33 open questions across 5 states.**
+**22 open questions across 5 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,73 +16,72 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. CONNECTICUT (CT)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Petition for Erasure (pre-2000 convictions and cannabis)** — The court where you were sentenced
 - **Absolute Pardon (Board of Pardons and Paroles) — full erasure** — Connecticut Board of Pardons and Paroles
+- **Petition for Erasure (pre-2000 convictions, decriminalized offenses, cannabis)** — The court where you were sentenced
+- **Diversion Feeders (Accelerated Rehabilitation, Supervised Diversionary Program)** — The sentencing court / Court Support Services Division
+- **Clean Slate Erasure (convictions — automatic for post-2000 offenses)** — Connecticut Judicial Branch (record check) / portal.ct.gov/cleanslate
 - Clean Slate CT (eligibility-date calculator) — https://www.cleanslatect.org
 - Connecticut Legal Services — https://www.ctlegal.org
 
 **Dates that govern:**
-- 2025-10 — Clean Slate automatic erasures resumed after delays (operative) · Wave 2 gives month and year only. Delayed for years by data-system problems; ~50,000 convictions erased so far, 100,000+ expected. "Eligible" does not yet mean "erased".
-- 2021 — Clean Slate Act (Public Act 21-42) — automatic erasure of post-2000 convictions (effective) · Wave 2 gives the year only.
+- 2023-01-01 — Clean Slate erasure operative (PA 21-32 as amended) (effective) · PA 21-32 as amended by 22-26, 23-134, 23-169, 23-204. The statute is unconditional — no funding contingency in the text — but the automated-erasure IT rollout was delayed in practice; "eligible" does not yet guarantee "erased".
+- 2000-01-01 — Clean Slate mechanism split by offense date (operative) · An offense committed on/after this date erases by operation of law; an earlier offense erases by a free OCCA-form petition. Classification and max sentence are judged by the law in effect at offense time (§ 54-142a(e)(1)(B)).
+- 2022-04-01 — Alcohol Education Program closed to new applications (operative) · § 54-56g(j) — this DUI-era diversion no longer accepts applicants; cases completed before closure still dismiss and erase.
 
-**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+**Verify — 6 open questions. Each answer closes a numbered question in the database:**
 
-1. What is the current Clean Slate rollout status, and how does a person check whether their own record has been erased yet? Wave 2 says erasures resumed October 2025 with ~50k of 100k+ done, and that individuals are not notified. Confirm the status page (portal.ct.gov/cleanslate) and the record-check process before any UI copy claims completeness.
+1. 2024–2026 session sweep: § 54-142a is encoded through PA 23-204 and § 54-142e through PA 23-134. Confirm no later (2024–2026) public act amended the erasure statutes before any UI copy claims completeness.
    - *Blocks no single field — affects a branch or wording.*
-2. DUI CONFLICT: is a DUI (Conn. Gen. Stat. § 14-227a) eligible for automatic erasure? One attorney source says DUIs are eligible; the state's own petition-form guidance blocks § 14-227a where there is a repeat within 10 years — which reads as first-offence eligible, repeat blocked. Read § 54-142a(e)(2)(C) and encode exactly what it says. The tree currently routes DUI to the exclusion gate as a question rather than assuming.
+2. Operational status of the automated erasure rollout: the statute is unconditional, but implementation was delayed in practice and individuals are not notified. Confirm the current status page (portal.ct.gov/cleanslate) and the record-check process — "eligible" is not yet "erased" (news/phone tier).
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the § 54-142a(e)(2)(C) exclusion list in full: family violence crimes (§ 46b-38a), sex offences requiring registration, and crimes with a maximum sentence over 5 years even where the actual sentence was less. The tree asks a person to self-assess this; the exact list needs confirming against the statute.
+3. Definitions cited but not pulled: § 46b-38a (family violence crime — the (e)(2)(A) exclusion) and § 54-250 (nonviolent/sexually violent offense — the (e)(2)(B) exclusion). The tree asks the person to self-assess membership; the exact definitional lists are cite-only here.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm the automatic erasure waiting periods against § 54-142a(e): misdemeanours 7 years, and class D/E and unclassified felonies with maximum terms of 5 years or less at 10 years — both measured from the person's MOST RECENT conviction of any crime.
+4. Feeder programs referenced but not pulled: § 54-56i / § 54-56q (drug education) and § 46b-38c (family violence education) — their mechanics and how completion feeds § 54-142a erasure are cite-only.
    - *Blocks no single field — affects a branch or wording.*
-5. How are completed deferrals/diversions (including accelerated rehabilitation) treated for erasure? Not covered in Wave 2 — standing call-sheet question for every state.
+5. Adjacent erasure routes not pulled: § 46b-146 (juvenile delinquency erasure) and § 29-15 (return of fingerprints). Out of scope for this pass; route juvenile matters to counsel.
    - *Blocks no single field — affects a branch or wording.*
-6. Is petition erasure (form JD-CR-202) and cannabis erasure genuinely free, and pardon applications too? Wave 2 says all three are free; confirm at the counter and on the Board of Pardons page.
-   - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
-7. What is the exact effective date of the resumed automatic erasures and of Public Act 21-42? Wave 2 gives month/year and year only.
-   - *Blocks no single field — affects a branch or wording.*
+6. Absolute-pardon application mechanics and fees are set by the Board of Pardons and Paroles outside the statute (§ 54-130a fixes the 3-year misdemeanor / 5-year felony application windows, not the process or cost). Confirm the current BOPP process and any fee (phone tier).
+   - *Blocks (null until answered):* `resources.remedies.pardon.fees`
 
 ---
 
 ## 2. DELAWARE (DE)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
+- **Post-Pardon Expungement (11 Del. C. § 4375)** — Delaware Board of Pardons, then Superior/Family Court
+- **Automatic Clean Slate Expungement (11 Del. C. § 4373A)** — Delaware State Bureau of Identification (SBI)
 - **Mandatory Expungement (State Bureau of Identification, 11 Del. C. § 4373)** — Delaware State Bureau of Identification (SBI)
-- **Discretionary Expungement (Superior Court, 11 Del. C. § 4374)** — Superior Court (or Family Court), county of the most recent case
+- **Discretionary Expungement (Superior or Family Court, 11 Del. C. § 4374)** — Superior Court (or Family Court), county of the most recent case
 - ACLU of Delaware (free expungement workshops) — https://www.aclu-de.org
 - Delaware Center for Justice — https://www.dcjustice.org
 
 **Dates that govern:**
-- 2024-08 — Automatic Clean Slate expungement processing began (operative) · Wave 2 gives month and year only. Covers the mandatory-eligible universe; rollout completeness is an open question.
-- 2021 — Clean Slate Act (SB 111 / SB 112) enacted (effective) · Wave 2 gives the year only.
+- 2024-08-01 — Automatic Clean Slate expungement sweep began (§ 4373A) (operative) · Since this date SBI sweeps the mandatory-eligible (§ 4373) universe monthly, with no application and no objection mechanism. A missed case keeps the SBI-application backstop; there is no damages claim if the sweep misses it. Operational completeness is an open question.
+- 2021 — Clean Slate Act (SB 111 / SB 112) enacted (effective) · Wave 2 gives the year only. The (f)(4)(b) 10-year prior-expungement bar counts grants after 12/27/2019.
 
-**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. WHICH felonies are on the § 4373 mandatory felony list (the 10-year path)? Wave 2 flags that the source text cut off here — the felony list itself was not captured. The tree routes an eligible-list felony to a result that says its dates but flags that the list membership needs confirming against § 4373.
+1. Fee amounts: the SBI mandatory-expungement application fee is set by regulation, and the Superior/Family Court discretionary-petition fee is a court schedule — neither dollar amount is in the statute. Confirm both (phone tier).
+   - *Blocks (null until answered):* `resources.remedies.mandatory.fees`, `resources.remedies.discretionary.fees`
+2. Cite-only cross-references not pulled: the 11 § 4201(c) violent-felony list (the § 4374(b) discretionary exclusion), the subchapter VI, chapter 5 subparts A/B/C/F misdemeanors (a § 4373(b) exclusion), 16 § 1136, 31 § 3913, 31 § 309 (Beau Biden Act), and the 10 § 901 family-relationship definition for the DV two-part test. The tree asks the person to self-assess membership; the exact lists need confirming.
    - *Blocks no single field — affects a branch or wording.*
-2. What is the current fingerprinting fee for mandatory expungement through SBI? Wave 2 gives "$52 (ACLU-DE figure)" and marks it for verification. And is there any waiver? Ask SBI/DSP directly.
-   - *Blocks (null until answered):* `resources.remedies.mandatory.fees`, `resources.remedies.mandatory.feeWaiver`
-3. What is the court fee for a discretionary expungement petition? § 4374(j) authorises a "reasonable fee" but does not state an amount. And can it be waived? Get the number from a Superior Court clerk.
-   - *Blocks (null until answered):* `resources.remedies.discretionary.fees`, `resources.remedies.discretionary.feeWaiver`
-4. What is the current status and completeness of the automatic Clean Slate rollout? Wave 2 says processing began August 2024 and to verify completeness on delaware.gov before any UI copy claims records are already done.
+3. Operational status of the § 4373A monthly automatic sweep: the statute is unconditional, but "eligible" is not yet "expunged" if the sweep has not reached a case. Confirm current completeness before UI copy claims records are already done (news/phone tier).
    - *Blocks no single field — affects a branch or wording.*
-5. Confirm the § 4372(f) exclusion list: Title 21 motor-vehicle offences including DUI (with narrow § 4374(i)(2) exceptions), violent felonies (§ 4201(c) list), and DV / child-victim / vulnerable-adult crimes (barred from mandatory, 7-year discretionary or pardon instead). Also confirm the prior-expungement-within-10-years and felony-after-felony-expungement bars.
+4. The delta of 85 Del. Laws c. 142 §10 is integrated into this 2025 print of § 4374; note only — confirm no substantive change to the encoded discretionary waits/exclusions was missed.
    - *Blocks no single field — affects a branch or wording.*
-6. How are completed deferrals/diversions (including Probation Before Judgment) treated for expungement? Standing call-sheet question for every state — Wave 2 does not cover it.
-   - *Blocks no single field — affects a branch or wording.*
-7. What are the exact effective dates for the August 2024 automatic-processing start and the 2021 Clean Slate Act? Wave 2 gives month/year and year only.
+5. Juvenile expungement (Title 10) was not pulled — it is a separate track from the adult subchapter VII rules encoded here; route juvenile matters to counsel (cite-only).
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 3. MINNESOTA (MN)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Petition Expungement (Minn. Stat. §§ 609A.02 / 609A.03)** — District court of the case
@@ -90,85 +89,70 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Until We Are All Free (Clean Slate implementation tracking) — https://www.uwaaf.org
 
 **Dates that govern:**
-- 2025-01-01 — Automatic Clean Slate expungement (§ 609A.015) live (effective) · The BCA began sending records April 2025 and sealing from June 2025; ~94% of ~2 million eligible records expunged by spring 2026, remainder in judicial review. The strongest automatic-track status of any state in Waves 1-2.
-- 2024-05 — Automatic petty-cannabis expungement (§ 609A.055) completed (operative) · Wave 2 gives month and year only.
+- 2025-01-01 — Automatic Clean Slate expungement (§ 609A.015) effective — retroactive (effective) · The BCA seals qualifying records on its own, no petition and no fee. It is RETROACTIVE to offenses that met the criteria before 1/1/25 and were in the BCA system as of 1/1/25. The BCA determines eligibility within 30 days of a wait ending, re-reviews annually, and seals 60 days after judicial notice (subd 5).
 
-**Verify — 6 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the exact § 609A.015 subd. 3(b) exclusion lists and the § 609A.02 subd. 3 lists — secondary sources paraphrase them loosely. Wave 2 flags DWI, domestic assault, harassment/stalking, and 4th-degree assault as carve-outs; the precise lists need pulling from the statute.
+1. Is there a 2026 Regular Session amendment to § 609A.015? The revisor page banners one, but it is not in the 2025 print pulled. The rules here reflect the 2025 text plus 1Sp2025 c3 art16 s18; re-confirm against the certified 2026 text once published.
    - *Blocks no single field — affects a branch or wording.*
-2. Is DWI excluded from the PETITION track as well as the automatic one? Wave 2 flags this specifically — read § 609A.02 subd. 3 against § 609A.015 subd. 3(b). The tree currently routes DWI to a hedge that says the automatic path is out and the petition path is unconfirmed.
+2. Pull the CANNABIS expungement paths — §§ 609A.017, 609A.055 (automatic petty-cannabis), and 609A.06 (Cannabis Expungement Board, felony cannabis) — referenced in § 609A.01 but NOT pulled. Minnesota cannabis routing stays draft until those sections are read.
    - *Blocks no single field — affects a branch or wording.*
-3. What is the current petition filing fee? Wave 2 gives "~$300-ish, in-forma-pauperis waiver available" and flags it. Confirm the current amount with a district court.
-   - *Blocks (null until answered):* `resources.remedies.petition.fees`
-4. Confirm the § 609.13 quirk: a felony deemed a misdemeanor via stay of imposition does NOT become automatic-eligible through the demotion — separate petition rules with 4/5-year splits apply. The tree does not currently special-case this; it is disclosed as an open question.
+3. What is the petition filing fee amount? A fee applies per § 357.021 subd 2 clause (1), but the dollar amount is not in the pulled text — confirm with a district court. It is waivable for indigency, and MUST be waived for a resolved-in-favor petition (§ 609A.03).
    - *Blocks no single field — affects a branch or wording.*
-5. Confirm the § 609A.015 rollout is as complete as reported (~94% by spring 2026) and the BCA record-check path. This is the strongest automatic-track claim in the app, so it is worth confirming before the copy leans on it.
-   - *Blocks no single field — affects a branch or wording.*
-6. How are completed diversions and stays of adjudication treated beyond the 1-year automatic period Wave 2 gives? The tree encodes the 1-year automatic diversion period; confirm the boundaries.
+4. Pull the § 299C.11 / § 13.82 arrest-record-return path (return/destruction of arrest records where no charge or a favorable outcome) — not in this pull; it is a separate mechanism from § 609A sealing.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 4. OKLAHOMA (OK)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Section 18 Expungement (seals arrest + court record)** — District court of the county of arrest; OSBI for the arrest record
-- **Section 991(c) Expungement (deferred-sentence disposition cleanup)** — The court that handled the case
+- **Section 18 Expungement (seals arrest + court record)** — District court where the arrest information is located; OSBI for the arrest record
+- **Section 991c Expungement (deferred-sentence disposition cleanup)** — The court that handled the case
 - Legal Aid Services of Oklahoma — https://oklaw.org
 - OSBI Expungements (answers by email and phone) — https://oklahoma.gov/osbi/services/criminal-history/expungements.html
 
 **Dates that govern:**
-- 2025-11-01 — Automatic Clean Slate processing legally began (operative) · Effective Nov 1, 2022; automatic processing began Nov 1, 2025. OSBI is mid-implementation with a phased bridge plan — rollout status is an open question.
+- 2025-11-01 — Automatic Clean Slate processing live (operative) · The § 18(C) automatic trigger is "three years after November 1, 2022" = November 1, 2025 (now past). It is subject to "availability of funds," and OSBI is mid-implementation — operational status is an open question. OSBI: expungements@osbi.ok.gov, (405) 879-2641.
+- 2024 — Dueling 2024 §18 amendments (Laws 2024 c. 452 §12 and c. 259 §1) (effective) · Two conflicting amendments to § 22-18 both remain in the code (v1 = c. 452, 16 paragraphs; v2 = c. 259, 15 paragraphs). ¶1-13 are identical. The v1-only ¶14 (two-felony-deferred) and the renumbered identity-theft/reclassified paragraphs are encoded with version notes; 2025 c. 292's § 19 amendments adopt v2 terminology for the automatic track.
 
-**Verify — 6 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. What is the current OSBI Clean Slate rollout status? Automatic processing legally began Nov 1, 2025 but OSBI is mid-implementation with a phased bridge. Verify on oklahoma.gov/osbi before any UI copy claims records are being processed now. OSBI answers email at expungements@osbi.ok.gov and phone (405) 879-2641.
+1. The dueling § 22-18 amendments (Laws 2024 c. 452 §12 "v1" 16 paragraphs vs c. 259 §1 "v2" 15 paragraphs) both remain in the code. Confirm whether courts/OSBI treat v1's two-felony-DEFERRED ¶14 as operative, and whether any 2026 act harmonized the two versions. The tree encodes the union with version notes.
    - *Blocks no single field — affects a branch or wording.*
-2. Did HB 3037 pass? Wave 2 flags a proposed change raising the fine-only misdemeanor threshold to $1,000 and cutting waits. Encode CURRENT law only — the tree uses the existing under-$501 fine-only threshold. Check the legislature site for HB 3037's fate before updating.
+2. OPERATIONAL status of the November 1, 2025 automatic Clean Slate sweep — the § 18(C) trigger is past, but the path is subject to "availability of funds" and OSBI is mid-implementation. Verify with OSBI (phone/news tier) before any copy claims records are actively being processed.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the current § 18(A)(12)-(13) text on single-nonviolent-felony expungement, specifically any pardon prerequisites. Wave 2 flags this. The tree encodes the 5-year (one felony) and 10-year (two felonies) periods but the pardon-prerequisite detail is unverified.
+3. Pull the cross-referenced offense lists: 57 O.S. § 571 (violent felonies — separates ¶9/¶12-eligible nonviolent felonies) and 21 O.S. § 13.1 (the felonies barred from ¶13 and v1-¶14). The exclusion screens key on those cross-references and ask the person until the lists are enumerated. Also the SORA (57 O.S. § 582/registerable) scope.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm the OSBI arrest-record processing fee. Wave 2 gives "$150 (their own page)"; the court-record expungement is free. Confirm the $150 and whether any waiver exists.
-   - *Blocks (null until answered):* `resources.remedies.section18.fees`, `resources.remedies.section18.feeWaiver`, `resources.remedies.section991c.fees`, `resources.remedies.section991c.feeWaiver`
-5. Confirm the SB 1770 single-source rule: any out-of-state or federal arrest disqualifies the AUTOMATIC path for dismissals and misdemeanours (not the petition path). The tree gates on this; confirm it applies only to the automatic path and only to those categories.
+4. District-court filing fee and the OSBI order-processing fee amounts are set OUTSIDE the pulled sections — phone tier for both. Exceptions confirmed from text: ¶3 (DNA-innocence) petitions get all filing fees and court costs reimbursed (§ 19(R)); the automatic path involves no filing at all. Also confirm the § 19b Identity Theft Passport fee (OSBI rule).
    - *Blocks no single field — affects a branch or wording.*
-6. Confirm the 57 O.S. § 571 violent-offense list that separates a "nonviolent felony" (expungeable) from a violent one (not). The tree asks a person whether their felony was violent; the list itself needs confirming.
+5. Confirm the exact scope of 2025 c. 292's § 19 changes and 2025 c. 305's § 991c changes — the pulled text shows the history lines; verify no further-reaching substantive change before the next review.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 5. VIRGINIA (VA)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Petition to Seal (new regime, Va. Code § 19.2-392.12)** — Circuit Court where the charge originated
-- **Expungement (old regime, non-convictions, Va. Code § 19.2-392.2)** — Circuit Court where the charge was heard
+- **Petition to Seal (Va. Code § 19.2-392.12; lighter track § 19.2-392.12:1)** — Circuit Court where the charge originated
+- **Expungement (non-convictions, Va. Code § 19.2-392.2)** — Circuit Court where the charge was heard
 - Legal Aid Justice Center — https://www.justice4all.org
 - Justice Forward Virginia (sealing explainer) — https://justiceforwardva.com
 
 **Dates that govern:**
-- 2026-07-01 — Comprehensive sealing regime took effect (SB 1466 / HB 2723) (effective) · Two weeks old as of the Wave 2 draft. The biggest recent second-chance-law change in the country. Automatic processes are spinning up — verify rollout status before any UI copy claims sealing is happening automatically now.
-- 1986-01-01 — Earliest sealable offense date (effective) · Only records with offense dates on or after this date can be sealed.
+- 2026-07-01 — Comprehensive sealing regime took effect (SB 1466 / HB 2723) (effective) · The biggest recent second-chance-law change in the country. Automatic processes are spinning up — verify rollout status before any UI copy claims sealing is happening automatically now.
+- 1986-01-01 — Earliest sealable offense date (effective) · Most records need an offense date on or after this date to be sealed. Exception: simple marijuana possession (former § 18.2-250.1) is sealed by operation of law regardless of date (§ 19.2-392.6:1).
+- 2026-12-01 — Expungement statute rewrite takes effect (2026 c. 1127) (effective) · The December version of § 19.2-392.2 broadens expungement to any disposition where the person was "not ultimately convicted" (unless a facts-sufficient stipulation/finding was made), allows one petition to cover multiple charges from separate occurrences, softens the standard to "potential manifest injustice," adds that a prior conviction alone cannot defeat the petition, and lets appellants proceed under a pseudonym.
 
-**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+**Verify — 2 open questions. Each answer closes a numbered question in the database:**
 
-1. What is the current automatic-sealing rollout status? The regime took effect July 1, 2026 and automatic processes are only spinning up. Verify on vsp.virginia.gov (the State Police petition-based-record-sealing page) and vscc.virginia.gov before any UI copy claims records are being sealed automatically now. Trust only VSP, the Crime Commission, and the statute — secondary sources carry stale 2025 dates.
+1. What is the current automatic-sealing rollout status? The regime took effect July 1, 2026 and automatic processes are only spinning up. Verify on vsp.virginia.gov (the State Police record-sealing page) and vscc.virginia.gov before any UI copy claims records are being sealed automatically now. Trust only VSP, the Crime Commission, and the statute — secondary sources carry stale 2025 dates.
    - *Blocks no single field — affects a branch or wording.*
-2. Are petition sealing filings genuinely free with no fingerprint card, per the 2025 amendments? Wave 2 says yes and calls it a UI headline if confirmed — verify on the Circuit Court's own instructions and by phone. This is one of the most user-relevant facts in the state.
-   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`, `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
-3. Confirm the exact lifetime-limit mechanics in § 19.2-392.12: Wave 2 says 2 lifetime sealing petitions but flags the precise mechanics. The tree discloses the limit in prose but cannot count a person's prior petitions.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the automatic misdemeanor list in § 19.2-392.7: petit larceny, shoplifting, trespass variants, disorderly conduct, misdemeanor marijuana distribution — sealed 7 years after conviction if no other CCRE-reportable conviction in that window (traffic infractions do not count against). The tree asks a person whether their offense is on this list.
-   - *Blocks no single field — affects a branch or wording.*
-5. Confirm the full § 19.2-392.12 petition exclusion list and the felony gating: no Class 1-2 felony ever, no Class 3-4 felony in 20 years, no felony of any kind in 10 years, 10 years clean, drug/alcohol convictions require a rehabilitation showing. The tree asks a person to self-assess the felony-history gate; the exact provisions need confirming.
-   - *Blocks no single field — affects a branch or wording.*
-6. How are DEFERRED dispositions treated under the new sealing regime? Not covered in Wave 2 — standing call-sheet question. The tree hedges deferrals.
-   - *Blocks no single field — affects a branch or wording.*
-7. Confirm the felony non-conviction path: Wave 2 says a felony charge that ended without conviction is sealable at conclusion WITH the defendant's request and the Commonwealth's Attorney's concurrence, or via old-regime expungement otherwise. The tree routes felony non-convictions to a result that explains both; confirm the concurrence requirement.
+2. Are Circuit Court clerks circulating a § 19.2-392.12:1 petition form yet, or are petitioners drafting their own? The 12:1 track is new and lighter (free, 7 years, no manifest-injustice element); the statute is clear but the local filing mechanics may not have caught up. Phone-verify with a Circuit Court clerk.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

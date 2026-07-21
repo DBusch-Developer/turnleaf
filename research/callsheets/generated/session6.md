@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**32 open questions across 11 states.**
+**43 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -105,25 +105,35 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 5. KENTUCKY (KY)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement (Ky. Rev. Stat. §§ 431.073, 431.076, 431.078; certificate § 431.079)** — The court of conviction; KSP/AOC for the Certificate of Eligibility
+- **Certificate of Eligibility (Ky. Rev. Stat. § 431.079 — required for conviction expungements)** — Kentucky State Police / Administrative Office of the Courts
+- **Drug-Possession Voiding and Sealing (Ky. Rev. Stat. §§ 218A.275, 218A.276)** — The court where the conviction was entered
+- **Misdemeanor Expungement (Ky. Rev. Stat. § 431.078; certificate § 431.079)** — The court of conviction (or the county-of-residence District Court for pre-1992 convictions)
+- **Felony Vacate-and-Expunge (Ky. Rev. Stat. § 431.073; certificate § 431.079)** — The court where the conviction was entered (motion in the original case)
+- **Non-Conviction Expungement (Ky. Rev. Stat. § 431.076)** — The court where the case was heard
 - Kentucky Department of Public Advocacy — Expungement Guide — https://dpa.ky.gov
 - expungeky.com (eligibility FAQ) — https://expungeky.com
 
 **Dates that govern:**
-- 2020-07-15 — Automatic non-conviction expungement begins (KRS § 431.076) (operative) · Acquittals and dismissals-with-prejudice on or after this date are expunged automatically, 30 days after the case ends — no petition, no certificate. Does NOT cover plea-deal dismissals. Older cases use the petition route.
-- 2023-06-29 — Amendment allowing MULTIPLE Class D felony expungements (KRS § 431.073) (effective) · The 2023 amendment repealed the once-per-lifetime limit; a person may now expunge more than one qualifying Class D felony. Older guides still say once-only — encode from the amended statute. Flagged for confirmation against current text.
+- 2020-07-15 — Automatic non-conviction expungement begins (KRS § 431.076(1)(a)) (operative) · For dispositions on or after this date, an acquittal or a dismissal-with-prejudice of ALL charges (not in exchange for a guilty plea to another charge) is expunged automatically 30 days after the case ends, unless the person objects. NOT retroactive — earlier dispositions use the petition tier.
+- 2027-04-30 — KRS § 431.073 current text effective until this date (operative) · The 2023 ch. 87 text of the felony vacate-and-expunge statute is effective until April 30, 2027; a successor version takes over after that and has not been pulled (open question a). Encode the current text; re-verify the felony path before 4/30/2027.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 6 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the full KRS § 431.078 misdemeanor exclusion list. Wave 6 gives 5-year eligibility for most misdemeanors/violations but excludes sex offenses and offenses against children, and flags the full exclusion list as needing the statute text. The tree asks a sex-offense/child-offense exclusion; confirm the complete list.
+1. SUCCESSOR VERSION of KRS § 431.073: the encoded text is the 2023 ch. 87 version, effective only until April 30, 2027. Pull the successor version and diff the felony vacate-and-expunge rules (list, exclusions, fees, burden modes) before that date — the current print expires.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the 2023 amendment (eff. Jun 29, 2023) to KRS § 431.073 allows expunging MULTIPLE qualifying Class D felonies, not one per lifetime. Wave 6 persona 4 (two Class D felonies, separate incidents) is the verify-then-encode branch and says to encode from the amended statute. The tree does not cap Class D felonies at one; confirm against the current text.
+2. 2024–2026 session sweep for the non-felony sections: § 431.076 is encoded through 2020 ch. 45, § 431.078 through 2016 ch. 94, and § 431.079 through 2019 ch. 188. Confirm no later (2024–2026) public act amended them before any UI copy claims completeness.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the State Police certificate backlog (KSP's own page says 4-5 months to process the § 431.079 Certificate of Eligibility) and confirm no automation exists: Wave 6 says SB 290 (automatic expungement) failed in the 2026 session. The tree tells conviction-eligible people to start the certificate first and plan around the wait, and is petition-only for convictions; confirm both facts.
+3. KSP § 431.079 Certificate of Eligibility fee: the statute sets the certification requirement but the fee AMOUNT is fixed by KSP regulation, not the statute text. Confirm the current amount (phone tier).
+   - *Blocks (null until answered):* `resources.remedies.certificate.fees`
+4. KRS § 27A.099 (the sealing-exception cited in the drug-voiding sealing provisions of §§ 218A.275/218A.276) was not pulled — confirm what access it preserves to sealed drug records.
    - *Blocks no single field — affects a branch or wording.*
+5. KRS § 218A.14151 (deferred-prosecution) was not pulled — it is the disqualifier for a § 218A.275 first-offense set-aside (a prior 14151 dismissal bars it). Cite-only feeder; confirm its mechanics.
+   - *Blocks no single field — affects a branch or wording.*
+6. Whether a § 431.076 non-conviction expungement carries any court filing fee in practice: no fee appears in the statute text and the § 431.079 certification does not apply, so it is encoded as free — confirm at the clerk (phone tier).
+   - *Blocks (null until answered):* `resources.remedies.nonConviction.fees`
 
 ---
 
@@ -201,48 +211,67 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 9. NEVADA (NV)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)** — The court where the case was decided (Las Vegas Justice Court / Eighth Judicial District)
-- Nevada Legal Services — Record Sealing Manual — https://nlslaw.net
+- **Reentry-Program Sealing (Nev. Rev. Stat. § 179.259)** — The court where the conviction was entered
+- **Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)** — The court where the case was decided
+- **Decriminalized-Offense Sealing Request (Nev. Rev. Stat. § 179.271)** — The court that entered the conviction
+- Nevada Legal Services — Record Sealing Manual — https://nevadalegalservices.org
 - Legal Aid Center of Southern Nevada — https://www.lacsn.org
 
 **Dates that govern:**
-- 2019 — Marijuana (<=2.5 oz) decriminalized-offense sealing, immediate (AB 192) (effective) · Wave 6 gives the year only. Records of now-decriminalized minor marijuana possession can be sealed immediately.
-- 2021 — Pardoned convictions become sealable on receipt of the pardon (effective) · Wave 6 gives the year only. A pardoned conviction can be sealed once the pardon is received.
+- 2025 — NRS 179.245 conviction-sealing text current through 2025 Stats. 773 (effective) · Diana read § 179.245 through 2025 Stats. 773. The delta of that chapter is integrated into this print; note only (open question f).
+- 2017 — Marijuana decriminalization opens the free § 179.271 sealing request (effective) · Records of now-decriminalized minor cannabis possession are sealed by a free written REQUEST to the convicting court under § 179.271, not the general § 179.245 petition.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm when the sealing waiting clock starts — specifically whether "release or discharge" requires fines/fees paid. Wave 6 notes practitioner sources say completion includes fines but flags the clock start for verification. The tree runs each ladder period from release/discharge; confirm whether unpaid financial obligations delay the clock.
+1. REQUIRED PULLS: NRS 179.2445 (the rebuttable-presumption text, and any crime-of-violence definition it carries) and NRS 179.301 (the exceptions to the effect of sealing — likely where gaming/licensing carve-outs live). The presumption mechanics here are encoded from § 179.245(4)/§ 179.255(6), and the effect copy is kept qualified until § 179.301 is read.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the 1-year general (catch-all) misdemeanor tier from the statute. Wave 6 lists it but flags it for confirmation against NRS 179.245. The tree routes "other misdemeanors" to a 1-year wait; confirm.
+2. Unpulled cross-referenced routes (cite-only until read): NRS 179.247, 179.2595, 453.3365 (drug set-aside sealing), 176.211 / 176A.245 / 176A.265 / 176A.295 (deferred/probation feeders), 201.354, 34.970, 174.034.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the sealing cost reality. Wave 6 says there is no single statutory fee — the cost is SCOPE reports from each arresting agency, a criminal-history record, and certified copies, roughly $150 all-in self-filed in Las Vegas Justice Court (practitioner figure), plus a months-long Carson City Repository backlog to actually seal after the order. The fees and feeWaiver fields are null pending this; the Nevada Legal Services Record Sealing Manual and the Eighth Judicial District are the checks.
-   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+3. Whether NRS chapter 179 contains a refile-after-denial waiting rule (check the table of contents around § 179.265). Do not assert one until confirmed.
+   - *Blocks no single field — affects a branch or wording.*
+4. County filing-fee amounts for a § 179.245/§ 179.255 sealing petition are not stated in the text — they vary by county (phone tier). Note: a sex-trafficking victim (§ 179.245(9)) pays NO fee of any kind.
+   - *Blocks (null until answered):* `resources.remedies.sealing.fees`
+5. NRS 179D.0357 (the crime-against-a-child list that the § 179.245(6) never-list references) was not pulled — cite-only; the tree asks the person to self-assess "crime against a child."
+   - *Blocks no single field — affects a branch or wording.*
+6. Delta of 2025 Stats. 773 versus the prior § 179.245 text is integrated into this print; note only — confirm no substantive change to the encoded tiers/exclusions was missed.
+   - *Blocks no single field — affects a branch or wording.*
+7. Is there a petition FORM for a § 179.259 reentry-program sealing, or is the petition drafted from the statute? No reentry-specific form was found statewide (selfhelp.nvcourts.gov lists no criminal record-sealing forms at all), in Clark County, or in the NV Legal Services manual. Ask a district court clerk which document they expect. The answer may legitimately be "no form exists" — in which case formUrl stays null permanently and the steps should say so.
+   - *Blocks (null until answered):* `resources.remedies.reentry.formUrl`
 
 ---
 
 ## 10. OREGON (OR)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Set Aside a Conviction (ORS 137.225)** — The sentencing court; Oregon State Police for the record check
+- **Set Aside a Conviction (ORS 137.225)** — The court of conviction (arrest/declination motions: the county of arrest); Oregon State Police for the record check
+- **Marijuana Set-Aside Fast Paths (ORS 137.226)** — The court of conviction; Oregon State Police for the record check
 - Legal Aid Services of Oregon (1-800-351-7248) — https://lasoregon.org
 - Oregon Judicial Department — Self-Help / Forms — https://www.courts.oregon.gov/self-help
 
 **Dates that govern:**
-- 2022-01-01 — SB 397 set-aside overhaul takes effect (ORS 137.225) (effective) · Shortened waits (Class B felony 20 yrs -> 7 yrs, etc.) and eliminated the court filing fee. Made many older convictions newly eligible — a key "you may already qualify" fact.
-- 2025 — Amendment: expired money-judgment obligations count as sentence-complete (effective) · Chapter 395 of 2025. Wave 6 gives the year only. Unpaid old LFOs whose money judgments have expired no longer block a set-aside.
+- 2022-01-01 — SB 397 set-aside overhaul effective (ORS 137.225) (effective) · Shortened the waits (Class B felony to 7 years, etc.), eliminated the court filing fee, and made grant presumptive. Many older convictions became newly eligible — a key "you may already qualify" fact.
+- 2025-09-26 — Pre-7/1/2015 sub-ounce marijuana fine obligations expire (2025 c.395) (operative) · The 2025 c.395 session note: monetary obligations on pre-7/1/2015 sub-ounce marijuana municipal/justice-court judgments expired on this date and are deemed satisfied for set-aside purposes — those unpaid fines no longer block the sentence-completion gate.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the Oregon State Police record-check / fingerprint fee amount. Wave 6 flags a conflict: $33 (Powell Law) vs $80 (fingerprint-card provisions/others). One OSP fee covers filings across multiple counties. The court filing fee itself was eliminated by SB 397. The fees and feeWaiver fields are null pending this amount; an OSP or circuit-court call is the check.
-   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
-2. Confirm the ORS 137.225 dismissal subsection against the current text. Wave 6 flags a known drafting error (an old subsection (9) cross-reference) that made SOME dismissed charges wait conviction-length periods rather than being expungeable anytime; a practitioner article flagged it unfixed as of 2024. The tree treats dismissals/acquittals as expungeable with essentially no wait but names this caveat; confirm the current statute and county practice (Multnomah).
+1. Oregon Criminal Justice Commission person-felony / person-misdemeanor definitions (OAR crime-category rules) are cross-referenced by ORS 137.225(5)/(6) but not pulled — the tree asks the person to self-assess "person felony." Pull the OAR crime-category list before any UI claims a definitive person-felony determination.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the 2025 chapter 395 amendment (expired money-judgment obligations count as sentence-complete) and the county backlog reality (~2 years, practitioner-documented). The tree tells people old expired-judgment LFOs no longer block them and sets an honest timeline expectation; confirm both against current practice.
+2. Oregon State Police criminal-record-check fee amount for conviction set-aside motions: ORS 137.225(2)(d) sets it at OSP actual cost (capped), one fee total across counties, but the dollar amount is in OSP practice, not the statute. Confirm the current amount (phone tier).
+   - *Blocks no single field — affects a branch or wording.*
+3. ORS 166.429 (the Class B felony carve-out that stays excluded) and ORS 475.896 (the drug-enforcement-misdemeanor possession excluded from the cleanliness lookback) were not pulled — cite-only until confirmed.
+   - *Blocks no single field — affects a branch or wording.*
+4. ORS 475C.397 (a separate marijuana conviction set-aside route referenced by the 2025 c.395 material) was not pulled — flag as a possible parallel path to 137.226 and confirm whether it offers broader or different relief.
+   - *Blocks no single field — affects a branch or wording.*
+5. ORS 163A.140 / 163A.145 / 163A.150 (the sex-offender reporting-relief mechanics that open the (6)(A) sex-crime exception) were not pulled — cite-only; the tree asks whether reporting relief was granted rather than screening its criteria.
+   - *Blocks no single field — affects a branch or wording.*
+6. The exact delta of 2025 c.349 versus the prior ORS 137.225 text is integrated into this 2025-edition print; note only — confirm no substantive change to the encoded waits/exclusions was missed.
+   - *Blocks no single field — affects a branch or wording.*
+7. Juvenile set-aside (ORS 419A series) was not pulled — out of scope for this pass; route juvenile matters to counsel.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

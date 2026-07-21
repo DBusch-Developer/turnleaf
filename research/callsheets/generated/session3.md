@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 3`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**25 open questions across 5 states.**
+**11 open questions across 5 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,7 +16,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. FLORIDA (FL)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Seal or Expunge (FDLE Certificate, then court petition)** — FDLE for the certificate; county clerk (county of arrest) for the petition
@@ -24,54 +24,46 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Florida Courts self-help (find your county legal aid) — https://www.flcourts.gov/Resources-Services/Court-Improvement/Self-Help-Center
 
 **Dates that govern:**
-- 2019 — Administrative/automatic sealing of qualifying non-conviction arrests (§ 943.0595) (effective) · Wave 3 gives the year only. FDLE auto-seals qualifying non-judicial arrest records that ended in non-conviction — scope and current status flagged for verification.
+- 2019 — Administrative/automatic sealing of qualifying non-conviction arrests (§ 943.0595) (effective) · FDLE MANDATORILY auto-seals qualifying non-conviction arrest records (§ 943.0595), with no lifetime limit ((2)(b)) — but NOT forcible felonies (§ 776.08) or specified sex-registry offenses ((2)(a)), and FDLE sealing its own copy does not force other agencies to seal theirs ((3)(c)). (Diana, statute pass 2026-07-16.)
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Verify — 1 open question. Each answer closes a numbered question in the database:**
 
-1. What is the current scope and status of § 943.0595 administrative/automatic sealing? Wave 3 says FDLE auto-seals qualifying non-conviction arrest records but flags the scope and rollout. Verify on FDLE's Seal & Expunge page before any UI copy claims a record may already be sealed automatically.
-   - *Blocks no single field — affects a branch or wording.*
-2. What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county's fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.
+1. What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county's fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.
    - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
-3. How long is an FDLE Certificate of Eligibility valid? Wave 3 gives "12 months" but flags it. Confirm on FDLE's instructions — it matters for timing the court petition after the certificate issues.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the § 943.0584 list of offences that cannot be sealed even with adjudication withheld: DV battery, sex offences, lewd offences, trafficking, and others. The tree asks a person whether their offence is on this list.
-   - *Blocks no single field — affects a branch or wording.*
-5. How are completed diversions treated — including juvenile diversion and the niche self-defense (§ 943.0578) and human-trafficking tracks? Wave 3 mentions these as niche tracks but does not detail eligibility. Standing call-sheet question for every state.
-   - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 2. GEORGIA (GA)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Record Restriction and Sealing (O.C.G.A. § 35-3-37)** — The court of conviction (or the arresting agency for pre-2013 arrests)
+- **Record Restriction and Sealing — court petition (O.C.G.A. § 35-3-37)** — The court of conviction
+- **Arrest Record Restriction — agency route (O.C.G.A. § 35-3-37)** — The arresting agency (GBI/GCIC for the record itself)
 - Georgia Justice Project (wrote the law; statewide clinics) — https://www.gjp.org
 - Atlanta Legal Aid — https://atlantalegalaid.org
 
 **Dates that govern:**
 - 2021-01-01 — SB 288 "Second Chance Act" — misdemeanour conviction restriction (effective) · Allows petitioning to restrict and seal up to 2 misdemeanour convictions in a lifetime.
 - 2013-07-01 — Automatic restriction of non-conviction arrests began (effective) · Arrests on/after this date that end without conviction are restricted automatically by GCIC — with documented reporting gaps, so verification of the GCIC report is advised. Pre-2013 arrests require applying to the arresting agency.
+- 2024-04-24 — HB 1201 — trafficking-survivor restriction track (effective) · Added O.C.G.A. § 35-3-37(j)(6)-(7): a survivor of human trafficking may petition the sentencing court to restrict a conviction, First Offender (§ 42-8-60), or conditional-discharge (§ 16-13-2) sentence for an offense committed while a victim (§ 16-5-46) — filed under seal, no fee.
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. How complete is the automatic restriction of post-2013 non-conviction arrests in practice? Wave 3 flags documented reporting gaps — the UI says "should be automatic; verify your GCIC report". Confirm with GBI/GCIC how a person checks and corrects a missed restriction.
+1. What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Statute-verified 7/18 confirms there is no statewide fee; both vary by agency/county. Phone targets.
+   - *Blocks (null until answered):* `resources.remedies.agency_restriction.fees`, `resources.remedies.agency_restriction.feeWaiver`, `resources.remedies.court_petition.fees`, `resources.remedies.court_petition.feeWaiver`
+2. How complete is the automatic restriction of post-2013 non-conviction arrests in practice? Documented reporting gaps remain — the UI says "should be automatic; verify your GCIC report". Confirm with GBI/GCIC how a person checks and corrects a missed restriction.
    - *Blocks no single field — affects a branch or wording.*
-2. What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Wave 3 flags both as varying by agency/county with no statewide fee. Phone targets.
-   - *Blocks (null until answered):* `resources.remedies.restriction.fees`, `resources.remedies.restriction.feeWaiver`
-3. Confirm the § 35-3-37(j)(4)(A) exclusion list for misdemeanour conviction restriction: DUI, family-violence battery (unless under 21 at arrest), sex offences, crimes against minors, and serious traffic offences. The tree asks a person whether their offence is on this list.
+3. Can a COMPLETED § 42-8-60 First Offender record be further restricted/sealed? § 42-8-60 exonerates but does not restrict, and a plain FO completion is not on § 35-3-37(h)(2)'s automatic-restriction list (only § 16-13-2 drug and § 3-3-23.1 alcohol first-offender completions are). Whether a separate restriction route exists is unsettled — GJP call target.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm the First Offender Act and retroactive First Offender mechanics: deferred adjudication once, judge-approved, and the ability to apply retroactively for old cases. Wave 3 names these as additional felony-adjacent routes but the tree does not yet branch on them — disclosed in the felony result.
-   - *Blocks no single field — affects a branch or wording.*
-5. How are completed diversions treated, and how does the Survivors First Act track (trafficking survivors — vacate or restrict+seal) work? Standing call-sheet question plus a named niche track.
+4. How does the § 42-8-66 retroactive-First-Offender prosecutor-consent requirement play out in practice? Sumrall (2024) and Ballard (2025) make consent a threshold; confirm with GJP how often prosecutors consent and any local practice for seeking it.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 3. ILLINOIS (IL)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Expungement or Sealing Petition (20 ILCS 2630/5.2)** — Circuit court of the county of the case
@@ -82,27 +74,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 **Dates that govern:**
 - 2026-06-30 — Clean Slate Act began phasing in (misdemeanour wait 3->2 yrs; prior-felony bar removed) (effective) · Signed Jan 16, 2026. Two weeks old as of the Wave 3 draft. The automatic-sealing system starts later — verify that date before any "automatic" UI copy.
 - 2026-01-16 — Clean Slate Act signed (effective)
+- 2026-06-01 — Governing amendment P.A. 104-459 effective (20 ILCS 2630/5.2) (effective) · The version Diana verified against ilga.gov (7/16): repeals the (c)(4) prior-felony bar, sets the (c)(3)(B) 2-yr / (c)(2)(F) 3-yr ladder, blanks the (d)(3) drug test, and adds the (k)/(l) automatic-sealing provisions.
+- 2029-01-01 — Automatic sealing begins (20 ILCS 2630/5.2(k)) — ISP quarterly (operative) · ISP seals eligible conviction records quarterly, with its own exclusion list (Class X, Articles 9/11, crimes of violence, robbery, hijacking, residential/Class 1-2 burglary, trafficking, organized retail; felonies wait until ALL eligible felonies meet timing). Petitioning now beats waiting for this.
+- 2034 — Automatic-sealing backlog phase-in deadline (subsection (k)) (deadline) · Wave 7 / Diana statute pass: the automatic-sealing backlog is phased in through 2034 — another reason to petition now rather than wait.
+- 2028-01-01 — Clerk auto-sealing of municipal-ordinance & Class C misdemeanor records begins (subsection (l)) (operative) · Circuit clerks auto-seal municipal-ordinance-violation and Class C misdemeanor records one year after the case closes.
 
-**Verify — 6 open questions. Each answer closes a numbered question in the database:**
+**Verify — 2 open questions. Each answer closes a numbered question in the database:**
 
-1. When does the Clean Slate AUTOMATIC sealing system actually start? The Act phased in June 30, 2026 but the automatic system comes later. Verify the automatic-start date on ILAO's Clean Slate FAQ before any UI copy claims records seal automatically — until then Illinois is petition-only and the tree treats it that way.
+1. Confirm the education-waiver provision: does earning a diploma or degree during the sealing wait accelerate eligibility? Wave 3 says it is real and great UX but flags it for verification. Disclosed in prose on the sealing results, not encoded as a branch (it is a discretionary accelerator).
    - *Blocks no single field — affects a branch or wording.*
-2. GENUINE FIGHT (research/REFEREE_QUEUE.md): under the post-June-30 text, how does a prior felony interact with a later felony sealing petition? Clean Slate removed the automatic bar, but the current rule for the felony-plus-felony fact pattern (Wave 3 persona 5) is unresolved. The tree hedges this to complex_new_law_il. Confirm against 20 ILCS 2630/5.2 current text (the July 1, 2025 version split matters).
-   - *Blocks no single field — affects a branch or wording.*
-3. Which completed-supervision offences carry the longer 5-year expungement wait rather than 2? Wave 3 flags the list. The tree uses the general 2-year supervision period and notes the exception.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the education-waiver provision: does earning a diploma or degree during the sealing wait accelerate eligibility? Wave 3 says it is real and great UX but flags it for verification. Disclosed in prose on the sealing results, not encoded as a branch (it is a discretionary accelerator).
-   - *Blocks no single field — affects a branch or wording.*
-5. What is the county filing fee, and specifically the Cook County rule that one fee covers all petitions filed the same day? Wave 3 flags it. A fee waiver is available.
+2. What is the county filing fee, and specifically the Cook County rule that one fee covers all petitions filed the same day? Wave 3 flags it. A fee waiver is available.
    - *Blocks (null until answered):* `resources.remedies.petition.fees`
-6. Confirm the current subsequent-felony unsealing risk text under Clean Slate. Wave 3 notes it is changing. Not encoded; flagged.
-   - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 4. NORTH CAROLINA (NC)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Expunction of a Nonviolent Conviction (§ 15A-145.5)** — Clerk of Superior Court, county of conviction
@@ -112,26 +100,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 **Dates that govern:**
 - 2025-07-09 — S.L. 2025-71 — one-nonviolent-misdemeanour wait cut 5 yrs to 3 (effective) · Applies to petitions filed on/after this date. Most secondary guides still cite the old 5-year figure.
-- 2024-07-08 — Automatic expunction of non-convictions (§ 15A-146) resumed under SB 565 (operative) · Dismissals/not-guilty on/after Dec 1, 2021 expunge automatically 180-210 days after disposition. Paused Aug 2022, resumed July 8, 2024 — verify it is still running. Plea-agreement dismissals are NOT automatic.
+- 2024-07-08 — Automatic expunction of non-convictions (§ 15A-146) resumed under SB 565 (operative) · A case with all charges disposed on/after Dec 1, 2021 and all dismissed/not-guilty/not-responsible expunges automatically 180-210 days after disposition (§ 15A-146(a4)). A case with a felony charge dismissed per plea agreement is excepted (whole case; petition route remains). Framework statute-confirmed; the 2022 pause / July 8, 2024 resumption is operational — verify it is still running.
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Verify — 3 open questions. Each answer closes a numbered question in the database:**
 
-1. Is the § 15A-146 automatic expunction of non-convictions still running? Wave 3 says it paused Aug 2022 and resumed July 8, 2024 under SB 565, and flags it for verification. Confirm on the current status before UI copy promises automatic expunction — the tree tells people to check rather than assume.
+1. Is the § 15A-146(a4) automatic expunction currently being PROCESSED by the AOC? The statutory framework is now confirmed (180-210 days, Dec 1 2021 trigger, felony-plea-agreement case exception). The only open part is operational: Wave 3 says the process paused Aug 2022 and resumed July 8, 2024 under SB 565 — a secondary-source claim. The tree tells people to check their record rather than assume.
    - *Blocks no single field — affects a branch or wording.*
-2. What is the current conviction-expunction filing fee? Wave 3 gives "$175, waived for indigent petitioners" and flags it. Non-conviction petitions are generally free. Confirm with a clerk of superior court.
-   - *Blocks (null until answered):* `resources.remedies.conviction.fees`
-3. Confirm the prior-§15A-145.5-expunction limits in subsections (c4)/(c5): Wave 3 says a misdemeanour expunction generally bars a later one and flags the legacy clauses. The tree discloses this in prose but cannot count a person's prior expunctions.
+2. Does a deferred-prosecution or conditional-discharge dismissal ALSO qualify for the § 15A-146(a4) automatic path, or is it petition-only? § 146(d) implies a petition (it carries the $175 fee); the statute text does not say whether the automatic path also reaches these dismissals.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm the full "nonviolent" exclusion list against § 15A-145.5(a): Class A-G felonies, Class A1 misdemeanours, any assault-element offence, registry offences, listed sex/stalking offences, meth/heroin/PWISD-cocaine felonies, CMV felonies, DWI, and attempts at any. The tree asks a person to self-assess this.
-   - *Blocks no single field — affects a branch or wording.*
-5. How are completed diversions and deferred-prosecution dismissals treated? Wave 3 says deferred-prosecution dismissals are not free like other non-conviction petitions but does not detail eligibility. Standing call-sheet question for every state.
+3. ADD SECTION: § 15A-145.8A (offense committed while under 18 but tried/convicted as an adult) was NOT read on 7/18 — the 15A-145.8 PDF covers remand-to-juvenile only. A "convicted as an adult for an under-18 offense" path stays unrouted until GS_15A-145.8A.pdf is read. One-download fix.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 5. OHIO (OH)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Application to Seal a Conviction (R.C. 2953.32)** — The sentencing court (common pleas for felonies, municipal for misdemeanours)
@@ -140,16 +124,12 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 **Dates that govern:**
 - 2023-04-04 — SB 288 — sealing and expungement became distinct remedies (effective) · Also removed the old "eligible offender" numerical cap in favour of per-conviction analysis.
+- 2025-09-30 — HB 96 — current R.C. 2953.32 sealing text (effective) · R.C. 2953.32 verified current through HB 96 (Diana, statute pass 2026-07-16).
+- 2026-03-20 — SB 56 — R.C. 2953.321 marijuana/hashish expungement track (effective) · Enacted SB 56. Marijuana or hashish possession (R.C. 2925.11) convictions or dismissals for conduct BEFORE this date are expungeable any time under R.C. 2953.321.
 
-**Verify — 4 open questions. Each answer closes a numbered question in the database:**
+**Verify — 1 open question. Each answer closes a numbered question in the database:**
 
-1. Confirm the F3 count-limit rules against the Ohio Supreme Court June 2026 Adult Rights Restoration bench card and R.C. 2953.32: an F3 is blocked where the person has more than one other felony (and the related 2-F3-plus-2-misdemeanour pattern). Wave 3 flags a secondary source claiming an HB 1 "5 felonies / 3 F4+" cap and instructs encoding from the bench card instead — which the tree does. Confirm the bench-card rules directly.
-   - *Blocks no single field — affects a branch or wording.*
-2. What is the court filing fee? Wave 3 gives "commonly $50" but flags it as set by individual court schedules. Confirm with a clerk of courts (Hamilton or Franklin). One application can cover multiple cases in the same court.
-   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
-3. Confirm the full exclusion list from the bench card: F1/F2, OVI and all traffic, offences of violence, registry sex offences, offences with a victim under 13, DV convictions (with the narrow M4 DV sealing allowance), and protection-order violations.
-   - *Blocks no single field — affects a branch or wording.*
-4. How are completed diversions and intervention-in-lieu treated? Standing call-sheet question. Wave 3 mentions prosecutor-initiated sealing for low-level drug offences (2953.39) and human-trafficking expungement anytime, but not general diversion timing.
+1. Diversion / intervention-in-lieu that did NOT end in a dismissal: the tree routes a completed diversion whose charges were dismissed into the R.C. 2953.33 non-conviction path (a dismissed complaint is textually within 2953.33(A)(1)); a diversion that did not end in dismissal keeps the punt node. Confirm local practice for the non-dismissal case. (R.C. 2953.39 prosecutor-initiated sealing for low-level drug offences remains a referral mention.)
    - *Blocks no single field — affects a branch or wording.*
 
 ---

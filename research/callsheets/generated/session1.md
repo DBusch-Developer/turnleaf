@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**37 open questions across 5 states.**
+**27 open questions across 5 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,7 +16,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. COLORADO (CO)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Motion to Seal Conviction Records (C.R.S. 24-72-704 to -710)** — The court that handled your criminal case
@@ -24,34 +24,31 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Colorado Legal Services — https://www.coloradolegalservices.org
 
 **Dates that govern:**
-- 2024-07-01 — Automatic Clean Slate sealing (SB22-099, C.R.S. 13-3-117) effective (effective) · Over 100,000 records were sealed in the first batch in August 2024.
-- 2022 — Sealing moved into the criminal case — no separate civil action (effective) · Wave 1 gives the year only. This is why an older packet quotes a $224 civil filing fee that may no longer apply.
-- 2025 — HB24-1133 expanded non-conviction automation (operative) · Wave 1 gives the year only ("implemented 2025").
+- 2019-08-02 — HB 19-1275 — sealing statutes partly recodified (effective) · Part of the modern sealing framework was recodified here.
+- 2022-08-10 — SB 22-099 — in-case sealing, fines/fees barrier removed, automatic framework (effective) · Moved petition sealing into the existing criminal case (no separate civil action), barred unpaid fines/costs/fees from being considered, and built the automatic Clean Slate framework (C.R.S. 13-3-117).
+- 2024-07-01 — Automatic Clean Slate sealing begins (misdemeanor/petty/drug, initial batch) (effective) · Over 100,000 records went in the first batch. Quarterly lists since. Name-based matching means eligible people genuinely fall through.
+- 2024-08-07 — HB 24-1432 — CBI legacy sealing costs waived; completion deadline June 30, 2026 (effective) · Waived CBI fees for legacy sealing and required CBI to complete those seals by June 30, 2026 (C.R.S. 24-72-706(4)). That deadline has now passed, so any "CBI wants money to seal" advice is dead.
+- 2025-07-01 — HB 24-1133 wave — automatic non-drug felonies, non-conviction backfill, § 711, remote hearings (effective) · Added non-drug felonies to the automatic list, swept pre-August-2022 deferred judgments/acquittals/diversions onto sealing lists (13-3-117(5)), added § 711, allowed remote hearings, and added DA-notice own-motion arrest sealing (704(1.5)).
+- 2026-05-21 — SB 26-149 — competency-dismissal exclusion (effective) · Reconfirmed that dismissals on competency grounds (16-8.5-109(4)/-113/-116) are NOT sealable (C.R.S. 24-72-705(1)(g)).
 
-**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. CONFLICT: what is the petition sealing waiting period for eligible felonies (class 4-6, drug levels 2-4) under C.R.S. 24-72-706? Wave 1 records that one source says 3 years for most felonies and 5 for others, and says to read § 706 and encode the statute's own table. Because the sources disagree, no felony period is encoded — the tree routes to a result that says we do not know and tells the person how to find out. This is the top verification item for Colorado.
+1. How often does the DA object to automatic sealing, and to petition sealing, in practice? The statute now sets the grounds precisely (13-3-117(3): technical objections for all offenses; a public-interest objection only for non-drug felonies, triggering notice and a § 706 hearing right), but the real-world frequency is a phone target.
    - *Blocks no single field — affects a branch or wording.*
-2. CONFLICT: what does it cost to file a Motion to Seal (JDF 612), and can it be waived? Wave 1 gives $65 from statute-based sources versus $224 in an older judicial-district packet, and reads the $224 as the pre-2022 separate-civil-action fee that the 2022 simplification removed. Probably stale rather than wrong — but "probably" is not a fee. Ask a district court clerk. Confirm also that sealing a record which should have auto-sealed is free, and ask about the fee waiver (JDF 205) at the same time.
-   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
-3. Confirm the exact class split for the 2-year petition period in § 706(1)(b): Wave 1 gives "class 2/3 misdemeanors, drug misdemeanors" but flags the split as needing verification against the statute text.
+2. What is the municipal filing fee under C.R.S. 24-72-708(4)? The statute says a "filing fee required by law" applies to the municipal sealing petition — a different animal from the $65 state processing fee (which is statute-cited and waivable). Ask a municipal court clerk.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm the sealing exclusion list against § 706(2), and specifically check theft. Wave 1's own persona 1 raises it: the rule of thumb is that eligible offences are those without a named victim, but theft HAS a victim and is nonetheless commonly listed as eligible. The tree does not encode the rule of thumb — it asks the statutory list — but the list itself needs confirming.
+3. Does a completed DUI/DWAI DEFERRED JUDGMENT seal under current § 705? The statutory carve-outs no longer list it, but In re Harte excluded alcohol-driving deferrals under prior law. Ask legal aid before encoding — the tree routes DUI deferred judgments to the general non-conviction result but flags this.
    - *Blocks no single field — affects a branch or wording.*
-5. What does a CBI criminal history report cost? Wave 1 gives "~$12.50 verify". It must be attached to the motion, so it is part of the real cost of filing.
+4. Do C.R.S. 24-72-702 and -707 exist in the current table of contents, and if § 707 is a trafficking-survivor sealing section, its requirements should be pulled and cited (cite-don't-encode, like WA's survivor tracks) before any tree branch relies on them.
    - *Blocks no single field — affects a branch or wording.*
-6. How often does the DA object to automatic sealing on public-safety grounds, and what happens when they do? Wave 1 notes the DA can object; a person told "your record may already be sealed" needs to know that is not guaranteed.
-   - *Blocks no single field — affects a branch or wording.*
-7. Confirm the non-conviction paths: arrests without charges auto-seal after 1 year for post-2022 offences, and acquittals/dismissals/completed deferred judgments seal through a simplified in-case process expanded by HB24-1133. What does a person actually do if it has not happened?
-   - *Blocks no single field — affects a branch or wording.*
-8. What are the exact effective dates for the 2022 in-case simplification and the 2025 HB24-1133 implementation? Wave 1 gives years only.
+5. The LexisNexis prints used for the 2026 chapters are pre-OLLS-certification text. Re-confirm the 2026 amendments (esp. SB 26-149 ch. 142 § 48 integration in § 705) against the certified C.R.S. once published.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 2. MICHIGAN (MI)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Application to Set Aside Conviction (MCL 780.621)** — The court that convicted you
@@ -60,31 +57,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Safe & Just Michigan — https://safeandjustmi.org
 
 **Dates that govern:**
-- 2023-04-11 — Automatic set-aside (MCL 780.621g) live (operative) · Records have been setting aside automatically since this date, with no petition and no notice to the person.
-- 2022-02 — First-offence OWI became petitionable (court discretion) (effective) · Wave 1 gives month and year only ("since Feb 2022"). OWI remains excluded from the automatic track.
+- 2023-04-11 — Automatic set-aside (MCL 780.621g) live (operative) · Records set aside automatically since this date, with no petition and no notice to the person. Statutorily derived: effective 2021-04-11 plus the 2-year trigger in 621g.
+- 2022-02-19 — First-offence OWI became petitionable (court discretion) (effective) · 2021 PA 79 (per the 621c history line). OWI remains excluded from the automatic track; a first-violation OWI is petitionable once per lifetime at the court's discretion.
+- 2024-02-13 — MCL 780.621 amended by 2023 PA 205 (effective) · The encoded 621 text is the current post-amendment text. The specific content of the 2023 PA 205 change was not separately verified.
 
-**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. What is the fee to file a set-aside application, and if there is one, can it be waived? Wave 1 gives "$50 fee to Michigan State Police" and marks it "widely cited but VERIFY BY PHONE — it is on the MC 227 instructions". Widely cited is not a source. Ask about the RI-008 fingerprint card fee at the same time — Wave 1 calls it "small" without giving a number, so it is not stated anywhere in the app.
-   - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
-2. Confirm the automatic set-aside exclusion list against MCL 780.621g, and confirm it really is broader than the petition exclusion list in MCL 780.621c. The tree asks a person to self-assess both lists; if either is wrong or if they are not actually different, the track fork is wrong.
+1. GAP: MCL 780.621d does not clearly assign a waiting period to an assaultive-crime MISDEMEANOR. Subsection (3) excludes assaultive-crime misdemeanours from the 3-year bucket, and (2) does not name them. The tree routes them conservatively to the 5-year node — confirm the correct period with a bench card or the clerk.
    - *Blocks no single field — affects a branch or wording.*
-3. The "One Bad Night" rule (MCL 780.621b) — multiple offences within 24 hours arising from the same transaction count as ONE conviction, except for assaultive, weapon, or 10+ year offences — has no representation in the tree. It changes the count that decides the waiting period, and the record model cannot express relationships between charges.
+2. For a completed deferred-and-dismissed disposition (7411, 769.4a, HYTA-type, liquor-code), the COUNTING treatment is answered — 621(2) counts it as a misdemeanour conviction for set-aside eligibility, and 621d(7)(d) requires listing it. The remaining question: can the deferral record ITSELF be set aside? The read text does not answer it.
    - *Blocks no single field — affects a branch or wording.*
-4. How are non-convictions treated? Wave 1 documents only convictions for Michigan — dismissals and acquittals are not covered at all, so the tree hedges them. What relief exists for a dismissed charge or an acquittal?
+3. Non-convictions (dismissals/acquittals) are confirmed to be OUTSIDE this set-aside act. The likely home for arrest-record relief is MCL 28.243, which has NOT been read yet — read it next.
    - *Blocks no single field — affects a branch or wording.*
-5. How are completed deferrals/diversions (including HYTA and 7411 dispositions) treated for set-aside? Not covered in Wave 1 — standing call-sheet question for every state.
+4. Fees below the statutory $50: the RI-008 fingerprint-card fee is set locally by the law-enforcement agency (not in the statute), and the 621e marijuana application fee is not stated in that section (likely none) — confirm both on the MC 227 / MC 227a instructions.
    - *Blocks no single field — affects a branch or wording.*
-6. Confirm the automatic-track count limits: max 2 felonies and 4 misdemeanours of 93 days or more set aside automatically, with unlimited 92-day-or-less misdemeanours. The tree does not gate on these — it cannot count — so a person past the limits may be told to check a record that will never clear on its own.
-   - *Blocks no single field — affects a branch or wording.*
-7. What is the exact effective date of the first-offence OWI petition path? Wave 1 gives month and year only ("since Feb 2022").
+5. ADD SECTION: MCL 780.621h (grounds for REINSTATEMENT of an automatic set-aside) was NOT read on 7/18. Reinstatement handling is unencoded until GS/MCL 780.621h is read.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 3. NEW JERSEY (NJ)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **eCourts Expungement (N.J.S.A. 2C:52-1 et seq.)** — Superior Court — county of residence or of any conviction
@@ -92,26 +86,19 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - NJ Courts Expungement Self-Help — https://www.njcourts.gov/self-help/expunge-record
 
 **Dates that govern:**
-- 2019 — Clean Slate expungement (2C:52-5.3) enacted (effective) · Wave 1 gives the year only. The same 2019 law ordered an AUTOMATED clean-slate system whose rollout has been slow — see open questions.
-- 2025 — Venue expanded to the county of residence (effective) · Wave 1 gives the year only. You may now file in the Superior Court for the county where you live, not only where you were convicted.
+- 2019 — Clean Slate expungement (2C:52-5.3), P.L.2019 c.269 (effective) · The same law ordered an AUTOMATED clean-slate system (2C:52-5.4) whose operational rollout has been slow — the mandate is statutory; the operational status is not. See open questions.
+- 2023 — Venue — file in the county of residence or of conviction (P.L.2023 c.260) (effective) · The residence-or-disposition-county venue is in the current 2C:52-7 text via P.L.2023 c.260, s.8. (Earlier drafts attributed this to a 2025 law.)
+- 2021 — Marijuana cases expunged by operation of law (2C:52-6.1) (effective) · By statutory formula, marijuana-only cases were expunged BY OPERATION OF LAW on the first day of the fifth month after P.L.2021 c.19's effective date, with remaining sentences, supervision, and unpaid assessments vacated. The exact calendar date needs P.L.2021 c.19's effective date (not read) — see open questions.
 
-**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Is expungement filing genuinely free, and is there any fee at any stage? Wave 1 says the NJ Courts' own page states it is free and that the $75 fee was eliminated in the 2019 reforms — but flags that older sources still cite $75 and says to VERIFY on njcourts.gov and by phone. Sources conflict, so no fee is stated in the app; the results attribute the free claim to njcourts.gov rather than asserting it. Wave 1 wants to "wear it proudly" once confirmed, and it is worth confirming: free-and-online is New Jersey's headline.
-   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
-2. What is the current status of the AUTOMATED clean-slate system ordered by the 2019 law? Wave 1 says the rollout has been slow and backlogged, and says to verify before claiming any automation in the UI. Nothing in the tree claims it — no automatic path is encoded for New Jersey — but if it is running, people need to be told to check their records first, as in every other automated state.
+1. What is the OPERATIONAL status of the automated clean-slate system (2C:52-5.4), and the name/URL of the State Police backlog / A3881 portal? The mandate, the mooting of pending 5.3 petitions at establishment (5.4(a)(3)), and the restoration of records on a later non-expungeable conviction (5.4(a)(2)) are now statute-cited. What stays open is whether the automated system is actually running and where to check processing.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the early-pathway waiting periods: 4 years via "compelling circumstances" instead of the standard 5, and Wave 1 flags a possible 3-year early path for DP-only records. The tree offers the 4-year compelling-circumstances route as a "talk to someone" result and does not encode the 3-year DP path at all, because it is flagged unverified.
+2. What is the EXACT operation-of-law date under 2C:52-6.1? The statutory formula is "the first day of the fifth month after P.L.2021 c.19's effective date," but c.19 was not read, so the precise calendar date is not pinned here.
    - *Blocks no single field — affects a branch or wording.*
-4. What is the name and URL of the State Police backlog status portal created by the 2025 law (A3881)? Wave 1 flags both as unverified. State Police processing backlogs are documented, so a person needs to know where to check whether their granted expungement has actually been processed.
+3. Do PENDING charges affect an expungement petition? No pending-charges ground appears in the 2C:52-14 denial text that was read; any disclosure duty would live in 2C:52-8, which was not read.
    - *Blocks no single field — affects a branch or wording.*
-5. Confirm how unpaid financial assessments are treated on the Clean Slate path: Wave 1 says a non-willful unpaid assessment does NOT block, and the court enters a civil judgment instead. This is disclosed in the results because it is user-relevant, but it is not verified.
-   - *Blocks no single field — affects a branch or wording.*
-6. Confirm the once-per-lifetime limit on the indictable expungement grant, and the crime-spree / interdependent-offences exception to it.
-   - *Blocks no single field — affects a branch or wording.*
-7. How are completed deferrals/diversions (including PTI and conditional discharge) treated? Standing call-sheet question for every state. Not covered in Wave 1.
-   - *Blocks no single field — affects a branch or wording.*
-8. What are the exact effective dates for the 2019 Clean Slate law and the 2025 venue expansion? Wave 1 gives years only.
+4. Read 2C:52-4 (ordinance violations). It is referenced by the 2C:52-14(e)(1) previous-expungement exception but was not pulled, so ordinance-violation eligibility is disclosed in prose only.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
@@ -153,30 +140,29 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 5. UTAH (UT)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
+- **Petition to Expunge Records (Utah R. Crim. P. Rule 42)** — The court that handled the case
 - **BCI Certificate of Eligibility (required before any petition)** — Utah Bureau of Criminal Identification (BCI)
-- **Petition to Expunge Records** — The court that handled the case
 - Clean Slate Utah (fee assistance available) — https://cleanslateutah.org
 - Utah Legal Services — https://utahlegalservices.org
 
 **Dates that govern:**
-- 2026-01-01 — Automatic expungement process changed — form requirement ended, courts self-identify (effective) · Confirm the current process description before writing UI copy.
+- 2024-10-01 — Automatic Clean Slate expungement began (form era) (effective) · From 10/1/2024 through 12/31/2025 a person had to submit a request form to the court for automatic expungement (§ 77-40a-204). Historical note only — see the 1/1/2026 change.
+- 2026-01-01 — Automatic expungement fully automatic — form requirement ended (effective) · On/after 1/1/2026 the court auto-expunges on identification, no form needed (§ 77-40a-204). Timing goals (204(4)): acquittal 60 days, dismissal-with-prejudice 180 days, clean-slate case 30 days after the eligibility determination, pre-5/1/2020 cases within 1 year of identification. The system is best-effort — no cause of action if it misses a case (§ 201(4)); the petition route remains open (§ 201(1)).
 
-**Verify — 6 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. What is the court filing fee for a Petition to Expunge Records, and if there is one, can it be waived? Wave 1 gives "~$135 per one source" and marks it VERIFY BY PHONE — one source and an approximation is not a fee. Ask both halves: the waiver answer is only knowable once the fee is.
-   - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
-2. The automatic-expungement process changed on Jan 1, 2026 — the form requirement ended and courts self-identify cases again. Confirm the current process on the utcourts self-help page, and confirm how a person checks whether their case was already auto-expunged.
+1. What are the FEE dollar amounts — the BCI application fee, the certificate issuance fee, the court filing fee, and the pre-2013-pardon processing fee? All are set administratively (§§ 63J-1-504, 78A-2-302), not in the statute. Phone-tier; BCI is the call target. Waivers exist (issuance fee waived for most § 302 non-conviction certificates; filing fee indigency waiver under § 78A-2-302).
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the petition-vs-automatic period split against §§ 77-40a-303 and -205 directly. The same offence has a SHORTER petition period than automatic period (class C: 3 years petition vs 5 years automatic), which is counter-intuitive enough to be a transcription error somewhere. Both tracks are encoded separately and the tree tells people plainly that petitioning is faster — if the inversion is wrong, that advice is wrong.
+2. Pull § 77-27-5.1 (pardon expungement) — referenced by § 77-40a-303(9)/401(2) for pre-5/14/2013 pardons but NOT in Chapter 40A. Cite-only until read.
    - *Blocks no single field — affects a branch or wording.*
-4. BCI posts which date it is currently processing, and the backlog is real. What is the actual wait now? No duration is asserted anywhere in the app until this is answered.
+3. Pull § 77-2a-3 (plea-in-abeyance expungement path) — referenced in the § 401(1)(c) priority list but not pulled. A plea-in-abeyance completion may have its own route in addition to the § 205 clean-slate treatment; the tree hedges PIA cases.
    - *Blocks no single field — affects a branch or wording.*
-5. How are completed deferrals/diversions (including pleas in abeyance) treated for expungement? Not covered in Wave 1 — standing call-sheet question for every state. The tree hedges these rather than guess.
+4. Pull Utah R. Crim. P. Rule 42 — the procedural rule the § 305 petition is filed under. Cite-only; the tree describes the § 305/306 process from the statute.
    - *Blocks no single field — affects a branch or wording.*
-6. Confirm the § 77-40a-303(4)/(5) count limits and the § 303(8) "+1 if 10 years clean" allowance. The tree asks a person to self-assess this four-clause test because the record model cannot compute it; if the clauses are wrong, the master gate is wrong.
+5. Pull the § 76-3-203.5(1)(c)(i) violent-felony list to enumerate it — the never-eligible screen (§ 303(2)(a)) currently keys on the cross-reference and asks the person, rather than listing the offenses.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

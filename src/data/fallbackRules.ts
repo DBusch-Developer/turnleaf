@@ -1270,7 +1270,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'CPL 160.59 Sealing Motion (petition path)',
           formName: 'CPL 160.59 Sealing Application (Notice of Motion & Affidavit in Support)',
-          formUrl: 'https://www.nycourts.gov/FORMS/cpl_160.59_sealing_application/index.shtml',
+          // The old FORMS/cpl_160.59_sealing_application path 404'd. NOTE: this
+          // 404 is invisible to automated checking — nycourts.gov sits behind a
+          // Cloudflare managed challenge that returns 403 to bots on every path,
+          // valid or not. It only surfaced in a real browser. Verified 2026-07-21.
+          formUrl: 'https://www.nycourts.gov/forms/application-seal-conviction-after-10-yrs',
           steps: [
             'Confirm eligibility: no more than 2 eligible convictions total, at most 1 a felony (offenses from the same criminal transaction count as ONE). The petition is summarily denied if you have 2+ felony convictions, more than 2 crimes, or any conviction entered AFTER the one you want sealed.',
             'Confirm the offense is not excluded: § 160.59 excludes sex offenses (Penal art. 130), art. 263, § 70.02 violent felonies, art. 125 homicide felonies, Class A felonies, conspiracies/attempts tied to an ineligible offense, and SORA-registrable offenses. (A § 70.02 violent felony is barred here but still qualifies for Clean Slate.)',
@@ -5671,7 +5675,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         section18: {
           name: 'Section 18 Expungement (seals arrest + court record)',
           formName: 'Petition for Expungement (22 O.S. § 18)',
-          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          // The old OSBI path 404'd (site restructure); this is the live page,
+          // verified 2026-07-21. Oklahoma publishes no statewide fillable
+          // petition — it is drafted from the statutory text in 22 O.S. § 18a —
+          // so this is a landing page by necessity, not by preference.
+          formUrl: 'https://oklahoma.gov/osbi/services/information-services-division/disposition-services-unit/criminal-history-record-expungement.html',
           steps: [
             'Check first whether the automatic Clean Slate path applies — it reaches Oklahoma-ONLY ("single-source") records, and involves no filing at all. OSBI answers at expungements@osbi.ok.gov and (405) 879-2641.',
             'Sequence multi-record cases: clear the OLDEST first — an expunged offense is not counted as a prior when testing your eligibility for the others (§ 19(T)) — and file all offenses in one county on a SINGLE petition (§ 19(F)).',
@@ -5687,7 +5695,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         section991c: {
           name: 'Section 991c Expungement (deferred-sentence disposition cleanup)',
           formName: 'Motion under 22 O.S. § 991c',
-          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          // See the section18 remedy: the old OSBI path 404'd.
+          formUrl: 'https://oklahoma.gov/osbi/services/information-services-division/disposition-services-unit/criminal-history-record-expungement.html',
           steps: [
             'On successful completion of a deferred sentence with all fines/fees/assessments paid, § 991c automatically cleans up the court record — plea expunged, disposition dismissed WITH prejudice, docket name deleted, public index obliterated (retroactive, § 991c(E)).',
             'Understand the limit: this cleanup is PARTIAL — sealed to the public but open to law enforcement and admissible to prove priors. It does NOT seal the arrest record.',
@@ -6697,7 +6706,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition: {
           name: 'Seal or Expunge (FDLE Certificate, then court petition)',
           formName: 'FDLE Application for Certificate of Eligibility, then the seal/expunge petition',
-          formUrl: 'https://www.fdle.state.fl.us/SAC/Home.aspx',
+          // The old SAC/Home.aspx path 404'd after an FDLE site restructure; this
+          // is the live Seal and Expunge section, verified 2026-07-21. The
+          // Certificate of Eligibility is now an online intake form, not a
+          // downloadable PDF, so there is no static form to link.
+          formUrl: 'https://www.fdle.state.fl.us/seal-and-expunge-process',
           steps: [
             'Check first whether a non-conviction arrest was already sealed automatically (§ 943.0595) — request your FDLE criminal history.',
             'Apply to FDLE for a Certificate of Eligibility: $75 non-refundable money order, notarized application, fingerprints, and a certified copy of the disposition.',
@@ -8761,7 +8774,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         conviction: {
           name: 'Conviction Expunction (T.C.A. § 40-32-107)',
           formName: 'Petition for Expunction (with TBI Certificate of Eligibility)',
-          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          // The old path 404'd; this is the live page, verified 2026-07-21.
+          // Tennessee publishes no statewide expunction form (the self-help forms
+          // index carries only Divorce, Order of Protection and General Sessions
+          // Civil) — petitions come from the county criminal court clerk. Note TN
+          // flags this page as pending update for T.C.A. § 40-32-101 changes.
+          formUrl: 'https://www.tncourts.gov/programs/self-help-center/expungements',
           steps: [
             'First request a Certificate of Eligibility from the TBI (§ 40-32-102(c)) — it confirms the offense qualifies, and a court cannot enter the order without it. Start this early; it adds processing time.',
             'File the petition in the court of conviction (§ 40-32-108); the district attorney is served and has 60 days to respond, and the court acts no sooner than day 61.',
@@ -8775,7 +8793,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         nonconviction: {
           name: 'Non-Conviction Expunction (T.C.A. § 40-32-106(a))',
           formName: 'Petition for Expunction (non-conviction)',
-          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          // See the conviction remedy: the old path 404'd.
+          formUrl: 'https://www.tncourts.gov/programs/self-help-center/expungements',
           steps: [
             'For a dismissal, nolle, no-bill, acquittal, or arrest without charge, file in the court that handled the case.',
             'No TBI certificate is needed for a non-conviction (§ 40-32-102(c)(1)), except a diversion-based expunction, which does need one.',
@@ -12017,7 +12036,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Motion to Expunge (La. C.Cr.P. arts. 971-999)',
           formName: 'Mandatory statutory forms (arts. 987-995, 998; art. 986 requires them — clerks reject others)',
-          formUrl: 'https://www.lsp.org/services/legal/expungements/',
+          // The old path was a SOFT 404 — it returned HTTP 200 while silently
+          // redirecting to the LSP homepage with no expungement content, so a
+          // status-code check would have passed it. This is the live Bureau of
+          // Criminal Identification page, verified 2026-07-21.
+          formUrl: 'https://lsp.org/about/leadershipsections/support/bcii/expungements/',
           steps: [
             'FIRST, check whether you can file for FREE before paying: § 983(F) waives all fees for certain non-convictions (DA certifies no felony convictions + nothing pending, and the case ended in acquittal, or dismissal/declination WITHOUT diversion, or identity theft). Human-trafficking victims (§ 983(H)) and the Art. 999 expedited path are also fee-exempt. Completing a pretrial diversion program KILLS the § 983(F) waiver.',
             'File the motion in the parish of the arrest or conviction, using the mandatory statutory forms (Art. 986).',
@@ -13760,6 +13783,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           'Delta of 2025 Stats. 773 versus the prior § 179.245 text is integrated into this print; note only — confirm no substantive change to the encoded tiers/exclusions was missed.',
         blocksFields: [],
       },
+      {
+        question:
+          'Is there a petition FORM for a § 179.259 reentry-program sealing, or is the petition drafted from the statute? No reentry-specific form was found statewide (selfhelp.nvcourts.gov lists no criminal record-sealing forms at all), in Clark County, or in the NV Legal Services manual. Ask a district court clerk which document they expect. The answer may legitimately be "no form exists" — in which case formUrl stays null permanently and the steps should say so.',
+        blocksFields: ['resources.remedies.reentry.formUrl'],
+      },
     ],
     sources: [
       { id: 'Nev. Rev. Stat. § 179.245 (conviction sealing; (1) tiered waits, (4) presumption mechanics, (5) cleanliness, (6)/(10) never-list + 18-item sexual-offense list, (7) DUI carve-back, (9) sex-trafficking-victim fee waiver; through 2025 Stats. 773)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec245', retrievedOn: '2026-07-19' },
@@ -14040,7 +14068,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)',
           formName: 'Nevada Legal Services Record Sealing Manual / district-court sealing forms',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // nlslaw.net serves an EXPIRED TLS certificate (SEC_E_CERT_EXPIRED) —
+          // users hit a full browser security interstitial, not the page. Same
+          // organisation, primary domain, verified 200 on 2026-07-21.
+          formUrl: 'https://nevadalegalservices.org/criminal-record-sealing/',
           steps: [
             'Confirm your offense is not on the never-list (crimes against a child, sexual offenses, home invasion with a deadly weapon, felony DUI, felony boating-UI).',
             'Order a current VERIFIED Central Repository criminal-history record — it is a required exhibit; a petition without it can be rejected.',
@@ -14057,7 +14088,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         decriminalized: {
           name: 'Decriminalized-Offense Sealing Request (Nev. Rev. Stat. § 179.271)',
           formName: 'Written request to the convicting court (not a petition)',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // See the sealing remedy: nlslaw.net's TLS certificate is expired.
+          formUrl: 'https://nevadalegalservices.org/criminal-record-sealing/',
           steps: [
             'File a written REQUEST (not a petition) with the court that entered the conviction — for cannabis possession and other now-decriminalized conduct.',
             'There is no fee.',
@@ -14071,7 +14103,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         reentry: {
           name: 'Reentry-Program Sealing (Nev. Rev. Stat. § 179.259)',
           formName: 'Petition to seal after a reentry program',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // null: no § 179.259 reentry-specific petition form could be located —
+          // not statewide (selfhelp.nvcourts.gov lists no criminal record-sealing
+          // forms at all), not in Clark County's district/justice court set, and
+          // not in the NV Legal Services manual, which reproduces the § 179.259
+          // text in its appendix without a form or walkthrough. The old link went
+          // to a general sealing page that does not cover this pathway, so it is
+          // withdrawn rather than re-pointed. Blocked by open question (g).
+          formUrl: null,
           steps: [
             'Available 4 years after completing a DOC or judicial reentry program (NRS 209.4886/.4888, 213.625/.632), for a SINGLE nonviolent felony conviction.',
             'Crimes against a child and sexual offenses are excluded.',
@@ -14084,7 +14123,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       legalAid: [
-        { name: 'Nevada Legal Services — Record Sealing Manual', url: 'https://nlslaw.net' },
+        { name: 'Nevada Legal Services — Record Sealing Manual', url: 'https://nevadalegalservices.org' },
         { name: 'Legal Aid Center of Southern Nevada', url: 'https://www.lacsn.org' }
       ]
     }
@@ -15521,7 +15560,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Annulment (N.H. Rev. Stat. Ann. § 651:5)',
           formName: 'NHJB-2202 / NHJB-3057 annulment forms',
-          formUrl: 'https://www.courts.nh.gov/self-help/annulments',
+          // The old self-help/annulments path 404'd; this is the canonical page
+          // NH's own self-help hub links to, verified 2026-07-21. Not a direct
+          // PDF: the form PDFs carry upload-date-stamped paths, and these are
+          // Circuit Court District Division forms while Superior Court cases file
+          // in the applicable Superior Court — the landing page routes correctly.
+          formUrl: 'https://www.courts.nh.gov/our-courts/circuit-court/district-division/annulment',
           steps: [
             'Confirm your waiting period has FULLY passed before filing — filing early bars a new petition for 3 years (RSA 651:5(IV)).',
             'For a non-conviction since January 1, 2019, do not file — it should already be auto-annulled; check your State Police record.',

@@ -10,6 +10,7 @@ import { groupByState, type ScreeningResultItem } from '../data/multiState';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
 import { ArrowLeft, AlertTriangle, MapPin, FileText, Check, Download, ArrowRight, BookOpen, ExternalLink } from 'lucide-react';
 import { usePublishScreen, type WillowScreen } from '../components/AssistantContext';
+import { useScrollToTop } from '../utils/useScrollToTop';
 
 // The four steps of the screening, in order. The number is not decoration —
 // it is the sequence the CTA refers back to ("Start Step 1").
@@ -108,7 +109,15 @@ export default function Home() {
   // still unresolved, so once all are in the maps it settles (no loop).
   useEffect(() => {
     if (selectedStateCodes.length === 0) {
-      setFailedByState({});
+      // Reset by RETURNING THE SAME OBJECT when there is nothing to clear.
+      // `setFailedByState({})` looks equivalent and is not: a fresh `{}` is a
+      // new identity, `failedByState` is one of this effect's own deps, so the
+      // set re-triggered the effect, which set again — an infinite loop that
+      // ran ~3000 times per second on the landing page and every other screen
+      // with no state selected ("Maximum update depth exceeded"). React bails
+      // out of the re-render when the updater returns the current value, so
+      // handing back `prev` ends the cycle at the first pass.
+      setFailedByState(prev => (Object.keys(prev).length === 0 ? prev : {}));
       return;
     }
     // Only fetch codes still unresolved AND not already failed — a failed code
@@ -212,23 +221,29 @@ export default function Home() {
     return () => document.body.classList.remove('has-photo-bg');
   }, [onLanding]);
 
+  // Which screen is on display. Derived at render (not inside the Willow effect
+  // where it used to live) because two things need it now: Willow's context, and
+  // the scroll reset below. One derivation, so they can't disagree about what
+  // counts as a screen change.
+  const screen: WillowScreen = onLanding
+    ? 'landing'
+    : isOpeningState
+      ? 'loading'
+      : results
+        ? 'results'
+        : selectedStateCodes.some(c => configs[c])
+          ? 'wizard'
+          : selectedStateCodes.some(c => comingSoonByState[c])
+            ? 'coming-soon'
+            : 'selector';
+
+  // Every screen swap starts at the top. See useScrollToTop for why.
+  useScrollToTop(screen);
+
   // Tell Willow what the person is looking at, so it can default each
   // question to the state on screen instead of asking "which state?" first.
   const publishScreen = usePublishScreen();
   useEffect(() => {
-    const hasScreenable = selectedStateCodes.some(c => configs[c]);
-    const hasResearching = selectedStateCodes.some(c => comingSoonByState[c]);
-    const screen: WillowScreen = onLanding
-      ? 'landing'
-      : isOpeningState
-        ? 'loading'
-        : results
-          ? 'results'
-          : hasScreenable
-            ? 'wizard'
-            : hasResearching
-              ? 'coming-soon'
-              : 'selector';
     const stateNames = selectedStateCodes.map(
       c => configs[c]?.name ?? comingSoonByState[c]?.name ?? states.find(s => s.code === c)?.name ?? c
     );
@@ -242,7 +257,7 @@ export default function Home() {
       stateNames,
       screen,
     });
-  }, [onLanding, isOpeningState, results, selectedStateCodes, configs, comingSoonByState, states, publishScreen]);
+  }, [screen, selectedStateCodes, configs, comingSoonByState, states, publishScreen]);
 
   // Partition the session: which selected states are screenable (have a config)
   // vs. still in research (coming-soon). The wizard screens the screenable ones;

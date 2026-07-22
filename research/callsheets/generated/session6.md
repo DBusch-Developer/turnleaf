@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**43 open questions across 11 states.**
+**44 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,25 +16,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. ARKANSAS (AR)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Record Sealing (Comprehensive Criminal Record Sealing Act, Ark. Code § 16-90-1401 et seq.)** — The court where the case was decided
+- **Record Sealing (Comprehensive Criminal Record Sealing Act, A.C.A. § 16-90-1401 et seq.)** — The circuit or district court where the case was decided (county of conviction; county of arrest for an uncharged arrest)
 - Legal Aid of Arkansas — https://arlegalaid.org
 - Center for Arkansas Legal Services — https://arlegalservices.org
 
 **Dates that govern:**
-- 2019-07 — Filing fee eliminated statewide (Act 680) (effective) · Wave 6 gives month and year. Since July 2019 there has been no filing fee to seal a record in Arkansas (confirmed by Legal Aid of Arkansas).
+- 2013 — Comprehensive Criminal Record Sealing Act of 2013 (§ 16-90-1401 et seq.) (effective) · Year precision only — the Act's name carries 2013 and § 16-90-1405(c) extends misdemeanor sealing to offenses committed before 2014, but the pulled text does not give a day. Do not pad it.
+- 2026 — Sealing statutes current through the First Extraordinary Session of 2026 (effective) · The verified text of §§ 16-90-1404–1417, § 5-65-111, and §§ 16-93-301–303 is current through the 1st Ex. Sess. 2026 per the Lexis public-access banner. Whether the 2025 regular session or the 1st Ex. Sess. 2026 amended any pulled section is an open question.
 
-**Verify — 4 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the short list of more serious misdemeanors that carry a 5-year wait (rather than immediate sealing). Wave 6 gives negligent-homicide A-misdemeanor, third-degree battery, indecent exposure, and DV-adjacent offenses among them, and flags the full list for the statute (§ 16-90-1405). The tree asks a "serious misdemeanor" question routing to a 5-year wait; confirm the list.
+1. What is the filing fee to seal a record in Arkansas, and is a fee waiver available? The pulled sealing statutes (§§ 16-90-1404–1417) do not state a fee. The draft's "no fee since Act 680 (2019)" claim is NOT confirmed in the statute text read here, so it stays phone-tier — confirm the current amount and any indigency waiver with a circuit clerk before flipping this.
+   - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
+2. What are the exact ACIC uniform petition and order forms and where does a person get them? § 16-90-1414 governs the statewide uniform petition/order but was cite-only (not pulled), so the specific form identifiers and any ACIC filing requirements are unverified. Do not construct a form URL — confirm the official one.
+   - *Blocks (null until answered):* `resources.remedies.sealing.formUrl`
+3. TOC check: §§ 16-90-1401, -1402, -1403 (short title/legislative intent/definitions preamble), -1412, -1418, -1419 were not pulled. Confirm none of them carries an operative rule that changes the encoded paths.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the misdemeanor-DWI 10-year wait. Wave 6 gives it per Legal Aid of Arkansas and flags it as a surprisingly long outlier needing confirmation. The tree routes a misdemeanor DWI to a 10-year wait; confirm against the statute.
+4. Confirm the DWI/BWI sealing wait CALCULATION with a court clerk. § 5-65-111 anchors its enhancement/lookback windows to the FIRST offense date and does not spell out a per-conviction sealing anchor; the messaging treats the 10-year window as running from the first offense but flags this as an interpretation to confirm.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm that non-convictions (arrests, nolle prosequi, dismissals, acquittals) are sealable with NO waiting period under §§ 16-90-1409/1410. Wave 6 gives this but flags it for confirmation. The tree routes non-convictions to an immediate result; confirm.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the one-prior-felony cap and how same-episode felonies count. Wave 6 says sealing allows at most one prior felony conviction, with same-episode felonies counting as one, and flags persona 3 (two separate felony convictions) as an analysis branch. The tree routes people with more than one prior felony to a "get an analysis" result; confirm the rule (§ 16-90-1406).
+5. Confirm no 2025 regular-session or 1st Ex. Sess. 2026 amendment altered §§ 16-90-1404–1417, § 5-65-111, or §§ 16-93-301–303 beyond the version read here (the Lexis banner says the text is current, but a targeted session sweep is the confirm-kill).
    - *Blocks no single field — affects a branch or wording.*
 
 ---

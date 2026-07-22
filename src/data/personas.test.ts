@@ -3697,63 +3697,228 @@ const NV: Persona[] = [
   },
 ];
 
+// AR personas come from Diana's read of A.C.A. Title 16, Ch. 90, Subch. 14 (the
+// Comprehensive Criminal Record Sealing Act) plus § 5-65-111 and §§ 16-93-301–303,
+// current through the 1st Ex. Sess. 2026 — the statute-verified rewrite that took
+// AR to statute_cited on 2026-07-22, replacing the Wave 6 draft's five personas.
 const AR: Persona[] = [
   {
-    source: 'Wave 6 — AR persona 1',
-    package: 'Class D theft felony, sentence done last month -> eligible NOW, free — the state\'s headline.',
-    record: { title: 'Class D theft felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2026-06-01', probation_status: 'completed' },
-    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: false, felony_violent_ar: false },
+    source: 'AR statute verification (2026-07-22) — persona 1',
+    package: 'nonviolent Class D felony, sentence completed, no priors -> eligible now, discretionary standard messaging.',
+    record: { title: 'Nonviolent Class D felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: false, felony_under18_ar: false, felony_class_ar: 'CD', felony_cd_violent_ar: false, prior_cap_ar: 'none' },
     expect: {
       resultKey: 'eligible_felony_ar',
-      reading: 'A non-violent Class D felony seals immediately on completion under § 16-90-1406 -> eligible now, free.',
+      reading: 'A nonviolent Class C/D felony seals on completion of sentence (§ 16-90-1406(a)); with no priors the one-prior cap is clear. eligible_felony_ar carries the discretionary clear-and-convincing felony standard (§ 16-90-1415(b)).',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — AR persona 2',
-    package: 'misdemeanor 2024, fines paid -> immediate.',
-    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed' },
-    answers: { level_ar: 'misd', misd_dwi_ar: false, misd_serious_ar: false },
+    source: 'AR statute verification (2026-07-22) — persona 2',
+    package: 'Class B meth-possession felony under the UCSA, completed -> eligible (surprise-yes drug carve-out).',
+    record: { title: 'Class B UCSA meth possession', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: false, felony_under18_ar: false, felony_class_ar: 'AB', felony_ab_drug_ar: true, prior_cap_ar: 'none' },
     expect: {
-      resultKey: 'eligible_misd_ar',
-      reading: 'A non-DWI, non-serious misdemeanor seals immediately on completion under § 16-90-1405 -> eligible.',
+      resultKey: 'eligible_felony_ar',
+      reading: 'Class A/B DRUG felonies under the UCSA are eligible despite the general A/B bar (§ 16-90-1406(a)(3)) — the surprise-yes. The Class A/B drug branch answers "yes" and reaches eligible_felony_ar.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — AR persona 3',
-    package: 'two separate felony convictions -> one-prior-felony cap ⚠️ analysis branch.',
-    record: { title: 'Second separate felony conviction', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
-    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: true },
-    expect: {
-      resultKey: 'complex_priorfelony_ar',
-      reading:
-        'More than one prior felony triggers the one-prior-felony cap (same-episode felonies count as one), '
-        + 'which needs case-specific analysis; the tree routes it to complex_priorfelony_ar.',
-    },
-    now: NOW,
-  },
-  {
-    source: 'Wave 6 — AR persona 4',
-    package: 'DWI misdemeanor 2018 -> 10-yr wait -> 2028.',
-    record: { title: 'DWI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
-    answers: { level_ar: 'misd', misd_dwi_ar: true },
+    source: 'AR statute verification (2026-07-22) — persona 3',
+    package: 'violent Class C felony completed 3 years ago -> not yet, 5-yr wait.',
+    record: { title: 'Violent Class C felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2022-01-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: false, felony_under18_ar: false, felony_class_ar: 'CD', felony_cd_violent_ar: true, felony_violent_date_ar: '2023-07-15' },
     expect: {
       resultKey: 'waiting_ar',
-      reading: 'A misdemeanor DWI carries a 10-year wait; 2018 -> 2028, so at 2026 it has not run -> waiting.',
+      reading: 'A violent Class C/D felony carries a 5-year wait from completion of sentence (§ 16-90-1406(b)); completed 2023-07-15, only 3 years elapsed at 2026-07-15 -> waiting.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — AR persona 5',
-    package: 'Class B drug felony, done 2023 -> immediate — the surprise-yes.',
-    record: { title: 'Class B drug felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
-    answers: { level_ar: 'felony', felony_excluded_ar: false, felony_prior_ar: false, felony_violent_ar: false },
+    source: 'AR statute verification (2026-07-22) — persona 4',
+    package: 'nonviolent Class C felony, one prior felony that was previously SEALED -> cap trap: prior still counts, at the one-prior limit -> eligible but flag.',
+    record: { title: 'Nonviolent Class C felony, one sealed prior', charge_type: 'felony', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: false, felony_under18_ar: false, felony_class_ar: 'CD', felony_cd_violent_ar: false, prior_cap_ar: 'one' },
     expect: {
-      resultKey: 'eligible_felony_ar',
-      reading:
-        'Class A/B DRUG felonies seal immediately (a drug offense answers "no" to the non-drug Y/A/B exclusion). '
-        + 'The tree reaches eligible_felony_ar immediately -> the surprise-yes.',
+      resultKey: 'eligible_felony_cap_ar',
+      reading: 'A previously SEALED felony still counts toward the one-prior cap (§ 16-90-1406(c)(2)); at exactly one prior the petitioner is at the limit -> eligible but flagged for a counting check (eligible_felony_cap_ar).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 5',
+    package: 'two prior felonies from separate episodes -> ineligible under 1406(c).',
+    record: { title: 'Felony with two separate-episode priors', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: false, felony_under18_ar: false, felony_class_ar: 'CD', felony_cd_violent_ar: false, prior_cap_ar: 'multi' },
+    expect: {
+      resultKey: 'ineligible_priorfelony_ar',
+      reading: 'More than one prior felony from separate criminal episodes exceeds the one-prior cap (§ 16-90-1406(c)) -> ineligible, with the same-episode nuance flagged.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 6',
+    package: 'misdemeanor theft, fines unpaid -> not yet (completion gate).',
+    record: { title: 'Misdemeanor theft, fines unpaid', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01', probation_status: 'completed', restitution_paid: false },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: false },
+    expect: {
+      resultKey: 'waiting_completion_ar',
+      reading: 'Completion of sentence (§ 16-90-1404(1)) includes paying fines/costs in full; money still owed fails the shared completion gate -> not yet eligible, with the court-excusal valve noted.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 7',
+    package: 'domestic battering 3rd completed 2 years ago -> not yet, 5-yr enhanced wait.',
+    record: { title: '3rd-degree domestic battering (enhanced misd)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-01-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'misd', misd_type_ar: 'enhanced', misd_enhanced_date_ar: '2024-07-15' },
+    expect: {
+      resultKey: 'waiting_ar',
+      reading: '3rd-degree domestic battering (§ 5-26-305) is one of the six enhanced misdemeanors carrying a 5-year wait from completion (§ 16-90-1405(b)); completed 2024-07-15, only 2 years elapsed at 2026-07-15 -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 8',
+    package: 'misdemeanor DWI -> honest "depends on § 5-65-111, not yet verified" response.',
+    record: { title: 'Misdemeanor DWI, offense count unclear', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'misd', misd_type_ar: 'dwi', dwi_count_ar: 'unsure' },
+    expect: {
+      resultKey: 'complex_dwi_ar',
+      reading: 'The § 5-65-111 lookback runs from the first DWI offense and depends on the total offense count; when the count/anchor is unclear the tree gives the honest "depends on § 5-65-111 — confirm with the clerk" answer (complex_dwi_ar). The first update left this a pullNote; the addendum\'s § 5-65-111 pull resolves the wait but the interpretive anchor caution (note 2c) remains.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 9',
+    package: 'SIS with no fine, completed -> routes to non-conviction analysis.',
+    record: { title: 'SIS, no fine imposed', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'sis_nofine' },
+    expect: {
+      resultKey: 'eligible_sis_nonconv_ar',
+      reading: 'An SIS with NO fine is not a conviction (§ 16-90-1404(2)(B)(ii)) and routes to the non-conviction track, where the court SHALL grant unless the State rebuts it.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 10',
+    package: 'acquittal by reason of mental disease -> NGRI exclusion, not sealable under 1410.',
+    record: { title: 'Acquittal by reason of mental disease or defect', charge_type: 'felony', disposition: 'acquitted' },
+    answers: { acquittal_ngri_ar: true },
+    expect: {
+      resultKey: 'ineligible_ngri_ar',
+      reading: 'An acquittal by reason of mental disease or defect (§ 5-2-301 et seq.) is excluded from non-conviction sealing (§ 16-90-1410(a)(3)) -> ineligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 11',
+    package: 'nolle prosequi 6 months ago -> not yet, 1-yr wait.',
+    record: { title: 'Nolle prosequi', charge_type: 'misdemeanor', disposition: 'dismissed' },
+    answers: { nonconv_type_ar: 'nolle', nolle_wait_ar: '2026-01-15' },
+    expect: {
+      resultKey: 'waiting_nonconv_ar',
+      reading: 'A nolle prosequi is sealable 1 year after entry of the order (§ 16-90-1410(a)(1)); entered 2026-01-15, only 6 months elapsed at 2026-07-15 -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 12',
+    package: 'manslaughter conviction -> never.',
+    record: { title: 'Manslaughter', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: true },
+    expect: {
+      resultKey: 'ineligible_felony_ar',
+      reading: 'Manslaughter (§ 5-10-104) is on the never-eligible list (§ 16-90-1408) -> ineligible, no waiting period changes it.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 13',
+    package: 'CDL holder, felony traffic offense -> never (1408(b)).',
+    record: { title: 'Felony traffic offense, CDL holder', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: true },
+    expect: {
+      resultKey: 'ineligible_felony_ar',
+      reading: 'A felony traffic offense committed while holding a CDL/CLP is never eligible (§ 16-90-1408(b)); the never-eligible screen catches it -> ineligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 14',
+    package: 'pardoned robbery (serious physical injury) -> pardon-sealing excluded, route to 1406 analysis instead.',
+    record: { title: 'Pardoned robbery (serious physical injury)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2016-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: true, pardon_exclusion_ar: true },
+    expect: {
+      resultKey: 'pardon_excluded_ar',
+      reading: 'Pardon-sealing excludes offenses resulting in death or serious physical injury (§ 16-90-1411); the automatic pardon door is closed, so the result routes to the ordinary §§ 1405/1406 petition analysis.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 15',
+    package: 'single misdemeanor DWI 2014, no other DWI history -> 10-yr lookback elapsed, eligible now.',
+    record: { title: 'Single misdemeanor DWI (2014)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2014-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'misd', misd_type_ar: 'dwi', dwi_count_ar: '1_3', dwi_date_ar: '2014-06-01' },
+    expect: {
+      resultKey: 'eligible_dwi_ar',
+      reading: 'A 1st-offense misdemeanor DWI is sealable after the § 5-65-111 10-year lookback from the first offense; 2014-06-01 + 10 = 2024, elapsed at 2026-07-15 -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 16',
+    package: 'misdemeanor DWI 2020, first offense -> not yet, lookback running.',
+    record: { title: 'Misdemeanor DWI (2020, first offense)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'misd', misd_type_ar: 'dwi', dwi_count_ar: '1_3', dwi_date_ar: '2020-06-01' },
+    expect: {
+      resultKey: 'waiting_dwi_ar',
+      reading: 'A 1st-offense misdemeanor DWI in 2020: the § 5-65-111 10-year lookback (2020 -> 2030) has not elapsed at 2026-07-15 -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 17',
+    package: 'sixth-offense DWI felony conviction -> never (Class B).',
+    record: { title: 'Sixth-offense DWI (Class B felony)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
+    answers: { sis_ar: 'ordinary', pardon_ar: false, completion_gate_ar: true, level_ar: 'felony', felony_neverelig_ar: false, felony_dwi_ar: true, dwi_count_ar: '6plus' },
+    expect: {
+      resultKey: 'ineligible_dwi6_ar',
+      reading: 'A 6th-or-subsequent DWI within 20 years of the first is a Class B felony (§ 5-65-111(f)) with no carve-out on the never-eligible list (§ 16-90-1408) -> never.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 18',
+    package: 'Act 346 probation for nonviolent Class D theft, completed, $500 fine imposed -> mandatory sealing at discharge, fine doesn\'t negate.',
+    record: { title: 'Act 346 Class D theft, $500 fine', charge_type: 'felony', disposition: 'deferred', probation_status: 'completed' },
+    answers: { deferred_ar: 'act346_done', act346_exclusion_ar: false },
+    expect: {
+      resultKey: 'eligible_act346_ar',
+      reading: 'Completed Act 346 probation, not on the exclusion list: the court SHALL dismiss, discharge, and seal at completion (§ 16-93-303(b)), and a fine <= $3,500 does not negate the benefit (§ 16-93-303(a)(1)(A)(ii)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 19',
+    package: 'Act 346 probation for indecent exposure, completed -> excluded from Act 346 sealing (303(a)(1)(B)), route to 1405 enhanced-misdemeanor 5-yr analysis instead.',
+    record: { title: 'Act 346 indecent exposure, completed', charge_type: 'misdemeanor', disposition: 'deferred', probation_status: 'completed' },
+    answers: { deferred_ar: 'act346_done', act346_exclusion_ar: true },
+    expect: {
+      resultKey: 'act346_excluded_ar',
+      reading: 'Indecent exposure (§ 5-14-112) is on the Act 346 exclusion list (§ 16-93-303(a)(1)(B)), so Act 346 cannot seal it; the result routes to the ordinary § 16-90-1405(b) enhanced-misdemeanor 5-year analysis.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AR statute verification (2026-07-22) — persona 20',
+    package: 'person who previously used Act 346 asking about using it again -> once-per-lifetime, warn re false-denial felony.',
+    record: { title: 'Prior Act 346 use, wants to use again', charge_type: 'felony', disposition: 'deferred' },
+    answers: { deferred_ar: 'act346_repeat' },
+    expect: {
+      resultKey: 'act346_repeat_ar',
+      reading: 'Act 346 may be used once per lifetime (§ 16-93-302(a)(1)); the result warns that falsely denying prior use is itself a Class D felony (§ 16-93-302(a)(2)).',
     },
     now: NOW,
   },

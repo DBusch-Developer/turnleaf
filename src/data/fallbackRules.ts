@@ -14250,53 +14250,91 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   AR: {
     code: 'AR',
     name: 'Arkansas',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
     terminology:
-      'Arkansas uses SEALING, under the Comprehensive Criminal Record Sealing Act of 2013 (§ 16-90-1401 '
-      + 'et seq.), with uniform petition and order forms statewide. It is quietly one of the more generous '
-      + 'states, and two facts drive that. First, filing is FREE — there has been no filing fee since July '
-      + '2019 (Act 680). Second, many records seal IMMEDIATELY on sentence completion, with no waiting '
-      + 'period: most misdemeanors, and non-violent Class C/D felonies plus Class A/B DRUG felonies. '
-      + '"Completion" includes paying your fines and costs. There is a cap worth knowing — you can seal with '
-      + 'at most one prior felony conviction (felonies from the same episode count as one).',
+      'Arkansas SEALS records under the Comprehensive Criminal Record Sealing Act of 2013 (§ 16-90-1401 '
+      + 'et seq.). Sealing here means the record is expunged/removed/sequestered or treated as confidential '
+      + '(§ 16-90-1404(4)) — it is NOT physical destruction, and criminal-justice and certain licensing '
+      + 'agencies keep access (§ 16-90-1416). Relief is PETITION-BASED only: there is no automatic or "Clean '
+      + 'Slate" sealing in Arkansas. Almost every path uses the statewide uniform petition (§ 16-90-1414), '
+      + 'filed in the county of CONVICTION (§ 16-90-1413(a)(1)); an arrest is sealed in the county of ARREST '
+      + '(§ 16-90-1409(b)). One prerequisite runs through every conviction path: COMPLETION OF SENTENCE '
+      + '(§ 16-90-1404(1)) — all fines, costs, and monetary obligations paid (unless the court excuses them), '
+      + 'all incarceration served, discharge from probation/parole/supervision, restitution paid, community '
+      + 'service and any required program done, and driver\'s-license reinstatement fees paid. Owing money '
+      + 'means not yet eligible, subject to the court-excusal valve. The state is quietly generous in places: '
+      + 'most misdemeanors and non-violent Class C/D felonies seal IMMEDIATELY on completion, and Class A/B '
+      + 'DRUG felonies under the Uniform Controlled Substances Act are eligible despite the general A/B bar '
+      + '(§ 16-90-1406(a)(3)). Two traps: a felony you PREVIOUSLY SEALED still counts toward the one-prior-'
+      + 'felony cap (§ 16-90-1406(c)(2)), and sealing does NOT restore firearm rights and does not by itself '
+      + 'restore voting rights (§ 16-90-1417(a)(3)). The standard asymmetry matters — for a misdemeanor the '
+      + 'court SHALL seal unless clear-and-convincing reasons say otherwise, but for a felony the court MAY '
+      + 'seal only if the petitioner proves by clear and convincing evidence that sealing serves the interests '
+      + 'of justice (§ 16-90-1415). Whether there is a filing fee is UNCONFIRMED — it is a phone-tier question, '
+      + 'not the settled zero-fee claim the draft carried.',
     keyDates: [
       {
-        label: 'Filing fee eliminated statewide (Act 680)',
-        date: '2019-07',
+        label: 'Comprehensive Criminal Record Sealing Act of 2013 (§ 16-90-1401 et seq.)',
+        date: '2013',
         kind: 'effective',
-        note: 'Wave 6 gives month and year. Since July 2019 there has been no filing fee to seal a record in Arkansas (confirmed by Legal Aid of Arkansas).',
+        note: 'Year precision only — the Act\'s name carries 2013 and § 16-90-1405(c) extends misdemeanor sealing to offenses committed before 2014, but the pulled text does not give a day. Do not pad it.',
+      },
+      {
+        label: 'Sealing statutes current through the First Extraordinary Session of 2026',
+        date: '2026',
+        kind: 'effective',
+        note: 'The verified text of §§ 16-90-1404–1417, § 5-65-111, and §§ 16-93-301–303 is current through the 1st Ex. Sess. 2026 per the Lexis public-access banner. Whether the 2025 regular session or the 1st Ex. Sess. 2026 amended any pulled section is an open question.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the short list of more serious misdemeanors that carry a 5-year wait (rather than immediate sealing). Wave 6 gives negligent-homicide A-misdemeanor, third-degree battery, indecent exposure, and DV-adjacent offenses among them, and flags the full list for the statute (§ 16-90-1405). The tree asks a "serious misdemeanor" question routing to a 5-year wait; confirm the list.',
+          'What is the filing fee to seal a record in Arkansas, and is a fee waiver available? The pulled sealing statutes (§§ 16-90-1404–1417) do not state a fee. The draft\'s "no fee since Act 680 (2019)" claim is NOT confirmed in the statute text read here, so it stays phone-tier — confirm the current amount and any indigency waiver with a circuit clerk before flipping this.',
+        blocksFields: ['resources.remedies.sealing.fees', 'resources.remedies.sealing.feeWaiver'],
+      },
+      {
+        question:
+          'What are the exact ACIC uniform petition and order forms and where does a person get them? § 16-90-1414 governs the statewide uniform petition/order but was cite-only (not pulled), so the specific form identifiers and any ACIC filing requirements are unverified. Do not construct a form URL — confirm the official one.',
+        blocksFields: ['resources.remedies.sealing.formUrl'],
+      },
+      {
+        question:
+          'TOC check: §§ 16-90-1401, -1402, -1403 (short title/legislative intent/definitions preamble), -1412, -1418, -1419 were not pulled. Confirm none of them carries an operative rule that changes the encoded paths.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the misdemeanor-DWI 10-year wait. Wave 6 gives it per Legal Aid of Arkansas and flags it as a surprisingly long outlier needing confirmation. The tree routes a misdemeanor DWI to a 10-year wait; confirm against the statute.',
+          'Confirm the DWI/BWI sealing wait CALCULATION with a court clerk. § 5-65-111 anchors its enhancement/lookback windows to the FIRST offense date and does not spell out a per-conviction sealing anchor; the messaging treats the 10-year window as running from the first offense but flags this as an interpretation to confirm.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm that non-convictions (arrests, nolle prosequi, dismissals, acquittals) are sealable with NO waiting period under §§ 16-90-1409/1410. Wave 6 gives this but flags it for confirmation. The tree routes non-convictions to an immediate result; confirm.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the one-prior-felony cap and how same-episode felonies count. Wave 6 says sealing allows at most one prior felony conviction, with same-episode felonies counting as one, and flags persona 3 (two separate felony convictions) as an analysis branch. The tree routes people with more than one prior felony to a "get an analysis" result; confirm the rule (§ 16-90-1406).',
+          'Confirm no 2025 regular-session or 1st Ex. Sess. 2026 amendment altered §§ 16-90-1404–1417, § 5-65-111, or §§ 16-93-301–303 beyond the version read here (the Lexis banner says the text is current, but a targeted session sweep is the confirm-kill).',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Ark. Code § 16-90-1405 (misdemeanor sealing; immediate on completion; serious-list and DWI waits)', url: null, retrievedOn: null },
-      { id: 'Ark. Code § 16-90-1406 (felony sealing; immediate for non-violent C/D and A/B drug; one-prior-felony cap)', url: null, retrievedOn: null },
-      { id: 'Ark. Code § 16-90-1408 (offenses ineligible for sealing)', url: null, retrievedOn: null },
-      { id: 'Ark. Code §§ 16-90-1409, 16-90-1410 (non-conviction sealing)', url: null, retrievedOn: null },
-      { id: 'Act 680 of 2019 (eliminated the sealing filing fee)', url: null, retrievedOn: null },
+      { id: 'A.C.A. § 16-90-1404 (definitions — (4) "seal" = expunge/remove/sequester/treat as confidential, not destruction; (1) completion of sentence; (2)(A)(v) SIS-with-fine is a conviction, (2)(B)(ii) SIS-without-fine is not, (2)(B)(v)-(vi) completed Act 346 probation is not, (2)(A)(viii) Act 346 violated with a finding of guilt is; (6) felony sex offense), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1405 (misdemeanor/violation sealing — immediate on completion, no lifetime cap, applies to pre-2014 offenses (c); five-year wait for six enhanced misdemeanors (b); DWI/BWI (5-65-103) defers to § 5-65-111 lookbacks; CDL bar (b)(6); refile timers 90 days / 1 year (b)(3)-(5)), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1406 (felony sealing — immediate for non-violent Class C/D, unclassified max <=10 yrs, UCSA Class A/B drug felonies (a)(3), inchoate versions, and any non-violent felony committed under 18; violent Class C/D five-year wait (b); felony DWI defers to § 5-65-111 (a)(2)(B); one-prior-felony cap (c), same-episode counts as one, previously sealed felonies still count (c)(2)), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1407 (drug-treatment special path — felony possession (5-64-419) or counterfeit substance (5-64-441) sealable on completion where a pre-sentence intake officer found addiction and recommended residential treatment, the court ordered treatment-program probation with a drug-free condition, and probation was completed), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1408 (offenses never eligible — Class Y; Class A/B except the UCSA drug carve-out; manslaughter (5-10-104); unclassified felonies with a max over 10 yrs; felony sex offenses (1404(6)); violent felonies under 5-4-501(d)(2); (b) felony traffic offenses committed while holding a CDL/CLP; sixth-or-subsequent DWI (Class B) has no carve-out), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1409 (arrest never charged — sealable after 1 year with no charges filed; (b) filed in the county of arrest), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1410 (non-conviction sealing — (a)(1) nolle prosequi sealable 1 year after entry of the order; (a)(2) dismissal, no stated wait; (a)(3) acquittal, EXCEPT acquittal by reason of mental disease or defect (5-2-301 et seq.); (a)(4) prosecutor declination, no stated wait), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1411 (pardon path — on a pardon the Governor notifies the court and the court SHALL seal, no petition (pre-7/15/1991 pardons: file a copy); excluded: any offense with a victim under 18, sex offenses, offenses resulting in death or serious physical injury; (b) youthful-offender mandatory path: felony under 16 + suspended sentence + pardon + no other convictions; (c) does not preclude a 1405/1406 petition), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1413 (procedure — (a)(1) filed in the county of conviction; (c)(1) prosecutor opposition window is 30 days for both misdemeanors and felonies, and the court may rule any time after the 30 days expire; a misdemeanor opposition requires a hearing unless the prosecutor consents to pleadings only, a felony opposition may be granted only after a hearing; (a)(2) 1-year refile after denial), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1415 (standards — (a) misdemeanor/violation: the court SHALL seal unless it finds by clear and convincing evidence it should not; (b) felony: the court MAY seal only if the petitioner shows by clear and convincing evidence that sealing furthers the interests of justice; non-conviction (1409/1410): the court SHALL grant unless the State shows by a preponderance that sealing risks the public or does not further justice; (c) drug-treatment path best-interest standard; (f) appeals, district->circuit de novo, circuit->appellate abuse of discretion), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1416 (access to sealed records — the person/their attorney, criminal-justice agencies for own-employment and polygraph/private-security licensing checks, courts on subsequent adjudication or good cause, prosecutors for criminal-justice purposes, healthcare licensing boards, ACIC, and the law-enforcement standards commission), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1417 (effect — (b)(1) on the uniform order the conduct is deemed as a matter of law never to have occurred and the person may state it did not occur; (a)(3) firearm rights are NOT restored; voting rights require the Arkansas Constitution Amendment 51 § 11 procedure; (b)(2) sealed records remain usable for criminal proceedings, habitual-offender status (5-4-501), impeachment, healthcare-professional licensure, Rules 17-19 discovery, and law-enforcement certification), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 5-65-111 (DWI/BWI enhancement and lookback windows — 2nd through 5th offenses enhance within 10 years of the first offense; (f) a 6th offense within 20 years of the first is a Class B felony; (g) out-of-state DWI judgments count as previous offenses; (j)(1) Class A misdemeanor negligent-homicide priors under 5-10-105(a)(1)(A)-(B) count as previous DWI offenses), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-93-301 (First Offender Act 346 — completed Act 346 probation is not a conviction), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-93-302 (First Offender Act 346 — (a)(1) may be used on one occasion only; (a)(2) falsely denying prior use is a Class D felony), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-93-303 (First Offender Act 346 mechanics — (a)(1)(A)(i) guilty/nolo plea before adjudication, no prior felony, consent, probation >= 1 year; (a)(1)(A)(ii) a fine <= $3,500 and/or costs do NOT negate the benefit; (b) on fulfillment the court SHALL dismiss, discharge, AND seal, mandatory and with no separate petition; (a)(1)(B) exclusion list; (a)(2) violation -> adjudication of guilt; (c)(1) firearm bar during probation; (d) still counts for habitual-offender/criminal-history/impeachment; (e) firearm eligibility per 5-73-103; (a)(3) courts are not compelled to offer it), retrieved via arkleg.state.ar.us official code portal', url: 'https://arkleg.state.ar.us', retrievedOn: '2026-07-22' },
+      { id: 'A.C.A. § 16-90-1414 (statewide uniform petition and order to seal) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'A.C.A. § 5-4-501(d)(2) (list of violent felonies reached by § 16-90-1408) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -14306,158 +14344,456 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ar' },
-            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'eligible_nonconv_ar' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ar' },
-            { label: 'First Offender Act 346 / diversion completed', value: 'deferred', next: 'eligible_nonconv_ar' },
+            { label: 'Convicted (guilty plea, no-contest, or found guilty)', value: 'convicted', next: 'sis_ar' },
+            { label: 'Dismissed, nolle prosequi, charges declined, or arrested but never charged', value: 'dismissed', next: 'nonconv_type_ar' },
+            { label: 'Acquitted (found not guilty)', value: 'acquitted', next: 'acquittal_ngri_ar' },
+            { label: 'First Offender Act 346 or other diversion', value: 'deferred', next: 'deferred_ar' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        // SIS routing (§ 16-90-1404(2)). An SIS WITH a fine is a conviction
+        // (2)(A)(v); an SIS with NO fine is NOT (2)(B)(ii) and routes to
+        // non-conviction analysis. The Act 346 exception (a fine <= $3,500 does
+        // not negate the benefit, § 16-93-303(a)(1)(A)(ii)) lives on the deferred
+        // path, so this node points Act 346 filers there.
+        sis_ar: {
+          type: 'choice',
+          text: 'Was your sentence a "suspended imposition of sentence" (SIS), where the court withheld a formal judgment of conviction — and if so, was a fine imposed? (If this was a First Offender Act 346 probation, a fine of $3,500 or less does NOT make it a conviction; go back and choose "First Offender Act 346" instead.)',
+          options: [
+            { label: 'Yes — SIS, and a fine WAS imposed', value: 'sis_fine', next: 'pardon_ar' },
+            { label: 'Yes — SIS, and NO fine was imposed', value: 'sis_nofine', next: 'eligible_sis_nonconv_ar' },
+            { label: 'No — an ordinary conviction, or I\'m not sure', value: 'ordinary', next: 'pardon_ar' }
+          ]
+        },
+        pardon_ar: {
+          type: 'boolean',
+          text: 'Have you received a pardon from the Governor for this offense?',
+          yes: 'pardon_exclusion_ar',
+          no: 'completion_gate_ar'
+        },
+        pardon_exclusion_ar: {
+          type: 'boolean',
+          text: 'Did the pardoned offense involve any of these: a victim under 18, a sex offense, or an offense that resulted in death or serious physical injury?',
+          yes: 'pardon_excluded_ar',
+          no: 'pardon_seal_ar'
+        },
+        // Completion of sentence (§ 16-90-1404(1)) — the shared prerequisite for
+        // EVERY conviction path. Money still owed means not yet eligible, subject
+        // to the court-excusal valve named in the question.
+        completion_gate_ar: {
+          type: 'boolean',
+          text: 'Have you fully completed your sentence? That means: all fines, court costs, and monetary obligations paid in full (unless the court excused them); all incarceration served; discharged from probation, parole, or post-release supervision; any suspended sentence completed; restitution paid; community service done; driver\'s-license reinstatement fees paid and requirements met; and any required vocational program completed.',
+          yes: 'level_ar',
+          no: 'waiting_completion_ar'
+        },
         level_ar: {
           type: 'choice',
-          text: 'What was the level of the conviction?',
+          text: 'What is the level of the conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_dwi_ar' },
-            { label: 'Felony', value: 'felony', next: 'felony_excluded_ar' },
+            { label: 'Misdemeanor or violation', value: 'misd', next: 'misd_type_ar' },
+            { label: 'Felony', value: 'felony', next: 'felony_neverelig_ar' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ar' }
           ]
         },
-        misd_dwi_ar: {
-          type: 'boolean',
-          text: 'Was this a DWI (driving while intoxicated)?',
-          yes: 'misd_dwi_date_ar',
-          no: 'misd_serious_ar'
+        misd_type_ar: {
+          type: 'choice',
+          text: 'Which best describes the misdemeanor or violation?',
+          options: [
+            { label: 'DWI or BWI (driving or boating while intoxicated)', value: 'dwi', next: 'dwi_count_ar' },
+            { label: 'One of six enhanced misdemeanors: Class A negligent homicide (5-10-105), 3rd-degree battery (5-13-203), indecent exposure (5-14-112), public sexual indecency (5-14-111), 4th-degree sexual assault (5-14-127), or 3rd-degree domestic battering (5-26-305)', value: 'enhanced', next: 'misd_enhanced_date_ar' },
+            { label: 'A traffic misdemeanor or violation (other than parking, weight, or an equipment defect)', value: 'traffic', next: 'misd_cdl_ar' },
+            { label: 'Any other misdemeanor or violation', value: 'other', next: 'eligible_misd_ar' }
+          ]
         },
-        misd_serious_ar: {
+        misd_cdl_ar: {
           type: 'boolean',
-          text: 'Was it one of a short list of more serious misdemeanors — negligent homicide, third-degree battery, indecent exposure, or a domestic-violence-related misdemeanor?',
-          yes: 'misd_serious_date_ar',
+          text: 'At the time of that traffic offense, did you hold a commercial driver\'s license (CDL) or a commercial learner\'s permit?',
+          yes: 'ineligible_cdl_ar',
           no: 'eligible_misd_ar'
         },
-        misd_dwi_date_ar: {
+        misd_enhanced_date_ar: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including paying all fines and costs?',
+          text: 'When did you complete your sentence — including restitution, costs, and any driver\'s-license reinstatement?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1405 — misdemeanor DWI)' },
+            period: { amount: 5, unit: 'years', anchor: 'five years from completion of sentence (§ 16-90-1405(b) — enhanced misdemeanor)' },
             nextPass: 'eligible_misd_ar',
             nextFail: 'waiting_ar'
           }
         },
-        misd_serious_date_ar: {
+        // DWI/BWI wait, § 5-65-111. The lookback/enhancement windows anchor to the
+        // FIRST offense date: 2nd-5th offenses enhance within 10 years of the first,
+        // a 6th within 20 years is a Class B felony (111(f)) and never sealable
+        // (§ 16-90-1408, no carve-out). 4th/5th sit inside the 10-year window, so a
+        // single 10-year-from-first-offense node serves both misdemeanor (1st-3rd)
+        // and felony (4th/5th). Reached from both the misdemeanor and felony paths.
+        dwi_count_ar: {
+          type: 'choice',
+          text: 'How many total DWI/BWI offenses do you have — counting this one, any out-of-state DWI judgments (§ 5-65-111(g)), and any Class A misdemeanor negligent-homicide convictions that count as DWI offenses (§ 5-65-111(j))?',
+          options: [
+            { label: '1st, 2nd, or 3rd offense (misdemeanor)', value: '1_3', next: 'dwi_date_ar' },
+            { label: '4th offense (unclassified felony, up to 6 years)', value: '4', next: 'dwi_date_ar' },
+            { label: '5th offense (unclassified felony, up to 10 years)', value: '5', next: 'dwi_date_ar' },
+            { label: '6th or subsequent offense (Class B felony)', value: '6plus', next: 'ineligible_dwi6_ar' },
+            { label: 'I\'m not sure how many / which offense number', value: 'unsure', next: 'complex_dwi_ar' }
+          ]
+        },
+        dwi_date_ar: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including paying all fines and costs?',
+          text: 'When did your FIRST DWI/BWI offense occur? (Arkansas anchors the § 5-65-111 window to the first offense; confirm the calculation with the court clerk.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1405 — serious-list misdemeanor)' },
-            nextPass: 'eligible_misd_ar',
-            nextFail: 'waiting_ar'
+            period: { amount: 10, unit: 'years', anchor: 'ten-year lookback from the date of the first DWI/BWI offense (§ 5-65-111(f) — interpretive; anchor confirmation is an open question)' },
+            nextPass: 'eligible_dwi_ar',
+            nextFail: 'waiting_dwi_ar'
           }
         },
-        felony_excluded_ar: {
+        felony_neverelig_ar: {
           type: 'boolean',
-          text: 'Was the offense any of these: a Class Y, A, or B felony that is NOT a drug offense; manslaughter; a sex offense; a violent felony; an unclassified felony with a maximum over 10 years; or a CDL-holder traffic felony?',
-          yes: 'ineligible_excluded_ar',
-          no: 'felony_prior_ar'
+          text: 'Is the felony any of these: manslaughter (§ 5-10-104); a felony sex offense; a violent felony listed at § 5-4-501(d)(2); or a felony traffic offense you committed while holding a CDL or commercial learner\'s permit?',
+          yes: 'ineligible_felony_ar',
+          no: 'felony_dwi_ar'
         },
-        felony_prior_ar: {
+        felony_dwi_ar: {
           type: 'boolean',
-          text: 'Do you have more than one prior felony conviction? (Arkansas allows sealing with at most one prior felony; felonies from the same episode count as one.)',
-          yes: 'complex_priorfelony_ar',
-          no: 'felony_violent_ar'
+          text: 'Is this a felony DWI/BWI — a 4th-or-subsequent intoxicated-driving offense?',
+          yes: 'dwi_count_ar',
+          no: 'felony_under18_ar'
         },
-        felony_violent_ar: {
+        felony_under18_ar: {
           type: 'boolean',
-          text: 'Was it a VIOLENT Class C or D felony? (Non-violent Class C/D felonies and Class A/B drug felonies seal immediately; violent C/D felonies have a 5-year wait.)',
+          text: 'Did you commit this felony before you turned 18? (In Arkansas any NON-violent felony committed under age 18 can be sealed once the sentence is complete — § 16-90-1406(a).)',
+          yes: 'prior_cap_ar',
+          no: 'felony_class_ar'
+        },
+        felony_class_ar: {
+          type: 'choice',
+          text: 'What is the class of the felony?',
+          options: [
+            { label: 'Class Y', value: 'Y', next: 'ineligible_felony_ar' },
+            { label: 'Class A or Class B', value: 'AB', next: 'felony_ab_drug_ar' },
+            { label: 'Class C or Class D', value: 'CD', next: 'felony_cd_violent_ar' },
+            { label: 'Unclassified felony', value: 'unclassified', next: 'felony_unclassified_ar' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_felonyclass_ar' }
+          ]
+        },
+        felony_ab_drug_ar: {
+          type: 'boolean',
+          text: 'Is this Class A or B felony a drug offense under the Uniform Controlled Substances Act (for example, possession or delivery under Title 5, Chapter 64)?',
+          yes: 'prior_cap_ar',
+          no: 'ineligible_felony_ar'
+        },
+        felony_cd_violent_ar: {
+          type: 'boolean',
+          text: 'Was this Class C or D felony a VIOLENT offense?',
           yes: 'felony_violent_date_ar',
-          no: 'eligible_felony_ar'
+          no: 'prior_cap_ar'
+        },
+        felony_unclassified_ar: {
+          type: 'boolean',
+          text: 'Is the maximum sentence for this unclassified felony 10 years or less?',
+          yes: 'prior_cap_ar',
+          no: 'ineligible_felony_ar'
         },
         felony_violent_date_ar: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including paying all fines and costs?',
+          text: 'When did you complete your sentence — including all fines, costs, and restitution?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from completion of sentence including fines/costs (Ark. Code § 16-90-1406 — violent Class C/D felony)' },
-            nextPass: 'eligible_felony_ar',
+            period: { amount: 5, unit: 'years', anchor: 'five years from completion of sentence (§ 16-90-1406(b) — violent Class C/D felony)' },
+            nextPass: 'prior_cap_ar',
             nextFail: 'waiting_ar'
           }
+        },
+        // The one-prior-felony cap (§ 16-90-1406(c)). Same-episode felonies count
+        // as one; a felony you PREVIOUSLY SEALED still counts (c)(2). Shared by
+        // every eligible-in-principle felony path, so its downstream is uniform.
+        prior_cap_ar: {
+          type: 'choice',
+          text: 'How many PREVIOUS felony convictions do you have, not counting the one you want to seal? Count felonies from the same criminal episode as a single conviction — and count any felony you previously had SEALED, because a sealed felony still counts toward this limit (§ 16-90-1406(c)(2)).',
+          options: [
+            { label: 'None', value: 'none', next: 'eligible_felony_ar' },
+            { label: 'Exactly one (including a previously sealed felony)', value: 'one', next: 'eligible_felony_cap_ar' },
+            { label: 'More than one (from separate criminal episodes)', value: 'multi', next: 'ineligible_priorfelony_ar' }
+          ]
+        },
+        nonconv_type_ar: {
+          type: 'choice',
+          text: 'Which best describes how your case ended?',
+          options: [
+            { label: 'I was arrested but never charged', value: 'arrest', next: 'arrest_wait_ar' },
+            { label: 'Charges were filed but dismissed', value: 'dismissal', next: 'eligible_dismissal_ar' },
+            { label: 'The prosecutor declined to prosecute', value: 'declination', next: 'eligible_dismissal_ar' },
+            { label: 'Nolle prosequi (the prosecutor dropped the charges)', value: 'nolle', next: 'nolle_wait_ar' }
+          ]
+        },
+        arrest_wait_ar: {
+          type: 'date',
+          text: 'When were you arrested?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'one year from the date of arrest with no charges filed (§ 16-90-1409)' },
+            nextPass: 'eligible_arrest_ar',
+            nextFail: 'waiting_nonconv_ar'
+          }
+        },
+        nolle_wait_ar: {
+          type: 'date',
+          text: 'When was the nolle prosequi order entered?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'one year from entry of the nolle prosequi order (§ 16-90-1410(a)(1))' },
+            nextPass: 'eligible_nolle_ar',
+            nextFail: 'waiting_nonconv_ar'
+          }
+        },
+        acquittal_ngri_ar: {
+          type: 'boolean',
+          text: 'Were you acquitted by reason of mental disease or defect (found not guilty by reason of insanity under § 5-2-301 et seq.)?',
+          yes: 'ineligible_ngri_ar',
+          no: 'eligible_acquittal_ar'
+        },
+        deferred_ar: {
+          type: 'choice',
+          text: 'Which describes your case?',
+          options: [
+            { label: 'First Offender Act 346 probation — successfully completed', value: 'act346_done', next: 'act346_exclusion_ar' },
+            { label: 'First Offender Act 346 — still on probation / not yet completed', value: 'act346_active', next: 'act346_pending_ar' },
+            { label: 'First Offender Act 346 — I violated the terms and was found guilty', value: 'act346_violated', next: 'completion_gate_ar' },
+            { label: 'I have used First Offender Act 346 before and want to use it again', value: 'act346_repeat', next: 'act346_repeat_ar' },
+            { label: 'Another diversion completed without a finding of guilt', value: 'diversion_done', next: 'eligible_diversion_ar' },
+            { label: 'A suspended imposition of sentence (SIS)', value: 'sis', next: 'sis_ar' }
+          ]
+        },
+        act346_exclusion_ar: {
+          type: 'boolean',
+          text: 'Was the Act 346 offense any of these: an offense requiring sex-offender registration (§ 12-12-901 et seq.), public sexual indecency (§ 5-14-111), indecent exposure (§ 5-14-112), bestiality (§ 5-14-122), knowingly exposing another to HIV (§ 5-14-123), or a felony involving violence (§ 5-4-501)?',
+          yes: 'act346_excluded_ar',
+          no: 'eligible_act346_ar'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Arkansas seals convictions and non-convictions differently, and many records seal immediately once you know which track you are on. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. An Arkansas State Police (ACIC) criminal-history request or your court paperwork will show the disposition; Legal Aid of Arkansas can help you read it.',
+          message: 'Arkansas seals convictions and non-convictions along different tracks, and many records seal quickly once you know which track you are on. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. An Arkansas Crime Information Center (ACIC) criminal-history request or your court paperwork will show the disposition; Legal Aid of Arkansas can help you read it.',
           remedy: 'Get Your Record First (ACIC / court paperwork)',
-          citation: 'Ark. Code § 16-90-1401 et seq. (the route depends on the disposition)'
+          citation: 'A.C.A. § 16-90-1401 et seq. (the route depends on the disposition)'
         },
-        eligible_nonconv_ar: {
+        eligible_sis_nonconv_ar: {
           status: 'eligible',
-          title: 'No Conviction — Sealable Now, Free',
-          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, acquitted, or completed under the First Offender Act 346 — Arkansas lets you seal it with no waiting period, and filing is free (no fee since Act 680 in 2019). You use the statewide uniform petition, filed in the court of the case. Legal Aid of Arkansas can help. (First Offender Act 346 completions and pardoned convictions also have their own sealing doors.)',
-          remedy: 'Non-conviction sealing (§§ 16-90-1409/1410) — free, no wait',
-          citation: 'Ark. Code §§ 16-90-1409, 16-90-1410'
+          title: 'SIS Without a Fine — Treated as a Non-Conviction',
+          message: 'A suspended imposition of sentence with NO fine imposed is not a conviction under Arkansas law (§ 16-90-1404(2)(B)(ii)). That means it is handled on the non-conviction track rather than the conviction track — and non-convictions carry a strong presumption in your favor: the court SHALL grant sealing unless the State shows by a preponderance of the evidence that it should not (§ 16-90-1415). You file the statewide uniform petition (§ 16-90-1414). If a fine actually was imposed, this becomes a conviction instead — go back and answer that way. Legal Aid of Arkansas can help you confirm which applies.',
+          remedy: 'Non-conviction sealing (§ 16-90-1404(2)(B)(ii))',
+          citation: 'A.C.A. §§ 16-90-1404(2)(B)(ii), 16-90-1415'
         },
-        eligible_misd_ar: {
-          status: 'eligible',
-          title: 'Misdemeanor — Sealable, and Filing Is Free',
-          message: 'Your misdemeanor is sealable in Arkansas, and filing is free (no fee since Act 680 in 2019). Most misdemeanors seal IMMEDIATELY once your sentence is complete and your fines and costs are paid — there is no waiting period and no limit on how many you can seal. A short list of more serious misdemeanors carries a 5-year wait, and a misdemeanor DWI a 10-year wait, but based on what you told us yours is clear to file. You use the statewide uniform petition in the court of the case; the prosecutor has 30 days to object, and the standard is that the court SHALL seal absent clear-and-convincing reasons not to. Legal Aid of Arkansas can help.',
-          remedy: 'Misdemeanor sealing (§ 16-90-1405) — free',
-          citation: 'Ark. Code § 16-90-1405'
-        },
-        eligible_felony_ar: {
-          status: 'eligible',
-          title: 'Felony — Sealable, Possibly Right Now',
-          message: 'This is Arkansas being quietly generous. Non-violent Class C and D felonies, and Class A/B DRUG felonies, seal IMMEDIATELY once your sentence is complete and your fines and costs are paid — no waiting period. (Violent Class C/D felonies have a 5-year wait.) Filing is free, on the statewide uniform petition in the court of the case; the court must wait 90 days before granting, and the decision is discretionary. Remember the cap: this works with at most one prior felony conviction. Legal Aid of Arkansas can help you file.',
-          remedy: 'Felony sealing (§ 16-90-1406) — free; immediate for non-violent C/D and A/B drug',
-          citation: 'Ark. Code § 16-90-1406'
-        },
-        waiting_ar: {
-          status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'A few Arkansas offenses carry a wait before sealing: a short list of serious misdemeanors (5 years), a misdemeanor DWI (10 years), and violent Class C/D felonies (5 years), each running from when you completed your sentence and paid your fines and costs. Based on your dates, yours has not passed yet. When it does, filing is free. Legal Aid of Arkansas can help you time it.',
-          remedy: 'Wait for the period, then seal for free',
-          citation: 'Ark. Code §§ 16-90-1405, 16-90-1406'
-        },
-        ineligible_excluded_ar: {
-          status: 'ineligible',
-          title: 'This Offense Cannot Be Sealed',
-          message: 'Arkansas excludes certain offenses from sealing entirely (§ 16-90-1408): Class Y, A, and B felonies that are not drug offenses, manslaughter, sex offenses, violent felonies, unclassified felonies with a maximum over 10 years, and CDL-holder traffic felonies. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-ineligible offense. Legal Aid of Arkansas can help you confirm where yours falls and explain the pardon process.',
-          remedy: 'None (Ineligible Offense) — a pardon is the remaining route',
-          citation: 'Ark. Code § 16-90-1408'
-        },
-        complex_priorfelony_ar: {
+        pardon_excluded_ar: {
           status: 'complex',
-          title: 'The One-Prior-Felony Cap Needs a Closer Look',
-          message: 'Arkansas lets you seal a felony only if you have at most ONE prior felony conviction — but with an important wrinkle: felonies arising from the same episode count as a single conviction. Because you told us you have more than one prior felony, whether you qualify depends on how those convictions are counted, which is exactly the kind of analysis worth doing with help rather than guessing at. Legal Aid of Arkansas can look at your specific record and tell you whether the cap is met. If it is, the good news is that filing is free.',
-          remedy: 'Get a One-Prior-Felony Analysis (Legal Aid of Arkansas)',
-          citation: 'Ark. Code § 16-90-1406'
+          title: 'Pardon-Sealing Is Excluded Here — But a Petition May Still Be Open',
+          message: 'On a pardon the court will ordinarily seal automatically, but the automatic pardon-sealing route is CLOSED for offenses with a victim under 18, sex offenses, and offenses that resulted in death or serious physical injury (§ 16-90-1411). Because yours falls in that group, the pardon by itself will not seal it. A pardon does not preclude a regular sealing petition (§ 16-90-1411(c)), so the honest next step is to run the ordinary conviction analysis under §§ 16-90-1405/1406 — though many offenses in this group are also on the never-eligible list (§ 16-90-1408). Legal Aid of Arkansas can tell you whether a petition remains available for your specific offense.',
+          remedy: 'Get a Petition Analysis (§§ 16-90-1405/1406) — Legal Aid of Arkansas',
+          citation: 'A.C.A. § 16-90-1411'
+        },
+        pardon_seal_ar: {
+          status: 'eligible',
+          title: 'Pardoned — the Court Shall Seal',
+          message: 'When the Governor issues a pardon, the Governor notifies the court and the court SHALL seal the record — this path is automatic and needs no petition (§ 16-90-1411). (If the pardon was issued before July 15, 1991, you file a copy of the pardon with the court.) There is a separate mandatory path for youthful offenders: a felony committed under age 16 with a suspended sentence, a pardon, and no other convictions must also be sealed (§ 16-90-1411(b)). Sealing does not restore firearm rights, and voting rights follow the Arkansas Constitution Amendment 51 § 11 procedure rather than sealing itself (§ 16-90-1417). Legal Aid of Arkansas can confirm the paperwork.',
+          remedy: 'Automatic pardon-sealing (§ 16-90-1411) — no petition',
+          citation: 'A.C.A. § 16-90-1411'
+        },
+        waiting_completion_ar: {
+          status: 'waiting',
+          title: 'Finish the Sentence First',
+          message: 'In Arkansas a conviction cannot be sealed until you have COMPLETED your sentence (§ 16-90-1404(1)) — and completion includes the money: all fines, court costs, and other monetary obligations paid in full, restitution paid, and any driver\'s-license reinstatement fees taken care of, along with all incarceration, probation, parole, community service, and any required program. Because something is still outstanding, you are not eligible yet. There is one valve worth asking about: a court can EXCUSE the monetary obligations, which would count as completion. Legal Aid of Arkansas can help you either finish the balance or ask the court to excuse it.',
+          remedy: 'Complete the sentence (or ask the court to excuse the balance)',
+          citation: 'A.C.A. § 16-90-1404(1)'
         },
         complex_level_ar: {
           status: 'complex',
           title: 'We Need the Conviction Level',
-          message: 'Arkansas sealing works differently for misdemeanors and felonies, and within felonies the class and whether it is a drug offense matter a lot. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and an ACIC criminal-history request will show it. Legal Aid of Arkansas can help you read it.',
+          message: 'Arkansas sealing works differently for misdemeanors and felonies, and within felonies the class and whether it is a drug offense matter a great deal. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and an ACIC criminal-history request will show it. Legal Aid of Arkansas can help you read it.',
           remedy: 'Get the Conviction Level First (court paperwork / ACIC)',
-          citation: 'Ark. Code § 16-90-1401 et seq.'
+          citation: 'A.C.A. § 16-90-1401 et seq.'
+        },
+        eligible_misd_ar: {
+          status: 'eligible',
+          title: 'Misdemeanor — Sealable Now',
+          message: 'Your misdemeanor or violation is sealable in Arkansas. Most misdemeanors seal IMMEDIATELY once your sentence is complete and your fines, costs, and any driver\'s-license reinstatement are paid — there is no waiting period and no limit on how many you can seal, and this reaches offenses committed before 2014 (§ 16-90-1405). You file the statewide uniform petition (§ 16-90-1414) in the county of conviction; the prosecutor has 30 days to object, and the standard strongly favors you — the court SHALL seal unless it finds clear and convincing evidence it should not (§ 16-90-1415(a)). On sealing, the conduct is treated as a matter of law as never having occurred (§ 16-90-1417). Note that sealing does not restore firearm rights, and criminal-justice and certain licensing agencies keep access (§ 16-90-1416). Whether there is a filing fee is unconfirmed — ask the clerk. Legal Aid of Arkansas can help.',
+          remedy: 'Misdemeanor sealing (§ 16-90-1405)',
+          citation: 'A.C.A. §§ 16-90-1405, 16-90-1415'
+        },
+        ineligible_cdl_ar: {
+          status: 'ineligible',
+          title: 'CDL Bar — This Traffic Offense Cannot Be Sealed',
+          message: 'Arkansas bars sealing a traffic misdemeanor or violation (other than parking, weight, or an equipment defect) if you held a commercial driver\'s license or a commercial learner\'s permit at the time of the offense (§ 16-90-1405(b)(6)). Because you held a CDL or CLP then, this particular offense cannot be sealed under the misdemeanor path. Legal Aid of Arkansas can confirm whether any other route applies to your record.',
+          remedy: 'None for this offense (CDL bar) — confirm with Legal Aid of Arkansas',
+          citation: 'A.C.A. § 16-90-1405(b)(6)'
+        },
+        waiting_ar: {
+          status: 'waiting',
+          title: 'Waiting Period Not Yet Met',
+          message: 'A few Arkansas offenses carry a wait measured from when you COMPLETED your sentence: the six enhanced misdemeanors (5 years — § 16-90-1405(b)) and violent Class C/D felonies (5 years — § 16-90-1406(b)). Based on the date you gave, yours has not passed yet. When it does, you file the statewide uniform petition in the county of conviction. Legal Aid of Arkansas can help you time it. (If your case was later denied, note the refile timers: generally 90 days for a misdemeanor, one year for an enhanced offense — § 16-90-1405(b)(3)-(4).)',
+          remedy: 'Wait for the period, then petition to seal',
+          citation: 'A.C.A. §§ 16-90-1405, 16-90-1406'
+        },
+        complex_dwi_ar: {
+          status: 'complex',
+          title: 'Your DWI Sealing Wait Depends on § 5-65-111 — Confirm the Count',
+          message: 'For a DWI/BWI, Arkansas sets the sealing wait by the § 5-65-111 lookback windows, which run from your FIRST DWI offense and depend on how many total DWI offenses you have — including any out-of-state DWI judgments and certain negligent-homicide priors. Because the offense count or the first-offense date is not clear here, this screening will not guess: a 1st-3rd offense is a misdemeanor sealable after the 10-year lookback, a 4th or 5th is an unclassified felony also sealable after the lookback, and a 6th-or-subsequent is a Class B felony that can never be sealed. The statute anchors the window to the first offense but does not spell out a per-conviction sealing anchor, so confirm the exact count and calculation with the court clerk. Legal Aid of Arkansas can help.',
+          remedy: 'Confirm your DWI offense count and first-offense date (court clerk)',
+          citation: 'A.C.A. §§ 5-65-111, 16-90-1405, 16-90-1406'
+        },
+        eligible_dwi_ar: {
+          status: 'eligible',
+          title: 'DWI/BWI — Lookback Period Appears Met',
+          message: 'For a DWI/BWI, Arkansas ties the sealing wait to the § 5-65-111 lookback window, which runs from your first DWI offense. Based on the first-offense date you gave, the 10-year window appears to have elapsed, so this offense looks eligible to seal (a 1st-3rd offense is a misdemeanor; a 4th or 5th is an unclassified felony — both sealable once the lookback has run). One honest caveat: the statute anchors the window to the FIRST offense and does not spell out a per-conviction anchor, so confirm the calculation with the court clerk before you rely on it. Sealing does not restore firearm rights (§ 16-90-1417). Legal Aid of Arkansas can help you file the uniform petition.',
+          remedy: 'DWI/BWI sealing after the § 5-65-111 lookback',
+          citation: 'A.C.A. §§ 5-65-111, 16-90-1405'
+        },
+        waiting_dwi_ar: {
+          status: 'waiting',
+          title: 'DWI/BWI — Lookback Period Not Yet Met',
+          message: 'For a DWI/BWI, Arkansas ties the sealing wait to the § 5-65-111 lookback window, which runs from your FIRST DWI offense. Based on the first-offense date you gave, the 10-year window has not yet elapsed, so this offense is not sealable yet. When it does elapse you can file the statewide uniform petition. One honest caveat: the statute anchors the window to the first offense and does not spell out a per-conviction anchor, so confirm the exact calculation with the court clerk. Legal Aid of Arkansas can help you time it.',
+          remedy: 'Wait for the § 5-65-111 lookback, then seal',
+          citation: 'A.C.A. §§ 5-65-111, 16-90-1405'
+        },
+        ineligible_dwi6_ar: {
+          status: 'ineligible',
+          title: 'Sixth DWI — Never Sealable',
+          message: 'A sixth-or-subsequent DWI/BWI offense within 20 years of your first is a Class B felony (§ 5-65-111(f)), and Class B felonies that are not drug offenses are on Arkansas\'s never-eligible list (§ 16-90-1408) with no carve-out for DWI. That means this offense cannot be sealed. A pardon from the Governor is the only remaining route, and even that excludes offenses resulting in death or serious physical injury. Legal Aid of Arkansas can help you confirm the offense count and explain the pardon process.',
+          remedy: 'None (Class B felony DWI) — a pardon is the remaining route',
+          citation: 'A.C.A. §§ 5-65-111(f), 16-90-1408'
+        },
+        ineligible_felony_ar: {
+          status: 'ineligible',
+          title: 'This Felony Cannot Be Sealed',
+          message: 'Arkansas excludes certain felonies from sealing entirely (§ 16-90-1408): Class Y felonies; Class A and B felonies that are NOT Uniform Controlled Substances Act drug offenses; manslaughter (§ 5-10-104); unclassified felonies with a maximum over 10 years; felony sex offenses (defined at § 16-90-1404(6)); violent felonies listed at § 5-4-501(d)(2); and felony traffic offenses committed while holding a CDL or commercial learner\'s permit (§ 16-90-1408(b)). No waiting period changes that. A pardon from the Governor remains a possible route for some otherwise-ineligible offenses, though pardon-sealing itself excludes offenses with a victim under 18, sex offenses, and offenses resulting in death or serious physical injury (§ 16-90-1411). Legal Aid of Arkansas can confirm where yours falls and explain the pardon process.',
+          remedy: 'None (Ineligible Offense) — a pardon may remain a route',
+          citation: 'A.C.A. §§ 16-90-1408, 16-90-1411'
+        },
+        complex_felonyclass_ar: {
+          status: 'complex',
+          title: 'We Need the Felony Class',
+          message: 'For an Arkansas felony, the class (Y, A, B, C, D, or unclassified), whether it is a drug offense under the Uniform Controlled Substances Act, and whether it is violent all change the answer — a non-violent Class C/D felony or a Class A/B drug felony can seal immediately, while a Class Y or non-drug Class A/B felony cannot seal at all. Since the class is not clear, this screening will not guess. Your court paperwork and an ACIC criminal-history request will state it. Legal Aid of Arkansas can help you read it.',
+          remedy: 'Get the Felony Class First (court paperwork / ACIC)',
+          citation: 'A.C.A. §§ 16-90-1406, 16-90-1408'
+        },
+        eligible_felony_ar: {
+          status: 'eligible',
+          title: 'Felony — Sealable, Possibly Right Now',
+          message: 'This is Arkansas being quietly generous. Non-violent Class C and D felonies, unclassified felonies with a maximum of 10 years or less, and — the surprise — Class A and B DRUG felonies under the Uniform Controlled Substances Act (§ 16-90-1406(a)(3)) all seal once your sentence is complete; any non-violent felony committed under age 18 qualifies too, and a violent Class C/D felony qualifies 5 years after completion. (There is also a special path for felony drug possession or a counterfeit substance where court-ordered treatment was completed — § 16-90-1407.) Two honest limits: for a FELONY the court MAY seal only if you prove by clear and convincing evidence that sealing serves the interests of justice — the burden is on you and the decision is discretionary (§ 16-90-1415(b)) — and sealing does not restore firearm rights and does not by itself restore voting rights (§ 16-90-1417). You file the uniform petition in the county of conviction; the prosecutor has 30 days to object. Legal Aid of Arkansas can help you file.',
+          remedy: 'Felony sealing (§ 16-90-1406) — immediate for non-violent C/D and A/B drug',
+          citation: 'A.C.A. §§ 16-90-1406, 16-90-1415'
+        },
+        eligible_felony_cap_ar: {
+          status: 'eligible',
+          title: 'Felony — Sealable, but You Are at the One-Prior-Felony Limit',
+          message: 'Your felony looks sealable, but flag this carefully: Arkansas allows felony sealing only if you have at most ONE previous felony conviction (§ 16-90-1406(c)), and you are at that limit. Two things make the count a trap — felonies from the same criminal episode count as a single conviction, and a felony you PREVIOUSLY SEALED still counts against the cap (§ 16-90-1406(c)(2)). So a record that feels clean because an earlier felony was sealed is still at the limit. If the count holds at one prior, the felony itself can seal once your sentence is complete, though a felony sealing is discretionary and you carry the clear-and-convincing burden (§ 16-90-1415(b)). Because the cap turns on exactly how convictions are counted, have Legal Aid of Arkansas confirm it before you file.',
+          remedy: 'Confirm the one-prior-felony count, then petition (§ 16-90-1406)',
+          citation: 'A.C.A. §§ 16-90-1406(c), 16-90-1415'
+        },
+        ineligible_priorfelony_ar: {
+          status: 'ineligible',
+          title: 'Over the One-Prior-Felony Cap',
+          message: 'Arkansas allows felony sealing only if you have at most ONE previous felony conviction (§ 16-90-1406(c)), and you told us you have more than one from separate criminal episodes. That puts this over the cap, so the felony cannot be sealed under § 16-90-1406. One nuance is worth confirming: felonies arising from the SAME criminal episode count as a single conviction, so if some of those convictions were really one episode, the count could come down. Legal Aid of Arkansas can look at how your convictions are counted and tell you whether the cap is actually met.',
+          remedy: 'Get a One-Prior-Felony Analysis (Legal Aid of Arkansas)',
+          citation: 'A.C.A. § 16-90-1406(c)'
+        },
+        eligible_dismissal_ar: {
+          status: 'eligible',
+          title: 'No Conviction — Sealable Now',
+          message: 'Because your case ended without a conviction — the charges were dismissed, or the prosecutor declined to prosecute — Arkansas lets you seal it with no stated waiting period (§ 16-90-1410(a)(2), (a)(4)). Non-convictions carry a strong presumption in your favor: the court SHALL grant sealing unless the State shows by a preponderance of the evidence that it should not (§ 16-90-1415). You file the statewide uniform petition (§ 16-90-1414). Legal Aid of Arkansas can help.',
+          remedy: 'Non-conviction sealing (§ 16-90-1410) — no stated wait',
+          citation: 'A.C.A. §§ 16-90-1410, 16-90-1415'
+        },
+        eligible_arrest_ar: {
+          status: 'eligible',
+          title: 'Arrest, Never Charged — Sealable',
+          message: 'An arrest that never led to charges can be sealed one year after the arrest with no charges filed (§ 16-90-1409). Based on the date you gave, that year has passed. This petition is filed in the county of ARREST (§ 16-90-1409(b)) — not the county of conviction, because there was no conviction. Non-convictions carry a strong presumption in your favor: the court SHALL grant unless the State shows by a preponderance it should not (§ 16-90-1415). Legal Aid of Arkansas can help you file.',
+          remedy: 'Arrest sealing (§ 16-90-1409) — filed in the county of arrest',
+          citation: 'A.C.A. §§ 16-90-1409, 16-90-1415'
+        },
+        waiting_nonconv_ar: {
+          status: 'waiting',
+          title: 'Non-Conviction — Short Wait Not Yet Met',
+          message: 'Two non-conviction paths carry a one-year wait: an arrest never charged is sealable one year after the arrest (§ 16-90-1409), and a nolle prosequi is sealable one year after the order is entered (§ 16-90-1410(a)(1)). Based on the date you gave, that year has not passed yet. When it does, you file the statewide uniform petition, and non-convictions carry a strong presumption in your favor. Legal Aid of Arkansas can help you time it.',
+          remedy: 'Wait one year, then seal (§§ 16-90-1409/1410)',
+          citation: 'A.C.A. §§ 16-90-1409, 16-90-1410'
+        },
+        eligible_nolle_ar: {
+          status: 'eligible',
+          title: 'Nolle Prosequi — Sealable',
+          message: 'A nolle prosequi can be sealed one year after the nolle order is entered (§ 16-90-1410(a)(1)). Based on the date you gave, that year has passed, so this is sealable. Non-convictions carry a strong presumption in your favor: the court SHALL grant sealing unless the State shows by a preponderance of the evidence that it should not (§ 16-90-1415). You file the statewide uniform petition (§ 16-90-1414). Legal Aid of Arkansas can help.',
+          remedy: 'Nolle prosequi sealing (§ 16-90-1410(a)(1))',
+          citation: 'A.C.A. §§ 16-90-1410, 16-90-1415'
+        },
+        ineligible_ngri_ar: {
+          status: 'ineligible',
+          title: 'Acquittal by Reason of Mental Disease or Defect — Excluded',
+          message: 'Most acquittals can be sealed in Arkansas, but there is one exception: an acquittal by reason of mental disease or defect (§ 5-2-301 et seq.) is specifically excluded from non-conviction sealing (§ 16-90-1410(a)(3)). Because your case ended that way, it cannot be sealed under this path. Legal Aid of Arkansas can confirm whether any other route applies to your record.',
+          remedy: 'None (NGRI acquittal excluded) — confirm with Legal Aid of Arkansas',
+          citation: 'A.C.A. § 16-90-1410(a)(3)'
+        },
+        eligible_acquittal_ar: {
+          status: 'eligible',
+          title: 'Acquitted — Sealable',
+          message: 'Because you were acquitted, Arkansas lets you seal the record (§ 16-90-1410(a)(3)). Non-convictions carry a strong presumption in your favor: the court SHALL grant sealing unless the State shows by a preponderance of the evidence that it should not (§ 16-90-1415). The one exception is an acquittal by reason of mental disease or defect, which is excluded — but that does not apply to you. You file the statewide uniform petition (§ 16-90-1414). Legal Aid of Arkansas can help.',
+          remedy: 'Acquittal sealing (§ 16-90-1410(a)(3))',
+          citation: 'A.C.A. §§ 16-90-1410, 16-90-1415'
+        },
+        act346_pending_ar: {
+          status: 'waiting',
+          title: 'Act 346 in Progress — Sealing Comes Automatically at Discharge',
+          message: 'You are still on First Offender Act 346 probation, so there is nothing to file yet — and that is good news. On successful completion (or early release), the court SHALL dismiss the case, discharge you WITHOUT an adjudication of conviction, AND seal the record, all in one order and with no separate petition or waiting period (§ 16-93-303(b)). While you are on Act 346 probation you may not possess a firearm (§ 16-93-303(c)(1)). If you were to violate the terms, the court would enter an adjudication of guilt and the case would become an ordinary conviction (§ 16-93-303(a)(2)). Complete the probation, and the sealing follows automatically. Legal Aid of Arkansas can help if the discharge order is not entered.',
+          remedy: 'Complete Act 346 probation — the court then seals automatically',
+          citation: 'A.C.A. § 16-93-303(b)'
+        },
+        act346_repeat_ar: {
+          status: 'complex',
+          title: 'First Offender Act 346 Is Once Per Lifetime',
+          message: 'First Offender Act 346 can be used on ONE occasion only (§ 16-93-302(a)(1)). If you have used it before, you cannot use it again — and there is a serious warning attached: falsely denying that you previously received Act 346 treatment is itself a Class D felony (§ 16-93-302(a)(2)), so do not represent that you have never used it. Courts are also not compelled to offer Act 346 even to a first-time-eligible person (§ 16-93-303(a)(3)). If Act 346 is off the table, a regular sealing petition under §§ 16-90-1405/1406 may still be available for an underlying conviction. Talk to a defense attorney or Legal Aid of Arkansas before deciding how to proceed.',
+          remedy: 'Act 346 is once-per-lifetime — seek counsel before proceeding',
+          citation: 'A.C.A. § 16-93-302'
+        },
+        eligible_diversion_ar: {
+          status: 'eligible',
+          title: 'Diversion Completed Without a Finding of Guilt — Not a Conviction',
+          message: 'A diversion completed WITHOUT a finding of guilt is not a conviction under Arkansas law (§ 16-90-1404(2)), so it is handled on the non-conviction track. Non-convictions carry a strong presumption in your favor: the court SHALL grant sealing unless the State shows by a preponderance of the evidence that it should not (§ 16-90-1415). You file the statewide uniform petition (§ 16-90-1414). If your diversion was a First Offender Act 346 probation specifically, go back and choose that option, because Act 346 has its own automatic sealing at discharge. Legal Aid of Arkansas can help.',
+          remedy: 'Non-conviction sealing (§ 16-90-1404(2))',
+          citation: 'A.C.A. §§ 16-90-1404(2), 16-90-1415'
+        },
+        eligible_act346_ar: {
+          status: 'eligible',
+          title: 'Act 346 Completed — Mandatory Sealing at Discharge',
+          message: 'You successfully completed First Offender Act 346 probation, and Arkansas treats that as a best outcome: on fulfillment (or early release) the court SHALL enter an order that dismisses the case, discharges you WITHOUT an adjudication of conviction, AND seals the record — all at once, with no separate petition and no waiting period (§ 16-93-303(b)). A fine of $3,500 or less and/or court costs do NOT negate the Act 346 benefit (§ 16-93-303(a)(1)(A)(ii)), so an imposed fine does not turn this into a conviction. A few honest caveats: Act 346 may be used only once in a lifetime, and falsely denying a prior use is itself a Class D felony (§ 16-93-302); and even after discharge the offense still counts for habitual-offender status, criminal-history scoring, sentencing, and Rule 609 impeachment, with firearm eligibility governed by § 5-73-103 (§ 16-93-303(d)-(e)). If the court has not entered the discharge-and-seal order, Legal Aid of Arkansas can help you obtain it.',
+          remedy: 'Automatic dismiss-discharge-seal at Act 346 completion (§ 16-93-303(b))',
+          citation: 'A.C.A. §§ 16-93-303(b), 16-93-302'
+        },
+        act346_excluded_ar: {
+          status: 'complex',
+          title: 'Act 346 Sealing Is Excluded for This Offense',
+          message: 'Even on successful completion, First Offender Act 346 cannot seal certain offenses (§ 16-93-303(a)(1)(B)): any offense requiring sex-offender registration, public sexual indecency, indecent exposure, bestiality, knowingly exposing another to HIV, and serious felonies or felonies involving violence. Because yours is on that list, the automatic Act 346 sealing does not apply. The ordinary conviction analysis is the route to check instead — for a misdemeanor like indecent exposure that means the five-year enhanced-misdemeanor wait under § 16-90-1405(b), measured from completion of your sentence. Legal Aid of Arkansas can run that analysis with you.',
+          remedy: 'Get a §§ 16-90-1405/1406 Analysis (Legal Aid of Arkansas)',
+          citation: 'A.C.A. §§ 16-93-303(a)(1)(B), 16-90-1405'
         }
       }
     },
     resources: {
       remedies: {
-        expungement: {
-          name: 'Record Sealing (Comprehensive Criminal Record Sealing Act, Ark. Code § 16-90-1401 et seq.)',
-          formName: 'ACIC uniform statewide petition and order forms',
-          formUrl: 'https://acic.arkansas.gov',
+        sealing: {
+          name: 'Record Sealing (Comprehensive Criminal Record Sealing Act, A.C.A. § 16-90-1401 et seq.)',
+          // Cited from the pulled statute, not a verified ACIC form/URL. The exact
+          // uniform-petition form under § 16-90-1414 (cite-only) and the ACIC
+          // filing requirements are an open question, so formUrl stays null.
+          formName: 'Statewide uniform petition and order to seal (§ 16-90-1414)',
+          formUrl: null,
           steps: [
-            'Confirm your offense is not on the § 16-90-1408 ineligible list, and that you have at most one prior felony conviction (same-episode felonies count as one).',
-            'Complete your sentence, including paying all fines and costs — "completion" includes the money owed.',
-            'File the statewide uniform petition in the court of the case. There is no filing fee (Act 680, 2019).',
-            'The prosecutor has 30 days to object on misdemeanors; on felonies the court waits 90 days before granting. Legal Aid of Arkansas can help.'
+            'Confirm your offense is not on the § 16-90-1408 never-eligible list, and — for a felony — that you have at most one prior felony conviction (same-episode felonies count as one, and a previously SEALED felony still counts).',
+            'Complete your sentence: all fines, costs, and monetary obligations paid (unless the court excuses them), plus incarceration, probation/parole, restitution, community service, driver\'s-license reinstatement, and any required program (§ 16-90-1404(1)).',
+            'File the statewide uniform petition (§ 16-90-1414) — in the county of conviction for a conviction, or the county of arrest for an arrest that was never charged.',
+            'The prosecutor has 30 days to object (§ 16-90-1413); for a misdemeanor the court SHALL seal absent clear-and-convincing reasons, while for a felony you must show by clear and convincing evidence that sealing serves the interests of justice. Legal Aid of Arkansas can help.'
           ],
-          // NOT null: Wave 6 states there is no filing fee since Act 680 (July 2019).
-          fees: 'No filing fee — Arkansas eliminated the sealing filing fee statewide in July 2019 (Act 680).',
-          feeWaiver: 'Not needed — filing is free statewide since Act 680 (2019).',
-          courtContact: 'The court where the case was decided'
+          // null, not $0: the pulled statutes (§§ 16-90-1404–1417) do not state a
+          // filing fee. The draft's "free since Act 680" claim is unconfirmed in the
+          // statute text and stays a phone-tier open question.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The circuit or district court where the case was decided (county of conviction; county of arrest for an uncharged arrest)'
         }
       },
       legalAid: [

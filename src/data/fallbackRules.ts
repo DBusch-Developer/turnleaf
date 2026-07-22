@@ -15695,78 +15695,150 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   NM: {
     code: 'NM',
     name: 'New Mexico',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      'Compiled text reflects amendments through 2023 (2021 1st S.S. ch. 3; 2023 ch. 74). 2024-2026 session '
+      + 'sweep pending — see Open Questions.',
     terminology:
-      'New Mexico uses EXPUNGEMENT under the Criminal Record Expungement Act (§ 29-3A), effective January 1, '
-      + '2020 — one of the broader laws in the country when it passed. The waiting periods for convictions '
-      + 'ladder by the DEGREE of the offense, and getting that ladder right matters: many legal blogs flatten '
-      + 'it to "2 years for misdemeanors, 4 for felonies," which is wrong. Non-convictions clear after just '
-      + '1 year. There is also an automatic path for minor cannabis possession. A handful of offenses are '
-      + 'excluded entirely, including DWI (even a first-offense deferred one) and — the odd one out — '
-      + 'embezzlement.',
+      'New Mexico uses EXPUNGEMENT under the Criminal Record Expungement Act (NMSA 1978 §§ 29-3A-1 to 29-3A-9), '
+      + 'and "expunge" here means REMOVAL FROM PUBLIC ACCESS — including from publicly accessible court, '
+      + 'corrections, and law-enforcement websites (29-3A-2(B)) — not destruction, with ONE exception: the '
+      + 'automatic cannabis path actually destroys the records. Every petition goes to DISTRICT court, even for '
+      + 'municipal-ordinance and misdemeanor cases, and the court must rule within 30 days of the hearing on '
+      + 'every path. There is exactly one automatic route (cannabis); everything else is petition-based. Two '
+      + 'things make New Mexico stand out. First, the conviction waiting periods ladder by DEGREE and getting the '
+      + 'ladder right matters — many blogs flatten it to "2 years misdemeanor, 4 felony," which is wrong: it is 2 '
+      + '(municipal/misdemeanor), 4 (misdemeanor aggravated battery or 4th-degree felony), 6 (3rd-degree), 8 '
+      + '(2nd-degree), and 10 (1st-degree). The TRAP: ANY offense under the Crimes Against Household Members Act '
+      + '(domestic violence) is 10 years regardless of degree, so a misdemeanor DV conviction waits 10 years, not '
+      + '2. And the clock RESETS — the conviction-free period runs from the LAST sentence you completed for ANY '
+      + 'conviction in ANY jurisdiction, so a new conviction restarts it. Second, the honest-no is among the '
+      + 'cleanest anywhere (29-3A-7): the proceedings are treated as if they never happened and you may say no '
+      + 'record exists, with a SINGLE carve-out — you must disclose for employment or association with a '
+      + 'financial institution regulated by FINRA or the SEC. (One caveat: DWI citations kept by the Taxation and '
+      + 'Revenue Department are excluded from "arrest records" and survive expungement.) Non-convictions clear '
+      + 'after just 1 year, a conditional discharge under 31-20-13 counts as a non-conviction, there is a '
+      + 'mandatory identity-theft path, and a handful of offenses are excluded entirely — including every DWI and '
+      + '— the odd one out — embezzlement.',
     keyDates: [
       {
-        label: 'Criminal Record Expungement Act takes effect (§ 29-3A)',
+        label: 'Criminal Record Expungement Act takes effect (§§ 29-3A-1 to 29-3A-9)',
         date: '2020-01-01',
         kind: 'effective',
-        note: 'One of the nation\'s broader expungement laws when passed. 2021 amendments added motor-vehicle penalty assessments and allowed one petition to cover multiple records in a district.',
+        note: 'One of the nation\'s broader expungement laws when passed. Amended in 2021 (1st S.S. ch. 3) and 2023 (ch. 74).',
       },
       {
-        label: 'Automatic cannabis expungement (§ 29-3A-8; HB 314)',
-        date: '2021',
+        label: 'Cannabis offenses decriminalized — anchor for the automatic path (§ 29-3A-8)',
+        date: '2021-06-29',
         kind: 'operative',
-        note: 'Wave 6 gives the year (with a 2023 HB 314 update). Possession of 2 oz or less is to be expunged automatically 2 years after conviction/arrest — operational status flagged for verification.',
+        note: 'Offenses no longer criminal as of June 29, 2021 (or reduced under the Cannabis Regulation Act) are automatically expunged, with destruction, 2 years after conviction/arrest — cannabis-and-paraphernalia records only.',
+      },
+      {
+        label: 'Cannabis automatic-expungement provisions amended (§ 29-3A-8, 2023 ch. 74)',
+        date: '2023',
+        kind: 'effective',
+        note: 'The compiled text reflects the 2023 amendments to the cannabis automatic path. Operational status of the automation (AOC verification procedure and backlog) is a phone-tier open question.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Verify the operational status of automatic cannabis expungement (§ 29-3A-8, 2021 + 2023 HB 314). Wave 6 says possession of 2 oz or less should be expunged automatically 2 years after conviction/arrest — New Mexico\'s only automation — but flags that the automation actually running needs confirmation (call DPS or the Second Judicial District). The tree routes cannabis to a "check whether it is already off" result; confirm the program is live.',
+          'Run a 2024-2026 session sweep for amendments to Chapter 29, Article 3A (nmlegis.gov bill finder by statute). The compiled nmonesource.com text is current only through 2023; confirm nothing since then changed the tiers, exclusions, or cannabis procedure.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the filing fee. Wave 6 notes CREA sets no statutory fee, so a district court civil filing fee applies (~$132 historically) — a phone target. The fees and feeWaiver fields are null pending this; nmcourts.gov and a district clerk are the checks.',
+          'Confirm the district court filing fee amount and any indigency-waiver practice. The CREA is silent on filing fees, so the district-court civil docket fee presumably applies to petitions (except § 29-3A-9 reviews, which are statutorily free). The fees and feeWaiver fields are null pending this phone-tier check with a district clerk / nmcourts.gov.',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
       },
       {
         question:
-          'Confirm the full conviction waiting-period ladder from § 29-3A-5, against the flattened version many blogs give. Wave 6 gives: municipal/most misdemeanors 2 yrs; misdemeanor aggravated battery and 4th-degree felonies 4 yrs; 3rd-degree 6 yrs; 2nd-degree 8 yrs; 1st-degree and Crimes Against Household Members Act (DV) offenses 10 yrs. The tree encodes this full ladder; confirm against the statute.',
+          'Confirm the AOC cannabis-verification procedure details and current backlog. § 29-3A-8(B) requires the Administrative Office of the Courts to provide a verification and expedited-request procedure; the messaging tells users to verify rather than assume, but the process specifics and timeline are phone-tier.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull NMSA 1978 § 29-11A-3, the sex-offense definition that the § 29-3A-5(G) never-list incorporates. Cited but not read; cite-only for now.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether "an offense committed against a child" (a § 29-3A-5(G) exclusion) has a settled definition in New Mexico case law, or whether its scope is contested. Attorney-tier; encoded as a categorical exclusion without a case-law gloss.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'N.M. Stat. § 29-3A-4 (non-conviction expungement; 1-yr wait)', url: null, retrievedOn: null },
-      { id: 'N.M. Stat. § 29-3A-5 (conviction expungement; degree-laddered waits)', url: null, retrievedOn: null },
-      { id: 'N.M. Stat. § 29-3A-8 (automatic cannabis expungement; HB 314)', url: null, retrievedOn: null },
+      { id: 'NMSA 1978 § 29-3A-1 (Criminal Record Expungement Act — short title; read as part of the complete article) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-2 (definitions — (A)(1) "arrest records" EXCLUDE DWI citations maintained by the Taxation and Revenue Department, which survive expungement; (B) "expunge" = removal from public access incl. publicly accessible court/corrections/law-enforcement websites, not destruction) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-3 (identity-theft expungement — on a showing of identity theft the district court SHALL expunge all arrest and public records, order within 30 days, and substitute the true offender\'s identifying information where known) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-4 (non-conviction expungement — 1 year from final disposition; district court where charges originated; covers municipal ordinance, misdemeanor, felony, Criminal/Motor Vehicle Code penalty assessments and MVC violations/deferred sentences; SHALL grant if nothing else pending and release was without conviction — acquittal, nolle/no bill/dismissal, preprosecution diversion, conditional discharge under 31-20-13, or other discharge; one petition may bundle all records in the district; filed UNDER SEAL/pseudonym and the proceedings are themselves expunged; attach a DPS record dated within 90 days; DA/DPS notice with 30-day objection; FBI-RAP objector must give petitioner a free copy) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-5 (conviction expungement — (A) petition gate: sentence completed AND all fines/fees owed to the state paid; (C) grant criteria: nothing pending, justice served, victim restitution FULFILLED (distinct gate), and a conviction-free period; (E) justice factors; (F) the conviction-free period runs from the LAST sentence completed for ANY conviction in ANY jurisdiction, so a new conviction RESETS the clock; ladder 2/4/6/8/10 years by degree, and ALL Crimes Against Household Members Act offenses (30-3-10 to 30-3-18) are 10 years regardless of degree; (G) never list) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-6 (Criminal Record Expungement Act — expungement procedure; read as part of the complete article; the 30-day-ruling requirement applies to every path) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-7 (effect — the proceedings are treated as if they never occurred; officials AND the person may reply that no record exists; SINGLE carve-out: arrest/conviction records must be disclosed for employment or association with a financial institution regulated by FINRA or the SEC) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-8 (cannabis AUTOMATIC expungement, as amended 2023 — offenses no longer criminal as of 6/29/2021 or reduced under the Cannabis Regulation Act, conviction or not, automatically expunged with DESTRUCTION 2 years after conviction (or arrest if none); cannabis-and-paraphernalia records only; under-18 kept 2 years or until age 18 whichever comes FIRST; (B) AOC verification + expedited-request procedure; (C) mixed cannabis/non-cannabis records via AOC administrative request for the cannabis charges; (D) requests confidential) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-3A-9 (cannabis dismissal/vacatur — anyone incarcerated now or previously for a now-legal or now-lesser cannabis offense may petition ANYTIME to modify the sentence or vacate the conviction; (C) completed sentences entitled to dismissal and expungement/redesignation; (I) cannabis-related record portions expunged within 30 days of grant; (K) applies to juvenile adjudications; (L) NO fees or costs; (D)-(H) DPS-review/prosecutor-challenge machinery carried 2022 deadlines — historical) via nmonesource.com (NM Compilation Commission official publication, linked from nmlegis.gov)', url: 'https://nmonesource.com', retrievedOn: '2026-07-22' },
+      { id: 'NMSA 1978 § 29-11A-3 (sex-offense definition incorporated by the § 29-3A-5(G) never-list) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'NMSA 1978 § 30-16-8 (embezzlement — on the § 29-3A-5(G) never-list) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'NMSA 1978 §§ 30-3-10 to 30-3-18 (Crimes Against Household Members Act — the 10-year-regardless-of-degree trap in § 29-3A-5) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'NMSA 1978 § 30-3-5(B) (misdemeanor aggravated battery — the 4-year tier in § 29-3A-5) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'NMSA 1978 § 31-20-13 (conditional discharge — routes as a non-conviction under § 29-3A-4) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_nm',
       nodes: {
+        entry_nm: {
+          type: 'choice',
+          text: 'What would you like to check?',
+          options: [
+            { label: 'Whether a conviction, diversion, or dismissed case can be expunged', value: 'record', next: 'disposition' },
+            { label: 'Clear a record that was cannabis-only, or has cannabis charges mixed in', value: 'cannabis', next: 'cannabis_route_nm' },
+            { label: 'I\'m a victim of identity theft — someone else\'s crime is on my record', value: 'identity', next: 'eligible_identity_nm' },
+            { label: 'What an expungement I ALREADY have means for disclosure', value: 'effects', next: 'effects_disclosure_nm' }
+          ]
+        },
         disposition: {
           type: 'choice',
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nm' },
-            { label: 'Dismissed / Nolle prosequi', value: 'dismissed', next: 'nonconv_date_nm' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_nm' },
-            { label: 'Pre-prosecution diversion / conditional discharge completed', value: 'deferred', next: 'nonconv_date_nm' },
+            { label: 'Convicted (guilty or found guilty)', value: 'convicted', next: 'excluded_nm' },
+            { label: 'Dismissed / Nolle prosequi / No bill', value: 'dismissed', next: 'nonconv_date_nm' },
+            { label: 'Acquitted (found not guilty)', value: 'acquitted', next: 'nonconv_date_nm' },
+            { label: 'Pre-prosecution diversion or conditional discharge (31-20-13) completed', value: 'deferred', next: 'nonconv_date_nm' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         excluded_nm: {
           type: 'boolean',
-          text: 'Was the offense any of these: a crime against a child, an offense causing great bodily harm or death, a sex offense, embezzlement, or DWI?',
+          text: 'Was the offense any of these: a crime committed against a child; an offense that caused great bodily harm or death; a sex offense (29-11A-3); embezzlement (30-16-8); or ANY DWI offense?',
           yes: 'ineligible_excluded_nm',
-          no: 'cannabis_nm'
+          no: 'petition_gate_nm'
         },
-        cannabis_nm: {
+        // 29-3A-5(A) petition gate: you cannot even petition until the sentence is
+        // completed AND all fines/fees owed to the STATE are paid. (Victim
+        // restitution is a separate grant criterion — see restitution_gate_nm.)
+        petition_gate_nm: {
           type: 'boolean',
-          text: 'Was this a conviction for possession of 2 ounces or less of cannabis?',
-          yes: 'check_cannabis_nm',
+          text: 'Have you completed your sentence AND paid all fines and fees you owe to the state?',
+          yes: 'restitution_gate_nm',
+          no: 'waiting_completion_nm'
+        },
+        restitution_gate_nm: {
+          type: 'boolean',
+          text: 'Has all restitution owed to any victim been fully paid?',
+          yes: 'household_nm',
+          no: 'ineligible_restitution_nm'
+        },
+        // The Household Members Act trap (29-3A-5(D)(e)): ANY domestic-violence
+        // offense is the 10-year tier regardless of degree, so this is asked before
+        // the degree ladder — a misdemeanor DV waits 10 years, not 2.
+        household_nm: {
+          type: 'boolean',
+          text: 'Was this an offense under the Crimes Against Household Members Act — that is, was the victim a household member (a spouse or former spouse, a co-parent, a family or household member, or someone you live or have lived with)?',
+          yes: 'date10_nm',
           no: 'level_nm'
         },
         level_nm: {
@@ -15774,72 +15846,79 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           text: 'How would you describe the offense?',
           options: [
             { label: 'A municipal-ordinance offense or most misdemeanors', value: 'misd', next: 'date2_nm' },
-            { label: 'Misdemeanor aggravated battery, or a 4th-degree felony', value: 'deg4', next: 'date4_nm' },
+            { label: 'Misdemeanor aggravated battery (30-3-5(B)), or a 4th-degree felony', value: 'deg4', next: 'date4_nm' },
             { label: 'A 3rd-degree felony', value: 'deg3', next: 'date6_nm' },
             { label: 'A 2nd-degree felony', value: 'deg2', next: 'date8_nm' },
-            { label: 'A 1st-degree felony, or a Crimes Against Household Members Act (DV) offense', value: 'deg1', next: 'date10_nm' },
+            { label: 'A 1st-degree felony', value: 'deg1', next: 'date10_nm' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nm' }
           ]
         },
         nonconv_date_nm: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When was the case finally disposed of (dismissal, acquittal, or completion of diversion)?',
+          text: 'When was the case finally disposed of (dismissal, acquittal, or completion of diversion / conditional discharge)?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'from final disposition (N.M. Stat. § 29-3A-4 — non-conviction)' },
+            period: { amount: 1, unit: 'years', anchor: 'one year from final disposition (§ 29-3A-4 — non-conviction)' },
             nextPass: 'eligible_nonconv_nm',
             nextFail: 'waiting_nonconv_nm'
           }
         },
+        // The date nodes ASK (they do not read disposition_date): the clock runs
+        // from the LAST sentence completed for ANY conviction in ANY jurisdiction
+        // (29-3A-5(F) reset clock), which is not this offense's disposition date.
         date2_nm: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          text: 'When did you complete your MOST RECENT sentence for ANY conviction, in any jurisdiction? (A newer conviction resets the clock.)',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — municipal / most misdemeanors)' },
+            period: { amount: 2, unit: 'years', anchor: 'conviction-free from the most recent sentence completed for ANY conviction (§ 29-3A-5 — municipal / most misdemeanors)' },
             nextPass: 'eligible_conviction_nm',
             nextFail: 'waiting_nm'
           }
         },
         date4_nm: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          text: 'When did you complete your MOST RECENT sentence for ANY conviction, in any jurisdiction? (A newer conviction resets the clock.)',
           validation: {
-            period: { amount: 4, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — misdemeanor aggravated battery / 4th-degree felony)' },
+            period: { amount: 4, unit: 'years', anchor: 'conviction-free from the most recent sentence completed for ANY conviction (§ 29-3A-5 — misdemeanor aggravated battery / 4th-degree felony)' },
             nextPass: 'eligible_conviction_nm',
             nextFail: 'waiting_nm'
           }
         },
         date6_nm: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          text: 'When did you complete your MOST RECENT sentence for ANY conviction, in any jurisdiction? (A newer conviction resets the clock.)',
           validation: {
-            period: { amount: 6, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 3rd-degree felony)' },
+            period: { amount: 6, unit: 'years', anchor: 'conviction-free from the most recent sentence completed for ANY conviction (§ 29-3A-5 — 3rd-degree felony)' },
             nextPass: 'eligible_conviction_nm',
             nextFail: 'waiting_nm'
           }
         },
         date8_nm: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          text: 'When did you complete your MOST RECENT sentence for ANY conviction, in any jurisdiction? (A newer conviction resets the clock.)',
           validation: {
-            period: { amount: 8, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 2nd-degree felony)' },
+            period: { amount: 8, unit: 'years', anchor: 'conviction-free from the most recent sentence completed for ANY conviction (§ 29-3A-5 — 2nd-degree felony)' },
             nextPass: 'eligible_conviction_nm',
             nextFail: 'waiting_nm'
           }
         },
         date10_nm: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your last sentence, with fines, fees, and restitution paid?',
+          text: 'When did you complete your MOST RECENT sentence for ANY conviction, in any jurisdiction? (A newer conviction resets the clock.)',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'conviction-free from last sentence completed, financial obligations paid (N.M. Stat. § 29-3A-5 — 1st-degree felony / Crimes Against Household Members Act)' },
+            period: { amount: 10, unit: 'years', anchor: 'conviction-free from the most recent sentence completed for ANY conviction (§ 29-3A-5 — 1st-degree felony, or ANY Crimes Against Household Members Act offense regardless of degree)' },
             nextPass: 'eligible_conviction_nm',
             nextFail: 'waiting_nm'
           }
+        },
+        cannabis_route_nm: {
+          type: 'choice',
+          text: 'Which best describes the cannabis record?',
+          options: [
+            { label: 'A cannabis-only record (conviction or arrest) for conduct that is now legal or a lesser offense', value: 'only', next: 'eligible_cannabis_auto_nm' },
+            { label: 'A record with cannabis charges MIXED with other (non-cannabis) charges', value: 'mixed', next: 'eligible_cannabis_mixed_nm' },
+            { label: 'I was incarcerated (now or in the past) for a cannabis offense that is now legal or lesser', value: 'incarcerated', next: 'eligible_cannabis_vacatur_nm' }
+          ]
         }
       },
       results: {
@@ -15848,76 +15927,118 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           title: 'We Need the Case Outcome First',
           message: 'New Mexico clears non-convictions after 1 year and convictions on a degree-based ladder, so the outcome decides the timeline. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a DPS record check will show the disposition; the nmcourts.gov expungement forms and Supreme Court handout explain the tracks.',
           remedy: 'Get Your Record First (court paperwork / DPS)',
-          citation: 'N.M. Stat. § 29-3A (the timeline depends on the disposition)'
+          citation: 'NMSA 1978 § 29-3A-4/-5 (the timeline depends on the disposition)'
         },
         eligible_nonconv_nm: {
           status: 'eligible',
           title: 'No Conviction — Expungeable After 1 Year',
-          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, acquitted, or completed through pre-prosecution diversion or a conditional discharge — New Mexico lets you expunge it 1 year after the final disposition, and based on your date that year has passed. The petition is filed under seal with a DPS RAP sheet no more than 90 days old attached, and one petition can cover multiple records in the same district. The nmcourts.gov forms walk through it.',
-          remedy: 'Non-conviction expungement (§ 29-3A-4)',
-          citation: 'N.M. Stat. § 29-3A-4'
+          message: 'Because your case ended without a conviction — dismissed, nolle prosequi, no bill, acquitted, or completed through pre-prosecution diversion or a conditional discharge under 31-20-13 — New Mexico lets you expunge it just 1 year after the final disposition, and the court SHALL grant it if nothing else is pending. Based on your date, that year has passed. A privacy bonus: the petition is filed under seal or a pseudonym, and the expungement proceedings are themselves expunged at the end. You attach a DPS record no more than 90 days old, and one petition can cover multiple records in the same district. The nmcourts.gov forms walk through it.',
+          remedy: 'Non-conviction expungement (§ 29-3A-4) — court shall grant',
+          citation: 'NMSA 1978 § 29-3A-4'
         },
         waiting_nonconv_nm: {
           status: 'waiting',
           title: 'Not Yet 1 Year',
-          message: 'For a non-conviction, New Mexico requires 1 year from the final disposition before you can expunge. Based on your date, that year has not passed yet. Once it does, you file under seal with a recent DPS RAP sheet attached. The nmcourts.gov forms and Supreme Court handout can help you prepare.',
+          message: 'For a non-conviction, New Mexico requires 1 year from the final disposition before you can expunge. Based on your date, that year has not passed yet. Once it does, the court SHALL grant it (if nothing is pending), and you file under seal with a recent DPS record attached. The nmcourts.gov forms and Supreme Court handout can help you prepare.',
           remedy: 'Wait until 1 year after final disposition (§ 29-3A-4)',
-          citation: 'N.M. Stat. § 29-3A-4'
+          citation: 'NMSA 1978 § 29-3A-4'
         },
-        check_cannabis_nm: {
+        eligible_cannabis_auto_nm: {
           status: 'eligible',
-          title: 'Minor Cannabis — Should Be Automatic, Check Your Record',
-          message: 'Because this was possession of 2 ounces or less of cannabis, New Mexico is supposed to expunge it AUTOMATICALLY — 2 years after the conviction or arrest, with no petition (§ 29-3A-8). This is the state\'s only automatic path. So the honest first step is to CHECK whether it has already come off: request your DPS record and look. Because the automation is newer, we are still confirming how reliably it is running — so if it is still showing after the 2 years, you can fall back on filing the regular petition. New Mexico Legal Aid can help you check or file.',
-          remedy: 'Check your record — minor cannabis should be automatic (§ 29-3A-8)',
-          citation: 'N.M. Stat. § 29-3A-8'
+          title: 'Cannabis-Only — Automatically Expunged (and Destroyed)',
+          message: 'Because this record is solely for a cannabis (or cannabis-paraphernalia) offense that is no longer criminal — or is a lesser offense — under the Cannabis Regulation Act, New Mexico expunges it AUTOMATICALLY, and actually DESTROYS the records, 2 years after the conviction (or the arrest, if there was no conviction) (§ 29-3A-8). This is the state\'s only automatic path, and no petition is needed. If you were under 18 at the time, the record is kept only until 2 years pass or you turn 18, whichever comes FIRST. Because it is automatic, the honest step is to VERIFY rather than assume: the Administrative Office of the Courts has a verification and expedited-request procedure (§ 29-3A-8(B)). If it is still showing after the 2 years, use that AOC procedure. New Mexico Legal Aid can help you check.',
+          remedy: 'Automatic cannabis expungement with destruction (§ 29-3A-8) — verify via the AOC',
+          citation: 'NMSA 1978 § 29-3A-8'
+        },
+        eligible_cannabis_mixed_nm: {
+          status: 'eligible',
+          title: 'Cannabis Charges Mixed In — Request the Cannabis Portion',
+          message: 'The automatic path only reaches records that are SOLELY cannabis and cannabis-paraphernalia charges. Because yours mixes cannabis charges with other (non-cannabis) charges, the automatic destruction does not apply on its own — but you can REQUEST expungement of the cannabis charges through the Administrative Office of the Courts\' administrative procedure (§ 29-3A-8(C)), and those requests are kept confidential (§ 29-3A-8(D)). The non-cannabis charges follow the ordinary conviction or non-conviction rules separately. New Mexico Legal Aid can help you file the request and screen the rest of the record.',
+          remedy: 'AOC administrative request for the cannabis charges (§ 29-3A-8(C))',
+          citation: 'NMSA 1978 § 29-3A-8(C)'
+        },
+        eligible_cannabis_vacatur_nm: {
+          status: 'eligible',
+          title: 'Incarcerated for Cannabis — Petition Anytime, No Cost',
+          message: 'If you are incarcerated now, or were in the past, for a cannabis offense that is now legal or a lesser offense, New Mexico lets you petition ANYTIME to modify the sentence or vacate the conviction (§ 29-3A-9). If your sentence is already complete, you are entitled to dismissal and expungement or redesignation, and on a grant the cannabis-related portions are expunged within 30 days. This applies equally to juvenile adjudications, and — importantly — there are NO fees or costs for a review under this section. New Mexico Legal Aid can help you bring it.',
+          remedy: 'Cannabis sentence-modification / vacatur (§ 29-3A-9) — free',
+          citation: 'NMSA 1978 § 29-3A-9'
+        },
+        eligible_identity_nm: {
+          status: 'eligible',
+          title: 'Identity Theft — the Court Shall Expunge',
+          message: 'If someone else\'s crime is on your record because you were wrongly identified, New Mexico has a dedicated, mandatory route: you petition the district court, and on a showing of identity theft the court SHALL expunge all of the arrest and public records tied to it, entering the order within 30 days (§ 29-3A-3). Where the true offender is known, the court substitutes that person\'s identifying information. This is separate from the conviction and non-conviction tracks and does not turn on any waiting period. New Mexico Legal Aid can help you document the identity theft and file.',
+          remedy: 'Identity-theft expungement (§ 29-3A-3) — court shall grant',
+          citation: 'NMSA 1978 § 29-3A-3'
+        },
+        effects_disclosure_nm: {
+          status: 'complex',
+          title: 'Expunged — and New Mexico\'s Honest-No Is Unusually Clean',
+          message: 'New Mexico has one of the cleanest expungement effects in the country: once expunged, the proceedings are treated as if they never occurred, and BOTH officials and you may reply that no record exists (§ 29-3A-7). There is a SINGLE statutory carve-out — you must disclose the arrest or conviction for employment or association with any financial institution regulated by FINRA or the SEC. So for a job at a FINRA-regulated brokerage, yes, you must disclose the expunged record; for almost anything else, you need not. One separate caveat unrelated to disclosure: a DWI citation kept by the Taxation and Revenue Department is not part of the "arrest record" and survives expungement (§ 29-3A-2(A)(1)). New Mexico Legal Aid can help you read this against your situation.',
+          remedy: 'Disclose only for FINRA/SEC-regulated financial employment (§ 29-3A-7)',
+          citation: 'NMSA 1978 § 29-3A-7'
         },
         eligible_conviction_nm: {
           status: 'eligible',
           title: 'Waiting Period Met — Expungeable',
-          message: 'Based on your dates, the waiting period for your offense\'s degree has passed, running conviction-free from when you completed your last sentence with fines, fees, and restitution paid. New Mexico\'s ladder is: 2 years for municipal offenses and most misdemeanors, 4 for misdemeanor aggravated battery and 4th-degree felonies, 6 for 3rd-degree, 8 for 2nd-degree, and 10 for 1st-degree felonies and domestic-violence (Crimes Against Household Members Act) offenses. The court weighs a "justice served" balancing. The nmcourts.gov forms and New Mexico Legal Aid can help.',
+          message: 'Based on your dates, the conviction-free waiting period for your offense\'s degree has passed, running from the most recent sentence you completed for any conviction. New Mexico\'s ladder is 2 years (municipal offenses and most misdemeanors), 4 (misdemeanor aggravated battery and 4th-degree felonies), 6 (3rd-degree), 8 (2nd-degree), and 10 (1st-degree, and ANY domestic-violence offense under the Crimes Against Household Members Act regardless of degree). You must have completed your sentence and paid all state fines and fees and all victim restitution, and the court weighs a "justice served" balancing (nature and gravity of the offense, your history, time elapsed, and the specific harms of denial). The nmcourts.gov forms and New Mexico Legal Aid can help.',
           remedy: 'Conviction expungement (§ 29-3A-5)',
-          citation: 'N.M. Stat. § 29-3A-5'
+          citation: 'NMSA 1978 § 29-3A-5'
         },
         waiting_nm: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'New Mexico\'s conviction waiting periods run conviction-free from when you complete your last sentence with all financial obligations paid, and they ladder by degree: 2 / 4 / 6 / 8 / 10 years from most misdemeanors up to 1st-degree felonies and domestic-violence offenses. Based on your dates, yours has not passed yet. The nmcourts.gov forms and New Mexico Legal Aid can help when the time comes.',
+          message: 'New Mexico\'s conviction waiting periods run conviction-free from the most recent sentence you completed for ANY conviction, and they ladder by degree: 2 / 4 / 6 / 8 / 10 years from most misdemeanors up to 1st-degree felonies — and every domestic-violence (Crimes Against Household Members Act) offense is 10 years regardless of degree. Watch the reset: a newer conviction restarts the clock from when you finished THAT sentence, so an old case can still be waiting because of a recent one. Based on your dates, yours has not passed yet. The nmcourts.gov forms and New Mexico Legal Aid can help when the time comes.',
           remedy: 'Wait for the degree-based period (§ 29-3A-5)',
-          citation: 'N.M. Stat. § 29-3A-5'
+          citation: 'NMSA 1978 § 29-3A-5'
+        },
+        waiting_completion_nm: {
+          status: 'waiting',
+          title: 'Finish the Sentence and Pay State Money First',
+          message: 'Before you can even petition to expunge a conviction, New Mexico requires that you have completed your sentence AND paid all fines and fees you owe to the state (§ 29-3A-5(A)). Because something there is still outstanding, you are not eligible to file yet — this is a "not yet." Once the sentence is complete and the state money is paid (and separately, any victim restitution is paid), the degree-based conviction-free clock is what governs. New Mexico Legal Aid can help you sort out what remains.',
+          remedy: 'Complete the sentence and pay state fines/fees (§ 29-3A-5(A))',
+          citation: 'NMSA 1978 § 29-3A-5(A)'
+        },
+        ineligible_restitution_nm: {
+          status: 'waiting',
+          title: 'Victim Restitution Must Be Paid First',
+          message: 'New Mexico treats victim restitution as its own requirement, separate from the fines and fees you owe the state: the court may grant a conviction expungement only if restitution has been FULFILLED (§ 29-3A-5(C)). Because restitution is still outstanding, you are not eligible yet even though your state fines and fees are paid — this is a "not yet," and it clears once the restitution is satisfied. New Mexico Legal Aid can help you confirm the balance and plan.',
+          remedy: 'Pay victim restitution in full, then petition (§ 29-3A-5(C))',
+          citation: 'NMSA 1978 § 29-3A-5(C)'
         },
         ineligible_excluded_nm: {
           status: 'ineligible',
           title: 'This Offense Is Excluded',
-          message: 'New Mexico excludes several categories from expungement entirely: crimes against children, offenses causing great bodily harm or death, sex offenses, embezzlement (the one that surprises people), and DWI — including a first-offense deferred DWI. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-excluded offense. New Mexico Legal Aid can help you confirm the category and explain the pardon process.',
-          remedy: 'None (Excluded Offense) — a pardon is the remaining route',
-          citation: 'N.M. Stat. § 29-3A-5'
+          message: 'New Mexico never expunges a conviction in several categories (§ 29-3A-5(G)): a crime committed against a child, an offense that caused great bodily harm or death, a sex offense, embezzlement (the one that surprises people — as in Mississippi), and ANY DWI offense. No waiting period changes that. Two honest notes: a non-conviction (a dismissed or acquitted charge) can still be expunged even for these offense types, and a pardon from the Governor remains a route. New Mexico Legal Aid can help you confirm the category and explain the options.',
+          remedy: 'None for the conviction (Excluded Offense) — check non-convictions or a pardon',
+          citation: 'NMSA 1978 § 29-3A-5(G)'
         },
         complex_level_nm: {
           status: 'complex',
           title: 'We Need the Offense Degree',
-          message: 'New Mexico\'s waiting period depends closely on the DEGREE — anywhere from 2 years for a misdemeanor to 10 years for a first-degree or domestic-violence felony. Since you are not sure which yours is, we are not going to guess (and be wary of blogs that flatten this to "2 years misdemeanor, 4 years felony" — that is not the real ladder). Your court paperwork states the degree, and a DPS record check will show it. New Mexico Legal Aid can help you read it.',
+          message: 'New Mexico\'s waiting period depends closely on the DEGREE — anywhere from 2 years for a misdemeanor to 10 years for a first-degree or domestic-violence offense. Since you are not sure which yours is, we are not going to guess (and be wary of blogs that flatten this to "2 years misdemeanor, 4 years felony" — that is not the real ladder). Your court paperwork states the degree, and a DPS record check will show it. New Mexico Legal Aid can help you read it.',
           remedy: 'Get the Offense Degree First (court paperwork / DPS)',
-          citation: 'N.M. Stat. § 29-3A-5'
+          citation: 'NMSA 1978 § 29-3A-5'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Expungement (Criminal Record Expungement Act, N.M. Stat. § 29-3A)',
+          name: 'Expungement (Criminal Record Expungement Act, NMSA 1978 §§ 29-3A-1 to 29-3A-9)',
           formName: 'New Mexico courts expungement forms + Supreme Court handout',
           formUrl: 'https://www.nmcourts.gov',
           steps: [
-            'Confirm your offense is not excluded (crimes against children, great-bodily-harm/death offenses, sex offenses, embezzlement, DWI).',
-            'For minor cannabis, check your DPS record first — it should be expunged automatically 2 years after conviction/arrest.',
-            'For other convictions, check the degree-based waiting period (2 / 4 / 6 / 8 / 10 years) conviction-free from completing your last sentence with all financial obligations paid.',
-            'File the petition under seal with a DPS RAP sheet no more than 90 days old attached; one petition can cover multiple records in a district. New Mexico Legal Aid can help.'
+            'Confirm the conviction is not excluded (a crime against a child, an offense causing great bodily harm or death, a sex offense, embezzlement, or any DWI). Note a non-conviction can still be expunged even in these categories.',
+            'For a cannabis-only record, verify with the Administrative Office of the Courts — it should be expunged (and destroyed) automatically 2 years after conviction/arrest; for a mixed record, request the cannabis portion through the AOC procedure.',
+            'For other convictions, first make sure your sentence is complete, all state fines and fees are paid, and all victim restitution is paid; then check the degree-based conviction-free period (2 / 4 / 6 / 8 / 10 years), which runs from your MOST RECENT sentence completion for any conviction — and remember every domestic-violence (Crimes Against Household Members Act) offense is 10 years regardless of degree.',
+            'File in DISTRICT court (even for municipal-ordinance and misdemeanor cases). A non-conviction petition is filed under seal with a DPS record no more than 90 days old attached, and one petition can cover multiple records in a district. New Mexico Legal Aid can help.'
           ],
-          // null: CREA sets no statutory fee, so a district-court civil filing fee applies
-          // (~$132 historically, unconfirmed) — the amount and any waiver are open.
+          // null: the CREA is silent on filing fees, so the district-court civil docket
+          // fee presumably applies (amount phone-tier). § 29-3A-9 reviews are free.
           fees: null,
           feeWaiver: null,
-          courtContact: 'The district court where the case was decided'
+          courtContact: 'The district court where the case was decided (all petitions go to district court)'
         }
       },
       legalAid: [

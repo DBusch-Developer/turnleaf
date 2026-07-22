@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**52 open questions across 11 states.**
+**54 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -209,24 +209,29 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 8. NEW MEXICO (NM)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement (Criminal Record Expungement Act, N.M. Stat. § 29-3A)** — The district court where the case was decided
+- **Expungement (Criminal Record Expungement Act, NMSA 1978 §§ 29-3A-1 to 29-3A-9)** — The district court where the case was decided (all petitions go to district court)
 - New Mexico Legal Aid — https://www.newmexicolegalaid.org
 - New Mexico Courts — Self-Help / Expungement — https://www.nmcourts.gov
 
 **Dates that govern:**
-- 2020-01-01 — Criminal Record Expungement Act takes effect (§ 29-3A) (effective) · One of the nation's broader expungement laws when passed. 2021 amendments added motor-vehicle penalty assessments and allowed one petition to cover multiple records in a district.
-- 2021 — Automatic cannabis expungement (§ 29-3A-8; HB 314) (operative) · Wave 6 gives the year (with a 2023 HB 314 update). Possession of 2 oz or less is to be expunged automatically 2 years after conviction/arrest — operational status flagged for verification.
+- 2020-01-01 — Criminal Record Expungement Act takes effect (§§ 29-3A-1 to 29-3A-9) (effective) · One of the nation's broader expungement laws when passed. Amended in 2021 (1st S.S. ch. 3) and 2023 (ch. 74).
+- 2021-06-29 — Cannabis offenses decriminalized — anchor for the automatic path (§ 29-3A-8) (operative) · Offenses no longer criminal as of June 29, 2021 (or reduced under the Cannabis Regulation Act) are automatically expunged, with destruction, 2 years after conviction/arrest — cannabis-and-paraphernalia records only.
+- 2023 — Cannabis automatic-expungement provisions amended (§ 29-3A-8, 2023 ch. 74) (effective) · The compiled text reflects the 2023 amendments to the cannabis automatic path. Operational status of the automation (AOC verification procedure and backlog) is a phone-tier open question.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Verify the operational status of automatic cannabis expungement (§ 29-3A-8, 2021 + 2023 HB 314). Wave 6 says possession of 2 oz or less should be expunged automatically 2 years after conviction/arrest — New Mexico's only automation — but flags that the automation actually running needs confirmation (call DPS or the Second Judicial District). The tree routes cannabis to a "check whether it is already off" result; confirm the program is live.
+1. Run a 2024-2026 session sweep for amendments to Chapter 29, Article 3A (nmlegis.gov bill finder by statute). The compiled nmonesource.com text is current only through 2023; confirm nothing since then changed the tiers, exclusions, or cannabis procedure.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the filing fee. Wave 6 notes CREA sets no statutory fee, so a district court civil filing fee applies (~$132 historically) — a phone target. The fees and feeWaiver fields are null pending this; nmcourts.gov and a district clerk are the checks.
+2. Confirm the district court filing fee amount and any indigency-waiver practice. The CREA is silent on filing fees, so the district-court civil docket fee presumably applies to petitions (except § 29-3A-9 reviews, which are statutorily free). The fees and feeWaiver fields are null pending this phone-tier check with a district clerk / nmcourts.gov.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
-3. Confirm the full conviction waiting-period ladder from § 29-3A-5, against the flattened version many blogs give. Wave 6 gives: municipal/most misdemeanors 2 yrs; misdemeanor aggravated battery and 4th-degree felonies 4 yrs; 3rd-degree 6 yrs; 2nd-degree 8 yrs; 1st-degree and Crimes Against Household Members Act (DV) offenses 10 yrs. The tree encodes this full ladder; confirm against the statute.
+3. Confirm the AOC cannabis-verification procedure details and current backlog. § 29-3A-8(B) requires the Administrative Office of the Courts to provide a verification and expedited-request procedure; the messaging tells users to verify rather than assume, but the process specifics and timeline are phone-tier.
+   - *Blocks no single field — affects a branch or wording.*
+4. Pull NMSA 1978 § 29-11A-3, the sex-offense definition that the § 29-3A-5(G) never-list incorporates. Cited but not read; cite-only for now.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm whether "an offense committed against a child" (a § 29-3A-5(G) exclusion) has a settled definition in New Mexico case law, or whether its scope is contested. Attorney-tier; encoded as a categorical exclusion without a case-law gloss.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

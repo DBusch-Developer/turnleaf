@@ -172,6 +172,11 @@ export interface StateRuleConfig {
   /** The research package this state's rules come from. Rules data may come
    *  from nowhere else — not from a model's knowledge of state law. */
   sourcePackage: string;
+  /** A state-level note about the legislative-session context of the pulled text
+   *  — e.g. that enacted-but-unintegrated session laws amend these sections and
+   *  are pending enrolled-text verification, or which bills died. Optional; most
+   *  states omit it. Persisted to the DB as session_note. */
+  sessionNote?: string;
   /** What this state calls its remedies, and what it does NOT have. Load-bearing:
    *  California has no expungement, Texas destroys vs seals, New York only seals. */
   terminology: string;
@@ -15231,119 +15236,323 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   KS: {
     code: 'KS',
     name: 'Kansas',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      'The displayed kslegislature.gov statute text integrates amendments through 2023. 2026 session outcomes '
+      + 'verified by bill page: HB 2323 (insurance-fraud expunged-record disclosure) and HB 2393 (docket-fee '
+      + 'surcharge extension, keeping the up-to-$195 total) are ENACTED and encoded; HB 2724 (poverty-affidavit '
+      + 'fee waiver), HB 2655 (municipal specialty courts), and HB 2272 (aggravated murder never-list addition) '
+      + 'DIED in committee (4/10/2026). Pending status checks: SB 430 (reconciliation), SB 245, SB 240; and the '
+      + 'HB 2323 enrolled subsection wording — see Open Questions.',
     terminology:
-      'Kansas uses EXPUNGEMENT (K.S.A. 21-6614), which functions as sealing — the record survives for certain '
-      + 'listed agencies. It is discretionary but broad, and it has two features that stand out from the rest '
-      + 'of this wave. First, DUI is actually expungeable here (a first DUI after a 5-year wait), which is '
-      + 'unusual. Second, a Kansas expungement RESTORES firearm rights (since 2021) — rare among states. The '
-      + 'waiting periods run from when your sentence is satisfied, and graduates of a drug court or veterans '
-      + 'treatment court can petition immediately with the docket fee waivable. The court "shall" expunge if '
-      + 'you have had no felony conviction in the past two years, none is pending, and the circumstances '
-      + 'warrant it.',
+      'Kansas uses EXPUNGEMENT (K.S.A. 21-6614), which functions as sealing — the record survives for a list of '
+      + 'agencies and purposes. It is PETITION-BASED (there is no automatic expungement), filed in the convicting '
+      + 'court and docketed in the original criminal action, with a mandatory hearing on notice to the prosecutor '
+      + 'and the arresting agency; a nice touch is that Kansas courts must tell every defendant about expungement '
+      + 'eligibility at sentencing or diversion (21-6614(j)). Two features stand out. First, DUI really is '
+      + 'expungeable here — a first DUI (even a diversion) after 5 years, a second-or-later after 10 — though a '
+      + 'COMMERCIAL DUI (8-2,144) never is. Second, expungement RESTORES firearm rights fully (21-6614(k)(2)), '
+      + 'retroactively to pre-2021 orders, with the KBI directing NICS to withdraw the record — rare among states. '
+      + 'Waiting periods run from the LATER of sentence satisfaction or discharge from supervision, in two tiers: '
+      + '3 years (misdemeanors, infractions, lower-level and older felonies) and 5 years (more serious felonies, '
+      + 'first DUI, and a traffic-flavored list — watch the trap that ANY felony in which a motor vehicle was used '
+      + 'gets pulled into the 5-year tier). The discretionary standard (21-6614(h)) asks for no felony conviction '
+      + 'in the past 2 years and none pending, that the circumstances warrant it, that it is consistent with '
+      + 'public welfare, and — for felonies — that restoring firearm possession will not threaten public safety. '
+      + 'Two Kansas surprises on the NEVER list (21-6614(e)): INVOLUNTARY MANSLAUGHTER and CHILD ENDANGERMENT are '
+      + 'permanently barred, which is broader than most states. While a person is required to register under the '
+      + 'Kansas Offender Registration Act, NOTHING can be expunged (21-6614(f)). Special paths: a prostitution '
+      + 'conviction committed under coercion can be expunged after just 1 year (21-6614(b)); a specialty-court '
+      + '(drug/veterans court, 20-173) graduate can petition IMMEDIATELY with a waivable docket fee and a relaxed '
+      + 'standard. The docket fee is $176, up to $195 with the supreme-court surcharge — and there is NO general '
+      + 'fee waiver for standard conviction expungements (only specialty-court petitions and the 22-2410 free '
+      + 'categories are relieved). A parallel MUNICIPAL system (12-4516) handles city-ordinance convictions, and '
+      + 'arrest records have their own route (22-2410), including a mandatory prosecutor-initiated purge for '
+      + 'mistaken-identity and identity-theft arrests.',
     keyDates: [
       {
         label: 'Expungement restores firearm rights (K.S.A. 21-6614(k)(2))',
         date: '2021',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. A Kansas expungement restores firearm rights — rare among states, and worth knowing.',
+        note: 'Year precision. A Kansas expungement of a disqualifying record fully restores firearm rights (use, transport, receive, purchase, transfer, possess), applies retroactively to pre-2021 orders, and the KBI must have the record withdrawn from NICS.',
+      },
+      {
+        label: 'Docket-fee surcharge authority extended through 6/30/2030 (2026 HB 2393)',
+        date: '2026',
+        kind: 'effective',
+        note: '2026 HB 2393 (signed 4/3/2026) extended the supreme-court non-judicial-personnel surcharge (up to $19) through June 30, 2030, amending 21-6614 and 22-2410; the up-to-$195 total is current law. The displayed statute text still shows the pre-extension 6/30/2025 sunset — enrolled-text integration pending.',
+      },
+      {
+        label: 'Insurance-fraud expunged-record disclosure added (2026 HB 2323)',
+        date: '2026',
+        kind: 'effective',
+        note: '2026 HB 2323 (signed 4/6/2026, effective on statute-book publication) requires disclosure of an expunged insurance-fraud arrest/conviction/diversion in applications for licensure as an insurance producer or public adjuster; added to the 21-6614(i)(2) disclosure list. Exact subsection wording pending the enrolled-text pull.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the docket fee. Wave 6 flags a conflict: the statute text says $176, while current guides and Judicial Council materials say $195 (set by a Supreme Court order that updates over time). The fees field is null pending this; a district clerk is the check. (The fee is waived for non-convictions, and a poverty affidavit is available.)',
-        blocksFields: ['resources.remedies.expungement.fees'],
+          'Check the status and effect of 2026 SB 430 (reconciliation) — specifically whether it restructured the text of K.S.A. 21-6614 or 12-4516. Encoded from the through-2023 statute text plus the confirmed 2026 amendments; a reconciliation bill could renumber or move provisions.',
+        blocksFields: [],
       },
       {
         question:
-          'Confirm the exact waiting period for a second-or-later DUI. Wave 6 gives it as a 7-to-10-year range, which is not a single number; the tree routes a 2nd+ DUI to an "exact period needs confirming" result rather than guess. Confirm the precise period against K.S.A. 21-6614.',
+          'Check the statuses of 2026 SB 245 and SB 240 (Senate companions of HB 2272 aggravated murder and HB 2323 insurance-fraud disclosure). HB 2272 died and HB 2323 was enacted per the House bill pages; confirm the Senate companions did not enact anything divergent.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull the enrolled subsection wording of 2026 HB 2323. The effect (insurance-producer/public-adjuster disclosure of an expunged fraudulent-insurance-act record) is encoded in the 21-6614(i)(2) disclosure messaging; the exact statutory subsection language is pending.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether the Kansas Supreme Court currently imposes the up-to-$19 non-judicial-personnel surcharge (making the total $195 vs the $176 base). HB 2393 preserved the authority through 2030; whether it is presently levied is a phone-tier question (district clerk).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the KBI post-grant processing timeline. The draft estimates 8-12 weeks after the order; verify with the KBI (phone-tier).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm municipal expungement fee amounts. Under 12-4516(g)(2) each city court MAY prescribe its own fee, so this is per-city and phone-tier — no single statutory number.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Read K.S.A. 22-4908 (relief from the Kansas Offender Registration Act registration requirement). Cited as the route out of the 21-6614(f) registration bar but not pulled; its mechanics are cite-only for now.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Kan. Stat. Ann. § 21-6614 (expungement; 3-yr and 5-yr tiers; discretionary standard; firearm restoration)', url: null, retrievedOn: null },
-      { id: 'Kan. Stat. Ann. § 22-2410 (arrest-record expungement)', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 21-6614 (expungement of conviction/diversion — (a) 3-year tier and diversion; (b) prostitution-survivor 1-year coercion path; (c) 5-year tier incl. the motor-vehicle-used-in-perpetration trap; (d) DUI 5-year first / 10-year second-or-subsequent, incl. diversion, with the 7/1/2014-6/30/2015 and 7/1/2006 date quirks; (e) 19-item never list incl. involuntary manslaughter, child endangerment/abuse, and commercial DUI 8-2,144; (f) Kansas Offender Registration Act bar; (g) $176 docket fee + up-to-$19 surcharge; (h) discretionary standard incl. felony firearm-safety finding; (i) effects + mandatory-disclosure list; (j) court must inform defendant; (k) firearm-rights restoration and NICS withdrawal; as amended by 2026 HB 2393 and 2026 HB 2323)', url: 'https://www.kslegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'Kan. Stat. Ann. § 22-2410 (arrest-record expungement — (a)(1) any arrested person may petition the district court; (a)(2) mandatory prosecutor-initiated petition and KBI purge for mistaken-identity/identity-theft arrests with dismissed/unprosecuted charges; (b)(2) immediate sequestration of the file on filing; (b)(3) $176 docket fee + surcharge, with free filings for identity-theft victims, no-probable-cause findings, not-guilty verdicts, and dismissed charges; (c) grounds; (e) case-by-case disclosure carve-outs for best-interests grants; (g) effects; surcharge extended by 2026 HB 2393)', url: 'https://www.kslegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'Kan. Stat. Ann. § 12-4516 (municipal-court expungement of city-ordinance convictions/diversions — 3-year tier, 5-year traffic-flavored list, DUI-equivalent 5/10-year, commercial-DUI-equivalent never, (c) prostitution-coercion 1-year path; (g)(2) city court MAY set its own fee; (h) discretionary standard with NO firearm prong; (i)/(k) effects incl. concealed-carry disclosure; (j) court must inform defendant; pre-7/1/2014 ordinances under 12-16,134 expungeable with no stated wait)', url: 'https://www.kslegislature.gov', retrievedOn: '2026-07-22' },
+      { id: '2026 Kan. HB 2323 (insurance-fraud expunged-record disclosure; signed 4/6/2026, effective on statute-book publication; adds to the 21-6614(i)(2) disclosure list) — status confirmed from the kslegislature.gov bill page; enrolled subsection wording pending', url: null, retrievedOn: null },
+      { id: '2026 Kan. HB 2393 (supreme-court non-judicial-personnel surcharge extended through 6/30/2030, amending 21-6614 and 22-2410; signed 4/3/2026; keeps the up-to-$195 total) — status confirmed from the kslegislature.gov bill page', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 8-1567 (driving under the influence — defines the DUI offense the 21-6614(d) 5/10-year tiers run on) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 8-2,144 (commercial-vehicle DUI — on the 21-6614(e) never list, including diversions) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 20-173 (specialty-court programs — completion enables the immediate 21-6614(a)(3) petition with a waivable docket fee) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 22-4908 (relief from Kansas Offender Registration Act registration — the route out of the 21-6614(f) bar) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Kan. Stat. Ann. § 12-16,134 (pre-7/1/2014 municipal ordinances reached by 12-4516) — CITE-ONLY, not pulled; subject not characterized', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_ks',
       nodes: {
+        entry_ks: {
+          type: 'choice',
+          text: 'What would you like to check?',
+          options: [
+            { label: 'Whether a conviction, diversion, or completed case can be expunged', value: 'record', next: 'disposition' },
+            { label: 'Whether an ARREST record can be cleared (you were arrested; charges dropped, dismissed, or never filed)', value: 'arrest', next: 'arrest_type_ks' },
+            { label: 'What an expungement I ALREADY have means for gun rights or disclosure', value: 'effects', next: 'effects_ks' }
+          ]
+        },
         disposition: {
           type: 'choice',
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_ks' },
+            { label: 'Convicted (guilty or found guilty)', value: 'convicted', next: 'kora_gate_ks' },
             { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_ks' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ks' },
-            { label: 'Diversion agreement completed', value: 'deferred', next: 'diversion_date_ks' },
+            { label: 'Acquitted (found not guilty)', value: 'acquitted', next: 'eligible_nonconv_ks' },
+            { label: 'Diversion agreement completed', value: 'deferred', next: 'diversion_route_ks' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        excluded_ks: {
+        // Kansas Offender Registration Act bar (21-6614(f)) — screened first: while
+        // registration is required, NOTHING on the record can be expunged.
+        kora_gate_ks: {
           type: 'boolean',
-          text: 'Was the offense any of these: murder, manslaughter, rape, a sex offense against a minor, child abuse, or a commercial-vehicle DUI — or are you still required to register as an offender?',
-          yes: 'ineligible_excluded_ks',
+          text: 'Are you currently required to register under the Kansas Offender Registration Act?',
+          yes: 'ineligible_kora_ks',
+          no: 'never_list_ks'
+        },
+        never_list_ks: {
+          type: 'boolean',
+          text: 'Is the offense on Kansas\'s never-expunge list (21-6614(e))? That includes: rape; indecent liberties or sodomy offenses with a child; sexual exploitation or child-pornography offenses; aggravated incest; ENDANGERING or ABUSE OF A CHILD; capital, first-, or second-degree murder; voluntary OR INVOLUNTARY manslaughter; sexual battery of a victim under 18; commercial-vehicle DUI (8-2,144); or an attempt to commit any of these.',
+          yes: 'ineligible_never_ks',
+          no: 'municipal_ks'
+        },
+        municipal_ks: {
+          type: 'boolean',
+          text: 'Was this a conviction or diversion under a CITY ORDINANCE (handled in municipal court), rather than a state charge?',
+          yes: 'municipal_route_ks',
+          no: 'survivor_ks'
+        },
+        survivor_ks: {
+          type: 'boolean',
+          text: 'Was this a prostitution conviction or diversion (repealed K.S.A. 21-3512, or K.S.A. 21-6419) that you committed under coercion — threats of harm or physical restraint, a scheme causing fear of harm, or abuse of legal process?',
+          yes: 'survivor_date_ks',
           no: 'specialty_ks'
         },
+        survivor_date_ks: {
+          type: 'date',
+          text: 'When was your sentence satisfied, or your diversion fulfilled?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'one year from sentence satisfied / diversion fulfilled (21-6614(b) — prostitution-survivor coercion path)' },
+            nextPass: 'eligible_survivor_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        // Specialty court (21-6614(a)(3)) — checked before the 2-year-felony-free
+        // gate, because a specialty-court graduate gets the relaxed standard
+        // (only no-pending-felony, (h)(1)(B)) and an immediate, fee-waivable petition.
         specialty_ks: {
           type: 'boolean',
-          text: 'Did you graduate from a drug court or a veterans treatment court program?',
+          text: 'Did you complete a certified specialty-court program — a drug court, a veterans treatment court, or another K.S.A. 20-173 program?',
           yes: 'eligible_specialty_ks',
-          no: 'level_ks'
+          no: 'recent_felony_ks'
         },
-        level_ks: {
+        recent_felony_ks: {
+          type: 'boolean',
+          text: 'In the last 2 years, have you been convicted of a felony, or do you have a felony case currently pending?',
+          yes: 'ineligible_recentfelony_ks',
+          no: 'dui_ks'
+        },
+        dui_ks: {
+          type: 'boolean',
+          text: 'Was this a DUI (K.S.A. 8-1567)?',
+          yes: 'dui_offense_ks',
+          no: 'offense_type_ks'
+        },
+        dui_offense_ks: {
+          type: 'choice',
+          text: 'Which DUI offense was this?',
+          options: [
+            { label: 'A first DUI (including a DUI diversion)', value: 'first', next: 'date5_ks' },
+            { label: 'A second or subsequent DUI', value: 'second', next: 'dateDUI2_ks' },
+            { label: 'A commercial-vehicle DUI (K.S.A. 8-2,144)', value: 'commercial', next: 'ineligible_never_ks' }
+          ]
+        },
+        offense_type_ks: {
           type: 'choice',
           text: 'How would you describe the offense?',
           options: [
             { label: 'A misdemeanor, or a traffic/tobacco infraction', value: 'misd', next: 'date3_ks' },
-            { label: 'An older Class D/E felony, a nongrid or severity 6-10 non-drug felony, or a lower-level drug felony', value: 'felony3', next: 'date3_ks' },
-            { label: 'A more serious eligible felony', value: 'felony5', next: 'date5_ks' },
-            { label: 'A first DUI', value: 'dui1', next: 'date5_ks' },
-            { label: 'A second or later DUI', value: 'dui2', next: 'dateDUI2_ks' },
+            { label: 'A lower-level or older felony (nongrid, nondrug severity 6-10, drug level 4/5, or a pre-1993 class D/E)', value: 'felony3', next: 'mv_trap_ks' },
+            { label: 'A more serious felony (nondrug severity 1-5, drug level 1-3/1-4, off-grid, or a pre-1993 class A/B/C)', value: 'felony5', next: 'date5_ks' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ks' }
           ]
         },
+        // The 5-year-tier trap (21-6614(c)(5)): ANY felony in which a motor vehicle
+        // was used in its perpetration is pulled OUT of the 3-year tier into 5 years,
+        // along with the enumerated traffic felonies.
+        mv_trap_ks: {
+          type: 'boolean',
+          text: 'Was a motor vehicle used in committing this felony (for example, as a getaway vehicle) — or was it a traffic-flavored felony such as vehicular homicide, driving while suspended/revoked, hit-and-run, or driving without insurance?',
+          yes: 'date5_ks',
+          no: 'date3_ks'
+        },
         date3_ks: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          text: 'When was your sentence satisfied — the LATER of finishing your sentence or being discharged from probation, parole, or postrelease supervision?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'from sentence satisfied / discharge (K.S.A. 21-6614 — 3-year tier: misdemeanors, infractions, lower-level and older felonies)' },
+            period: { amount: 3, unit: 'years', anchor: 'the LATER of sentence satisfied or discharge from supervision (21-6614(a) — 3-year tier: misdemeanors, infractions, lower-level and older felonies)' },
             nextPass: 'eligible_conviction_ks',
             nextFail: 'waiting_ks'
           }
         },
         date5_ks: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          text: 'When was your sentence satisfied — the LATER of finishing your sentence or being discharged from probation, parole, or postrelease supervision?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from sentence satisfied / discharge (K.S.A. 21-6614 — 5-year tier: more serious eligible felonies and first DUI)' },
+            period: { amount: 5, unit: 'years', anchor: 'the LATER of sentence satisfied or discharge from supervision (21-6614(c)/(d) — 5-year tier: more serious felonies, motor-vehicle felonies, and a first DUI)' },
             nextPass: 'eligible_conviction_ks',
             nextFail: 'waiting_ks'
           }
         },
         dateDUI2_ks: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          text: 'When was your DUI sentence satisfied (discharge from custody or supervision)?',
           validation: {
-            period: { amount: null, unit: 'years', anchor: 'from sentence satisfied (K.S.A. 21-6614 — second-or-later DUI; Wave 6 gives a 7-to-10-year range, not a single period)' },
-            nextUnknown: 'complex_dui2_ks'
-          }
-        },
-        diversion_date_ks: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the diversion agreement?',
-          validation: {
-            period: { amount: 3, unit: 'years', anchor: 'from completion of the diversion agreement (K.S.A. 21-6614 — diversion)' },
+            period: { amount: 10, unit: 'years', anchor: 'ten years from sentence satisfied (21-6614(d) — second-or-subsequent DUI; the flat 10-year rule applies to violations on/after 7/1/2006, except those committed 7/1/2014-6/30/2015)' },
             nextPass: 'eligible_conviction_ks',
             nextFail: 'waiting_ks'
           }
+        },
+        diversion_route_ks: {
+          type: 'boolean',
+          text: 'Was the diversion agreement for a DUI (K.S.A. 8-1567)?',
+          yes: 'dui_offense_ks',
+          no: 'diversion_date_ks'
+        },
+        diversion_date_ks: {
+          type: 'date',
+          text: 'When did you fulfill the diversion agreement?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'three years from fulfillment of the diversion agreement (21-6614(a) — diversion)' },
+            nextPass: 'eligible_conviction_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        municipal_route_ks: {
+          type: 'choice',
+          text: 'What kind of city-ordinance offense was it?',
+          options: [
+            { label: 'An ordinary ordinance offense (e.g., theft, disorderly conduct)', value: 'ordinary', next: 'municipal_date3_ks' },
+            { label: 'A DUI-equivalent city ordinance', value: 'dui', next: 'municipal_dui_ks' },
+            { label: 'A traffic-related ordinance (vehicular, driving while suspended, hit-and-run, no insurance)', value: 'traffic5', next: 'municipal_date5_ks' },
+            { label: 'A commercial-DUI-equivalent ordinance', value: 'commercial', next: 'ineligible_never_ks' }
+          ]
+        },
+        municipal_dui_ks: {
+          type: 'choice',
+          text: 'Which DUI-equivalent ordinance offense was this?',
+          options: [
+            { label: 'A first offense (including a diversion)', value: 'first', next: 'municipal_date5_ks' },
+            { label: 'A second or subsequent offense', value: 'second', next: 'municipal_dui2_date_ks' }
+          ]
+        },
+        municipal_date3_ks: {
+          type: 'date',
+          text: 'When was your sentence satisfied, or your diversion fulfilled?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'three years from sentence satisfied / diversion fulfilled (12-4516 — municipal 3-year tier)' },
+            nextPass: 'eligible_municipal_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        municipal_date5_ks: {
+          type: 'date',
+          text: 'When was your sentence satisfied, or your diversion fulfilled?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'five years from sentence satisfied / diversion fulfilled (12-4516 — municipal 5-year tier: traffic-flavored ordinances and a first DUI-equivalent)' },
+            nextPass: 'eligible_municipal_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        municipal_dui2_date_ks: {
+          type: 'date',
+          text: 'When was your sentence satisfied (discharge from custody or supervision)?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'ten years from sentence satisfied (12-4516 — municipal second-or-subsequent DUI-equivalent)' },
+            nextPass: 'eligible_municipal_ks',
+            nextFail: 'waiting_ks'
+          }
+        },
+        arrest_type_ks: {
+          type: 'choice',
+          text: 'How did the arrest end, or why are you seeking to clear it?',
+          options: [
+            { label: 'Charges were dismissed, or none are likely (best interests of justice)', value: 'dismissed_bij', next: 'eligible_arrest_bij_ks' },
+            { label: 'Mistaken identity or identity theft, with charges dismissed or never prosecuted', value: 'mistaken', next: 'eligible_arrest_mandatory_ks' },
+            { label: 'I was found not guilty at trial', value: 'notguilty', next: 'eligible_arrest_bij_ks' },
+            { label: 'A judge found there was no probable cause', value: 'nopc', next: 'eligible_arrest_bij_ks' }
+          ]
+        },
+        effects_ks: {
+          type: 'choice',
+          text: 'What do you want to know about your expungement\'s effect?',
+          options: [
+            { label: 'Whether my firearm rights are restored', value: 'firearms', next: 'effects_firearms_ks' },
+            { label: 'Whether I must disclose the expunged record on a specific application', value: 'disclosure', next: 'effects_disclosure_ks' }
+          ]
         }
       },
       results: {
@@ -15356,50 +15565,99 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         eligible_nonconv_ks: {
           status: 'eligible',
-          title: 'No Conviction — Expungeable, Fee Waived',
-          message: 'Because your case ended without a conviction, you can expunge it, and the docket fee is waived for non-convictions. You file in the court that handled the case. Expect the process to take a couple of months (a hearing roughly 60+ days out, then 8-12 weeks for the KBI to update). Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org) and can help.',
-          remedy: 'Non-conviction expungement (§ 21-6614) — fee waived',
-          citation: 'Kan. Stat. Ann. § 21-6614'
+          title: 'No Conviction — Expungeable, No Docket Fee',
+          message: 'Because your case ended without a conviction — dismissed or a not-guilty verdict — you can expunge it, and Kansas charges NO docket fee for these categories (22-2410(b)(3)(B) also makes filings free for identity-theft victims and no-probable-cause findings). You file in the court that handled the case. Expect a couple of months (a hearing roughly 60+ days out, then time for the KBI to update — the draft estimate is 8-12 weeks). Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org) and can help.',
+          remedy: 'Non-conviction expungement (§ 21-6614) — no docket fee',
+          citation: 'Kan. Stat. Ann. §§ 21-6614, 22-2410(b)(3)(B)'
         },
         eligible_specialty_ks: {
           status: 'eligible',
           title: 'Specialty-Court Graduate — Petition Now, Fee Waivable',
-          message: 'Because you graduated from a drug court or veterans treatment court, Kansas lets you petition for expungement IMMEDIATELY — no waiting period — and the docket fee can be waived. You file in the court that handled the case; the court "shall" expunge if you have had no felony conviction in the past two years, none is pending, and the circumstances warrant it. And a nice bonus in Kansas: expungement restores your firearm rights. Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
-          remedy: 'Immediate expungement for specialty-court graduates (§ 21-6614) — fee waivable',
-          citation: 'Kan. Stat. Ann. § 21-6614'
+          message: 'Because you completed a certified specialty-court program (a drug court, veterans treatment court, or other K.S.A. 20-173 program), Kansas lets you petition for expungement IMMEDIATELY — no waiting period — and the court may waive all or part of the docket fee (21-6614(a)(3)). Your standard is relaxed, too: only the "no felony case pending" requirement applies, not the usual 2-years-felony-free lookback. You file in the court that handled the case. And a Kansas bonus: expungement fully restores your firearm rights (21-6614(k)(2)). Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
+          remedy: 'Immediate expungement for specialty-court graduates (§ 21-6614(a)(3)) — fee waivable',
+          citation: 'Kan. Stat. Ann. § 21-6614(a)(3)'
+        },
+        eligible_survivor_ks: {
+          status: 'eligible',
+          title: 'Prostitution Conviction Under Coercion — Short 1-Year Path',
+          message: 'Kansas has a survivor path: a prostitution conviction or diversion (repealed K.S.A. 21-3512, or K.S.A. 21-6419) committed under coercion can be expunged just 1 year after your sentence is satisfied or your diversion is fulfilled (21-6614(b)). "Coercion" is defined broadly — threats of harm or physical restraint, a scheme meant to make you fear harm, or abuse of legal process — and you would show that at the hearing. Based on your dates, the 1-year period has passed. Kansas expungement also restores firearm rights. Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
+          remedy: 'Prostitution-survivor expungement (§ 21-6614(b)) — 1-year path',
+          citation: 'Kan. Stat. Ann. § 21-6614(b)'
         },
         eligible_conviction_ks: {
           status: 'eligible',
           title: 'Waiting Period Met — Expungeable',
-          message: 'Based on your dates, the waiting period for your offense has passed — generally 3 years for misdemeanors, infractions, and lower-level or older felonies, or 5 years for more serious eligible felonies and a first DUI, running from when your sentence was satisfied. Two Kansas advantages worth knowing: a first DUI really is expungeable here (unusual), and expungement restores your firearm rights (since 2021). The court "shall" expunge if you have had no felony conviction in the past two years and none is pending. Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org).',
+          message: 'Based on your dates, the waiting period for your offense has passed — 3 years for misdemeanors, infractions, and lower-level or older felonies, or 5 years for more serious felonies, a first DUI, and any felony in which a motor vehicle was used, running from the LATER of when your sentence was satisfied or you were discharged from supervision. Two Kansas advantages worth knowing: a first DUI really is expungeable here (unusual), and expungement fully restores your firearm rights (21-6614(k)(2)). The court "shall" expunge if you have had no felony conviction in the past 2 years, none is pending, the circumstances warrant it, it is consistent with public welfare, and — for a felony — your firearm possession is not likely to threaten public safety. The docket fee is $176 (up to $195 with the surcharge), and there is no general waiver for a conviction expungement. Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
           remedy: 'Expungement petition (§ 21-6614)',
           citation: 'Kan. Stat. Ann. § 21-6614'
         },
         waiting_ks: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Kansas expungement waiting periods run from when your sentence is satisfied: 3 years for misdemeanors, infractions, and lower-level or older felonies; 5 years for more serious eligible felonies and a first DUI; and 3 years from completing a diversion. Based on your dates, yours has not passed yet. When it does, remember Kansas expungement also restores firearm rights, and Kansas Legal Services runs free clinics to help.',
+          message: 'Kansas expungement waiting periods run from the LATER of when your sentence is satisfied or you are discharged from supervision: 3 years for misdemeanors, infractions, and lower-level or older felonies; 5 years for more serious felonies, a first DUI, and any felony in which a motor vehicle was used; 10 years for a second-or-subsequent DUI; 3 years from fulfilling a diversion; and just 1 year for a prostitution conviction under coercion. Based on your dates, yours has not passed yet. When it does, remember Kansas expungement also restores firearm rights, and Kansas Legal Services runs free clinics to help.',
           remedy: 'Wait for the period (§ 21-6614)',
           citation: 'Kan. Stat. Ann. § 21-6614'
         },
-        complex_dui2_ks: {
-          status: 'complex',
-          title: 'Second DUI — We Need the Exact Waiting Period',
-          message: 'A second or later DUI is expungeable in Kansas, but the waiting period is longer and our source gives it as a range (roughly 7 to 10 years) rather than a single number — so rather than guess your eligibility date, we are flagging it for a precise answer. A district court clerk or Kansas Legal Services can tell you the exact period that applies to your case. The good news is that the route exists; it is the timing we want to pin down. Kansas Legal Services runs free expungement clinics (kls_expunge@klsinc.org).',
-          remedy: 'Confirm the exact 2nd-DUI waiting period (district clerk / Kansas Legal Services)',
-          citation: 'Kan. Stat. Ann. § 21-6614'
+        ineligible_kora_ks: {
+          status: 'ineligible',
+          title: 'Registration Required — Nothing Can Be Expunged Yet',
+          message: 'While you are required to register under the Kansas Offender Registration Act, NOTHING on your record — no conviction and no part of the record — can be expunged (21-6614(f)). This is a "not yet," not necessarily a "never": once the registration requirement ends, the ordinary waiting-period analysis applies, and there is a separate relief route from registration itself (K.S.A. 22-4908) worth asking an attorney about. Kansas Legal Services can help you check when your registration obligation ends.',
+          remedy: 'None while registering — check when registration ends (or § 22-4908 relief)',
+          citation: 'Kan. Stat. Ann. § 21-6614(f)'
         },
-        ineligible_excluded_ks: {
+        ineligible_never_ks: {
           status: 'ineligible',
           title: 'This Offense Cannot Be Expunged',
-          message: 'Kansas never expunges certain offenses: murder, manslaughter, rape, sex offenses against a minor, child abuse, and commercial-vehicle DUI — and no one who is still required to register can expunge while that requirement is in place. No waiting period changes that. If a registration requirement is the only barrier, this may become a "not yet" once that ends; otherwise a pardon is the remaining route. Kansas Legal Services can help you check.',
-          remedy: 'None (Excluded Offense, or still registering) — check when registration ends, or a pardon',
-          citation: 'Kan. Stat. Ann. § 21-6614'
+          message: 'Kansas never expunges the offenses on its 21-6614(e) list, and this one is on it. The list is broad, and two entries surprise people: INVOLUNTARY manslaughter and CHILD ENDANGERMENT/abuse are permanently barred, alongside murder, rape, sex offenses against children, sexual exploitation, and commercial-vehicle DUI (including diversions). Attempts to commit these are equally barred. No waiting period changes that. A pardon from the Governor is the remaining route. Kansas Legal Services can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Never-Expunge Offense) — a pardon is the remaining route',
+          citation: 'Kan. Stat. Ann. § 21-6614(e)'
+        },
+        ineligible_recentfelony_ks: {
+          status: 'ineligible',
+          title: 'A Recent or Pending Felony Blocks This For Now',
+          message: 'Kansas will not grant a standard expungement if you have been convicted of a felony in the past 2 years, or if a felony case is currently pending against you (21-6614(h)(1)(A)). Based on your answer, one of those applies, so this is a "not yet" rather than a permanent no — once two felony-free years have passed and nothing is pending, the ordinary waiting-period analysis applies. (One exception: a specialty-court graduate is held only to the "no pending felony" part of the standard.) Kansas Legal Services can help you time it.',
+          remedy: 'Wait until 2 years felony-free with nothing pending (§ 21-6614(h))',
+          citation: 'Kan. Stat. Ann. § 21-6614(h)(1)(A)'
+        },
+        eligible_municipal_ks: {
+          status: 'eligible',
+          title: 'City-Ordinance Conviction — Expungeable in Municipal Court',
+          message: 'A city-ordinance conviction or diversion is expunged through the MUNICIPAL court under a parallel statute (K.S.A. 12-4516), and based on your dates the waiting period has passed (generally 3 years, or 5 for a traffic-flavored or first-DUI-equivalent ordinance, or 10 for a second-or-later DUI-equivalent; a commercial-DUI-equivalent is never expungeable). The municipal standard has NO firearm-safety prong. One difference on cost: instead of the state docket fee, each city court MAY set its own fee (12-4516(g)(2)), so the amount is per-city — ask the municipal clerk. (Certain pre-July-2014 ordinance convictions can be expunged with no stated wait under 12-16,134.) Kansas Legal Services can help.',
+          remedy: 'Municipal-court expungement (§ 12-4516) — city-set fee',
+          citation: 'Kan. Stat. Ann. § 12-4516'
+        },
+        eligible_arrest_bij_ks: {
+          status: 'eligible',
+          title: 'Arrest Record — Expungeable, and Free',
+          message: 'You can petition the district court to expunge the ARREST record itself (K.S.A. 22-2410). The grounds fit where charges were dismissed, you were found not guilty, a judge found no probable cause, or expungement is in the best interests of justice and no charges are likely. For a dismissed charge or a not-guilty verdict, the filing carries NO docket fee (22-2410(b)(3)(B)). On filing, the court file is immediately sequestered pending the hearing (22-2410(b)(2)). Where the court grants on a "best interests" basis, it decides any disclosure carve-outs case by case. Kansas Legal Services runs free clinics (kls_expunge@klsinc.org).',
+          remedy: 'Arrest-record expungement (§ 22-2410) — no docket fee for dismissals/acquittals',
+          citation: 'Kan. Stat. Ann. § 22-2410'
+        },
+        eligible_arrest_mandatory_ks: {
+          status: 'eligible',
+          title: 'Mistaken Identity — a Mandatory Purge, and the Prosecutor Files',
+          message: 'This is the strongest arrest-record route in Kansas. For a mistaken-identity or identity-theft arrest where the charges were dismissed or never prosecuted, the PROSECUTOR must petition and the court SHALL order expungement — and it goes further than a normal expungement: the KBI must purge the record from all state and federal databases (K.S.A. 22-2410(a)(2)). There is no docket fee. On filing, the court file is immediately sequestered pending the hearing. If the prosecutor has not acted, this is worth raising with their office directly; Kansas Legal Services (kls_expunge@klsinc.org) can help you push it.',
+          remedy: 'Prosecutor-initiated mandatory purge (§ 22-2410(a)(2)) — no fee, KBI purge',
+          citation: 'Kan. Stat. Ann. § 22-2410(a)(2)'
+        },
+        effects_firearms_ks: {
+          status: 'eligible',
+          title: 'Firearm Rights — Fully Restored by Expungement',
+          message: 'Kansas is unusual and generous here: expungement of a disqualifying record FULLY restores your firearm rights — to use, transport, receive, purchase, transfer, and possess firearms (21-6614(k)(2)). It applies retroactively to expungement orders entered before 2021, and the KBI must have the record withdrawn from the federal NICS background-check system. One honest contrast to keep in mind: even though the record is expunged, it can still count as a PRIOR conviction if you are sentenced for a later crime, and it can be used as an element in certain later prosecutions — restoration of gun rights and the sentencing-use carve-out are two different things. Kansas Legal Services can confirm how this applies to your record.',
+          remedy: 'Firearm rights restored on expungement (§ 21-6614(k)(2)) — KBI/NICS withdrawal',
+          citation: 'Kan. Stat. Ann. § 21-6614(k)(2)'
+        },
+        effects_disclosure_ks: {
+          status: 'complex',
+          title: 'Expunged — but a Few Applications Still Require Disclosure',
+          message: 'An expungement lets you say, in most settings, that you were never arrested, convicted, or diverted (21-6614(i)) — but Kansas keeps a specific list of applications where you MUST still disclose an expunged record: private detective or security licensure; admission to the bar; lottery, gaming, or racing; commercial driver\'s license applications; broker-dealer or investment-adviser registration; law-enforcement employment; and bail-enforcement agents (the municipal statute adds concealed-carry). As of 2026 HB 2323, that disclosure list also reaches applications for an INSURANCE PRODUCER or PUBLIC ADJUSTER license where the expunged record was for a fraudulent insurance act — so an expunged insurance-fraud case must be disclosed on those specific applications. Separately, an expunged conviction can still count as a prior at sentencing for a later crime, and the Department of Corrections may reinstate the record on a new commitment. For anything else, you need not disclose it. Kansas Legal Services can help you read the list against your situation.',
+          remedy: 'Disclose on the listed applications, incl. insurance-fraud (§ 21-6614(i); 2026 HB 2323)',
+          citation: 'Kan. Stat. Ann. § 21-6614(i); 2026 Kan. HB 2323'
         },
         complex_level_ks: {
           status: 'complex',
           title: 'We Need the Offense Level',
-          message: 'The Kansas waiting period depends on the offense — 3 years for most misdemeanors and lower-level felonies, 5 for more serious felonies and a first DUI, longer for repeat DUIs. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a KBI criminal-history request will show it. Kansas Legal Services can help you read it.',
+          message: 'The Kansas waiting period depends on the offense — 3 years for most misdemeanors and lower-level felonies, 5 for more serious felonies and a first DUI (and for any felony in which a motor vehicle was used), 10 for a second DUI. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a KBI criminal-history request will show it. Kansas Legal Services can help you read it.',
           remedy: 'Get the Offense Level First (court paperwork / KBI)',
           citation: 'Kan. Stat. Ann. § 21-6614'
         }
@@ -15408,22 +15666,24 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     resources: {
       remedies: {
         expungement: {
-          name: 'Expungement (Kan. Stat. Ann. § 21-6614)',
+          name: 'Expungement (Kan. Stat. Ann. § 21-6614; arrests § 22-2410; municipal § 12-4516)',
           formName: 'Kansas Judicial Council expungement forms',
           formUrl: 'https://www.kansasjudicialcouncil.org/legal-forms/expungement',
           steps: [
-            'Confirm your offense is not one Kansas never expunges, and that you are not still required to register.',
-            'Check your waiting period from when your sentence was satisfied (3 or 5 years for most offenses; specialty-court graduates can file immediately).',
-            'File the petition in the court that handled the case. The docket fee is waived for non-convictions; a poverty affidavit is available otherwise.',
-            'Expect 2-4 months (a hearing ~60+ days out, then 8-12 weeks for the KBI). Kansas Legal Services runs free clinics: kls_expunge@klsinc.org.'
+            'Confirm your offense is not on the 21-6614(e) never-expunge list (which includes involuntary manslaughter and child endangerment), and that you are not currently required to register under the Kansas Offender Registration Act.',
+            'Check your waiting period, running from the LATER of sentence satisfaction or discharge from supervision: 3 years (misdemeanors, infractions, lower-level/older felonies), 5 years (more serious felonies, any felony in which a motor vehicle was used, first DUI), 10 years (second DUI), 3 years (diversion), or 1 year (prostitution-under-coercion). Specialty-court graduates can file immediately.',
+            'File the petition in the convicting court (municipal court for a city ordinance; district court for an arrest record). The docket fee is $176, up to $195 with the surcharge — there is NO general waiver, though specialty-court petitions are waivable and non-conviction/arrest filings are free under 22-2410(b)(3)(B).',
+            'Expect roughly 2-4 months (a hearing ~60+ days out, then time for the KBI to update). Kansas Legal Services runs free clinics: kls_expunge@klsinc.org.'
           ],
-          // null: Wave 6 flags a fee conflict — statute says $176, current guides/Judicial
-          // Council say $195 (Supreme Court order). Waived for non-convictions.
-          fees: null,
-          // NOT null: non-conviction fee waiver, poverty affidavit, and specialty-court
-          // waiver are named mechanisms.
-          feeWaiver: 'The docket fee is waived for non-conviction expungements; a poverty affidavit is available for others; and drug-court/veterans-court graduates can have the docket fee waived.',
-          courtContact: 'The court that handled the case'
+          // NOT null: base docket fee is $176 (21-6614(g)(2); 22-2410(b)(3)(A)),
+          // up to $195 with the supreme-court surcharge that 2026 HB 2393 extended
+          // through 6/30/2030. The $176-vs-$195 is base-vs-base+surcharge, not a conflict.
+          fees: '$176 docket fee, up to $195 with the supreme-court non-judicial-personnel surcharge (21-6614(g)(2); 22-2410(b)(3)(A); surcharge extended through 6/30/2030 by 2026 HB 2393). Whether the surcharge is presently levied is a phone-tier question.',
+          // NOT null: there is NO general fee waiver (HB 2724, which would have added a
+          // poverty-affidavit waiver, died in committee 4/10/2026). Only specialty-court
+          // petitions and the 22-2410(b)(3)(B) free categories get relief.
+          feeWaiver: 'No general fee waiver for standard conviction expungements (the 2026 poverty-affidavit waiver bill, HB 2724, died in committee). Fee relief is limited to specialty-court petitions (21-6614(a)(3), waivable) and the 22-2410(b)(3)(B) free categories — identity-theft victims, no-probable-cause findings, not-guilty verdicts, and dismissed charges. Municipal petitions carry a per-city fee set under 12-4516(g)(2).',
+          courtContact: 'The convicting court (municipal court for a city ordinance; district court for an arrest record)'
         }
       },
       legalAid: [

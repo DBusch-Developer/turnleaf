@@ -93,6 +93,7 @@ async function seed() {
     CHECK (verification_status IN ('draft', 'statute_cited', 'phone_verified'));
   `;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS source_package TEXT;`;
+  await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS session_note TEXT;`;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS terminology TEXT;`;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS key_dates JSONB NOT NULL DEFAULT '[]'::jsonb;`;
   await sql`ALTER TABLE states ADD COLUMN IF NOT EXISTS open_questions JSONB NOT NULL DEFAULT '[]'::jsonb;`;
@@ -108,7 +109,7 @@ async function seed() {
     await sql`
       INSERT INTO states (
         code, name, rules, resources, last_reviewed, verified_date, verification_status,
-        source_package, terminology, key_dates, open_questions, sources
+        source_package, session_note, terminology, key_dates, open_questions, sources
       )
       VALUES (
         ${code},
@@ -119,6 +120,7 @@ async function seed() {
         ${config.verifiedDate ?? null},
         ${config.verificationStatus},
         ${config.sourcePackage},
+        ${config.sessionNote ?? null},
         ${config.terminology},
         ${JSON.stringify(config.keyDates)},
         ${JSON.stringify(config.openQuestions)},
@@ -133,6 +135,7 @@ async function seed() {
         verified_date = EXCLUDED.verified_date,
         verification_status = EXCLUDED.verification_status,
         source_package = EXCLUDED.source_package,
+        session_note = EXCLUDED.session_note,
         terminology = EXCLUDED.terminology,
         key_dates = EXCLUDED.key_dates,
         open_questions = EXCLUDED.open_questions,

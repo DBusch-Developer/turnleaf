@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**47 open questions across 11 states.**
+**52 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -87,21 +87,33 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 4. KANSAS (KS)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement (Kan. Stat. Ann. § 21-6614)** — The court that handled the case
+- **Expungement (Kan. Stat. Ann. § 21-6614; arrests § 22-2410; municipal § 12-4516)** — The convicting court (municipal court for a city ordinance; district court for an arrest record)
 - Kansas Legal Services (free expungement clinics; kls_expunge@klsinc.org) — https://www.kansaslegalservices.org
 - Kansas Judicial Council — Expungement Forms — https://www.kansasjudicialcouncil.org
 
 **Dates that govern:**
-- 2021 — Expungement restores firearm rights (K.S.A. 21-6614(k)(2)) (effective) · Wave 6 gives the year only. A Kansas expungement restores firearm rights — rare among states, and worth knowing.
+- 2021 — Expungement restores firearm rights (K.S.A. 21-6614(k)(2)) (effective) · Year precision. A Kansas expungement of a disqualifying record fully restores firearm rights (use, transport, receive, purchase, transfer, possess), applies retroactively to pre-2021 orders, and the KBI must have the record withdrawn from NICS.
+- 2026 — Docket-fee surcharge authority extended through 6/30/2030 (2026 HB 2393) (effective) · 2026 HB 2393 (signed 4/3/2026) extended the supreme-court non-judicial-personnel surcharge (up to $19) through June 30, 2030, amending 21-6614 and 22-2410; the up-to-$195 total is current law. The displayed statute text still shows the pre-extension 6/30/2025 sunset — enrolled-text integration pending.
+- 2026 — Insurance-fraud expunged-record disclosure added (2026 HB 2323) (effective) · 2026 HB 2323 (signed 4/6/2026, effective on statute-book publication) requires disclosure of an expunged insurance-fraud arrest/conviction/diversion in applications for licensure as an insurance producer or public adjuster; added to the 21-6614(i)(2) disclosure list. Exact subsection wording pending the enrolled-text pull.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the docket fee. Wave 6 flags a conflict: the statute text says $176, while current guides and Judicial Council materials say $195 (set by a Supreme Court order that updates over time). The fees field is null pending this; a district clerk is the check. (The fee is waived for non-convictions, and a poverty affidavit is available.)
-   - *Blocks (null until answered):* `resources.remedies.expungement.fees`
-2. Confirm the exact waiting period for a second-or-later DUI. Wave 6 gives it as a 7-to-10-year range, which is not a single number; the tree routes a 2nd+ DUI to an "exact period needs confirming" result rather than guess. Confirm the precise period against K.S.A. 21-6614.
+1. Check the status and effect of 2026 SB 430 (reconciliation) — specifically whether it restructured the text of K.S.A. 21-6614 or 12-4516. Encoded from the through-2023 statute text plus the confirmed 2026 amendments; a reconciliation bill could renumber or move provisions.
+   - *Blocks no single field — affects a branch or wording.*
+2. Check the statuses of 2026 SB 245 and SB 240 (Senate companions of HB 2272 aggravated murder and HB 2323 insurance-fraud disclosure). HB 2272 died and HB 2323 was enacted per the House bill pages; confirm the Senate companions did not enact anything divergent.
+   - *Blocks no single field — affects a branch or wording.*
+3. Pull the enrolled subsection wording of 2026 HB 2323. The effect (insurance-producer/public-adjuster disclosure of an expunged fraudulent-insurance-act record) is encoded in the 21-6614(i)(2) disclosure messaging; the exact statutory subsection language is pending.
+   - *Blocks no single field — affects a branch or wording.*
+4. Confirm whether the Kansas Supreme Court currently imposes the up-to-$19 non-judicial-personnel surcharge (making the total $195 vs the $176 base). HB 2393 preserved the authority through 2030; whether it is presently levied is a phone-tier question (district clerk).
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm the KBI post-grant processing timeline. The draft estimates 8-12 weeks after the order; verify with the KBI (phone-tier).
+   - *Blocks no single field — affects a branch or wording.*
+6. Confirm municipal expungement fee amounts. Under 12-4516(g)(2) each city court MAY prescribe its own fee, so this is per-city and phone-tier — no single statutory number.
+   - *Blocks no single field — affects a branch or wording.*
+7. Read K.S.A. 22-4908 (relief from the Kansas Offender Registration Act registration requirement). Cited as the route out of the 21-6614(f) registration bar but not pulled; its mechanics are cite-only for now.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

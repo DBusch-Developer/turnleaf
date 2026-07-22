@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**44 open questions across 11 states.**
+**47 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -142,26 +142,33 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 6. MISSISSIPPI (MS)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expunction (Miss. Code § 99-19-71)** — The court that handled the case
+- **Expunction (Miss. Code Ann. § 99-19-71)** — The justice, county, circuit, or municipal court that handled the case
 - Mississippi Center for Justice — https://www.mscenterforjustice.org
 - Mission First Legal Aid Office — https://missionfirst.org
 
 **Dates that govern:**
-- 2019 — General one-felony-per-lifetime expunction rule in effect (§ 99-19-71) (effective) · Wave 6 gives the year only ("post-Jul 2019 general rule"). A person may expunge one felony in their lifetime, 5 years after completing all sentence terms.
+- 2026-07-01 — 2026 HB 1546 (Ch. 430) effective — felony wait cut 5→3 years, exclusions expanded to 12, trafficking-survivor path added (effective) · Approved 3/30/2026, effective July 1, 2026. Amended § 99-19-71(2) (five-year wait reduced to three; added procuring/promoting prostitution to the exclusion list) and §§ 97-3-54.1, 97-3-54.6 (survivor expungement/vacatur). Encoded from the enrolled Ch. 430 text.
+- 2026-02-03 — Automatic-expungement bill HB 1344 died in committee (deadline) · The third failed automatic-expungement bill in three sessions (after 2024 HB 801 and 2025 HB 1117). Recorded to support the "no automation — you must petition" encoding; per billstatus.ls.state.ms.us.
 
-**Verify — 4 open questions. Each answer closes a numbered question in the database:**
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the full felony exclusion list under § 99-19-71. Wave 6 gives crimes of violence (§ 97-3-2), first-degree arson, drug trafficking, third-or-later DUI, felon-in-possession, failure to register as a sex offender, and EMBEZZLEMENT (the surprising one), and flags the list as needing the full statute text. The tree asks these as exclusions; confirm the complete set.
+1. Do clerks in practice charge the $150 § 99-19-72 fee on NON-conviction petitions? By the statute's terms the non-conviction path is subsection (4) OF § 99-19-71, so the fee attaches; whether clerks actually collect it on dismissal/acquittal petitions is a practice question (phone-tier, Hinds circuit clerk).
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm that a first-offense, non-traffic misdemeanor has NO statutory waiting period for expunction. Wave 6 gives this but flags it for confirmation. The tree routes a first-offense misdemeanor to an immediate petition result; confirm.
+2. Pull the § 97-3-2 crime-of-violence list. It defines the felony exclusion (§ 99-19-71(2)(i)), the trafficking-survivor crime-of-violence carve-out (§ 97-3-54.6(6)), and the § 99-15-26 non-adjudication exclusion; encoded as a cite-only reference until read.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the $150 expunction fee is current and whether it applies to non-conviction petitions. Wave 6 gives § 99-19-72: $100 judicial fund + $40 DA fund + $10 clerk = $150, and flags both currency and non-conviction scope. Also confirm the 2026 automatic-expungement bill (HB 1344) died before encoding "no automation" (bills were introduced 2024 HB 801, 2025 HB 1117, 2026 HB 1344).
+3. Read § 97-11-31, referenced as a § 99-15-26 non-adjudication exclusion. Cited but not pulled — confirm its scope.
    - *Blocks no single field — affects a branch or wording.*
-4. Confirm whether a pauper's/indigency waiver applies to the $150 expunction fee. Wave 6 gives the fee amount but says nothing about a waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Hinds).
-   - *Blocks (null until answered):* `resources.remedies.expungement.feeWaiver`
+4. Confirm the petition-to-order timeline (how long after filing a court rules) — not stated in the pulled sections; phone-tier (clerk/practice).
+   - *Blocks no single field — affects a branch or wording.*
+5. Resolve the § 41-29-150(d)(2) interpretive question: the disjunctive "or had satisfactorily served his sentence" arguably extends expunction to a SERVED first-time possession conviction, not just a completed conditional discharge. Attorney-tier; encoded as a messaging flag only, no routing claim.
+   - *Blocks no single field — affects a branch or wording.*
+6. Has the public code container integrated 2026 Ch. 430 yet? At retrieval (7/22/2026) legislature.ms.gov still served the pre-7/1/2026 version of § 99-19-71, so it was encoded from the enrolled act. Recheck the container text at the next sweep and drop the § 99-19-71 sourceNote once it matches.
+   - *Blocks no single field — affects a branch or wording.*
+7. Does a pauper's/indigency waiver apply to the $150 § 99-19-72 fee? The fee amount is statutory; the pulled text says nothing about a waiver, so feeWaiver is null pending confirmation with a circuit clerk (Hinds).
+   - *Blocks (null until answered):* `resources.remedies.expunction.feeWaiver`
 
 ---
 

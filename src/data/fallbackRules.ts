@@ -64,11 +64,18 @@ export interface OpenQuestion {
  *
  * `url` and `retrievedOn` are null until someone actually opens the source and
  * records that they did. A citation we have not read is still just a citation.
+ *
+ * `sourceNote` is an optional provenance caveat about the text that was read —
+ * e.g. that a section was encoded from an enrolled act because the public code
+ * container was still serving a superseded version at retrieval. It records WHY
+ * the read source differs from where a reader would land today; drop it once the
+ * container catches up.
  */
 export interface StatuteSource {
   id: string;
   url: string | null;
   retrievedOn: string | null;
+  sourceNote?: string;
 }
 
 /**
@@ -14805,51 +14812,100 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   MS: {
     code: 'MS',
     name: 'Mississippi',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
     terminology:
-      'Mississippi uses EXPUNCTION (§ 99-19-71), filed in the court that handled the case. The defining fact '
-      + 'for felonies: you get ONE felony expunction in your LIFETIME, five years after you finish every term '
-      + 'of the sentence and pay all fines and costs — and it is discretionary, so a judge has to find you '
-      + 'rehabilitated after a hearing with 10 days\' notice to the district attorney. That makes the real '
-      + 'question less "am I eligible" and more "is this the conviction worth using my one chance on." '
-      + 'Misdemeanors are easier — a first-offense, non-traffic misdemeanor can be petitioned with no set '
-      + 'waiting period. Non-convictions can be expunged on petition (the court "shall" grant), though not '
-      + 'automatically.',
+      'Mississippi uses EXPUNCTION, and it is PETITION-BASED — filed in the justice, county, circuit, or '
+      + 'municipal court that had the case. There is NO automatic expungement: automatic-expungement bills have '
+      + 'died in committee three sessions running (HB 801 in 2024, HB 1117 in 2025, and HB 1344, which died '
+      + '2/3/2026), so nothing clears on its own — you must file. The 2026 reform that DID pass matters a lot: '
+      + '2026 HB 1546 (Ch. 430, effective July 1, 2026) cut the felony waiting period from FIVE years to THREE '
+      + 'years after you complete all terms and conditions, so someone told "wait five years" under the old law '
+      + 'may be eligible NOW. The felony rule is still a once-in-a-lifetime, discretionary expunction (§ 99-19-71(2)): '
+      + 'all fines and costs paid, a hearing at the court\'s discretion with 10 days\' written notice to the district '
+      + 'attorney, and a grant requires the judge to make a specific REHABILITATED finding on the record. Twelve '
+      + 'felony categories are excluded (crimes of violence, first-degree arson, drug trafficking, 3rd/4th DUI, '
+      + 'felon-in-possession, sex-offender-registration failure, voyeurism, witness intimidation, vulnerable-person '
+      + 'abuse, embezzlement, and — added in 2026 — procuring and promoting prostitution). A separate hard bar: no '
+      + 'public official may expunge a conviction related to their official duties (§ 99-19-71(5)). Misdemeanors are '
+      + 'easier: a first-offense, non-traffic misdemeanor petitions with no set wait (traffic misdemeanors are '
+      + 'excluded). Non-convictions the court "shall" expunge — but read the fee trap: the non-conviction path is '
+      + 'subsection (4) OF § 99-19-71, so the $150 statutory fee (§ 99-19-72) attaches by the statute\'s terms; '
+      + 'misdemeanor non-convictions can instead use § 99-15-59 or § 99-15-26(5), which carry no fee statute. Other '
+      + 'doors: non-adjudication (§ 99-15-26, which expressly carves domestic-violence misdemeanors IN), first-time '
+      + 'drug conditional discharge (§ 41-29-150(d)), a DUI-specific regime (§ 63-11-30, where nonadjudication, '
+      + 'expunction, and first-offender status all share one DPS registry so using one forecloses the others), and '
+      + 'a 2026 trafficking-survivor package (§§ 97-3-54.1, 97-3-54.6) that reaches convictions AND juvenile '
+      + 'delinquency adjudications. Expunction restores your pre-arrest status and you need not disclose it '
+      + '(§ 99-19-71(3)) — with two carve-outs: employers may ask about expunction orders, and prospective jurors '
+      + 'must disclose in camera.',
     keyDates: [
       {
-        label: 'General one-felony-per-lifetime expunction rule in effect (§ 99-19-71)',
-        date: '2019',
+        label: '2026 HB 1546 (Ch. 430) effective — felony wait cut 5→3 years, exclusions expanded to 12, trafficking-survivor path added',
+        date: '2026-07-01',
         kind: 'effective',
-        note: 'Wave 6 gives the year only ("post-Jul 2019 general rule"). A person may expunge one felony in their lifetime, 5 years after completing all sentence terms.',
+        note: 'Approved 3/30/2026, effective July 1, 2026. Amended § 99-19-71(2) (five-year wait reduced to three; added procuring/promoting prostitution to the exclusion list) and §§ 97-3-54.1, 97-3-54.6 (survivor expungement/vacatur). Encoded from the enrolled Ch. 430 text.',
+      },
+      {
+        label: 'Automatic-expungement bill HB 1344 died in committee',
+        date: '2026-02-03',
+        kind: 'deadline',
+        note: 'The third failed automatic-expungement bill in three sessions (after 2024 HB 801 and 2025 HB 1117). Recorded to support the "no automation — you must petition" encoding; per billstatus.ls.state.ms.us.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the full felony exclusion list under § 99-19-71. Wave 6 gives crimes of violence (§ 97-3-2), first-degree arson, drug trafficking, third-or-later DUI, felon-in-possession, failure to register as a sex offender, and EMBEZZLEMENT (the surprising one), and flags the list as needing the full statute text. The tree asks these as exclusions; confirm the complete set.',
+          'Do clerks in practice charge the $150 § 99-19-72 fee on NON-conviction petitions? By the statute\'s terms the non-conviction path is subsection (4) OF § 99-19-71, so the fee attaches; whether clerks actually collect it on dismissal/acquittal petitions is a practice question (phone-tier, Hinds circuit clerk).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm that a first-offense, non-traffic misdemeanor has NO statutory waiting period for expunction. Wave 6 gives this but flags it for confirmation. The tree routes a first-offense misdemeanor to an immediate petition result; confirm.',
+          'Pull the § 97-3-2 crime-of-violence list. It defines the felony exclusion (§ 99-19-71(2)(i)), the trafficking-survivor crime-of-violence carve-out (§ 97-3-54.6(6)), and the § 99-15-26 non-adjudication exclusion; encoded as a cite-only reference until read.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the $150 expunction fee is current and whether it applies to non-conviction petitions. Wave 6 gives § 99-19-72: $100 judicial fund + $40 DA fund + $10 clerk = $150, and flags both currency and non-conviction scope. Also confirm the 2026 automatic-expungement bill (HB 1344) died before encoding "no automation" (bills were introduced 2024 HB 801, 2025 HB 1117, 2026 HB 1344).',
+          'Read § 97-11-31, referenced as a § 99-15-26 non-adjudication exclusion. Cited but not pulled — confirm its scope.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm whether a pauper\'s/indigency waiver applies to the $150 expunction fee. Wave 6 gives the fee amount but says nothing about a waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Hinds).',
-        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+          'Confirm the petition-to-order timeline (how long after filing a court rules) — not stated in the pulled sections; phone-tier (clerk/practice).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Resolve the § 41-29-150(d)(2) interpretive question: the disjunctive "or had satisfactorily served his sentence" arguably extends expunction to a SERVED first-time possession conviction, not just a completed conditional discharge. Attorney-tier; encoded as a messaging flag only, no routing claim.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Has the public code container integrated 2026 Ch. 430 yet? At retrieval (7/22/2026) legislature.ms.gov still served the pre-7/1/2026 version of § 99-19-71, so it was encoded from the enrolled act. Recheck the container text at the next sweep and drop the § 99-19-71 sourceNote once it matches.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Does a pauper\'s/indigency waiver apply to the $150 § 99-19-72 fee? The fee amount is statutory; the pulled text says nothing about a waiver, so feeWaiver is null pending confirmation with a circuit clerk (Hinds).',
+        blocksFields: ['resources.remedies.expunction.feeWaiver'],
       },
     ],
     sources: [
-      { id: 'Miss. Code § 99-19-71 (expunction; one felony per lifetime; 5-yr wait; misdemeanor and non-conviction paths; exclusions)', url: null, retrievedOn: null },
-      { id: 'Miss. Code § 99-19-72 ($150 expunction fee: $100 judicial + $40 DA + $10 clerk)', url: null, retrievedOn: null },
+      { id: 'Miss. Code Ann. § 99-19-71 (2026 Miss. Laws Ch. 430 (HB 1546), eff. 7/1/2026) — (1) first-offender non-traffic misdemeanor, no wait, MCIC nonpublic first-offender check (71(3)); (2) felony expunction: THREE-year wait after completing all terms (reduced from five by Ch. 430), all fines/costs paid, discretionary hearing, 10 days\' DA notice, on-the-record REHABILITATED finding, one per lifetime, common-nucleus counting, twelve-item exclusion list (procuring/promoting prostitution added by Ch. 430); (3) honest-no effect; (4) non-conviction shall-grant; (5) public-official bar', url: 'https://billstatus.ls.state.ms.us', retrievedOn: '2026-07-22', sourceNote: 'Encoded from the enrolled Ch. 430 text; the public code container was still serving the superseded pre-7/1/2026 version at retrieval.' },
+      { id: 'Miss. Code Ann. § 97-3-54.1 (2026 Miss. Laws Ch. 430 (HB 1546), eff. 7/1/2026) — (4) minors identified as trafficking victims are not criminally liable for non-violent offenses (except § 63-11-30) occurring during and as a direct result of trafficking', url: 'https://billstatus.ls.state.ms.us', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 97-3-54.6 (2026 Miss. Laws Ch. 430 (HB 1546), eff. 7/1/2026) — (5) vacatur of trafficking-act convictions/delinquency adjudications anytime; (6) survivor EXPUNGEMENT of a misdemeanor or non-violent felony (not a § 97-3-2 crime of violence) conviction or delinquency adjudication, motion anytime, preponderance standard, official documentation creates a presumption but is NOT required, and (unlike 54.1(4)/54.6(7)) states no § 63-11-30 exception; (7) affirmative defense for trafficked-status offenses (except § 63-11-30) with a no-prejudice rule (7)(b)', url: 'https://billstatus.ls.state.ms.us', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 99-19-72 (expunction fee — $150 total: $100 judicial fund + $40 DA fund + $10 clerk; attaches to § 99-19-71 petitions including the subsection (4) non-conviction path), retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 99-15-26 (non-adjudication — plea withheld pending conditions; completion → dismissed and closed → shall-grant non-conviction expunction; circuit/county reach felonies and misdemeanors (pleas on/after 7/1/2014), justice/municipal misdemeanors; excludes crimes against the person, crimes of violence (§ 97-3-2), § 97-11-31, public-funds misappropriation, trafficking (§ 41-29-139(f)), Implied Consent/DUI (only via § 63-11-30(14)); (1)(c) DV misdemeanors (§ 99-3-7(5)) carved IN; (1)(d) once per lifetime; (5) non-conviction expunction), retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 99-15-57 (historical/parallel non-conviction relief; (2) parallel shall-expunge on dismissal/no-conviction) — pre-1983 relief, cited but not a primary routing basis, retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 99-15-59 (misdemeanor arrested/cited/held and not formally charged within 12 months, or on dismissal → apply to the court with jurisdiction; carries NO fee statute — the cheaper misdemeanor non-conviction route), retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 41-29-150(d) (first-time drug-possession conditional discharge — § 41-29-139(c)/(d) possession, deferral without judgment, ≤3-yr probation, once per person; completion → discharge/dismissal, not a conviction for any purpose, bureau nonpublic record; (d)(2) expunction on application with hearing, and disjunctive "or had satisfactorily served his sentence" — interpretive, see open questions), retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 63-11-30 (DUI — (13) first-offense conviction expunction, circuit court, ≥5 years after completion, six gates (sentence complete; no test refusal; BAC < .16 if available; no other DUI convicted/pending; written justification; no prior DUI nonadjudication/expunction), non-CDL, once per lifetime, DPS confidential registry; (14) nonadjudication once ever, non-CDL, conditions incl. 120-day interlock/drug-testing; registry cross-burn among nonadjudication/expunction/first-offender; (2)(c)-(d) 3rd within 5 yrs and 4th+ are felonies; (7) out-of-state priors count within 5 yrs; (12) child-endangerment unmerged), retrieved via legislature.ms.gov official code portal', url: 'https://legislature.ms.gov', retrievedOn: '2026-07-22' },
+      { id: 'Miss. Code Ann. § 97-3-2 (crime-of-violence list reached by § 99-19-71(2)(i), § 97-3-54.6(6), and § 99-15-26) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Miss. Code Ann. § 99-3-7(5) (domestic-violence definition carved into § 99-15-26(1)(c) non-adjudication eligibility) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Miss. Code Ann. § 97-3-54.4(q) (definition of a trafficked person, used by §§ 97-3-54.1/.6) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: '2026 HB 1344 (automatic-expungement bill; died in committee 2/3/2026 per billstatus.ls.state.ms.us; follows 2024 HB 801 and 2025 HB 1117) — CITE-ONLY, not enacted; supports the "no automatic expungement" encoding', url: null, retrievedOn: null },
     ],
     rules: {
       startNode: 'disposition',
@@ -14859,49 +14915,132 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           field: 'disposition',
           text: 'What was the outcome of the case?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ms' },
-            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'eligible_nonconv_ms' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ms' },
-            { label: 'Non-adjudication / diversion completed', value: 'deferred', next: 'eligible_nonconv_ms' },
+            { label: 'Convicted (guilty or found guilty)', value: 'convicted', next: 'public_official_ms' },
+            { label: 'Dismissed, dropped, or never formally charged', value: 'dismissed', next: 'nonconv_route_ms' },
+            { label: 'Acquitted (found not guilty)', value: 'acquitted', next: 'eligible_nonconv_71_ms' },
+            { label: 'Non-adjudication, conditional discharge, or diversion', value: 'deferred', next: 'deferred_route_ms' },
             { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
           ]
+        },
+        // Public-official bar (§ 99-19-71(5)) — applies across every path in the
+        // section, so it is screened first on the conviction track.
+        public_official_ms: {
+          type: 'boolean',
+          text: 'Is this conviction related to your conduct or duties as a public official (elected or appointed)?',
+          yes: 'ineligible_publicofficial_ms',
+          no: 'survivor_ms'
+        },
+        survivor_ms: {
+          type: 'boolean',
+          text: 'Was this offense committed during a period when you were a victim of human trafficking, and as a direct result of being trafficked?',
+          yes: 'survivor_violence_ms',
+          no: 'dui_ms'
+        },
+        survivor_violence_ms: {
+          type: 'boolean',
+          text: 'Was the conviction a crime of violence as defined by § 97-3-2?',
+          yes: 'survivor_violent_ms',
+          no: 'eligible_survivor_ms'
+        },
+        dui_ms: {
+          type: 'boolean',
+          text: 'Was this a DUI / DWI (driving under the influence) conviction?',
+          yes: 'dui_offense_ms',
+          no: 'level_ms'
+        },
+        dui_offense_ms: {
+          type: 'choice',
+          text: 'Which DUI offense was this?',
+          options: [
+            { label: 'First-offense DUI', value: 'first', next: 'dui_bac_ms' },
+            { label: 'Second-offense DUI', value: 'second', next: 'complex_dui_ms' },
+            { label: 'Third, fourth, or subsequent DUI', value: 'multi', next: 'ineligible_dui_ms' }
+          ]
+        },
+        dui_bac_ms: {
+          type: 'boolean',
+          text: 'Where a chemical test result is available, was your blood-alcohol concentration .16 or higher?',
+          yes: 'ineligible_dui_ms',
+          no: 'dui_prior_ms'
+        },
+        dui_prior_ms: {
+          type: 'boolean',
+          text: 'Have you ever previously used a DUI nonadjudication, a DUI expunction, or a first-offender DUI status? (In Mississippi these share ONE Department of Public Safety registry, so using any one forecloses the others.)',
+          yes: 'ineligible_dui_ms',
+          no: 'dui_date_ms'
+        },
+        dui_date_ms: {
+          type: 'date',
+          text: 'When did you complete every term of the DUI sentence?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'at least five years after completing the DUI sentence (§ 63-11-30(13) — first-offense DUI conviction expunction)' },
+            nextPass: 'eligible_dui_ms',
+            nextFail: 'waiting_dui_ms'
+          }
         },
         level_ms: {
           type: 'choice',
           text: 'What was the level of the conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_firstoffender_ms' },
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_type_ms' },
             { label: 'Felony', value: 'felony', next: 'felony_prioruse_ms' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ms' }
           ]
         },
-        misd_firstoffender_ms: {
-          type: 'boolean',
-          text: 'Is this your first offense, and was it a non-traffic misdemeanor?',
-          yes: 'eligible_misd_ms',
-          no: 'complex_misd_discretionary_ms'
+        misd_type_ms: {
+          type: 'choice',
+          text: 'Which best describes the misdemeanor?',
+          options: [
+            { label: 'A first-offense, non-traffic misdemeanor', value: 'first_nontraffic', next: 'eligible_misd_ms' },
+            { label: 'A traffic misdemeanor', value: 'traffic', next: 'ineligible_traffic_ms' },
+            { label: 'Not a first offense (non-traffic)', value: 'repeat', next: 'complex_misd_ms' }
+          ]
         },
         felony_prioruse_ms: {
           type: 'boolean',
-          text: 'Have you already used a felony expunction before? (Mississippi allows only ONE felony expunction in your lifetime.)',
+          text: 'Have you already used your one lifetime felony expunction before? (Mississippi allows only ONE felony expunction per lifetime; felonies sharing a common nucleus of operative facts count as a single conviction.)',
           yes: 'ineligible_prioruse_ms',
           no: 'felony_excluded_ms'
         },
         felony_excluded_ms: {
           type: 'boolean',
-          text: 'Was the offense any of these: a crime of violence, first-degree arson, drug trafficking, a third-or-later DUI, felon-in-possession of a weapon, failure to register as a sex offender, or embezzlement?',
+          text: 'Was the felony any of these twelve excluded categories: a crime of violence (§ 97-3-2); first-degree arson; drug trafficking; a third or fourth/subsequent DUI; felon in possession of a firearm; failure to register as a sex offender; voyeurism; witness intimidation; abuse, neglect, or exploitation of a vulnerable person; embezzlement; procuring prostitution; or promoting prostitution?',
           yes: 'ineligible_excluded_ms',
           no: 'felony_date_ms'
         },
         felony_date_ms: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete every term of your sentence, including paying all fines and costs?',
+          text: 'When did you complete every term and condition of your sentence, including paying all fines and costs?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'after completing all sentence terms with fines/costs paid (Miss. Code § 99-19-71 — felony; discretionary, one per lifetime)' },
+            period: { amount: 3, unit: 'years', anchor: 'three years after completing all terms and conditions with all fines/costs paid (§ 99-19-71(2), as amended by 2026 Ch. 430 — reduced from 5 years effective July 1, 2026; discretionary, one per lifetime)' },
             nextPass: 'eligible_felony_ms',
             nextFail: 'waiting_ms'
           }
+        },
+        nonconv_route_ms: {
+          type: 'choice',
+          text: 'What level was the charge that ended without a conviction?',
+          options: [
+            { label: 'Felony charge', value: 'felony', next: 'eligible_nonconv_71_ms' },
+            { label: 'Misdemeanor charge (or an arrest/citation never formally charged)', value: 'misd', next: 'eligible_9959_ms' },
+            { label: 'Not sure', value: 'unsure', next: 'eligible_nonconv_71_ms' }
+          ]
+        },
+        deferred_route_ms: {
+          type: 'choice',
+          text: 'Which describes your case?',
+          options: [
+            { label: 'Non-adjudication (§ 99-15-26) — I completed the conditions', value: 'nonadj', next: 'nonadj_excluded_ms' },
+            { label: 'Domestic-violence misdemeanor, non-adjudication plea, first offense', value: 'dv_nonadj', next: 'eligible_nonadj_dv_ms' },
+            { label: 'Drug conditional discharge (§ 41-29-150) — first-time possession, completed probation', value: 'drug_cd', next: 'eligible_drugcd_ms' },
+            { label: 'Another diversion completed', value: 'other_div', next: 'eligible_nonconv_71_ms' }
+          ]
+        },
+        nonadj_excluded_ms: {
+          type: 'boolean',
+          text: 'Was the non-adjudicated charge any of these: a crime against the person, a crime of violence (§ 97-3-2), a § 97-11-31 violation, misappropriation of public funds, a trafficking charge (§ 41-29-139(f)), or a DUI / Implied Consent offense?',
+          yes: 'nonadj_excluded_result_ms',
+          no: 'eligible_nonadj_ms'
         }
       },
       results: {
@@ -14910,85 +15049,177 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           title: 'We Need the Case Outcome First',
           message: 'Mississippi handles convictions and non-convictions differently, and felonies have a once-in-a-lifetime rule that makes the outcome important to get right. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Mississippi criminal-history request will show the disposition; the Mississippi Center for Justice has expungement resources.',
           remedy: 'Get Your Record First (court paperwork / criminal history)',
-          citation: 'Miss. Code § 99-19-71 (the route depends on the disposition)'
+          citation: 'Miss. Code Ann. § 99-19-71 (the route depends on the disposition)'
         },
-        eligible_nonconv_ms: {
+        ineligible_publicofficial_ms: {
+          status: 'ineligible',
+          title: 'Public-Official Conviction — Barred From Expunction',
+          message: 'Mississippi bars expunction of any conviction related to your conduct or duties as a public official (§ 99-19-71(5)), and this bar applies no matter which path you would otherwise use. Because this conviction arose from your official duties, it cannot be expunged under § 99-19-71. A pardon from the Governor remains the only route. The Mississippi Center for Justice can help you confirm the category and explain the pardon process.',
+          remedy: 'None (public-official bar) — a pardon is the remaining route',
+          citation: 'Miss. Code Ann. § 99-19-71(5)'
+        },
+        eligible_survivor_ms: {
           status: 'eligible',
-          title: 'No Conviction — Expungeable by Petition',
-          message: 'Because your case ended without a conviction — dismissed, dropped, acquitted, or resolved through non-adjudication — Mississippi expunges it on petition, and for these the court "shall" grant expunction. It is not automatic, so you do have to file, in the court that handled the case. Note the $150 statutory fee may or may not apply to non-conviction petitions (we are confirming that). The Mississippi Center for Justice can help.',
-          remedy: 'Non-conviction expunction petition (§ 99-19-71) — court shall grant',
-          citation: 'Miss. Code § 99-19-71'
+          title: 'Trafficking Survivor — Expungement Motion Available',
+          message: 'Because this offense happened while you were a victim of human trafficking and as a direct result of it, Mississippi lets you move to EXPUNGE the conviction — or a juvenile delinquency adjudication — at any time, for a misdemeanor or a non-violent felony (§ 97-3-54.6(6), effective July 1, 2026). The court decides by a PREPONDERANCE of the evidence that your participation occurred during the trafficking period and resulted from it. Official government documentation of your victim status creates a presumption in your favor but is NOT required — your own evidence can carry it. This survivor motion sits outside § 99-19-71, so no filing-fee statute attaches to it, and failing to raise (or losing) a trafficking affirmative defense earlier does not prejudice this motion (§ 97-3-54.6(7)(b)). The Mississippi Center for Justice can help you bring it.',
+          remedy: 'Trafficking-survivor expungement motion (§ 97-3-54.6(6)) — anytime, preponderance',
+          citation: 'Miss. Code Ann. § 97-3-54.6(6)'
+        },
+        survivor_violent_ms: {
+          status: 'ineligible',
+          title: 'Crime of Violence — Survivor Expungement Does Not Reach It',
+          message: 'The trafficking-survivor expungement motion is available only for a misdemeanor or a NON-violent felony, so it does not reach a crime of violence as defined by § 97-3-2 (§ 97-3-54.6(6)). That sends the analysis to the standard § 99-19-71 felony route — where a crime of violence is also on the twelve-item exclusion list and cannot be expunged. If the conviction is under the trafficking act itself, a separate VACATUR motion (§ 97-3-54.6(5)) may be available regardless. Otherwise a pardon from the Governor is the remaining route. The Mississippi Center for Justice can sort out which applies.',
+          remedy: 'None via survivor expungement (crime of violence) — check vacatur or a pardon',
+          citation: 'Miss. Code Ann. §§ 97-3-54.6(6), 99-19-71(2)'
+        },
+        ineligible_dui_ms: {
+          status: 'ineligible',
+          title: 'DUI — Not Eligible for Expunction',
+          message: 'Mississippi\'s DUI expunction is narrow. Only a FIRST-offense DUI can be expunged, and only if every gate is met: at least five years since you completed the sentence, no chemical-test refusal, a blood-alcohol concentration under .16 where a test result exists, no other DUI convicted or pending, and no prior DUI nonadjudication, expunction, or first-offender status (these share one DPS registry, so using any one forecloses the others). A third DUI within five years and any fourth-or-subsequent DUI are felonies that can never be expunged (§ 63-11-30; § 99-19-71(2) exclusion). Based on your answers, one of these bars applies. A pardon from the Governor remains a route. The Mississippi Center for Justice can confirm the details.',
+          remedy: 'None (a DUI gate or the multiple-offense bar applies)',
+          citation: 'Miss. Code Ann. §§ 63-11-30(13), 99-19-71(2)'
+        },
+        eligible_dui_ms: {
+          status: 'eligible',
+          title: 'First-Offense DUI — Appears Eligible, With Conditions',
+          message: 'A first-offense DUI conviction can be expunged five years after you complete the sentence (§ 63-11-30(13)), and based on your dates that period has passed. Confirm the remaining gates before you rely on it: you must not have refused the chemical test, your blood-alcohol concentration must have been under .16 where a result exists, you must have no other DUI convicted or pending, you must not have held a commercial license at the time, and you must provide a written justification — and you must not have used any prior DUI nonadjudication, expunction, or first-offender status, because they share one DPS registry. You file in the circuit court of the county of conviction, and the order goes to the Department of Public Safety within five days. The Mississippi Center for Justice can help.',
+          remedy: 'First-offense DUI expunction (§ 63-11-30(13)) — once per lifetime',
+          citation: 'Miss. Code Ann. § 63-11-30(13)'
+        },
+        waiting_dui_ms: {
+          status: 'waiting',
+          title: 'First-Offense DUI — Five-Year Wait Not Yet Met',
+          message: 'A first-offense DUI conviction can be expunged only at least five years after you complete every term of the sentence (§ 63-11-30(13)). Based on your dates, that has not passed yet. When it does, the other gates still apply (no test refusal, blood-alcohol under .16, no other DUI, non-commercial license, written justification, and no prior DUI nonadjudication/expunction/first-offender status, which share one DPS registry). The Mississippi Center for Justice can help you plan.',
+          remedy: 'Wait for the 5-year period (§ 63-11-30(13))',
+          citation: 'Miss. Code Ann. § 63-11-30(13)'
+        },
+        complex_dui_ms: {
+          status: 'complex',
+          title: 'Second DUI — Expunction Is First-Offense Only',
+          message: 'Mississippi\'s DUI expunction (§ 63-11-30(13)) reaches only a FIRST-offense DUI, so a second DUI conviction does not fit that route, and the DUI nonadjudication path (§ 63-11-30(14)) is available only where you have no prior or pending DUI. Whether any option remains depends on the specifics of your record, which is worth reviewing with counsel rather than guessing. A pardon from the Governor is also a route. The Mississippi Center for Justice can review your case.',
+          remedy: 'Review options for a second DUI (Mississippi Center for Justice)',
+          citation: 'Miss. Code Ann. § 63-11-30'
         },
         eligible_misd_ms: {
           status: 'eligible',
           title: 'First-Offense Misdemeanor — Expungeable, No Set Wait',
-          message: 'Because this is a first-offense, non-traffic misdemeanor, Mississippi lets you petition the convicting court to expunge it with no set waiting period. You file in the court that handled the case; the statutory fee is $150 ($100 judicial fund, $40 DA fund, $10 clerk). The Mississippi Center for Justice can help with the petition. (Even beyond first offenses, municipal and justice courts can expunge misdemeanors at their discretion after two years of good conduct, and there is a separate path for people under 23.)',
-          remedy: 'First-offense misdemeanor expunction (§ 99-19-71)',
-          citation: 'Miss. Code § 99-19-71'
+          message: 'Because this is a first-offense, non-traffic misdemeanor, Mississippi lets you petition the convicting court to expunge it with no set waiting period (§ 99-19-71(1)). First-offender status is checked against the MCIC nonpublic record of prior expunctions. You file in the justice, county, circuit, or municipal court that handled the case; the statutory fee is $150 ($100 judicial fund, $40 DA fund, $10 clerk — § 99-19-72). On expunction you are restored to your pre-arrest status and need not disclose the offense, with two carve-outs: employers may ask about expunction orders, and prospective jurors must disclose in camera (§ 99-19-71(3)). The Mississippi Center for Justice can help with the petition.',
+          remedy: 'First-offense misdemeanor expunction (§ 99-19-71(1))',
+          citation: 'Miss. Code Ann. § 99-19-71(1)'
         },
-        complex_misd_discretionary_ms: {
+        ineligible_traffic_ms: {
+          status: 'ineligible',
+          title: 'Traffic Misdemeanor — Not Under the First-Offender Path',
+          message: 'The first-offender misdemeanor expunction (§ 99-19-71(1)) expressly excludes TRAFFIC misdemeanors, so this conviction cannot be expunged by that route. If the traffic charge had instead ended without a conviction, the non-conviction routes could apply; and a pardon from the Governor remains available. Because traffic-record options can turn on the specific offense and court, it is worth confirming with the court that handled it, or with the Mississippi Center for Justice, rather than assuming.',
+          remedy: 'None via § 99-19-71(1) (traffic excluded) — confirm other routes',
+          citation: 'Miss. Code Ann. § 99-19-71(1)'
+        },
+        complex_misd_ms: {
           status: 'complex',
-          title: 'Not a First Offense — a Discretionary Path May Still Exist',
-          message: 'The simplest misdemeanor route (a first-offense, non-traffic misdemeanor with no set wait) does not fit, because this is not a first offense. That is not the end of the road: municipal and justice courts in Mississippi can expunge misdemeanors at their DISCRETION after two years of good conduct, and there is a separate first-offender path for people who were under 23. Because these are discretionary and court-specific, it is worth confirming with the court that handled your case, or with the Mississippi Center for Justice, rather than guessing.',
-          remedy: 'Ask the convicting court about discretionary misdemeanor expunction (2-yr good conduct)',
-          citation: 'Miss. Code § 99-19-71'
+          title: 'Not a First Offense — a Court-Specific Path May Still Exist',
+          message: 'The first-offender misdemeanor route (a first-offense, non-traffic misdemeanor with no set wait) does not fit, because this is not a first offense. That is not necessarily the end of the road — Mississippi courts have some court-specific and age-based misdemeanor options — but they are discretionary and depend on your record and the court, so it is worth confirming with the court that handled your case, or with the Mississippi Center for Justice, rather than guessing.',
+          remedy: 'Ask the convicting court about a discretionary misdemeanor route',
+          citation: 'Miss. Code Ann. § 99-19-71'
         },
         eligible_felony_ms: {
           status: 'eligible',
-          title: 'Felony, 5+ Years — Eligible, But It Is Your One Shot',
-          message: 'Based on your dates — five years since you finished every term of the sentence and paid all fines and costs — this felony is eligible for expunction under § 99-19-71. Two Mississippi-specific things to weigh before you file. First, you get only ONE felony expunction in your lifetime, so if you have more than one felony, choose deliberately (offenses sharing a common set of facts count as one conviction). Second, it is discretionary: a judge decides after a hearing, with 10 days\' notice to the district attorney, and has to find you rehabilitated — so it helps to come prepared. The $150 fee applies. The Mississippi Center for Justice can help you make the strongest case.',
-          remedy: 'Felony expunction (§ 99-19-71) — once per lifetime, discretionary',
-          citation: 'Miss. Code § 99-19-71'
+          title: 'Felony — Eligible Now Under the Reduced 3-Year Wait',
+          message: 'Here is the headline: as of July 1, 2026 (2026 HB 1546 / Ch. 430) the felony expunction wait dropped from FIVE years to THREE years after you complete all terms and conditions and pay every fine and cost — so if someone once told you to wait five years, you may be eligible NOW. Based on your dates, the three years have passed and this felony is eligible under § 99-19-71(2). Two Mississippi-specific things to weigh first. You get only ONE felony expunction in your lifetime, so if you have more than one felony choose deliberately — though felonies sharing a common nucleus of operative facts count as a single conviction (the court decides). And it is discretionary: a judge holds a hearing at their discretion, with 10 days\' written notice to the district attorney, and must make a specific finding that you are rehabilitated, so come prepared. The $150 fee applies (§ 99-19-72). (If this is a first-time drug-possession conviction, ask counsel whether § 41-29-150(d)(2)\'s "satisfactorily served his sentence" language offers an added route.) The Mississippi Center for Justice can help you make the strongest case.',
+          remedy: 'Felony expunction (§ 99-19-71(2)) — 3-year wait, once per lifetime, discretionary',
+          citation: 'Miss. Code Ann. § 99-19-71(2)'
         },
         waiting_ms: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Mississippi lets you expunge a felony five years after you complete every term of the sentence and pay all fines and costs. Based on your dates, that has not passed yet. When it does, remember this is a once-in-a-lifetime, discretionary expunction — so it is worth being deliberate about which conviction you use it on and coming to the hearing prepared. The Mississippi Center for Justice can help you plan.',
-          remedy: 'Wait for the 5-year period (§ 99-19-71)',
-          citation: 'Miss. Code § 99-19-71'
+          title: 'Felony — Three-Year Wait Not Yet Met',
+          message: 'As of July 1, 2026, Mississippi lets you expunge a felony three years after you complete all terms and conditions and pay every fine and cost — reduced from five years by 2026 HB 1546 (Ch. 430). Based on your dates, even the shorter three-year period has not passed yet. When it does, remember this is a once-in-a-lifetime, discretionary expunction (the judge must find you rehabilitated after a hearing with 10 days\' notice to the district attorney) — so be deliberate about which conviction you use it on and come prepared. The Mississippi Center for Justice can help you plan.',
+          remedy: 'Wait for the 3-year period (§ 99-19-71(2))',
+          citation: 'Miss. Code Ann. § 99-19-71(2)'
         },
         ineligible_excluded_ms: {
           status: 'ineligible',
           title: 'This Felony Is Excluded',
-          message: 'Mississippi excludes a set of felonies from expunction, and this one falls in it: crimes of violence, first-degree arson, drug trafficking, a third-or-later DUI, felon-in-possession of a weapon, failure to register as a sex offender, and — the one that surprises people — embezzlement. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-ineligible offense. The Mississippi Center for Justice can help you confirm the category and explain the pardon process.',
+          message: 'Mississippi excludes twelve felony categories from expunction, and this one falls in it: crimes of violence, first-degree arson, drug trafficking, a third or fourth/subsequent DUI, felon in possession of a firearm, failure to register as a sex offender, voyeurism, witness intimidation, abuse/neglect/exploitation of a vulnerable person, embezzlement, and — added by 2026 Ch. 430 — procuring and promoting prostitution (§ 99-19-71(2)). No waiting period changes that. A pardon from the Governor remains a route for an otherwise-ineligible offense. The Mississippi Center for Justice can help you confirm the category and explain the pardon process.',
           remedy: 'None (Excluded Felony) — a pardon is the remaining route',
-          citation: 'Miss. Code § 99-19-71'
+          citation: 'Miss. Code Ann. § 99-19-71(2)'
         },
         ineligible_prioruse_ms: {
           status: 'ineligible',
           title: 'Your One Felony Expunction Has Been Used',
-          message: 'Mississippi allows only one felony expunction in a lifetime, and because you have already used it, a second felony cannot be expunged — no waiting period changes that. Two things are still worth checking: any NON-conviction on your record can still be expunged separately, and a pardon from the Governor remains a route for the felony itself. The Mississippi Center for Justice can help you look at both.',
-          remedy: 'None (one-felony limit used) — check non-convictions or a pardon',
-          citation: 'Miss. Code § 99-19-71'
+          message: 'Mississippi allows only one felony expunction in a lifetime, and because you have already used it, a second felony cannot be expunged — no waiting period changes that. One nuance worth confirming: felonies that share a common nucleus of operative facts count as a SINGLE conviction (the court decides), so if what you are counting as two was really one episode, you may not have used your one chance after all. Beyond that, any NON-conviction on your record can still be expunged separately, and a pardon from the Governor remains a route for the felony itself. The Mississippi Center for Justice can help you look at all three.',
+          remedy: 'None (one-felony limit used) — check common-nucleus counting, non-convictions, or a pardon',
+          citation: 'Miss. Code Ann. § 99-19-71(2)'
         },
         complex_level_ms: {
           status: 'complex',
           title: 'We Need the Conviction Level',
-          message: 'Mississippi treats misdemeanors and felonies very differently — a first-offense misdemeanor has no set wait, while a felony is a once-in-a-lifetime, discretionary expunction after 5 years. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a criminal-history request will show it. The Mississippi Center for Justice can help you read it.',
+          message: 'Mississippi treats misdemeanors and felonies very differently — a first-offense, non-traffic misdemeanor has no set wait, while a felony is a once-in-a-lifetime, discretionary expunction after three years. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a criminal-history request will show it. The Mississippi Center for Justice can help you read it.',
           remedy: 'Get the Conviction Level First (court paperwork / criminal history)',
-          citation: 'Miss. Code § 99-19-71'
+          citation: 'Miss. Code Ann. § 99-19-71'
+        },
+        eligible_nonconv_71_ms: {
+          status: 'eligible',
+          title: 'No Conviction — Court Shall Expunge (Fee Applies)',
+          message: 'Because your case ended without a conviction — an arrest with release and no charge, a dismissal, dropped charges, no disposition, or a not-guilty verdict at trial — Mississippi\'s court "shall" expunge it on petition (§ 99-19-71(4)). It is not automatic, so you file, in the court that handled the case. One honest point on cost: this non-conviction path is subsection (4) OF § 99-19-71, so by the statute\'s terms the $150 fee (§ 99-19-72) attaches — do not assume it is free. (Whether clerks actually collect it on non-conviction petitions is something we are confirming.) If yours was a MISDEMEANOR that was never formally charged or was dismissed, the § 99-15-59 route may be cheaper — it carries no fee statute. The Mississippi Center for Justice can help you pick the least costly path.',
+          remedy: 'Non-conviction expunction (§ 99-19-71(4)) — court shall grant; $150 fee by statute',
+          citation: 'Miss. Code Ann. §§ 99-19-71(4), 99-19-72'
+        },
+        eligible_9959_ms: {
+          status: 'eligible',
+          title: 'Misdemeanor Non-Conviction — a Cheaper Route',
+          message: 'For a misdemeanor that was never formally charged (you were arrested, cited, or held but not charged within 12 months) or that was dismissed, Mississippi lets you apply to the court with jurisdiction to expunge it (§ 99-15-59) — and unlike the general § 99-19-71(4) path, § 99-15-59 carries NO fee statute, so it is the cheaper route for a misdemeanor non-conviction. A completed § 99-15-26 non-adjudication also feeds a shall-grant expunction with no separate fee statute. You do have to file; it is not automatic. The Mississippi Center for Justice can help you choose the right filing.',
+          remedy: 'Misdemeanor non-conviction expunction (§ 99-15-59) — no fee statute',
+          citation: 'Miss. Code Ann. §§ 99-15-59, 99-15-26(5)'
+        },
+        eligible_nonadj_ms: {
+          status: 'eligible',
+          title: 'Non-Adjudication Completed — Expungeable',
+          message: 'Because you completed a § 99-15-26 non-adjudication, the case was dismissed and closed, and that routes to a shall-grant non-conviction expunction. Circuit and county courts can non-adjudicate felonies and misdemeanors (for pleas on or after July 1, 2014); justice and municipal courts, misdemeanors. Non-adjudication is a once-per-lifetime option (§ 99-15-26(1)(d)). You still file the expunction petition; it is not automatic. The Mississippi Center for Justice can help.',
+          remedy: 'Expunction after § 99-15-26 non-adjudication — court shall grant',
+          citation: 'Miss. Code Ann. §§ 99-15-26, 99-19-71(4)'
+        },
+        nonadj_excluded_result_ms: {
+          status: 'complex',
+          title: 'This Charge May Be Outside Non-Adjudication',
+          message: 'Non-adjudication (§ 99-15-26) is not available for certain charges — crimes against the person, crimes of violence (§ 97-3-2), § 97-11-31 violations, misappropriation of public funds, trafficking charges (§ 41-29-139(f)), and Implied Consent/DUI offenses (which have their own § 63-11-30(14) route). One important carve-IN: domestic-violence misdemeanors (§ 99-3-7(5)) ARE eligible even though they might look like crimes against the person — if that is your case, this exclusion does not apply to you. Because whether a specific charge falls in or out can be close, confirm it with the court or the Mississippi Center for Justice rather than guessing.',
+          remedy: 'Confirm non-adjudication eligibility for this charge (court / Center for Justice)',
+          citation: 'Miss. Code Ann. § 99-15-26'
+        },
+        eligible_nonadj_dv_ms: {
+          status: 'eligible',
+          title: 'Domestic-Violence Misdemeanor — Carved Into Non-Adjudication',
+          message: 'This is a Mississippi surprise worth knowing: a domestic-violence misdemeanor (§ 99-3-7(5)) is expressly carved INTO non-adjudication eligibility (§ 99-15-26(1)(c)), even though DV can look like a "crime against the person" that would otherwise be excluded. If you entered a first-offense non-adjudication plea and completed the conditions (which can include restitution, up to 960 hours of community service, a fine, and treatment, under supervision of up to five years in circuit/county court or two in justice/municipal court), the case is dismissed and closed, and that feeds a shall-grant expunction. Non-adjudication is once per lifetime (§ 99-15-26(1)(d)). The Mississippi Center for Justice can help you file.',
+          remedy: 'DV-misdemeanor non-adjudication + expunction (§ 99-15-26(1)(c))',
+          citation: 'Miss. Code Ann. § 99-15-26(1)(c)'
+        },
+        eligible_drugcd_ms: {
+          status: 'eligible',
+          title: 'Drug Conditional Discharge — Discharge, Then Expunge',
+          message: 'For a first-time drug-possession case under § 41-29-139(c)/(d), Mississippi allows a conditional discharge: the court defers proceedings without entering a judgment, places you on probation for up to three years, and on successful completion discharges and dismisses the case — which is NOT a conviction for any purpose, and is kept only on a nonpublic bureau record (§ 41-29-150(d)). You can then apply to expunge it, and the court holds a hearing (§ 41-29-150(d)(2)). Two things to flag: this conditional discharge is available only ONCE per person, so it is a one-time benefit; and there is an unresolved question — the statute\'s phrase "or had satisfactorily served his sentence" arguably lets even a SERVED first-time possession conviction be expunged this way, which is worth asking an attorney about. The Mississippi Center for Justice can help.',
+          remedy: 'Drug conditional-discharge expunction (§ 41-29-150(d)) — once per person',
+          citation: 'Miss. Code Ann. § 41-29-150(d)'
         }
       }
     },
     resources: {
       remedies: {
-        expungement: {
-          name: 'Expunction (Miss. Code § 99-19-71)',
-          formName: 'Petition for expunction (filed in the court that handled the case)',
+        expunction: {
+          name: 'Expunction (Miss. Code Ann. § 99-19-71)',
+          formName: 'Petition for expunction (filed in the justice, county, circuit, or municipal court that handled the case)',
           formUrl: 'https://www.mscenterforjustice.org',
           steps: [
-            'For a felony, confirm it is not excluded (violence, first-degree arson, trafficking, 3rd+ DUI, felon-in-possession, sex-registration failure, embezzlement) and that you have not used your one lifetime felony expunction.',
-            'Complete every term of the sentence and pay all fines and costs; for a felony, wait 5 years from that point.',
-            'File the petition in the court that handled the case. The statutory fee is $150 ($100 judicial + $40 DA + $10 clerk).',
-            'A felony expunction is discretionary — the judge holds a hearing with 10 days\' notice to the DA and must find you rehabilitated, so come prepared. The Mississippi Center for Justice can help.'
+            'For a felony, confirm it is not one of the twelve excluded categories (violence, first-degree arson, trafficking, 3rd/4th DUI, felon-in-possession, sex-registration failure, voyeurism, witness intimidation, vulnerable-person abuse, embezzlement, procuring/promoting prostitution) and that you have not used your one lifetime felony expunction — and that it is not a public-official duty-related conviction (§ 99-19-71(5)).',
+            'Complete every term and condition of the sentence and pay all fines and costs; for a felony, wait 3 years from that point (reduced from 5 by 2026 Ch. 430, effective July 1, 2026).',
+            'File the petition in the court that handled the case. The § 99-19-71 fee is $150 ($100 judicial + $40 DA + $10 clerk, § 99-19-72) — and by the statute\'s terms it attaches to the subsection (4) non-conviction path too; a misdemeanor non-conviction under § 99-15-59 or § 99-15-26(5) carries no fee statute.',
+            'A felony expunction is discretionary — the judge holds a hearing at their discretion with 10 days\' written notice to the DA and must make a specific rehabilitated finding, so come prepared. The Mississippi Center for Justice can help.'
           ],
-          // NOT null: § 99-19-72 gives $150 ($100 + $40 + $10). Currency and
-          // non-conviction scope are flagged as open questions, not a conflicting value.
-          fees: '$150 statutory expunction fee (§ 99-19-72): $100 judicial fund, $40 DA fund, $10 clerk. Whether it applies to non-conviction petitions is being confirmed.',
-          // null: Wave 6 gives no waiver information; whether a pauper's/indigency
-          // waiver applies is an open question.
+          // NOT null: § 99-19-72 gives $150 ($100 + $40 + $10). The textual trap —
+          // that the fee attaches to the subsection (4) non-conviction path — is
+          // encoded here; whether clerks collect it in practice is an open question.
+          fees: '$150 statutory fee on each § 99-19-71 petition (§ 99-19-72): $100 judicial fund, $40 DA fund, $10 clerk. By the statute\'s terms it attaches to the non-conviction path (subsection (4)) as well; a misdemeanor non-conviction filed under § 99-15-59 or § 99-15-26(5), and a § 97-3-54.6(6) trafficking-survivor motion, carry no fee statute.',
+          // null: the pulled text says nothing about a pauper's/indigency waiver;
+          // whether one applies is an open question (feeWaiver blocked).
           feeWaiver: null,
-          courtContact: 'The court that handled the case'
+          courtContact: 'The justice, county, circuit, or municipal court that handled the case'
         }
       },
       legalAid: [

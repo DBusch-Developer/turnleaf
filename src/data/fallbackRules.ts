@@ -1270,7 +1270,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'CPL 160.59 Sealing Motion (petition path)',
           formName: 'CPL 160.59 Sealing Application (Notice of Motion & Affidavit in Support)',
-          formUrl: 'https://www.nycourts.gov/FORMS/cpl_160.59_sealing_application/index.shtml',
+          // The old FORMS/cpl_160.59_sealing_application path 404'd. NOTE: this
+          // 404 is invisible to automated checking — nycourts.gov sits behind a
+          // Cloudflare managed challenge that returns 403 to bots on every path,
+          // valid or not. It only surfaced in a real browser. Verified 2026-07-21.
+          formUrl: 'https://www.nycourts.gov/forms/application-seal-conviction-after-10-yrs',
           steps: [
             'Confirm eligibility: no more than 2 eligible convictions total, at most 1 a felony (offenses from the same criminal transaction count as ONE). The petition is summarily denied if you have 2+ felony convictions, more than 2 crimes, or any conviction entered AFTER the one you want sealed.',
             'Confirm the offense is not excluded: § 160.59 excludes sex offenses (Penal art. 130), art. 263, § 70.02 violent felonies, art. 125 homicide felonies, Class A felonies, conspiracies/attempts tied to an ineligible offense, and SORA-registrable offenses. (A § 70.02 violent felony is barred here but still qualifies for Clean Slate.)',
@@ -1715,7 +1719,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         nondisclosure: {
           name: 'Order of Nondisclosure',
           formName: 'Petition for Order of Nondisclosure (form depends on which § 411 section applies)',
-          formUrl: 'https://www.txcourts.gov/rules-forms/forms/',
+          // The nondisclosure section hub rather than the generic all-forms
+          // index: it lists the section-specific petitions (411.0725, .0726,
+          // .0727, .0728, .0729, .073, .0731, .0735, .0736). Hub is the right
+          // altitude here precisely because the correct form depends on which
+          // § 411 subsection applies. Verified 2026-07-21.
+          formUrl: 'https://www.txcourts.gov/forms/orders-of-nondisclosure',
           steps: [
             'Confirm you completed deferred adjudication and received a discharge and dismissal order.',
             'Ensure the waiting period for your offense category has elapsed.',
@@ -2282,7 +2291,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         bci_certificate: {
           name: 'BCI Certificate of Eligibility (required before any petition)',
           formName: 'BCI Expungement Application',
-          formUrl: 'https://bci.utah.gov/expungements/',
+          // The BCI forms index, which lists "Application for Expungement of
+          // Adult Criminal History" plus the instruction and indigent sheets.
+          // Not the raw PDF: its path is date-stamped (2026/03) and siblings
+          // carry 2024/10 and 2025/12, so those URLs demonstrably rotate on
+          // revision. Verified 2026-07-21.
+          formUrl: 'https://bci.utah.gov/expungements/expungement-forms/',
           steps: [
             'First check the free routes: an eligible traffic offense is auto-deleted (§ 202), a misdemeanor may already be auto-expunged (§ 205), and an acquittal or dismissal-with-prejudice auto-expunges (§ 206) — contact BCI to see whether your record is already clear before paying.',
             'For a petition, apply to the Bureau of Criminal Identification for a Certificate of Eligibility — the court will not accept a petition without one. BCI reviews your FULL criminal history, including out-of-state records; false information on the application is a class B misdemeanor.',
@@ -2298,7 +2312,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition: {
           name: 'Petition to Expunge Records (Utah R. Crim. P. Rule 42)',
           formName: 'Petition to Expunge Records',
-          formUrl: 'https://utcourts.gov/en/self-help/case-categories/criminal-justice/expunge.html',
+          // The filtered official form index, NOT form 1000EX. Utah's tree
+          // branches to traffic (§ 77-40a-202 deletion) and medical-cannabis
+          // (§ 305(4) cert bypass) paths, and this single remedy serves all of
+          // them — 1000EX would mis-route those users. The index lists 1000EX,
+          // 1001EX, 1002EX (traffic), 1003EX (cannabis) and 1103EX with their
+          // form numbers. Verified 2026-07-21.
+          formUrl: 'https://www.utcourts.gov/en/forms/forms/court-forms.html?case-type=EX',
           steps: [
             'Obtain your BCI Certificate of Eligibility first — this petition cannot be filed without it (never-charged cases file in the district court of the arrest county).',
             'File the Petition to Expunge in the court that handled the case; two cert bypasses exist — traffic cases and medical-cannabis possession convictions (§ 305(4)).',
@@ -4074,7 +4094,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'Motion to Seal Conviction Records (C.R.S. 24-72-704 to -710)',
           formName: 'Form JDF 612 (instructions JDF 611)',
-          formUrl: 'https://www.coloradojudicial.gov/self-help/sealing-criminal-records',
+          // JDF 612 form-detail page ("Motion to Seal Conviction Records").
+          // Not the raw PDF: it sits at a year-stamped path (2025-07) and a
+          // 2024-02 copy of the same form still exists, so the PDF URL will rot
+          // on the next revision while this slug always serves current.
+          // Verified 2026-07-21. Note: covers JDF 612 only — the JDF 611
+          // instructions sit at an opaque /media/ URL and are not linked here.
+          formUrl: 'https://www.coloradojudicial.gov/self-help-and-forms/self-help-forms/motion-seal-conviction-records',
           steps: [
             'Check first whether it already sealed automatically — use the state court administrator\'s confidential lookup at coloradojudicial.gov (C.R.S. 13-3-117(3)(c)), then a CBI criminal history as backup. Sealing has been automatic since July 2024.',
             'Make sure any restitution is paid or the order vacated (a precondition); unpaid fines, costs, and fees do NOT block sealing (§ 24-72-703(12)(b)). In a multi-count case, every conviction in the case must be sealable or none is (§ 24-72-703(12)(a)).',
@@ -5671,7 +5697,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         section18: {
           name: 'Section 18 Expungement (seals arrest + court record)',
           formName: 'Petition for Expungement (22 O.S. § 18)',
-          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          // The old OSBI path 404'd (site restructure); this is the live page,
+          // verified 2026-07-21. Oklahoma publishes no statewide fillable
+          // petition — it is drafted from the statutory text in 22 O.S. § 18a —
+          // so this is a landing page by necessity, not by preference.
+          formUrl: 'https://oklahoma.gov/osbi/services/information-services-division/disposition-services-unit/criminal-history-record-expungement.html',
           steps: [
             'Check first whether the automatic Clean Slate path applies — it reaches Oklahoma-ONLY ("single-source") records, and involves no filing at all. OSBI answers at expungements@osbi.ok.gov and (405) 879-2641.',
             'Sequence multi-record cases: clear the OLDEST first — an expunged offense is not counted as a prior when testing your eligibility for the others (§ 19(T)) — and file all offenses in one county on a SINGLE petition (§ 19(F)).',
@@ -5687,7 +5717,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         section991c: {
           name: 'Section 991c Expungement (deferred-sentence disposition cleanup)',
           formName: 'Motion under 22 O.S. § 991c',
-          formUrl: 'https://oklahoma.gov/osbi/services/criminal-history/expungements.html',
+          // See the section18 remedy: the old OSBI path 404'd.
+          formUrl: 'https://oklahoma.gov/osbi/services/information-services-division/disposition-services-unit/criminal-history-record-expungement.html',
           steps: [
             'On successful completion of a deferred sentence with all fines/fees/assessments paid, § 991c automatically cleans up the court record — plea expunged, disposition dismissed WITH prejudice, docket name deleted, public index obliterated (retroactive, § 991c(E)).',
             'Understand the limit: this cleanup is PARTIAL — sealed to the public but open to law enforcement and admissible to prove priors. It does NOT seal the arrest record.',
@@ -6026,7 +6057,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'Petition to Seal (Va. Code § 19.2-392.12; lighter track § 19.2-392.12:1)',
           formName: 'Petition for Sealing of Criminal Records',
-          formUrl: 'https://vsp.virginia.gov/sealing/',
+          // Was pointing at the State Police — the records agency, not the court
+          // you file in. This is the judiciary's sealing forms index (CC-1201,
+          // CC-1203 and addenda). Index rather than a single PDF because which
+          // petition applies turns on the disposition, and sending someone to
+          // the wrong one is actively harmful. Verified 2026-07-21; the
+          // petition-based regime took effect 2026-07-01, so confirm the
+          // fillable PDFs are live before relying on it.
+          formUrl: 'https://www.vacourts.gov/forms/circuit/crim_sealing',
           steps: [
             'Confirm your offense is not on the § 19.2-392.12(L) exclusion list and that your dates and felony history qualify — the Virginia State Police can provide your record.',
             'Pay any restitution ordered on the offense in full first; it must be satisfied before a sealing order can enter (§ 19.2-392.12(F)(4)). Other fines and costs do not block sealing.',
@@ -6041,7 +6079,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Expungement (non-convictions, Va. Code § 19.2-392.2)',
           formName: 'Petition for Expungement',
-          formUrl: 'https://www.vacourts.gov/',
+          // Form CC-1473 "Petition for Expungement" (rev. 07/26). Un-versioned
+          // filename despite the form being revised — the pattern you want.
+          // Scope-checked: CC-1473 covers the acquittal/dismissal track, and
+          // this remedy is explicitly non-convictions (§ 19.2-392.2), so it
+          // matches. Convictions go through sealing. Verified 2026-07-21.
+          formUrl: 'https://www.vacourts.gov/static/forms/circuit/cc1473.pdf',
           steps: [
             'This route is for non-convictions — dismissals, acquittals, and charges that did not result in a conviction.',
             'A first-time misdemeanor or civil non-conviction is entitled to expungement unless the Commonwealth shows good cause, and the filing is free (§ 19.2-392.2).',
@@ -6455,7 +6498,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition: {
           name: 'Petition Expungement (Minn. Stat. §§ 609A.02 / 609A.03)',
           formName: 'MN Judicial Branch Expungement forms packet',
-          formUrl: 'https://www.mncourts.gov/Help-Topics/Expungement.aspx',
+          // The actual forms packet (EXP101 instructions through EXP107), each
+          // row carrying a PDF and a fillable smart form, with Hmong, Somali and
+          // Spanish versions of the instructions. Verified 2026-07-21.
+          formUrl: 'https://mncourts.gov/getforms/criminal-expungement/forms-packet-expungement-sealing-of-a-criminal-record',
           steps: [
             'Check first whether the automatic program (§ 609A.015) already sealed it — run a BCA criminal history search. The automatic track does NOT reach DHS/DCYF/Health records; those need a petition directed to the commissioner.',
             'Consider the side doors first: a prosecutor can agree to sealing without a petition (§ 609A.025 — the agreement can even predate a diversion dismissal), and a pardon triggers an automatic sealing order (§ 609A.035).',
@@ -6697,7 +6743,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition: {
           name: 'Seal or Expunge (FDLE Certificate, then court petition)',
           formName: 'FDLE Application for Certificate of Eligibility, then the seal/expunge petition',
-          formUrl: 'https://www.fdle.state.fl.us/SAC/Home.aspx',
+          // The old SAC/Home.aspx path 404'd after an FDLE site restructure; this
+          // is the live Seal and Expunge section, verified 2026-07-21. The
+          // Certificate of Eligibility is now an online intake form, not a
+          // downloadable PDF, so there is no static form to link.
+          formUrl: 'https://www.fdle.state.fl.us/seal-and-expunge-process',
           steps: [
             'Check first whether a non-conviction arrest was already sealed automatically (§ 943.0595) — request your FDLE criminal history.',
             'Apply to FDLE for a Certificate of Eligibility: $75 non-refundable money order, notarized application, fingerprints, and a certified copy of the disposition.',
@@ -6987,7 +7037,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         petition: {
           name: 'Expungement or Sealing Petition (20 ILCS 2630/5.2)',
           formName: 'Illinois Legal Aid Online Easy Form (Expungement / Sealing)',
-          formUrl: 'https://www.illinoislegalaid.org',
+          // Moves off a legal-aid site onto the official judiciary suite. The
+          // page states that the Supreme Court Commission on Access to Justice
+          // approved these forms and "All Illinois Courts must accept these
+          // forms" — adult forms approved 06/2026. Suite page rather than the
+          // PDF: the PDFs sit on GUID-based Azure blob URLs that change on
+          // revision. Verified 2026-07-21.
+          formUrl: 'https://www.illinoiscourts.gov/documents-and-forms/approved-forms/circuit-court-standardized-forms-suites/expungement-sealing/',
           steps: [
             'Use the Illinois Legal Aid Online Easy Form to build your petition — it is genuinely good and covers both expungement and sealing.',
             'File in the circuit court of the county of the case (in Cook County: any district, or the Expungement Department at the Leighton Courthouse). E-filing is available statewide.',
@@ -7447,7 +7503,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       {
         question:
           'What does it cost to restrict a pre-2013 arrest through the arresting agency, and what are the county court costs for a conviction restriction petition? Statute-verified 7/18 confirms there is no statewide fee; both vary by agency/county. Phone targets.',
-        blocksFields: ['resources.remedies.restriction.fees', 'resources.remedies.restriction.feeWaiver'],
+        blocksFields: [
+          'resources.remedies.agency_restriction.fees',
+          'resources.remedies.agency_restriction.feeWaiver',
+          'resources.remedies.court_petition.fees',
+          'resources.remedies.court_petition.feeWaiver',
+        ],
       },
       {
         question:
@@ -7646,22 +7707,42 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     },
     resources: {
       remedies: {
-        restriction: {
-          name: 'Record Restriction and Sealing (O.C.G.A. § 35-3-37)',
-          formName: 'Petition for Record Restriction and Sealing (or agency application for pre-2013 arrests)',
-          formUrl: 'https://www.gjp.org/record-restriction/',
+        // Split from a single `restriction` remedy: the two branches have
+        // genuinely different destinations. The agency branch has an official
+        // GBI form; the court-petition branch has no statewide form at all
+        // (georgiacourts.gov describes the process, publishes no petition, and
+        // refers people to local expungement desks), so it keeps the GJP link.
+        // One remedy could only ever be right about one of them.
+        agency_restriction: {
+          name: 'Arrest Record Restriction — agency route (O.C.G.A. § 35-3-37)',
+          formName: 'Request to Restrict Arrest Record (instructions and request form, filed with the arresting agency)',
+          formUrl: 'https://gbi.georgia.gov/services/georgia-criminal-history-record-restrictions',
           steps: [
             'For a non-conviction on/after July 1, 2013: it should be restricted automatically — request your GCIC report and confirm it shows.',
-            'For a pre-2013 non-conviction: apply to the arresting agency.',
-            'For a misdemeanor conviction (up to 2 per lifetime): petition the court of conviction 4 years after completing the sentence, and serve the prosecutor.',
-            'For a felony: obtain a pardon from the State Board of Pardons and Paroles first, then petition.',
+            'For a pre-2013 non-conviction: apply to the arresting agency. GBI states plainly that for arrests before July 1, 2013 you are required to apply for restriction at the arresting agency.',
             'GCIC applies the restriction within weeks of a court order.'
           ],
-          // null: Wave 3 flags county court costs and pre-2013 agency fees as
-          // varying with no statewide fee.
+          // null: Wave 3 flags pre-2013 agency fees as varying with no
+          // statewide fee. Carried over from the pre-split `restriction`.
           fees: null,
           feeWaiver: null,
-          courtContact: 'The court of conviction (or the arresting agency for pre-2013 arrests)'
+          courtContact: 'The arresting agency (GBI/GCIC for the record itself)'
+        },
+        court_petition: {
+          name: 'Record Restriction and Sealing — court petition (O.C.G.A. § 35-3-37)',
+          formName: 'Petition for Record Restriction and Sealing (Georgia publishes no statewide petition form)',
+          formUrl: 'https://www.gjp.org/record-restriction/',
+          steps: [
+            'For a misdemeanor conviction (up to 2 per lifetime): petition the court of conviction 4 years after completing the sentence, and serve the prosecutor.',
+            'For a felony: obtain a pardon from the State Board of Pardons and Paroles first, then petition.',
+            'There is no statewide petition form — the court of conviction and the local expungement clinic prepare it with you.',
+            'GCIC applies the restriction within weeks of a court order.'
+          ],
+          // null: Wave 3 flags county court costs as varying with no statewide
+          // fee. Carried over from the pre-split `restriction`.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The court of conviction'
         }
       },
       legalAid: [
@@ -7921,8 +8002,18 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       remedies: {
         conviction: {
           name: 'Expunction of a Nonviolent Conviction (§ 15A-145.5)',
-          formName: 'AOC-CR-281 / 287 / 298 series',
-          formUrl: 'https://www.ncsecondchance.org',
+          // formName corrected: AOC-CR-281 is SUPERSEDED. NC split the
+          // § 15A-145.5 conviction petition into AOC-CR-297 (nonviolent
+          // felonies) and AOC-CR-298 (nonviolent misdemeanors); 281 still
+          // downloads but is no longer listed on the official expunctions page,
+          // and cr298's own text says "For expunction of nonviolent felonies
+          // under G.S. 15A-145.5, use form AOC-CR-297." Verified 2026-07-21.
+          formName: 'AOC-CR-297 (nonviolent felonies) / AOC-CR-298 (nonviolent misdemeanors)',
+          // Official NC Judicial Branch hub, replacing a nonprofit link that was
+          // confirmed not to link out to the official AOC forms. Hub rather than
+          // a single PDF because conviction expunction spans §§ 15A-145.1
+          // through 145.6 and 145A.
+          formUrl: 'https://www.nccourts.gov/help-topics/court-records/expunctions',
           steps: [
             'Confirm the offense is "nonviolent" under the statute and that any restitution is paid.',
             'Prepare the § 15A-145.5(c1) petition materials: your own affidavit of good moral character, plus TWO character affidavits from people unrelated to you and to each other.',
@@ -7936,8 +8027,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         nonconviction: {
           name: 'Expunction of a Non-Conviction (§ 15A-146)',
-          formName: 'AOC-CR non-conviction expunction forms',
-          formUrl: 'https://www.ncsecondchance.org',
+          // Named the actual forms: AOC-CR-287 (§ 15A-146(a)/(a1), charges
+          // dismissed) and AOC-CR-288 (§ 15A-146(a2), not guilty / not
+          // responsible). Two forms split by disposition, so the hub rather
+          // than a single PDF — a direct link would misroute not-guilty
+          // petitioners. Verified 2026-07-21.
+          formName: 'AOC-CR-287 (charges dismissed) / AOC-CR-288 (not guilty)',
+          formUrl: 'https://www.nccourts.gov/help-topics/court-records/expunctions',
           steps: [
             'Check first whether it was expunged automatically — a case with all charges disposed on/after Dec 1, 2021 and all dismissed/not-guilty/not-responsible expunges by operation of law about 180-210 days after disposition (§ 15A-146(a4)).',
             'If the case had a felony charge dismissed as part of a plea agreement, the automatic path does not apply to the whole case — petition instead.',
@@ -8362,7 +8458,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         vacation: {
           name: 'Motion to Vacate a Conviction (RCW 9.96.060 / 9.94A.640)',
           formName: 'Motion and Declaration to Vacate (statewide forms; county packets)',
-          formUrl: 'https://www.courts.wa.gov/forms/',
+          // "Court Forms: Vacating/Sealing Records" category index — covers both
+          // misdemeanor (CrRLJ 09.0100 Petition and Declaration for Order
+          // Vacating Conviction) and felony (CR 08.0900), which a single PDF
+          // would not. WA renamed 09.0100 from Motion to Petition in 11/2024 and
+          // the PDF filenames carry version suffixes, so the index is the stable
+          // target. Verified 2026-07-21.
+          formUrl: 'https://www.courts.wa.gov/forms/?fa=forms.contribute&formID=38',
           steps: [
             'Complete the whole sentence, including paying all fines, fees, and restitution — that is a filing precondition (RCW 9.96.060(2)(a)), even though it does not delay the waiting clock. If the balance is the obstacle, ask the court about reducing it on a separate motion.',
             'For a felony, obtain a Certificate of Discharge first (RCW 9.94A.637) — the vacation cannot proceed without it. It is retroactively effective to the date you completed all conditions.',
@@ -8761,7 +8863,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         conviction: {
           name: 'Conviction Expunction (T.C.A. § 40-32-107)',
           formName: 'Petition for Expunction (with TBI Certificate of Eligibility)',
-          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          // The old path 404'd; this is the live page, verified 2026-07-21.
+          // Tennessee publishes no statewide expunction form (the self-help forms
+          // index carries only Divorce, Order of Protection and General Sessions
+          // Civil) — petitions come from the county criminal court clerk. Note TN
+          // flags this page as pending update for T.C.A. § 40-32-101 changes.
+          formUrl: 'https://www.tncourts.gov/programs/self-help-center/expungements',
           steps: [
             'First request a Certificate of Eligibility from the TBI (§ 40-32-102(c)) — it confirms the offense qualifies, and a court cannot enter the order without it. Start this early; it adds processing time.',
             'File the petition in the court of conviction (§ 40-32-108); the district attorney is served and has 60 days to respond, and the court acts no sooner than day 61.',
@@ -8775,7 +8882,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         nonconviction: {
           name: 'Non-Conviction Expunction (T.C.A. § 40-32-106(a))',
           formName: 'Petition for Expunction (non-conviction)',
-          formUrl: 'https://www.tncourts.gov/programs/expunctions',
+          // See the conviction remedy: the old path 404'd.
+          formUrl: 'https://www.tncourts.gov/programs/self-help-center/expungements',
           steps: [
             'For a dismissal, nolle, no-bill, acquittal, or arrest without charge, file in the court that handled the case.',
             'No TBI certificate is needed for a non-conviction (§ 40-32-102(c)(1)), except a diversion-based expunction, which does need one.',
@@ -10374,8 +10482,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       remedies: {
         conviction: {
           name: 'Expungement of a Conviction (Md. Crim. Proc. § 10-110)',
-          formName: 'Form CC-DC-CR-072 (and related series)',
-          formUrl: 'https://www.mdcourts.gov/legalhelp/expungement',
+          // Was "Form CC-DC-CR-072 (and related series)". MD splits the series
+          // by disposition (072A acquittal/dismissal/PBJ/nolle/stet, 072B guilty,
+          // 072C, 072D) and this remedy is scoped to § 10-110 CONVICTIONS, so
+          // 072B is the one. Extracted PDF text confirms "PETITION FOR
+          // EXPUNGEMENT OF RECORDS (GUILTY DISPOSITION)". Verified 2026-07-21.
+          formName: 'Form CC-DC-CR-072B (Petition for Expungement of Records — Guilty Disposition)',
+          formUrl: 'https://www.mdcourts.gov/sites/default/files/court-forms/courtforms/joint/ccdccr072B.pdf/ccdccr072B.pdf',
           steps: [
             'Confirm the offense is on the § 10-110(a) eligible list and that no other charge in the case blocks it under the unit rule (cannabis-possession charges and minor traffic violations are exempt — § 10-107(a)).',
             'Confirm you are past the REDEEM Act wait from completing your sentence including probation, parole, and mandatory supervision (§ 10-101(c)).',
@@ -10579,7 +10692,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         pardon: {
           name: 'Governor\'s Pardon (the route for most Wisconsin convictions)',
           formName: 'Pardon Application (Governor\'s Pardon Advisory Board)',
-          formUrl: 'https://evers.wi.gov/Pages/Pardon-Information.aspx',
+          // Direct "State of Wisconsin Pardon Application" PDF (last revised
+          // August 2021), extracted and confirmed. WARNING: both this and the
+          // previous URL live on evers.wi.gov, a governor-specific domain.
+          // Evers's term ends January 2027 and this domain is likely retired at
+          // the transition — schedule a re-check. Verified 2026-07-21.
+          formUrl: 'https://evers.wi.gov/Documents/PardonApp_Aug2021.pdf',
           steps: [
             'Confirm expungement is not already available: it exists only if the judge ordered it at sentencing (for an offense before age 25, max penalty 6 years) — if so, it is automatic on completion, no application.',
             'For everything else, apply for a Governor\'s pardon — generally 5 years after completing your sentence for a felony.',
@@ -11578,7 +11696,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Expungement Petition (Ala. Code § 15-27)',
           formName: 'Petition for Expungement (circuit court)',
-          formUrl: 'https://eforms.alacourt.gov',
+          // Pre-filled search resolving to exactly one result: Form CR-65
+          // "Petition For Expungement of Records" (rev. 10/1/2024). Deliberately
+          // not the PDF — it is both version-stamped and behind an opaque CMS
+          // media hash (/media/aojnchjg/), so the next revision will break it,
+          // and Alabama publishes no form-detail page for CR-65. The search URL
+          // survives revisions. Verified 2026-07-21.
+          formUrl: 'https://eforms.alacourt.gov/search/?q=CR-65',
           steps: [
             'Confirm eligibility: non-convictions after 90 days (dismissal without prejudice: 1 yr misd / 5 yr felony; program completion: 1 yr); misdemeanor convictions after 3 years; a felony CONVICTION only after a full pardon with rights restored, then 180 days (§ 15-27-2(c)).',
             'Order a certified ACJIC criminal-history record and a certified arrest/disposition record — both are required exhibits, along with a sworn statement listing ALL your prior expungement applications and grants (§ 15-27-3).',
@@ -12017,7 +12141,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Motion to Expunge (La. C.Cr.P. arts. 971-999)',
           formName: 'Mandatory statutory forms (arts. 987-995, 998; art. 986 requires them — clerks reject others)',
-          formUrl: 'https://www.lsp.org/services/legal/expungements/',
+          // The old path was a SOFT 404 — it returned HTTP 200 while silently
+          // redirecting to the LSP homepage with no expungement content, so a
+          // status-code check would have passed it. This is the live Bureau of
+          // Criminal Identification page, verified 2026-07-21.
+          formUrl: 'https://lsp.org/about/leadershipsections/support/bcii/expungements/',
           steps: [
             'FIRST, check whether you can file for FREE before paying: § 983(F) waives all fees for certain non-convictions (DA certifies no felony convictions + nothing pending, and the case ended in acquittal, or dismissal/declination WITHOUT diversion, or identity theft). Human-trafficking victims (§ 983(H)) and the Art. 999 expedited path are also fee-exempt. Completing a pretrial diversion program KILLS the § 983(F) waiver.',
             'File the motion in the parish of the arrest or conviction, using the mandatory statutory forms (Art. 986).',
@@ -12827,7 +12955,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         felonyVacate: {
           name: 'Felony Vacate-and-Expunge (Ky. Rev. Stat. § 431.073; certificate § 431.079)',
           formName: 'AOC vacate-and-expunge motion + § 431.079 Certificate of Eligibility',
-          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          // AOC-496.3 "Application to Vacate and Expunge Felony Conviction",
+          // from the official KY Court of Justice form library. Un-versioned
+          // filename, so rot-resistant. Verified 2026-07-21.
+          formUrl: 'https://www.kycourts.gov/Legal-Forms/Legal%20Forms/496.3.pdf',
           steps: [
             'Get the § 431.079 Certificate of Eligibility from the State Police and AOC first — it is the long pole; a background check certifies you are eligible.',
             'File the vacate-and-expunge motion in the ORIGINAL criminal case. On a (1)(d) application, no prosecutor objection (or 120 days of silence) lets the court vacate without a hearing; an objection triggers a clear-and-convincing hearing where you carry the burden.',
@@ -12841,7 +12972,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         misdemeanor: {
           name: 'Misdemeanor Expungement (Ky. Rev. Stat. § 431.078; certificate § 431.079)',
           formName: 'AOC expungement petition + § 431.079 Certificate of Eligibility',
-          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          // AOC-496.2 "Petition for Expungement (Misdemeanor, Violation, or
+          // Traffic Infraction Conviction)". NOTE: indexed revision stamp reads
+          // Rev. 7-16, older than the 496.3/496.4 siblings (Rev. 6-23) — the
+          // official library still lists it as current, but worth a spot-check
+          // that KY has not retired it. Verified 2026-07-21.
+          formUrl: 'https://www.kycourts.gov/Legal-Forms/Legal%20Forms/496.2.pdf',
           steps: [
             'Get the § 431.079 Certificate of Eligibility first (background check; KSP/AOC).',
             'File the petition in the court of conviction after the 5-year wait (later of sentence or probation completion) and once any enhancement window has expired.',
@@ -12855,7 +12991,9 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         nonConviction: {
           name: 'Non-Conviction Expungement (Ky. Rev. Stat. § 431.076)',
           formName: 'AOC non-conviction expungement petition (no certificate required)',
-          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          // AOC-497.2 "Petition for Expungement (for Acquittal, Dismissal, or
+          // Failure to Indict)". Verified 2026-07-21.
+          formUrl: 'https://www.kycourts.gov/Legal-Forms/Legal%20Forms/497.2.pdf',
           steps: [
             'For an acquittal or all-charges with-prejudice dismissal on/after July 15, 2020, do NOT file — the court expunges automatically at 30 days unless you object; check your KSP record instead.',
             'For earlier dispositions, or a without-prejudice dismissal that has aged past its wait (felony 3 years / misdemeanor 1 year), file the petition; a properly brought petition SHALL be granted.',
@@ -12872,7 +13010,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         certificate: {
           name: 'Certificate of Eligibility (Ky. Rev. Stat. § 431.079 — required for conviction expungements)',
           formName: '§ 431.079 Certificate of Eligibility application (KSP + AOC background check)',
-          formUrl: 'https://kycourts.gov/Legal-Help/Pages/Expungement.aspx',
+          // The AOC's dedicated Expungement Certification page rather than the
+          // RU-009 PDF: the dominant path is the online application, and this
+          // page routes to whichever of the three (online / in-person / mail)
+          // fits. Verified 2026-07-21.
+          formUrl: 'https://www.kycourts.gov/AOC/Information-and-Technology/Pages/Expungement.aspx',
           steps: [
             'Required before filing a conviction expungement under § 431.073 (felony) or § 431.078 (misdemeanor); NOT required for a § 431.076 non-conviction.',
             'The State Police run a background check and the AOC certifies eligibility; KSP regulations govern.',
@@ -13760,6 +13902,11 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           'Delta of 2025 Stats. 773 versus the prior § 179.245 text is integrated into this print; note only — confirm no substantive change to the encoded tiers/exclusions was missed.',
         blocksFields: [],
       },
+      {
+        question:
+          'Is there a petition FORM for a § 179.259 reentry-program sealing, or is the petition drafted from the statute? No reentry-specific form was found statewide (selfhelp.nvcourts.gov lists no criminal record-sealing forms at all), in Clark County, or in the NV Legal Services manual. Ask a district court clerk which document they expect. The answer may legitimately be "no form exists" — in which case formUrl stays null permanently and the steps should say so.',
+        blocksFields: ['resources.remedies.reentry.formUrl'],
+      },
     ],
     sources: [
       { id: 'Nev. Rev. Stat. § 179.245 (conviction sealing; (1) tiered waits, (4) presumption mechanics, (5) cleanliness, (6)/(10) never-list + 18-item sexual-offense list, (7) DUI carve-back, (9) sex-trafficking-victim fee waiver; through 2025 Stats. 773)', url: 'https://www.leg.state.nv.us/nrs/nrs-179.html#NRS179Sec245', retrievedOn: '2026-07-19' },
@@ -14040,7 +14187,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         sealing: {
           name: 'Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)',
           formName: 'Nevada Legal Services Record Sealing Manual / district-court sealing forms',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // nlslaw.net serves an EXPIRED TLS certificate (SEC_E_CERT_EXPIRED) —
+          // users hit a full browser security interstitial, not the page. Same
+          // organisation, primary domain, verified 200 on 2026-07-21.
+          formUrl: 'https://nevadalegalservices.org/criminal-record-sealing/',
           steps: [
             'Confirm your offense is not on the never-list (crimes against a child, sexual offenses, home invasion with a deadly weapon, felony DUI, felony boating-UI).',
             'Order a current VERIFIED Central Repository criminal-history record — it is a required exhibit; a petition without it can be rejected.',
@@ -14057,7 +14207,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         decriminalized: {
           name: 'Decriminalized-Offense Sealing Request (Nev. Rev. Stat. § 179.271)',
           formName: 'Written request to the convicting court (not a petition)',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // See the sealing remedy: nlslaw.net's TLS certificate is expired.
+          formUrl: 'https://nevadalegalservices.org/criminal-record-sealing/',
           steps: [
             'File a written REQUEST (not a petition) with the court that entered the conviction — for cannabis possession and other now-decriminalized conduct.',
             'There is no fee.',
@@ -14071,7 +14222,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         reentry: {
           name: 'Reentry-Program Sealing (Nev. Rev. Stat. § 179.259)',
           formName: 'Petition to seal after a reentry program',
-          formUrl: 'https://nlslaw.net/record-sealing/',
+          // null: no § 179.259 reentry-specific petition form could be located —
+          // not statewide (selfhelp.nvcourts.gov lists no criminal record-sealing
+          // forms at all), not in Clark County's district/justice court set, and
+          // not in the NV Legal Services manual, which reproduces the § 179.259
+          // text in its appendix without a form or walkthrough. The old link went
+          // to a general sealing page that does not cover this pathway, so it is
+          // withdrawn rather than re-pointed. Blocked by open question (g).
+          formUrl: null,
           steps: [
             'Available 4 years after completing a DOC or judicial reentry program (NRS 209.4886/.4888, 213.625/.632), for a SINGLE nonviolent felony conviction.',
             'Crimes against a child and sexual offenses are excluded.',
@@ -14084,7 +14242,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         }
       },
       legalAid: [
-        { name: 'Nevada Legal Services — Record Sealing Manual', url: 'https://nlslaw.net' },
+        { name: 'Nevada Legal Services — Record Sealing Manual', url: 'https://nevadalegalservices.org' },
         { name: 'Legal Aid Center of Southern Nevada', url: 'https://www.lacsn.org' }
       ]
     }
@@ -15520,8 +15678,17 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
       remedies: {
         expungement: {
           name: 'Annulment (N.H. Rev. Stat. Ann. § 651:5)',
-          formName: 'NHJB-2202 / NHJB-3057 annulment forms',
-          formUrl: 'https://www.courts.nh.gov/self-help/annulments',
+          // formName corrected: NHJB-2202 does not appear anywhere on NH's
+          // current annulment page. The live set is 2317-DSe (Petition to Annul
+          // Record), 3056-DSe (non-conviction), 3057-DSe (conviction) and
+          // 3124-DS (marijuana). Verified 2026-07-21.
+          formName: 'NHJB-3057-DSe (conviction) / NHJB-3056-DSe (non-conviction) / NHJB-2317-DSe annulment forms',
+          // The old self-help/annulments path 404'd; this is the canonical page
+          // NH's own self-help hub links to, verified 2026-07-21. Not a direct
+          // PDF: the form PDFs carry upload-date-stamped paths, and these are
+          // Circuit Court District Division forms while Superior Court cases file
+          // in the applicable Superior Court — the landing page routes correctly.
+          formUrl: 'https://www.courts.nh.gov/our-courts/circuit-court/district-division/annulment',
           steps: [
             'Confirm your waiting period has FULLY passed before filing — filing early bars a new petition for 3 years (RSA 651:5(IV)).',
             'For a non-conviction since January 1, 2019, do not file — it should already be auto-annulled; check your State Police record.',
@@ -16527,7 +16694,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         expungement: {
           name: 'Expungement (S.D. Codified Laws §§ 23A-3-26 to -37)',
           formName: 'UJS-391 / UJS-394 (Guide & File online interview)',
-          formUrl: 'https://ujs.sd.gov/Forms/',
+          // The expungement-specific page (UJS-390 instructions through UJS-395,
+          // plus the Guide & File interview) rather than the generic all-forms
+          // index. Not direct PDFs: every UJS form URL carries both an opaque
+          // media hash and a month stamp, both of which change on revision.
+          // Canonical host, not the southdakota.ujs.state.sd.us mirror.
+          // Verified 2026-07-21.
+          formUrl: 'https://ujs.sd.gov/self-help/civil-law-help/expungement/',
           steps: [
             'For a non-conviction, petition after 1 year (dismissal/no-charge arrest) or anytime (acquittal); use the ujs.sd.gov Guide & File interview.',
             'For a case whose highest charge was a petty offense, municipal violation, or Class 2 misdemeanor, check whether it has already auto-removed from the PUBLIC record — 5 years after conditions are met, no further convictions — under § 23A-3-34.',

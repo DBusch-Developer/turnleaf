@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 0`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**32 open questions across 4 states.**
+**25 open questions across 4 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -51,7 +51,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 2. CALIFORNIA (CA)
 
-**Status:** `draft` · reviewed 2026-07-15 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Arrest Record Sealing (PC 851.91 / 851.87)** — County Superior Court Clerk
@@ -63,28 +63,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - 2024-10-01 — Automatic record relief fully operative (PC § 1203.425) (operative) · AB 1076 (2019) as expanded by SB 731, after two delays: AB 134 pushed it to Jul 2024, AB 168 to Oct 2024. This final date is the one that governs.
 - 2022-08 — Courts barred from disclosing set-asides (effective) · Wave 0 gives month and year only ("since Aug 2022"). Applies to all set-asides, past and future — this is what makes them function as sealing.
 
-**Verify — 7 open questions. Each answer closes a numbered question in the database:**
+**Verify — 3 open questions. Each answer closes a numbered question in the database:**
 
-1. Is there any filing fee for the PC § 1203.4 dismissal petition (Form CR-180)? Recent sources say none statewide following the AB 1076-era fee elimination, but older county fee schedules show roughly $120-150. Wave 0 calls this "a perfect confirm-kill call" — ask an LA Superior Court clerk.
+1. Is there any filing fee for the PC § 1203.4 dismissal petition (Form CR-180)? Recent sources say none statewide following the AB 1076-era fee elimination, but older county fee schedules show roughly $120-150. Wave 0 calls this "a perfect confirm-kill call" — ask an LA Superior Court clerk. (Practice tier; the statute Diana verified is silent on it.)
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`
-2. Is arrest sealing under PC § 851.91 / § 851.87 genuinely free, and if there is a fee, is a waiver available? The encoded rules asserted "$0, no filing fee under state law", but Wave 0 does not address arrest sealing fees at all and no source is recorded for the claim.
+2. Is arrest sealing under PC § 851.91 / § 851.87 genuinely free, and if there is a fee, is a waiver available? Diana verified § 851.91's eligibility (7/16) but the statute does not settle the filing fee — practice tier.
    - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
-3. What are the exact felony tiers for automatic relief under the current PC § 1203.425(b)? Wave 0 gives "generally 4 yrs post-sentence for non-serious/non-violent" but flags the tiers as unverified. The 4-year figure has been removed from user-facing messages until this is confirmed.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the PC § 1203.41 waiting period for felony/realignment cases. Wave 0 gives "2 yrs post-completion" but flags it. The figure has been removed from the complex_prison message until confirmed.
-   - *Blocks no single field — affects a branch or wording.*
-5. What are the sub-criteria for automatic misdemeanour relief at 1 year after judgment under PC § 1203.425? Wave 0 gives the 1-year period but flags the sub-criteria as unverified.
-   - *Blocks no single field — affects a branch or wording.*
-6. Verify adjacent-remedy statute references: PC § 4852.01 (Certificate of Rehabilitation), PC § 17(b) (felony reduction), PC § 1203.3 (early termination of probation), and PC § 290.5 (ending registration). These are cited in user-facing messages but appear nowhere in Wave 0 — they entered the rules from outside the research package.
-   - *Blocks no single field — affects a branch or wording.*
-7. The automatic relief layer (PC §§ 851.93, 1203.425) is not encoded as a branch — it exists only as prose inside petition results. The "check your record first" posture Wave 0 calls for has no structural representation.
+3. Adjacent-remedy statutes cited only in result PROSE, not yet human-read: PC § 4852.01 (Certificate of Rehabilitation), § 17(b) (felony reduction), § 1203.3 (early termination of probation), § 290.5 (ending registration). No routing claim traces to them (badge call, 7/16 — CA flipped to statute_cited on the six verified sections + 1203.4 with these retained as unread citations). Read them when convenient to link.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 3. NEW YORK (NY)
 
-**Status:** `draft` · reviewed 2026-07-15 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **CPL 160.59 Sealing Motion (petition path)** — Sentencing Court Clerk (Supreme / County / City / Town Court)
@@ -95,33 +87,25 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 **Dates that govern:**
 - 2024-11-16 — Clean Slate Act (CPL § 160.57) effective (effective)
-- 2027-11-16 — OCA deadline to seal the pre-existing backlog (deadline) · Until this date the rollout is incomplete: many eligible old records are NOT yet sealed. "Eligible" and "sealed" are different states and the copy must not blur them.
+- 2027-11-16 — OCA deadline to seal the pre-existing backlog (deadline) · CPL 160.57 subd. 6: OCA must complete sealing of pre-effective-date convictions no later than 3 years after the effective date. Until then many eligible old records are NOT yet sealed — "eligible" and "sealed" are different states and the copy must not blur them.
 - 2017 — Petition sealing (CPL § 160.59) enacted (effective) · Wave 0 gives the year only.
 
-**Verify — 8 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Is there a filing fee for the CPL § 160.59 sealing motion, and if there is, is a waiver available? Wave 0 says "No filing fee" but flags it for verification.
+1. Is there a filing fee for the CPL § 160.59 sealing motion, and if there is, is a waiver available? The statute is SILENT on a filing fee (Diana, 7/16), so this is an OCA/practice question, not statute-resolved — the fee and waiver fields stay null pending it.
    - *Blocks (null until answered):* `resources.remedies.sealing.fees`, `resources.remedies.sealing.feeWaiver`
-2. Confirm the supervision condition for Clean Slate sealing: must the person be off probation/parole entirely? Wave 0 flags this. The whole supervision_status branch and the ineligible_supervision result rest on it.
+2. Clock-reset modeling limitation (not a legal unknown). Diana confirmed the mechanic (7/16): under CPL 160.57 a new conviction before sealing restarts the prior conviction's clock on the SAME date as the new conviction's clock; under 160.59 subd. 5, time incarcerated after the latest conviction tolls the 10-year period. The single-date tree cannot model a multi-conviction reset — the copy states it in prose instead.
    - *Blocks no single field — affects a branch or wording.*
-3. Are Penal Law § 70.02 violent felonies eligible for Clean Slate automatic sealing after the 8-year wait? (Package sources conflicted.) Wave 0's rules section lists Clean Slate exclusions as sex offences (Arts. 130/263) and non-drug Class A felonies only — § 70.02 appears solely as a CPL 160.59 petition exclusion — but Wave 0's own persona 3 says a violent felony is excluded from BOTH paths. Resolved to the rules section pending confirmation. This is a practitioner question (Legal Aid Society / LawNY), not a clerk question.
+3. What is the current Clean Slate rollout status? Wave 0 names this as the call question for nycourts.gov — how far through the backlog is OCA (subd. 6 deadline Nov 16, 2027), and can a person find out whether their own record has been reached?
    - *Blocks no single field — affects a branch or wording.*
-4. The Clean Slate clock resets on a new conviction. This has no representation in the tree — the date nodes only ask for one date and cannot model a reset.
-   - *Blocks no single field — affects a branch or wording.*
-5. How are completed deferrals/diversions treated for sealing? Not covered in Wave 0 — add to call sheet. The tree hedges these rather than guess (see unknown_deferred).
-   - *Blocks no single field — affects a branch or wording.*
-6. What is the current Clean Slate rollout status? Wave 0 names this as the call question for nycourts.gov — how far through the backlog is OCA, and can a person find out whether their own record has been reached?
-   - *Blocks no single field — affects a branch or wording.*
-7. MRTA cannabis expungement (2021) is a real New York remedy that Wave 0 documents, but it is not encoded as a branch and is not surfaced anywhere in the tree.
-   - *Blocks no single field — affects a branch or wording.*
-8. The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the filing steps but appears nowhere in Wave 0 — it entered the rules from outside the research package. Confirm with a court clerk.
+4. The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the § 160.59 filing steps but is a court-clerk practice figure, not in the verified statute. Confirm the current cost with a court clerk.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 4. TEXAS (TX)
 
-**Status:** `draft` · reviewed 2026-07-15 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Petition for Expunction (CCP Ch. 55A)** — County District Court Clerk
@@ -132,25 +116,27 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 **Dates that govern:**
 - 2025-01-01 — Expunction recodified from CCP Ch. 55 to Ch. 55A (effective) · HB 4504. Substance largely carried over. Most of the internet — including older forms and guides — still cites Ch. 55; every citation here reads 55A deliberately.
 
-**Verify — 9 open questions. Each answer closes a numbered question in the database:**
+**Verify — 10 open questions. Each answer closes a numbered question in the database:**
 
-1. What does an expunction actually cost? Wave 0 gives "civil filing fee, county-set, ~$280-$400 range commonly cited, plus per-agency service costs" — "commonly cited" is not a source. The encoded rules said $300-$450, which does not even match. Ask a Harris County district clerk for both fee stacks.
+1. Before any TX DWI nondisclosure branch is built on § 411.0731, do a FULL read of the section. Only subsection (f) — the waiting ladder (2 years with an ignition interlock, 5 without) — has been human-verified against the official text (it surfaced via a page-break spillover in the retrieved PDF); the section's applicability and conditions are unread. The link on the 411.0731 source is kept because the sole currently-encoded claim traces to that verified (f) text, but no further 411.0731 rule may be encoded until the whole section is read.
+   - *Blocks no single field — affects a branch or wording.*
+2. What is the base civil filing fee for an expunction petition in a given county? The statute answers the rest: electronic service on the listed entities is free, $25 per entity that cannot receive electronic transmission (Art. 55A.254(e)-(f), 2025 amendment), and a specialty-court expunction may carry no fee at all (Art. 55A.203(c)). Ask a Harris County district clerk for the base filing fee, and confirm they are applying the 2025 electronic-service rule rather than the old per-agency charges.
    - *Blocks (null until answered):* `resources.remedies.expunction.fees`
-2. What does an Order of Nondisclosure cost? Wave 0 gives "civil filing fee + $28 statutory fee"; the encoded rules said "approximately $280 to $350" and never mentioned the $28 statutory fee at all. Ask a Harris County district clerk.
+3. What does an Order of Nondisclosure cost? Wave 0 gives "civil filing fee + $28 statutory fee"; the encoded rules said "approximately $280 to $350" and never mentioned the $28 statutory fee at all. Ask a Harris County district clerk.
    - *Blocks (null until answered):* `resources.remedies.nondisclosure.fees`
-3. CONFLICT: what is the waiting period under Gov't Code § 411.0735 for certain misdemeanour convictions? Wave 0 records that sources split between 2 and 5 years and says to encode from the statute. Because the sources disagree, no period is encoded — this path stays prose-only until the statute settles it, then it gets a real branch.
+4. CONFLICT: what is the waiting period under Gov't Code § 411.0735 for certain misdemeanour convictions? Wave 0 records that sources split between 2 and 5 years and says to encode from the statute. Because the sources disagree, no period is encoded — this path stays prose-only until the statute settles it, then it gets a real branch.
    - *Blocks no single field — affects a branch or wording.*
-4. Does CCP Ch. 55A create AUTOMATIC expunction at acquittal — the trial court ordering it then and there? Wave 0 flags this as new and unverified. It matters directly: if true, an acquitted person may already have relief and should confirm it happened rather than petition. The eligible_expunction message now says both.
+5. Two Ch. 55A bars are disclosed in the results but NOT gated by the tree, because each turns on a fact we do not ask about. Art. 55A.153: an arrest for violating community supervision is never expungable. Art. 55A.154: absconding bars expunction. Ask legal aid how often each actually bites in practice, and whether a person can tell from their own paperwork that one applies — if they can, both should become questions rather than paragraphs.
    - *Blocks no single field — affects a branch or wording.*
-5. Which dismissals qualify for expunction without community supervision, and what are the "certain automatic-dismissal pathways" Wave 0 flags?
+6. Can a person actually tell which Art. 55A.053 dismissal reason applies to them from their own paperwork? The tree asks them to pick one — veterans court, mental health court, pretrial intervention, no probable cause / mistake / false information, or void indictment — and routes "I don't know" to a hedge that says to get the dismissal order. Ask a district clerk what the order typically says, and whether the recorded reason is legible to a non-lawyer.
    - *Blocks no single field — affects a branch or wording.*
-6. Map the correct DWI nondisclosure section numbers (§§ 411.0726 / .0731 / .0736). Wave 0 gives the rule — first-offence DWI, BAC under 0.15, no accident involving another person, no CDL: 2 years with full-term ignition interlock, 5 years without — but flags the section mapping. Neither the rule nor the interlock condition is encoded as a branch.
+7. Map the correct DWI nondisclosure section numbers (§§ 411.0726 / .0731 / .0736). Wave 0 gives the rule — first-offence DWI, BAC under 0.15, no accident involving another person, no CDL: 2 years with full-term ignition interlock, 5 years without — but flags the section mapping. Neither the rule nor the interlock condition is encoded as a branch.
    - *Blocks no single field — affects a branch or wording.*
-7. The 180-day Class C expunction wait cannot be encoded yet: the screening form offers only misdemeanour/felony/infraction and has no way to say "Class C". A Class C arrestee currently gets the Class A/B 1-year rule and may be told to wait when they are already eligible. Needs a form value before it can be a branch.
+8. The 180-day Class C expunction wait cannot be encoded yet: the screening form offers only misdemeanour/felony/infraction and has no way to say "Class C". A Class C arrestee currently gets the Class A/B 1-year rule and may be told to wait when they are already eligible. Needs a form value before it can be a branch.
    - *Blocks no single field — affects a branch or wording.*
-8. Confirm the TexasLawHelp expunction kit URL and whether the county requires its own form. The current formUrl points at the site root because the deep link was never verified.
+9. Confirm the TexasLawHelp expunction kit URL and whether the county requires its own form. The current formUrl points at the site root because the deep link was never verified.
    - *Blocks no single field — affects a branch or wording.*
-9. Confirm the first-DWI nondisclosure timing and which section governs: 2 years after sentence completion with a full-term ignition interlock, 5 years without? Wave 0 gives the rule but flags the mapping across §§ 411.0726 / .0731 / .0736. The DWI path is disclosed in prose on the conviction result but is NOT a branch — the tree has no interlock question — so a first-DWI person is currently told less than the research knows.
+10. Confirm the first-DWI nondisclosure timing and which section governs: 2 years after sentence completion with a full-term ignition interlock, 5 years without? Wave 0 gives the rule but flags the mapping across §§ 411.0726 / .0731 / .0736. The DWI path is disclosed in prose on the conviction result but is NOT a branch — the tree has no interlock question — so a first-DWI person is currently told less than the research knows.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

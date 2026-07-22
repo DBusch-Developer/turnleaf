@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 4`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**23 open questions across 5 states.**
+**14 open questions across 5 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,54 +16,58 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. INDIANA (IN)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement of a Conviction (Ind. Code § 35-38-9)** — The convicting court
 - **Expungement of an Arrest / Non-Conviction (§ 35-38-9-1)** — The court where the case was handled
+- **Expungement of a Conviction (Ind. Code § 35-38-9)** — The convicting court
 - Indiana Legal Services (expungement) — https://www.indianalegalservices.org/expungement
 - indy.gov Second Chance (Marion County) — https://www.indy.gov
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Dates that govern:**
+- 2022-06-30 — Automatic non-conviction expungement threshold (P.L.14-2022) (effective) · For charges FILED after June 30, 2022, a dismissal of all charges, an acquittal, or a vacated conviction triggers a court-ordered expungement with NO petition — effective no earlier than 60 days out, and the prosecutor may seek up to a 1-year delay (§ 35-38-9-1(b)). Events before this use the § 1(d) petition path.
+- 2025-01-01 — P.L.77-2025 — CDL carve-out and current-code amendments (effective) · Added § 35-38-9-0.6(d): the BMV cannot be ordered to expunge a 49 CFR 383.5 conviction for a person who held a CDL/CLP at the time of a 49 CFR 384.226 violation. The rules encoded here are the P.L.77-2025 current-code text.
 
-1. Confirm the scope of the post-2022 automatic expungement of dismissed-case arrests (§ 9-1), and the 2022 additions for infraction-adjudication arrests and diversion-participant eligibility (with prosecutor authorization). Wave 4 flags the scope. The tree tells non-conviction petitioners to check whether it was already done.
-   - *Blocks no single field — affects a branch or wording.*
-2. Confirm the § 9-3 exclusion list for Level 6 / Class D felonies (bodily-injury offenses, sex/violent offenders, etc.). The tree asks a person whether their offense is excluded from the § 9-3 mandatory path.
-   - *Blocks no single field — affects a branch or wording.*
-3. Confirm the § 9-5(b) never-expungeable list (murder/homicide-level, sex/violent-offender registry, sex crimes, official misconduct). The tree asks a person whether their offense is on it.
-   - *Blocks no single field — affects a branch or wording.*
-4. What is the conviction-petition filing fee? Wave 4 says § 9-1 arrest petitions are free by statute, and conviction petitions pay the civil filing fee (~$100 vicinity, county-set). Phone target.
-   - *Blocks (null until answered):* `resources.remedies.conviction.fees`, `resources.remedies.conviction.feeWaiver`
-5. Confirm the "earlier with prosecutor's written consent" mechanics for the § 9-2 misdemeanour path and the § 9-5 serious-felony prosecutor-consent requirement. The tree uses the standard waits and notes the consent shortcuts in prose.
+**Verify — 1 open question. Each answer closes a numbered question in the database:**
+
+1. What is the conviction-petition filing FEE amount? The statute now settles the mechanics — conviction petitions pay the standard civil filing fee, the court may reduce or waive it for indigency (§ 35-38-9-8(d)), and arrest/non-conviction petitions and collateral-action requests are free (§§ 35-38-9-1(e), 9.5(e)). The exact dollar amount is county-set — confirm with the clerk of the convicting court.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 2. MASSACHUSETTS (MA)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Administrative Sealing of a Conviction (M.G.L. c. 276 § 100A)** — Commissioner of Probation (by mail), One Ashburton Place, Room 405, Boston, MA 02108
 - Mass.gov — Seal your criminal record — https://www.mass.gov/how-to/seal-your-criminal-record
 - Greater Boston Legal Services (CORI self-help) — https://www.gbls.org
 
-**Verify — 4 open questions. Each answer closes a numbered question in the database:**
+**Dates that govern:**
+- 2018-10-13 — St. 2018, c. 69 — sealing waits cut + expungement created (effective Oct 13, 2018) (effective) · St. 2018, c. 69 (An Act Relative to Criminal Justice Reform), signed April 13, 2018 as an emergency law. Act SECTIONS 186-187 cut the § 100A sealing waits from 5/10 to 3/7 years, SECTION 188 added the "except for convictions for resisting arrest" carve-out, and SECTION 195 created the expungement remedy (§§ 100E-100U). Per act SECTION 239 these took effect 6 months after signing — October 13, 2018 — despite the emergency clause. Effective date pre-computed by the Trial Court Law Libraries at mass.gov/lists/mass-general-laws-c276 ("Amended by St.2018, c. 69, §§ 186 to 192, effective October 13, 2018"). Proof at research/statutes/MA/St2018-c69-2026-07-18.pdf and ma-c276-effective-dates-2026-07-18.png.
+- 2020 — Current § 100I expungement structure (2-record limit) (effective) · St. 2020, c. 253, § 120 set the current § 100I text, including the max-2-records structure. The session law was approved Dec 31, 2020; the exact § 120 effective day is unconfirmed — see open questions.
+- 2022-11-09 — § 100K1/4 mandatory marijuana expungement (effective) · St. 2022, c. 180, § 23: the court SHALL order expungement of decriminalized-amount marijuana offenses within 30 days of the petition, notwithstanding §§ 100I and 100J.
+- 2024-03-13 — Governor Healey blanket marijuana-possession pardon (operative) · Blanket pardon of prior misdemeanor marijuana-possession convictions for people 21+ on that date; pardoned convictions are sealed under c. 127, § 152.
 
-1. Confirm the current Petition to Seal form name/number. Wave 4 gives "TC-005" but flags it. Verify on the mass.gov "Seal your criminal record" page along with the current Commissioner of Probation mailing address.
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+
+1. Confirm the current Petition to Seal form name/number (Wave 4 gives "TC-005") and the Commissioner of Probation mailing address on the mass.gov "Seal your criminal record" page. Phone/site check.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm which offense categories are ineligible for administrative sealing under § 100A. Wave 4 flags the list (firearms-licensing statutes, some state-ethics offenses). The tree asks a person whether their offense is in one of these categories.
+2. Confirm the iCORI self-request fee (Wave 4: $25, waivable if unaffordable). Phone/site check.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm the § 100J expungement exclusion list (~20 categories: ABDW, firearms, OUI, restraining-order violations, sex offenses) and the § 100E-100U mechanics: offense before the 21st birthday, 3-yr misd / 7-yr felony waits, max 2 lifetime, no subsequent cases. The expungement path is disclosed but not fully branched.
+3. Does a SUBSEQUENT continuance-without-a-finding (CWOF) during someone else's § 100A waiting period interrupt it? A CWOF ends in a dismissal and is not a "guilty finding" under condition (3), but confirm with GBLS before asserting it never interrupts.
    - *Blocks no single field — affects a branch or wording.*
-4. How are completed diversions and continuances-without-a-finding (CWOF) treated for sealing? Standing call-sheet question. Wave 4 does not detail these.
+4. Confirm the exact effective date of St. 2020, c. 253, § 120 (the current § 100I 2-record structure) from the session law before encoding a precise day in keyDates.
+   - *Blocks no single field — affects a branch or wording.*
+5. Recheck the 194th-session expungement-expansion bills (successors to H.4325) after the session ends — the bill has been filed and died three sessions running, so watch rather than assume any change.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 3. MISSOURI (MO)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Petition to Expunge (Mo. Rev. Stat. § 610.140)** — The court of the case
@@ -71,55 +75,45 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Missouri Courts — Expungement self-help — https://www.courts.mo.gov/page.jsp?id=98230
 
 **Dates that govern:**
-- 2025-01-01 — SB 754 — lifetime limits raised to 2 felonies + 3 misdemeanours (effective) · Was 1 felony + 2 misdemeanours. Many attorney sites still show the old numbers. Also: separate crimes in one case are no longer automatically counted as one; arrest expungements available at 18 months (was 3 years).
+- 2025-01-01 — SB 754 — lifetime limits raised; $250 surcharge removed (§ 610.140, A.L. 2024) (effective) · Limits set at 2 felonies + 3 misdemeanours/ordinance violations (infractions unlimited). The old $250 statutory surcharge was REMOVED. Arrest expungements at 18 months (was 3 years) — but only where the petitioner was NEVER CHARGED. Many attorney sites still show the old numbers.
+- 2017-01-01 — § 610.130 first-DWI expungement moved from § 577.054 (effective) · The first-intoxication-offence expungement is now § 610.130 (transferred from the former § 577.054, effective 1/1/2017). Older guides still cite the dead number.
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Verify — 2 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the SB 754 counting change against the current § 610.140 text: separate crimes in one case are no longer automatically counted as one toward the limits, with a nuanced same-course-of-conduct exception. Wave 4 flags the exact text. The tree asks the person to self-assess their count for the 2-felony / 3-misdemeanour limits.
+1. What is the standard civil FILING FEE amount for an expungement petition, and the current clerk practice? The 1/1/2025 § 610.140 text contains NO fee or surcharge provision — the old $250 statutory surcharge is gone (SB 754) — so only the ordinary civil filing fee (amount not in the statutes pulled) remains, waivable by in-forma-pauperis motion. Confirm the amount with a circuit clerk.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the first-time-DWI expungement track: Wave 4 says a first DWI can be expunged after 10 years with no further alcohol offenses, and flags the cite (likely § 610.130/.140 interplay). The tree routes a first DWI to its own 10-year result.
-   - *Blocks no single field — affects a branch or wording.*
-3. FEE CONFLICT: Wave 4 gives "$250 statutory surcharge per one source vs standard circuit filing fee per another" and flags it as a phone target. Fee waiver by in-forma-pauperis motion. Confirm the actual fee with a circuit clerk.
-   - *Blocks (null until answered):* `resources.remedies.expungement.fees`
-4. What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? Wave 4 says courts are still processing and flags a status check. And confirm no Clean Slate automation bill passed this session (Wave 4 says pending, not law).
-   - *Blocks no single field — affects a branch or wording.*
-5. Confirm the § 610.140.3 exclusion list: Class A felonies, dangerous felonies (§ 556.061), death-element felonies, felony assault, ANY domestic assault, felony kidnapping, sex-registry offenses, most weapons offenses, intoxication-related traffic (except the first-DWI 10-year track), CDL offenses. The tree asks a person whether their offence is on it.
+2. What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? That is a constitutional provision, not in this statutory pull; Wave 4 says courts are still processing. Confirm the current status.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 4. TENNESSEE (TN)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Conviction Expunction (T.C.A. § 40-32-101(g))** — The court of conviction; TBI for the certificate
-- **Non-Conviction Expunction (T.C.A. § 40-32-101)** — The court that handled the case
+- **Conviction Expunction (T.C.A. § 40-32-107)** — The court of conviction; TBI for the certificate
+- **Non-Conviction Expunction (T.C.A. § 40-32-106(a))** — The court that handled the case
 - Tennessee Courts — Expunctions — https://www.tncourts.gov/programs/expunctions
 - Legal Aid Society of Middle Tennessee and the Cumberlands — https://www.las.org
 
 **Dates that govern:**
-- 2024-01-01 — TBI Certificate of Eligibility required for conviction expunctions (effective) · No conviction-expunction order may be entered without a TBI certificate confirming the offence qualifies. Adds a step and processing time to every conviction track.
-- 2025 — Statutory reorganization of § 40-32-101 into §§ 40-32-106/107 (effective) · Wave 4 gives the year only, and flags that content is mid-renumbering — cite both old and new until settled; the AOC site says "updated information coming soon".
+- 2025 — Acts 2025, ch. 268 — expunction statute reorganized (effective) · Settled. § 40-32-101 is now definitions only; non-conviction rules moved to § 40-32-106, conviction rules to § 40-32-107, procedure to § 40-32-108, effects to § 40-32-110. Cite the new sections only.
+- 2026-07-01 — § 40-32-107 current version effective July 1, 2026 (effective) · The verified print is the effective-on-7/1/2026 version of § 40-32-107 (history includes 2026 ch. 719, ch. 930 §§ 2-3, and ch. 1061 § 2). Encoded lists/waits are this current text.
+- 2026 — 2026 ch. 719 — pardon-based conviction expunction (§ 40-32-107(d)) (effective) · Added a path for a positive parole-board vote plus a governor's pardon, with violent- and sexual-offense exclusions. Disclosed in prose.
 
-**Verify — 5 open questions. Each answer closes a numbered question in the database:**
+**Verify — 2 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the current statute numbering: Wave 4 flags a 2025 reorganization renumbering § 40-32-101 content into §§ 40-32-106/107, still settling. Cite both until confirmed. The AOC site itself says updated information is coming.
+1. What is the TBI Certificate-of-Eligibility request process and turnaround? § 40-32-102(c) gives the mechanics (the certificate must be attached before a conviction-expunction order), but not the timing. Verify on TBI's site.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the newer 10-year felony tier: Wave 4 says certain Class C and D felonies were added at 10 years, and flags the exact (g)(1)(D)-(F) list — most older guides only mention Class E. The tree encodes a 10-year Class C/D track but the specific eligible-offence list needs confirming.
-   - *Blocks no single field — affects a branch or wording.*
-3. What is the TBI certificate-of-eligibility request process and turnaround? Wave 4 flags this as a new step (since Jan 2024) that adds processing time to every conviction track. Verify on TBI's site.
-   - *Blocks no single field — affects a branch or wording.*
-4. Confirm the clerk fee practice: Wave 4 says no state fee but the clerk may charge up to $100 (§ 8-21-401(b)(1)(D)(x)) for conviction/diversion expunctions, waived by indigency affidavit; dismissals are free. Confirm the current practice with a clerk (Davidson County).
-   - *Blocks (null until answered):* `resources.remedies.conviction.fees`
-5. How are pretrial and judicial diversion completions treated, and confirm the same-episode trap (§ (a)(1)(E)): conviction of any count from an episode generally bars expunging the rest. The tree hedges diversions and discloses the same-episode rule in prose.
+2. Confirm the clerk-fee AMOUNT and current practice. The statute is clear that a clerk fee applies to conviction (§ 40-32-108(a)) and diversion (§ 40-32-106(d)(3)) expunctions via § 8-21-401, and that non-conviction is free (§ 40-32-106(a)(1)). The "up to $100" figure and the indigency-waiver practice come from § 8-21-401, which was not pulled — confirm with a clerk (Davidson County).
    - *Blocks no single field — affects a branch or wording.*
 
 ---
 
 ## 5. WASHINGTON (WA)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Motion to Vacate a Conviction (RCW 9.96.060 / 9.94A.640)** — The sentencing court
@@ -127,18 +121,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Washington Courts self-help forms — https://www.courts.wa.gov/forms/
 
 **Dates that govern:**
-- 2024 — New Hope Act — waiting clock no longer waits for LFO payoff (effective) · Wave 4 gives the year only. The clock runs from release/sentencing; courts can waive or reduce outstanding legal financial obligations on motion. Older guides still say "pay all fines first". Verify the session-law cite.
-- 2019 — New Hope Act — Assault 2/3 and Robbery 2 carve-out from the violent-offence bar (effective) · Wave 4 gives the year only. Vacatable if no firearm/deadly-weapon/sexual-motivation enhancement.
+- 2019 — 2019 c 331 (New Hope Act) — felony carve-outs and clock re-anchor (effective) · Broadened the offences that can be vacated (the Assault 2/3 and Robbery 2 carve-out, vacatable if no firearm/deadly-weapon/sexual-motivation enhancement) and re-anchored the felony waiting clock.
+- 2023 — 2023 sp.s. c 1 — mandatory drug-possession vacate path (effective) · RCW 9.96.060(6): completing a substance use disorder program, or an assessment via a recovery navigator / arrest-and-jail-alternative / LEAD program plus 6 months of substantial compliance, means the court MUST vacate a simple-possession conviction. Stacks on top of the Blake void-vacatur remedy for pre-2/25/2021 offences.
+- 2024 — 2024 c 296 — misdemeanor clock re-anchor + DV-clock LFO exclusion (effective) · The misdemeanor waiting clock (9.96.060(2)(g)) runs 3 years from the later of release from supervision, release from confinement, or sentencing — LFO payment timing no longer extends it (though payment stays a filing precondition). The DV 5-year clock (2)(f) runs from completion of sentence conditions including court-ordered treatment but EXCLUDING payment of financial obligations.
+- 2025-04-25 — 2025 c 169 — juvenile prison-riot conviction vacate (effective) · RCW 9.94A.640(5): a prison-riot conviction (9.94.010) committed while incarcerated in a DCYF or county juvenile facility — the court SHALL vacate on application.
 
 **Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the 2024 New Hope Act session-law cite for the rule that the waiting clock no longer waits for LFO (legal financial obligation) payoff. Wave 4 says the clock runs from release/sentencing and courts can waive LFOs on motion — but flags the exact cite. The tree encodes this rule; confirm it against the current RCW 9.96.060 / 9.94A.640 text.
-   - *Blocks no single field — affects a branch or wording.*
-2. Confirm the DV-related misdemeanour subsection: Wave 4 gives a 5-year track with extra conditions (no restraining-order violations in the prior 5 years; fewer than two separate-incident DV convictions) but flags the exact DV subsection. The tree asks whether the offence was DV-related and applies the 5-year track.
-   - *Blocks no single field — affects a branch or wording.*
-3. What is the filing fee for a vacation motion? Wave 4 says one guide reports generally none but counties may differ — phone target. A WSP WATCH self-check is $11 online, free in person.
+1. What is the filing fee for a vacation motion? The statute is silent, counties vary, and one guide reports generally none — phone target. A WSP WATCH self-check is $11 online, free in person.
    - *Blocks (null until answered):* `resources.remedies.vacation.fees`, `resources.remedies.vacation.feeWaiver`
-4. How are completed diversions treated? Wave 4 details special tracks (trafficking/DV-victim convictions under 9.96.080 / 9.94A.648, marijuana misdemeanours, pre-1975 treaty-fishing) but not general diversion. Standing call-sheet question.
+2. Pull RCW 9.96.080 and 9.94A.648 — the two survivor/victim vacation PROCESS sections. RCW 9.96.060(3) and 9.94A.640(3) route trafficking, prostitution, commercial-sexual-abuse-of-a-minor, sexual-assault, and DV victims (and 9.96.060(7), a homicide victim's family) to those sections, but their requirements cannot be encoded until 9.96.080 / 9.94A.648 themselves are read. The tree names the track and routes to legal aid.
+   - *Blocks no single field — affects a branch or wording.*
+3. Recheck DUI vacation next session. HB 1110 (2025-26) would have opened DUI vacation effective July 1, 2026, but died in House Community Safety; it was reintroduced 2026-01-12 with no further action and the session ended. The DUI/physical-control exclusion (9.96.060(2), 9.94A.640(2)(g)) still stands — confirm nothing passed before softening it.
+   - *Blocks no single field — affects a branch or wording.*
+4. How are completed diversions and deferred prosecutions treated beyond the RCW 10.97.060 nonconviction-deletion path the tree now routes them to? A deferred prosecution ends in dismissal (nothing to vacate) but is the first thing an agency may refuse to delete (10.97.060(1)), and a DUI deferred prosecution still counts as a "prior offense" under 46.61.5055. Confirm the remaining boundaries with the call sheet.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**25 open questions across 10 states.**
+**23 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -130,7 +130,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 6. NEW HAMPSHIRE (NH)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Annulment (N.H. Rev. Stat. Ann. § 651:5)** — The court that handled the case
@@ -140,13 +140,9 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 **Dates that govern:**
 - 2019-01-01 — Automatic annulment of dismissals/acquittals begins (RSA 651:5) (operative) · Dismissals and acquittals on or after this date are annulled automatically 30 days after disposition — no petition. A streamlined post-2019 process also applies to violations and Class B misdemeanors (20-day prosecutor objection, no DOC investigation).
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 1 open question. Each answer closes a numbered question in the database:**
 
-1. Confirm the Class B misdemeanor waiting period against current RSA 651:5(III). Wave 7 flags a conflict: the statute historically said 3 years, but some current summaries say 1 year. Because the value conflicts, the tree routes Class B misdemeanors to an "exact wait needs confirming" result rather than guess — do not resolve from a model reading. Confirm the current statutory text.
-   - *Blocks no single field — affects a branch or wording.*
-2. Confirm the court filing fee. Wave 7 gives $125 per court location from the official Judicial Branch checklist, but notes some guides say $100. The fees field encodes $125 (the official checklist) and flags the conflict; confirm with courts.nh.gov. Also confirm the DOC investigation fee amount and the ~$25 record-copy fee.
-   - *Blocks no single field — affects a branch or wording.*
-3. Confirm the multi-conviction sequencing rule. Wave 7 says annulment is barred until the time requirement is met for ALL offenses of record, and barred entirely if any conviction is in a never-eligible class — but State v. Williams (2020) lets a person petition the latest-occurring offense first and work backwards. The tree routes people with more than one conviction to a "get sequencing help" result; confirm the Williams approach and how courts apply it.
+1. Confirm the court filing fee amount. Diana verified RSA 651:5 against gc.nh.gov (7/16): the three statutory fees are now known — $100 DOC investigation (IX), $100 DPS record-correction, and up to $100 State Police removal (X(d)), each waived if indigent, acquitted, or dismissed. The COURT filing fee is not set by statute and remains a phone-tier item (a waiver form exists); confirm the amount with courts.nh.gov.
    - *Blocks no single field — affects a branch or wording.*
 
 ---
@@ -175,7 +171,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 8. SOUTH DAKOTA (SD)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Expungement (S.D. Codified Laws §§ 23A-3-26 to -37)** — The circuit court where the case was handled (DCI in Pierre for records, (605) 773-3331)
@@ -185,10 +181,12 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 **Dates that govern:**
 - 2018 — Diversion completions auto-expunged (§§ 23A-3-35 to -37) (effective) · Wave 7 gives the year. Completed diversions are expunged automatically — no motion needed.
 - 2022 — Early dismissal expungement on "compelling necessity" (effective) · Wave 7 gives the year. A dismissed case can be expunged sooner than the usual 1 year on a showing of compelling necessity.
+- 2016 — Automatic-removal amended (§ 23A-3-34, SL 2016 ch 134) (effective) · Amendment history for the § 23A-3-34 automatic-removal section (Diana, statute pass 2026-07-16).
+- 2021 — Automatic-removal amended (§ 23A-3-34, SL 2021 ch 106) (effective) · Amendment history for the § 23A-3-34 automatic-removal section (Diana, statute pass 2026-07-16).
 
 **Verify — 2 open questions. Each answer closes a numbered question in the database:**
 
-1. Resolve the automatic-removal waiting period. Wave 7 flags that sources split 5 vs 10 years for § 23A-3-34 automatic removal of petty offenses, municipal violations, and Class 2 misdemeanors — encode from current statute text only. The tree routes those to a "check whether it is already off your record" result without asserting a specific year; confirm the exact period against the current statute.
+1. check_deferred_sd status. The SIS cluster is verified (§§ 23A-27-13/-13.1/-13.3/-14, linked 7/16): a completed SIS is discharged and dismissed without adjudication and is NOT a conviction (§ 14). Still HELD: whether the record is SEALED traces to § 23A-27-17, not yet read — the copy says "not a conviction" (cited) + "sealing status: confirm" until Diana reads 17. Also unread: §§ 23A-27-14.1/14.2 (licensing, cited in copy) and the diversion sections §§ 23A-3-35 to -37. check_deferred_sd is a check-your-record hedge, not a computed-eligibility claim.
    - *Blocks no single field — affects a branch or wording.*
 2. Confirm the circuit court filing fee, and whether any fee waiver applies. Wave 7 gives the DCI record check as $24 (Pierre, (605) 773-3331) but flags the circuit court filing fee as a per-clerk phone target and gives no waiver information. The fees and feeWaiver fields are null pending both.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`

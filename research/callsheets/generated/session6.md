@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**57 open questions across 11 states.**
+**60 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -66,22 +66,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 3. IDAHO (ID)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Idaho record relief (ISP expungement § 67-3004(10); shielding § 67-3004(11); withheld-judgment dismissal § 19-2604)** — Idaho State Police (BCI) for non-convictions; the district court for shielding and withheld-judgment motions
+- **Idaho record relief (dismissal/reduction § 19-2604; shielding § 67-3004(11); ISP non-conviction expungement § 67-3004(10))** — Idaho State Police (BCI) for non-convictions; the district court (in the underlying criminal case) for shielding, dismissal, and reduction
 - Idaho Legal Aid Services — https://www.idaholegalaid.org
 - Idaho Courts — Self-Help — https://www.courtselfhelp.idaho.gov
 
 **Dates that govern:**
-- 2023 — Conviction shielding created (§ 67-3004(11), HB 149) (effective) · Wave 6 gives the year only. HB 149 created a new shielding remedy for one non-violent-misdemeanor or felony-drug-possession conviction after 5 conviction-free years. Fresh law that most older guides do not reflect — they still say Idaho has no conviction relief.
+- 2023 — Conviction shielding created (§ 67-3004(11), HB 149) (effective) · HB 149 created a new shielding remedy for one eligible conviction (a misdemeanor other than 13 assaultive ones, or a felony drug possession under § 37-2732(a)/(c)/(e)) after 5 conviction-free years. Fresh law that most older guides do not reflect.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the § 67-3004(11) shielding rule (HB 149, 2023): ONE conviction, either a non-violent misdemeanor or a felony drug-possession, petitioned after 5 conviction-free years from full sentence completion (probation, parole, fines, restitution), under a "held accountable" standard; the record is hidden from public view and deniable, but law enforcement retains access; assaultive/violent misdemeanors are excluded. Wave 6 flags this as fresh-law discrepancy material. The tree encodes it; confirm against the statute and district practice (Ada County).
+1. Run a 2024-2026 session sweep for amendments to §§ 19-2604 and 67-3004 (legislature.idaho.gov session laws by code section). § 67-3004 was read through 2023 ch. 108 and § 19-2604 through 2017 ch. 172; confirm nothing since then changed the paths, gates, lists, or waits.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the fees. Wave 6 says the § 67-3004(10) ISP administrative non-conviction request appears to be free (documentation only), and flags the § 67-3004(11) shielding petition as a court filing whose fee is a phone target. The fees and feeWaiver fields are null pending both.
+2. Pull the Idaho Supreme Court rules implementing shielding, referenced in § 67-3004(11)(a) and (l) (ICAR / court rule). The statute delegates procedure and forms to court rule; the specific rule was not read.
+   - *Blocks no single field — affects a branch or wording.*
+3. Confirm the § 67-3004(10) ISP written-request form and processing time, and the § 67-3004(11) / § 19-2604 court filing-fee practice. Neither statute states a fee; a court filing fee may apply to the petitions. The fees and feeWaiver fields are null pending these phone-tier checks (ISP / district clerk); state no numbers.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+4. Confirm whether § 19-2604(1) dismissal relief supports any honest-no answer in practice. The statute is silent and the record stays public, so the encoding treats it as vacatur with no honest-no — but district practice on how a dismissed-by-court record reads is an attorney-tier question.
+   - *Blocks no single field — affects a branch or wording.*
+5. Pull I.C. § 18-310 (restoration of civil rights and firearms) if time allows. § 19-2604(1) dismissal "restores civil rights," and firearm mechanics run through § 18-310, which is untouched by shielding — cited but not read, so firearm questions are attorney-tier.
+   - *Blocks no single field — affects a branch or wording.*
 
 ---
 

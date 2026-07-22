@@ -16430,135 +16430,350 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   ID: {
     code: 'ID',
     name: 'Idaho',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      'Compiled text read through 2023 ch. 108 (§ 67-3004) and 2017 ch. 172 (§ 19-2604). A 2024-2026 session '
+      + 'sweep for amendments to §§ 19-2604 / 67-3004 is pending — see Open Questions.',
     terminology:
-      'Idaho is honest-limited: it has no general expungement of convictions, but three narrow tools, and one '
-      + 'of them is new enough that most guides miss it. (1) NON-CONVICTIONS clear through a written request to '
-      + 'the Idaho State Police (§ 67-3004(10)) — administrative, not a court petition. (2) SHIELDING '
-      + '(§ 67-3004(11), from HB 149 in 2023) is the new door: ONE conviction — a non-violent misdemeanor or '
-      + 'a felony drug-possession — can be hidden from public view after 5 conviction-free years. (3) A '
-      + 'WITHHELD JUDGMENT (§ 19-2601) that you complete can be dismissed under § 19-2604, restoring rights '
-      + '(including firearms) — but the record then reads "Dismissed by Court" and is NOT sealed. There is no '
-      + 'automation.',
+      'Idaho has NO general expungement of convictions, and the honest framing matters here because it runs FOUR '
+      + 'narrow remedies that do different things. (A) DISMISSAL / set-aside (§ 19-2604(1)) — for a completed '
+      + 'withheld judgment, suspended sentence, or clean probation — nullifies the conviction and restores civil '
+      + 'rights, but the record stays PUBLIC (it reads dismissed) and there is NO honest-no; it is vacatur, not '
+      + 'concealment, and is even excluded from the State Police non-conviction expungement. (B) Felony-to-'
+      + 'MISDEMEANOR reduction (§ 19-2604(3)) after discharge from probation — and the counterintuitive headline '
+      + 'is that NO offense is absolutely barred from reduction except a registrable sex offense: even murder is '
+      + 'reducible WITH prosecutor stipulation. Stipulation is always required within 5 years of discharge, and '
+      + 'after 5 years only if the felony is on a 15-item serious list. (C) Court-record SHIELDING (§ 67-3004(11), '
+      + 'from HB 149 in 2023) — the ONLY conviction honest-no in Idaho: one eligible conviction (any misdemeanor '
+      + 'except 13 assaultive ones, PLUS — the surprise — felony drug possession under § 37-2732(a)/(c)/(e)) can '
+      + 'be hidden from public view after 5 conviction-free years, deniable in most settings but not in court or '
+      + 'peace-officer licensing, with law enforcement keeping access. It is ONCE PER LIFETIME, blocked by any '
+      + 'restraining order in effect at filing, and does NOT restore firearm rights. (D) NON-CONVICTION '
+      + 'expungement (§ 67-3004(10)) — a written request to the Idaho State Police (no court petition) for an '
+      + 'arrest never charged within a year, an acquittal, or a dismissal (but NOT a § 19-2604(1) dismissal). A '
+      + 'gate that trips people on the dismissal path: a single probation violation the court FOUND or you '
+      + 'ADMITTED permanently bars § 19-2604(1) relief (a drug- or mental-health-court graduation is the only '
+      + 'bypass), though PAROLE violations do not count. A registrable sex offense is barred from the whole of '
+      + '§ 19-2604. There is no automation.',
     keyDates: [
       {
         label: 'Conviction shielding created (§ 67-3004(11), HB 149)',
         date: '2023',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. HB 149 created a new shielding remedy for one non-violent-misdemeanor or felony-drug-possession conviction after 5 conviction-free years. Fresh law that most older guides do not reflect — they still say Idaho has no conviction relief.',
+        note: 'HB 149 created a new shielding remedy for one eligible conviction (a misdemeanor other than 13 assaultive ones, or a felony drug possession under § 37-2732(a)/(c)/(e)) after 5 conviction-free years. Fresh law that most older guides do not reflect.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the § 67-3004(11) shielding rule (HB 149, 2023): ONE conviction, either a non-violent misdemeanor or a felony drug-possession, petitioned after 5 conviction-free years from full sentence completion (probation, parole, fines, restitution), under a "held accountable" standard; the record is hidden from public view and deniable, but law enforcement retains access; assaultive/violent misdemeanors are excluded. Wave 6 flags this as fresh-law discrepancy material. The tree encodes it; confirm against the statute and district practice (Ada County).',
+          'Run a 2024-2026 session sweep for amendments to §§ 19-2604 and 67-3004 (legislature.idaho.gov session laws by code section). § 67-3004 was read through 2023 ch. 108 and § 19-2604 through 2017 ch. 172; confirm nothing since then changed the paths, gates, lists, or waits.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the fees. Wave 6 says the § 67-3004(10) ISP administrative non-conviction request appears to be free (documentation only), and flags the § 67-3004(11) shielding petition as a court filing whose fee is a phone target. The fees and feeWaiver fields are null pending both.',
+          'Pull the Idaho Supreme Court rules implementing shielding, referenced in § 67-3004(11)(a) and (l) (ICAR / court rule). The statute delegates procedure and forms to court rule; the specific rule was not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the § 67-3004(10) ISP written-request form and processing time, and the § 67-3004(11) / § 19-2604 court filing-fee practice. Neither statute states a fee; a court filing fee may apply to the petitions. The fees and feeWaiver fields are null pending these phone-tier checks (ISP / district clerk); state no numbers.',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm whether § 19-2604(1) dismissal relief supports any honest-no answer in practice. The statute is silent and the record stays public, so the encoding treats it as vacatur with no honest-no — but district practice on how a dismissed-by-court record reads is an attorney-tier question.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull I.C. § 18-310 (restoration of civil rights and firearms) if time allows. § 19-2604(1) dismissal "restores civil rights," and firearm mechanics run through § 18-310, which is untouched by shielding — cited but not read, so firearm questions are attorney-tier.',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Idaho Code § 67-3004(10) (non-conviction expungement via ISP BCI request)', url: null, retrievedOn: null },
-      { id: 'Idaho Code § 67-3004(11) (conviction shielding; HB 149 of 2023)', url: null, retrievedOn: null },
-      { id: 'Idaho Code §§ 19-2601, 19-2604 (withheld judgment; dismissal; felony-to-misdemeanor reduction)', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 19-2604 (read through 2017 ch. 172 — (1) DISMISSAL/set-aside restoring civil rights for a withheld judgment, suspended sentence, commuted felony (§ 19-2601(1)), a felony with no board-of-correction custody, an unsentenced drug/mental-health-court graduate, or a misdemeanor with no/suspended jail; requires that no probation violation was ever found or admitted (drug/mental-health-court graduation is the only bypass), and per (5) parole/supervision-agreement violations do NOT preclude; discretionary/good-cause; record stays public and is excluded from § 67-3004(10) expungement; (2) rider amendment to misdemeanor for a suspended sentence during retained jurisdiction; (3) felony-to-MISDEMEANOR reduction after discharge from probation, stipulation always required within 5 years and after 5 years only for the 15-item serious list, grant criteria (d) no later-committed felony / no pending charges / good cause; (4) any § 18-8304 registrable sex offense (incl. withheld judgments) barred from BOTH dismissal and reduction) via legislature.idaho.gov', url: 'https://legislature.idaho.gov', retrievedOn: '2026-07-22' },
+      { id: 'Idaho Code § 67-3004 (read through 2023 ch. 108 — (10) NON-CONVICTION expungement by WRITTEN REQUEST to the Idaho State Police (no petition, no fee stated): not charged by indictment/information within 1 year of arrest/summons, acquitted of all offenses, or all charges dismissed EXCEPT a § 19-2604(1) dismissal; expunges fingerprints/criminal history and the court file may be sealed; (11) conviction SHIELDING (HB 149): any misdemeanor except 13 assaultive/violent ones, plus felony possession under § 37-2732(a)/(c)/(e); no earlier than 5 years after completing the full sentence incl. probation/parole/fines/restitution; cleanliness gates and NO restraining order in effect at filing; petition in the criminal case, held-accountable + public/victim-safety standard, court SHALL shield; effect is a court-record honest-no (deemed never to have occurred; may deny) EXCEPT in judicial proceedings and peace-officer licensing, LE/POST/prosecutors retain access, NO firearm-rights restoration (no effect on §§ 18-310/18-3316); ONCE PER LIFETIME (one petition, one incident/transaction); revocation SHALL on a subsequent felony (on request at sentencing) and MAY on a subsequent misdemeanor; no liability for negligent/third-party release) via legislature.idaho.gov', url: 'https://legislature.idaho.gov', retrievedOn: '2026-07-22' },
+      { id: 'Idaho Code § 18-8304 (offenses requiring sex-offender registration — the § 19-2604(4) bar) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 37-2732 (controlled-substance possession — the shieldable felony under (a)/(c)/(e); § 37-2732B drug trafficking is on the § 19-2604(3) serious list) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 19-2601 (withheld judgment, suspended sentence, retained jurisdiction, and commutation — the § 19-2604 eligibility feeders) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 18-310 (restoration of civil rights and firearms on final discharge — untouched by shielding; the firearm mechanics § 19-2604 dismissal runs through) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Idaho Code § 18-3316 (unlawful possession of a firearm — expressly unaffected by shielding, § 67-3004(11)) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_id',
       nodes: {
-        disposition: {
+        entry_id: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check? Idaho has four separate record remedies.',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'shielding_type_id' },
-            { label: 'Dismissed / Never charged', value: 'dismissed', next: 'eligible_nonconv_id' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_id' },
-            { label: 'Withheld judgment completed', value: 'deferred', next: 'withheld_id' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'DISMISS / set aside a completed withheld judgment or probation case (restores rights; record stays public)', value: 'dismissal', next: 'dismiss_sexbar_id' },
+            { label: 'REDUCE a felony to a misdemeanor', value: 'reduction', next: 'reduce_sexbar_id' },
+            { label: 'SHIELD a conviction (hide it from public view)', value: 'shielding', next: 'shielding_type_id' },
+            { label: 'Clear a NON-conviction (dismissed, acquitted, or never charged)', value: 'nonconv', next: 'nonconv_route_id' },
+            { label: 'What a shielding or dismissal I ALREADY have means', value: 'effects', next: 'effects_id' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
+        // 19-2604 DISMISSAL / set-aside path.
+        dismiss_sexbar_id: {
+          type: 'boolean',
+          text: 'Does this offense require you to register as a sex offender under § 18-8304? (Includes a withheld judgment for such an offense.)',
+          yes: 'ineligible_sexbar_id',
+          no: 'dismiss_probation_id'
+        },
+        // Flawless-probation gate (19-2604(1)): a single found-or-admitted PROBATION
+        // violation permanently bars this path; parole/supervision violations do not.
+        dismiss_probation_id: {
+          type: 'boolean',
+          text: 'In any probation-violation proceeding on THIS case, did the court ever FIND, or did you ever ADMIT, a probation violation? (A parole or supervision-agreement violation — including on another case — does NOT count.)',
+          yes: 'dismiss_drugcourt_id',
+          no: 'eligible_dismiss_id'
+        },
+        dismiss_drugcourt_id: {
+          type: 'boolean',
+          text: 'Did you successfully graduate from a drug court or a mental-health court, with a clean probation record AFTER graduation? (This is the only way to overcome a probation violation on this path.)',
+          yes: 'eligible_dismiss_id',
+          no: 'ineligible_dismiss_violation_id'
+        },
+        // 19-2604(3) felony-to-MISDEMEANOR reduction path.
+        reduce_sexbar_id: {
+          type: 'boolean',
+          text: 'Does this felony require you to register as a sex offender under § 18-8304?',
+          yes: 'ineligible_sexbar_id',
+          no: 'reduce_laterfelony_id'
+        },
+        reduce_laterfelony_id: {
+          type: 'boolean',
+          text: 'Since this conviction, have you been convicted of any felony committed AFTER it, or do you currently have any charges pending?',
+          yes: 'ineligible_reduce_laterfelony_id',
+          no: 'reduce_years_id'
+        },
+        reduce_years_id: {
+          type: 'choice',
+          text: 'How long has it been since you were discharged from probation on this felony?',
+          options: [
+            { label: 'Less than 5 years', value: 'under5', next: 'reduce_stip_id' },
+            { label: '5 years or more', value: 'over5', next: 'reduce_seriouslist_id' }
+          ]
+        },
+        reduce_seriouslist_id: {
+          type: 'boolean',
+          text: 'Is the felony on Idaho\'s 15-item serious list — murder, voluntary manslaughter, robbery, first-degree kidnapping, assault/battery with intent to commit a serious felony, enticing children, drug trafficking (§ 37-2732B), bombs/destructive devices, discharging a firearm at a dwelling/vehicle, and the like (including attempts)?',
+          yes: 'complex_reduce_seriousstip_id',
+          no: 'eligible_reduce_id'
+        },
+        reduce_stip_id: {
+          type: 'boolean',
+          text: 'Will the prosecutor stipulate (agree) to reducing the felony to a misdemeanor?',
+          yes: 'eligible_reduce_id',
+          no: 'ineligible_reduce_nostip_id'
+        },
+        // 67-3004(11) SHIELDING path.
         shielding_type_id: {
           type: 'choice',
-          text: 'Shielding covers only ONE conviction, and only two kinds. Which best describes yours?',
+          text: 'Shielding covers only ONE eligible conviction. Which best describes yours?',
           options: [
-            { label: 'A non-violent misdemeanor', value: 'nonviolent_misd', next: 'shielding_date_id' },
-            { label: 'A felony drug-possession offense', value: 'felony_drug', next: 'shielding_date_id' },
-            { label: 'An assaultive or violent misdemeanor', value: 'violent_misd', next: 'ineligible_violent_id' },
-            { label: 'Something else (another felony, etc.)', value: 'other', next: 'ineligible_nopath_id' },
+            { label: 'A misdemeanor that is NOT on the assaultive/violent list', value: 'nonviolent_misd', next: 'shielding_prioruse_id' },
+            { label: 'A felony possession of a controlled substance (§ 37-2732(a), (c), or (e))', value: 'felony_drug', next: 'shielding_prioruse_id' },
+            { label: 'One of the 13 assaultive/violent misdemeanors (assault, battery, domestic battery, stalking, no-contact/protection-order violation, DV, etc.)', value: 'violent_misd', next: 'ineligible_shield_violent_id' },
+            { label: 'Some other felony (not drug possession)', value: 'other', next: 'ineligible_shield_nopath_id' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_id' }
           ]
         },
+        shielding_prioruse_id: {
+          type: 'boolean',
+          text: 'Have you ever had a shielding petition granted before? (Idaho allows only ONE shielding in your lifetime.)',
+          yes: 'ineligible_shield_prioruse_id',
+          no: 'shielding_ro_id'
+        },
+        shielding_ro_id: {
+          type: 'boolean',
+          text: 'Is there any restraining order in effect against you right now?',
+          yes: 'ineligible_shield_ro_id',
+          no: 'shielding_clean_id'
+        },
+        shielding_clean_id: {
+          type: 'boolean',
+          text: 'Since this conviction, have you had any other felony or misdemeanor conviction, any pending case, or are you currently on probation or parole for another conviction?',
+          yes: 'ineligible_shield_notclean_id',
+          no: 'shielding_date_id'
+        },
         shielding_date_id: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your full sentence — probation, parole, fines, and restitution?',
+          text: 'When did you complete your FULL sentence — including probation, parole, all fines, and all restitution?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction-free from full sentence completion (Idaho Code § 67-3004(11) — shielding; one conviction)' },
+            period: { amount: 5, unit: 'years', anchor: 'no earlier than 5 years after completing the full sentence incl. probation/parole/fines/restitution (§ 67-3004(11) — shielding)' },
             nextPass: 'eligible_shielding_id',
             nextFail: 'waiting_id'
           }
+        },
+        // 67-3004(10) NON-CONVICTION path.
+        nonconv_route_id: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'I was arrested or summoned but never charged within a year', value: 'nocharge', next: 'eligible_isp_id' },
+            { label: 'I was acquitted of all charges', value: 'acquitted', next: 'eligible_isp_id' },
+            { label: 'All charges were dismissed', value: 'dismissed', next: 'nonconv_2604_id' }
+          ]
+        },
+        nonconv_2604_id: {
+          type: 'boolean',
+          text: 'Was the dismissal a § 19-2604(1) dismissal — one that came from completing a withheld judgment or probation?',
+          yes: 'ineligible_isp_2604_id',
+          no: 'eligible_isp_id'
+        },
+        effects_id: {
+          type: 'choice',
+          text: 'What do you want to know?',
+          options: [
+            { label: 'I have a SHIELDED record — what can I say if I am asked about it?', value: 'honestno', next: 'effects_honestno_id' },
+            { label: 'My shielding was granted but I picked up a new conviction — can it be revoked?', value: 'revoke', next: 'effects_revoke_id' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Idaho\'s three tools depend entirely on the outcome — a non-conviction goes to the State Police, a completed withheld judgment gets dismissed, and only certain single convictions can be shielded. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an Idaho State Police record check will show the disposition; the Idaho courts\' self-help pages can help you read it.',
+          message: 'Idaho\'s four tools depend entirely on the outcome — a non-conviction goes to the State Police, a completed withheld judgment or clean probation can be dismissed, a felony can be reduced, and only certain single convictions can be shielded. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an Idaho State Police record check will show the disposition; the Idaho courts\' self-help pages can help you read it.',
           remedy: 'Get Your Record First (court paperwork / ISP)',
-          citation: 'Idaho Code § 67-3004 (the tool depends on the disposition)'
+          citation: 'Idaho Code §§ 19-2604, 67-3004 (the tool depends on the disposition)'
         },
-        eligible_nonconv_id: {
-          status: 'eligible',
-          title: 'No Conviction — Clear It Through the State Police',
-          message: 'Because your case ended without a conviction — dismissed, acquitted, or an arrest that never led to a charge (after 1 year) — Idaho clears it through a WRITTEN REQUEST to the Idaho State Police (§ 67-3004(10)), not a court petition. The State Police has an application form; once granted, your fingerprints and criminal history are expunged and the court file is sealed. One exception to know: this does not cover a dismissal that came from a withheld judgment (§ 19-2604(1)) — those follow a different path. The Idaho courts\' self-help pages can help.',
-          remedy: 'ISP administrative expungement request (§ 67-3004(10))',
-          citation: 'Idaho Code § 67-3004(10)'
+        ineligible_sexbar_id: {
+          status: 'ineligible',
+          title: 'Registrable Sex Offense — Barred From § 19-2604',
+          message: 'Any conviction for an offense that requires sex-offender registration under § 18-8304 is barred from BOTH dismissal and felony-to-misdemeanor reduction under § 19-2604 — and that bar reaches even a withheld judgment for such an offense (§ 19-2604(4)). No completion or waiting changes that. Idaho has no general conviction expungement, so the remaining route is a pardon or commutation from the Commission of Pardons and Parole. Idaho Legal Aid can help you confirm the category and explain the pardon process.',
+          remedy: 'None under § 19-2604 (registrable sex offense) — a pardon/commutation is the route',
+          citation: 'Idaho Code § 19-2604(4)'
         },
-        withheld_id: {
+        eligible_dismiss_id: {
           status: 'eligible',
-          title: 'Withheld Judgment — Move to Dismiss (But Know It Stays Visible)',
-          message: 'Because you completed a withheld judgment, you can move to have the case DISMISSED under § 19-2604, which restores your rights — including firearm rights. That is a real and worthwhile step. But here is the honest caveat: after dismissal the record is not sealed. It will read "Dismissed by Court" and remains visible to anyone who looks. (For a felony, you may also be able to have it reduced to a misdemeanor under § 19-2604(2).) If you want it actually hidden, a shielding petition may be available separately for an eligible conviction. The Idaho courts\' self-help pages explain the motion.',
-          remedy: 'Motion to dismiss a completed withheld judgment (§ 19-2604) — visible but dismissed',
-          citation: 'Idaho Code § 19-2604'
+          title: 'Dismissal Available — But It Is Vacatur, Not Concealment',
+          message: 'Because your probation record is clean (no probation violation was ever found or admitted, or you graduated a drug/mental-health court with a clean record after), you can move under § 19-2604(1) to terminate the sentence, set aside the plea or conviction, and finally dismiss the case — which nullifies the conviction and RESTORES your civil rights. That is real and worth doing. But hold onto the honest limit: this is vacatur, not concealment. The record stays PUBLIC (it will read that the case was dismissed), there is no honest-no, and a § 19-2604(1) dismissal is even excluded from the State Police non-conviction expungement — so it does not disappear. Firearm effects run through § 18-310 and are worth an attorney\'s read (federal treatment of this relief is unsettled). If you want the record actually hidden, ask whether shielding fits instead. Idaho Legal Aid can help.',
+          remedy: 'Motion to dismiss / set aside (§ 19-2604(1)) — restores rights, record stays public',
+          citation: 'Idaho Code § 19-2604(1)'
+        },
+        ineligible_dismiss_violation_id: {
+          status: 'ineligible',
+          title: 'A Probation Violation Bars the Dismissal Path',
+          message: 'Section 19-2604(1) relief requires a flawless probation record: because a probation violation was found by the court or admitted by you, and you did not graduate a drug or mental-health court with a clean post-graduation record, this dismissal path is permanently closed for this case. That is not necessarily the end of the road — a felony may still be REDUCED to a misdemeanor under § 19-2604(3) (with the stipulation rules), and an eligible conviction may still be SHIELDED under § 67-3004(11). It is worth running those two analyses. Idaho Legal Aid can help you check whether either fits.',
+          remedy: 'None via § 19-2604(1) (probation violation) — check reduction or shielding',
+          citation: 'Idaho Code § 19-2604(1)'
+        },
+        ineligible_reduce_laterfelony_id: {
+          status: 'ineligible',
+          title: 'A Later Felony or Pending Charge Blocks Reduction',
+          message: 'A felony-to-misdemeanor reduction under § 19-2604(3) requires that you have not been convicted of a felony committed AFTER this one, and that you have no charges currently pending. Because one of those applies, the reduction cannot be granted now. If the pending matter resolves without a disqualifying conviction, the analysis can reopen. Idaho Legal Aid can help you time it.',
+          remedy: 'Resolve the later felony / pending charge first (§ 19-2604(3)(d))',
+          citation: 'Idaho Code § 19-2604(3)'
+        },
+        eligible_reduce_id: {
+          status: 'eligible',
+          title: 'Felony Reduction Available',
+          message: 'Based on your answers, your felony appears eligible to be REDUCED to a misdemeanor under § 19-2604(3): you are discharged from probation, you have no later-committed felony or pending charges, and either 5 years have passed and the offense is not on the serious list, or the prosecutor will stipulate. Idaho\'s counterintuitive rule is that no offense is absolutely barred from reduction except a registrable sex offense — so this is a real path. It is discretionary (good cause), and it reduces the offense level rather than hiding the record. If you also want the record hidden, ask whether shielding fits. Idaho Legal Aid can help you file.',
+          remedy: 'Felony-to-misdemeanor reduction (§ 19-2604(3))',
+          citation: 'Idaho Code § 19-2604(3)'
+        },
+        ineligible_reduce_nostip_id: {
+          status: 'waiting',
+          title: 'Reduction Needs a Prosecutor Stipulation Right Now',
+          message: 'Within 5 years of discharge from probation, a felony-to-misdemeanor reduction always requires the prosecutor to stipulate (agree), and you told us they will not (§ 19-2604(3)). That leaves two timing paths: get the prosecutor to stipulate, or wait until 5 years have passed since discharge — after which, UNLESS the felony is on the 15-item serious list, no stipulation is needed. So this is a "not yet" rather than a permanent no. Idaho Legal Aid can help you negotiate the stipulation or time the 5-year mark.',
+          remedy: 'Get a stipulation, or wait to 5 years post-discharge (§ 19-2604(3))',
+          citation: 'Idaho Code § 19-2604(3)'
+        },
+        complex_reduce_seriousstip_id: {
+          status: 'complex',
+          title: 'Serious-List Felony — Reduction Still Needs a Stipulation',
+          message: 'You are more than 5 years past discharge, which would normally drop the stipulation requirement — but because this felony is on Idaho\'s 15-item serious list, the prosecutor must still stipulate to a reduction no matter how much time has passed (§ 19-2604(3)). The important and counterintuitive part: it is still POSSIBLE — Idaho bars no offense from reduction absolutely except a registrable sex offense, so even a serious-list felony (up to and including murder) can be reduced WITH the prosecutor\'s agreement. Whether that agreement is realistic is the practical question. Idaho Legal Aid can help you approach the prosecutor and prepare the motion.',
+          remedy: 'Seek a prosecutor stipulation for the serious-list reduction (§ 19-2604(3))',
+          citation: 'Idaho Code § 19-2604(3)'
         },
         eligible_shielding_id: {
           status: 'eligible',
-          title: 'Shielding Available — Idaho\'s New 2023 Door',
-          message: 'Based on your dates — 5 conviction-free years since you completed your full sentence, including fines and restitution — your conviction appears eligible for SHIELDING under § 67-3004(11), a remedy Idaho created in 2023 (HB 149) that many guides still do not know exists. It covers one conviction (a non-violent misdemeanor or a felony drug-possession), and once granted the record is hidden from public view and you can deny it — though law enforcement keeps access. The standard is whether you have been "held accountable." Because this is fresh law, it is worth filing with help; the Idaho courts\' self-help pages and a district clerk (Ada County) can guide the petition.',
-          remedy: 'Shielding petition (§ 67-3004(11)) — one conviction, hidden from public view',
+          title: 'Shielding Available — Idaho\'s Only Conviction Honest-No',
+          message: 'Based on your answers — an eligible conviction, one shielding never used, no restraining order, a clean record since, and 5 conviction-free years since you completed your full sentence including fines and restitution — you appear eligible for SHIELDING under § 67-3004(11) (created by HB 149 in 2023). If the court finds you have been held accountable and shielding would not compromise public or victim safety, it SHALL shield: the court records are hidden from public view, the State Police make reports and fingerprints unavailable, and you may lawfully reply that it never occurred — the ONE conviction honest-no Idaho offers. Hold onto four limits: you may NOT deny it in a judicial proceeding or for peace-officer licensing; law enforcement and prosecutors keep full access; it does NOT restore firearm rights (see § 18-310, attorney territory); and it is ONCE PER LIFETIME, so if you have more than one eligible offense, choose deliberately (a later felony conviction can also trigger revocation). Idaho Legal Aid can help you file.',
+          remedy: 'Shielding petition (§ 67-3004(11)) — once per lifetime, honest-no',
           citation: 'Idaho Code § 67-3004(11)'
         },
         waiting_id: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Idaho\'s shielding remedy requires 5 conviction-free years from when you completed your full sentence — probation, parole, fines, and restitution. Based on your dates, that has not passed yet. When it does, remember shielding covers only one conviction, so if you have more than one eligible offense, it is worth being deliberate. The Idaho courts\' self-help pages can help you plan.',
+          title: 'Shielding — 5-Year Wait Not Yet Met',
+          message: 'Idaho\'s shielding remedy can be petitioned no earlier than 5 years after you complete your FULL sentence — probation, parole, all fines, and all restitution (§ 67-3004(11)). Based on your dates, that has not passed yet. When it does, remember shielding is once per lifetime and covers one eligible conviction (or several from a single incident), so it is worth being deliberate. Idaho Legal Aid can help you plan.',
           remedy: 'Wait for the 5 conviction-free years (§ 67-3004(11))',
           citation: 'Idaho Code § 67-3004(11)'
         },
-        ineligible_violent_id: {
+        ineligible_shield_violent_id: {
           status: 'ineligible',
           title: 'Assaultive/Violent Misdemeanor — Not Shieldable',
-          message: 'Idaho\'s shielding remedy specifically excludes assaultive and violent misdemeanors, so this conviction cannot be shielded, and no waiting period changes that. Idaho has no general conviction expungement, so the remaining routes are a pardon or commutation from the Commission of Pardons and Parole. If any part of your record was a non-conviction, that can still be cleared through the State Police separately. The Idaho courts\' self-help pages can help you check.',
-          remedy: 'None (excluded from shielding) — a pardon/commutation is the route',
+          message: 'Idaho\'s shielding remedy excludes 13 assaultive and violent misdemeanors — assault, battery, domestic battery, second-degree stalking, protection-order/no-contact violations, telephone harassment, vehicular manslaughter, excessive DUI, domestic assault, battery on law enforcement, injury to children, sexual battery, and indecent exposure (§ 67-3004(11)). So this conviction cannot be shielded, and no waiting period changes that. A felony may still be reducible to a misdemeanor under § 19-2604, and any non-conviction can still be cleared through the State Police. Otherwise a pardon or commutation is the route. Idaho Legal Aid can help you check.',
+          remedy: 'None via shielding (assaultive misdemeanor) — check § 19-2604 or a pardon',
           citation: 'Idaho Code § 67-3004(11)'
         },
-        ineligible_nopath_id: {
+        ineligible_shield_nopath_id: {
           status: 'ineligible',
-          title: 'No Expungement Path for This Conviction',
-          message: 'Idaho has no general expungement of convictions. Its shielding remedy reaches only one non-violent misdemeanor or a felony drug-possession, so a conviction outside those categories (such as another kind of felony) does not have an expungement or shielding route. The honest answer is that the remaining path is a pardon or commutation from the Commission of Pardons and Parole. If any of your charges ended without a conviction, those can still be cleared through the State Police. The Idaho courts\' self-help pages can point you to the pardon process.',
-          remedy: 'None (no conviction expungement in Idaho) — a pardon/commutation is the route',
-          citation: 'Idaho Code § 67-3004'
+          title: 'This Conviction Is Outside Shielding',
+          message: 'Idaho\'s shielding remedy reaches only a non-assaultive misdemeanor or a felony DRUG possession under § 37-2732(a)/(c)/(e) — so another kind of felony cannot be shielded. That does not automatically mean no relief: many felonies can be REDUCED to a misdemeanor under § 19-2604(3) (Idaho bars no offense from reduction absolutely except a registrable sex offense), and a completed withheld judgment or clean-probation case can be DISMISSED under § 19-2604(1). It is worth running those. If none fits, a pardon or commutation is the remaining route. Idaho Legal Aid can help you sort it out.',
+          remedy: 'None via shielding — check reduction (§ 19-2604(3)) or dismissal',
+          citation: 'Idaho Code § 67-3004(11)'
         },
         complex_level_id: {
           status: 'complex',
           title: 'We Need to Know the Conviction',
-          message: 'Idaho\'s shielding remedy is narrow — it covers only a non-violent misdemeanor or a felony drug-possession, and excludes assaultive/violent misdemeanors and other felonies. Whether yours qualifies depends on exactly what it was, which we are not going to guess. Your court paperwork names the offense, and an Idaho State Police record check will show it. The Idaho courts\' self-help pages can help you read it.',
+          message: 'Idaho\'s shielding remedy is narrow — it covers a non-assaultive misdemeanor or a felony drug-possession, and excludes 13 assaultive misdemeanors and other felonies. Whether yours qualifies depends on exactly what it was, which we are not going to guess. Your court paperwork names the offense, and an Idaho State Police record check will show it. Idaho Legal Aid can help you read it.',
           remedy: 'Get the Conviction Details First (court paperwork / ISP)',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        ineligible_shield_prioruse_id: {
+          status: 'ineligible',
+          title: 'You Have Already Used Your One Shielding',
+          message: 'Idaho allows only ONE shielding in a lifetime, and because a shielding petition has already been granted for you, another cannot be shielded — no waiting period changes that (§ 67-3004(11)). A felony may still be reducible under § 19-2604(3), a clean case dismissible under § 19-2604(1), and any non-conviction clearable through the State Police. Idaho Legal Aid can help you look at those.',
+          remedy: 'None (one-shielding limit used) — check § 19-2604 or the State Police path',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        ineligible_shield_ro_id: {
+          status: 'waiting',
+          title: 'A Restraining Order Blocks Shielding at Filing',
+          message: 'Idaho will not grant shielding while a restraining order is in effect against you at the time you file (§ 67-3004(11)) — an unusual gate that catches people off guard. Because you have one in effect now, this is a "not yet": once the restraining order is no longer in effect (and the other requirements are met), you can petition. Idaho Legal Aid can help you time it.',
+          remedy: 'Wait until no restraining order is in effect, then petition (§ 67-3004(11))',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        ineligible_shield_notclean_id: {
+          status: 'ineligible',
+          title: 'A Later Conviction or Pending Case Blocks Shielding',
+          message: 'Shielding requires a clean record through the hearing: no subsequent felony or misdemeanor conviction, no pending misdemeanor or felony case, and you cannot be on probation or parole for a subsequent conviction (§ 67-3004(11)). Because one of those applies, shielding is not available now. Depending on how those matters resolve, the analysis may reopen later. Idaho Legal Aid can help you check the timing and any other route.',
+          remedy: 'None now (not conviction-free) — reassess once the record is clean (§ 67-3004(11))',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        eligible_isp_id: {
+          status: 'eligible',
+          title: 'No Conviction — Clear It Through the State Police',
+          message: 'Because your case ended without a conviction — an arrest never charged within a year, an acquittal of all charges, or a dismissal (other than a § 19-2604(1) dismissal) — Idaho clears it through a WRITTEN REQUEST to the Idaho State Police (§ 67-3004(10)), not a court petition. On the request, your fingerprints and criminal history for the incident are expunged, and you may also have the official court file sealed. This is Idaho\'s cheapest and fastest path — administrative, with no fee stated. Idaho Legal Aid can help you submit it.',
+          remedy: 'ISP written-request expungement (§ 67-3004(10)) — administrative',
+          citation: 'Idaho Code § 67-3004(10)'
+        },
+        ineligible_isp_2604_id: {
+          status: 'complex',
+          title: 'A § 19-2604(1) Dismissal Is NOT State-Police Expungeable',
+          message: 'This is a subtle but important Idaho rule: a dismissal that came from a § 19-2604(1) set-aside (completing a withheld judgment or clean probation) is EXPRESSLY excluded from the State Police non-conviction expungement (§ 67-3004(10)). The § 19-2604(1) relief you already have nullified the conviction and restored your civil rights — but it is vacatur, not concealment, so the record stays publicly visible and cannot be wiped through the ISP administrative route. If hiding the record from public view is the goal, the question is whether the underlying conviction qualifies for SHIELDING (§ 67-3004(11)) instead. Idaho Legal Aid can help you tell the two apart.',
+          remedy: 'Not ISP-expungeable (§ 67-3004(10)) — consider shielding instead',
+          citation: 'Idaho Code § 67-3004(10)'
+        },
+        effects_honestno_id: {
+          status: 'complex',
+          title: 'Shielded Record — You May Deny It, With Two Exceptions',
+          message: 'A shielded conviction (§ 67-3004(11)) is deemed never to have occurred, and you may lawfully reply accordingly — so in a JOB interview, on most applications for employment, a license, education, or another right or privilege, you can answer as if it never happened. There are two exceptions where you must still disclose: a JUDICIAL PROCEEDING (in court, e.g. as a witness) and PEACE-OFFICER (POST) licensing. Keep in mind that law enforcement, POST-certified officers, and prosecutors retain full access to the shielded record, and shielding does NOT restore firearm rights. So: deny it in the interview, disclose it in court. Idaho Legal Aid can help you apply this to a specific situation.',
+          remedy: 'Deny a shielded record except in court and POST licensing (§ 67-3004(11))',
+          citation: 'Idaho Code § 67-3004(11)'
+        },
+        effects_revoke_id: {
+          status: 'complex',
+          title: 'A New Conviction Can Undo Your Shielding',
+          message: 'Shielding is not permanent if you reoffend. If you are convicted of a subsequent FELONY, the court SHALL revoke the shielding on the prosecutor\'s request at sentencing; if you are convicted of a subsequent MISDEMEANOR, the court MAY revoke it (§ 67-3004(11)). Once revoked, the record returns to public view. Because shielding is also once per lifetime, a revocation is costly. If you are facing a new charge, this is worth discussing with a defense attorney who knows the shielding was granted. Idaho Legal Aid can point you to help.',
+          remedy: 'Understand revocation risk on a new conviction (§ 67-3004(11))',
           citation: 'Idaho Code § 67-3004(11)'
         }
       }
@@ -16566,20 +16781,20 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     resources: {
       remedies: {
         expungement: {
-          name: 'Idaho record relief (ISP expungement § 67-3004(10); shielding § 67-3004(11); withheld-judgment dismissal § 19-2604)',
-          formName: 'Idaho State Police expungement application / Idaho courts shielding forms',
+          name: 'Idaho record relief (dismissal/reduction § 19-2604; shielding § 67-3004(11); ISP non-conviction expungement § 67-3004(10))',
+          formName: 'Idaho State Police expungement application / Idaho courts § 19-2604 and shielding forms',
           formUrl: 'https://isp.idaho.gov/BCI/',
           steps: [
-            'For a non-conviction, submit the Idaho State Police expungement request (§ 67-3004(10)) — administrative, not a court filing.',
-            'For a completed withheld judgment, file a motion to dismiss under § 19-2604 (restores rights, including firearms) — but know the record stays visible, marked "Dismissed by Court."',
-            'For one eligible conviction (non-violent misdemeanor or felony drug-possession), file a shielding petition (§ 67-3004(11)) after 5 conviction-free years from full sentence completion.',
-            'There is no general conviction expungement otherwise; a pardon or commutation is the remaining route. The Idaho courts\' self-help pages can guide each.'
+            'For a NON-conviction (arrest never charged within a year, acquittal, or a non-§19-2604(1) dismissal), submit the Idaho State Police written-request expungement (§ 67-3004(10)) — administrative, no court filing, no fee stated.',
+            'To clear a CONVICTION\'s legal effect, move under § 19-2604: dismissal/set-aside (§ 19-2604(1)) needs a flawless probation record (a found/admitted probation violation bars it unless you graduated drug/mental-health court); felony-to-misdemeanor reduction (§ 19-2604(3)) needs prosecutor stipulation within 5 years, or after 5 years unless on the serious list. Both are barred for a registrable sex offense, and neither hides the record.',
+            'To HIDE one eligible conviction (a non-assaultive misdemeanor or a felony drug possession), file a shielding petition (§ 67-3004(11)) after 5 conviction-free years from full sentence completion — once per lifetime, no restraining order in effect, and it does not restore firearm rights.',
+            'A § 19-2604(1) dismissal cannot be ISP-expunged, and there is no general conviction expungement; a pardon or commutation is the remaining route. Idaho Legal Aid and the Idaho courts self-help pages can guide each.'
           ],
-          // null: Wave 6 says the ISP administrative request "appears free" (unconfirmed)
-          // and the shielding petition court fee is a phone target — both unknown.
+          // null: no fee is stated for the § 67-3004(10) ISP written request or in
+          // § 19-2604 / § 67-3004(11); court filing fees for the petitions are phone-tier.
           fees: null,
           feeWaiver: null,
-          courtContact: 'Idaho State Police (BCI) for non-convictions; the district court for shielding and withheld-judgment motions'
+          courtContact: 'Idaho State Police (BCI) for non-convictions; the district court (in the underlying criminal case) for shielding, dismissal, and reduction'
         }
       },
       legalAid: [

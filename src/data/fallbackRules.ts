@@ -12179,77 +12179,112 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   WV: {
     code: 'WV',
     name: 'West Virginia',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      '2024-2026 session sweep pending (WV Legislature bill status by code section) — see Open Questions.',
     terminology:
-      'West Virginia uses EXPUNGEMENT, filed in the circuit court where the case was decided — § 61-11-26 '
-      + 'for convictions and § 61-11-25 for non-convictions. Two things make it distinctive. First, an '
-      + 'ACCELERATION lane (§ 61-11-26a): if you complete an approved substance-abuse treatment or recovery '
-      + 'program, or a WV Department of Education job-readiness course, your waiting periods drop sharply AND '
-      + 'the $100 State Police fee is waived — a treatment-and-work fast lane no other state has. Second, and '
-      + 'important to know before you file: the Supreme Court\'s official petition instructions (form SCA-C900) '
-      + 'say a person may request expungement under these sections only ONCE — so the question is not just '
-      + 'whether you are eligible, but whether this is the record worth spending that one request on.',
+      'West Virginia uses EXPUNGEMENT — sealing of the court records plus expungement at the other agencies — '
+      + 'petitioned in the circuit court of conviction or charge; there is no automatic path. It runs three '
+      + 'routes. NON-CONVICTION (§ 61-11-25) is FREE and fast: an acquittal, a dismissal (but NOT one given in '
+      + 'exchange for a guilty plea to another charge — a real trap), or a completed pretrial-diversion / '
+      + 'deferred-adjudication dismissal can be expunged, no sooner than 60 days after the order. But there is a '
+      + 'HARD BAR: anyone previously convicted of a FELONY cannot use § 61-11-25 at all, even for an acquittal. '
+      + 'CONVICTION (§ 61-11-26) is tiered — 1 year for a single misdemeanor, 2 years for multiple misdemeanors, '
+      + '5 years for a nonviolent felony (each running from the LATER of conviction, release from incarceration, '
+      + 'or completion of supervision) — and the petitioner carries a CLEAR AND CONVINCING burden. A long '
+      + '15-item exclusion list (§ 61-11-26(c)) puts violent felonies, minor-victim and sexual offenses, DV '
+      + 'offenses, every DUI, burglary of a dwelling, CDL offenses, and — a catch-all worth flagging — ANY '
+      + 'offense in which a deadly weapon was used or exhibited, out of reach; whether a felony even counts as '
+      + '"nonviolent" is partly a discretionary court finding, so a label alone never guarantees eligibility. '
+      + '(One nuance: a DUI conviction that is at least 5 years old does not itself block expunging a separate '
+      + 'eligible felony — the DUI just stays unexpungeable.) The ACCELERATOR (§ 61-11-26a) is the distinctive '
+      + 'part: complete an approved substance-abuse treatment/recovery program (90 days\' compliance) or graduate '
+      + 'a Department of Education job-readiness course and the waits drop to effectively-now / 1 year / 3 years, '
+      + 'AND the $100 State Police fee is waived. Both § 61-11-26 and § 61-11-26a relief share ONE combined '
+      + 'once-per-lifetime request (§ 61-11-26(o)), so choosing which record to spend it on matters. After a '
+      + 'grant the offense is deemed never to have occurred and you need not disclose it — except that '
+      + 'applicants for law-enforcement-pipeline jobs must disclose all expunged convictions.',
     keyDates: [],
     openQuestions: [
       {
         question:
-          'Confirm the SCA-C900 "only once" language and its SCOPE. Wave 6 flags this: the Supreme Court\'s official petition instructions say a person may request expungement under §§ 61-11-26/26a only once, but it is unclear whether that means once per person for life or once per statute/petition. It changes strategy the way Indiana\'s one-petition rule does. The tree routes people who have already expunged once to a "confirm this before you spend your one request" result; confirm the scope with a circuit clerk (Kanawha).',
+          'Run a 2024-2026 session sweep for amendments to §§ 61-11-25, 61-11-26, and 61-11-26a (WV Legislature bill status by code section). Confirm nothing since the pulled text changed the tiers, the exclusion list, the once-per-lifetime rule, or the accelerator.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the full § 61-11-26(c) exclusion list. Wave 6 gives violent felonies, felonies with minor victims, sexual offenses, deadly-weapon offenses, DV assault/battery, DUI, driving-suspended, and CDL offenses, and flags the (c) list as needing the full statutory text. Also confirm the note that an old DUI (5+ years) does not itself block expunging a separate, eligible felony. The tree asks these as exclusions; confirm the list against current § 61-11-26(c).',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the circuit court filing fee amount (it varies by county). Wave 6 gives the $100 State Police records-division fee (§ 61-11-26(n), waived on the 26a acceleration lane) but flags the separate circuit court filing fee as a per-county phone target. The fees field is null pending this; a Kanawha circuit clerk is the check.',
+          'Confirm the § 59-1-11(a)(1) civil-action filing fee amount, which sets the circuit-clerk fee for a § 61-11-26 conviction petition. The pulled text cross-references it but does not state the amount, so the conviction-path total is unknown; it is cite-only / phone-tier (a Kanawha circuit clerk is the check). The $100 State Police records-division fee is stated (and waived on the § 61-11-26a lane), and the § 61-11-25 non-conviction path is free.',
         blocksFields: ['resources.remedies.expungement.fees'],
       },
       {
         question:
-          'Confirm West Virginia has NOT enacted automatic expungement. Wave 6 says to check whether any 2024-26 automation bill (HB 4344-era proposals) moved, and to encode "petition-only" unless a call says otherwise. The tree is petition-only throughout; confirm no automation program is live.',
+          'Pull §§ 61-11-22 (pretrial diversion) and 61-11-22a (deferred adjudication) if time allows — they feed the § 61-11-25 non-conviction path (a completed-diversion dismissal is expungeable, subject to the DV carve-out). Cited but not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether the § 61-11-26(h)(1) requirement — that the convictions sought are the ONLY convictions for that specified offense in the state — is applied strictly. Additional convictions of the same offense outside the petition may defeat it; attorney-tier if the fact pattern is close.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the practical scope of the § 61-11-26(c)(4) catch-all — ANY offense in which the petitioner "used or exhibited a deadly weapon or dangerous instrument." How broadly courts read it (e.g. constructive possession, a weapon present but unused) is attorney-tier.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'W. Va. Code § 61-11-26 (expungement of convictions; 1-yr / 2-yr / 5-yr waits; (c) exclusions; (n) $100 WSP fee)', url: null, retrievedOn: null },
-      { id: 'W. Va. Code § 61-11-26a (acceleration: treatment/recovery or job-readiness course shortens waits to 90 days / 1 yr / 3 yrs and waives the WSP fee)', url: null, retrievedOn: null },
-      { id: 'W. Va. Code § 61-11-25 (expungement of non-convictions; 60-day wait; pretrial diversion / deferred adjudication dismissals)', url: null, retrievedOn: null },
-      { id: 'W. Va. Supreme Court petition instructions SCA-C900 ("only once" language)', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 61-11-25 (expungement of NON-convictions — found not guilty; a dismissal NOT in exchange for a guilty plea to another offense; a dismissal after full completion of pretrial diversion (§ 61-11-22) or deferred adjudication (§ 61-11-22a); HARD BAR: a person previously convicted of a FELONY may not file at all; no sooner than 60 days after the order; exclusions for DMV records (17C-5-2b), DV deferred-adjudication dismissals (61-2-28, 61-2-9(a)/(b)/(c), 61-2-9a with a family/household-member victim), and NGRI/mental-illness/addiction acquittals (15-12-1 et seq.); FREE, no fees (g); court must inform at acquittal/dismissal (b)) via code.wvlegislature.gov', url: 'https://code.wvlegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'W. Va. Code § 61-11-26 (expungement of CONVICTIONS — (a)-(b) tiers: single misdemeanor 1 yr, multiple misdemeanors 2 yr, nonviolent felony(ies) 5 yr, from the LATER of conviction/incarceration/supervision completion; (p)(5) discretionary nonviolent-felony definition; (c) 15-item exclusion list incl. (c)(4) deadly-weapon catch-all, (c)(7) any DUI (with the 5-yr-old-DUI-does-not-block-a-separate-felony proviso), (c)(12) burglary of a dwelling, (c)(13) sexually-motivated finding, (c)(14) CDL; (d)-(k) verified-petition content, service, 30-day opposition, CLEAR AND CONVINCING burden incl. (h)(1) only-conviction-of-that-offense, 60-day court action; (l) effects/honest-no with a law-enforcement-pipeline disclosure carve-out; (o) combined once-per-lifetime with § 61-11-26a; (p)(6) pardon records never expungeable; (q) no benefit reinstatement; (r) pre-2019 § 61-11B sentence-reduction conversion; $100 WV State Police fee) via code.wvlegislature.gov', url: 'https://code.wvlegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'W. Va. Code § 61-11-26a (ACCELERATOR — for people otherwise eligible under § 61-11-26 with a medically documented substance-abuse history plus successful compliance with a DoH-approved treatment/recovery program, and/or graduation from a Department of Education job-readiness adult course: single misdemeanor eligible on 90 days\' compliance/course completion, multiple misdemeanors 1 yr, nonviolent felony 3 yr; petition attaches program documentation; the $100 State Police fee is WAIVED; same combined once-per-lifetime counter as § 61-11-26) via code.wvlegislature.gov', url: 'https://code.wvlegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'W. Va. Code §§ 61-11-22, 61-11-22a (pretrial diversion and deferred adjudication — the § 61-11-25 non-conviction feeders) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 59-1-11(a)(1) (civil-action filing fee — the circuit-clerk fee for a § 61-11-26 conviction petition; amount not in the pulled text) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Code §§ 61-2, 61-3E, 61-8B, 61-8D (crime-of-violence, sexual-offense, and minor-victim definitions incorporated by § 61-11-26(p)(3)-(4) and (c)) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Code §§ 61-2-28, 61-2-9, 61-2-9a (domestic-violence offenses referenced in the § 61-11-26(c)(5) exclusion and the § 61-11-25 deferred-adjudication carve-out) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 17C-5-2b (DMV records for DUI that survive expungement under § 61-11-25) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Code § 61-11B (repealed pre-2019 sentence-reduction scheme — the § 61-11-26(r) conversion feeder) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'W. Va. Supreme Court expungement petition forms (SCA-C900 series) — CITE-ONLY, procedural forms', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_wv',
       nodes: {
-        disposition: {
+        entry_wv: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_wv' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_wv' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_wv' },
-            { label: 'Diversion / deferred adjudication completed and dismissed', value: 'deferred', next: 'eligible_deferred_wv' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Whether a CONVICTION can be expunged', value: 'conviction', next: 'onceever_wv' },
+            { label: 'Whether a NON-conviction can be expunged (acquittal, dismissal, completed diversion)', value: 'nonconv', next: 'nonconv_felonyprior_wv' },
+            { label: 'Convert a pre-2019 sentence-reduction order (§ 61-11B) to an expungement', value: 'legacy', next: 'eligible_legacy_wv' },
+            { label: 'What an expungement I ALREADY have means for disclosure', value: 'effects', next: 'effects_disclosure_wv' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
+        },
+        // Combined once-per-lifetime counter for § 61-11-26 + § 61-11-26a (26(o)).
+        onceever_wv: {
+          type: 'boolean',
+          text: 'Have you ever obtained a West Virginia conviction expungement before, under § 61-11-26 or § 61-11-26a? (The two share ONE request per lifetime.)',
+          yes: 'ineligible_onceever_wv',
+          no: 'excluded_wv'
         },
         excluded_wv: {
           type: 'boolean',
-          text: 'Was the offense any of these: a violent felony, a felony with a minor victim, a sexual offense, a deadly-weapon offense, domestic-violence assault or battery, DUI, driving on a suspended license, or a CDL-holder traffic offense?',
+          text: 'Was the conviction any of these excluded categories: a felony crime of violence against a person (ch. 61 arts. 2, 3E, 8B, 8D), or a misdemeanor causing intentional physical injury to a minor or a law-enforcement officer; a felony/listed offense with a MINOR victim; any sexual offense (61-8B); a domestic-violence offense (61-2-28) or a battery with a domestic relationship; neglect of an incapacitated adult; ANY DUI; driving while revoked for DUI; burglary of a DWELLING; a conviction with a sexually-motivated finding; or a CDL offense (17E-1-13(g))?',
           yes: 'ineligible_excluded_wv',
-          no: 'prior_use_wv'
+          no: 'deadly_weapon_wv'
         },
-        prior_use_wv: {
+        // The (c)(4) catch-all — its own gate, because a deadly weapon bars an
+        // offense that might otherwise look expungeable.
+        deadly_weapon_wv: {
           type: 'boolean',
-          text: 'Have you ever obtained a West Virginia expungement before, under § 61-11-26 or § 61-11-26a?',
-          yes: 'complex_onceever_wv',
+          text: 'In committing this offense, did you USE or EXHIBIT a deadly weapon or dangerous instrument?',
+          yes: 'ineligible_deadlyweapon_wv',
           no: 'accel_wv'
         },
         accel_wv: {
           type: 'boolean',
-          text: 'Have you completed an approved substance-abuse treatment or recovery program, or a WV Department of Education job-readiness course? (This "acceleration" shortens your waiting periods and waives the $100 State Police fee.)',
+          text: 'Have you completed an approved substance-abuse treatment or recovery program (with 90 days\' compliance), or graduated a WV Department of Education job-readiness course? (This § 61-11-26a lane shortens your waits and waives the $100 State Police fee.)',
           yes: 'level_accel_wv',
           no: 'level_wv'
         },
@@ -12259,7 +12294,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           options: [
             { label: 'A single misdemeanor', value: 'misd_single', next: 'misd_single_date_wv' },
             { label: 'Multiple misdemeanors', value: 'misd_multi', next: 'misd_multi_date_wv' },
-            { label: 'A non-violent felony (or several from the same incident)', value: 'felony', next: 'felony_date_wv' },
+            { label: 'A non-violent felony (or several from the same transaction/series)', value: 'felony', next: 'felony_date_wv' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wv' }
           ]
         },
@@ -12269,76 +12304,93 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           options: [
             { label: 'A single misdemeanor', value: 'misd_single', next: 'misd_single_accel_date_wv' },
             { label: 'Multiple misdemeanors', value: 'misd_multi', next: 'misd_multi_accel_date_wv' },
-            { label: 'A non-violent felony (or several from the same incident)', value: 'felony', next: 'felony_accel_date_wv' },
+            { label: 'A non-violent felony (or several from the same transaction/series)', value: 'felony', next: 'felony_accel_date_wv' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wv' }
           ]
         },
         misd_single_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete this misdemeanor case — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For this single misdemeanor, when was the LATEST of: the conviction, your release from incarceration, and completion of any supervision?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'conviction / incarceration / supervision completion, whichever latest (W. Va. Code § 61-11-26 — single misdemeanor)' },
+            period: { amount: 1, unit: 'years', anchor: 'the LATER of conviction / incarceration / supervision completion (§ 61-11-26(a) — single misdemeanor)' },
             nextPass: 'eligible_misd_wv',
             nextFail: 'waiting_wv'
           }
         },
         misd_multi_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the LAST of the misdemeanors — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For the LAST of your misdemeanors, when was the LATEST of: the conviction, your release from incarceration, and completion of any supervision?',
           validation: {
-            period: { amount: 2, unit: 'years', anchor: 'completion of the LAST misdemeanor, whichever of conviction/incarceration/supervision is latest (W. Va. Code § 61-11-26 — multiple misdemeanors)' },
+            period: { amount: 2, unit: 'years', anchor: 'the LATER of conviction / incarceration / supervision completion for the last misdemeanor (§ 61-11-26(b) — multiple misdemeanors)' },
             nextPass: 'eligible_misd_wv',
             nextFail: 'waiting_wv'
           }
         },
         felony_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the felony case — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For the felony (or the last of several from the same transaction/series), when was the LATEST of: the conviction, your release from incarceration, and completion of any supervision?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction / incarceration / supervision completion, whichever latest (W. Va. Code § 61-11-26 — non-violent felony)' },
+            period: { amount: 5, unit: 'years', anchor: 'the LATER of conviction / incarceration / supervision completion (§ 61-11-26(b) — nonviolent felony)' },
             nextPass: 'eligible_felony_wv',
             nextFail: 'waiting_wv'
           }
         },
         misd_single_accel_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete this misdemeanor case — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For this single misdemeanor, when did you complete your program/course (or finish incarceration/supervision, whichever is later)?',
           validation: {
-            period: { amount: 90, unit: 'days', anchor: 'completion, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — single misdemeanor; treatment/job-readiness completed)' },
+            period: { amount: 90, unit: 'days', anchor: '90 days after program compliance / course completion, following incarceration/supervision (§ 61-11-26a — single misdemeanor)' },
             nextPass: 'eligible_accel_wv',
             nextFail: 'waiting_wv'
           }
         },
         misd_multi_accel_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the LAST of the misdemeanors — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For the LAST of your misdemeanors, when was the LATEST of: the conviction, your release from incarceration, and completion of any supervision?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'completion of the last, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — multiple misdemeanors)' },
+            period: { amount: 1, unit: 'years', anchor: 'the LATER of conviction / incarceration / supervision completion for the last misdemeanor, on the accelerator (§ 61-11-26a — multiple misdemeanors)' },
             nextPass: 'eligible_accel_wv',
             nextFail: 'waiting_wv'
           }
         },
         felony_accel_date_wv: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the felony case — conviction, any incarceration, and any supervision, whichever was latest?',
+          text: 'For the felony (or the last of several from the same transaction/series), when was the LATEST of: the conviction, your release from incarceration, and completion of any supervision?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'completion, whichever latest, on the acceleration lane (W. Va. Code § 61-11-26a — non-violent felony)' },
+            period: { amount: 3, unit: 'years', anchor: 'the LATER of conviction / incarceration / supervision completion, on the accelerator (§ 61-11-26a — nonviolent felony)' },
             nextPass: 'eligible_accel_wv',
             nextFail: 'waiting_wv'
           }
         },
-        nonconv_wv: {
+        // NON-conviction path. Felony-prior HARD BAR is screened first (61-11-25).
+        nonconv_felonyprior_wv: {
+          type: 'boolean',
+          text: 'Have you ever been convicted of a FELONY (anywhere)? In West Virginia a prior felony conviction bars the non-conviction expungement entirely — even for an acquittal.',
+          yes: 'ineligible_felonyprior_wv',
+          no: 'nonconv_type_wv'
+        },
+        nonconv_type_wv: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'I was found not guilty (acquitted)', value: 'acquitted', next: 'nonconv_date_wv' },
+            { label: 'Charges were dismissed — NOT in exchange for a guilty plea to another charge', value: 'dismissed', next: 'nonconv_date_wv' },
+            { label: 'Charges were dismissed as part of a plea deal on another charge', value: 'pleadeal', next: 'ineligible_pleadeal_wv' },
+            { label: 'I completed a pretrial diversion or deferred adjudication and it was dismissed', value: 'diversion', next: 'nonconv_dv_wv' }
+          ]
+        },
+        nonconv_dv_wv: {
+          type: 'boolean',
+          text: 'Was the diverted/deferred charge a domestic-violence-related offense — § 61-2-28, § 61-2-9(a)/(b)/(c), or § 61-2-9a — where the victim was a family or household member?',
+          yes: 'ineligible_dv_deferred_wv',
+          no: 'nonconv_date_wv'
+        },
+        nonconv_date_wv: {
           type: 'date',
           field: 'disposition_date',
           text: 'When was the case acquitted or dismissed?',
           validation: {
-            period: { amount: 60, unit: 'days', anchor: 'after the acquittal or dismissal (W. Va. Code § 61-11-25 — non-conviction)' },
+            period: { amount: 60, unit: 'days', anchor: 'no sooner than 60 days after the acquittal or dismissal order (§ 61-11-25 — non-conviction floor)' },
             nextPass: 'eligible_nonconv_wv',
             nextFail: 'waiting_nonconv_wv'
           }
@@ -12352,73 +12404,108 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (court paperwork / WV State Police)',
           citation: 'W. Va. Code §§ 61-11-25, 61-11-26 (which path applies depends on the disposition)'
         },
-        eligible_deferred_wv: {
-          status: 'eligible',
-          title: 'Diversion Completed — Likely Expungeable',
-          message: 'Because you completed a pretrial diversion or deferred-adjudication agreement and the charge was dismissed, West Virginia generally allows that dismissal to be expunged. One caution to confirm: there are carve-outs for domestic-violence-related matters, so if yours involved a DV charge, check that first. This is filed in the circuit court where the case was handled. Legal Aid of West Virginia can confirm your route. And a planning note worth knowing up front: the Supreme Court\'s official instructions say you may request expungement only once, so it is worth being deliberate about timing.',
-          remedy: 'Expunge a completed-diversion dismissal (§ 61-11-25) — confirm DV carve-outs',
-          citation: 'W. Va. Code § 61-11-25'
+        ineligible_onceever_wv: {
+          status: 'ineligible',
+          title: 'You Have Already Used Your One Expungement',
+          message: 'West Virginia allows only ONE conviction-expungement request in a lifetime, combined across § 61-11-26 and the § 61-11-26a accelerator (§ 61-11-26(o)). Because you have already obtained one, a new conviction cannot be expunged this way — no waiting period changes that. Two things still worth checking: any NON-conviction on your record can be expunged separately (that does not use the one request), and a Governor\'s pardon remains a route for a conviction. Legal Aid of West Virginia can help you look at both.',
+          remedy: 'None (one-expungement limit used) — check non-convictions or a pardon',
+          citation: 'W. Va. Code § 61-11-26(o)'
         },
         eligible_nonconv_wv: {
           status: 'eligible',
-          title: 'No Conviction — Expungeable After 60 Days',
-          message: 'Because your case ended in an acquittal or dismissal, you can petition to expunge it 60 days after the case ended — and based on your date, that window has passed. You file in the circuit court where the case was decided, serving the State Police, the prosecutor, and the arresting agency, who then certify compliance. Legal Aid of West Virginia can help with the petition.',
-          remedy: 'Non-conviction expungement petition (§ 61-11-25)',
+          title: 'No Conviction — Expungeable (and Free) After 60 Days',
+          message: 'Because your case ended in an acquittal or a qualifying dismissal, you can petition to expunge it no sooner than 60 days after the order — and based on your date, that window has passed. This path (§ 61-11-25) is FREE: no filing fees or costs. You file in the circuit court where the case was decided, serving the State Police, the prosecutor, and the arresting agency, who then certify compliance within 60 days. On a grant the matter is treated as never having occurred, and you need not disclose it. Legal Aid of West Virginia can help with the petition.',
+          remedy: 'Non-conviction expungement petition (§ 61-11-25) — free',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        waiting_nonconv_wv: {
+          status: 'waiting',
+          title: 'Not Yet 60 Days',
+          message: 'For an acquittal or dismissal, West Virginia lets you petition no sooner than 60 days after the order (§ 61-11-25). Based on your date, that 60-day floor has not passed yet — filing early is premature. Once it does, this path is free, filed in the circuit court where the case was decided. Legal Aid of West Virginia can help you prepare in the meantime.',
+          remedy: 'Wait until 60 days after the order, then petition (§ 61-11-25) — free',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        ineligible_felonyprior_wv: {
+          status: 'ineligible',
+          title: 'A Prior Felony Bars the Non-Conviction Path',
+          message: 'West Virginia\'s non-conviction expungement (§ 61-11-25) has a hard bar that surprises people: anyone previously convicted of a FELONY may not file under this section at all — even to clear an acquittal or a dismissed charge. Because you have a prior felony conviction, this free path is closed. Two things to consider instead: if that felony is itself a nonviolent, non-excluded offense, it may be expungeable under the CONVICTION path (§ 61-11-26) after its waiting period — and clearing it would remove this bar for the future; and a pardon remains a route. Legal Aid of West Virginia can help you sequence this.',
+          remedy: 'None via § 61-11-25 (prior felony) — consider expunging the felony under § 61-11-26 first',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        ineligible_pleadeal_wv: {
+          status: 'ineligible',
+          title: 'A Plea-Deal Dismissal Is Not Expungeable Here',
+          message: 'West Virginia\'s non-conviction expungement covers dismissals — but NOT a charge that was dismissed in exchange for your guilty plea to another offense (§ 61-11-25). Because this dismissal was part of a plea deal on another charge, it does not qualify as a non-conviction for expungement. The charge you actually pleaded guilty to is a conviction and would be screened on the conviction path (§ 61-11-26) instead, subject to its tiers and exclusions. Legal Aid of West Virginia can help you sort out which charge is which.',
+          remedy: 'None via § 61-11-25 (plea-deal dismissal) — screen the plea conviction under § 61-11-26',
+          citation: 'W. Va. Code § 61-11-25'
+        },
+        ineligible_dv_deferred_wv: {
+          status: 'ineligible',
+          title: 'Domestic-Violence Deferred Dismissal — Not Expungeable',
+          message: 'A completed diversion or deferred-adjudication dismissal usually can be expunged — but West Virginia carves out domestic-violence-related charges (§ 61-2-28, § 61-2-9(a)/(b)/(c), or § 61-2-9a) where the victim was a family or household member (§ 61-11-25). Because yours fits that carve-out, the dismissal cannot be expunged under this path, and no waiting period changes that. A Governor\'s pardon is the remaining route. Legal Aid of West Virginia can help you confirm the relationship element and explain the options.',
+          remedy: 'None (DV deferred-adjudication carve-out) — a pardon is the remaining route',
           citation: 'W. Va. Code § 61-11-25'
         },
         eligible_misd_wv: {
           status: 'eligible',
           title: 'Misdemeanor Waiting Period Met — Expungeable',
-          message: 'Based on your dates, the waiting period for your misdemeanor record has passed — 1 year for a single misdemeanor, or 2 years from the last if there were several. You can petition the circuit court where the case was decided. Two things to plan around: there is a $100 State Police fee plus a circuit court filing fee (the circuit fee varies by county — worth calling to confirm), and the Supreme Court\'s official instructions say you may request expungement only once, so be deliberate about which record you clear. If you have completed a substance-abuse treatment or recovery program, or a job-readiness course, ask about the acceleration lane — it shortens the wait and waives the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
-          remedy: 'Conviction expungement petition (§ 61-11-26)',
+          message: 'Based on your dates, the waiting period for your misdemeanor record has passed — 1 year for a single misdemeanor, or 2 years from the last if there were several — running from the LATER of conviction, release from incarceration, or completion of supervision. You petition the circuit court where the case was decided, and you carry the burden by CLEAR AND CONVINCING evidence (including that this is your only conviction for that specified offense in the state). Plan around cost and the one-request rule: there is a $100 State Police fee plus a circuit-clerk filing fee, and §§ 61-11-26/26a share ONE expungement per lifetime, so be deliberate about which record you clear. If you completed an approved treatment/recovery program or a job-readiness course, the accelerator shortens the wait and waives the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
+          remedy: 'Conviction expungement petition (§ 61-11-26) — clear and convincing, once per lifetime',
           citation: 'W. Va. Code § 61-11-26'
         },
         eligible_felony_wv: {
           status: 'eligible',
-          title: 'Non-Violent Felony, 5+ Years — Expungeable',
-          message: 'Based on your dates, the 5-year waiting period for a non-violent felony (or several felonies from the same incident, counted together) has passed. You can petition the circuit court where the case was decided. Plan around two things: a $100 State Police fee plus a circuit court filing fee that varies by county, and the Supreme Court\'s official instruction that you may request expungement only once — so this is worth doing deliberately. If you have completed an approved treatment or recovery program, or a WV job-readiness course, the acceleration lane can cut the wait to 3 years and waive the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
-          remedy: 'Conviction expungement petition (§ 61-11-26)',
+          title: 'Nonviolent Felony, 5+ Years — Petition Available',
+          message: 'Based on your dates, the 5-year waiting period for a nonviolent felony (or several from the same transaction/series, counted together) has passed. One honest caveat before you count on it: felony eligibility is never guaranteed by the offense label alone — the court must FIND the felony nonviolent (no intentional infliction of serious bodily injury, no violence or potential violence to a person or the public, and facts consistent with the statute\'s purposes, § 61-11-26(p)(5)), and you carry the burden by CLEAR AND CONVINCING evidence. You petition the circuit court where the case was decided. Plan around the $100 State Police fee plus a circuit-clerk fee, and the once-per-lifetime rule shared with § 61-11-26a. If you completed an approved treatment/recovery program or a job-readiness course, the accelerator cuts the wait to 3 years and waives the $100 fee. Legal Aid of West Virginia and Jobs & Hope WV can help.',
+          remedy: 'Conviction expungement petition (§ 61-11-26) — discretionary nonviolence finding',
           citation: 'W. Va. Code § 61-11-26'
         },
         eligible_accel_wv: {
           status: 'eligible',
-          title: 'Acceleration Lane — Shorter Wait, Fee Waived',
-          message: 'Because you completed an approved substance-abuse treatment or recovery program, or a WV Department of Education job-readiness course, you qualify for West Virginia\'s acceleration lane (§ 61-11-26a): the waiting periods drop to 90 days for a single misdemeanor, 1 year for multiple misdemeanors, and 3 years for a non-violent felony — and the $100 State Police fee is waived. Based on your dates, your shortened period has passed. This treatment-and-work fast lane is unique to West Virginia; Jobs & Hope WV is the program hub. You still file in the circuit court where the case was decided (a circuit filing fee, which varies by county, may still apply). Remember the once-only rule when choosing which record to clear.',
+          title: 'Accelerator — Shorter Wait, $100 Fee Waived',
+          message: 'Because you completed an approved substance-abuse treatment/recovery program (with 90 days\' compliance) or graduated a WV Department of Education job-readiness course, you qualify for the accelerator (§ 61-11-26a): the waits drop to effectively 90 days for a single misdemeanor, 1 year for multiple misdemeanors, and 3 years for a nonviolent felony — and the $100 State Police fee is waived. Based on your dates, your shortened period has passed. Attach your program documentation or graduation certificate to the petition, filed in the circuit court where the case was decided (a circuit-clerk filing fee may still apply). This still uses your ONE lifetime expungement request (shared with § 61-11-26), and a felony still needs the discretionary nonviolence finding. Jobs & Hope WV is the program hub; Legal Aid of West Virginia can help.',
           remedy: 'Accelerated expungement petition (§ 61-11-26a) — $100 State Police fee waived',
           citation: 'W. Va. Code § 61-11-26a'
         },
         waiting_wv: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'West Virginia\'s waiting periods run from whichever is latest of your conviction, release from incarceration, or completion of supervision: 1 year for a single misdemeanor, 2 years for multiple misdemeanors, and 5 years for a non-violent felony. Based on your dates, yours has not passed yet. One route can shorten it: completing an approved substance-abuse treatment or recovery program, or a WV job-readiness course, drops the waits to 90 days / 1 year / 3 years and waives the $100 State Police fee (§ 61-11-26a). Jobs & Hope WV runs those programs.',
-          remedy: 'Wait for the period — or shorten it via the § 61-11-26a acceleration lane',
+          message: 'West Virginia\'s conviction waiting periods run from whichever is latest of your conviction, release from incarceration, or completion of supervision: 1 year for a single misdemeanor, 2 years for multiple misdemeanors, and 5 years for a nonviolent felony. Based on your dates, yours has not passed yet. One route can shorten it: completing an approved substance-abuse treatment/recovery program (90 days\' compliance) or a WV job-readiness course drops the waits to effectively 90 days / 1 year / 3 years and waives the $100 State Police fee (§ 61-11-26a). Jobs & Hope WV runs those programs.',
+          remedy: 'Wait for the period — or shorten it via the § 61-11-26a accelerator',
           citation: 'W. Va. Code §§ 61-11-26, 61-11-26a'
-        },
-        waiting_nonconv_wv: {
-          status: 'waiting',
-          title: 'Not Yet 60 Days',
-          message: 'For an acquittal or dismissal, West Virginia lets you petition to expunge 60 days after the case ended. Based on your date, that 60-day window has not passed yet. Once it does, you file in the circuit court where the case was decided. Legal Aid of West Virginia can help you prepare in the meantime.',
-          remedy: 'Wait until 60 days after the case ended, then petition (§ 61-11-25)',
-          citation: 'W. Va. Code § 61-11-25'
         },
         ineligible_excluded_wv: {
           status: 'ineligible',
           title: 'This Offense Is Excluded From Expungement',
-          message: 'West Virginia\'s expungement statute excludes a set of offenses: violent felonies, felonies with a minor victim, sexual offenses, deadly-weapon offenses, domestic-violence assault or battery, DUI, driving on a suspended license, and CDL-holder traffic offenses. No waiting period changes that for the excluded offense itself. One thing worth knowing, though: an old DUI (5 or more years back) does not, by itself, block you from expunging a SEPARATE, eligible offense — each offense is judged on its own, so if you have another record that qualifies, screen that one on its own. For an offense that is truly excluded, a Governor\'s pardon is the remaining route. Legal Aid of West Virginia can help you check where yours falls.',
-          remedy: 'None for the excluded offense — a separate eligible offense can still be pursued; else pardon',
+          message: 'West Virginia\'s conviction expungement excludes a long list of offenses (§ 61-11-26(c)): felony crimes of violence and misdemeanors that intentionally injure a minor or an officer; felonies with a minor victim; sexual offenses; domestic-violence offenses; neglect of an incapacitated adult; ANY DUI and driving-revoked-for-DUI; burglary of a dwelling; convictions with a sexually-motivated finding; and CDL offenses. No waiting period changes that for the excluded offense itself. Two things worth knowing: an old DUI (5+ years) does NOT by itself block expunging a SEPARATE, eligible felony — each offense is judged on its own, so screen any other record separately (the DUI just stays unexpungeable); and burglary of a COMMERCIAL building is not caught by the dwelling exclusion, so it can be analyzed as a nonviolent felony. For a truly excluded offense, a Governor\'s pardon is the remaining route. Legal Aid of West Virginia can help you check where yours falls.',
+          remedy: 'None for the excluded offense — screen a separate eligible offense, or a pardon',
           citation: 'W. Va. Code § 61-11-26(c)'
         },
-        complex_onceever_wv: {
+        ineligible_deadlyweapon_wv: {
+          status: 'ineligible',
+          title: 'A Deadly Weapon Was Used — Excluded',
+          message: 'West Virginia\'s expungement statute has a broad catch-all: ANY offense in which you used or exhibited a deadly weapon or dangerous instrument is excluded, regardless of the offense\'s label (§ 61-11-26(c)(4)). Because a deadly weapon was involved, this conviction cannot be expunged, and no waiting period changes that. A Governor\'s pardon is the remaining route. If a separate offense on your record did not involve a weapon and is otherwise eligible, that one can still be screened on its own. Legal Aid of West Virginia can help.',
+          remedy: 'None (deadly-weapon catch-all) — a pardon is the remaining route',
+          citation: 'W. Va. Code § 61-11-26(c)(4)'
+        },
+        eligible_legacy_wv: {
+          status: 'eligible',
+          title: 'Pre-2019 Sentence Reduction — Convertible to Expungement',
+          message: 'If you have an old sentence-reduction order entered under the repealed § 61-11B (before the 2019 expungement scheme), West Virginia lets you convert it to an EXPUNGEMENT by petition with verification (§ 61-11-26(r)). This is a niche path for those legacy reduction orders — you would not start the conviction analysis from scratch. It is filed in the circuit court, and the ordinary once-per-lifetime rule still applies. Legal Aid of West Virginia can help you confirm your old order qualifies and file the conversion.',
+          remedy: 'Convert a § 61-11B reduction order to expungement (§ 61-11-26(r))',
+          citation: 'W. Va. Code § 61-11-26(r)'
+        },
+        effects_disclosure_wv: {
           status: 'complex',
-          title: 'You May Have Already Used Your One Request — Confirm First',
-          message: 'This is a West Virginia-specific caution, not a no. The Supreme Court\'s official petition instructions (form SCA-C900) say a person may request expungement under §§ 61-11-26/26a only once. Because you told us you have expunged a record before, you may have already used that one request — but the exact scope of the "only once" rule (once per person for life, or once per petition) is something we flag for confirmation rather than guess at. Before filing anything, confirm with the circuit clerk where you would file (Kanawha County is a good reference) whether you can request again. If you can only go once, this is a decision about which record matters most. Legal Aid of West Virginia can help you weigh it.',
-          remedy: 'Confirm the scope of the once-only rule with a circuit clerk before filing',
-          citation: 'W. Va. Supreme Court petition instructions SCA-C900; W. Va. Code §§ 61-11-26, 61-11-26a'
+          title: 'Expunged — With Two Disclosure Exceptions',
+          message: 'After a West Virginia expungement the offense is, as a matter of law, deemed never to have occurred: the agencies reply that no record exists, you need not disclose it on employment, credit, or other applications, and you are protected from a perjury charge for answering accordingly (§ 61-11-26(l)). There are two carve-outs. First — the one that catches people — if you apply for a LAW-ENFORCEMENT-PIPELINE position (work in crime prevention, detection, investigation, prosecution, or incarceration, e.g. a corrections officer), you MUST disclose ALL expunged convictions. Second, entities that are required by state or federal law to run criminal-history checks may still learn of expunged convictions. Also note expungement does not reinstate any forfeited retirement or employment benefits. So: for an ordinary job you can answer as if it never happened; for a corrections-officer or similar role, disclose. Legal Aid of West Virginia can help you apply this.',
+          remedy: 'Disclose on law-enforcement-pipeline applications (§ 61-11-26(l))',
+          citation: 'W. Va. Code § 61-11-26(l)'
         },
         complex_level_wv: {
           status: 'complex',
           title: 'We Need to Know What You Are Clearing',
-          message: 'West Virginia\'s waiting period depends on whether you are clearing a single misdemeanor (1 year), multiple misdemeanors (2 years from the last), or a non-violent felony (5 years) — and the acceleration lane changes those to 90 days / 1 year / 3 years. Since you are not sure which describes your record, we are not going to guess. Your court paperwork or a West Virginia State Police criminal-history request will show it. Legal Aid of West Virginia can help you read it.',
+          message: 'West Virginia\'s waiting period depends on whether you are clearing a single misdemeanor (1 year), multiple misdemeanors (2 years from the last), or a nonviolent felony (5 years) — and the accelerator changes those to effectively 90 days / 1 year / 3 years. Since you are not sure which describes your record, we are not going to guess. Your court paperwork or a West Virginia State Police criminal-history request will show it. Legal Aid of West Virginia can help you read it.',
           remedy: 'Get Your Record First (court paperwork / WV State Police)',
           citation: 'W. Va. Code §§ 61-11-26, 61-11-26a'
         }
@@ -12431,17 +12518,18 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'WV Supreme Court expungement forms (SCA-C900 series)',
           formUrl: 'https://www.courtswv.gov/lower-courts/sca-forms',
           steps: [
-            'Confirm your offense is not on the § 61-11-26(c) exclusion list (violent felonies, minor-victim felonies, sex offenses, deadly-weapon offenses, DV assault/battery, DUI, driving-suspended, CDL offenses).',
-            'If you completed a substance-abuse treatment/recovery program or a WV job-readiness course, use the § 61-11-26a acceleration lane — shorter waits and the $100 State Police fee is waived. Jobs & Hope WV is the program hub.',
-            'File in the circuit court where the case was decided, serving the State Police superintendent, the prosecutor, the police chief, and (if applicable) the warden; agencies certify compliance within 60 days.',
-            'Because the official instructions say you may request expungement only once, be deliberate about which record you clear — confirm the scope with your circuit clerk before filing.'
+            'For a NON-conviction (acquittal, a dismissal not given for a guilty plea to another charge, or a completed diversion/deferred-adjudication dismissal), petition under § 61-11-25 — free, no sooner than 60 days after the order. Note the hard bar: a prior FELONY conviction blocks this path entirely.',
+            'For a CONVICTION, confirm it is not on the § 61-11-26(c) exclusion list (violent/minor-victim/sexual/DV offenses, any DUI, burglary of a dwelling, CDL offenses, or ANY offense in which a deadly weapon was used or exhibited), then check your tier: single misdemeanor 1 yr, multiple 2 yr, nonviolent felony 5 yr, from the LATER of conviction / incarceration / supervision completion. A felony also needs a discretionary nonviolence finding, and you carry a clear-and-convincing burden.',
+            'If you completed a substance-abuse treatment/recovery program (90 days\' compliance) or a WV Department of Education job-readiness course, use the § 61-11-26a accelerator — waits drop to effectively 90 days / 1 yr / 3 yr and the $100 State Police fee is waived (attach your program documentation). Jobs & Hope WV is the program hub.',
+            'File in the circuit court of conviction/charge, serving the State Police superintendent, prosecutor(s), arresting agency, and (if confined) the warden. §§ 61-11-26 and 61-11-26a share ONE expungement per lifetime, so be deliberate about which record you clear.'
           ],
-          // null: the $100 State Police fee is known, but Wave 6 flags the separate
-          // circuit court filing fee as a per-county unknown, so the total is unknown.
+          // null: the $100 State Police fee is stated, but the § 61-11-26 circuit-clerk
+          // fee equals the § 59-1-11(a)(1) civil-action fee, whose amount is not in the
+          // pulled text — so the total is unknown. Non-conviction (§ 61-11-25) is free.
           fees: null,
-          // NOT null: the § 61-11-26a acceleration is a named mechanism that waives the WSP fee.
-          feeWaiver: 'The § 61-11-26a acceleration lane — completing an approved substance-abuse treatment/recovery program or a WV Department of Education job-readiness course — waives the $100 State Police fee.',
-          courtContact: 'The circuit court where the case was decided (Kanawha County is a reference for fee confirmation)'
+          // NOT null: the § 61-11-26a accelerator is a named mechanism that waives the WSP fee.
+          feeWaiver: 'The § 61-11-26a accelerator — completing an approved substance-abuse treatment/recovery program or a WV Department of Education job-readiness course — waives the $100 State Police fee. The § 61-11-25 non-conviction path is free entirely.',
+          courtContact: 'The circuit court of conviction or charge (Kanawha County is a reference for fee confirmation)'
         }
       },
       legalAid: [

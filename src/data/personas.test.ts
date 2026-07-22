@@ -4901,63 +4901,185 @@ const ID: Persona[] = [
   },
 ];
 
+// WV personas come from Diana's read of W. Va. Code §§ 61-11-25, 61-11-26, and
+// 61-11-26a from code.wvlegislature.gov — the statute-verified rewrite that took WV
+// to statute_cited on 2026-07-22, replacing the Wave 6 draft's five personas.
+// Conviction date nodes are asked (the clock runs from the LATER of conviction,
+// incarceration, or supervision completion — not disposition_date).
 const WV: Persona[] = [
   {
-    source: 'Wave 6 — WV persona 1',
-    package: 'single misdemeanor 2023, done -> 1-yr wait met -> eligible.',
-    record: { title: 'Single misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2023-06-01', probation_status: 'completed' },
-    answers: { excluded_wv: false, prior_use_wv: false, accel_wv: false, level_wv: 'misd_single' },
+    source: 'WV statute verification (2026-07-22) — persona 1',
+    package: 'single misdemeanor possession, completed 14 months ago -> eligible, 1-yr tier.',
+    record: { title: 'Single misdemeanor possession', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: false, deadly_weapon_wv: false, accel_wv: false, level_wv: 'misd_single', misd_single_date_wv: '2025-05-01' },
     expect: {
       resultKey: 'eligible_misd_wv',
-      reading: 'A single misdemeanor 3 years past completion clears the 1-year § 61-11-26 wait -> eligible.',
+      reading: 'A single misdemeanor clears the 1-year § 61-11-26(a) tier; completed 2025-05-01, ~14 months before 2026-07-15 -> eligible.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — WV persona 2',
-    package: 'NV felony 2020 + completed recovery program -> 26a: eligible at 3 yrs (2023+), WSP fee waived — the fast-lane persona.',
-    record: { title: 'Non-violent felony + completed recovery program', charge_type: 'felony', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
-    answers: { excluded_wv: false, prior_use_wv: false, accel_wv: true, level_accel_wv: 'felony' },
+    source: 'WV statute verification (2026-07-22) — persona 2',
+    package: 'three misdemeanors, last completed 18 months ago -> not yet, 2-yr multiple tier.',
+    record: { title: 'Three misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: false, deadly_weapon_wv: false, accel_wv: false, level_wv: 'misd_multi', misd_multi_date_wv: '2025-01-01' },
+    expect: {
+      resultKey: 'waiting_wv',
+      reading: 'Multiple misdemeanors carry a 2-year tier from the last completion (§ 61-11-26(b)); last completed 2025-01-01, only ~18 months at 2026-07-15 -> waiting.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 3',
+    package: 'same person but graduated an approved job-readiness course -> 26a accelerator, 1-yr tier met, $100 fee waived.',
+    record: { title: 'Three misdemeanors + job-readiness course', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: false, deadly_weapon_wv: false, accel_wv: true, level_accel_wv: 'misd_multi', misd_multi_accel_date_wv: '2025-01-01' },
     expect: {
       resultKey: 'eligible_accel_wv',
-      reading:
-        'A non-violent ("NV") felony on the § 61-11-26a acceleration lane (recovery program completed) drops '
-        + 'to a 3-year wait; 2020 -> eligible 2023, met at 2026, WSP fee waived -> eligible_accel_wv.',
+      reading: 'On the § 61-11-26a accelerator, multiple misdemeanors drop from 2 years to 1 year; last completed 2025-01-01, ~18 months at 2026-07-15 -> eligible, $100 State Police fee waived.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — WV persona 3',
-    package: 'DV battery -> excluded.',
-    record: { title: 'DV battery', disposition: 'convicted', disposition_date: '2019-06-01' },
-    answers: { excluded_wv: true },
+    source: 'WV statute verification (2026-07-22) — persona 4',
+    package: 'nonviolent felony forgery, completed 6 years ago, clean -> eligible, clear-and-convincing + discretionary nonviolence finding messaging.',
+    record: { title: 'Nonviolent felony forgery', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: false, deadly_weapon_wv: false, accel_wv: false, level_wv: 'felony', felony_date_wv: '2020-01-01' },
+    expect: {
+      resultKey: 'eligible_felony_wv',
+      reading: 'A nonviolent felony clears the 5-year § 61-11-26(b) tier; completed 2020-01-01, 6+ years by 2026-07-15 -> eligible, with the clear-and-convincing + discretionary-nonviolence-finding caveat.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 5',
+    package: 'felony completed 3.5 years ago with documented 90-day treatment compliance -> 26a 3-yr tier eligible.',
+    record: { title: 'Nonviolent felony + treatment compliance', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: false, deadly_weapon_wv: false, accel_wv: true, level_accel_wv: 'felony', felony_accel_date_wv: '2023-01-01' },
+    expect: {
+      resultKey: 'eligible_accel_wv',
+      reading: 'On the § 61-11-26a accelerator a nonviolent felony drops from 5 years to 3; completed 2023-01-01, 3.5 years at 2026-07-15 -> eligible, $100 fee waived.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 6',
+    package: 'misdemeanor battery on a police officer -> excluded (c)(1).',
+    record: { title: 'Misdemeanor battery on a police officer', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: true },
     expect: {
       resultKey: 'ineligible_excluded_wv',
-      reading: 'DV assault/battery is on the § 61-11-26(c) exclusion list; the excluded gate routes to the ineligible result.',
+      reading: 'A misdemeanor causing intentional physical injury to a law-enforcement officer is on the § 61-11-26(c)(1) exclusion list -> excluded.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — WV persona 4',
-    package: 'acquitted -> 60 days -> expunge.',
-    record: { title: 'Acquitted', disposition: 'acquitted', disposition_date: '2024-06-01' },
-    answers: {},
+    source: 'WV statute verification (2026-07-22) — persona 7',
+    package: 'robbery with a firearm -> excluded twice (violence + deadly weapon).',
+    record: { title: 'Robbery with a firearm', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: true },
     expect: {
-      resultKey: 'eligible_nonconv_wv',
-      reading: 'An acquittal is expungeable 60 days after the case ended (§ 61-11-25); well past 60 days -> eligible.',
+      resultKey: 'ineligible_excluded_wv',
+      reading: 'Robbery is a felony crime of violence (§ 61-11-26(c)(1)) AND involved a deadly weapon (c)(4) — excluded on both grounds; the violence gate catches it first.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 6 — WV persona 5',
-    package: 'already used expungement once -> the ⚠️ once-ever branch.',
-    record: { title: 'Prior expungement already used', disposition: 'convicted', disposition_date: '2018-06-01' },
-    answers: { excluded_wv: false, prior_use_wv: true },
+    source: 'WV statute verification (2026-07-22) — persona 8',
+    package: 'DUI conviction -> never; if also has an unrelated old felony and the DUI is 6 years old -> DUI doesn\'t block the felony petition.',
+    record: { title: 'DUI conviction', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: true },
     expect: {
-      resultKey: 'complex_onceever_wv',
-      reading:
-        'The SCA-C900 once-only rule means a prior expungement may have used the single request; the prior-use '
-        + 'gate routes to complex_onceever_wv, which hedges the scope for confirmation.',
+      resultKey: 'ineligible_excluded_wv',
+      reading: 'Any DUI is on the § 61-11-26(c)(7) exclusion list -> the DUI itself is never expungeable; the result explains a 5+-year-old DUI does not block expunging a separate eligible felony (screened on its own).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 9',
+    package: 'burglary of a home -> excluded (c)(12); burglary of a commercial warehouse -> not excluded by (12), analyze as nonviolent felony.',
+    record: { title: 'Burglary of a home', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: false, excluded_wv: true },
+    expect: {
+      resultKey: 'ineligible_excluded_wv',
+      reading: 'Burglary of a dwelling is excluded (§ 61-11-26(c)(12)); the result notes that burglary of a COMMERCIAL building is not caught by (12) and can be analyzed as a nonviolent felony.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 10',
+    package: 'acquitted at trial, filing 30 days later -> too early, 60-day floor.',
+    record: { title: 'Acquitted, filing at 30 days', disposition: 'acquitted', disposition_date: '2026-06-20' },
+    answers: { entry_wv: 'nonconv', nonconv_felonyprior_wv: false, nonconv_type_wv: 'acquitted' },
+    expect: {
+      resultKey: 'waiting_nonconv_wv',
+      reading: 'The § 61-11-25 non-conviction petition may not be filed sooner than 60 days after the order; acquitted 2026-06-20, only ~25 days before 2026-07-15 -> too early.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 11',
+    package: 'charges dismissed as part of a plea deal on another count -> non-conviction path excluded.',
+    record: { title: 'Plea-deal dismissal', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: { entry_wv: 'nonconv', nonconv_felonyprior_wv: false, nonconv_type_wv: 'pleadeal' },
+    expect: {
+      resultKey: 'ineligible_pleadeal_wv',
+      reading: 'A dismissal given in exchange for a guilty plea to another offense is excluded from § 61-11-25; the plea conviction is screened on the § 61-11-26 conviction path instead.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 12',
+    package: 'acquitted, but has a 2010 felony conviction -> BARRED from 61-11-25 (felony-prior gate) — the trap persona.',
+    record: { title: 'Acquitted, prior 2010 felony', charge_type: 'felony', disposition: 'acquitted', disposition_date: '2024-06-01' },
+    answers: { entry_wv: 'nonconv', nonconv_felonyprior_wv: true },
+    expect: {
+      resultKey: 'ineligible_felonyprior_wv',
+      reading: 'A prior felony conviction bars § 61-11-25 entirely, even for an acquittal (the felony-prior hard bar) — the trap.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 13',
+    package: 'deferred adjudication completed on a domestic battery 61-2-9(b) against a cohabitant -> dismissal not expungeable.',
+    record: { title: 'Deferred adjudication, DV battery (cohabitant)', disposition: 'deferred', disposition_date: '2023-06-01' },
+    answers: { entry_wv: 'nonconv', nonconv_felonyprior_wv: false, nonconv_type_wv: 'diversion', nonconv_dv_wv: true },
+    expect: {
+      resultKey: 'ineligible_dv_deferred_wv',
+      reading: 'A deferred-adjudication dismissal for a § 61-2-9(b) battery with a family/household-member victim is carved out of § 61-11-25 -> not expungeable.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 14',
+    package: 'already used expungement in 2022, new misdemeanor -> once-per-lifetime bar.',
+    record: { title: 'Prior expungement used 2022, new misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_wv: 'conviction', onceever_wv: true },
+    expect: {
+      resultKey: 'ineligible_onceever_wv',
+      reading: 'Sections 61-11-26 and 61-11-26a share ONE expungement request per lifetime (§ 61-11-26(o)); having used it in 2022 bars a new conviction expungement.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 15',
+    package: 'applying to be a corrections officer with an expunged conviction -> must disclose.',
+    record: { title: 'Corrections-officer applicant, expunged conviction', disposition: 'convicted' },
+    answers: { entry_wv: 'effects' },
+    expect: {
+      resultKey: 'effects_disclosure_wv',
+      reading: 'Applicants for law-enforcement-pipeline positions (incl. incarceration work like a corrections officer) must disclose ALL expunged convictions (§ 61-11-26(l)) -> must disclose.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'WV statute verification (2026-07-22) — persona 16',
+    package: 'pre-2019 sentence-reduction order under 61-11B -> conversion petition.',
+    record: { title: 'Pre-2019 § 61-11B reduction order', disposition: 'convicted', disposition_date: '2016-06-01' },
+    answers: { entry_wv: 'legacy' },
+    expect: {
+      resultKey: 'eligible_legacy_wv',
+      reading: 'A pre-2019 § 61-11B sentence-reduction order converts to an expungement by petition with verification (§ 61-11-26(r)) — a niche legacy path.',
     },
     now: NOW,
   },

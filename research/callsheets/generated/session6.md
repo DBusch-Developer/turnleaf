@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**60 open questions across 11 states.**
+**61 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -316,22 +316,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 11. WEST VIRGINIA (WV)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement (W. Va. Code §§ 61-11-25, 61-11-26, 61-11-26a)** — The circuit court where the case was decided (Kanawha County is a reference for fee confirmation)
+- **Expungement (W. Va. Code §§ 61-11-25, 61-11-26, 61-11-26a)** — The circuit court of conviction or charge (Kanawha County is a reference for fee confirmation)
 - Legal Aid of West Virginia — https://www.lawv.net
 - Jobs & Hope WV (acceleration-lane program hub) — https://jobsandhope.wv.gov
 
-**Verify — 4 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the SCA-C900 "only once" language and its SCOPE. Wave 6 flags this: the Supreme Court's official petition instructions say a person may request expungement under §§ 61-11-26/26a only once, but it is unclear whether that means once per person for life or once per statute/petition. It changes strategy the way Indiana's one-petition rule does. The tree routes people who have already expunged once to a "confirm this before you spend your one request" result; confirm the scope with a circuit clerk (Kanawha).
+1. Run a 2024-2026 session sweep for amendments to §§ 61-11-25, 61-11-26, and 61-11-26a (WV Legislature bill status by code section). Confirm nothing since the pulled text changed the tiers, the exclusion list, the once-per-lifetime rule, or the accelerator.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the full § 61-11-26(c) exclusion list. Wave 6 gives violent felonies, felonies with minor victims, sexual offenses, deadly-weapon offenses, DV assault/battery, DUI, driving-suspended, and CDL offenses, and flags the (c) list as needing the full statutory text. Also confirm the note that an old DUI (5+ years) does not itself block expunging a separate, eligible felony. The tree asks these as exclusions; confirm the list against current § 61-11-26(c).
-   - *Blocks no single field — affects a branch or wording.*
-3. Confirm the circuit court filing fee amount (it varies by county). Wave 6 gives the $100 State Police records-division fee (§ 61-11-26(n), waived on the 26a acceleration lane) but flags the separate circuit court filing fee as a per-county phone target. The fees field is null pending this; a Kanawha circuit clerk is the check.
+2. Confirm the § 59-1-11(a)(1) civil-action filing fee amount, which sets the circuit-clerk fee for a § 61-11-26 conviction petition. The pulled text cross-references it but does not state the amount, so the conviction-path total is unknown; it is cite-only / phone-tier (a Kanawha circuit clerk is the check). The $100 State Police records-division fee is stated (and waived on the § 61-11-26a lane), and the § 61-11-25 non-conviction path is free.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`
-4. Confirm West Virginia has NOT enacted automatic expungement. Wave 6 says to check whether any 2024-26 automation bill (HB 4344-era proposals) moved, and to encode "petition-only" unless a call says otherwise. The tree is petition-only throughout; confirm no automation program is live.
+3. Pull §§ 61-11-22 (pretrial diversion) and 61-11-22a (deferred adjudication) if time allows — they feed the § 61-11-25 non-conviction path (a completed-diversion dismissal is expungeable, subject to the DV carve-out). Cited but not read.
+   - *Blocks no single field — affects a branch or wording.*
+4. Confirm whether the § 61-11-26(h)(1) requirement — that the convictions sought are the ONLY convictions for that specified offense in the state — is applied strictly. Additional convictions of the same offense outside the petition may defeat it; attorney-tier if the fact pattern is close.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm the practical scope of the § 61-11-26(c)(4) catch-all — ANY offense in which the petitioner "used or exhibited a deadly weapon or dangerous instrument." How broadly courts read it (e.g. constructive possession, a weapon present but unused) is attorney-tier.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

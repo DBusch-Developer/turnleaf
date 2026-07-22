@@ -6,6 +6,7 @@ import { currentNode, isAsked, type Answers } from '../data/rulesEngine';
 import { groupByState, screenAll, type ScreeningResultItem } from '../data/multiState';
 import type { ConvictionRecord } from '../data/screening';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
+import { useScrollToTop } from '../utils/useScrollToTop';
 
 // ConvictionRecord now lives in the data layer, alongside the field domains the
 // validator checks against. Re-exported because half the app imports it here.
@@ -38,6 +39,10 @@ export default function EligibilityWizard({
   const [checkpointVerified, setCheckpointVerified] = useState(false);
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showRapSheetInstructions, setShowRapSheetInstructions] = useState(false);
+
+  // The checkpoint replaces the whole record form, so it is a screen change in
+  // everything but routing — start it at the top like any other.
+  useScrollToTop(showCheckpoint);
 
   // An empty charge for a given state. Every seeded/added record is built here
   // so a record always carries the state whose group it sits in.

@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:1920px; height:1080px;
+    background:#0d1117;
+    display:flex; align-items:center; justify-content:center;
+    font-family: 'Cascadia Code','Consolas','SF Mono',monospace;
+  }
+  .wrap { width:1180px; }
+  .cards { display:flex; gap:20px; margin-bottom:34px; }
+  .card {
+    flex:1; background:#161b22; border:1px solid #21262d;
+    border-radius:12px; padding:22px 24px;
+    opacity:0; transform:translateY(14px);
+    animation: rise .55s ease forwards;
+  }
+  .card:nth-child(1){ animation-delay:.15s }
+  .card:nth-child(2){ animation-delay:.5s }
+  .card:nth-child(3){ animation-delay:.85s }
+  @keyframes rise { to { opacity:1; transform:none } }
+  .card .n { color:#3fb950; font-size:26px; font-weight:600; margin-bottom:8px; }
+  .card .t { color:#8b949e; font-size:15px; line-height:1.45; }
+
+  .term {
+    background:#161b22; border:1px solid #21262d; border-radius:12px;
+    overflow:hidden; opacity:0; animation: rise .6s ease 1.2s forwards;
+  }
+  .bar { background:#21262d; padding:11px 16px; display:flex; gap:8px; align-items:center; }
+  .dot { width:12px; height:12px; border-radius:50%; }
+  .bar .label { color:#8b949e; font-size:13px; margin-left:10px; }
+  pre { padding:26px 30px; color:#c9d1d9; font-size:17px; line-height:1.75; white-space:pre-wrap; }
+  .g { color:#3fb950; font-weight:600; }
+  .dim { color:#6e7681; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="cards">
+      <div class="card">
+        <div class="n">591 tests</div>
+        <div class="t">Every state's rules checked automatically on every change.</div>
+      </div>
+      <div class="card">
+        <div class="n">Referee process</div>
+        <div class="t">When two sources disagree, the conflict is escalated — never averaged.</div>
+      </div>
+      <div class="card">
+        <div class="n">Build fails</div>
+        <div class="t">An answer that can't cite its source doesn't ship.</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="bar">
+        <div class="dot" style="background:#ff5f56"></div>
+        <div class="dot" style="background:#ffbd2e"></div>
+        <div class="dot" style="background:#27c93f"></div>
+        <div class="label">turnleaf — npm test</div>
+      </div>
+<pre><span class="dim">$</span> npm test
+
+ RUN  v4.1.10 C:/Users/Diana/Desktop/GitHub/turnleaf
+
+ Test Files  <span class="g">6 passed (6)</span>
+      Tests  <span class="g">591 passed (591)</span>
+   Duration  1.65s</pre>
+    </div>
+  </div>
+</body>
+</html>

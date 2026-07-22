@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**54 open questions across 11 states.**
+**57 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -186,23 +186,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 7. NEBRASKA (NE)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Set-Aside of a Conviction (Neb. Rev. Stat. § 29-2264)** — The court that entered the conviction
+- **Set-Aside / Sealing / Expungement (Neb. Rev. Stat. §§ 29-2264, 29-3523)** — The sentencing court for a set-aside; the court that had the case for sealing; the district court of the county of arrest for a law-enforcement-error expungement
 - Legal Aid of Nebraska — Clean Slate Program (AccessLine) — https://www.legalaidofnebraska.org
 - Nebraska Judicial Branch — Self-Help — https://supremecourt.nebraska.gov/self-help
 
 **Dates that govern:**
-- 2020 — Set-aside extended to imprisonment of 1 year or less (LB 881) (effective) · Wave 6 gives the year only. Before LB 881, set-aside was limited to probation/fine/community-service sentences; it now also reaches completed imprisonment of one year or less.
-- 2021 — Pardoned convictions become sealable (effective) · Wave 6 gives the year only. A pardoned conviction can now be sealed — one of the few things in Nebraska that actually comes off the public record.
-- 2024 — Voting restored automatically on sentence completion (LB20) (effective) · Wave 6 gives the year only. LB20 ended the former 2-year waiting period; voting rights are restored automatically once the sentence is complete. An adjacent-rights fact, not part of set-aside.
+- 2024 — Set-aside Path B (imprisonment of 1 year or less) under § 29-2264(3) — LB 20 (effective) · Per § 29-2264 as amended through Laws 2024, LB 20. Path B reaches a completed sentence of one year or less of imprisonment, subject to mandatory-denial bars (pending charge anywhere in the U.S. or abroad, SORA registration, motor-vehicle offenses, and a 2-year refile bar) that Path A does not carry.
+- 2024 — Voting restored automatically on sentence completion — LB 20 (effective) · LB 20 restores voting rights automatically once the sentence is complete, with notice in the release order (§ 29-2264(1)); an adjacent right, not part of the set-aside itself.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the § 29-2264 set-aside conditions: eligible for probation/fine/community-service sentences, or (since LB 881, 2020) completed imprisonment of one year or less; not still pending; not registrable; not vehicular homicide; and no set-aside denial in the past 2 years. It is discretionary (Brunsen factors). The tree routes on sentence type and these exclusions; confirm against the statute.
+1. Pull Neb. Rev. Stat. § 29-3005 (the sex-trafficking-victim set-aside criteria). § 29-3523(4) lets a victim whose conviction was set aside under § 29-3005 move for sealing, but the § 29-3005 eligibility criteria themselves were not read — the trafficking node is flagged pending this pull. Juvenile-adjudication sealing routes via § 43-2,108.05 (cite-only).
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm whether a set-aside restores firearm rights, and the county-practice split on domestic-violence misdemeanors. Wave 6 says firearms are NOT restored by a set-aside (that needs the pardon board) and flags live litigation with counties split on DV misdemeanors. The tree tells people firearms are not restored; confirm the current state of that litigation.
+2. Run a 2025-2026 unicameral session sweep for LBs amending §§ 29-2264 / 29-3523 (nebraskalegislature.gov bill search by statute). The § 29-3523 source line ends at Laws 2019 LB 686 and § 29-2264 at Laws 2024 LB 20; confirm nothing since then changed the paths, bars, or timelines.
+   - *Blocks no single field — affects a branch or wording.*
+3. Confirm the filing-fee practice. Neither § 29-2264 nor § 29-3523 states a fee for set-aside petitions or sealing motions; a district-court civil filing fee presumably applies to the § 29-3523(9) law-enforcement-error petition and § 29-3528 enforcement actions. The fees and feeWaiver fields are null pending this phone-tier check (district clerk); state no numbers.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+4. Confirm whether courts reliably enter the § 29-3523(7) sealing order at disposition, or whether petitioners must prompt them. Post-2017 removal under (3) is self-executing, but practice on the sealing order is a phone-tier question (clerk / Legal Aid of Nebraska).
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm the scope of "Nebraska Rules of the Road" offenses that trigger the Path B motor-vehicle bar (§ 29-2264(3)(b)(iii)) — cite-only to Neb. Rev. Stat. §§ 60-601 et seq., not pulled.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

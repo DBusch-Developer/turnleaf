@@ -16050,160 +16050,375 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   NE: {
     code: 'NE',
     name: 'Nebraska',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      'Statute text read as amended through Laws 2024, LB 20 (§ 29-2264) and Laws 2019, LB 686 (§ 29-3523). A '
+      + '2025-2026 unicameral session sweep for amendments to §§ 29-2264 / 29-3523 is pending — see Open '
+      + 'Questions.',
     terminology:
-      'Nebraska needs an honest expectation reset in the first breath, because it is unlike every other '
-      + 'state: its conviction relief is limited to a SET-ASIDE, with no general sealing authority. A granted '
-      + 'set-aside nullifies the conviction and removes civil disabilities — but the conviction STAYS on your '
-      + 'public record, annotated "set aside." So if you are searching for "expungement," the thing Nebraska '
-      + 'offers is real but different: it clears the legal effect, not the visibility. Set-asides cover '
-      + 'sentences of probation, a fine, community service, or (since 2020) up to one year of imprisonment; '
-      + 'anything longer needs a pardon. Non-convictions and pardoned convictions CAN be removed or sealed.',
+      'Nebraska needs an honest expectation reset in the first breath, because it is unlike almost every other '
+      + 'state and runs a TWO-TIER system. For CONVICTIONS there is NO general expungement or sealing — the '
+      + 'remedy is a SET-ASIDE (§ 29-2264), which nullifies the conviction and removes civil disabilities '
+      + '(prospectively, from the order date) but leaves the record PUBLIC, annotated "set aside," with NO '
+      + 'honest-no: you must still answer truthfully that you were convicted. There are two set-aside paths. '
+      + 'Path A (§ 29-2264(2)) covers sentences of probation, a fine only, or community service — no waiting '
+      + 'period, no cap on how many, and NO motor-vehicle bar, so a DUI sentenced to probation qualifies. '
+      + 'Path B (§ 29-2264(3), added by LB 20 in 2024) covers any other sentence of one year or less of '
+      + 'imprisonment, but carries four MANDATORY denials Path A does not: any charge pending anywhere in the '
+      + 'United States or another country, current Sex Offender Registration Act registration, any motor-vehicle '
+      + 'offense (§ 28-306 motor-vehicle homicide or the Rules of the Road — so a DUI with a JAIL sentence is '
+      + 'barred here), and filing within 2 years of a prior Path B denial. A sentence over one year of '
+      + 'imprisonment has NO set-aside path — pardon only. Set-aside is discretionary and does NOT restore '
+      + 'firearm rights: the state felon-in-possession law (§ 28-1206) still applies, federal law may still '
+      + 'count the conviction, and the order itself must tell you to consult an attorney about firearms. By '
+      + 'contrast, NON-CONVICTIONS actually come OFF the public record (§ 29-3523): a prosecutor declination at '
+      + '1 year, a diversion that stopped charges at 2 years, and a dismissal, acquittal, deferred judgment, or '
+      + 'completed problem-solving-court program IMMEDIATELY — plus court-ordered sealing with a STRONG honest-no '
+      + '(you cannot even be questioned about a sealed offense). Pardoned convictions and sex-trafficking-victim '
+      + 'convictions can be sealed too, and an arrest caused by law-enforcement error can be truly expunged. '
+      + 'Voting rights are restored automatically once the sentence is complete.',
     keyDates: [
       {
-        label: 'Set-aside extended to imprisonment of 1 year or less (LB 881)',
-        date: '2020',
-        kind: 'effective',
-        note: 'Wave 6 gives the year only. Before LB 881, set-aside was limited to probation/fine/community-service sentences; it now also reaches completed imprisonment of one year or less.',
-      },
-      {
-        label: 'Pardoned convictions become sealable',
-        date: '2021',
-        kind: 'effective',
-        note: 'Wave 6 gives the year only. A pardoned conviction can now be sealed — one of the few things in Nebraska that actually comes off the public record.',
-      },
-      {
-        label: 'Voting restored automatically on sentence completion (LB20)',
+        label: 'Set-aside Path B (imprisonment of 1 year or less) under § 29-2264(3) — LB 20',
         date: '2024',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. LB20 ended the former 2-year waiting period; voting rights are restored automatically once the sentence is complete. An adjacent-rights fact, not part of set-aside.',
+        note: 'Per § 29-2264 as amended through Laws 2024, LB 20. Path B reaches a completed sentence of one year or less of imprisonment, subject to mandatory-denial bars (pending charge anywhere in the U.S. or abroad, SORA registration, motor-vehicle offenses, and a 2-year refile bar) that Path A does not carry.',
+      },
+      {
+        label: 'Voting restored automatically on sentence completion — LB 20',
+        date: '2024',
+        kind: 'effective',
+        note: 'LB 20 restores voting rights automatically once the sentence is complete, with notice in the release order (§ 29-2264(1)); an adjacent right, not part of the set-aside itself.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the § 29-2264 set-aside conditions: eligible for probation/fine/community-service sentences, or (since LB 881, 2020) completed imprisonment of one year or less; not still pending; not registrable; not vehicular homicide; and no set-aside denial in the past 2 years. It is discretionary (Brunsen factors). The tree routes on sentence type and these exclusions; confirm against the statute.',
+          'Pull Neb. Rev. Stat. § 29-3005 (the sex-trafficking-victim set-aside criteria). § 29-3523(4) lets a victim whose conviction was set aside under § 29-3005 move for sealing, but the § 29-3005 eligibility criteria themselves were not read — the trafficking node is flagged pending this pull. Juvenile-adjudication sealing routes via § 43-2,108.05 (cite-only).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm whether a set-aside restores firearm rights, and the county-practice split on domestic-violence misdemeanors. Wave 6 says firearms are NOT restored by a set-aside (that needs the pardon board) and flags live litigation with counties split on DV misdemeanors. The tree tells people firearms are not restored; confirm the current state of that litigation.',
+          'Run a 2025-2026 unicameral session sweep for LBs amending §§ 29-2264 / 29-3523 (nebraskalegislature.gov bill search by statute). The § 29-3523 source line ends at Laws 2019 LB 686 and § 29-2264 at Laws 2024 LB 20; confirm nothing since then changed the paths, bars, or timelines.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the filing-fee practice. Neither § 29-2264 nor § 29-3523 states a fee for set-aside petitions or sealing motions; a district-court civil filing fee presumably applies to the § 29-3523(9) law-enforcement-error petition and § 29-3528 enforcement actions. The fees and feeWaiver fields are null pending this phone-tier check (district clerk); state no numbers.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Confirm whether courts reliably enter the § 29-3523(7) sealing order at disposition, or whether petitioners must prompt them. Post-2017 removal under (3) is self-executing, but practice on the sealing order is a phone-tier question (clerk / Legal Aid of Nebraska).',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the scope of "Nebraska Rules of the Road" offenses that trigger the Path B motor-vehicle bar (§ 29-2264(3)(b)(iii)) — cite-only to Neb. Rev. Stat. §§ 60-601 et seq., not pulled.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Neb. Rev. Stat. § 29-2264 (set-aside of a conviction; LB 881 of 2020)', url: null, retrievedOn: null },
-      { id: 'Neb. Rev. Stat. § 29-3523 (removal/sealing of non-conviction records)', url: null, retrievedOn: null },
-      { id: 'Neb. Rev. Stat. § 29-3005 (trafficking-survivor set-aside and sealing)', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 29-2264 (set-aside of a conviction, read through Laws 2024, LB 20 — (2) Path A: probation/fine/community-service sentences, petition on completion, no waiting period, no cap, jail as a probation condition does not disqualify (State v. Kudlacz); (3) Path B: any other sentence of one year or less of imprisonment, with mandatory denials — (i) charge pending anywhere in the U.S. or another country, (ii) current SORA registration, (iii) any § 28-306 or Rules-of-the-Road motor-vehicle offense, (iv) filing within 2 years of a prior Path B denial; (4)-(6) discretionary best-interest standard, prospective effect, and the non-preclusion list; (7) any state/local offense incl. infractions/ordinances; (8)-(9) retroactive; (1) voting restored on completion) via nebraskalegislature.gov', url: 'https://nebraskalegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'Neb. Rev. Stat. § 29-3523 (removal and sealing of criminal history record information, read through Laws 2019, LB 686 — (3) automatic public-record removal: (a) prosecutor declination 1 year from arrest/citation/referral, (b) diversion-completed no-charge 2 years, (c) dismissal/acquittal/deferred judgment/problem-solving-court completion IMMEDIATELY; (4) sex-trafficking-victim sealing (via § 29-3005); (5) pardon sealing SHALL grant; (6) pre-1/1/2017 dismissals need a motion; (7) court sealing order + Crime Commission/State Patrol notice at disposition; (8) sealed-record honest-no — cannot be questioned, plus dissemination exceptions; (9) law-enforcement-error expungement by clear and convincing evidence; (10) retroactive) via nebraskalegislature.gov', url: 'https://nebraskalegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'Neb. Rev. Stat. § 29-3528 (enforcement — where an agency fails to remove a record under § 29-3523(3), the remedy is a SEPARATE civil action (mandamus etc.) in the district where the records sit or Lancaster County, not a motion in the criminal case (State v. Coble); no sovereign-immunity waiver against state agencies (State ex rel. Rhiley), so practical enforcement runs against political subdivisions) via nebraskalegislature.gov', url: 'https://nebraskalegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'Neb. Rev. Stat. § 29-3005 (sex-trafficking-victim conviction set-aside criteria — the § 29-3523(4) sealing feeder) — CITE-ONLY, NOT pulled; trafficking node pending this pull', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 43-2,108.05 (juvenile-adjudication sealing for trafficking victims) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 28-1206 (possession of a deadly weapon by a prohibited person — the state felon-in-possession bar that SURVIVES a set-aside) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. § 28-306 (motor-vehicle homicide — a Path B motor-vehicle bar under § 29-2264(3)(b)(iii)) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Neb. Rev. Stat. §§ 60-601 et seq. (Nebraska Rules of the Road — scope of the Path B motor-vehicle bar) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Case law construing §§ 29-2264 / 29-3523 / 29-3528 (cite-only): State v. Kudlacz (jail as a probation condition does not disqualify Path A); State v. Brunsen (court may not deny on irrelevant/erroneous grounds); McCray (set-aside effect is prospective); State v. Coble (post-2017 removal enforced via § 29-3528, not a motion in the criminal case); State ex rel. Rhiley (no sovereign-immunity waiver); U.S. v. Germaine (federal law may still count a set-aside conviction for firearms)', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_ne',
       nodes: {
-        disposition: {
+        entry_ne: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'pardoned_ne' },
-            { label: 'Dismissed', value: 'dismissed', next: 'eligible_nonconv_ne' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_ne' },
-            { label: 'Diversion completed / charge dismissed', value: 'deferred', next: 'eligible_nonconv_ne' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Whether a CONVICTION can be cleared (set-aside, or sealing after a pardon)', value: 'conviction', next: 'conviction_route_ne' },
+            { label: 'Whether a NON-conviction can be removed or sealed (dismissed, acquitted, diversion, declination, deferred judgment)', value: 'nonconv', next: 'nonconv_route_ne' },
+            { label: 'An arrest caused by law-enforcement error', value: 'le_error', next: 'eligible_leerror_ne' },
+            { label: 'What a set-aside I ALREADY have means (record visibility, gun rights)', value: 'effects', next: 'effects_ne' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        pardoned_ne: {
+        conviction_route_ne: {
           type: 'boolean',
-          text: 'Has this conviction been pardoned?',
+          text: 'Has this conviction been pardoned by the Nebraska Board of Pardons?',
           yes: 'eligible_pardoned_ne',
+          no: 'trafficking_ne'
+        },
+        trafficking_ne: {
+          type: 'boolean',
+          text: 'Was this conviction or adjudication for an offense you committed as a victim of sex trafficking, which was (or could be) set aside under § 29-3005?',
+          yes: 'complex_trafficking_ne',
           no: 'sentence_ne'
         },
         sentence_ne: {
           type: 'choice',
           text: 'What kind of sentence did you receive?',
           options: [
-            { label: 'Probation, a fine only, or community service', value: 'noncustody', next: 'setaside_excluded_ne' },
-            { label: 'Imprisonment of one year or less', value: 'short_prison', next: 'setaside_excluded_ne' },
-            { label: 'Imprisonment of more than one year', value: 'long_prison', next: 'ineligible_prison_ne' },
+            { label: 'Probation, a fine only, or community service (Path A)', value: 'pathA', next: 'pathA_complete_ne' },
+            { label: 'Any other sentence of one year or less of imprisonment, such as jail (Path B)', value: 'pathB', next: 'pathB_mv_ne' },
+            { label: 'More than one year of imprisonment', value: 'long_prison', next: 'ineligible_prison_ne' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_sentence_ne' }
           ]
         },
-        setaside_excluded_ne: {
+        pathA_complete_ne: {
           type: 'boolean',
-          text: 'Is the offense one that requires you to register (a sex offense), or was it vehicular homicide?',
-          yes: 'ineligible_excluded_ne',
-          no: 'eligible_setaside_ne'
+          text: 'Have you fulfilled or been discharged from probation, paid any fine, and completed any community service?',
+          yes: 'eligible_setaside_a_ne',
+          no: 'waiting_completion_ne'
+        },
+        // Path B mandatory-denial bars (§ 29-2264(3)(b)), asked in order. The
+        // motor-vehicle bar attaches ONLY here — a DUI on probation goes Path A
+        // with no such bar, but a DUI with a jail sentence is barred here.
+        pathB_mv_ne: {
+          type: 'boolean',
+          text: 'Is the conviction a motor-vehicle offense — a DUI, motor-vehicle homicide (§ 28-306), or any violation of the Nebraska Rules of the Road (a traffic offense)?',
+          yes: 'ineligible_pathb_mv_ne',
+          no: 'pathB_pending_ne'
+        },
+        pathB_pending_ne: {
+          type: 'boolean',
+          text: 'Do you have any criminal charge currently pending in any court — anywhere in the United States OR in another country?',
+          yes: 'ineligible_pathb_pending_ne',
+          no: 'pathB_sora_ne'
+        },
+        pathB_sora_ne: {
+          type: 'boolean',
+          text: 'Are you currently required to register under the Sex Offender Registration Act?',
+          yes: 'ineligible_pathb_sora_ne',
+          no: 'pathB_refile_ne'
+        },
+        pathB_refile_ne: {
+          type: 'boolean',
+          text: 'Have you had a Path B set-aside petition DENIED within the last 2 years?',
+          yes: 'ineligible_pathb_refile_ne',
+          no: 'pathB_complete_ne'
+        },
+        pathB_complete_ne: {
+          type: 'boolean',
+          text: 'Have you completed the sentence?',
+          yes: 'eligible_setaside_b_ne',
+          no: 'waiting_completion_ne'
+        },
+        nonconv_route_ne: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'The prosecutor declined to file charges (no charges filed)', value: 'declination', next: 'declination_date_ne' },
+            { label: 'Charges were never filed because I completed a diversion', value: 'diversion', next: 'diversion_date_ne' },
+            { label: 'Charges were filed but the case was dismissed, or I was acquitted', value: 'dismissed', next: 'dismissal_era_ne' },
+            { label: 'A deferred judgment that I completed', value: 'deferred_judgment', next: 'eligible_removed_immediate_ne' },
+            { label: 'I completed a drug court or other problem-solving-court program', value: 'problemsolving', next: 'eligible_removed_immediate_ne' }
+          ]
+        },
+        declination_date_ne: {
+          type: 'date',
+          text: 'When were you arrested, cited, or referred for the charge the prosecutor declined?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'one year from arrest/citation/referral (§ 29-3523(3)(a) — prosecutor declination)' },
+            nextPass: 'eligible_removed_1yr_ne',
+            nextFail: 'waiting_declination_ne'
+          }
+        },
+        diversion_date_ne: {
+          type: 'date',
+          text: 'When were you arrested, cited, or referred for the charge that the diversion resolved?',
+          validation: {
+            period: { amount: 2, unit: 'years', anchor: 'two years from arrest/citation/referral (§ 29-3523(3)(b) — charges not filed due to completed diversion)' },
+            nextPass: 'eligible_removed_2yr_ne',
+            nextFail: 'waiting_diversion_ne'
+          }
+        },
+        dismissal_era_ne: {
+          type: 'boolean',
+          text: 'Was the case dismissed (or were you acquitted) on or after January 1, 2017?',
+          yes: 'eligible_removed_immediate_ne',
+          no: 'complex_pre2017_ne'
+        },
+        effects_ne: {
+          type: 'choice',
+          text: 'What do you want to know about a set-aside you already have?',
+          options: [
+            { label: 'Can I say I was never convicted?', value: 'honestno', next: 'effects_honestno_ne' },
+            { label: 'Does it restore my gun rights?', value: 'firearms', next: 'effects_firearms_ne' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Nebraska handles convictions (set-aside) and non-convictions (removal or sealing) differently. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Nebraska State Patrol record check will show the disposition; the nebraskajudicial.gov self-help pages and Legal Aid of Nebraska\'s Clean Slate Program can help you read it.',
+          message: 'Nebraska handles convictions (set-aside) and non-convictions (removal or sealing) very differently, so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Nebraska State Patrol record check will show the disposition; the supremecourt.nebraska.gov self-help pages and Legal Aid of Nebraska\'s Clean Slate Program can help you read it.',
           remedy: 'Get Your Record First (court paperwork / State Patrol)',
           citation: 'Neb. Rev. Stat. §§ 29-2264, 29-3523 (the route depends on the disposition)'
         },
-        eligible_nonconv_ne: {
-          status: 'eligible',
-          title: 'No Conviction — Removable or Sealable',
-          message: 'Because your case ended without a conviction, Nebraska can actually remove or seal it — one of the few things here that genuinely comes off the record. This covers arrests without a charge (on set timelines), dismissed cases, and erroneous arrests (shown by clear-and-convincing evidence), under § 29-3523. Legal Aid of Nebraska\'s Clean Slate Program can help you file. The nebraskajudicial.gov self-help pages have the forms.',
-          remedy: 'Non-conviction removal/sealing (§ 29-3523)',
-          citation: 'Neb. Rev. Stat. § 29-3523'
-        },
         eligible_pardoned_ne: {
           status: 'eligible',
-          title: 'Pardoned — Now Sealable',
-          message: 'Because this conviction was pardoned, Nebraska now lets you SEAL it (since 2021) — which, in a state where convictions normally stay visible even after a set-aside, is meaningful. This is one of the few Nebraska paths that actually takes the record off public view. Legal Aid of Nebraska\'s Clean Slate Program can help you with the sealing, and the nebraskajudicial.gov self-help pages have guidance.',
-          remedy: 'Seal a pardoned conviction (2021 law)',
+          title: 'Pardoned — the Court Shall Seal',
+          message: 'Because this conviction was pardoned, Nebraska lets you move the sentencing court to SEAL it, and on finding the pardon the court SHALL grant it (§ 29-3523(5)). In a state where a conviction normally stays visible even after a set-aside, this is one of the only routes that actually takes the record off public view — and, being a sealed record, it carries the strong honest-no (you cannot even be questioned about it). Legal Aid of Nebraska\'s Clean Slate Program can help you file the motion.',
+          remedy: 'Seal a pardoned conviction (§ 29-3523(5)) — court shall grant',
+          citation: 'Neb. Rev. Stat. § 29-3523(5)'
+        },
+        complex_trafficking_ne: {
+          status: 'complex',
+          title: 'Trafficking-Survivor Sealing — Criteria Pending Verification',
+          message: 'Nebraska lets a sex-trafficking victim whose conviction was set aside under § 29-3005 move to SEAL it, and the court SHALL grant sealing (§ 29-3523(4)) — a sealed record, so the strong honest-no would apply. But the eligibility criteria live in § 29-3005, which we have not yet read against the official text, so we are not going to state them and risk getting them wrong. This route is real; the details are what we still need to confirm. Legal Aid of Nebraska\'s Clean Slate Program can walk you through § 29-3005 (juvenile adjudications route through § 43-2,108.05).',
+          remedy: 'Trafficking-survivor sealing (§ 29-3523(4)) — § 29-3005 criteria pending',
+          citation: 'Neb. Rev. Stat. §§ 29-3523(4), 29-3005'
+        },
+        eligible_setaside_a_ne: {
+          status: 'eligible',
+          title: 'Set-Aside Available Now (Path A) — But Know What It Does',
+          message: 'Because your sentence was probation, a fine, or community service (Path A, § 29-2264(2)), you can petition for a SET-ASIDE as soon as it is complete — there is NO waiting period and no cap on how many, and there is no motor-vehicle bar on this path, so even a DUI sentenced to probation qualifies. Hold onto the honest part, though: a set-aside nullifies the conviction and removes civil disabilities going forward, but the conviction STAYS on your public record, annotated "set aside," and there is NO honest-no — you must still answer truthfully that you were convicted. It also does not restore firearm rights (the state felon-in-possession law, § 28-1206, still applies; consult an attorney), and the conviction can still be used for sentencing, enhancement, and impeachment later. It is discretionary — the judge weighs your post-sentencing behavior and the public interest. Within those limits it is real and worth doing. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Set-aside petition, Path A (§ 29-2264(2)) — no wait; conviction stays visible',
+          citation: 'Neb. Rev. Stat. § 29-2264(2)'
+        },
+        eligible_setaside_b_ne: {
+          status: 'eligible',
+          title: 'Set-Aside Available (Path B) — But Know What It Does',
+          message: 'Because your sentence was one year or less of imprisonment and none of the Path B bars apply (no charge pending anywhere, no current sex-offender registration, no motor-vehicle offense, and no Path B denial in the last 2 years), you can petition for a SET-ASIDE under § 29-2264(3), added by LB 20 in 2024. The same honest limits apply as on any Nebraska set-aside: it nullifies the conviction and removes civil disabilities going forward, but the record STAYS public, annotated "set aside," with NO honest-no — you must still answer truthfully — and it does not restore firearm rights (§ 28-1206 still applies; consult an attorney). It is discretionary. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Set-aside petition, Path B (§ 29-2264(3)) — conviction stays visible',
+          citation: 'Neb. Rev. Stat. § 29-2264(3)'
+        },
+        waiting_completion_ne: {
+          status: 'waiting',
+          title: 'Finish the Sentence First',
+          message: 'A Nebraska set-aside can be petitioned only after the sentence is complete — probation fulfilled or discharged, any fine paid, community service done, and any imprisonment served (§ 29-2264). Because something there is still outstanding, you are not eligible to file yet; this is a "not yet." Once it is complete, come back and the set-aside path (subject to its limits — the conviction stays public and firearm rights are not restored) is available. Legal Aid of Nebraska\'s Clean Slate Program can help you plan.',
+          remedy: 'Complete the sentence, then petition for set-aside (§ 29-2264)',
           citation: 'Neb. Rev. Stat. § 29-2264'
         },
-        eligible_setaside_ne: {
-          status: 'eligible',
-          title: 'Set-Aside Available — But Know What It Does',
-          message: 'Based on your sentence (probation, a fine, community service, or imprisonment of one year or less), you appear eligible to petition for a SET-ASIDE under § 29-2264, once your sentence is complete and any payment is made. Here is the honest part you should hold onto: a set-aside nullifies the conviction and removes civil disabilities, but the conviction STAYS on your public record, annotated "set aside." It clears the legal effect, not the visibility — and it does not restore firearm rights (that needs the Board of Pardons). It is also discretionary, so a judge weighs the circumstances. Within those limits it is real and worth doing. Legal Aid of Nebraska\'s Clean Slate Program can help.',
-          remedy: 'Set-aside petition (§ 29-2264) — nullifies the conviction, but it stays visible',
-          citation: 'Neb. Rev. Stat. § 29-2264'
+        ineligible_pathb_mv_ne: {
+          status: 'ineligible',
+          title: 'Motor-Vehicle Offense — Barred on Path B',
+          message: 'Path B (a completed sentence of one year or less of imprisonment) mandatorily excludes any motor-vehicle offense — motor-vehicle homicide (§ 28-306) or any violation of the Nebraska Rules of the Road, which sweeps in DUI and ordinary traffic convictions (§ 29-2264(3)(b)(iii)). So a DUI or reckless-driving conviction with a jail sentence cannot be set aside. One asymmetry worth knowing: this motor-vehicle bar attaches ONLY to Path B — the same DUI sentenced to PROBATION would qualify under Path A. Otherwise, a pardon from the Board of Pardons is the route. Legal Aid of Nebraska\'s Clean Slate Program can help you confirm which sentence you had.',
+          remedy: 'None on Path B (motor-vehicle bar) — Path A if probation, else a pardon',
+          citation: 'Neb. Rev. Stat. § 29-2264(3)(b)(iii)'
+        },
+        ineligible_pathb_pending_ne: {
+          status: 'ineligible',
+          title: 'A Pending Charge Blocks Path B',
+          message: 'Path B set-aside is mandatorily denied if you have any criminal charge pending in any court — and Nebraska means anywhere in the United States OR in another country (§ 29-2264(3)(b)(i)). Because you have a charge pending, this is a "not yet": once that matter is resolved and nothing is pending, you can petition. Legal Aid of Nebraska\'s Clean Slate Program can help you time it.',
+          remedy: 'Resolve the pending charge first, then petition (§ 29-2264(3))',
+          citation: 'Neb. Rev. Stat. § 29-2264(3)(b)(i)'
+        },
+        ineligible_pathb_sora_ne: {
+          status: 'ineligible',
+          title: 'Sex-Offender Registration Blocks Path B',
+          message: 'Path B set-aside is mandatorily denied while you are required to register under the Sex Offender Registration Act (§ 29-2264(3)(b)(ii)) — and this applies no matter what the conviction you want set aside is. Separately, note that a set-aside would not end a registration duty anyway: the duty to register survives a set-aside. If your registration obligation ends, the Path B analysis reopens; otherwise a pardon is the route. Legal Aid of Nebraska\'s Clean Slate Program can help you check when registration ends.',
+          remedy: 'None during SORA registration (§ 29-2264(3)(b)(ii)) — check when it ends, or a pardon',
+          citation: 'Neb. Rev. Stat. § 29-2264(3)(b)(ii)'
+        },
+        ineligible_pathb_refile_ne: {
+          status: 'waiting',
+          title: 'A Recent Path B Denial — Wait 2 Years',
+          message: 'Path B set-aside is mandatorily denied if you file within 2 years of a prior Path B denial (§ 29-2264(3)(b)(iv)). Because your denial was less than 2 years ago, you have to wait out the rest of that window before refiling. When the 2 years have passed, you can petition again. Legal Aid of Nebraska\'s Clean Slate Program can help you time it and strengthen the next petition.',
+          remedy: 'Wait until 2 years after the prior denial (§ 29-2264(3)(b)(iv))',
+          citation: 'Neb. Rev. Stat. § 29-2264(3)(b)(iv)'
         },
         ineligible_prison_ne: {
           status: 'ineligible',
           title: 'Sentence Over One Year — Pardon Only',
-          message: 'Because your sentence was more than one year of imprisonment, it is beyond what a set-aside can reach (set-aside covers probation, fines, community service, or up to one year of imprisonment). The remaining route is a pardon from the Nebraska Board of Pardons — a real process, just a different one, and a pardoned conviction can then be sealed. Legal Aid of Nebraska\'s Clean Slate Program can explain the pardon process.',
+          message: 'Because your sentence was more than one year of imprisonment, it is beyond what a set-aside can reach — neither Path A nor Path B applies. The remaining route is a pardon from the Nebraska Board of Pardons, and a pardoned conviction can then be SEALED (§ 29-3523(5)), which actually takes it off public view. Legal Aid of Nebraska\'s Clean Slate Program can explain the pardon process.',
           remedy: 'None by set-aside — a pardon is the route (and a pardon can then be sealed)',
-          citation: 'Neb. Rev. Stat. § 29-2264'
-        },
-        ineligible_excluded_ne: {
-          status: 'ineligible',
-          title: 'This Offense Is Excluded From Set-Aside',
-          message: 'Nebraska\'s set-aside is not available for offenses that require registration (sex offenses) or for vehicular homicide. No completion or waiting changes that. The remaining route is a pardon from the Board of Pardons. Legal Aid of Nebraska\'s Clean Slate Program can help you confirm the category and explain the pardon process.',
-          remedy: 'None (Excluded Offense) — a pardon is the route',
           citation: 'Neb. Rev. Stat. § 29-2264'
         },
         complex_sentence_ne: {
           status: 'complex',
           title: 'We Need to Know Your Sentence',
-          message: 'In Nebraska, whether a set-aside is available turns on your sentence: probation, a fine, community service, or imprisonment of one year or less can qualify, but more than a year of imprisonment cannot (pardon only). Since you are not sure which describes yours, we are not going to guess. Your court paperwork states the sentence, and the nebraskajudicial.gov self-help pages and Legal Aid of Nebraska can help you read it.',
+          message: 'In Nebraska, which set-aside path applies (and whether one applies at all) turns on your sentence: probation, a fine, or community service is Path A; one year or less of imprisonment is Path B (with extra bars); more than a year cannot be set aside at all. Since you are not sure which describes yours, we are not going to guess. Your court paperwork states the sentence, and the supremecourt.nebraska.gov self-help pages and Legal Aid of Nebraska can help you read it.',
           remedy: 'Get Your Sentence Details First (court paperwork)',
           citation: 'Neb. Rev. Stat. § 29-2264'
+        },
+        eligible_removed_immediate_ne: {
+          status: 'eligible',
+          title: 'No Conviction — Already Off the Public Record',
+          message: 'Because your case ended in a dismissal, an acquittal, a completed deferred judgment, or completion of a problem-solving-court program, Nebraska removes it from the public record IMMEDIATELY — by operation of law, upon the dismissal/acquittal (§ 29-3523(3)(c)). For cases resolved on or after January 1, 2017, this is self-executing, and at disposition the court is to order sealing and notify the Crime Commission and State Patrol. Being a sealed record, it carries the strong honest-no: you cannot even be questioned about it, and may answer as if it never happened (§ 29-3523(8)). If it is still showing on a background check, the record has NOT been properly removed — and the fix is a separate civil enforcement action under § 29-3528 (not a motion in the criminal case), which Legal Aid of Nebraska\'s Clean Slate Program can help you bring.',
+          remedy: 'Automatic removal at dismissal (§ 29-3523(3)(c)) — enforce via § 29-3528 if it lingers',
+          citation: 'Neb. Rev. Stat. § 29-3523(3)(c)'
+        },
+        eligible_removed_1yr_ne: {
+          status: 'eligible',
+          title: 'Declination — Removed After 1 Year',
+          message: 'Because the prosecutor declined to file charges, Nebraska removes the record from public access 1 year after your arrest, citation, or referral (§ 29-3523(3)(a)) — by operation of law, no petition. Based on your date, that year has passed. Being a sealed record, it carries the strong honest-no (you cannot be questioned about it). If it is still appearing after the year, that is an enforcement problem: a separate § 29-3528 action is the remedy. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Automatic removal 1 year after declination (§ 29-3523(3)(a))',
+          citation: 'Neb. Rev. Stat. § 29-3523(3)(a)'
+        },
+        waiting_declination_ne: {
+          status: 'waiting',
+          title: 'Declination — Not Yet 1 Year',
+          message: 'Where the prosecutor declined to file charges, Nebraska removes the record 1 year after your arrest, citation, or referral (§ 29-3523(3)(a)). Based on your date, that year has not passed yet — but this happens automatically when it does, with no petition needed. If it is still showing after the year, a § 29-3528 enforcement action is the remedy. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Wait until 1 year after arrest/citation/referral (§ 29-3523(3)(a))',
+          citation: 'Neb. Rev. Stat. § 29-3523(3)(a)'
+        },
+        eligible_removed_2yr_ne: {
+          status: 'eligible',
+          title: 'Diversion Completed — Removed After 2 Years',
+          message: 'Because charges were never filed thanks to a completed diversion, Nebraska removes the record from public access 2 years after your arrest, citation, or referral (§ 29-3523(3)(b)) — automatically, no petition. Based on your date, those 2 years have passed. Being a sealed record, it carries the strong honest-no. If it is still appearing, a separate § 29-3528 enforcement action is the remedy. Legal Aid of Nebraska\'s Clean Slate Program can help.',
+          remedy: 'Automatic removal 2 years after a completed diversion (§ 29-3523(3)(b))',
+          citation: 'Neb. Rev. Stat. § 29-3523(3)(b)'
+        },
+        waiting_diversion_ne: {
+          status: 'waiting',
+          title: 'Diversion — Not Yet 2 Years',
+          message: 'Where a completed diversion kept charges from being filed, Nebraska removes the record 2 years after your arrest, citation, or referral (§ 29-3523(3)(b)). Based on your date, those 2 years have not passed yet — but it happens automatically when they do, with no petition. Legal Aid of Nebraska\'s Clean Slate Program can help you confirm the timing.',
+          remedy: 'Wait until 2 years after arrest/citation/referral (§ 29-3523(3)(b))',
+          citation: 'Neb. Rev. Stat. § 29-3523(3)(b)'
+        },
+        complex_pre2017_ne: {
+          status: 'complex',
+          title: 'Dismissed Before 2017 — a Motion Is Required',
+          message: 'For a case dismissed before January 1, 2017, removal is not automatic: you have to file a MOTION in the court that had the case, and on finding that the case qualifies (it ended without a conviction under § 29-3523(3)(c)), the court SHALL seal it (§ 29-3523(6)). So the relief is available — it just takes a filing rather than happening on its own. Once sealed, it carries the strong honest-no. Legal Aid of Nebraska\'s Clean Slate Program can help you file the motion.',
+          remedy: 'File a motion to seal a pre-2017 dismissal (§ 29-3523(6)) — court shall grant',
+          citation: 'Neb. Rev. Stat. § 29-3523(6)'
+        },
+        eligible_leerror_ne: {
+          status: 'eligible',
+          title: 'Arrest From Law-Enforcement Error — Expungeable',
+          message: 'If your arrest was caused by a law-enforcement agency\'s error, Nebraska allows a true EXPUNGEMENT — you petition the district court in the county of arrest, with the county attorney as the respondent, and if you prove the error by clear and convincing evidence the record is expunged (§ 29-3523(9)). This is one of the few genuine expungements in Nebraska (most relief here is set-aside or sealing). A district-court filing fee may apply. Legal Aid of Nebraska\'s Clean Slate Program can help you prepare the evidence and file.',
+          remedy: 'Law-enforcement-error expungement (§ 29-3523(9)) — clear and convincing',
+          citation: 'Neb. Rev. Stat. § 29-3523(9)'
+        },
+        effects_honestno_ne: {
+          status: 'complex',
+          title: 'A Set-Aside Does NOT Let You Say You Were Never Convicted',
+          message: 'This is the hardest truth about Nebraska relief, and it is better to hear it now: a SET-ASIDE (§ 29-2264) does not seal or hide anything. The conviction stays on your public record, annotated "set aside," and there is NO honest-no — on a job or license application, or as a witness, you must still answer truthfully that you were convicted. The conviction can also still be used for sentencing on a later crime, for enhancement, and for impeachment (and the set-aside order itself is admissible). The strong honest-no in Nebraska belongs to SEALED records — non-convictions, pardoned convictions, and trafficking-victim convictions (§ 29-3523(8)) — where you cannot even be questioned about the offense. So if a true honest-no matters to you, the question is whether your record can be sealed, not just set aside. Legal Aid of Nebraska\'s Clean Slate Program can help you tell which you have.',
+          remedy: 'Answer truthfully — a set-aside is not a seal (§ 29-2264 vs § 29-3523(8))',
+          citation: 'Neb. Rev. Stat. §§ 29-2264, 29-3523(8)'
+        },
+        effects_firearms_ne: {
+          status: 'complex',
+          title: 'Gun Rights After a Set-Aside — Consult an Attorney',
+          message: 'A Nebraska set-aside does NOT automatically restore firearm rights, and the set-aside order itself is required to advise you to consult an attorney about the state and federal firearm consequences (§ 29-2264). Two things survive it: the STATE felon-in-possession law (§ 28-1206) still applies, and federal law may still count the conviction against you (see U.S. v. Germaine). So a set-aside should never be read as "my gun rights are back." Restoring firearm rights generally runs through the Board of Pardons, not the set-aside. Please talk to an attorney about your specific record before relying on anything here. Legal Aid of Nebraska\'s Clean Slate Program can point you to help.',
+          remedy: 'Consult an attorney — a set-aside does not restore firearm rights (§ 28-1206 applies)',
+          citation: 'Neb. Rev. Stat. §§ 29-2264, 28-1206'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Set-Aside of a Conviction (Neb. Rev. Stat. § 29-2264)',
-          formName: 'Nebraska Judicial Branch set-aside self-help forms',
+          name: 'Set-Aside / Sealing / Expungement (Neb. Rev. Stat. §§ 29-2264, 29-3523)',
+          formName: 'Nebraska Judicial Branch set-aside and sealing self-help forms',
           formUrl: 'https://supremecourt.nebraska.gov/self-help',
           steps: [
-            'Understand what a set-aside does: it nullifies the conviction and removes civil disabilities, but the conviction stays on your public record marked "set aside," and firearm rights are not restored.',
-            'Confirm your sentence qualifies (probation, fine, community service, or imprisonment of one year or less) and the offense is not registrable or vehicular homicide.',
-            'Complete your sentence and any payment, then file the set-aside petition — it is discretionary, so the judge weighs the circumstances.',
-            'If the sentence was over a year, or you want the record actually off public view, a pardon is the route (and a pardoned conviction can then be sealed). Legal Aid of Nebraska\'s Clean Slate Program can help.'
+            'Sort out which tier you are in: a CONVICTION gets only a set-aside (§ 29-2264) — Path A for probation/fine/community-service sentences (no wait, no motor-vehicle bar), Path B for one year or less of imprisonment (with mandatory bars: pending charge anywhere, SORA registration, any motor-vehicle offense, or a Path B denial within 2 years); over a year of imprisonment is pardon-only.',
+            'Understand the set-aside\'s limits before filing: it nullifies the conviction and removes civil disabilities going forward, but the record stays PUBLIC (no honest-no) and firearm rights are not restored (§ 28-1206 still applies — consult an attorney).',
+            'A NON-conviction comes off the public record automatically (§ 29-3523): declination at 1 year, diversion at 2 years, dismissal/acquittal/deferred judgment immediately — with a strong honest-no once sealed. A pre-2017 dismissal needs a motion; a pardoned conviction can be sealed by motion; a law-enforcement-error arrest can be truly expunged (clear and convincing).',
+            'If an automatically-removed record still appears on a background check, the remedy is a SEPARATE § 29-3528 civil action, not a motion in the criminal case. Legal Aid of Nebraska\'s Clean Slate Program can help with any of these.'
           ],
-          // NOT null: Wave 6 says a set-aside petition typically carries no fee.
-          fees: 'Typically none — Nebraska set-aside petitions usually carry no fee.',
-          feeWaiver: 'Not typically needed — set-aside petitions usually carry no fee.',
-          courtContact: 'The court that entered the conviction'
+          // null: neither § 29-2264 nor § 29-3523 states a fee for set-aside petitions
+          // or sealing motions; a district-court civil filing fee presumably applies to
+          // the § 29-3523(9) and § 29-3528 actions. Amount and any waiver are phone-tier.
+          fees: null,
+          feeWaiver: null,
+          courtContact: 'The sentencing court for a set-aside; the court that had the case for sealing; the district court of the county of arrest for a law-enforcement-error expungement'
         }
       },
       legalAid: [

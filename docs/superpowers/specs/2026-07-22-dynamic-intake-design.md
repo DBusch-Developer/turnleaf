@@ -138,7 +138,7 @@ function buildAnswers(
 ## 9. Guided tail + plain-language pass
 
 - After prefill, whatever asked nodes remain surface as the **existing one-at-a-time cards** — but now only the genuinely state-specific ones (exclusion questions, unsettled-rule flags). Same component, far fewer cards.
-- **Plain-language pass (bundled):** rewrite the *remaining* tail questions to lead with plain wording and move statute citations into an optional "why we ask" line. This is copy-only on `node.text` (no logic change) and can be done state-by-state alongside each map. The approved mockup's Arizona question ("Did this offense involve a weapon, serious injury, a sexual element, or a victim under 15?") is the target register.
+- **Plain-language pass (REQUIRED, first-class).** This is core to Turnleaf's purpose — people must *understand* the question. Every state's migration **must** rewrite its remaining tail questions to lead with plain wording and move statute citations into an optional "why we ask" line. It is copy-only on `node.text` (no logic change) and ships **in the same change** as that state's map — not a later sweep. The approved mockup's Arizona question ("Did this offense involve a weapon, serious injury to someone, a sexual element, or a victim under 15?") is the target register: everyday words first, statute numbers tucked into an optional explainer.
 
 ## 10. Graceful degradation
 
@@ -174,10 +174,10 @@ The 774-persona suite is the regression net; results must not move.
 
 - **New:** `src/data/intake.ts` (`IntakeProfile`, `IntakeMap` types, `buildAnswers`), `src/data/intakeMaps.ts` (per-state maps).
 - **Changed:** `src/components/EligibilityWizard.tsx` (dynamic intake form + prefill on submit), `src/data/validateState.ts` (map-integrity checks), `src/data/personas.test.ts` (equivalence harness), a coverage script under `src/db/`.
-- **Structure & law unchanged:** every state tree's **nodes, edges, and results** in `src/data/fallbackRules.ts`, `src/data/rulesEngine.ts`, and all legal data (waits, exclusions, fees, citations). The **only** tree edit is the optional plain-language pass (§9), which rewrites `node.text` **copy** on tail questions — logic-neutral, and each such edit is covered by that state's persona tests (result keys cannot move).
+- **Structure & law unchanged:** every state tree's **nodes, edges, and results** in `src/data/fallbackRules.ts`, `src/data/rulesEngine.ts`, and all legal data (waits, exclusions, fees, citations). The **only** tree edit is the required plain-language pass (§9), which rewrites `node.text` **copy** on tail questions — logic-neutral, and each such edit is covered by that state's persona tests (result keys cannot move).
 
-## 15. Open questions for review
+## 15. Decisions (resolved 2026-07-22 with Diana)
 
-1. Is the canonical taxonomy in §5 the right set, or do you want an additional shared fact (e.g. a canonical "serious factor" exclusion boolean to absorb more tails)?
-2. Rollout order after the AZ pilot — big-population-first (as written), or your call-sheet order?
-3. Should the plain-language tail rewrite be part of each state's map PR, or a separate sweep afterward?
+1. **Shared-fact taxonomy (§5): approved as written.** The seven canonical facts stand; no extra "serious factor" field for now (the exclusion question stays in the guided tail).
+2. **Rollout order: biggest-population states first**, after the Arizona pilot — CA, TX, NY, FL, then down by population.
+3. **Plain-language rewrite: REQUIRED and bundled** into each state's migration, not a later sweep — it is central to Turnleaf's mission that people understand the question (see §9, now marked first-class).

@@ -90,6 +90,18 @@ export default function EligibilityWizard({
   const setStateFieldValue = (id: string, key: string, value: string) =>
     setStateFieldValues(s => ({ ...s, [id]: { ...(s[id] ?? {}), [key]: value } }));
 
+  // California reads probation_status and prison_sentenced as FIELD-BACKED nodes
+  // (fallbackRules CA `prison_sentence` / `probation_status`): field-backed nodes
+  // are auto-read from the record and never asked, and CA has no intake map to
+  // prefill them. So they must be collected on the record directly, or a CA charge
+  // sentenced to prison / on active probation would be read from frozen defaults
+  // and silently mis-screened. These are NOT profile facts (not on IntakeProfile) —
+  // they are record fields only California consumes; kept per record id, CA-only.
+  const [caFields, setCaFields] = useState<Record<string, { probation_status: ConvictionRecord['probation_status']; prison_sentenced: boolean }>>({});
+  const caFieldsOf = (id: string) => caFields[id] ?? { probation_status: 'completed' as const, prison_sentenced: false };
+  const setCaField = <K extends 'probation_status' | 'prison_sentenced'>(id: string, k: K, v: { probation_status: ConvictionRecord['probation_status']; prison_sentenced: boolean }[K]) =>
+    setCaFields(s => ({ ...s, [id]: { ...caFieldsOf(id), [k]: v } }));
+
   /** Answers to ASKED nodes, per record id: { [recordId]: { [nodeId]: answer } }.
    *  Declared before the prepopulated-records effect that seeds it. */
   const [answers, setAnswers] = useState<Record<string, Answers>>({});
@@ -209,6 +221,10 @@ export default function EligibilityWizard({
         charge_type: p.chargeType,
         disposition_date: p.dischargeDate ?? r.disposition_date,
         restitution_paid: p.restitutionPaid,
+        // California-only field-backed nodes (see caFields note above). For
+        // every other state these keep their existing values, unchanged.
+        probation_status: caFields[r.id]?.probation_status ?? r.probation_status,
+        prison_sentenced: caFields[r.id]?.prison_sentenced ?? r.prison_sentenced,
       };
     });
     setRecords(updated);
@@ -386,6 +402,41 @@ export default function EligibilityWizard({
                       </select>
                     </div>
                   ))}
+
+                  {/* California-only: probation_status and prison_sentenced are
+                      field-backed CA nodes with no intake map to prefill them, so
+                      they must be collected on the record or the CA tree reads
+                      frozen defaults and mis-screens. Shown only for CA — no other
+                      state reads these fields. */}
+                  {record.state === 'CA' && (
+                    <>
+                      <div>
+                        <label style={labelStyle}>Probation Status</label>
+                        <select
+                          className="input-field"
+                          value={caFieldsOf(record.id).probation_status}
+                          onChange={(e) => setCaField(record.id, 'probation_status', e.target.value as ConvictionRecord['probation_status'])}
+                        >
+                          <option value="completed">Completed Successfully</option>
+                          <option value="none">No Probation Sentenced</option>
+                          <option value="failed">Did Not Complete Successfully</option>
+                          <option value="active">Active (Still on Probation)</option>
+                        </select>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+                        <input
+                          type="checkbox"
+                          id={`prison-${record.id}`}
+                          checked={caFieldsOf(record.id).prison_sentenced}
+                          onChange={(e) => setCaField(record.id, 'prison_sentenced', e.target.checked)}
+                          style={{ width: '1.2rem', height: '1.2rem', cursor: 'pointer' }}
+                        />
+                        <label htmlFor={`prison-${record.id}`} style={{ fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer' }}>
+                          Sentenced to state prison?
+                        </label>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
                   );

@@ -19765,210 +19765,319 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   WY: {
     code: 'WY',
     name: 'Wyoming',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'W.S. §§ 7-13-1401 (non-conviction), 7-13-1501 (misdemeanor), and 7-13-1502 (felony) read in full on '
+      + 'wyoleg.gov. The honesty split is load-bearing: only the non-conviction section (§ 1401(f)) grants a '
+      + 'right to deny the event; NEITHER conviction section grants an "I was never convicted" answer, so the '
+      + 'conviction paths never promise denial rights and route the effect question to an attorney. Cross-cited '
+      + 'sections — the § 7-13-301 / § 35-7-1037 / former § 7-13-203 deferral exclusion, § 6-1-104(a)(xii), '
+      + '§ 7-1-107(b)(iii), § 6-2-313, the § 7-13-1502 exclusion enumeration, and § 14-6-241 juvenile — are '
+      + 'cite-only, not pulled (see the open questions). A 2025-2026 session sweep is pending.',
     terminology:
-      'Wyoming expunges MISDEMEANORS (§ 7-13-1501) 5 years after sentence and FELONIES (§ 7-13-1502) 10 years '
-      + 'after sentence, and both are ONCE PER LIFETIME under their sections — so bundle everything you can '
-      + 'into the single petition. The fee is priced by tier: $100 for a misdemeanor, $300 for a felony. Two '
-      + 'Wyoming-specific points matter: domestic-violence misdemeanors ARE expungeable, and expungement lifts '
-      + 'the federal firearm bar (for felonies, § (m) restores the rights the conviction removed, including '
-      + 'firearms). The felony path is narrow — only felonies from a SINGLE occurrence, with no other felony '
-      + 'history. Non-convictions can be expunged 180 days after arrest or dismissal.',
+      'Wyoming EXPUNGEMENT is a petition-based RECLASSIFICATION, not destruction: the DCI record is resealed so '
+      + 'it disseminates only to criminal-justice agencies and the court file is sealed (investigatory files are '
+      + 'excluded, § 7-13-1401(j)). Three paths, three clocks, and a hard honesty split. NON-CONVICTION '
+      + '(§ 7-13-1401): FREE, 180 days after arrest/dismissal with no charges pending, and it is the ONLY path '
+      + 'that grants a may-deny right (you may deny the arrest ever happened, § 1401(f)) — BUT dispositions under '
+      + 'a first-offender deferral (§ 7-13-301, § 35-7-1037, or former § 7-13-203) are EXCLUDED from § 1401, and '
+      + 'the completer\'s actual route is an open question (do not send them down § 1401). MISDEMEANOR '
+      + '(§ 7-13-1501): $100, 5 years after ALL terms expire (probation and programs included), 1 year for an '
+      + 'age-based status offense (§ 7-1-107(b)(iii)); excluded if a firearm was used or attempted, or for a '
+      + 'health-care provider\'s offense against a patient (§ 6-2-313); domestic-violence misdemeanors ARE '
+      + 'expungeable (and expungement lifts the federal firearm bar); ONCE PER LIFETIME (§ 1501(k)) — bundle '
+      + 'every misdemeanor into the one petition; 30-day prosecutor/victim objection; the court may deny on a '
+      + 'substantial-danger finding. FELONY (§ 7-13-1502): $300, 10 years from the LATER of sentence-term '
+      + 'expiration, program completion, or restitution PAID IN FULL (late restitution restarts the decade — '
+      + 'intake must ask the restitution-finish date); only ONE felony history, bundling same-occurrence/related '
+      + 'felonies; excluded for a long list (violent § 6-1-104(a)(xii), sex, child endangerment, felony DUI, '
+      + 'drug distribution, and more) and for firearm felonies UNLESS punishable under Title 23 (the game-and-'
+      + 'fish carve-back); ONCE PER LIFETIME; 90-day objection; on grant § 1502(m) restores ALL rights the '
+      + 'conviction removed, including firearms under state law (a federal-law caveat is attorney-tier). NEITHER '
+      + 'conviction section grants the right to answer "I was never convicted" — that is the split from § 1401.',
     keyDates: [
       {
         label: 'Under-21 nicotine offenses auto-expunged',
         date: '2020',
         kind: 'effective',
-        note: 'Wave 7 gives the year. Under-21 nicotine offenses are auto-expunged 6 months after the fine is paid.',
+        note: 'Wave 7 gives the year. A separate auto-expungement provision (under-21 nicotine offenses, 6 months after the fine is paid) — not re-pulled against the statute this session.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the full felony exclusion list under § 7-13-1502. Wave 7 gives violent felonies (§ 6-1-104(a)(xii)), firearm felonies (except wildlife-code), sex crimes, child endangerment, felony DUI, and drug-distribution, and flags the full list for the statute. The tree asks these as exclusions; confirm the complete set.',
+          'TOP PRIORITY — pull § 7-13-301 (and § 35-7-1037 / former § 7-13-203) to confirm the route for someone who COMPLETED a first-offender deferral. § 7-13-1401 EXCLUDES those dispositions from the 180-day non-conviction path, so the completer is barred from § 1401 — but the section does not state their actual expungement route. The tree routes deferral-completers to an attorney (complex_deferral_wy); it must not send them down § 1401.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the non-conviction expungement fee (§ 7-13-1401). Wave 7 gives the 180-day non-conviction path but flags the fee for confirmation. The tree routes non-convictions to a 180-day result; confirm the fee with a circuit clerk (Laramie or Natrona).',
+          'Pull § 7-1-107(b)(iii) — the age-based "status offense" definition that opens the 1-year misdemeanor fast lane (vs. the 5-year standard wait). Cited by § 7-13-1501 but not read; the tree screens the status category without the exact enumeration.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. Wave 7 gives the fee amounts but no waiver information; the feeWaiver field is null pending confirmation with a circuit clerk.',
+          'Pull the full felony exclusion enumeration behind § 7-13-1502 — violent felonies (§ 6-1-104(a)(xii)), § 6-2-106(b), § 6-2-108, §§ 6-2-301 through 6-2-320, and the registration-based bars (§ 7-19-302(g)-(j)). Cited but not individually read; the tree screens the exclusion as a category, and the firearm carve-back (punishable under Title 23) is encoded from the section text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Run a 2025-2026 session sweep for amendments to §§ 7-13-1401, 7-13-1501, and 7-13-1502. Confirm nothing changed the waiting periods, fees, exclusion lists, once-per-lifetime bars, or the honesty provisions.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether § 7-13-1501 once-per-lifetime bundling allows misdemeanors from UNRELATED incidents in the single petition, or only same-incident offenses. Attorney-tier; the tree gives the bundle advice without resolving the scope.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull § 14-6-241 (juvenile record expungement). Cite-only, not encoded — juvenile expungement is a separate track outside this adult-conviction tree.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. The sections state the fee amounts but no waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Laramie or Natrona).',
         blocksFields: ['resources.remedies.expungement.feeWaiver'],
       },
     ],
     sources: [
-      { id: 'Wyo. Stat. § 7-13-1501 (misdemeanor expungement; 5-yr / 1-yr status; once per lifetime; DV + firearm restoration)', url: null, retrievedOn: null },
-      { id: 'Wyo. Stat. § 7-13-1502 (felony expungement; 10-yr; same-occurrence only; rights restoration incl. firearms)', url: null, retrievedOn: null },
-      { id: 'Wyo. Stat. § 7-13-1401 (non-conviction expungement; 180 days)', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 7-13-1401 (NON-conviction expungement — FREE; 180 days after arrest/dismissal with no charges pending; one of (A) no convictions from the incident, (B) no charges filed, or (C) all charges dismissed; DEFERRAL TRAP — dispositions under § 7-13-301, § 35-7-1037, or former § 7-13-203 are EXCLUDED; 20-day objection; § 1401(f) grants a may-DENY right; § 1401(j) excludes investigatory files; § 1401(k) juvenile state-petition context) via wyoleg.gov', url: 'https://wyoleg.gov', retrievedOn: '2026-07-22', sourceNote: 'wyoleg.gov serves the Wyoming Statutes through a session-based viewer with no stable per-section permalink; the portal base is cited per the never-construct-a-URL rule.' },
+      { id: 'Wyo. Stat. § 7-13-1501 (MISDEMEANOR expungement — $100; 5 years after ALL terms expire incl. probation/programs, 1 year for an age-based status offense (§ 7-1-107(b)(iii)); EXCLUDES firearm use/attempted use (no carve-back) and a health-care provider\'s offense against a patient (§ 6-2-313); domestic-violence misdemeanors ARE expungeable and expungement lifts the federal firearm bar; multiple misdemeanors in one petition; ONCE PER LIFETIME (§ 1501(k)); 30-day prosecutor + victim objection; substantial-danger denial standard) via wyoleg.gov', url: 'https://wyoleg.gov', retrievedOn: '2026-07-22' },
+      { id: 'Wyo. Stat. § 7-13-1502 (FELONY expungement — $300; 10 years from the LATER of (A) sentence-term expiration, (B) program completion, or (C) restitution paid in full (late restitution restarts the clock); only ONE felony history, bundling same-occurrence/related felonies; firearm-felony exclusion UNLESS punishable under Title 23 (game-and-fish carve-back); exclusion enumeration (§ 6-1-104(a)(xii), § 6-2-106(b), § 6-2-108, §§ 6-2-301-320, registration § 7-19-302(g)-(j)); ONCE PER LIFETIME; 90-day objection; substantial-danger standard; § 1502(m) restores ALL rights removed incl. firearms under state law, with a federal-law attorney caveat) via wyoleg.gov', url: 'https://wyoleg.gov', retrievedOn: '2026-07-22' },
+      { id: 'Wyo. Stat. § 7-13-301, § 35-7-1037, former § 7-13-203 (first-offender deferral dispositions EXCLUDED from § 7-13-1401 — the completer\'s expungement route is an open question) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 7-1-107(b)(iii) (age-based "status offense" definition — the 1-year misdemeanor fast lane) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 6-1-104(a)(xii), § 6-2-106(b), § 6-2-108, §§ 6-2-301-320, § 7-19-302(g)-(j) (the felony exclusion enumeration behind § 7-13-1502) — CITE-ONLY, screened as a category', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 6-2-313 (health-care provider offense against a patient — the misdemeanor exclusion in § 7-13-1501) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Wyo. Stat. § 14-6-241 (juvenile record expungement — a separate track, out of scope for this adult-conviction tree) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_wy',
       nodes: {
-        disposition: {
+        entry_wy: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check about clearing a Wyoming record?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_wy' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_date_wy' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_date_wy' },
-            { label: 'First-offender deferral (§ 7-13-301) completed', value: 'deferred', next: 'eligible_deferral_wy' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Clear a CONVICTION (found or pleaded guilty)', value: 'conviction', next: 'conv_level_wy' },
+            { label: 'A NON-conviction (arrest with no conviction, dismissed, acquitted, or no charges filed)', value: 'nonconv', next: 'nonconv_pending_wy' },
+            { label: 'I completed a first-offender DEFERRAL (§ 7-13-301, § 35-7-1037, or former § 7-13-203)', value: 'deferral', next: 'complex_deferral_wy' },
+            { label: 'What an expungement lets me say afterward (firearms, "were you ever convicted?")', value: 'effects', next: 'effects_split_wy' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        level_wy: {
+        conv_level_wy: {
           type: 'choice',
           text: 'What was the level of the conviction?',
           options: [
             { label: 'Misdemeanor', value: 'misd', next: 'misd_prioruse_wy' },
-            { label: 'Felony', value: 'felony', next: 'felony_excluded_wy' },
+            { label: 'Felony', value: 'felony', next: 'felony_prioruse_wy' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_wy' }
           ]
         },
         misd_prioruse_wy: {
           type: 'boolean',
-          text: 'Have you already used Wyoming\'s once-in-a-lifetime misdemeanor expungement?',
-          yes: 'ineligible_prioruse_wy',
+          text: 'Have you already used Wyoming\'s once-in-a-lifetime MISDEMEANOR expungement (§ 7-13-1501(k))?',
+          yes: 'ineligible_prioruse_misd_wy',
+          no: 'misd_excluded_wy'
+        },
+        misd_excluded_wy: {
+          type: 'boolean',
+          text: 'Did the offense involve the use or attempted use of a firearm, OR was it a health-care provider\'s offense against a patient (§ 6-2-313)?',
+          yes: 'ineligible_excluded_misd_wy',
           no: 'misd_status_wy'
         },
         misd_status_wy: {
           type: 'boolean',
           text: 'Was this a "status offense" — something illegal only because of your age, like underage possession (MIP)?',
           yes: 'misd_status_date_wy',
-          no: 'misd_excluded_wy'
-        },
-        misd_excluded_wy: {
-          type: 'boolean',
-          text: 'Did the offense involve use of a firearm, or was it a healthcare provider\'s patient-care offense?',
-          yes: 'ineligible_excluded_misd_wy',
           no: 'misd_date_wy'
         },
         misd_status_date_wy: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
+          text: 'When did ALL of your sentence terms end — including probation and any programs?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'post-sentence (Wyo. Stat. § 7-13-1501 — status offense)' },
-            nextPass: 'eligible_misd_wy',
-            nextFail: 'waiting_wy'
+            period: { amount: 1, unit: 'years', anchor: 'expiration of all sentence terms incl. probation/programs (Wyo. Stat. § 7-13-1501 — age-based status offense, § 7-1-107(b)(iii))' },
+            nextPass: 'misd_objection_wy',
+            nextFail: 'waiting_misd_wy'
           }
         },
         misd_date_wy: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
+          text: 'When did ALL of your sentence terms end — including probation and any programs?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'post-sentence (Wyo. Stat. § 7-13-1501 — misdemeanor)' },
-            nextPass: 'eligible_misd_wy',
-            nextFail: 'waiting_wy'
+            period: { amount: 5, unit: 'years', anchor: 'expiration of all sentence terms incl. probation/programs (Wyo. Stat. § 7-13-1501 — misdemeanor)' },
+            nextPass: 'misd_objection_wy',
+            nextFail: 'waiting_misd_wy'
           }
+        },
+        misd_objection_wy: {
+          type: 'boolean',
+          text: 'Has a prosecutor or a victim filed an objection to the expungement (they have a 30-day window)?',
+          yes: 'complex_objection_misd_wy',
+          no: 'eligible_misd_wy'
+        },
+        felony_prioruse_wy: {
+          type: 'boolean',
+          text: 'Have you already used Wyoming\'s once-in-a-lifetime FELONY expungement (§ 7-13-1502)?',
+          yes: 'ineligible_prioruse_felony_wy',
+          no: 'felony_excluded_wy'
         },
         felony_excluded_wy: {
           type: 'boolean',
-          text: 'Was the offense any of these: a violent felony, a firearm felony (other than wildlife-code), a sex crime, child endangerment, felony DUI, or drug distribution?',
+          text: 'Was the offense any of these: a violent felony (§ 6-1-104(a)(xii)), a sex crime, child endangerment, felony DUI, drug distribution, OR a firearm felony that is NOT punishable under Title 23 (the game-and-fish code)?',
           yes: 'ineligible_excluded_felony_wy',
           no: 'felony_history_wy'
         },
         felony_history_wy: {
           type: 'boolean',
-          text: 'Do you have any OTHER felony conviction, or felonies from a DIFFERENT occurrence? (Wyoming expunges only felonies from a single occurrence, with no other felony history.)',
+          text: 'Do you have any OTHER felony conviction, or felonies from a DIFFERENT occurrence? (Wyoming expunges only felonies from a single occurrence, with no other felony history — related same-occurrence felonies can be bundled.)',
           yes: 'ineligible_felonyhistory_wy',
           no: 'felony_date_wy'
         },
         felony_date_wy: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, with restitution paid in full?',
+          text: 'What is the LATER of these three dates: your sentence terms ended, you completed any programs, or you paid restitution IN FULL?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'post-sentence with restitution paid in full (Wyo. Stat. § 7-13-1502 — felony, same occurrence, no other felony history)' },
-            nextPass: 'eligible_felony_wy',
-            nextFail: 'waiting_wy'
+            period: { amount: 10, unit: 'years', anchor: 'the LATER of sentence-term expiration, program completion, or restitution paid in full (Wyo. Stat. § 7-13-1502 — late restitution restarts the decade)' },
+            nextPass: 'felony_objection_wy',
+            nextFail: 'waiting_felony_wy'
           }
+        },
+        felony_objection_wy: {
+          type: 'boolean',
+          text: 'Has a prosecutor or a victim filed an objection to the expungement (they have a 90-day window)?',
+          yes: 'complex_objection_felony_wy',
+          no: 'eligible_felony_wy'
+        },
+        nonconv_pending_wy: {
+          type: 'boolean',
+          text: 'Do you currently have any criminal charges pending?',
+          yes: 'waiting_pending_wy',
+          no: 'nonconv_date_wy'
         },
         nonconv_date_wy: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When were you arrested, or when was the case dismissed?',
+          text: 'When were you arrested, or when was the case dismissed? (Use the later of the two if both apply.)',
           validation: {
             period: { amount: 180, unit: 'days', anchor: 'after arrest or dismissal, no charges pending (Wyo. Stat. § 7-13-1401 — non-conviction)' },
             nextPass: 'eligible_nonconv_wy',
-            nextFail: 'waiting_wy'
+            nextFail: 'waiting_nonconv_wy'
           }
+        },
+        effects_split_wy: {
+          type: 'choice',
+          text: 'When your record was (or will be) expunged, was it a CONVICTION or a NON-conviction?',
+          options: [
+            { label: 'A CONVICTION expunged under § 7-13-1501 or § 7-13-1502', value: 'conviction', next: 'complex_effect_conviction_wy' },
+            { label: 'A NON-conviction (arrest/dismissal) expunged under § 7-13-1401', value: 'nonconv', next: 'effects_nonconv_wy' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Wyoming expunges misdemeanors, felonies, and non-convictions on different timelines, and the conviction paths are once per lifetime — so the outcome matters. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a DCI record check will show the disposition; the wyocourts.gov expungement self-help can help you read it.',
+          message: 'Wyoming expunges misdemeanors, felonies, and non-convictions on different timelines, the conviction paths are once per lifetime, and only the non-conviction path lets you later deny the event — so the outcome matters. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a DCI record check will show the disposition; the wyocourts.gov expungement self-help can help you read it.',
           remedy: 'Get Your Record First (court paperwork / DCI)',
           citation: 'Wyo. Stat. §§ 7-13-1401/1501/1502 (the route depends on the disposition)'
         },
         eligible_nonconv_wy: {
           status: 'eligible',
-          title: 'No Conviction — Expungeable After 180 Days',
-          message: 'Because your case ended without a conviction, Wyoming lets you expunge it 180 days after the arrest or dismissal, as long as no charges are pending — and based on your date, that window has passed. You file in the court that handled the case. The wyocourts.gov expungement self-help has the forms; a circuit clerk can confirm the non-conviction fee.',
-          remedy: 'Non-conviction expungement (§ 7-13-1401)',
+          title: 'No Conviction — Expungeable After 180 Days, and You May Deny It',
+          message: 'Because your case ended without a conviction, Wyoming lets you expunge it 180 days after the arrest or dismissal, as long as no charges are pending — and based on your date, that window has passed. This is the FREE path, and it is the only one that carries a may-deny right: once it is expunged, § 7-13-1401(f) lets you deny that the arrest ever happened. A prosecutor may object within 20 days, and one important trap does NOT apply to an ordinary dismissal but is worth knowing — if your case ended through a first-offender deferral (§ 7-13-301, § 35-7-1037, or former § 7-13-203), that route is EXCLUDED here and you should talk to an attorney instead. You file in the court that handled the case; the wyocourts.gov expungement self-help has the forms.',
+          remedy: 'Non-conviction expungement (§ 7-13-1401) — free, and you may deny the arrest',
           citation: 'Wyo. Stat. § 7-13-1401'
-        },
-        eligible_deferral_wy: {
-          status: 'eligible',
-          title: 'First-Offender Deferral Completed — No Conviction',
-          message: 'Because you completed a first-offender deferral (§ 7-13-301), Wyoming treats the case as never resulting in a conviction — which is often the best outcome of all, since there is no conviction to expunge. Confirm your record reflects the dismissal; the wyocourts.gov self-help pages can help, and if any related non-conviction record remains, it can be expunged 180 days out.',
-          remedy: 'First-offender deferral (§ 7-13-301) — avoids a conviction',
-          citation: 'Wyo. Stat. § 7-13-301'
         },
         eligible_misd_wy: {
           status: 'eligible',
           title: 'Misdemeanor Waiting Period Met — Expungeable (One Shot)',
-          message: 'Based on your dates, your misdemeanor waiting period has passed (5 years post-sentence, or 1 year for an age-based status offense). The fee is $100, with a 30-day prosecutor-objection window and then a possible summary grant. Two Wyoming points worth knowing: domestic-violence misdemeanors ARE expungeable here, and expungement lifts the federal firearm bar. One important caveat: this is ONCE PER LIFETIME under this section, so bundle every misdemeanor you want cleared into the single petition. The wyocourts.gov expungement self-help can help.',
-          remedy: 'Misdemeanor expungement (§ 7-13-1501) — once per lifetime, bundle everything',
+          message: 'Based on your dates, your misdemeanor waiting period has passed — 5 years after all your sentence terms ended (probation and programs included), or 1 year for an age-based status offense. The fee is $100. A prosecutor or a victim may object within 30 days, and the court can still deny if it finds a substantial danger to the public, so a grant is not automatic. Two Wyoming points worth knowing: domestic-violence misdemeanors ARE expungeable here, and expungement lifts the federal firearm bar. This is ONCE PER LIFETIME under § 7-13-1501, so bundle every misdemeanor you want cleared into the single petition. One honesty caveat: unlike the non-conviction path, this section does not clearly give you the right to answer "no" if asked whether you were ever convicted — a lawyer can tell you what you may safely say. The wyocourts.gov expungement self-help can help.',
+          remedy: 'Misdemeanor expungement (§ 7-13-1501) — $100, once per lifetime, bundle everything',
           citation: 'Wyo. Stat. § 7-13-1501'
         },
         eligible_felony_wy: {
           status: 'eligible',
           title: 'Felony Waiting Period Met — Expungeable (One Shot)',
-          message: 'Based on your dates — 10 years post-sentence with restitution paid in full — your felony appears expungeable under § 7-13-1502, provided these are felonies from a single occurrence and you have no other felony history. The fee is $300, with a 90-day objection window. A meaningful benefit: expungement restores the rights the conviction removed, including firearms (§ (m)). This is once per lifetime, so include everything from that occurrence. The wyocourts.gov expungement self-help can help.',
-          remedy: 'Felony expungement (§ 7-13-1502) — once per lifetime, restores rights',
+          message: 'Based on your dates, the 10-year clock has run — measured from the LATER of when your sentence terms ended, you completed any programs, or you paid restitution in full — for felonies from a single occurrence with no other felony history. The fee is $300, with a 90-day objection window and a substantial-danger standard, so a grant is not automatic. A meaningful benefit: on grant, § 7-13-1502(m) restores the rights the conviction removed, including firearms under STATE law — though whether that clears the FEDERAL firearm bar is a question for an attorney, not a promise this screen can make. This is once per lifetime, so include every related same-occurrence felony. And as with any conviction expungement, the section does not clearly let you answer "no" to "were you ever convicted" — ask a lawyer what you may say. The wyocourts.gov expungement self-help can help.',
+          remedy: 'Felony expungement (§ 7-13-1502) — $300, once per lifetime, restores state firearm rights',
           citation: 'Wyo. Stat. § 7-13-1502'
         },
-        waiting_wy: {
+        waiting_misd_wy: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Wyoming\'s waiting periods run post-sentence: 5 years for a misdemeanor (1 year for an age-based status offense), 10 years for a felony (with restitution paid), and 180 days for a non-conviction. Based on your dates, yours has not passed yet. When it does, remember the conviction paths are once per lifetime, so it is worth bundling everything. The wyocourts.gov expungement self-help can help you plan.',
-          remedy: 'Wait for the period (§§ 7-13-1401/1501/1502)',
-          citation: 'Wyo. Stat. §§ 7-13-1501, 7-13-1502'
+          title: 'Misdemeanor Waiting Period Not Yet Met',
+          message: 'Wyoming\'s misdemeanor wait runs from the expiration of ALL your sentence terms — including probation and any programs — not from the conviction date: 5 years, or 1 year for an age-based status offense. Based on your dates, yours has not passed yet. When it does, remember the misdemeanor path is once per lifetime (§ 7-13-1501), so it is worth bundling everything into the one $100 petition. The wyocourts.gov expungement self-help can help you plan.',
+          remedy: 'Wait for the misdemeanor period (§ 7-13-1501)',
+          citation: 'Wyo. Stat. § 7-13-1501'
         },
-        ineligible_prioruse_wy: {
+        complex_objection_misd_wy: {
+          status: 'complex',
+          title: 'An Objection Was Filed — There Will Be a Hearing',
+          message: 'Your misdemeanor timing looks met, but because a prosecutor or a victim objected within the 30-day window, the expungement does not go through on a summary basis — the court holds a hearing and may deny it if it finds a substantial danger to the public (§ 7-13-1501). This is still a real path; it now turns on the arguments at that hearing, which is exactly where representation helps. Legal Aid of Wyoming (lawyoming.org) and the wyocourts.gov self-help can help you prepare or find counsel.',
+          remedy: 'Contested misdemeanor expungement hearing (§ 7-13-1501) — substantial-danger standard',
+          citation: 'Wyo. Stat. § 7-13-1501'
+        },
+        waiting_felony_wy: {
+          status: 'waiting',
+          title: 'Felony Waiting Period Not Yet Met',
+          message: 'Wyoming\'s felony wait is 10 years, but from a date that catches people off guard: it runs from the LATER of when your sentence terms ended, when you completed any programs, or when you paid restitution IN FULL. Paying restitution late RESTARTS the decade from the payment date. Based on the date you gave, the 10 years have not passed yet. When they do, the felony path is once per lifetime (§ 7-13-1502) and covers only same-occurrence felonies, so plan the $300 petition to include everything from that occurrence. The wyocourts.gov expungement self-help can help you plan.',
+          remedy: 'Wait for the felony period (§ 7-13-1502) — restitution must be paid; late payment restarts the clock',
+          citation: 'Wyo. Stat. § 7-13-1502'
+        },
+        complex_objection_felony_wy: {
+          status: 'complex',
+          title: 'An Objection Was Filed — There Will Be a Hearing',
+          message: 'Your felony timing looks met, but because a prosecutor or a victim objected within the 90-day window, the expungement is decided at a hearing rather than summarily, and the court may deny it if it finds a substantial danger to the public (§ 7-13-1502). This remains a real path; it now turns on the hearing, where representation helps. Legal Aid of Wyoming (lawyoming.org) and the wyocourts.gov self-help can help you prepare or find counsel.',
+          remedy: 'Contested felony expungement hearing (§ 7-13-1502) — substantial-danger standard',
+          citation: 'Wyo. Stat. § 7-13-1502'
+        },
+        waiting_pending_wy: {
+          status: 'waiting',
+          title: 'A Pending Charge Blocks the Non-Conviction Expungement',
+          message: 'Wyoming\'s non-conviction expungement (§ 7-13-1401) is available only when no charges are pending. Because you have an open charge right now, the petition cannot go forward — but this is a timing hold, not a denial. Once the pending charge is resolved, and if the case still ended without a conviction, the free 180-day non-conviction path reopens. The wyocourts.gov expungement self-help can help you time it.',
+          remedy: 'Resolve the pending charge, then use the non-conviction path (§ 7-13-1401)',
+          citation: 'Wyo. Stat. § 7-13-1401'
+        },
+        waiting_nonconv_wy: {
+          status: 'waiting',
+          title: 'Non-Conviction — 180 Days Not Yet Passed',
+          message: 'Wyoming lets you expunge a non-conviction 180 days after the arrest or dismissal, with no charges pending, and it is free — but based on your date, those 180 days have not passed yet. This is a short wait; once it runs, § 7-13-1401 gives you the strongest position of all, including the right to deny the arrest ever happened (§ 1401(f)). The wyocourts.gov expungement self-help can help you file when the date arrives.',
+          remedy: 'Wait out the 180 days, then expunge (§ 7-13-1401)',
+          citation: 'Wyo. Stat. § 7-13-1401'
+        },
+        ineligible_prioruse_misd_wy: {
           status: 'ineligible',
           title: 'Your One Lifetime Misdemeanor Expungement Has Been Used',
-          message: 'Wyoming\'s misdemeanor expungement is once per lifetime, and because you have already used it, another is not available under this section — no waiting period changes that. If you have a felony from a single occurrence that qualifies, that is a separate once-per-lifetime path (§ 7-13-1502); and any non-conviction can still be expunged. The wyocourts.gov self-help can help you check what remains.',
+          message: 'Wyoming\'s misdemeanor expungement is once per lifetime (§ 7-13-1501(k)), and because you have already used it, another is not available under this section — no waiting period changes that. If you have a felony from a single occurrence that qualifies, that is a separate once-per-lifetime path (§ 7-13-1502); and any non-conviction can still be expunged for free. The wyocourts.gov self-help can help you check what remains.',
           remedy: 'None (misdemeanor one-shot used) — check the felony path or non-convictions',
           citation: 'Wyo. Stat. § 7-13-1501'
         },
         ineligible_excluded_misd_wy: {
           status: 'ineligible',
           title: 'This Misdemeanor Is Excluded',
-          message: 'Wyoming does not expunge misdemeanors that involved the use of a firearm, and there are patient-care exclusions for healthcare providers. No waiting period changes that. If this is the only barrier and you have other, eligible offenses, those can still be bundled and expunged; otherwise a pardon is the remaining route. The wyocourts.gov self-help can help you confirm.',
-          remedy: 'None (firearm-use / patient-care exclusion) — a pardon is the remaining route',
+          message: 'Wyoming does not expunge a misdemeanor that involved the use or attempted use of a firearm — there is no carve-back for it — or a health-care provider\'s offense against a patient (§ 6-2-313). No waiting period changes that. If this is the only barrier and you have other, eligible misdemeanors, those can still be bundled and expunged; otherwise a gubernatorial pardon is the remaining route. The wyocourts.gov self-help can help you confirm.',
+          remedy: 'None (firearm-use / health-care-provider exclusion) — a pardon is the remaining route',
           citation: 'Wyo. Stat. § 7-13-1501'
+        },
+        ineligible_prioruse_felony_wy: {
+          status: 'ineligible',
+          title: 'Your One Lifetime Felony Expungement Has Been Used',
+          message: 'Wyoming\'s felony expungement is once per lifetime (§ 7-13-1502), and because you have already used it, another felony expungement is not available — no waiting period changes that. If you have a misdemeanor that qualifies, that is a separate once-per-lifetime path (§ 7-13-1501), and any non-conviction can still be expunged. Otherwise a gubernatorial pardon is the remaining route for a felony. The wyocourts.gov self-help can help you check what remains.',
+          remedy: 'None (felony one-shot used) — check the misdemeanor path, non-convictions, or a pardon',
+          citation: 'Wyo. Stat. § 7-13-1502'
         },
         ineligible_excluded_felony_wy: {
           status: 'ineligible',
           title: 'This Felony Is Excluded',
-          message: 'Wyoming excludes a set of felonies from expungement: violent felonies, firearm felonies (other than wildlife-code), sex crimes, child endangerment, felony DUI, and drug distribution. No waiting period changes that. A pardon from the Governor remains a route for an otherwise-excluded felony. The wyocourts.gov self-help can help you confirm the category and explain the pardon process.',
-          remedy: 'None (Excluded Felony) — a pardon is the remaining route',
+          message: 'Wyoming excludes a set of felonies from expungement — violent felonies (§ 6-1-104(a)(xii)), sex crimes, child endangerment, felony DUI, drug distribution, and firearm felonies (unless the offense is punishable under Title 23, the game-and-fish code). No waiting period changes that. A pardon from the Governor remains a route for an otherwise-excluded felony. The full exclusion enumeration is being confirmed against the statute; the wyocourts.gov self-help can help you confirm the category and explain the pardon process.',
+          remedy: 'None (excluded felony) — a pardon is the remaining route',
           citation: 'Wyo. Stat. § 7-13-1502'
         },
         ineligible_felonyhistory_wy: {
           status: 'ineligible',
           title: 'Other Felony History — Not Expungeable',
-          message: 'Wyoming\'s felony expungement is narrow: it reaches only felonies from a SINGLE occurrence, and only if you have no other felony history. Because you have another felony conviction or felonies from a different occurrence, this path is not available — no waiting period changes that. A pardon from the Governor remains the route for felony convictions here. If any part of your record was a non-conviction, that can still be expunged separately. The wyocourts.gov self-help can help you check.',
+          message: 'Wyoming\'s felony expungement is narrow: it reaches only felonies from a SINGLE occurrence, and only if you have no other felony history. Because you have another felony conviction or felonies from a different occurrence, this path is not available — no waiting period changes that. (Related felonies from the SAME occurrence can be bundled into one petition; it is felonies from a different occurrence that close the door.) A pardon from the Governor remains the route for felony convictions here, and any non-conviction can still be expunged separately. The wyocourts.gov self-help can help you check.',
           remedy: 'None (other felony history) — a pardon is the remaining route',
           citation: 'Wyo. Stat. § 7-13-1502'
         },
@@ -19978,6 +20087,27 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           message: 'Wyoming\'s waiting period and fee depend on whether it is a misdemeanor (5 years, $100) or a felony (10 years, $300), and both are once per lifetime. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a DCI record check will show it. The wyocourts.gov expungement self-help can help you read it.',
           remedy: 'Get the Conviction Level First (court paperwork / DCI)',
           citation: 'Wyo. Stat. §§ 7-13-1501, 7-13-1502'
+        },
+        complex_deferral_wy: {
+          status: 'complex',
+          title: 'A Completed Deferral — Talk to an Attorney About the Route',
+          message: 'This is a Wyoming trap worth getting right. If your case ended through a first-offender deferral (§ 7-13-301, § 35-7-1037, or former § 7-13-203), completing it usually means there is no conviction — a good outcome — but the non-conviction expungement statute (§ 7-13-1401) specifically EXCLUDES those deferral dispositions, so you cannot simply use the free 180-day path, and the statute does not spell out the completer\'s actual expungement route. Because we will not guess at law that could mislead you, the honest answer is to take this to an attorney or a clerk who can confirm how a completed deferral is cleared. Legal Aid of Wyoming (lawyoming.org) is a place to start.',
+          remedy: 'Attorney/clerk review — deferral dispositions are excluded from § 7-13-1401; the route is unsettled',
+          citation: 'Wyo. Stat. § 7-13-1401 (excludes § 7-13-301 / § 35-7-1037 / former § 7-13-203 dispositions)'
+        },
+        complex_effect_conviction_wy: {
+          status: 'complex',
+          title: 'A Conviction Expungement Does Not Clearly Let You Say "Never Convicted"',
+          message: 'This is the honesty split at the heart of Wyoming\'s scheme, and it is easy to get wrong. When a NON-conviction is expunged, § 7-13-1401(f) expressly lets you deny that the arrest ever happened. But the CONVICTION sections — § 7-13-1501 for misdemeanors and § 7-13-1502 for felonies — do NOT contain that same "you may deny it" language, so this screen will not promise you a right to answer "no" if an employer or a licensing board asks whether you were ever convicted. What a felony expungement clearly DOES do is restore the rights the conviction removed, including firearms under state law (§ 1502(m)). Exactly what you may say, and to whom, is a question for a lawyer — Legal Aid of Wyoming (lawyoming.org) can advise on your specific record.',
+          remedy: 'Attorney advice — conviction expungement restores rights but grants no clear denial right',
+          citation: 'Wyo. Stat. §§ 7-13-1501, 7-13-1502 (contrast § 7-13-1401(f))'
+        },
+        effects_nonconv_wy: {
+          status: 'complex',
+          title: 'A Non-Conviction Expungement Lets You Deny the Arrest',
+          message: 'Good news on the effect: when a NON-conviction is expunged under § 7-13-1401, subsection (f) expressly lets you deny that the arrest ever happened — the strongest answer any Wyoming path gives. That is the opposite of the conviction sections (§ 7-13-1501 / § 7-13-1502), which restore rights but do not clearly grant that denial right. Keep in mind the expungement is a reclassification, not destruction: the record still disseminates to criminal-justice agencies, and it does not erase a separate FBI record for its own purposes. If you want to be precise about what you can say on a particular application, Legal Aid of Wyoming (lawyoming.org) can advise.',
+          remedy: 'Non-conviction expungement (§ 7-13-1401(f)) — you may deny the arrest',
+          citation: 'Wyo. Stat. § 7-13-1401(f)'
         }
       }
     },
@@ -19988,15 +20118,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formName: 'Wyoming Judicial Branch expungement forms',
           formUrl: 'https://www.courts.state.wy.us/expungement/',
           steps: [
-            'Confirm your path: misdemeanor (5 years, $100), felony (10 years, $300, single occurrence, no other felony history), or non-conviction (180 days).',
-            'Bundle everything into the single petition — the conviction paths are once per lifetime.',
-            'For a felony, confirm restitution is paid in full and the offense is not excluded (violent, firearm, sex, child-endangerment, felony DUI, drug-distribution).',
-            'File in the court that handled the case; expungement can restore firearm rights (and lifts the federal bar for a DV misdemeanor). The wyocourts.gov self-help has the forms.'
+            'Pick your path: NON-conviction (§ 7-13-1401 — free, 180 days after arrest/dismissal, no charges pending); MISDEMEANOR (§ 7-13-1501 — $100, 5 years after ALL terms end, 1 year for an age-based status offense); or FELONY (§ 7-13-1502 — $300, 10 years from the LATER of sentence completion, program completion, or restitution paid in full).',
+            'Bundle everything you can — both conviction paths are ONCE PER LIFETIME. A felony petition covers only felonies from a single occurrence, and only if you have no other felony history.',
+            'Check the exclusions: a misdemeanor is barred if a firearm was used or attempted, or for a health-care provider\'s patient offense (§ 6-2-313); a felony is barred for a violent/sex/child-endangerment/felony-DUI/drug-distribution offense, and for a firearm felony UNLESS it is punishable under Title 23 (game-and-fish). Domestic-violence misdemeanors ARE expungeable.',
+            'File in the court that handled the case; expect a prosecutor/victim objection window (30 days misdemeanor, 90 days felony) and a substantial-danger standard. A felony grant restores the rights the conviction removed, including firearms under state law (§ 1502(m)) — the federal firearm effect, and whether you may deny a conviction, are questions for an attorney. Only the non-conviction path (§ 1401(f)) clearly lets you deny the event. The wyocourts.gov self-help has the forms; a circuit clerk can confirm fees.'
           ],
-          // NOT null: Wave 7 gives $100 (misdemeanor) / $300 (felony). The non-conviction
-          // fee and any waiver are open questions.
-          fees: '$100 filing fee for a misdemeanor expungement (§ 7-13-1501); $300 for a felony (§ 7-13-1502). The non-conviction (§ 7-13-1401) fee is being confirmed.',
-          // null: Wave 7 gives no indigency-waiver information for the filing fees.
+          // NOT null: the sections state the fees — non-conviction free, misdemeanor
+          // $100 (§ 7-13-1501), felony $300 (§ 7-13-1502).
+          fees: 'Non-conviction expungement (§ 7-13-1401) is free. A misdemeanor expungement (§ 7-13-1501) is $100; a felony (§ 7-13-1502) is $300.',
+          // null: the sections state fee amounts but no indigency waiver; pending a
+          // circuit-clerk confirmation (open question).
           feeWaiver: null,
           courtContact: 'The court that handled the case'
         }

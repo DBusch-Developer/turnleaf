@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**40 open questions across 10 states.**
+**44 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -249,7 +249,7 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 10. WYOMING (WY)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
 - **Expungement (Wyo. Stat. §§ 7-13-1401, 7-13-1501, 7-13-1502)** — The court that handled the case
@@ -257,15 +257,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 - Legal Aid of Wyoming — https://www.lawyoming.org
 
 **Dates that govern:**
-- 2020 — Under-21 nicotine offenses auto-expunged (effective) · Wave 7 gives the year. Under-21 nicotine offenses are auto-expunged 6 months after the fine is paid.
+- 2020 — Under-21 nicotine offenses auto-expunged (effective) · Wave 7 gives the year. A separate auto-expungement provision (under-21 nicotine offenses, 6 months after the fine is paid) — not re-pulled against the statute this session.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 7 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the full felony exclusion list under § 7-13-1502. Wave 7 gives violent felonies (§ 6-1-104(a)(xii)), firearm felonies (except wildlife-code), sex crimes, child endangerment, felony DUI, and drug-distribution, and flags the full list for the statute. The tree asks these as exclusions; confirm the complete set.
+1. TOP PRIORITY — pull § 7-13-301 (and § 35-7-1037 / former § 7-13-203) to confirm the route for someone who COMPLETED a first-offender deferral. § 7-13-1401 EXCLUDES those dispositions from the 180-day non-conviction path, so the completer is barred from § 1401 — but the section does not state their actual expungement route. The tree routes deferral-completers to an attorney (complex_deferral_wy); it must not send them down § 1401.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the non-conviction expungement fee (§ 7-13-1401). Wave 7 gives the 180-day non-conviction path but flags the fee for confirmation. The tree routes non-convictions to a 180-day result; confirm the fee with a circuit clerk (Laramie or Natrona).
+2. Pull § 7-1-107(b)(iii) — the age-based "status offense" definition that opens the 1-year misdemeanor fast lane (vs. the 5-year standard wait). Cited by § 7-13-1501 but not read; the tree screens the status category without the exact enumeration.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. Wave 7 gives the fee amounts but no waiver information; the feeWaiver field is null pending confirmation with a circuit clerk.
+3. Pull the full felony exclusion enumeration behind § 7-13-1502 — violent felonies (§ 6-1-104(a)(xii)), § 6-2-106(b), § 6-2-108, §§ 6-2-301 through 6-2-320, and the registration-based bars (§ 7-19-302(g)-(j)). Cited but not individually read; the tree screens the exclusion as a category, and the firearm carve-back (punishable under Title 23) is encoded from the section text.
+   - *Blocks no single field — affects a branch or wording.*
+4. Run a 2025-2026 session sweep for amendments to §§ 7-13-1401, 7-13-1501, and 7-13-1502. Confirm nothing changed the waiting periods, fees, exclusion lists, once-per-lifetime bars, or the honesty provisions.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm whether § 7-13-1501 once-per-lifetime bundling allows misdemeanors from UNRELATED incidents in the single petition, or only same-incident offenses. Attorney-tier; the tree gives the bundle advice without resolving the scope.
+   - *Blocks no single field — affects a branch or wording.*
+6. Pull § 14-6-241 (juvenile record expungement). Cite-only, not encoded — juvenile expungement is a separate track outside this adult-conviction tree.
+   - *Blocks no single field — affects a branch or wording.*
+7. Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. The sections state the fee amounts but no waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Laramie or Natrona).
    - *Blocks (null until answered):* `resources.remedies.expungement.feeWaiver`
 
 ---

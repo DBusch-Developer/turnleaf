@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { intakeMaps, answersForState } from './intakeMaps';
 import { validateIntakeMaps } from './validateState';
 import { fallbackRules } from './fallbackRules';
-import type { IntakeProfile } from './intake';
+import type { IntakeProfile, IntakeMap } from './intake';
 
 const azProfile: IntakeProfile = {
   offenseCategory: 'dui', disposition: 'convicted', chargeType: 'misdemeanor',
@@ -31,5 +31,32 @@ describe('AZ intake map', () => {
 
   test('an unmapped state returns an empty answer set (today\'s flow)', () => {
     expect(answersForState('ZZ', azProfile, {})).toEqual({});
+  });
+
+  test('a broken map is caught: a dangling derived id and a non-choice optionsFrom', () => {
+    // Deliberately broken, mirroring validConfig()-then-break in
+    // validateState.test.ts: a derived node id the AZ tree does not have, and
+    // a stateField whose optionsFrom points at a boolean node (not a choice
+    // node, so it has no options to populate the dropdown from).
+    const brokenMap: IntakeMap = {
+      derived: {
+        nonexistent_node_zz: () => true,
+      },
+      stateFields: [
+        { key: 'azLevel', label: 'Level & class of the offense', optionsFrom: 'dui_offense',
+          fills: ['offense_level'] },
+      ],
+    };
+
+    const errors = validateIntakeMaps(fallbackRules, { AZ: brokenMap });
+
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors.some(e =>
+      e.path.includes('nonexistent_node_zz') || e.message.includes('nonexistent_node_zz')
+    )).toBe(true);
+    expect(errors.some(e =>
+      (e.path.includes('optionsFrom') || e.message.includes('optionsFrom')) &&
+      e.message.includes('dui_offense')
+    )).toBe(true);
   });
 });

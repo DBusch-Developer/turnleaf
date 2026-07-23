@@ -1941,7 +1941,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         restitution_ut: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you paid ALL fines and interest AND all restitution in full? (An unsatisfied criminal account receivable blocks expungement on both tracks.)',
+          text: 'Have you paid ALL restitution in full? (An unsatisfied criminal account receivable blocks expungement on both tracks.)',
+          yes: 'fines_ut',
+          no: 'ineligible_restitution_ut'
+        },
+        fines_ut: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you paid ALL fines and interest in full? (An unsatisfied criminal account receivable blocks expungement on both tracks.)',
           yes: 'count_limits_ut',
           no: 'ineligible_restitution_ut'
         },
@@ -8750,7 +8757,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         restitution_5_tn: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you completed your sentence AND paid all fines, restitution, court costs, and assessments in the case?',
+          text: 'Have you completed your sentence AND paid all restitution in the case?',
+          yes: 'fines_5_tn',
+          no: 'waiting_tn'
+        },
+        fines_5_tn: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you paid all fines, court costs, and assessments in the case?',
           yes: 'date_5_tn',
           no: 'waiting_tn'
         },
@@ -8767,7 +8781,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         restitution_10_tn: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you completed your sentence AND paid all fines, restitution, court costs, and assessments in the case?',
+          text: 'Have you completed your sentence AND paid all restitution in the case?',
+          yes: 'fines_10_tn',
+          no: 'waiting_tn'
+        },
+        fines_10_tn: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you paid all fines, court costs, and assessments in the case?',
           yes: 'date_10_tn',
           no: 'waiting_tn'
         },
@@ -11580,7 +11601,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         misd_restitution_al: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you completed all probation/parole AND paid ALL fines, costs, restitution, and court-ordered amounts in full?',
+          text: 'Have you completed all probation/parole AND paid ALL restitution and court-ordered amounts owed to a victim in full?',
+          yes: 'fines_al',
+          no: 'ineligible_restitution_al'
+        },
+        fines_al: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you paid ALL fines and costs in full?',
           yes: 'misd_conv_date_al',
           no: 'ineligible_restitution_al'
         },

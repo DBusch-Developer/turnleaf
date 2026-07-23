@@ -440,7 +440,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 1 (class B clean-slate automatic)',
     package: 'class B misd theft, 6 yrs clean, fines paid -> automatic clean-slate eligible; court/BCI-only scope note.',
-    record: { title: 'Class B Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Class B Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'b', cs_b_ut: false, cb_date_ut: '2020-01-01', cb_auto_date_ut: '2020-01-01' },
     expect: { resultKey: 'eligible_auto_ut', reading: 'Class B, not clean-slate-excluded, 6yr passes both the 4yr petition and 6yr automatic (§ 205) -> eligible_auto_ut. Copy carries the § 207(4) court/BCI-only scope limit + petition-for-full-agency-clearance.' },
     now: NOW,
@@ -448,7 +448,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 2 (class B, wants full agency clearance -> petition 303)',
     package: 'same class B but the person wants the arresting agency cleared too -> petition route via § 303 (4yr B wait met).',
-    record: { title: 'Class B Misdemeanor (agency clearance wanted)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Class B Misdemeanor (agency clearance wanted)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'b', cs_b_ut: false, cb_date_ut: '2020-01-01', cb_auto_date_ut: '2020-01-01' },
     expect: { resultKey: 'eligible_auto_ut', reading: 'Same routing as persona 1 -> eligible_auto_ut, whose copy explains that automatic clears courts/BCI only (§ 207) and a § 303 petition (4yr B, met) reaches ALL agencies via § 307 — the reason to petition.' },
     now: NOW,
@@ -456,7 +456,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 3 (class A 76-18-207 possession -> the only class A that is automatic)',
     package: 'class A misd drug possession (§ 76-18-207), 7 yrs -> automatic eligible (the ONLY class A on the clean-slate track).',
-    record: { title: 'Class A Drug Possession (§ 76-18-207)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Class A Drug Possession (§ 76-18-207)', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'a_drug', a_drug_date_ut: '2019-01-01', a_drug_auto_date_ut: '2019-01-01' },
     expect: { resultKey: 'eligible_auto_ut', reading: 'Class A 76-18-207 possession is the one class A on the automatic track: petition 5yr + automatic 7yr both met (2019) -> eligible_auto_ut.' },
     now: NOW,
@@ -464,7 +464,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 4 (class A assault -> automatic excluded, petition 5yr)',
     package: 'class A misd assault (Title 76 Ch. 5) -> not on the clean-slate track, petition § 303 at 5yr.',
-    record: { title: 'Class A Assault', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Class A Assault', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'a_other', a_other_date_ut: '2020-01-01' },
     expect: { resultKey: 'eligible_petition_ut', reading: 'A class A non-drug (assault) is not clean-slate-eligible; petition-only at 5yr (2020+5=2025<2026) -> eligible_petition_ut (BCI cert then petition).' },
     now: NOW,
@@ -472,7 +472,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 5 (DV misd + protective order -> disqualified)',
     package: 'DV misdemeanor with a protective order in effect -> automatic-excluded, and the § 303 protective-order disqualifier blocks the petition too.',
-    record: { title: 'Domestic Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Domestic Violence Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: true },
     expect: { resultKey: 'ineligible_protective_ut', reading: 'A DV misd is clean-slate-excluded (§ 205(3)(f)(viii)); § 303 has no DV exclusion, but ANY protective order/stalking injunction in effect disqualifies -> ineligible_protective_ut (a timing bar).' },
     now: NOW,
@@ -488,7 +488,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 7 (2 non-drug felonies -> count limit)',
     package: '2 non-drug felonies in separate episodes -> cert denied at the § 303(4) count-limit master gate.',
-    record: { title: 'Second Non-Drug Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Second Non-Drug Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'over_limits' },
     expect: { resultKey: 'ineligible_counts_ut', reading: 'Two non-drug felonies is clause (a) of the § 303(4) cap -> ineligible_counts_ut. The gate fires before any per-conviction check.' },
     now: NOW,
@@ -496,7 +496,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 8 (2 felonies BUT 10 yrs clean -> decade bump, eligible)',
     package: 'same 2 non-drug felonies but 10+ years clean -> the § 303(7) decade bump raises the limit to 3, so within limits -> eligible felony petition.',
-    record: { title: 'Non-Drug Felony (10 yrs clean)', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Non-Drug Felony (10 yrs clean)', charge_type: 'felony', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'felony', felony_date_ut: '2015-01-01' },
     expect: { resultKey: 'eligible_petition_ut', reading: 'DECADE BUMP: 10 yrs clean raises the 2-felony limit to 3, so the person answers within -> felony 7yr wait (2015+7=2022<2026) -> eligible_petition_ut.' },
     now: NOW,
@@ -504,7 +504,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 9 (3rd-degree felony 7yr -> cert eligible)',
     package: 'eligible 3rd-degree felony, 7 yrs from release -> § 303 cert eligible.',
-    record: { title: 'Third-Degree Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Third-Degree Felony', charge_type: 'felony', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'felony', felony_date_ut: '2019-01-01' },
     expect: { resultKey: 'eligible_petition_ut', reading: 'Eligible felony, 7yr from conviction/release (2019+7=2026-01<2026-07) -> eligible_petition_ut (BCI cert, then petition; reaches all agencies).' },
     now: NOW,
@@ -544,7 +544,7 @@ const UT: Persona[] = [
   {
     source: 'UT 7/19 statute-verified — persona 14 (DUI misd -> 10yr petition)',
     package: 'misdemeanor DUI, 11 yrs from release -> § 303 10-year wait met (excluded from both traffic deletion and clean-slate).',
-    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true },
+    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: true, fines_paid: true },
     answers: { traffic_conv_ut: false, pending_ut: false, never_ut: false, count_limits_ut: 'within', supervision_ut: false, protective_ut: false, offense_level_ut: 'dui', dui_date_ut: '2015-01-01' },
     expect: { resultKey: 'eligible_petition_ut', reading: 'Misd DUI is petition-only at 10yr (2015+10=2025<2026) -> eligible_petition_ut. DUI is excluded from the § 101(24) traffic definition and from clean-slate, so neither free track reaches it.' },
     now: NOW,
@@ -2315,7 +2315,7 @@ const TN: Persona[] = [
   {
     source: 'Wave 4 - TN persona 1 (updated)',
     package: 'single eligible misdemeanor, sentence done 2019, all paid, no priors -> eligible, TBI cert step.',
-    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01', restitution_paid: true },
+    record: { title: 'Misdemeanor Theft', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2019-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'misd', misd_exclusion_tn: false, sequencing_tn: false, other_eligible_tn: false },
     expect: { resultKey: 'eligible_conviction_tn', reading: 'Single eligible misdemeanour (not on the 107(a)(1)(D) exclusion list), all obligations paid, 5yr met (2019+5=2024<2026), no prior expunction, no ineligible prior, no second eligible conviction -> eligible. Copy leads with the TBI Certificate of Eligibility (102(c)) and the 108 procedure/presumption. Exact.' },
     now: NOW,
@@ -2331,7 +2331,7 @@ const TN: Persona[] = [
   {
     source: 'Diana 7/19 - TN Class D theft on the list',
     package: 'Class D theft (39-14-103), sentence done 2013, paid -> eligible on the enumerated (a)(1)(B) list, 10yr.',
-    record: { title: 'Class D Theft (39-14-103)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true },
+    record: { title: 'Class D Theft (39-14-103)', charge_type: 'felony', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'cd', felony_cd_list_tn: true, sequencing_tn: false, other_eligible_tn: false },
     expect: { resultKey: 'eligible_conviction_tn', reading: 'Felony eligibility is now an INCLUSION list: a Class D theft is ON the 107(a)(1)(B) list -> pass; 10yr met (2013+10=2023<2026), paid, clean sequence -> eligible. Exact.' },
     now: NOW,
@@ -2419,7 +2419,7 @@ const TN: Persona[] = [
   {
     source: 'Diana 7/19 addendum - TN 107(e) recovery-court bypass',
     package: 'eligible misdemeanor committed 12 yrs after a single DUI, recovery court completed -> eligible via 107(e).',
-    record: { title: 'Eligible misdemeanor (12 yrs after a single DUI)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true },
+    record: { title: 'Eligible misdemeanor (12 yrs after a single DUI)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'misd', misd_exclusion_tn: false, sequencing_tn: true, dui_bypass_tn: true },
     expect: { resultKey: 'eligible_recovery_court_tn', reading: '107(e) bypass: the sequencing bar trips (a DUI predates this offense), but all (e) conditions hold — (a)(1)-eligible, 10+ yrs after the single DUI, recovery court completed, no prior expunction, offense not vehicle+alcohol/CS -> eligible_recovery_court_tn. The DUI itself stays. Exact.' },
     now: NOW,
@@ -2427,7 +2427,7 @@ const TN: Persona[] = [
   {
     source: 'Diana 7/19 addendum - TN sequencing bar (no recovery court)',
     package: 'same as above but no recovery court completed -> ineligible (sequencing bar).',
-    record: { title: 'Eligible misdemeanor after a DUI (no recovery court)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true },
+    record: { title: 'Eligible misdemeanor after a DUI (no recovery court)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'misd', misd_exclusion_tn: false, sequencing_tn: true, dui_bypass_tn: false },
     expect: { resultKey: 'ineligible_sequencing_tn', reading: 'Sequencing bar (107(a)(3)(A)(i)): an ineligible DUI predates this offense and the 107(e) conditions are not met (no recovery court) -> ineligible_sequencing_tn, which points to the bypass as the thing to ask about. Exact.' },
     now: NOW,
@@ -2435,7 +2435,7 @@ const TN: Persona[] = [
   {
     source: 'Diana 7/19 addendum - TN two DUIs (bypass unavailable)',
     package: 'same but two lifetime DUIs -> ineligible; 107(e) requires no more than one DUI.',
-    record: { title: 'Eligible misdemeanor after two DUIs', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true },
+    record: { title: 'Eligible misdemeanor after two DUIs', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'misd', misd_exclusion_tn: false, sequencing_tn: true, dui_bypass_tn: false },
     expect: { resultKey: 'ineligible_sequencing_tn', reading: 'Two lifetime DUIs fail the 107(e) "no more than one lifetime DUI" condition, so the dui_bypass gate answers no -> ineligible_sequencing_tn. Exact.' },
     now: NOW,
@@ -2443,7 +2443,7 @@ const TN: Persona[] = [
   {
     source: 'Diana 7/19 addendum - TN 107(e)(3) vehicle+alcohol target offense',
     package: 'eligible-list offense but it itself involves a vehicle + alcohol -> barred by 107(e)(3).',
-    record: { title: 'Offense involving vehicle + alcohol (after a DUI)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true },
+    record: { title: 'Offense involving vehicle + alcohol (after a DUI)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2013-01-01', restitution_paid: true, fines_paid: true },
     answers: { prior_expunction_tn: false, trafficking_conv_tn: false, cdl_tn: false, conv_type_tn: 'misd', misd_exclusion_tn: false, sequencing_tn: true, dui_bypass_tn: false },
     expect: { resultKey: 'ineligible_sequencing_tn', reading: '107(e)(3) bars the bypass when the target offense itself involves a motor vehicle plus alcohol or a controlled substance, so the dui_bypass gate answers no -> ineligible_sequencing_tn. Exact.' },
     now: NOW,
@@ -3204,7 +3204,7 @@ const AL: Persona[] = [
   {
     source: 'AL 7/19 statute-verified — persona 7 (same, restitution paid -> eligible)',
     package: 'same misdemeanor theft but restitution PAID, 3yr clean -> REDEEMER eligible, first-petition grant presumption.',
-    record: { title: 'Misdemeanor Theft (paid)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-01-01', restitution_paid: true },
+    record: { title: 'Misdemeanor Theft (paid)', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-01-01', restitution_paid: true, fines_paid: true },
     answers: { conv_class_al: 'misd', misd_excluded_al: false, misd_cdl_al: false, misd_conv_date_al: '2022-01-01' },
     expect: { resultKey: 'eligible_misd_al', reading: 'REDEEMER (§ 15-27-1(b)): 3yr from conviction (2022+3=2025<2026), all paid -> eligible_misd_al. Copy carries the first-petition grant presumption (§ 15-27-5) + affirmative disclosure duty (§ 15-27-6).' },
     now: NOW,

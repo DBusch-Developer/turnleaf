@@ -13703,103 +13703,175 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   IA: {
     code: 'IA',
     name: 'Iowa',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave6_Draft_Package.md',
+    sessionNote:
+      'Iowa Code 2026 edition (text through the 2024-2025 acts); a 2026 session sweep for amendments to '
+      + 'Chapter 901C and § 907.9 is pending — see Open Questions.',
     terminology:
-      'Iowa uses EXPUNGEMENT (the record is made confidential, not destroyed), under Chapter 901C. It is '
-      + 'narrow. There is NO felony-conviction expungement — felonies clear only by a Governor\'s pardon. '
-      + 'Non-convictions can be expunged, but with an unusual and harsh catch: every court cost in the case '
-      + 'must be PAID first. Completed deferred judgments are expunged automatically. And since 2019 you can '
-      + 'expunge a misdemeanor conviction — but only ONE, ever: it is a once-per-lifetime application, so if '
-      + 'you have several, you have to choose which one to spend it on. That makes the real question less '
-      + '"am I eligible" and more "is this the record worth using my one chance on."',
+      'Iowa uses EXPUNGEMENT, but read the word carefully: it makes the record CONFIDENTIAL — exempt from '
+      + 'public access under § 22.7 — not destroyed, and NONE of the three governing sections gives you a '
+      + 'statutory right to say the record does not exist. So this is concealment from public view; how to '
+      + 'answer a background question is an attorney-tier judgment, and no honest-no should be promised. There '
+      + 'is NO general felony-conviction expungement. Three routes exist. NON-CONVICTION (§ 901C.2): a court '
+      + 'SHALL expunge an acquittal or dismissal — but with Iowa\'s harsh catch, ALL court costs and financial '
+      + 'obligations must be PAID first (even acquitted people must clear the debt), and at least 180 days must '
+      + 'pass (waivable for good cause such as identity theft). Insanity/incompetency dismissals are excluded, '
+      + 'and deferred-judgment dismissals go the § 907.9 route instead. MISDEMEANOR conviction (§ 901C.3): a '
+      + 'court SHALL expunge as a matter of law more than 8 years after the DATE OF CONVICTION — notably the '
+      + 'conviction date, not sentence completion, so a long probation tail does not push the clock — if all '
+      + 'money is paid, no charges are pending, and you have not previously had two deferred judgments. But it '
+      + 'is ONCE PER LIFETIME (one application ever, which may bundle several misdemeanors only if they arose '
+      + 'from the same incident), and a 24-item exclusion list sweeps in things people assume are minor '
+      + '(OWI, public-intoxication-related and driving-status offenses, domestic-abuse assault, and more). '
+      + 'DEFERRED JUDGMENT (§ 907.9): Iowa\'s only felony-concealment route — on discharge of a deferred '
+      + 'judgment the record is expunged, but only once every financial obligation is fully paid; a payment '
+      + 'plan can DISCHARGE you without expunging the record. The deferred-judgment docket itself persists.',
     keyDates: [
       {
         label: 'Misdemeanor-conviction expungement enacted (Iowa Code § 901C.3)',
         date: '2019',
         kind: 'effective',
-        note: 'Wave 6 gives the year only. Since 2019, a single misdemeanor conviction can be expunged 8 years after conviction — once per lifetime.',
-      },
-      {
-        label: 'Automatic expungement of completed deferred judgments (Iowa Code § 907.9)',
-        date: '2013-07',
-        kind: 'operative',
-        note: 'Wave 6 gives month and year. Deferred judgments completed after July 2013 are expunged automatically; earlier ones (and some rural unsupervised-probation cases) may need a motion.',
+        note: 'Since 2019, a single misdemeanor conviction can be expunged more than 8 years after the date of conviction — once per lifetime.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the filing fee for Chapter 901C petitions. Wave 6 found no statutory filing fee for 901C petitions and flags it for a clerk (Polk County) — the petition is filed in the criminal case. The fees and feeWaiver fields are null pending this.',
+          'Run a 2026 session sweep for amendments to Chapter 901C and § 907.9 (legis.iowa.gov bill tracking by code section). The Iowa Code 2026 edition reflects the 2024-2025 acts; confirm nothing in the 2026 session changed the gates, tiers, exclusion list, or the deferred-judgment mechanics.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the application filing-fee practice for §§ 901C.2 / 901C.3 (the application is filed in the criminal case). None of the three sections states a fee for the applications themselves; the fees and feeWaiver fields are null pending this phone-tier check (a Polk County clerk is the check).',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
       },
       {
         question:
-          'Confirm the full list of ~25 excluded misdemeanor categories under Iowa Code § 901C.3. Wave 6 gives OWI (§ 321J.2), assault variants, harassment, stalking, weapons (ch. 724), and sex offenses among them, and flags the complete list as needing the statute. The tree asks these as exclusions; confirm the full set.',
+          'Pull the Iowa supreme court procedural rules referenced in § 901C.2(6) and § 901C.3(6) (if time allows). The statutes delegate application procedure and forms to court rule; the specific rules were not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull Iowa Code § 907.3 (deferred-judgment eligibility criteria). It is the feeder that determines which felonies can ever be concealed via the § 907.9 expungement; cited but not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm how employers and background-check practice treat § 22.7-confidential expunged records, and what an applicant may lawfully say. None of the three sections grants a statutory right to deny the record exists, so this is attorney-tier — the encoding never promises an honest-no.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Iowa Code § 901C.2 (non-conviction expungement; all court costs paid; 180-day wait)', url: null, retrievedOn: null },
-      { id: 'Iowa Code § 901C.3 (misdemeanor-conviction expungement; 8-yr wait; once per lifetime; ~25 exclusions)', url: null, retrievedOn: null },
-      { id: 'Iowa Code § 907.9 (deferred-judgment expungement; automatic since Jul 2013)', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 901C.2 (2026 edition — NON-conviction expungement; court SHALL expunge on application of the defendant, prosecutor, or the court\'s own motion if all charges were acquitted or dismissed, ALL court costs/fees/financial obligations are paid, at least 180 days have passed (WAIVABLE for good cause incl. identity/mistaken identity), the dismissal was not by reason of insanity, and there was no incompetency-to-stand-trial finding; excludes deferred-judgment dismissals (route via § 907.9); applies to all public offenses (§ 692.1), retroactive; court must advise of the right at acquittal/dismissal; expunged record confidential under § 22.7 but released to the defendant and § 907.4(2) agencies without a court order) via legis.iowa.gov', url: 'https://www.legis.iowa.gov', retrievedOn: '2026-07-22' },
+      { id: 'Iowa Code § 901C.3 (2026 edition — MISDEMEANOR-conviction expungement; court SHALL expunge as a matter of law if more than 8 years since the DATE OF CONVICTION, no pending charges, the defendant has not previously been granted two deferred judgments, and all financial obligations are paid; ONCE PER LIFETIME (one application, bundling multiple misdemeanors only if from the same transaction/occurrence); 24-item exclusion list (2) incl. § 123.46, § 123.47(3), §§ 321.218/321A.32/321J.21, § 321J.2 OWI, sex offenses (§ 692A.101), § 707.5, § 708.2(3), § 708.2A, § 708.7, §§ 708.11/708.12, § 716.8(3)-(4), and chapters 717C/719/720/721/723/724/726/728/901A and comparable CDL offenses; expunged record confidential, released only by court order, and removed from DPS criminal-history files; retroactive) via legis.iowa.gov', url: 'https://www.legis.iowa.gov', retrievedOn: '2026-07-22' },
+      { id: 'Iowa Code § 907.9 (2026 edition — deferred-judgment discharge and expungement; discharge when probation\'s purposes are fulfilled and § 904.912 fees + § 602.8107 court debt are paid, mandatory at probation expiration with a PAYMENT-PLAN valve for unpaid debt; (4)(b) on discharge the deferred-judgment record, dismissed counts in the same charging instrument, and related dismissed charges are expunged, BUT NOT until restitution/civil penalties/court costs/fees/all financial obligations are fully paid; (c)(2) related charges outside the instrument need a court order; (d) no expungement of dismissed counts if any count produced an unexpunged conviction; (g) "related" = same transaction/occurrence or common scheme; expunged record confidential, available to § 907.4(2) agencies without a court order, the deferred docket persists; (4)(a) citizenship-rights restoration is a recommendation to the governor at discharge) via legis.iowa.gov', url: 'https://www.legis.iowa.gov', retrievedOn: '2026-07-22' },
+      { id: 'Iowa Code § 22.7 (confidential public records — the exemption an expunged record receives, not destruction) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 907.3 (deferred-judgment eligibility — the feeder that determines which felonies can be concealed via § 907.9) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 907.4(2) (agencies that may access a deferred/expunged record without a court order) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Iowa Code § 692A.101 (sex-offense definitions incorporated by the § 901C.3(2) exclusion list) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Iowa Code §§ 904.912, 602.8107 (deferred-judgment supervision fees and court-debt collection referenced by § 907.9) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_ia',
       nodes: {
-        disposition: {
+        entry_ia: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_ia' },
-            { label: 'Dismissed', value: 'dismissed', next: 'costs_ia' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'costs_ia' },
-            { label: 'Deferred judgment completed', value: 'deferred', next: 'check_deferred_ia' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Whether a NON-conviction can be expunged (acquittal or dismissal)', value: 'nonconv', next: 'nonconv_ngri_ia' },
+            { label: 'Whether a MISDEMEANOR conviction can be expunged', value: 'misd', next: 'misd_priordeferred_ia' },
+            { label: 'Whether a completed DEFERRED JUDGMENT is expunged', value: 'deferred', next: 'deferred_route_ia' },
+            { label: 'Whether a FELONY conviction can be expunged', value: 'felony', next: 'ineligible_felony_ia' },
+            { label: 'What an expunged (confidential) record means for disclosure', value: 'effects', next: 'effects_disclosure_ia' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        costs_ia: {
+        // NON-conviction path (901C.2).
+        nonconv_ngri_ia: {
           type: 'boolean',
-          text: 'Have ALL court costs and fees in the case been paid? (Iowa is unusual — it requires every court cost paid before a non-conviction can be expunged.)',
-          yes: 'nonconv_date_ia',
+          text: 'Was the case dismissed by reason of insanity (NGRI), or was there a finding that you were incompetent to stand trial?',
+          yes: 'ineligible_ngri_ia',
+          no: 'nonconv_costs_ia'
+        },
+        nonconv_costs_ia: {
+          type: 'boolean',
+          text: 'Have ALL court costs, fees, and financial obligations in the case been paid? (Iowa requires this even for a case that ended WITHOUT a conviction.)',
+          yes: 'nonconv_waiver_ia',
           no: 'ineligible_costs_ia'
+        },
+        nonconv_waiver_ia: {
+          type: 'boolean',
+          text: 'Is there good cause to waive the 180-day wait — for example, you are a victim of identity theft or mistaken identity?',
+          yes: 'eligible_nonconv_ia',
+          no: 'nonconv_date_ia'
         },
         nonconv_date_ia: {
           type: 'date',
           field: 'disposition_date',
           text: 'When did the case end (the acquittal or dismissal)?',
           validation: {
-            period: { amount: 180, unit: 'days', anchor: 'after the acquittal/dismissal with all court costs paid (Iowa Code § 901C.2 — non-conviction; waivable for good cause)' },
+            period: { amount: 180, unit: 'days', anchor: 'at least 180 days after the acquittal/dismissal with all financial obligations paid (§ 901C.2 — non-conviction; waivable for good cause)' },
             nextPass: 'eligible_nonconv_ia',
             nextFail: 'waiting_nonconv_ia'
           }
         },
-        level_ia: {
-          type: 'choice',
-          text: 'What was the level of the conviction?',
-          options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_excluded_ia' },
-            { label: 'Felony', value: 'felony', next: 'ineligible_felony_ia' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_ia' }
-          ]
+        // MISDEMEANOR path (901C.3).
+        misd_priordeferred_ia: {
+          type: 'boolean',
+          text: 'Have you previously been granted TWO or more deferred judgments? (Iowa bars the one-time misdemeanor expungement if so.)',
+          yes: 'ineligible_priordeferred_ia',
+          no: 'misd_prioruse_ia'
+        },
+        misd_prioruse_ia: {
+          type: 'boolean',
+          text: 'Have you ever used the Iowa misdemeanor expungement (§ 901C.3) before? (It is a once-per-lifetime application.)',
+          yes: 'ineligible_prioruse_ia',
+          no: 'misd_excluded_ia'
         },
         misd_excluded_ia: {
           type: 'boolean',
-          text: 'Was the offense any of these: OWI (operating while intoxicated), an assault, harassment, stalking, a weapons offense, a sex offense, or another similar excluded category?',
+          text: 'Was the misdemeanor any of these excluded categories: OWI (§ 321J.2); a public-intoxication-related offense (§ 123.46 or a § 123.47(3) offense); a driving-status offense (§ 321.218, § 321A.32, or § 321J.21); a sex offense (§ 692A.101); involuntary manslaughter (§ 707.5); assault under § 708.2(3); domestic-abuse assault (§ 708.2A); harassment (§ 708.7); stalking (§ 708.11 or § 708.12); certain trespass (§ 716.8(3)-(4)); an offense under chapters 717C, 719, 720, 721, 723, 724, 726, 728, or 901A; or a comparable CDL offense?',
           yes: 'ineligible_excluded_ia',
-          no: 'misd_date_ia'
+          no: 'misd_bundle_ia'
+        },
+        misd_bundle_ia: {
+          type: 'choice',
+          text: 'How many misdemeanors do you want to expunge, and are they related?',
+          options: [
+            { label: 'Just one misdemeanor', value: 'one', next: 'misd_date_ia' },
+            { label: 'Several, all from the SAME incident or transaction', value: 'same', next: 'misd_date_ia' },
+            { label: 'Several from SEPARATE incidents', value: 'separate', next: 'complex_separate_ia' }
+          ]
         },
         misd_date_ia: {
           type: 'date',
           field: 'disposition_date',
-          text: 'When were you convicted?',
+          text: 'When were you CONVICTED? (Iowa measures the 8 years from the conviction date, not from when your sentence or probation ended.)',
           validation: {
-            period: { amount: 8, unit: 'years', anchor: 'from conviction, all financial obligations paid, no pending charges (Iowa Code § 901C.3 — misdemeanor; once per lifetime)' },
+            period: { amount: 8, unit: 'years', anchor: 'more than 8 years from the DATE OF CONVICTION, all financial obligations paid, no pending charges (§ 901C.3 — misdemeanor; once per lifetime)' },
             nextPass: 'eligible_misd_ia',
             nextFail: 'waiting_misd_ia'
           }
+        },
+        // DEFERRED-JUDGMENT path (907.9).
+        deferred_route_ia: {
+          type: 'choice',
+          text: 'What is the status of your deferred judgment?',
+          options: [
+            { label: 'Discharged, and ALL financial obligations (restitution, costs, fees, penalties) are fully paid', value: 'discharged_paid', next: 'deferred_othercount_ia' },
+            { label: 'Discharged via a PAYMENT PLAN, but a balance is still outstanding', value: 'discharged_plan', next: 'complex_deferred_plan_ia' },
+            { label: 'Still on probation / not yet discharged', value: 'active', next: 'waiting_deferred_ia' },
+            { label: 'Completed, but I am not sure of the financial status', value: 'unsure', next: 'complex_deferred_ia' }
+          ]
+        },
+        deferred_othercount_ia: {
+          type: 'boolean',
+          text: 'In the SAME case, did any other count result in a conviction that has NOT been expunged?',
+          yes: 'complex_deferred_othercount_ia',
+          no: 'eligible_deferred_ia'
         }
       },
       results: {
@@ -13810,85 +13882,142 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'Get Your Record First (Iowa Courts Online / paperwork)',
           citation: 'Iowa Code §§ 901C.2, 901C.3, 907.9 (the route depends on the disposition)'
         },
-        check_deferred_ia: {
-          status: 'eligible',
-          title: 'Deferred Judgment — Likely Already Expunged, Check',
-          message: 'Because you completed a deferred judgment, Iowa expunges it AUTOMATICALLY if it was completed after July 2013 — no petition needed. So the honest first step is to CHECK whether it has already come off: look yourself up on Iowa Courts Online. If it completed before July 2013, or it was a rural unsupervised-probation case, you may need to file a motion to finish the job. Iowa Legal Aid can help you confirm and, if needed, file.',
-          remedy: 'Check your record — a post-2013 deferred should already be expunged (§ 907.9)',
-          citation: 'Iowa Code § 907.9'
+        ineligible_ngri_ia: {
+          status: 'ineligible',
+          title: 'Insanity / Incompetency Dismissal — Not Expungeable',
+          message: 'Iowa\'s non-conviction expungement does not reach a case dismissed by reason of insanity (NGRI) or one in which you were found incompetent to stand trial (§ 901C.2). Because yours ended that way, the § 901C.2 route does not apply, and no waiting period changes that. A Governor\'s pardon is a possible route depending on the circumstances. Iowa Legal Aid can help you confirm the disposition and options.',
+          remedy: 'None via § 901C.2 (insanity/incompetency) — confirm options with Iowa Legal Aid',
+          citation: 'Iowa Code § 901C.2'
+        },
+        ineligible_costs_ia: {
+          status: 'waiting',
+          title: 'Financial Obligations Must Be Paid First',
+          message: 'Iowa has an unusual and, frankly, harsh requirement: even for a case that ended WITHOUT a conviction, you cannot expunge it until every court cost, fee, and financial obligation in the case is paid (§ 901C.2). Because something is still outstanding, the expungement is blocked for now — but this is a "not yet," not a "never." Once the money is cleared (and 180 days have passed, unless waived for good cause), you can file under § 901C.2. Iowa Legal Aid can help you sort out what is owed and to whom.',
+          remedy: 'Pay the outstanding financial obligations, then expunge (§ 901C.2)',
+          citation: 'Iowa Code § 901C.2'
         },
         eligible_nonconv_ia: {
           status: 'eligible',
-          title: 'No Conviction, Costs Paid — Expungeable',
-          message: 'Because your case ended without a conviction, all court costs are paid, and more than 180 days have passed, it can be expunged under Iowa Code § 901C.2. You file in the criminal case. Note this does not apply to deferred-judgment dismissals (those have their own automatic path) or insanity/incompetency dismissals. Iowa Legal Aid can help with the filing.',
-          remedy: 'Non-conviction expungement (§ 901C.2)',
+          title: 'No Conviction — Court Shall Expunge',
+          message: 'Because your case ended in an acquittal or dismissal, all financial obligations are paid, and either 180 days have passed or the wait is waivable for good cause (such as identity theft or mistaken identity), the court SHALL expunge it under § 901C.2. The application can be filed by you, the prosecutor, or the court on its own motion, in the criminal case. Two honest notes: this does not reach deferred-judgment dismissals (those go the § 907.9 route) or insanity/incompetency dismissals; and the expunged record is made CONFIDENTIAL under § 22.7 rather than destroyed, and Iowa gives no statutory right to deny it exists — how to answer a background question is worth an attorney\'s read. Iowa Legal Aid can help with the filing.',
+          remedy: 'Non-conviction expungement (§ 901C.2) — court shall grant',
           citation: 'Iowa Code § 901C.2'
         },
         waiting_nonconv_ia: {
           status: 'waiting',
           title: 'Not Yet 180 Days',
-          message: 'For a non-conviction with all court costs paid, Iowa lets you expunge 180 days after the case ended. Based on your date, that has not passed yet (the wait can sometimes be waived for good cause, such as identity theft). Once it does, you file in the criminal case. Iowa Legal Aid can help you prepare.',
-          remedy: 'Wait until 180 days after the case ended (§ 901C.2)',
+          message: 'For a non-conviction with all financial obligations paid, Iowa lets you expunge at least 180 days after the case ended (§ 901C.2). Based on your date, that has not passed yet — though the wait can be WAIVED for good cause, such as identity theft or mistaken identity, so if that fits you may be able to apply now. Once eligible, the application is filed in the criminal case and the court shall grant it. Iowa Legal Aid can help you prepare.',
+          remedy: 'Wait until 180 days after the case ended, or seek a good-cause waiver (§ 901C.2)',
           citation: 'Iowa Code § 901C.2'
         },
-        ineligible_costs_ia: {
+        ineligible_priordeferred_ia: {
           status: 'ineligible',
-          title: 'Court Costs Must Be Paid First',
-          message: 'Iowa has an unusual and, frankly, harsh requirement: even for a case that ended WITHOUT a conviction, you cannot expunge it until every court cost and fee in the case is paid. Because those are still outstanding, the expungement is blocked for now — but this is a "not yet," not a "never." Once the costs are cleared, and 180 days have passed since the case ended, you can file under § 901C.2. Iowa Legal Aid can help you sort out what is owed and to whom.',
-          remedy: 'Pay the outstanding court costs, then expunge (§ 901C.2)',
-          citation: 'Iowa Code § 901C.2'
+          title: 'Two Prior Deferred Judgments Bar This Path',
+          message: 'Iowa\'s one-time misdemeanor expungement is unavailable to a person who has previously been granted two deferred judgments (§ 901C.3(1)(c)). Because you have, the § 901C.3 route is closed, and no waiting period changes that — the deferred-judgment docket survives to enforce this. Any NON-conviction on your record can still be expunged separately (that is a different section), and a Governor\'s pardon remains a route. Iowa Legal Aid can help you look at those.',
+          remedy: 'None via § 901C.3 (two prior deferred judgments) — check non-convictions or a pardon',
+          citation: 'Iowa Code § 901C.3(1)(c)'
+        },
+        ineligible_prioruse_ia: {
+          status: 'ineligible',
+          title: 'You Have Already Used Your One Misdemeanor Expungement',
+          message: 'Iowa\'s misdemeanor expungement is a once-per-lifetime application (§ 901C.3(3)), and because you have already used it, another misdemeanor cannot be expunged this way — no waiting period changes that. Two things still worth checking: a NON-conviction can be expunged separately, and a completed deferred judgment has its own § 907.9 route. Iowa Legal Aid can help you look at both.',
+          remedy: 'None (one-time misdemeanor expungement used) — check non-convictions or § 907.9',
+          citation: 'Iowa Code § 901C.3(3)'
+        },
+        ineligible_excluded_ia: {
+          status: 'ineligible',
+          title: 'This Misdemeanor Is Excluded',
+          message: 'Iowa\'s misdemeanor expungement excludes a 24-item list (§ 901C.3(2)), and it sweeps in offenses people assume are minor: OWI, public-intoxication-related and driving-status offenses, domestic-abuse assault, harassment, stalking, weapons offenses (chapter 724), sex offenses, and more. Because yours is on that list, the § 901C.3 route does not apply, and no waiting period changes that. For an excluded offense, a Governor\'s pardon is the remaining route. Iowa Legal Aid can help you confirm the category and explain the pardon process.',
+          remedy: 'None (Excluded Misdemeanor) — a pardon is the remaining route',
+          citation: 'Iowa Code § 901C.3(2)'
+        },
+        complex_separate_ia: {
+          status: 'complex',
+          title: 'Only One Can Be Expunged — Choose Deliberately',
+          message: 'Iowa\'s misdemeanor expungement is a single application for your whole life, and it can bundle several misdemeanors ONLY if they arose from the same incident or transaction (§ 901C.3(3)). Because your misdemeanors are from separate incidents, you can expunge just ONE of them, ever — so the real question is which record is worth spending your one chance on. Each still has to meet the 8-years-from-conviction rule, have all money paid, and not be on the exclusion list. This is exactly the kind of trade-off worth talking through with Iowa Legal Aid before you file.',
+          remedy: 'Choose which single misdemeanor to expunge (§ 901C.3) — it is once per lifetime',
+          citation: 'Iowa Code § 901C.3(3)'
         },
         eligible_misd_ia: {
           status: 'eligible',
-          title: 'Misdemeanor, 8+ Years — Eligible, But Choose Carefully',
-          message: 'Based on your dates — 8 years since conviction, financial obligations paid, and no pending charges — this misdemeanor is eligible for expungement under Iowa Code § 901C.3. But here is the Iowa-specific catch you should weigh before filing: you get only ONE misdemeanor expungement in your lifetime (one application covers multiple misdemeanors only if they were from the same incident). So if you have more than one misdemeanor on your record, the real question is which one is worth spending your single chance on. Iowa Legal Aid flags exactly this trade-off and can help you decide.',
-          remedy: 'Misdemeanor expungement (§ 901C.3) — but it is once per lifetime',
+          title: 'Misdemeanor, 8+ Years Since Conviction — Court Shall Expunge',
+          message: 'Based on your dates — more than 8 years since the DATE OF CONVICTION, all financial obligations paid, and no pending charges — the court SHALL expunge this misdemeanor as a matter of law under § 901C.3. A favorable Iowa detail: the clock runs from the conviction date, not from when your sentence or probation ended, so a long supervision tail does not push it back. But weigh the catch first: this is a ONCE-PER-LIFETIME application (it bundles multiple misdemeanors only if they came from the same incident), so if you have more than one, choose which to spend it on. The record becomes CONFIDENTIAL under § 22.7 (released only by court order) and is removed from DPS criminal-history files — but Iowa gives no statutory right to deny it exists, so how to answer a background question is attorney-tier. Iowa Legal Aid can help you decide and file.',
+          remedy: 'Misdemeanor expungement (§ 901C.3) — court shall grant, once per lifetime',
           citation: 'Iowa Code § 901C.3'
         },
         waiting_misd_ia: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Iowa lets you expunge a misdemeanor conviction 8 years after the conviction, with all financial obligations paid and no pending charges. Based on your dates, that has not passed yet. When it does, remember it is a once-per-lifetime expungement, so it is worth being deliberate about which record you use it on. Iowa Legal Aid can help you plan.',
-          remedy: 'Wait for the 8-year period (§ 901C.3)',
+          title: 'Not Yet 8 Years Since Conviction',
+          message: 'Iowa lets you expunge a misdemeanor conviction more than 8 years after the DATE OF CONVICTION, with all financial obligations paid and no pending charges (§ 901C.3). Based on your conviction date, that has not passed yet. A favorable note: the 8 years run from the conviction date, not from when your sentence ended. When it does, remember it is a once-per-lifetime expungement, so be deliberate about which record you use it on. Iowa Legal Aid can help you plan.',
+          remedy: 'Wait for the 8 years from conviction (§ 901C.3)',
           citation: 'Iowa Code § 901C.3'
         },
-        ineligible_excluded_ia: {
-          status: 'ineligible',
-          title: 'This Offense Is Excluded',
-          message: 'Iowa\'s misdemeanor expungement law excludes about 25 categories, including OWI (operating while intoxicated), assault variants, harassment, stalking, weapons offenses, and sex offenses. Because yours falls in an excluded category, the § 901C.3 route does not apply, and no waiting period changes that. For an excluded offense, a Governor\'s pardon is the remaining route. Iowa Legal Aid can help you confirm the category and explain the pardon process.',
-          remedy: 'None (Excluded Offense) — ask about a pardon',
-          citation: 'Iowa Code § 901C.3'
+        eligible_deferred_ia: {
+          status: 'eligible',
+          title: 'Deferred Judgment Discharged and Paid — Expunged',
+          message: 'Because your deferred judgment was discharged and every financial obligation (restitution, civil penalties, court costs, fees) is fully paid, Iowa expunges the court\'s record of the deferred judgment — along with dismissed counts in the same charging instrument — under § 907.9(4)(b). This is Iowa\'s only route that can conceal what began as a FELONY, and it happens at discharge rather than by a separate petition. Two honest limits: the record becomes CONFIDENTIAL under § 22.7 (still available to § 907.4(2) agencies without a court order, and the deferred-judgment docket itself persists), and this is concealment, not a right to deny the record — attorney-tier on how to answer a background question. Related dismissed charges OUTSIDE the charging instrument need a separate court order identifying them. Iowa Legal Aid can help confirm it was completed.',
+          remedy: 'Deferred-judgment expungement at discharge (§ 907.9(4)(b))',
+          citation: 'Iowa Code § 907.9(4)(b)'
+        },
+        complex_deferred_plan_ia: {
+          status: 'waiting',
+          title: 'Discharged on a Payment Plan — Not Yet Expunged',
+          message: 'Iowa splits DISCHARGE from EXPUNGEMENT for a deferred judgment. At probation\'s end you can be discharged even with a balance, by entering a payment plan (§ 907.9) — but the record is NOT expunged until every financial obligation (restitution, civil penalties, court costs, fees) is fully PAID (§ 907.9(4)(b)). So being discharged is good, but with a balance outstanding the record stays visible for now. Once you pay it off in full, the expungement follows. Iowa Legal Aid can help you confirm the balance and the path to full payment.',
+          remedy: 'Pay the deferred-judgment balance in full, then it expunges (§ 907.9(4)(b))',
+          citation: 'Iowa Code § 907.9(4)(b)'
+        },
+        complex_deferred_othercount_ia: {
+          status: 'complex',
+          title: 'An Unexpunged Conviction in the Case Blocks It',
+          message: 'Iowa will not expunge the dismissed counts of a case if any count in that same case produced a conviction that has not itself been expunged (§ 907.9(4)(d)). Because another count in your case ended in a standing conviction, the deferred-judgment expungement is blocked for the dismissed counts while that conviction remains. Whether that conviction can be cleared on its own (for a misdemeanor, § 901C.3; a felony conviction cannot be expunged) is the next question. Because the interaction is technical, it is worth reviewing with Iowa Legal Aid rather than guessing.',
+          remedy: 'Resolve the standing conviction first (§ 907.9(4)(d)) — review with Iowa Legal Aid',
+          citation: 'Iowa Code § 907.9(4)(d)'
+        },
+        waiting_deferred_ia: {
+          status: 'waiting',
+          title: 'Deferred Judgment Not Yet Discharged',
+          message: 'A deferred judgment is expunged at DISCHARGE, not before (§ 907.9). Because you are still on probation, there is nothing to expunge yet — complete the probation, pay the § 904.912 fees and § 602.8107 court debt (or, at probation\'s expiration, enter a payment plan to be discharged), and the expungement follows once every financial obligation is fully paid. Iowa Legal Aid can help you understand the discharge steps.',
+          remedy: 'Complete probation and pay in full — then it expunges at discharge (§ 907.9)',
+          citation: 'Iowa Code § 907.9'
+        },
+        complex_deferred_ia: {
+          status: 'complex',
+          title: 'We Need the Deferred-Judgment Financial Status',
+          message: 'For a deferred judgment, Iowa expunges the record at discharge — but ONLY once every financial obligation (restitution, civil penalties, court costs, fees) is fully paid; if you were discharged on a payment plan with a balance, it is not expunged yet (§ 907.9(4)(b)). Since the financial status is not clear, we are not going to guess. Iowa Courts Online or the clerk can confirm whether the case is paid in full and whether the record shows as expunged. Iowa Legal Aid can help you read it.',
+          remedy: 'Confirm the deferred-judgment balance and status (clerk / Iowa Courts Online)',
+          citation: 'Iowa Code § 907.9'
         },
         ineligible_felony_ia: {
           status: 'ineligible',
-          title: 'Felony Conviction — Pardon Only',
-          message: 'Iowa does not have felony-conviction expungement at all — the only route to clear a felony conviction is a Governor\'s pardon. That is a real process, just a different one from expungement. Iowa Legal Aid and the Governor\'s office can explain how to apply. (If any of your charges ended without a conviction, those may still be expungeable separately.)',
-          remedy: 'None (no felony expungement in Iowa) — a pardon is the route',
-          citation: 'Iowa Code ch. 901C'
+          title: 'Felony Conviction — No Expungement (Pardon Only)',
+          message: 'Iowa has no general felony-conviction expungement — the only route to clear a standing felony CONVICTION is a Governor\'s pardon. There is one important exception on a different track: if your felony was resolved by a DEFERRED JUDGMENT (no conviction entered) that you completed and paid off, that record is expunged at discharge under § 907.9 — so if that describes you, check the deferred-judgment path instead. Otherwise a pardon is the route, and any charge that ended without a conviction can still be expunged separately. Iowa Legal Aid and the Governor\'s office can explain the pardon process.',
+          remedy: 'None for a felony conviction (pardon only) — but a completed deferred judgment expunges (§ 907.9)',
+          citation: 'Iowa Code ch. 901C; § 907.9'
         },
-        complex_level_ia: {
+        effects_disclosure_ia: {
           status: 'complex',
-          title: 'We Need the Conviction Level',
-          message: 'It matters a lot in Iowa: a misdemeanor conviction may be expungeable (once per lifetime, after 8 years), but a felony conviction cannot be expunged at all — only pardoned. Since you are not sure which yours is, we are not going to guess. Iowa Courts Online or your paperwork states it, and Iowa Legal Aid can help you read it.',
-          remedy: 'Get the Conviction Level First (Iowa Courts Online / paperwork)',
-          citation: 'Iowa Code § 901C.3'
+          title: 'Expunged in Iowa Means Confidential — Not a Right to Deny It',
+          message: 'This is the honest, important limit of Iowa expungement: it makes the record CONFIDENTIAL and exempt from public access under § 22.7 — it does not destroy the record, and NONE of the three governing sections (§ 901C.2, § 901C.3, § 907.9) gives you a statutory right to say the offense never happened. So an expunged Iowa record is concealed from ordinary public view, but there is no built-in honest-no like some states have. What you may lawfully say on a job or license application is a real legal question that turns on the specific application and who is asking (some agencies retain access — e.g. § 907.4(2) agencies for deferred records, and DPS is directed to remove § 901C.3 records from its files), so this is genuinely attorney-tier. Please do not treat "expunged" here as "I can deny it." Iowa Legal Aid can advise on your specific situation.',
+          remedy: 'Confidential, not deniable — get attorney advice on what you may say (§ 22.7)',
+          citation: 'Iowa Code §§ 22.7, 901C.2, 901C.3, 907.9'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Expungement (Iowa Code ch. 901C; deferred judgments § 907.9)',
+          name: 'Expungement (Iowa Code §§ 901C.2, 901C.3; deferred judgments § 907.9)',
           formName: 'Iowa Judicial Branch expungement forms',
           formUrl: 'https://www.iowacourts.gov/for-the-public/court-forms/',
           steps: [
-            'For a completed deferred judgment, check Iowa Courts Online first — post-July-2013 completions are expunged automatically.',
-            'For a non-conviction, pay every court cost in the case first (Iowa requires it), then file after 180 days under § 901C.2.',
-            'For a misdemeanor conviction 8+ years old, file under § 901C.3 — but remember it is once per lifetime, so choose which record deliberately.',
-            'Felony convictions cannot be expunged; a Governor\'s pardon is the only route. Iowa Legal Aid can help throughout.'
+            'For a NON-conviction (acquittal or dismissal, but not NGRI/incompetency or a deferred-judgment dismissal), pay every financial obligation in the case first — Iowa requires it even for an acquittal — then apply under § 901C.2 at least 180 days after the case ended (waivable for good cause); the court shall grant it.',
+            'For a MISDEMEANOR conviction, apply under § 901C.3 more than 8 years after the DATE OF CONVICTION (not sentence completion), with all money paid, no pending charges, no two prior deferred judgments, and the offense not on the 24-item exclusion list — but it is once per lifetime, so choose which record deliberately.',
+            'For a DEFERRED JUDGMENT, the record expunges at discharge under § 907.9 — but only once every financial obligation is fully paid; a payment plan can discharge you without expunging the record.',
+            'A standing felony conviction cannot be expunged (pardon only). Note none of these routes gives a statutory right to deny the record — it becomes confidential under § 22.7, and what you may say is attorney-tier. Iowa Legal Aid can help throughout.'
           ],
-          // null: Wave 6 found no statutory filing fee for 901C petitions and flags
-          // it for a clerk — so the fee, and any waiver, are unknown.
+          // null: none of the three sections states a fee for the applications
+          // themselves; filing-fee practice is phone-tier, so the fee and any waiver
+          // are unknown. (The statutory financial-obligation GATES are encoded above.)
           fees: null,
           feeWaiver: null,
           courtContact: 'The court where the criminal case was filed'

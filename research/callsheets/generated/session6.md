@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**61 open questions across 11 states.**
+**64 open questions across 11 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -44,22 +44,27 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 2. IOWA (IA)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement (Iowa Code ch. 901C; deferred judgments § 907.9)** — The court where the criminal case was filed
+- **Expungement (Iowa Code §§ 901C.2, 901C.3; deferred judgments § 907.9)** — The court where the criminal case was filed
 - Iowa Legal Aid — https://www.iowalegalaid.org
 - Iowa Judicial Branch — Court Forms — https://www.iowacourts.gov/for-the-public/court-forms/
 
 **Dates that govern:**
-- 2019 — Misdemeanor-conviction expungement enacted (Iowa Code § 901C.3) (effective) · Wave 6 gives the year only. Since 2019, a single misdemeanor conviction can be expunged 8 years after conviction — once per lifetime.
-- 2013-07 — Automatic expungement of completed deferred judgments (Iowa Code § 907.9) (operative) · Wave 6 gives month and year. Deferred judgments completed after July 2013 are expunged automatically; earlier ones (and some rural unsupervised-probation cases) may need a motion.
+- 2019 — Misdemeanor-conviction expungement enacted (Iowa Code § 901C.3) (effective) · Since 2019, a single misdemeanor conviction can be expunged more than 8 years after the date of conviction — once per lifetime.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the filing fee for Chapter 901C petitions. Wave 6 found no statutory filing fee for 901C petitions and flags it for a clerk (Polk County) — the petition is filed in the criminal case. The fees and feeWaiver fields are null pending this.
+1. Run a 2026 session sweep for amendments to Chapter 901C and § 907.9 (legis.iowa.gov bill tracking by code section). The Iowa Code 2026 edition reflects the 2024-2025 acts; confirm nothing in the 2026 session changed the gates, tiers, exclusion list, or the deferred-judgment mechanics.
+   - *Blocks no single field — affects a branch or wording.*
+2. Confirm the application filing-fee practice for §§ 901C.2 / 901C.3 (the application is filed in the criminal case). None of the three sections states a fee for the applications themselves; the fees and feeWaiver fields are null pending this phone-tier check (a Polk County clerk is the check).
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
-2. Confirm the full list of ~25 excluded misdemeanor categories under Iowa Code § 901C.3. Wave 6 gives OWI (§ 321J.2), assault variants, harassment, stalking, weapons (ch. 724), and sex offenses among them, and flags the complete list as needing the statute. The tree asks these as exclusions; confirm the full set.
+3. Pull the Iowa supreme court procedural rules referenced in § 901C.2(6) and § 901C.3(6) (if time allows). The statutes delegate application procedure and forms to court rule; the specific rules were not read.
+   - *Blocks no single field — affects a branch or wording.*
+4. Pull Iowa Code § 907.3 (deferred-judgment eligibility criteria). It is the feeder that determines which felonies can ever be concealed via the § 907.9 expungement; cited but not read.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm how employers and background-check practice treat § 22.7-confidential expunged records, and what an applicant may lawfully say. None of the three sections grants a statutory right to deny the record exists, so this is attorney-tier — the encoding never promises an honest-no.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

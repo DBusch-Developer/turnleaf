@@ -850,7 +850,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         monetary_check_az: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you paid all fines, fees and restitution in full?',
+          text: 'Have you paid all court-ordered RESTITUTION in full? (Restitution is money owed to a victim.)',
+          yes: 'monetary_fines_az',
+          no: 'eligible_pay_then_file_az'
+        },
+        monetary_fines_az: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you paid all court fines, fees and costs in full?',
           yes: 'eligible_both_az',
           no: 'eligible_pay_then_file_az'
         }

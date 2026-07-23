@@ -40,9 +40,9 @@ describe('intake form derivation', () => {
 });
 
 describe('moneyFieldsFor', () => {
-  // AZ's fines_paid node doesn't exist until Task 3 splits its money gate —
-  // un-skip this case then.
-  test.skip('AZ reads both restitution and fines (after Task 3 split)', () => {
+  // Task 3 split AZ's single monetary_check_az into a restitution gate
+  // (monetary_check_az) and a fines gate (monetary_fines_az), both field-backed.
+  test('AZ reads both restitution and fines (after Task 3 split)', () => {
     expect(moneyFieldsFor('AZ')).toEqual({ restitution: true, fines: true });
   });
 

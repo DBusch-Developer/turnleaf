@@ -17,6 +17,7 @@ const rec = (o: Partial<ConvictionRecord> = {}): ConvictionRecord => ({
   probation_status: 'completed',
   prison_sentenced: false,
   restitution_paid: true,
+  fines_paid: true,
   ...o,
 });
 

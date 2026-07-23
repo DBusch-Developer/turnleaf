@@ -163,7 +163,7 @@ const AZ: Persona[] = [
   {
     source: 'Wave 0 — AZ persona 1',
     package: 'class 6 felony possession, done 2018 → set aside now + sealing eligible 2023+ → both.',
-    record: { title: 'Possession', charge_type: 'felony', disposition_date: '2018-04-01', restitution_paid: true },
+    record: { title: 'Possession', charge_type: 'felony', disposition_date: '2018-04-01', restitution_paid: true, fines_paid: true },
     // 'done 2018' = discharged 2018. CORRECTED 7/16: the § 13-911(E) clock runs
     // from completion of the NON-MONETARY conditions plus discharge — not from
     // "absolute discharge including all money paid", which is what this fixture

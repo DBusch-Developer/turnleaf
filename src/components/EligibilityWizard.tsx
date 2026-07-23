@@ -57,7 +57,10 @@ const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
   restitutionPaid: 'All fines & restitution paid?',
 };
 
-const labelStyle: React.CSSProperties = { fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' };
+// minHeight reserves two lines so a one-line label and a wrapping two-line
+// label (e.g. "Sentence fully completed (probation, jail, fines)?") leave their
+// inputs on the same baseline across a grid row, instead of stair-stepping.
+const labelStyle: React.CSSProperties = { fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem', minHeight: '2.5em', lineHeight: 1.25 };
 
 export default function EligibilityWizard({
   configs,
@@ -373,7 +376,7 @@ export default function EligibilityWizard({
                     per-state dropdown (e.g. Arizona's offense class), all wired
                     to this record's own profile. On submit these seed the tree
                     walk so a prefilled node's card never shows at the checkpoint. */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem 1.25rem', alignItems: 'start' }}>
                   <div>
                     <label style={labelStyle}>
                       Charge Name <span style={{ fontWeight: 400, color: 'var(--color-text-light)' }}>(optional label)</span>

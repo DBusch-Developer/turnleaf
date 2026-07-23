@@ -32,7 +32,8 @@ export interface ConvictionRecord {
   disposition_date: string;
   probation_status: 'completed' | 'failed' | 'active' | 'none';
   prison_sentenced: boolean;
-  restitution_paid: boolean;
+  restitution_paid?: boolean;
+  fines_paid?: boolean;
 }
 
 /** The record fields a node may read. */
@@ -42,6 +43,7 @@ export type RecordField =
   | 'probation_status'
   | 'prison_sentenced'
   | 'restitution_paid'
+  | 'fines_paid'
   | 'disposition_date';
 
 /**
@@ -57,12 +59,13 @@ export const FIELD_DOMAINS: Record<RecordField, readonly string[]> = {
   probation_status: ['completed', 'failed', 'active', 'none'],
   prison_sentenced: ['true', 'false'],
   restitution_paid: ['true', 'false'],
+  fines_paid: ['true', 'false'],
   // A date has no enumerable domain; it is checked by type, not by value.
   disposition_date: [],
 };
 
 /** Which fields hold a yes/no, and so back a `boolean` node rather than a `choice`. */
-export const BOOLEAN_FIELDS: readonly RecordField[] = ['prison_sentenced', 'restitution_paid'];
+export const BOOLEAN_FIELDS: readonly RecordField[] = ['prison_sentenced', 'restitution_paid', 'fines_paid'];
 
 /**
  * Which fields hold a date, and so may back a `date` node.

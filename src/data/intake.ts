@@ -27,7 +27,8 @@ export interface IntakeProfile {
   sentenceCompleted: boolean;
   dischargeDate: string | null;
   priorFelony: boolean;
-  restitutionPaid: boolean;
+  restitutionPaid: boolean | null;
+  finesPaid: boolean | null;
 }
 
 /** A per-state form field built from a tree node's own options (e.g. offense class). */

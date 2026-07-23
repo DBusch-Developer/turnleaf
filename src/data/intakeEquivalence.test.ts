@@ -30,7 +30,7 @@ const cases: Array<{ name: string; profile: IntakeProfile; level: string; tail: 
   {
     name: 'clean Class 1 misdemeanor DUI, discharged 2019 -> the DUI hedge',
     profile: { offenseCategory: 'dui', disposition: 'convicted', chargeType: 'misdemeanor',
-      sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true },
+      sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true, finesPaid: null },
     level: 'misd_1',
     tail: { excluded_setaside_az: false }, // reaches dui_offense=true -> complex_dui_az before exclusions matter
     expect: 'complex_dui_az',
@@ -38,7 +38,7 @@ const cases: Array<{ name: string; profile: IntakeProfile; level: string; tail: 
   {
     name: 'non-DUI Class 1 misdemeanor, discharged 2019, restitution paid -> set-aside AND sealing',
     profile: { offenseCategory: 'property', disposition: 'convicted', chargeType: 'misdemeanor',
-      sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true },
+      sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true, finesPaid: null },
     level: 'misd_1',
     // Neither exclusion gate is on the AZ intake map (state-specific lists stay
     // asked); both must be answered "no" to fall through to the offense-level /
@@ -49,7 +49,7 @@ const cases: Array<{ name: string; profile: IntakeProfile; level: string; tail: 
   {
     name: 'convicted, dangerous/registrable offense -> excluded from both remedies',
     profile: { offenseCategory: 'violent', disposition: 'convicted', chargeType: 'felony',
-      sentenceCompleted: true, dischargeDate: '2015-01-01', priorFelony: false, restitutionPaid: true },
+      sentenceCompleted: true, dischargeDate: '2015-01-01', priorFelony: false, restitutionPaid: true, finesPaid: null },
     level: 'felony_high',
     // A "yes" on the § 13-905(P) exclusion gate ends the walk immediately, before
     // marijuana/DUI/sentence questions are ever reached.

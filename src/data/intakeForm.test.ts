@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { stateFieldsFor, sharedFieldsFor, CHARGE_TYPE_OPTIONS, DISPOSITION_OPTIONS } from './intakeForm';
+import { stateFieldsFor, sharedFieldsFor, CHARGE_TYPE_OPTIONS, DISPOSITION_OPTIONS, moneyFieldsFor } from './intakeForm';
 import { FIELD_DOMAINS } from './screening';
 
 describe('intake form derivation', () => {
@@ -36,5 +36,29 @@ describe('intake form derivation', () => {
 
   test('disposition options cover the full record domain — no narrowing', () => {
     expect(DISPOSITION_OPTIONS.map(o => o.value)).toEqual([...FIELD_DOMAINS.disposition]);
+  });
+});
+
+describe('moneyFieldsFor', () => {
+  // AZ's fines_paid node doesn't exist until Task 3 splits its money gate —
+  // un-skip this case then.
+  test.skip('AZ reads both restitution and fines (after Task 3 split)', () => {
+    expect(moneyFieldsFor('AZ')).toEqual({ restitution: true, fines: true });
+  });
+
+  // The brief's example was PA, but PA's restitution question (`restitution_pa`)
+  // is currently an ASKED node, not field-backed (verified by reading
+  // fallbackRules.ts — it has no `field: 'restitution_paid'`), so moneyFieldsFor
+  // correctly reports it as not-field-backed. NC's `restitution_nc` node IS
+  // field-backed (`field: 'restitution_paid'`), so it exercises the same
+  // restitution-only shape the brief intended.
+  test('NC reads restitution only', () => {
+    expect(moneyFieldsFor('NC')).toEqual({ restitution: true, fines: false });
+  });
+
+  test('a state whose tree reads no money field needs neither', () => {
+    // NV has no restitution_paid (or fines_paid) field-backed node — verified
+    // by grepping fallbackRules.ts for `field: 'restitution_paid'`.
+    expect(moneyFieldsFor('NV')).toEqual({ restitution: false, fines: false });
   });
 });

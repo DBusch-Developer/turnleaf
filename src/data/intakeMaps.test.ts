@@ -7,6 +7,7 @@ import type { IntakeProfile, IntakeMap } from './intake';
 const azProfile: IntakeProfile = {
   offenseCategory: 'dui', disposition: 'convicted', chargeType: 'misdemeanor',
   sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true,
+  finesPaid: null,
 };
 
 describe('AZ intake map', () => {

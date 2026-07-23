@@ -4,6 +4,7 @@ import { buildAnswers, type IntakeProfile, type IntakeMap } from './intake';
 const base: IntakeProfile = {
   offenseCategory: 'dui', disposition: 'convicted', chargeType: 'misdemeanor',
   sentenceCompleted: true, dischargeDate: '2019-06-01', priorFelony: false, restitutionPaid: true,
+  finesPaid: null,
 };
 
 const map: IntakeMap = {

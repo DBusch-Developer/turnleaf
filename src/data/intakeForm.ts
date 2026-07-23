@@ -43,6 +43,18 @@ export function sharedFieldsFor(_stateCodes: string[]): SharedFieldKey[] {
   return ALL_SHARED;
 }
 
+/**
+ * Which money facts a state's tree actually reads. Restitution and fines/fees
+ * are separate facts (some states gate on restitution only, some on both) —
+ * this tells a caller which of the two to ask for, per state, without the
+ * caller knowing anything about that state's tree shape.
+ */
+export function moneyFieldsFor(stateCode: string): { restitution: boolean; fines: boolean } {
+  const nodes = fallbackRules[stateCode]?.rules.nodes ?? {};
+  const reads = (f: string) => Object.values(nodes).some(n => n.field === f);
+  return { restitution: reads('restitution_paid'), fines: reads('fines_paid') };
+}
+
 /** Per-state dropdowns (e.g. offense class), options read from the tree node. */
 export function stateFieldsFor(stateCodes: string[]): Array<{
   code: string; spec: StateFieldSpec; options: { label: string; value: string }[];

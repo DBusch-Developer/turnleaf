@@ -36,6 +36,7 @@ const makeRecordId = () => Math.random().toString(36).substr(2, 9);
 const emptyProfile: IntakeProfile = {
   offenseCategory: 'other', disposition: 'convicted', chargeType: 'misdemeanor',
   sentenceCompleted: true, dischargeDate: null, priorFelony: false, restitutionPaid: true,
+  finesPaid: true,
 };
 
 const OFFENSE_CATEGORY_OPTIONS: { label: string; value: OffenseCategory }[] = [
@@ -60,6 +61,10 @@ const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
   dischargeDate: 'Date you finished those non-money parts / were discharged',
   priorFelony: 'Any prior felony conviction?',
   restitutionPaid: 'All fines & restitution paid?',
+  // Not yet asked (not in ALL_SHARED / sharedFieldsFor) — fines/fees split from
+  // restitution as its own fact lands in a later task; this label exists only
+  // so SHARED_FIELD_LABELS satisfies Record<SharedFieldKey, string>.
+  finesPaid: 'All fines & fees paid?',
 };
 
 // minHeight reserves two lines so a one-line label and a wrapping two-line
@@ -150,7 +155,7 @@ export default function EligibilityWizard({
           disposition: r.disposition as Disposition,
           chargeType: r.charge_type === 'felony' ? 'felony' : 'misdemeanor',
           dischargeDate: r.disposition_date,
-          restitutionPaid: r.restitution_paid,
+          restitutionPaid: r.restitution_paid ?? null,
         };
         seeded[r.id] = answersForState(r.state, p, {});
       }
@@ -218,7 +223,7 @@ export default function EligibilityWizard({
         disposition: p.disposition,
         charge_type: p.chargeType,
         disposition_date: p.dischargeDate ?? r.disposition_date,
-        restitution_paid: p.restitutionPaid,
+        restitution_paid: p.restitutionPaid ?? undefined,
         // California-only field-backed nodes (see caFields note above). For
         // every other state these keep their existing values, unchanged.
         probation_status: caFields[r.id]?.probation_status ?? r.probation_status,

@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**26 open questions across 10 states.**
+**28 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -93,24 +93,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 4. MONTANA (MT)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111; recodified 2019)** — The district court where the case was handled
+- **Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111); felony deferred-imposition dismissal (§ 46-18-204)** — A district court of conviction (any judicial district where a bundled offense was convicted)
 - Montana Legal Services Association — https://www.mtlsa.org
 - Montana Judicial Branch — Self-Help — https://courts.mt.gov/selfhelp/
 
 **Dates that govern:**
-- 2019 — Misdemeanor Expungement Clarification Act renumbers the statute (HB 543) (effective) · Wave 7 gives the year. HB 543 repealed § 46-18-1101 and recodified the misdemeanor-expungement law into §§ 46-18-1102 through -1111. The DOJ page and most attorneys still cite 1101 — cite the live sections.
+- 2019 — Misdemeanor Expungement Clarification Act enacted (Part 11, §§ 46-18-1102 to -1111) (effective) · 2019 ch. 384 enacted the whole of Part 11 and repealed the former § 46-18-1101 (many sources still cite the dead section). No amendments through MCA 2025.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the live statutory sections. Wave 7 flags that the 2019 Misdemeanor Expungement Clarification Act (HB 543) repealed § 46-18-1101 and recodified into §§ 46-18-1102 to -1111, but sources (including the DOJ's own page and most attorneys) still cite the dead 1101 section. The tree cites the live sections with a "recodified 2019" note; confirm against current MCA text.
+1. Pull the Department of Justice rules adopted under § 46-18-1111 (if findable). The statute delegates the DOJ identifying form and the expungement-processing mechanics to rule; the specific administrative rules were not read.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the multiple-misdemeanor bundling practice. Wave 7 says a single lifetime order may cover multiple misdemeanors (the court may grant all, some, or none per § 46-18-1110), but flags practitioner-reported inconsistency between jurisdictions on whether bundling is allowed — a call question. The tree tells people to bundle everything into the one petition; confirm the practice with a district clerk.
-   - *Blocks no single field — affects a branch or wording.*
-3. Confirm the district court filing fee. Wave 7 flags it as a phone target (a Yellowstone or Missoula clerk). The fees and feeWaiver fields are null pending this; courts.mt.gov publishes the self-help forms packet.
+2. Confirm the district-court filing-fee practice. No fee is stated in Part 11 or § 46-18-204; the amount and any waiver are phone-tier (a Yellowstone or Missoula district clerk; courts.mt.gov publishes the self-help forms packet). The fees and feeWaiver fields are null pending this — state no numbers.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+3. Pull Mont. Code Ann. § 44-5-103 (the definition of confidential criminal justice information). § 46-18-204 makes deferred-imposition-dismissal records confidential under § 44-5-103, but the definition itself was not read — cite-only for now.
+   - *Blocks no single field — affects a branch or wording.*
+4. PULL-NEEDED: whether Montana provides a separate removal route for NON-conviction arrest records under Title 44, chapter 5. This was not read; the non-conviction node states no rules and routes to a pending-pull result. Do not state non-conviction rules from memory.
+   - *Blocks no single field — affects a branch or wording.*
+5. Pull Mont. Code Ann. § 46-18-208 (early termination of a deferred imposition), which feeds the § 46-18-204 dismissal. Cited but not read — cite-only.
+   - *Blocks no single field — affects a branch or wording.*
 
 ---
 

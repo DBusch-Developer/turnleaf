@@ -17997,200 +17997,280 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   MT: {
     code: 'MT',
     name: 'Montana',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'Read from the official MCA 2025. All of Part 11 (§§ 46-18-1102 to -1111) was enacted by 2019 ch. 384 '
+      + 'with no subsequent amendments through MCA 2025 (§ 46-18-1101 was repealed in 2019). Montana\'s '
+      + 'legislature is biennial — the next regular session is 2027 — so there is no interim session-sweep '
+      + 'residual outstanding.',
     terminology:
-      'Montana offers TRUE expungement of MISDEMEANORS — permanent destruction from the state criminal-history '
-      + 'system — filed in district court (§§ 46-18-1102 to -1111). It is presumed ("shall grant") after 5 '
-      + 'conviction-free years since you completed your sentence, or immediately for a military applicant '
-      + 'whose record is blocking enlistment. But it is ONCE PER LIFETIME: a single order, though that one '
-      + 'order can cover several misdemeanors, so bundle everything into it. Felonies cannot be expunged at '
-      + 'all (only a deferred-imposition dismissal or a rare pardon). Note the statute was renumbered in 2019 '
-      + '(HB 543 repealed the old § 46-18-1101), and many sources still cite the dead section.',
+      'Montana offers TRUE expungement of MISDEMEANORS under the Misdemeanor Expungement Clarification Act '
+      + '(MCA §§ 46-18-1102 to -1111): the Department of Justice criminal-history record is '
+      + 'DESTROYED and the court/agency records are permanently sealed, though fingerprint records and '
+      + 'investigative data survive (§ 46-18-1103(2)(b)). It is filed in district court, and it is ONCE PER '
+      + 'LIFETIME — but that single petition may bundle ALL of your misdemeanors, across any number of courts '
+      + 'and cases, so the plain rule is: include everything, because there is no second petition (the court '
+      + 'may grant all, some, or none). Expungement is PRESUMED — the court "shall" grant unless the interests '
+      + 'of public safety demand otherwise — if you are not detained, not charged, and have no pending charges, '
+      + 'AND either you have 5 conviction-free years since completing every sentencing term (including all '
+      + 'financial obligations and any court-ordered treatment) OR you are on a MILITARY path (applying to an '
+      + 'academy, applying to enlist, or serving and held back by the conviction), which carries NO waiting '
+      + 'period. A list of offenses (§ 46-18-1108) — assault, partner/family-member assault, stalking, sexual '
+      + 'assault, protective-order violations, and any DUI — LOSES the presumption but is STILL ELIGIBLE on a '
+      + 'discretionary, factors-based review, so Montana never returns a flat "never" for a misdemeanor DUI or '
+      + 'PFMA. Execution has a quirk: nothing propagates automatically — after a grant, YOU must mail the order, '
+      + 'the validation fingerprints, and a DOJ form to each arresting agency, prosecuting office, sentencing '
+      + 'court, and the DOJ. There is no felony expungement at all; the felony route is a '
+      + 'DEFERRED-IMPOSITION dismissal under § 46-18-204, which (unlike Part 11) does not destroy the record but '
+      + 'renders it confidential criminal justice information, reachable only by district-court order on good '
+      + 'cause — and, oddly, at the end of a deferral the felony dismissal is MANDATORY while a misdemeanor one '
+      + 'is discretionary.',
     keyDates: [
       {
-        label: 'Misdemeanor Expungement Clarification Act renumbers the statute (HB 543)',
+        label: 'Misdemeanor Expungement Clarification Act enacted (Part 11, §§ 46-18-1102 to -1111)',
         date: '2019',
         kind: 'effective',
-        note: 'Wave 7 gives the year. HB 543 repealed § 46-18-1101 and recodified the misdemeanor-expungement law into §§ 46-18-1102 through -1111. The DOJ page and most attorneys still cite 1101 — cite the live sections.',
+        note: '2019 ch. 384 enacted the whole of Part 11 and repealed the former § 46-18-1101 (many sources still cite the dead section). No amendments through MCA 2025.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the live statutory sections. Wave 7 flags that the 2019 Misdemeanor Expungement Clarification Act (HB 543) repealed § 46-18-1101 and recodified into §§ 46-18-1102 to -1111, but sources (including the DOJ\'s own page and most attorneys) still cite the dead 1101 section. The tree cites the live sections with a "recodified 2019" note; confirm against current MCA text.',
+          'Pull the Department of Justice rules adopted under § 46-18-1111 (if findable). The statute delegates the DOJ identifying form and the expungement-processing mechanics to rule; the specific administrative rules were not read.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the multiple-misdemeanor bundling practice. Wave 7 says a single lifetime order may cover multiple misdemeanors (the court may grant all, some, or none per § 46-18-1110), but flags practitioner-reported inconsistency between jurisdictions on whether bundling is allowed — a call question. The tree tells people to bundle everything into the one petition; confirm the practice with a district clerk.',
-        blocksFields: [],
-      },
-      {
-        question:
-          'Confirm the district court filing fee. Wave 7 flags it as a phone target (a Yellowstone or Missoula clerk). The fees and feeWaiver fields are null pending this; courts.mt.gov publishes the self-help forms packet.',
+          'Confirm the district-court filing-fee practice. No fee is stated in Part 11 or § 46-18-204; the amount and any waiver are phone-tier (a Yellowstone or Missoula district clerk; courts.mt.gov publishes the self-help forms packet). The fees and feeWaiver fields are null pending this — state no numbers.',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Pull Mont. Code Ann. § 44-5-103 (the definition of confidential criminal justice information). § 46-18-204 makes deferred-imposition-dismissal records confidential under § 44-5-103, but the definition itself was not read — cite-only for now.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'PULL-NEEDED: whether Montana provides a separate removal route for NON-conviction arrest records under Title 44, chapter 5. This was not read; the non-conviction node states no rules and routes to a pending-pull result. Do not state non-conviction rules from memory.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull Mont. Code Ann. § 46-18-208 (early termination of a deferred imposition), which feeds the § 46-18-204 dismissal. Cited but not read — cite-only.',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Mont. Code Ann. §§ 46-18-1102 to -1111 (misdemeanor expungement; recodified 2019 by HB 543)', url: null, retrievedOn: null },
-      { id: 'Mont. Code Ann. § 46-18-1110 (one order may cover multiple misdemeanors)', url: null, retrievedOn: null },
-      { id: '2019 HB 47 (non-conviction return/expungement of prints and photos)', url: null, retrievedOn: null },
+      { id: 'Mont. Code Ann. §§ 46-18-1102, 46-18-1103 (MCA 2025 — Misdemeanor Expungement Clarification Act short title/definitions and EFFECT: true DESTRUCTION at the DOJ criminal-history system and permanent sealing at courts/agencies, but (1103(2)(b)) fingerprint records and investigative data survive) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1104 (MCA 2025 — eligibility and ONCE-EVER bundle: any person convicted of one or more misdemeanors, across any number of courts/cases, may petition the district court ONCE in a lifetime to expunge ALL of them; fingerprinting required to validate identity) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1105 (MCA 2025 — venue: district court of any judicial district of conviction) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1106 (MCA 2025 — petition served on every prosecuting office involved; prosecution attempts victim notification within 14 days; victims may respond and appear) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1107 (MCA 2025 — PRESUMPTION: presumed if not detained, not charged, and no pending charges (verified by the prosecution), AND either (a) 5 conviction-free years since completing all sentencing terms incl. financial obligations and court-ordered treatment, OR (b) the MILITARY path — applied to a military academy, applied to enlist in the armed forces/national guard, or currently serving and held back by the conviction — with NO waiting period) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1108 (MCA 2025 — NO-PRESUMPTION list (NOT an exclusion): assault (45-5-201), partner/family-member assault (45-5-206), stalking (45-5-220), sexual assault (45-5-502), protective-order violation (45-5-626), DUI however named (Title 61 ch. 8 pt. 10) or any DUI-enhanced offense; for these the court weighs age at offense, time elapsed, rehabilitation, reoffense likelihood, and anything else relevant — still eligible) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-1109 (MCA 2025 — hearing: preponderance standard; the presumption is overcome ONLY on a determination that the interests of public safety demand dismissal; rules of evidence do not apply) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. §§ 46-18-1110, 46-18-1111 (MCA 2025 — order: (1) the court may grant all, some, or none of the bundled offenses; (2)-(3) EXECUTION QUIRK — the PETITIONER must send a copy of the order plus the validation fingerprints and the DOJ identifying form to the arresting agency, prosecuting office, sentencing court clerk, AND the DOJ for each offense, and the DOJ then expunges; § 1111 DOJ rulemaking) via mca.legmt.gov', url: 'https://mca.legmt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 46-18-204 (MCA 2025 — deferred-imposition dismissal: for FELONIES the court SHALL strike the plea/verdict and dismiss at the end of the deferral if no revocation petition was filed (mandatory); for MISDEMEANORS dismissal is discretionary on motion; effect — records become confidential criminal justice information under § 44-5-103, public access only by district-court order on good cause) via leg.mt.gov', url: 'https://leg.mt.gov', retrievedOn: '2026-07-22' },
+      { id: 'Mont. Code Ann. § 44-5-103 (definition of confidential criminal justice information — the status a § 46-18-204 dismissal confers) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Mont. Code Ann. § 46-18-208 (early termination of a deferred imposition, feeding the § 46-18-204 dismissal) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Mont. Code Ann. Title 44, ch. 5 (criminal justice information; any separate NON-conviction arrest-record removal route) — CITE-ONLY, NOT pulled; non-conviction rules pending', url: null, retrievedOn: null },
+      { id: 'Mont. Code Ann. §§ 45-5-201/206/220/502/626 and Title 61 ch. 8 pt. 10 (the § 46-18-1108 no-presumption offenses — assault, PFMA, stalking, sexual assault, protective-order violation, DUI) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_mt',
       nodes: {
-        disposition: {
+        entry_mt: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'level_mt' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_mt' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_mt' },
-            { label: 'Deferred imposition completed and dismissed', value: 'deferred', next: 'eligible_deferred_mt' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
-          ]
-        },
-        level_mt: {
-          type: 'choice',
-          text: 'What was the level of the conviction?',
-          options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_prioruse_mt' },
-            { label: 'Felony', value: 'felony', next: 'ineligible_felony_mt' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_mt' }
+            { label: 'Expunge a MISDEMEANOR conviction', value: 'misd', next: 'misd_prioruse_mt' },
+            { label: 'A FELONY — is there any route?', value: 'felony', next: 'felony_deferred_mt' },
+            { label: 'A completed DEFERRED IMPOSITION of sentence', value: 'deferred', next: 'deferred_level_mt' },
+            { label: 'A NON-conviction (dismissed, acquitted, or an arrest)', value: 'nonconv', next: 'nonconv_pending_mt' },
+            { label: 'My expungement was GRANTED — what do I do now?', value: 'granted', next: 'granted_checklist_mt' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
         misd_prioruse_mt: {
           type: 'boolean',
-          text: 'Have you already used Montana\'s once-in-a-lifetime misdemeanor expungement?',
+          text: 'Have you already used your one lifetime Montana misdemeanor-expungement petition?',
           yes: 'ineligible_prioruse_mt',
+          no: 'misd_pending_mt'
+        },
+        misd_pending_mt: {
+          type: 'boolean',
+          text: 'Are you currently detained, currently charged, or do you have any pending criminal charges anywhere?',
+          yes: 'ineligible_pending_mt',
+          no: 'misd_listed_mt'
+        },
+        misd_listed_mt: {
+          type: 'boolean',
+          text: 'Is any misdemeanor you want expunged one of these: assault (45-5-201), partner or family-member assault (45-5-206), stalking (45-5-220), sexual assault (45-5-502), a protective-order violation (45-5-626), or a DUI (or any DUI-enhanced offense)?',
+          yes: 'eligible_discretionary_mt',
           no: 'misd_military_mt'
         },
         misd_military_mt: {
           type: 'boolean',
-          text: 'Are you a military applicant or enlistee, and this conviction is blocking your service?',
+          text: 'Because of this conviction, are you being held back on a MILITARY path — applying to a military academy, applying to enlist in the armed forces or national guard, or currently serving and blocked from a position? (This carries NO waiting period.)',
           yes: 'eligible_military_mt',
-          no: 'misd_discretionary_mt'
+          no: 'misd_complete_mt'
         },
-        misd_discretionary_mt: {
+        misd_complete_mt: {
           type: 'boolean',
-          text: 'Was the offense any of these: assault, partner or family-member assault, stalking, sexual assault, a protective-order violation, or DUI?',
-          yes: 'misd_disc_date_mt',
-          no: 'misd_presumed_date_mt'
+          text: 'Have you completed ALL terms of your sentence — including all fines, fees, restitution, and any court-ordered treatment?',
+          yes: 'misd_date_mt',
+          no: 'waiting_completion_mt'
         },
-        misd_presumed_date_mt: {
+        misd_date_mt: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including all fines, fees, and any court-ordered treatment?',
+          text: 'When did you complete the LAST of those sentencing terms (the point from which the 5 conviction-free years run)?',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction-free since sentence completion incl. LFOs and treatment (Mont. Code Ann. § 46-18-1104 — presumed misdemeanor expungement)' },
+            period: { amount: 5, unit: 'years', anchor: 'five conviction-free years since completing every sentencing term incl. financial obligations and treatment (§ 46-18-1107(a) — presumption)' },
             nextPass: 'eligible_presumed_mt',
             nextFail: 'waiting_mt'
           }
         },
-        misd_disc_date_mt: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including all fines, fees, and any court-ordered treatment?',
-          validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction-free since sentence completion incl. LFOs and treatment (Mont. Code Ann. § 46-18-1104 — discretionary misdemeanor expungement)' },
-            nextPass: 'eligible_discretionary_mt',
-            nextFail: 'waiting_mt'
-          }
+        felony_deferred_mt: {
+          type: 'boolean',
+          text: 'Was the felony handled with a DEFERRED IMPOSITION of sentence (a deferral, rather than a straight conviction)?',
+          yes: 'felony_deferred_status_mt',
+          no: 'ineligible_felony_mt'
+        },
+        felony_deferred_status_mt: {
+          type: 'boolean',
+          text: 'Has the deferral period ended, with NO petition to revoke filed?',
+          yes: 'eligible_felony_dismiss_mt',
+          no: 'waiting_felony_deferred_mt'
+        },
+        deferred_level_mt: {
+          type: 'choice',
+          text: 'Was the deferred-imposition case a felony or a misdemeanor?',
+          options: [
+            { label: 'A felony', value: 'felony', next: 'felony_deferred_status_mt' },
+            { label: 'A misdemeanor', value: 'misd', next: 'misd_deferred_mt' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Montana expunges misdemeanors (a true, permanent destruction) but not felonies, and non-convictions have their own path — so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Montana DOJ criminal-history request will show the disposition; the Montana Legal Services Association can help you read it.',
+          message: 'Montana expunges misdemeanors (a true, permanent destruction) but not felonies, and deferred-imposition cases and non-convictions have their own tracks — so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Montana DOJ criminal-history request will show the disposition; the Montana Legal Services Association can help you read it.',
           remedy: 'Get Your Record First (court paperwork / Montana DOJ)',
-          citation: 'Mont. Code Ann. §§ 46-18-1102 to -1111 (the route depends on the disposition)'
+          citation: 'Mont. Code Ann. §§ 46-18-1102 to -1111, 46-18-204 (the route depends on the disposition)'
         },
-        nonconv_mt: {
-          status: 'eligible',
-          title: 'No Conviction — Records Returned/Expunged',
-          message: 'Because your case ended without a conviction, Montana\'s process (2019 HB 47) provides for the return or expungement of your fingerprints and photos through the state repository — a semi-automatic step for no-charge releases and invalidated convictions. The Montana Legal Services Association can help you make sure it happens for your record.',
-          remedy: 'Non-conviction record return/expungement (2019 HB 47)',
-          citation: '2019 HB 47'
-        },
-        eligible_deferred_mt: {
-          status: 'eligible',
-          title: 'Deferred Imposition Completed — Dismissed',
-          message: 'Because you completed a deferred imposition of sentence, the charge is dismissed — the standard Montana path for a case handled that way at sentencing. If it was a felony handled by deferred imposition, this dismissal is the relief available (felonies cannot otherwise be expunged). The Montana Legal Services Association can confirm your record reflects the dismissal and explain any remaining steps.',
-          remedy: 'Deferred-imposition dismissal',
-          citation: 'Mont. Code Ann. § 46-18-1102'
-        },
-        eligible_presumed_mt: {
-          status: 'eligible',
-          title: 'Misdemeanor, 5+ Years — Presumed Eligible (Bundle Them)',
-          message: 'Based on your dates — 5 conviction-free years since completing your sentence, including fines, fees, and any treatment — your misdemeanor expungement is PRESUMED, meaning the court "shall grant" it. And this is a true expungement: permanent destruction from the state criminal-history system. One important thing to plan around: it is ONCE PER LIFETIME, but a single order can cover several misdemeanors, so bundle everything you want cleared into this one petition. After the grant, you mail the order plus a fingerprint card and a DOJ form to CRISS in Helena. The Montana Legal Services Association can help.',
-          remedy: 'Presumed misdemeanor expungement (§ 46-18-1104) — bundle all misdemeanors',
-          citation: 'Mont. Code Ann. § 46-18-1104'
-        },
-        eligible_discretionary_mt: {
-          status: 'eligible',
-          title: 'Eligible, But Discretionary — Come Prepared',
-          message: 'Based on your dates, 5 conviction-free years have passed, so you can petition — but for your offense type (assault, partner/family-member assault, stalking, sexual assault, protective-order violation, or DUI) the grant is NOT presumed. It is discretionary: the court balances factors, with victim notification and a prosecutor response. That means it is possible, just uphill, so it helps to come prepared. Remember it is once per lifetime, and one order can bundle multiple misdemeanors. The Montana Legal Services Association can help you make the strongest case.',
-          remedy: 'Discretionary misdemeanor expungement (§ 46-18-1104) — possible but uphill',
-          citation: 'Mont. Code Ann. § 46-18-1104'
-        },
-        waiting_mt: {
-          status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'Montana requires 5 conviction-free years since you completed your sentence (including fines, fees, and any court-ordered treatment) before a misdemeanor expungement. Based on your dates, that has not passed yet. When it does, remember it is once per lifetime — so bundle every misdemeanor you want cleared into the single petition. The Montana Legal Services Association can help you plan. (A military applicant blocked by a record can petition immediately, without the wait.)',
-          remedy: 'Wait for the 5-year period (§ 46-18-1104)',
-          citation: 'Mont. Code Ann. § 46-18-1104'
-        },
-        eligible_military_mt: {
-          status: 'eligible',
-          title: 'Military Applicant — Petition Now, No Wait',
-          message: 'Because you are a military applicant or enlistee and a misdemeanor conviction is blocking your service, Montana lets you petition for expungement IMMEDIATELY — no 5-year wait. This is a specific, unusual provision worth using. It is still once per lifetime, and one order can cover multiple misdemeanors, so include everything relevant. The Montana Legal Services Association can help you file quickly.',
-          remedy: 'Immediate misdemeanor expungement for military applicants (§ 46-18-1104)',
-          citation: 'Mont. Code Ann. § 46-18-1104'
-        },
-        ineligible_felony_mt: {
-          status: 'ineligible',
-          title: 'Felony — No Expungement in Montana',
-          message: 'Montana does not expunge felonies at all. Two things can still help, depending on your case: if the felony was handled with a deferred imposition of sentence, completing it results in a dismissal; and a pardon remains theoretically available, though it is rare (only a handful of recommendations a year). For marijuana convictions there is a separate legalization-era path with resources through the Office of Court Administrator. The Montana Legal Services Association can explain which applies to you.',
-          remedy: 'None (no felony expungement) — deferred-imposition dismissal or a rare pardon',
-          citation: 'Mont. Code Ann. § 46-18-1102'
+        nonconv_pending_mt: {
+          status: 'complex',
+          title: 'Non-Conviction Records — We Have Not Verified That Route Yet',
+          message: 'Because your case ended WITHOUT a conviction, it is not handled by Montana\'s misdemeanor-expungement chapter (Part 11), which is for convictions. Any separate route for clearing NON-conviction arrest records would live in Title 44, chapter 5, which we have NOT read — so we are not going to state how a Montana dismissal, acquittal, or arrest-only record is treated and risk getting it wrong. This is a "we need to check," not a dead end. The Montana Legal Services Association can tell you what applies to your specific non-conviction record, and we have flagged the Title 44 pull as an open item.',
+          remedy: 'Non-conviction rules pending (Title 44, ch. 5) — check with Montana Legal Services',
+          citation: 'Mont. Code Ann. Title 44, ch. 5 (pending verification)'
         },
         ineligible_prioruse_mt: {
           status: 'ineligible',
-          title: 'Your One Lifetime Expungement Has Been Used',
-          message: 'Montana allows only one misdemeanor expungement in a lifetime, and because you have already used it, another is not available — no waiting period changes that. If any NON-conviction is on your record, that has its own return/expungement path; and a pardon, though rare, remains theoretically possible. The Montana Legal Services Association can help you look at what is left.',
-          remedy: 'None (one-time expungement used) — check non-convictions or a rare pardon',
+          title: 'Your One Lifetime Petition Has Been Used',
+          message: 'Montana allows only ONE misdemeanor-expungement petition in a lifetime (§ 46-18-1104) — and because you have already used it, another is not available, no matter how much time passes. This is exactly why the one petition is meant to bundle everything at once. If you have a completed deferred imposition, or a non-conviction on your record, those follow different tracks. The Montana Legal Services Association can help you look at what is left.',
+          remedy: 'None (one-time petition used) — check a deferred imposition or non-convictions',
           citation: 'Mont. Code Ann. § 46-18-1104'
         },
-        complex_level_mt: {
+        ineligible_pending_mt: {
+          status: 'waiting',
+          title: 'A Pending Charge Blocks the Presumption For Now',
+          message: 'Montana\'s expungement is available only when you are not detained, not currently charged, and have no pending charges — the prosecution verifies this (§ 46-18-1107). Because you have a pending charge (or are detained/charged), you cannot proceed right now. This is a "not yet," not a "never": once that matter is fully resolved and nothing is pending, you can petition, and — for a non-listed misdemeanor 5 conviction-free years out — the grant is presumed. The Montana Legal Services Association can help you time it.',
+          remedy: 'Resolve the pending charge first, then petition (§ 46-18-1107)',
+          citation: 'Mont. Code Ann. § 46-18-1107'
+        },
+        eligible_discretionary_mt: {
+          status: 'eligible',
+          title: 'Eligible — but Discretionary, Not Presumed',
+          message: 'Your offense is on Montana\'s no-PRESUMPTION list (§ 46-18-1108) — assault, partner/family-member assault, stalking, sexual assault, a protective-order violation, or a DUI. Here is the important part most people get wrong: this does NOT mean "never." You are still ELIGIBLE; you just lose the automatic "shall grant." Instead the court weighs factors — your age at the offense, the time elapsed, your rehabilitation, the likelihood of reoffending, and anything else relevant. So for a Montana misdemeanor DUI or PFMA, expungement is harder, not impossible — a strong showing (time, rehabilitation) matters. It is still once per lifetime, and one petition can bundle multiple misdemeanors. The Montana Legal Services Association can help you build the strongest case.',
+          remedy: 'Discretionary misdemeanor expungement (§ 46-18-1108) — eligible, factors-based',
+          citation: 'Mont. Code Ann. § 46-18-1108'
+        },
+        eligible_military_mt: {
+          status: 'eligible',
+          title: 'Military Path — Petition Now, No Waiting Period',
+          message: 'Because a misdemeanor conviction is holding you back on a military path — applying to a military academy, applying to enlist in the armed forces or national guard, or serving and blocked from a position — Montana lets you petition IMMEDIATELY, with NO 5-year wait (§ 46-18-1107(b)). If you are not detained, not charged, and have nothing pending, the grant is presumed. It is still once per lifetime, and one petition can bundle several misdemeanors, so include everything relevant. After a grant, remember you must mail the order, the validation fingerprints, and a DOJ form to each agency and the DOJ yourself. The Montana Legal Services Association can help you file quickly.',
+          remedy: 'Immediate expungement on the military path (§ 46-18-1107(b)) — no wait',
+          citation: 'Mont. Code Ann. § 46-18-1107(b)'
+        },
+        waiting_completion_mt: {
+          status: 'waiting',
+          title: 'Finish the Sentence First — Including the Money',
+          message: 'Montana\'s 5-year presumption clock does not even start until you have completed EVERY term of the sentence — and that expressly includes all financial obligations (fines, fees, restitution) and any court-ordered treatment (§ 46-18-1107(a)). Because something there is still outstanding — for example, unpaid restitution — you have not started the clock yet, so this is a "not yet." Once everything is satisfied, the 5 conviction-free years begin to run. The Montana Legal Services Association can help you confirm what remains.',
+          remedy: 'Complete all sentencing terms (incl. restitution), then the 5-year clock starts (§ 46-18-1107(a))',
+          citation: 'Mont. Code Ann. § 46-18-1107(a)'
+        },
+        eligible_presumed_mt: {
+          status: 'eligible',
+          title: 'Misdemeanor, 5+ Years Clean — Presumed Eligible (Bundle Everything)',
+          message: 'Based on your answers — a non-listed misdemeanor, 5 conviction-free years since you completed every sentencing term (including all money and any treatment), and nothing pending — your expungement is PRESUMED: the court "shall" grant it unless it determines the interests of public safety demand otherwise (§ 46-18-1107, 1109). And this is a TRUE expungement — the DOJ criminal-history record is destroyed. Plan around two Montana specifics. First, it is ONCE PER LIFETIME, but a single petition can bundle ALL your misdemeanors across any courts and cases, and the court may grant all, some, or none (§ 46-18-1110(1)) — so include everything, because there is no second petition. Second, nothing propagates automatically: after the grant, YOU must mail the order, the validation fingerprints, and the DOJ form to each arresting agency, prosecuting office, sentencing court, and the DOJ. The Montana Legal Services Association can help.',
+          remedy: 'Presumed misdemeanor expungement (§ 46-18-1107) — bundle all, once per lifetime',
+          citation: 'Mont. Code Ann. §§ 46-18-1104, 46-18-1107'
+        },
+        waiting_mt: {
+          status: 'waiting',
+          title: 'Not Yet Five Conviction-Free Years',
+          message: 'Montana presumes expungement after 5 conviction-free years since you completed every sentencing term, including all financial obligations and any treatment (§ 46-18-1107(a)). Based on your date, that has not passed yet. When it does — and provided you stay conviction-free with nothing pending — the grant is presumed for a non-listed misdemeanor. Remember it is once per lifetime, so bundle every misdemeanor into the single petition. (A military-path applicant blocked by the record can petition now, without the wait.) The Montana Legal Services Association can help you plan.',
+          remedy: 'Wait for the 5 conviction-free years (§ 46-18-1107(a))',
+          citation: 'Mont. Code Ann. § 46-18-1107(a)'
+        },
+        ineligible_felony_mt: {
+          status: 'ineligible',
+          title: 'Felony — No Part 11 Expungement',
+          message: 'Montana\'s Part 11 expungement is for MISDEMEANORS only — a straight felony conviction cannot be expunged through it. The felony route in Montana is a DEFERRED-IMPOSITION dismissal under § 46-18-204: if your felony was handled with a deferral (rather than a straight conviction), completing it results in a dismissal, and the records then become confidential criminal justice information (reachable only by a court order on good cause) — not destroyed, and without a statutory right to deny them. If your case was a straight felony conviction with no deferral, neither route applies and a Governor\'s pardon would be the remaining possibility. The Montana Legal Services Association can confirm which describes your case.',
+          remedy: 'None via Part 11 (felony) — a § 46-18-204 deferred-imposition dismissal is the felony route',
+          citation: 'Mont. Code Ann. §§ 46-18-1104, 46-18-204'
+        },
+        eligible_felony_dismiss_mt: {
+          status: 'eligible',
+          title: 'Felony Deferred Imposition — Mandatory Dismissal',
+          message: 'Because your felony was handled by a deferred imposition of sentence, the deferral period has ended, and no petition to revoke was filed, the court SHALL strike the guilty plea or verdict and dismiss the charge — for a felony this dismissal is MANDATORY (§ 46-18-204). One honest limit on what that gets you: this is not destruction like Part 11 misdemeanor expungement. The records become CONFIDENTIAL criminal justice information under § 44-5-103 — off public view, but reachable by a district-court order on good cause — and there is no statutory right to say the case never happened. How to answer a background question about a dismissed deferred imposition is genuinely attorney-tier. The Montana Legal Services Association can confirm your record reflects the dismissal.',
+          remedy: 'Mandatory strike-and-dismiss of a felony deferred imposition (§ 46-18-204)',
+          citation: 'Mont. Code Ann. § 46-18-204'
+        },
+        waiting_felony_deferred_mt: {
+          status: 'waiting',
+          title: 'Deferred Imposition Not Yet Complete',
+          message: 'A deferred-imposition dismissal happens at the END of the deferral period, and only if no petition to revoke has been filed (§ 46-18-204). Because your deferral has not finished (or a revocation issue is open), there is nothing to dismiss yet. Complete the deferral cleanly, and for a felony the dismissal is mandatory once the period ends. The Montana Legal Services Association can help you track the timing.',
+          remedy: 'Complete the deferral period, then the felony dismissal is mandatory (§ 46-18-204)',
+          citation: 'Mont. Code Ann. § 46-18-204'
+        },
+        misd_deferred_mt: {
           status: 'complex',
-          title: 'We Need the Conviction Level',
-          message: 'It matters a great deal in Montana: a misdemeanor can be expunged (once per lifetime), but a felony cannot be expunged at all. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a Montana DOJ criminal-history request will show it. The Montana Legal Services Association can help you read it.',
-          remedy: 'Get the Conviction Level First (court paperwork / Montana DOJ)',
-          citation: 'Mont. Code Ann. § 46-18-1104'
+          title: 'Misdemeanor Deferred Imposition — Dismissal Is Discretionary',
+          message: 'Here is a Montana quirk worth knowing: for a MISDEMEANOR deferred imposition, the dismissal at the end is NOT automatic — it is discretionary, granted on your motion (§ 46-18-204). This is the inverse of the felony rule, where the dismissal is mandatory. So for a completed misdemeanor deferral you file a motion to dismiss, and the court decides. As with a felony, a § 46-18-204 dismissal makes the records confidential criminal justice information rather than destroying them. Note too that a misdemeanor CONVICTION (not a deferral) can instead be truly expunged under Part 11 — so it is worth comparing the two paths. The Montana Legal Services Association can help you choose and file.',
+          remedy: 'Move to dismiss a completed misdemeanor deferral (§ 46-18-204) — discretionary',
+          citation: 'Mont. Code Ann. § 46-18-204'
+        },
+        granted_checklist_mt: {
+          status: 'complex',
+          title: 'Expungement Granted — Now You Have to Deliver It Yourself',
+          message: 'This is Montana\'s execution quirk, and it is important: winning the order is not the end, because NOTHING propagates automatically (§ 46-18-1110(2)-(3)). To make the expungement actually happen, YOU must send a copy of the signed order — together with the validation fingerprints and the DOJ identifying form — to, for EACH expunged offense: the arresting agency, the prosecuting office, the clerk of the sentencing court, AND the Montana Department of Justice. Once the DOJ receives its packet, it expunges (destroys) its criminal-history record for that offense; the other agencies permanently seal theirs. Until you send those packets, the agencies have no obligation to act. Keep copies of everything. The Montana Legal Services Association can walk you through the mailing.',
+          remedy: 'Mail the order + fingerprints + DOJ form to each agency and the DOJ (§ 46-18-1110)',
+          citation: 'Mont. Code Ann. § 46-18-1110(2)-(3)'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111; recodified 2019)',
+          name: 'Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111); felony deferred-imposition dismissal (§ 46-18-204)',
           formName: 'Montana Judicial Branch self-help expungement forms packet',
           formUrl: 'https://courts.mt.gov/selfhelp/',
           steps: [
-            'Confirm it is a misdemeanor — felonies cannot be expunged (deferred-imposition dismissal or a rare pardon are the only felony routes).',
-            'Wait until 5 conviction-free years after completing your sentence (or petition immediately if a military applicant blocked by the record).',
-            'File one petition in district court, bundling every misdemeanor you want cleared — it is once per lifetime.',
-            'After the grant, mail the order plus an FD-258 fingerprint card and the DOJ form to CRISS in Helena. Montana Legal Services Association offers free help.'
+            'Confirm it is a MISDEMEANOR conviction — Part 11 expungement is misdemeanor-only (a felony\'s route is a § 46-18-204 deferred-imposition dismissal, which makes records confidential rather than destroying them).',
+            'Confirm eligibility: not detained/charged/pending, and either 5 conviction-free years since you completed every sentencing term (including all money and any treatment) or a military-path applicant blocked by the record. Listed offenses (assault, PFMA, stalking, sexual assault, protective-order violation, DUI) lose the presumption but are still eligible on a discretionary review.',
+            'File ONE petition in a district court of conviction, bundling every misdemeanor you want cleared — it is once per lifetime, and the court may grant all, some, or none. Get fingerprinted to validate identity.',
+            'After the grant, YOU must mail the order plus the validation fingerprints and the DOJ form to each arresting agency, prosecuting office, sentencing court, and the DOJ — nothing propagates automatically. Montana Legal Services Association offers free help.'
           ],
-          // null: Wave 7 flags the district court filing fee as a phone target — the
-          // amount and any waiver are unknown.
+          // null: no fee is stated in Part 11 or § 46-18-204; the district-court
+          // filing-fee practice is phone-tier, so the fee and any waiver are unknown.
           fees: null,
           feeWaiver: null,
-          courtContact: 'The district court where the case was handled'
+          courtContact: 'A district court of conviction (any judicial district where a bundled offense was convicted)'
         }
       },
       legalAid: [

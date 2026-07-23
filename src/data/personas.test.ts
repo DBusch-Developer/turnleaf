@@ -5593,45 +5593,133 @@ const ME: Persona[] = [
   },
 ];
 
+// MT personas come from Diana's read of MCA 46-18-1102 to -1111 (Part 11, the
+// Misdemeanor Expungement Clarification Act) and 46-18-204 from the official MCA 2025
+// (mca.legmt.gov / leg.mt.gov) — the statute-verified rewrite that took MT to
+// statute_cited on 2026-07-22, replacing the Wave 7 draft's five personas. Misdemeanor
+// expungement is a once-per-lifetime bundle with a presumption structure; the felony
+// route is a deferred-imposition dismissal. Date nodes are asked (the clock runs from
+// completion of every sentencing term, not the conviction date).
 const MT: Persona[] = [
   {
-    source: 'Wave 7 — MT persona 1',
-    package: 'two misdemeanors 2017, done 2018, clean -> presumed-eligible for the one lifetime shot — bundle both.',
-    record: { title: 'Two misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
-    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: false, misd_discretionary_mt: false },
-    expect: { resultKey: 'eligible_presumed_mt', reading: 'Non-listed misdemeanors 5 conviction-free years past completion (2018 -> 2023) are presumed eligible; the result says to bundle both into the one lifetime order.' },
+    source: 'MT statute verification (2026-07-22) — persona 1',
+    package: 'two misdemeanor thefts from different years + one disorderly conduct, all completed 6+ years ago, clean -> single petition bundling all three, presumed.',
+    record: { title: 'Two thefts + disorderly conduct', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: false, misd_military_mt: false, misd_complete_mt: true, misd_date_mt: '2020-01-01' },
+    expect: {
+      resultKey: 'eligible_presumed_mt',
+      reading: 'Non-listed misdemeanors, all complete and 5+ conviction-free years out (2020-01-01), nothing pending -> presumed (§ 46-18-1107); the ONE petition bundles all three (§ 46-18-1104/1110).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — MT persona 2',
-    package: 'DUI misdemeanor -> discretionary branch, not barred.',
-    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
-    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: false, misd_discretionary_mt: true },
-    expect: { resultKey: 'eligible_discretionary_mt', reading: 'DUI is not presumed but not barred — it routes to the discretionary branch, and with the 5-year wait met (2018) reaches the discretionary-eligible result.' },
+    source: 'MT statute verification (2026-07-22) — persona 2',
+    package: 'misdemeanor DUI, completed 8 years ago, clean -> eligible but NO presumption — discretionary factors messaging; the not-never trap persona.',
+    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: true },
+    expect: {
+      resultKey: 'eligible_discretionary_mt',
+      reading: 'A DUI is on the § 46-18-1108 no-presumption list — it LOSES the presumption but is still ELIGIBLE on a factors-based review; Montana never returns "never" for a misdemeanor DUI (the not-never trap).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — MT persona 3',
-    package: 'enlisting in the Guard, conviction blocking -> immediate petition — the military persona.',
-    record: { title: 'Conviction blocking enlistment', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01' },
-    answers: { level_mt: 'misd', misd_prioruse_mt: false, misd_military_mt: true },
-    expect: { resultKey: 'eligible_military_mt', reading: 'A military applicant blocked by the record may petition immediately with no wait; the military gate routes to eligible_military_mt.' },
+    source: 'MT statute verification (2026-07-22) — persona 3',
+    package: 'PFMA conviction, 10 years out, strong rehabilitation -> discretionary, factors-based; not auto-denied.',
+    record: { title: 'PFMA misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: true },
+    expect: {
+      resultKey: 'eligible_discretionary_mt',
+      reading: 'Partner/family-member assault (45-5-206) is on the § 46-18-1108 no-presumption list — eligible on the discretionary factors (age, time elapsed, rehabilitation), not auto-denied.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — MT persona 4',
-    package: 'felony -> honest-no (deferred/pardon notes).',
-    record: { title: 'Felony', charge_type: 'felony', disposition: 'convicted', disposition_date: '2015-06-01' },
-    answers: { level_mt: 'felony' },
-    expect: { resultKey: 'ineligible_felony_mt', reading: 'Montana does not expunge felonies; the tree routes them to the honest-no (deferred-imposition dismissal / rare pardon).' },
+    source: 'MT statute verification (2026-07-22) — persona 4',
+    package: 'misdemeanor theft completed 2 years ago, person enlisting in the national guard and blocked by the record -> military path, presumed NOW, no wait.',
+    record: { title: 'Misdemeanor theft, enlisting blocked', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: false, misd_military_mt: true },
+    expect: {
+      resultKey: 'eligible_military_mt',
+      reading: 'The military path (§ 46-18-1107(b)) carries NO waiting period; a national-guard enlistee blocked by the record is presumed eligible now, despite only 2 years elapsed.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — MT persona 5',
-    package: 'already used the lifetime shot -> done forever.',
-    record: { title: 'Lifetime expungement already used', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01' },
-    answers: { level_mt: 'misd', misd_prioruse_mt: true },
-    expect: { resultKey: 'ineligible_prioruse_mt', reading: 'The once-per-lifetime misdemeanor expungement, once used, bars another; the prior-use gate routes to the ineligible result.' },
+    source: 'MT statute verification (2026-07-22) — persona 5',
+    package: '5-year-clean petitioner with a new pending charge -> presumption unavailable until resolved.',
+    record: { title: '5-yr clean, new pending charge', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: true },
+    expect: {
+      resultKey: 'ineligible_pending_mt',
+      reading: 'Expungement requires not detained/charged/pending (§ 46-18-1107); a new pending charge blocks it until resolved -> a "not yet".',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 6',
+    package: 'person who used their lifetime petition in 2020, new misdemeanor since -> never again.',
+    record: { title: 'Lifetime petition used 2020, new misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: true },
+    expect: {
+      resultKey: 'ineligible_prioruse_mt',
+      reading: 'The § 46-18-1104 petition is once per lifetime; having used it in 2020 bars a new one for the later misdemeanor -> never again (why you bundle everything).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 7',
+    package: 'felony deferred imposition, deferral period ended, no revocation petition -> mandatory strike-and-dismiss; records confidential, not destroyed.',
+    record: { title: 'Felony deferred imposition, period ended', charge_type: 'felony', disposition: 'deferred', probation_status: 'completed' },
+    answers: { entry_mt: 'felony', felony_deferred_mt: true, felony_deferred_status_mt: true },
+    expect: {
+      resultKey: 'eligible_felony_dismiss_mt',
+      reading: 'For a felony, § 46-18-204 makes the strike-and-dismiss MANDATORY at the end of the deferral if no revocation was filed; records become confidential CJI (44-5-103), not destroyed.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 8',
+    package: 'misdemeanor deferred imposition completed -> dismissal discretionary on motion — contrast with the felony rule.',
+    record: { title: 'Misdemeanor deferred imposition completed', charge_type: 'misdemeanor', disposition: 'deferred', probation_status: 'completed' },
+    answers: { entry_mt: 'deferred', deferred_level_mt: 'misd' },
+    expect: {
+      resultKey: 'misd_deferred_mt',
+      reading: 'For a MISDEMEANOR deferral, § 46-18-204 dismissal is discretionary on motion (the inverse of the mandatory felony rule).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 9',
+    package: 'granted expungement, asks "what now?" -> the self-service mailing checklist.',
+    record: { title: 'Expungement granted, next steps', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { entry_mt: 'granted' },
+    expect: {
+      resultKey: 'granted_checklist_mt',
+      reading: 'Nothing propagates automatically (§ 46-18-1110(2)-(3)); the petitioner must mail the order + fingerprints + DOJ form to each arresting agency, prosecuting office, sentencing court, and the DOJ.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 10',
+    package: 'petitioner with restitution unpaid -> 5-yr clock hasn\'t started (financial obligations gate).',
+    record: { title: 'Misdemeanor, restitution unpaid', charge_type: 'misdemeanor', disposition: 'convicted', restitution_paid: false },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: false, misd_military_mt: false, misd_complete_mt: false },
+    expect: {
+      resultKey: 'waiting_completion_mt',
+      reading: 'The 5-year clock does not start until every sentencing term, including all financial obligations, is complete (§ 46-18-1107(a)); unpaid restitution means it has not begun.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'MT statute verification (2026-07-22) — persona 11',
+    package: 'bundled petition where the court grants two of three offenses -> partial-grant outcome messaging.',
+    record: { title: 'Bundled petition, partial grant', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_mt: 'misd', misd_prioruse_mt: false, misd_pending_mt: false, misd_listed_mt: false, misd_military_mt: false, misd_complete_mt: true, misd_date_mt: '2019-06-01' },
+    expect: {
+      resultKey: 'eligible_presumed_mt',
+      reading: 'A bundled, presumed petition reaches eligible_presumed_mt, whose message carries the § 46-18-1110(1) partial-grant reality — the court may grant all, some, or none of the bundled offenses.',
+    },
     now: NOW,
   },
 ];

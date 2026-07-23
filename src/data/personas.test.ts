@@ -6270,45 +6270,199 @@ const AK: Persona[] = [
   },
 ];
 
+// VT personas come from Diana's read of 13 V.S.A. ch. 230 (§§ 7601-7611) as
+// restructured by 2025 Act 60 (legislature.vermont.gov) — the statute-verified rewrite
+// that took VT to statute_cited on 2026-07-22, replacing the Wave 7 draft's five
+// personas. Post-Act-60: expungement only for decriminalized offenses; everything else
+// is sealing of a "qualifying crime" with the burden flipped onto the State, and a
+// sealed record is still fully visible to NICS firearm checks. Conviction date nodes
+// are asked (the clock runs from sentence completion, not the conviction date).
 const VT: Persona[] = [
   {
-    source: 'Wave 7 — VT persona 1',
-    package: 'misdemeanor possession 2021, done 2022 -> sealed 2025 under the NEW 3-yr rule (old law said 2027 — show the delta).',
-    record: { title: 'Misdemeanor possession', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2022-06-01', probation_status: 'completed' },
-    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'misd', misd_dui_vt: false },
-    expect: { resultKey: 'eligible_seal_vt', reading: 'Act 60 dropped the qualifying-misdemeanor wait to 3 years; done 2022 -> sealed 2025 (old 5-year rule said 2027) -> eligible at 2026.' },
+    source: 'VT statute verification (2026-07-22) — persona 1',
+    package: 'misdemeanor petty larceny, completed 4 years ago, restitution paid -> shall-seal, burden-on-State messaging.',
+    record: { title: 'Misdemeanor petty larceny', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'misd', conv_misd_excl_vt: false, misd_age_vt: false, misd_date_vt: '2022-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_vt',
+      reading: 'A qualifying misdemeanor, restitution paid, 3+ years from completion (2022-01-01) -> shall-seal unless the State shows contrary to interests of justice (§ 7602(c)).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — VT persona 2',
-    package: 'felony grand larceny 2016, done 2018 -> 7-yr -> eligible 2025.',
-    record: { title: 'Felony grand larceny', charge_type: 'felony', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
-    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'felony' },
-    expect: { resultKey: 'eligible_seal_vt', reading: 'A qualifying non-violent felony has a 7-year wait; done 2018 -> eligible 2025, met at 2026.' },
+    source: 'VT statute verification (2026-07-22) — persona 2',
+    package: 'qualifying felony grand larceny, completed 8 years ago -> shall-seal, 7-yr tier.',
+    record: { title: 'Felony grand larceny', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'felony', conv_felony_burglary_vt: false, felony_age_vt: false, felony_date_vt: '2018-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_vt',
+      reading: 'Grand larceny is a designated qualifying felony (§ 7601(5)); 7-year tier met (completed 2018-01-01) -> shall-seal.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — VT persona 3',
-    package: '19-yr-old, qualifying misdemeanor, sentence done last month -> 30-day petition — fastest conviction relief in the nation.',
-    record: { title: '19-year-old qualifying misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2026-05-01', probation_status: 'completed' },
-    answers: { nolonger_crime_vt: false, age_vt: true },
-    expect: { resultKey: 'eligible_seal_vt', reading: 'An 18-21 offender can petition after just 30 days; sentence done ~2 months ago clears 30 days -> eligible (the fastest conviction relief).' },
+    source: 'VT statute verification (2026-07-22) — persona 3',
+    package: 'misdemeanor DUI, completed 11 years ago, no CDL -> sealable — the post-Act-60 reversal persona; include the predicate caveat.',
+    record: { title: 'Misdemeanor DUI', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'dui', conv_cdl_vt: false, dui_date_vt: '2015-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_dui_vt',
+      reading: 'Misdemeanor DUI is now sealable at 10 years post-Act-60 (§ 7602(e)); completed 2015-01-01, non-CDL -> eligible, with the § 7607(c)(4) predicate-enhancement caveat.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — VT persona 4',
-    package: 'DUI misdemeanor 2014 -> 10-yr -> eligible.',
-    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2014-06-01', probation_status: 'completed' },
-    answers: { nolonger_crime_vt: false, age_vt: false, level_vt: 'misd', misd_dui_vt: true },
-    expect: { resultKey: 'eligible_seal_vt', reading: 'A misdemeanor DUI has a 10-year wait; 2014 -> eligible 2024, met at 2026.' },
+    source: 'VT statute verification (2026-07-22) — persona 4',
+    package: 'misdemeanor DUI, current CDL holder -> barred.',
+    record: { title: 'Misdemeanor DUI, current CDL holder', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'dui', conv_cdl_vt: true },
+    expect: {
+      resultKey: 'ineligible_cdl_dui_vt',
+      reading: 'A current CDL/CLP holder may not seal a DUI (or any motor-vehicle offense) (§ 7602(e)/(a)(5)) -> barred while the credential is held.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — VT persona 5',
-    package: 'conduct no longer criminal -> immediate expungement.',
-    record: { title: 'Conduct no longer criminal', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
-    answers: { nolonger_crime_vt: true },
-    expect: { resultKey: 'eligible_expunge_vt', reading: 'Conviction for conduct no longer a crime gets immediate full expungement (record destroyed) under Act 60.' },
+    source: 'VT statute verification (2026-07-22) — persona 5',
+    package: 'occupied-dwelling burglary at age 23, no weapon, completed 8 years ago -> qualifying via the youth carve-back.',
+    record: { title: 'Occupied-dwelling burglary at 23, no weapon', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'felony', conv_felony_burglary_vt: true, conv_burglary_youth_vt: true, felony_age_vt: false, felony_date_vt: '2018-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_vt',
+      reading: 'Occupied-dwelling burglary is qualifying only via the carve-back — 25-or-younger and no weapon (§ 7601); at 23 with no weapon, 7 years out -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 6',
+    package: 'same burglary at age 30 -> not qualifying.',
+    record: { title: 'Occupied-dwelling burglary at 30', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'felony', conv_felony_burglary_vt: true, conv_burglary_youth_vt: false },
+    expect: {
+      resultKey: 'ineligible_burglary_vt',
+      reading: 'Occupied-dwelling burglary is NOT qualifying unless the youth-and-no-weapon carve-back applies; at 30 it fails, so it is not a qualifying crime (§ 7601).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 7',
+    package: 'aggravated assault felony with an unconditional pardon -> pardon converter — qualifying, 7-yr analysis.',
+    record: { title: 'Aggravated assault felony, pardoned', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: true, conv_pardon_level_vt: 'felony', felony_date_vt: '2016-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_vt',
+      reading: 'An unconditional pardon converts ANY offense into a qualifying crime (§ 7601); a pardoned aggravated assault then seals on the 7-year felony analysis.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 8',
+    package: 'domestic assault misdemeanor (a listed crime) -> not qualifying.',
+    record: { title: 'Domestic assault misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'misd', conv_misd_excl_vt: true },
+    expect: {
+      resultKey: 'ineligible_excluded_vt',
+      reading: 'A domestic-abuse misdemeanor is on the § 7601 exclusion list, so it is not a qualifying crime -> not sealable (absent a pardon converter).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 9',
+    package: 'offense since decriminalized -> true expungement, anytime after completion.',
+    record: { title: 'Since-decriminalized offense', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'decrim' },
+    expect: {
+      resultKey: 'eligible_expunge_vt',
+      reading: 'A decriminalized offense is the only true-expungement conviction path (§ 7602(a)(1)); petition anytime on completion + restitution/surcharges paid, record destroyed.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 10',
+    package: 'charges dismissed before trial 3 months ago, no objection -> already sealed automatically at 60 days.',
+    record: { title: 'Dismissed before trial, no objection', disposition: 'dismissed', disposition_date: '2026-04-01' },
+    answers: { entry_vt: 'nonconv', nonconv_route_vt: 'auto' },
+    expect: {
+      resultKey: 'eligible_nonconv_auto_vt',
+      reading: 'A pre-trial dismissal with no objection is sealed near-automatically within 60 days of final disposition (§ 7603) -> already sealed; escalate to the court if still visible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 11',
+    package: 'acquitted, State objected -> interests-of-justice hearing.',
+    record: { title: 'Acquitted, State objected', disposition: 'acquitted', disposition_date: '2025-12-01' },
+    answers: { entry_vt: 'nonconv', nonconv_route_vt: 'objected' },
+    expect: {
+      resultKey: 'complex_nonconv_hearing_vt',
+      reading: 'An objection in the interests of justice sends the otherwise-automatic non-conviction sealing to a hearing between defendant and prosecutor (§ 7603).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 12',
+    package: '20-year-old at offense, qualifying misdemeanor, sentence done 6 weeks ago, restitution paid -> 7609 seal NOW.',
+    record: { title: '20-at-offense qualifying misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'misd', conv_misd_excl_vt: false, misd_age_vt: true, conv_age_mixed_vt: false, age_date_vt: '2026-06-01' },
+    expect: {
+      resultKey: 'eligible_seal_age_vt',
+      reading: 'A qualifying crime committed at 18-21 seals 30 days after completion (§ 7609); completed 2026-06-01, ~6 weeks before 2026-07-15 -> eligible now, burden on the State.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 13',
+    package: '19-year-old with qualifying + nonqualifying charges on one record -> 7609 mixed-docket bar; route to standard analysis at 3 yrs for the qualifying one — but flag the docket-file publicity trap.',
+    record: { title: '19-at-offense, mixed qualifying/nonqualifying docket', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: true, conv_pardon_vt: false, conv_type_vt: 'misd', conv_misd_excl_vt: false, misd_age_vt: true, conv_age_mixed_vt: true },
+    expect: {
+      resultKey: 'complex_mixed_docket_vt',
+      reading: 'A docket mixing qualifying and nonqualifying offenses is barred from the § 7609 fast path; the qualifying one still uses the standard 3-year path, and the partial-docket publicity trap is flagged.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 14',
+    package: 'petition denied last year -> 2-yr refile bar unless shortened.',
+    record: { title: 'Petition denied last year', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'denied' },
+    expect: {
+      resultKey: 'denied_refile_vt',
+      reading: 'A denial carries a 2-year refile bar unless the court authorized a shorter period (§ 7605).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 15',
+    package: 'new charge pending at filing -> frozen until disposition.',
+    record: { title: 'New charge pending', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_vt: 'pending' },
+    expect: {
+      resultKey: 'pending_freeze_vt',
+      reading: 'A pending new charge freezes any petition until that charge is disposed of (§ 7604) — a timing hold, not a denial.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 16',
+    package: 'sealed felony holder asked about firearms purchase denial -> NICS sees sealed records; no concealment there.',
+    record: { title: 'Sealed felony, firearms-purchase question', charge_type: 'felony', disposition: 'convicted' },
+    answers: { entry_vt: 'effects' },
+    expect: {
+      resultKey: 'effects_vt',
+      reading: 'A sealed record stays fully visible to VCIC/FBI for NICS firearm checks (§ 7607) — sealing provides no concealment on a gun purchase.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'VT statute verification (2026-07-22) — persona 17',
+    package: 'unpaid restitution -> blocked on every conviction path.',
+    record: { title: 'Qualifying misdemeanor, restitution unpaid', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed', restitution_paid: false },
+    answers: { entry_vt: 'conviction', conv_restitution_vt: false },
+    expect: {
+      resultKey: 'ineligible_restitution_vt',
+      reading: 'Restitution and surcharges paid in full is a universal gate for expungement and sealing (§ 7602); unpaid restitution blocks every conviction path -> a "not yet".',
+    },
     now: NOW,
   },
 ];

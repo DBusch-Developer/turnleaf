@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**37 open questions across 10 states.**
+**40 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -222,21 +222,27 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 9. VERMONT (VT)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement / Sealing (13 V.S.A. ch. 230; Act 60 of 2025)** — The court where the case was decided
+- **Expungement / Sealing (13 V.S.A. ch. 230, as restructured by 2025 Act 60)** — The Criminal Division of the Superior Court where the case was decided
 - Vermont Legal Aid — Expungement Clinics (1-800-917-7787) — https://vtlawhelp.org/expungement
 - Vermont Judiciary — Expungement — https://www.vermontjudiciary.org/criminal/expungement
 
 **Dates that govern:**
-- 2025-07-01 — Act 60 restructures record-clearing (13 V.S.A. ch. 230) (effective) · Total rewrite. Sealing is now primary: misdemeanors 3 yrs (down from 5), non-violent felonies 7 yrs, misdemeanor DUI 10 yrs; the burden to oppose sits on the state; the old no-new-convictions-during-the-wait rule was removed; ages 18-21 petition after 30 days. Any pre-July-2025 source is wrong.
+- 2025-07-01 — 2025 Act 60 restructures record-clearing (13 V.S.A. ch. 230) (effective) · Total rewrite. Expungement now only for decriminalized offenses; sealing of qualifying crimes is primary (misdemeanor 3 yr, felony 7 yr, DUI 10 yr, age 18-21 30 days); burden flipped to the State; non-conviction sealing near-automatic at 60 days. Any pre-July-2025 source is wrong.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the post-Act-60 statute against the current text. Wave 7 stresses that Act 60 (eff. July 1, 2025) rewrote everything and nearly every online guide predates it. Confirm the 3/7/10-year waits, the burden-flip (state must show sealing is contrary to the interests of justice), the removal of the no-new-convictions-during-the-wait rule, and the 18-21 30-day petition, against legislature.vermont.gov and vtcourts.gov/criminal/expungement.
+1. Run a 2026-session sweep for amendments to 13 V.S.A. chapter 230 (the legislature.vermont.gov text integrates the 2025 session only; check the VT bill lookup). Confirm nothing in 2026 changed the qualifying-crime lists, tiers, or effect provisions.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the qualifying-crimes list in 13 V.S.A. § 7601(4). Wave 7 says qualifying felonies include non-violent offenses such as burglary of unoccupied dwellings, listed property crimes, drug offenses (including trafficking), and pardoned convictions, while listed violent crimes and sexual misconduct are excluded. The tree asks these; confirm the exact list.
+2. Pull 13 V.S.A. § 5301(7) — the "listed crimes" that are the load-bearing exclusion from the § 7601(4) qualifying-misdemeanor definition. Cited but not read; the tree screens the exclusion category without the specific enumeration.
+   - *Blocks no single field — affects a branch or wording.*
+3. Pull 32 V.S.A. § 1431 for the petition and DUI-sealing fee amounts. General chapter-230 petition fees are not stated in this chapter; the DUI-sealing fee is set by § 1431(e) (feeding the § 7610 special fund) but the amount is elsewhere. The fees field is null pending this phone-tier / fee-schedule check.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`
+4. Confirm how pre-Act-60 expungements and pending petitions are treated under the new chapter (transition rules). Attorney-tier; the encoding applies the current chapter-230 text.
+   - *Blocks no single field — affects a branch or wording.*
+5. Verify the encoded text against the OFFICIAL VSA print. legislature.vermont.gov serves an unofficial copy of the Vermont Statutes Annotated (per the site's own banner) — the source notes carry this caveat; a check against the official print closes it.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

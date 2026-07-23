@@ -19393,195 +19393,367 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   VT: {
     code: 'VT',
     name: 'Vermont',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'Chapter 230 read complete as restructured by 2025 Act 60 (eff. July 1, 2025). The text integrates the '
+      + '2025 session; 2026-session integration is unverified — a sweep for chapter 230 amendments is pending. '
+      + '(The legislature.vermont.gov text is the site\'s own unofficial copy of the VSA — see the source notes.)',
     terminology:
-      'Vermont rewrote its entire record-clearing system with Act 60 (2025), effective July 1, 2025 — so any '
-      + 'guide older than that is wrong. Under the new architecture (13 V.S.A. ch. 230), EXPUNGEMENT (record '
-      + 'destroyed, "no criminal record exists") is now reserved for conduct that is no longer a crime. '
-      + 'SEALING is the primary remedy: most qualifying misdemeanors after 3 years, most qualifying '
-      + 'non-violent felonies after 7 years, and a misdemeanor DUI after 10 years. Two features are unusually '
-      + 'favorable: the court "shall grant" without a hearing unless the state objects and shows sealing is '
-      + 'against the interests of justice (the burden is on the STATE), and people who were 18-21 at the time '
-      + 'of the offense can petition after just 30 days.',
+      '2025 Act 60 rewrote Vermont\'s record-clearing entirely (13 V.S.A. ch. 230, eff. July 1, 2025), so ANY '
+      + 'older guide is wrong. The new architecture splits cleanly: EXPUNGEMENT (record destroyed, "no criminal '
+      + 'record exists") now survives ONLY for conduct that is no longer a crime (a decriminalized offense); '
+      + 'every other conviction remedy is SEALING of a "qualifying crime," and non-conviction sealing is nearly '
+      + 'automatic. A "qualifying crime" (§ 7601) is ANY misdemeanor except a specific exclusion list (§ 5301(7) '
+      + 'listed crimes, domestic and protection-order offenses, sex/child-exploitation offenses, animal cruelty, '
+      + 'hate crimes, CDL-holder motor-vehicle offenses, registrable sex offenses, and more) — NOTE a misdemeanor '
+      + 'DUI is NOT on that exclusion list and IS sealable — plus a defined set of felonies: burglary (but not '
+      + 'burglary of an OCCUPIED dwelling, UNLESS the person was 25 or younger and carried no weapon), 25 '
+      + 'designated property offenses, and enumerated drug offenses; and — the PARDON CONVERTER — an unconditional '
+      + 'gubernatorial pardon makes ANY offense qualifying. Sealing timelines run from sentence completion: '
+      + 'qualifying misdemeanor 3 years, qualifying felony 7 years, misdemeanor DUI 10 years (a post-Act-60 '
+      + 'reversal — but a sealed DUI still counts as a predicate to enhance a later DUI), and — the fast path — a '
+      + 'qualifying crime committed at age 18-21 seals just 30 days after completion (though a mixed docket with '
+      + 'any nonqualifying charge is barred from that fast path). All conviction sealing requires restitution and '
+      + 'surcharges paid, and the burden is FLIPPED: the court grants unless the STATE shows sealing is contrary '
+      + 'to the interests of justice. Two honest limits on the effect (§ 7607): you may tell the public "no '
+      + 'criminal record exists," but a sealed record is fully visible to VCIC/FBI for NICS firearm checks — '
+      + 'sealing hides nothing on a gun purchase — and a case file with multiple charges stays public until every '
+      + 'charge is cleared (the partial-docket trap).',
     keyDates: [
       {
-        label: 'Act 60 restructures record-clearing (13 V.S.A. ch. 230)',
+        label: '2025 Act 60 restructures record-clearing (13 V.S.A. ch. 230)',
         date: '2025-07-01',
         kind: 'effective',
-        note: 'Total rewrite. Sealing is now primary: misdemeanors 3 yrs (down from 5), non-violent felonies 7 yrs, misdemeanor DUI 10 yrs; the burden to oppose sits on the state; the old no-new-convictions-during-the-wait rule was removed; ages 18-21 petition after 30 days. Any pre-July-2025 source is wrong.',
+        note: 'Total rewrite. Expungement now only for decriminalized offenses; sealing of qualifying crimes is primary (misdemeanor 3 yr, felony 7 yr, DUI 10 yr, age 18-21 30 days); burden flipped to the State; non-conviction sealing near-automatic at 60 days. Any pre-July-2025 source is wrong.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the post-Act-60 statute against the current text. Wave 7 stresses that Act 60 (eff. July 1, 2025) rewrote everything and nearly every online guide predates it. Confirm the 3/7/10-year waits, the burden-flip (state must show sealing is contrary to the interests of justice), the removal of the no-new-convictions-during-the-wait rule, and the 18-21 30-day petition, against legislature.vermont.gov and vtcourts.gov/criminal/expungement.',
+          'Run a 2026-session sweep for amendments to 13 V.S.A. chapter 230 (the legislature.vermont.gov text integrates the 2025 session only; check the VT bill lookup). Confirm nothing in 2026 changed the qualifying-crime lists, tiers, or effect provisions.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the qualifying-crimes list in 13 V.S.A. § 7601(4). Wave 7 says qualifying felonies include non-violent offenses such as burglary of unoccupied dwellings, listed property crimes, drug offenses (including trafficking), and pardoned convictions, while listed violent crimes and sexual misconduct are excluded. The tree asks these; confirm the exact list.',
+          'Pull 13 V.S.A. § 5301(7) — the "listed crimes" that are the load-bearing exclusion from the § 7601(4) qualifying-misdemeanor definition. Cited but not read; the tree screens the exclusion category without the specific enumeration.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull 32 V.S.A. § 1431 for the petition and DUI-sealing fee amounts. General chapter-230 petition fees are not stated in this chapter; the DUI-sealing fee is set by § 1431(e) (feeding the § 7610 special fund) but the amount is elsewhere. The fees field is null pending this phone-tier / fee-schedule check.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm how pre-Act-60 expungements and pending petitions are treated under the new chapter (transition rules). Attorney-tier; the encoding applies the current chapter-230 text.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Verify the encoded text against the OFFICIAL VSA print. legislature.vermont.gov serves an unofficial copy of the Vermont Statutes Annotated (per the site\'s own banner) — the source notes carry this caveat; a check against the official print closes it.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: '13 V.S.A. §§ 7601, 7602 (expungement/sealing; Act 60 of 2025 architecture)', url: null, retrievedOn: null },
-      { id: '13 V.S.A. § 7603 (non-conviction sealing)', url: null, retrievedOn: null },
-      { id: 'Act 60 (2025) (restructure of record-clearing, eff. Jul 1, 2025)', url: null, retrievedOn: null },
+      { id: '13 V.S.A. §§ 7601, 7602 (2025 Act 60 — 7601(4)-(5) "qualifying crime": all misdemeanors except the exclusion list (§ 5301(7) listed crimes, ch. 64 child sexual exploitation, § 1030 abuse-order violations, ch. 28 vulnerable-adult, § 2605 voyeurism, § 352 animal cruelty, § 5409 registry noncompliance, § 1455 hate crimes, §§ 1304/1305/1306 cruelty, § 3151 FGM, § 3258(b), § 4058(b)(1) ERPO, CDL-holder motor-vehicle offenses, registrable sex offenses; DUI NOT excluded), plus qualifying felonies — burglary (§ 1201) excluding occupied-dwelling burglary UNLESS 25-or-younger and no weapon, the 25 designated property offenses (7601(5)(A)-(Y)), enumerated 18 V.S.A. drug offenses, and PARDON-converted offenses; 7602 grounds — (a)(1)/(b) decriminalized-offense EXPUNGEMENT anytime on completion + restitution/surcharges paid; (a)(2)/(c)/(d) SEALING of same-incident qualifying crimes, misdemeanor 3 yr / felony 7 yr from completion, restitution/surcharges paid, State bears the contrary-to-interests-of-justice burden; (a)(5) CDL/CLP holders may not seal any motor-vehicle offense; (e) misdemeanor DUI 10 yr, not a current CDL/CLP holder; (f) fish-and-wildlife points survive) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22', sourceNote: 'legislature.vermont.gov serves the site\'s own UNOFFICIAL copy of the VSA (per its banner); verify against the official print (open question).' },
+      { id: '13 V.S.A. § 7603 (2025 Act 60 — NON-conviction sealing, near-automatic: unless a party objects in the interests of justice, the court SHALL seal within 60 days of final disposition where (a) no probable-cause determination at arraignment, (b) charges dismissed before trial (with or without prejudice), or (c) acquittal; anytime by prosecutor-defendant stipulation; anytime by (g) petition on an interests-of-justice finding for other dispositions; objection -> hearing between defendant and prosecutor only) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. §§ 7604, 7605 (2025 Act 60 — 7604 a pending new charge FREEZES any petition until disposition; 7605 a denial carries a 2-year refile bar unless the court authorizes a shorter period) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. § 7606 (2025 Act 60 — EXPUNGEMENT effect: annulment, treated as never arrested/convicted/sentenced, answer only about non-expunged records, state entities advise of the right not to disclose, inquiry response is "no criminal record exists"; PARTIAL-DOCKET TRAP — the case file stays public until every charge is expunged, then is DESTROYED; confidential special index inspectable only on the subject\'s petition) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. § 7607 (2025 Act 60 — SEALING effect: same treated-as-never rule and "no criminal record exists" to the PUBLIC, with exceptions — same-incident litigation use (mandatory SEALED label), criminal-justice-purpose use with onward disclosure needing a court order, DUI predicate enhancement ((c)(4)), UNRESTRICTED VCIC/FBI access for NICS firearm checks (no firearm-check concealment), discovery, self-access, law-enforcement hiring, authorized research; sealed dockets exempt from public access when complete but NOT destroyed (partial-docket trap); $1,000-per-disclosure enforcement via § 7611) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. § 7608 (2025 Act 60 — VICTIM notice is the PETITIONER\'s duty: notice to known victims at filing, victim may give a statement, reasonable effort = mail + phone + email at last-knowns, inability to locate is no bar) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. § 7609 (2025 Act 60 — AGE 18-21 FAST PATH: a qualifying crime committed at age 18-21 seals 30 days after completion, shall-grant, restitution/surcharges paid, burden on the State; TRAP — a record containing both qualifying and nonqualifying offenses is ineligible under this section (mixed-docket bar); effect follows 7607(a)-(b)) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. §§ 7610, 7611 (2025 Act 60 — 7610 sealing special fund fed by the DUI-sealing fee; 7611 unauthorized access/disclosure of sealed records is a $1,000 civil penalty PER disclosure) via legislature.vermont.gov', url: 'https://legislature.vermont.gov', retrievedOn: '2026-07-22' },
+      { id: '13 V.S.A. § 5301(7) (the "listed crimes" excluded from the qualifying-misdemeanor definition) — CITE-ONLY, NOT pulled; the misdemeanor exclusion is screened as a category', url: null, retrievedOn: null },
+      { id: '32 V.S.A. § 1431 (court fees, incl. (e) the DUI-sealing fee feeding the § 7610 fund) — CITE-ONLY, not pulled; fee amounts pending', url: null, retrievedOn: null },
+      { id: '13 V.S.A. § 1201 (burglary), § 7282 (surcharges/waiver), 23 V.S.A. § 1201 (DUI), and the 25 designated property offenses and enumerated 18 V.S.A. drug offenses referenced by § 7601 — CITE-ONLY, referenced by the encoded paths', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_vt',
       nodes: {
-        disposition: {
+        entry_vt: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check? (Vermont\'s Act 60 rules took effect July 1, 2025.)',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'nolonger_crime_vt' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_vt' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_vt' },
-            { label: 'Diversion / deferred completed', value: 'deferred', next: 'nonconv_vt' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Seal a CONVICTION', value: 'conviction', next: 'conv_restitution_vt' },
+            { label: 'A NON-conviction (no probable cause, dismissed, or acquitted)', value: 'nonconv', next: 'nonconv_route_vt' },
+            { label: 'An offense that has since been DECRIMINALIZED', value: 'decrim', next: 'eligible_expunge_vt' },
+            { label: 'What a sealed record means (firearms/NICS, disclosure)', value: 'effects', next: 'effects_vt' },
+            { label: 'My petition was DENIED — can I refile?', value: 'denied', next: 'denied_refile_vt' },
+            { label: 'I have a new charge PENDING', value: 'pending', next: 'pending_freeze_vt' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        nolonger_crime_vt: {
+        // All conviction sealing requires restitution + surcharges paid, so it gates first.
+        conv_restitution_vt: {
           type: 'boolean',
-          text: 'Is the conduct you were convicted of no longer a crime in Vermont (for example, since decriminalized)?',
-          yes: 'eligible_expunge_vt',
-          no: 'age_vt'
+          text: 'Have you paid all restitution and surcharges in full for every crime of conviction? (Waived surcharges are excepted.)',
+          yes: 'conv_pardon_vt',
+          no: 'ineligible_restitution_vt'
         },
-        age_vt: {
+        conv_pardon_vt: {
           type: 'boolean',
-          text: 'Were you between 18 and 21 years old at the time of the offense?',
-          yes: 'age_date_vt',
-          no: 'level_vt'
+          text: 'Do you have an unconditional gubernatorial PARDON for this offense? (A pardon makes ANY offense a "qualifying crime" that can be sealed.)',
+          yes: 'conv_pardon_level_vt',
+          no: 'conv_type_vt'
         },
-        age_date_vt: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
-          validation: {
-            period: { amount: 30, unit: 'days', anchor: 'from sentence completion for an offense committed at age 18-21 (13 V.S.A. ch. 230 — 30-day petition)' },
-            nextPass: 'eligible_seal_vt',
-            nextFail: 'waiting_vt'
-          }
-        },
-        level_vt: {
+        conv_pardon_level_vt: {
           type: 'choice',
-          text: 'How would you describe the conviction?',
+          text: 'Is the pardoned offense a misdemeanor or a felony?',
           options: [
-            { label: 'A qualifying misdemeanor (most, except listed violent crimes and sexual misconduct)', value: 'misd', next: 'misd_dui_vt' },
-            { label: 'A qualifying non-violent felony (incl. burglary of an unoccupied dwelling, listed property crimes, or drug offenses including trafficking)', value: 'felony', next: 'felony_date_vt' },
-            { label: 'A listed violent crime or a sexual-misconduct offense', value: 'excluded', next: 'ineligible_excluded_vt' },
+            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_vt' },
+            { label: 'Felony', value: 'felony', next: 'felony_date_vt' }
+          ]
+        },
+        conv_type_vt: {
+          type: 'choice',
+          text: 'Which best describes the conviction?',
+          options: [
+            { label: 'A misdemeanor (most misdemeanors qualify)', value: 'misd', next: 'conv_misd_excl_vt' },
+            { label: 'A misdemeanor DUI (23 V.S.A. § 1201(a))', value: 'dui', next: 'conv_cdl_vt' },
+            { label: 'A qualifying FELONY — burglary, one of the 25 designated property offenses, or an enumerated drug offense', value: 'felony', next: 'conv_felony_burglary_vt' },
+            { label: 'A listed/excluded offense (a violent crime, sex offense, domestic-abuse or protection-order offense, child abuse, etc.)', value: 'excluded', next: 'ineligible_excluded_vt' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_vt' }
           ]
         },
-        misd_dui_vt: {
+        conv_misd_excl_vt: {
           type: 'boolean',
-          text: 'Was this a misdemeanor DUI?',
-          yes: 'dui_date_vt',
+          text: 'Is the misdemeanor one of Vermont\'s excluded categories — a § 5301(7) listed crime, a domestic-abuse or protection/abuse-order violation, a sex or child-exploitation offense, a vulnerable-adult offense, animal cruelty, a hate-motivated crime, a registrable sex offense, or a CDL-holder motor-vehicle offense?',
+          yes: 'ineligible_excluded_vt',
+          no: 'misd_age_vt'
+        },
+        conv_cdl_vt: {
+          type: 'boolean',
+          text: 'Are you currently a commercial driver\'s license (CDL) or commercial learner\'s permit (CLP) holder?',
+          yes: 'ineligible_cdl_dui_vt',
+          no: 'dui_date_vt'
+        },
+        conv_felony_burglary_vt: {
+          type: 'boolean',
+          text: 'Is the felony BURGLARY of an OCCUPIED dwelling?',
+          yes: 'conv_burglary_youth_vt',
+          no: 'felony_age_vt'
+        },
+        conv_burglary_youth_vt: {
+          type: 'boolean',
+          text: 'At the time of that occupied-dwelling burglary, were you 25 years old or YOUNGER AND carried NO dangerous or deadly weapon?',
+          yes: 'felony_age_vt',
+          no: 'ineligible_burglary_vt'
+        },
+        misd_age_vt: {
+          type: 'boolean',
+          text: 'Were you between 18 and 21 years old at the time of the offense? (Age 18-21 opens a 30-day fast path.)',
+          yes: 'conv_age_mixed_vt',
           no: 'misd_date_vt'
+        },
+        felony_age_vt: {
+          type: 'boolean',
+          text: 'Were you between 18 and 21 years old at the time of the offense? (Age 18-21 opens a 30-day fast path.)',
+          yes: 'conv_age_mixed_vt',
+          no: 'felony_date_vt'
+        },
+        conv_age_mixed_vt: {
+          type: 'boolean',
+          text: 'Does the record (docket) contain BOTH qualifying and NONqualifying offenses? (A mixed docket is barred from the 18-21 fast path.)',
+          yes: 'complex_mixed_docket_vt',
+          no: 'age_date_vt'
         },
         misd_date_vt: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
+          text: 'When did you complete all terms of the sentence (the 3-year clock runs from completion)?',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — qualifying misdemeanor; down from 5 under Act 60)' },
+            period: { amount: 3, unit: 'years', anchor: 'three years from completion of sentence terms (§ 7602(c) — qualifying misdemeanor)' },
             nextPass: 'eligible_seal_vt',
             nextFail: 'waiting_vt'
           }
         },
         felony_date_vt: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
+          text: 'When did you complete all terms of the sentence (the 7-year clock runs from completion)?',
           validation: {
-            period: { amount: 7, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — qualifying non-violent felony)' },
+            period: { amount: 7, unit: 'years', anchor: 'seven years from completion of sentence terms (§ 7602(d) — qualifying felony)' },
             nextPass: 'eligible_seal_vt',
             nextFail: 'waiting_vt'
           }
         },
         dui_date_vt: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence?',
+          text: 'When did you complete all terms of the DUI sentence (the 10-year clock runs from completion)?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from sentence completion (13 V.S.A. ch. 230 — misdemeanor DUI, excluding injury/death, school-bus, CDL)' },
-            nextPass: 'eligible_seal_vt',
+            period: { amount: 10, unit: 'years', anchor: 'ten years from completion of sentence terms (§ 7602(e) — misdemeanor DUI)' },
+            nextPass: 'eligible_seal_dui_vt',
             nextFail: 'waiting_vt'
           }
+        },
+        age_date_vt: {
+          type: 'date',
+          text: 'When did you complete all terms of the sentence (the 18-21 fast path opens 30 days after completion)?',
+          validation: {
+            period: { amount: 30, unit: 'days', anchor: '30 days after completion of sentence terms for a qualifying crime committed at age 18-21 (§ 7609)' },
+            nextPass: 'eligible_seal_age_vt',
+            nextFail: 'waiting_vt'
+          }
+        },
+        nonconv_route_vt: {
+          type: 'choice',
+          text: 'How did the case end without a conviction, and was there an objection?',
+          options: [
+            { label: 'No probable cause at arraignment, dismissed before trial, or acquitted — and no party objected', value: 'auto', next: 'eligible_nonconv_auto_vt' },
+            { label: 'One of those, but the State (or a party) OBJECTED in the interests of justice', value: 'objected', next: 'complex_nonconv_hearing_vt' },
+            { label: 'A different disposition, outside those grounds', value: 'other', next: 'eligible_nonconv_petition_vt' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Vermont\'s Act 60 (2025) rewrite handles convictions and non-convictions differently, and even the conviction rules depend on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a VCIC record check will show the disposition; Vermont Legal Aid (1-800-917-7787, vtlawhelp.org/expungement) runs free clinics and can help you read it.',
+          message: 'Vermont\'s 2025 Act 60 rewrite handles convictions and non-convictions differently, and even the conviction rules depend on the offense. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a VCIC record check will show the disposition; Vermont Legal Aid (1-800-917-7787, vtlawhelp.org/expungement) runs free clinics and can help you read it.',
           remedy: 'Get Your Record First (court paperwork / VCIC)',
           citation: '13 V.S.A. ch. 230 (the route depends on the disposition)'
         },
-        nonconv_vt: {
-          status: 'eligible',
-          title: 'No Conviction — Sealable',
-          message: 'Because your case ended without a conviction, Vermont lets you seal it under 13 V.S.A. § 7603. Under the Act 60 framework the court "shall grant" absent a government objection showing it is against the interests of justice — a favorable posture. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you file. The fees are $90 per docket plus a $30 VCIC record check, with waivers available.',
-          remedy: 'Non-conviction sealing (§ 7603)',
-          citation: '13 V.S.A. § 7603'
+        ineligible_restitution_vt: {
+          status: 'waiting',
+          title: 'Restitution and Surcharges Must Be Paid First',
+          message: 'Every Vermont conviction-clearing path — expungement of a decriminalized offense and sealing of a qualifying crime alike — requires that all restitution and surcharges be paid in full for every crime of conviction (waived surcharges excepted) (§ 7602). Because something is still outstanding, this is a "not yet," not a "never." Once the money is paid (or the court waives a surcharge under § 7282), the waiting-period analysis applies. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you sort out what is owed.',
+          remedy: 'Pay all restitution and surcharges, then seal/expunge (§ 7602)',
+          citation: '13 V.S.A. § 7602'
         },
         eligible_expunge_vt: {
           status: 'eligible',
-          title: 'Conduct No Longer a Crime — Immediate Expungement',
-          message: 'Because you were convicted of conduct that is no longer a crime in Vermont, you qualify for full EXPUNGEMENT under Act 60 — immediate once your sentence and any restitution and surcharges are paid, with the record destroyed so that, in the law\'s words, "no criminal record exists." This is the strongest relief Vermont offers. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you file.',
-          remedy: 'Expungement for conduct no longer criminal (13 V.S.A. ch. 230) — record destroyed',
-          citation: '13 V.S.A. § 7601'
+          title: 'Conduct No Longer a Crime — True Expungement',
+          message: 'Because you were convicted of conduct that is no longer a crime in Vermont (a decriminalized offense), you qualify for full EXPUNGEMENT — the strongest relief the state offers, and the ONLY true-expungement conviction path left after Act 60. You may petition anytime once your sentence is complete and restitution and surcharges are paid (surcharges are waivable under § 7282). On grant, the record is destroyed and, in the law\'s words, "no criminal record exists"; you may answer any inquiry accordingly, and state entities must advise you of the right not to disclose. One trap to know: if the case had multiple charges, the case file stays public until EVERY charge is cleared, and only then is it destroyed. Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Expungement of a decriminalized offense (§ 7602(a)(1)) — record destroyed',
+          citation: '13 V.S.A. § 7602(a)(1)'
         },
         eligible_seal_vt: {
           status: 'eligible',
-          title: 'Waiting Period Met — Sealable',
-          message: 'Based on your dates, your Act 60 waiting period has passed — 3 years for a qualifying misdemeanor, 7 for a qualifying non-violent felony, 10 for a misdemeanor DUI, or just 30 days if you were 18-21 at the time of the offense. Two things work in your favor: the court "shall grant" without a hearing unless the state objects and shows sealing is against the interests of justice (the burden is on the state), and the old rule barring you for new convictions during the wait was removed in 2025. A pending charge would pause the petition. Fees are $90 per docket plus a $30 VCIC record check (waivers available). Vermont Legal Aid (1-800-917-7787) runs free clinics.',
-          remedy: 'Sealing petition (13 V.S.A. ch. 230)',
+          title: 'Qualifying Crime, Window Met — Sealable (Burden on the State)',
+          message: 'Based on your answers — a qualifying crime, restitution and surcharges paid, and the waiting period met (3 years from completion for a misdemeanor, 7 for a felony) — you can petition to SEAL this conviction (§ 7602). Two things are unusually favorable under Act 60: the court SHALL grant it unless the STATE shows that sealing would be contrary to the interests of justice (the burden is flipped onto the prosecution), and a stipulation with the prosecutor lets it be granted without a hearing. You file in the Criminal Division, and qualifying crimes from the same incident can be bundled. Be clear-eyed about the effect: to the public you may say "no criminal record exists," but a sealed record stays fully visible to VCIC and the FBI for NICS FIREARM background checks — sealing hides nothing on a gun purchase. Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Sealing of a qualifying crime (§ 7602) — State bears the burden to oppose',
           citation: '13 V.S.A. § 7602'
+        },
+        eligible_seal_dui_vt: {
+          status: 'eligible',
+          title: 'Misdemeanor DUI, 10 Years — Now Sealable (a Post-Act-60 Reversal)',
+          message: 'This is one of Act 60\'s biggest changes: a misdemeanor DUI (23 V.S.A. § 1201(a)), which used to be unsealable, CAN now be sealed 10 years after you complete the sentence, if restitution and surcharges are paid, you are not a current CDL/CLP holder, and the State does not show sealing is contrary to the interests of justice (§ 7602(e)). Based on your dates, the 10 years have passed. Two honest caveats: a sealed DUI still counts as a PREDICATE to enhance the penalty on a LATER DUI (§ 7607(c)(4)) — sealing does not erase it for that purpose — and there is a DUI-sealing filing fee (set by 32 V.S.A. § 1431(e); amount not stated here). And as with any sealing, VCIC/FBI firearm (NICS) checks still see it. Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Misdemeanor-DUI sealing (§ 7602(e)) — 10 years; still a DUI predicate',
+          citation: '13 V.S.A. § 7602(e)'
+        },
+        eligible_seal_age_vt: {
+          status: 'eligible',
+          title: 'Committed at Age 18-21 — the 30-Day Fast Path',
+          message: 'Because this qualifying crime was committed when you were 18 to 21 years old, Vermont opens a fast path: you can petition to seal just 30 DAYS after you complete the sentence, and the court SHALL grant it if restitution and surcharges are paid and the State does not show it is contrary to the interests of justice (§ 7609) — the burden is on the prosecution. Based on your dates, the 30 days have passed. One limit that does NOT apply to you (since your docket is all qualifying offenses): a record mixing qualifying and nonqualifying charges is barred from this fast path. The effect is the ordinary sealing effect — public "no criminal record exists," but VCIC/FBI firearm checks still see it. Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Age-18-21 fast-path sealing (§ 7609) — 30 days after completion',
+          citation: '13 V.S.A. § 7609'
         },
         waiting_vt: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Vermont\'s Act 60 sealing waits run from sentence completion: 3 years for a qualifying misdemeanor, 7 for a qualifying non-violent felony, 10 for a misdemeanor DUI — or just 30 days if you were 18-21 at the time of the offense. Based on your dates, yours has not passed yet. When it does, the process is favorable: the state bears the burden to oppose. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you plan.',
-          remedy: 'Wait for the Act 60 period (13 V.S.A. ch. 230)',
+          message: 'Vermont\'s Act 60 sealing waits run from completion of your sentence terms: 3 years for a qualifying misdemeanor, 7 for a qualifying felony, 10 for a misdemeanor DUI — or just 30 days if you were 18-21 at the time of the offense. Based on your dates, yours has not passed yet. When it does, the process is favorable: the State bears the burden to oppose, and a new conviction during the wait no longer bars you (though a pending charge freezes a pending petition). Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you plan.',
+          remedy: 'Wait for the Act 60 period (§ 7602)',
           citation: '13 V.S.A. § 7602'
         },
         ineligible_excluded_vt: {
           status: 'ineligible',
-          title: 'A Listed Violent or Sexual-Misconduct Offense — Not Sealable',
-          message: 'Even under Act 60\'s broadened rules, Vermont excludes listed violent crimes and sexual-misconduct offenses from sealing. No waiting period changes that. A pardon remains a route for an otherwise-excluded offense (and a pardoned conviction can then be sealed). Vermont Legal Aid (1-800-917-7787) can help you confirm whether yours is on the excluded list and explain the pardon process.',
-          remedy: 'None (listed violent / sexual-misconduct offense) — a pardon is the remaining route',
+          title: 'A Listed/Excluded Offense — Not a Qualifying Crime',
+          message: 'Vermont\'s sealing reaches only "qualifying crimes," and yours is on the excluded list — the § 5301(7) listed crimes, domestic-abuse and protection-order offenses, sex and child-exploitation offenses, vulnerable-adult offenses, animal cruelty, hate-motivated crimes, registrable sex offenses, or a CDL-holder motor-vehicle offense (§ 7601). No waiting period changes that on its own. But there is one real path even for an excluded offense: an unconditional gubernatorial PARDON converts ANY offense into a qualifying crime, after which it can be sealed under § 7602. Vermont Legal Aid (1-800-917-7787) can help you confirm the classification and explain the pardon route.',
+          remedy: 'None as a qualifying crime — a pardon converts it, then it can be sealed (§ 7601)',
           citation: '13 V.S.A. § 7601'
+        },
+        ineligible_cdl_dui_vt: {
+          status: 'ineligible',
+          title: 'Current CDL Holder — DUI Not Sealable',
+          message: 'Vermont\'s new misdemeanor-DUI sealing is not available to a current commercial driver\'s license (CDL) or commercial learner\'s permit (CLP) holder (§ 7602(e)) — and more broadly, a CDL/CLP holder may not seal any motor-vehicle offense (§ 7602(a)(5)). Because you currently hold a CDL/CLP, the DUI cannot be sealed now. This can be a "not yet" rather than a "never": if you no longer hold the commercial credential when you petition, the ordinary 10-year DUI-sealing analysis would apply. Vermont Legal Aid (1-800-917-7787) can help you time it.',
+          remedy: 'None while a current CDL/CLP holder (§ 7602(e)/(a)(5)) — reassess if that changes',
+          citation: '13 V.S.A. § 7602(e)'
+        },
+        ineligible_burglary_vt: {
+          status: 'ineligible',
+          title: 'Occupied-Dwelling Burglary — Not a Qualifying Felony',
+          message: 'Burglary is generally a qualifying felony in Vermont, but there is a carve-out within a carve-out: burglary of an OCCUPIED dwelling is NOT qualifying — UNLESS the person was 25 or younger at the time AND carried no dangerous or deadly weapon (§ 7601). Because your occupied-dwelling burglary does not fit that narrow youth-and-no-weapon exception, it is not a qualifying crime and cannot be sealed on the ordinary path. An unconditional pardon would convert it into a qualifying crime that could then be sealed. Vermont Legal Aid (1-800-917-7787) can help you confirm the facts and explain the pardon route.',
+          remedy: 'None on the ordinary path (occupied-dwelling burglary) — a pardon converts it',
+          citation: '13 V.S.A. § 7601'
+        },
+        complex_mixed_docket_vt: {
+          status: 'complex',
+          title: 'Mixed Docket — the 18-21 Fast Path Is Barred, but Not the Standard Path',
+          message: 'A wrinkle worth getting right: the 18-21 fast path (§ 7609) is unavailable when a record (docket) contains BOTH qualifying and nonqualifying offenses — a mixed docket is barred from that section. So you cannot use the 30-day route here. That does NOT mean no relief: the qualifying offense can still be sealed on the STANDARD path (3 years for a misdemeanor, 7 for a felony from completion), where the mixed-docket bar does not apply. One trap to plan around: because of the partial-docket rule, the case file stays PUBLIC until every charge on it is cleared — so a nonqualifying charge on the same docket keeps the whole file visible even after the qualifying one is sealed. Vermont Legal Aid (1-800-917-7787) can help you map the timing.',
+          remedy: 'Use the standard 3/7-year path, not § 7609 — mind the partial-docket publicity trap',
+          citation: '13 V.S.A. §§ 7609, 7602',
         },
         complex_level_vt: {
           status: 'complex',
           title: 'We Need the Offense Details',
-          message: 'Under Act 60 the wait depends on whether your offense is a qualifying misdemeanor (3 years), a qualifying non-violent felony (7 years), or a misdemeanor DUI (10 years) — and some violent and sexual-misconduct offenses are excluded entirely. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a VCIC record check will show it. Vermont Legal Aid (1-800-917-7787) can help you read it.',
+          message: 'Under Act 60 the wait depends on whether your offense is a qualifying misdemeanor (3 years), a qualifying felony (7 years), or a misdemeanor DUI (10 years) — and a specific list of offenses (violent crimes, sex offenses, domestic-abuse offenses, and more) are excluded entirely. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a VCIC record check will show it. Vermont Legal Aid (1-800-917-7787) can help you read it.',
           remedy: 'Get the Offense Details First (court paperwork / VCIC)',
           citation: '13 V.S.A. § 7601'
+        },
+        eligible_nonconv_auto_vt: {
+          status: 'eligible',
+          title: 'No Conviction — Sealed Automatically Within 60 Days',
+          message: 'Because your case ended without a conviction — no probable-cause finding at arraignment, dismissed before trial (with or without prejudice), or an acquittal — and no party objected, Vermont seals it NEARLY AUTOMATICALLY: the court SHALL seal within 60 days of final disposition, with no waiting period (§ 7603). If it is still showing after 60 days, that is worth raising with the court. On grant you may tell the public "no criminal record exists" (with the usual firearm-check exception — VCIC/FBI still see it). If your case does not fit those grounds, there is also an anytime petition route under § 7603(g) on an interests-of-justice finding. Vermont Legal Aid (1-800-917-7787) runs free clinics.',
+          remedy: 'Near-automatic non-conviction sealing (§ 7603) — within 60 days, no wait',
+          citation: '13 V.S.A. § 7603'
+        },
+        complex_nonconv_hearing_vt: {
+          status: 'complex',
+          title: 'The State Objected — There Will Be a Hearing',
+          message: 'Non-conviction sealing is normally near-automatic in Vermont, but a party may OBJECT in the interests of justice — and because that happened here, the automatic 60-day sealing does not simply go through; instead the court holds a hearing between you and the prosecutor to decide it (§ 7603). This is still a favorable posture — the default is that these cases seal — but it now turns on the interests-of-justice arguments, so it is worth being prepared. This is exactly the kind of hearing where representation helps. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you prepare or find counsel.',
+          remedy: 'Interests-of-justice hearing on a contested non-conviction sealing (§ 7603)',
+          citation: '13 V.S.A. § 7603'
+        },
+        eligible_nonconv_petition_vt: {
+          status: 'eligible',
+          title: 'Other Non-Conviction Disposition — Petition Anytime',
+          message: 'For a non-conviction that does not fit the near-automatic 60-day grounds (no probable cause, pre-trial dismissal, or acquittal), Vermont still gives you a route: you may petition ANYTIME under § 7603(g), and the court seals on an interests-of-justice finding. It is a petition rather than an automatic order, but there is no waiting period. You can also seal anytime by stipulation with the prosecutor. Vermont Legal Aid (1-800-917-7787) runs free clinics and can help you file.',
+          remedy: 'Anytime non-conviction sealing petition (§ 7603(g)) — interests of justice',
+          citation: '13 V.S.A. § 7603(g)'
+        },
+        effects_vt: {
+          status: 'complex',
+          title: 'Sealed in Vermont — Powerful, but Not for Firearm Checks',
+          message: 'Vermont sealing is strong: you are treated as never arrested, convicted, or sentenced, and to the PUBLIC — on job or license applications — you may answer that "no criminal record exists," with state entities required to advise you of that right (§ 7607). But it has real, encoded exceptions, and the one that catches people concerns FIREARMS: a sealed record remains FULLY VISIBLE to the Vermont Crime Information Center and the FBI for NICS background checks. So sealing provides NO concealment on a gun purchase — a firearms denial can still rest on a sealed conviction. Other exceptions: the record can be used in same-incident litigation (labeled SEALED), for criminal-justice purposes by agencies and the AG (onward disclosure needs a court order), as a DUI predicate, in discovery, and for law-enforcement hiring. And unauthorized disclosure of a sealed record carries a $1,000 civil penalty PER disclosure (§ 7611). Vermont Legal Aid (1-800-917-7787) can explain what sealing will and will not do for your situation.',
+          remedy: 'Sealing hides your record from the public, NOT from NICS firearm checks (§ 7607)',
+          citation: '13 V.S.A. § 7607'
+        },
+        denied_refile_vt: {
+          status: 'complex',
+          title: 'Denied — a 2-Year Refile Bar (Unless Shortened)',
+          message: 'If your Vermont sealing or expungement petition was denied, there is a 2-YEAR bar on refiling — unless the court authorized a shorter period in its order (§ 7605). So check your denial order first: it may set a shorter window. Otherwise, use the two years to strengthen the petition — clear any remaining restitution or surcharges, let more of the waiting period run, and be ready for the interests-of-justice arguments (remember the State carries the burden to oppose, and a prosecutor stipulation can avoid a hearing entirely). Vermont Legal Aid (1-800-917-7787) can help you read the order and plan the refiling.',
+          remedy: 'Refile after the 2-year bar, or sooner if the court authorized it (§ 7605)',
+          citation: '13 V.S.A. § 7605'
+        },
+        pending_freeze_vt: {
+          status: 'waiting',
+          title: 'A Pending Charge Freezes the Petition',
+          message: 'Vermont pauses record-clearing while you have an open case: a pending new criminal charge FREEZES any petition until that charge is disposed of (§ 7604). So a petition cannot move forward right now — but this is a timing hold, not a denial, and importantly Act 60 removed the old rule that a new CONVICTION during your waiting period would bar you. Once the pending charge is resolved, your petition can proceed, and the waiting-period clock is not reset by the mere pendency. Vermont Legal Aid (1-800-917-7787) can help you time the filing for after the pending matter resolves.',
+          remedy: 'Wait for the pending charge to resolve, then petition (§ 7604)',
+          citation: '13 V.S.A. § 7604'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Expungement / Sealing (13 V.S.A. ch. 230; Act 60 of 2025)',
+          name: 'Expungement / Sealing (13 V.S.A. ch. 230, as restructured by 2025 Act 60)',
           formName: 'Vermont Judiciary expungement/sealing forms',
           formUrl: 'https://www.vermontjudiciary.org/criminal/expungement',
           steps: [
-            'Note Act 60 (July 1, 2025) rewrote everything — use only current forms and statute, not older guides.',
-            'If the conduct is no longer a crime, seek expungement (record destroyed) — immediate once your sentence and restitution/surcharges are paid.',
-            'Otherwise seek sealing: 3 years (qualifying misdemeanor), 7 (qualifying non-violent felony), 10 (misdemeanor DUI), or 30 days if you were 18-21 at the offense.',
-            'File with the $90-per-docket fee plus a $30 VCIC record check (waivers available). Vermont Legal Aid (1-800-917-7787) runs free clinics.'
+            'Note 2025 Act 60 (July 1, 2025) rewrote everything — use only current forms and statute. EXPUNGEMENT (record destroyed) now exists only for a decriminalized offense; everything else is SEALING of a "qualifying crime."',
+            'Confirm the offense is a qualifying crime (most misdemeanors, plus burglary, 25 property offenses, and enumerated drug offenses; a pardon converts any offense), that restitution and surcharges are paid, and — for a DUI or any motor-vehicle offense — that you are not a current CDL/CLP holder.',
+            'Check the wait from completion: qualifying misdemeanor 3 years, qualifying felony 7 years, misdemeanor DUI 10 years, or 30 days if you were 18-21 at the offense. A non-conviction seals near-automatically within 60 days. The State bears the burden to oppose; a prosecutor stipulation avoids a hearing.',
+            'Petition in the Criminal Division; you must notice known victims (§ 7608). Be clear-eyed on effect: to the public "no criminal record exists," but VCIC/FBI firearm (NICS) checks still see a sealed record. Vermont Legal Aid (1-800-917-7787) runs free clinics.'
           ],
-          // NOT null: Wave 7 gives $90 per docket + $30 VCIC record check.
-          fees: '$90 per docket plus a $30 VCIC record check.',
-          feeWaiver: 'Fee waivers are available.',
-          courtContact: 'The court where the case was decided'
+          // null: general chapter-230 petition fees are not stated in the chapter; the
+          // DUI-sealing fee is set by 32 V.S.A. § 1431(e) (amount elsewhere). Phone-tier.
+          fees: null,
+          // NOT null: a decriminalized-offense expungement and non-conviction sealing
+          // involve no fee in the chapter, and surcharges are waivable under § 7282.
+          feeWaiver: 'Surcharges are waivable under § 7282 (and a waived surcharge does not block relief). General petition fees and any waiver are unconfirmed (phone-tier / 32 V.S.A. § 1431); the DUI-sealing path has a fee set by § 1431(e).',
+          courtContact: 'The Criminal Division of the Superior Court where the case was decided'
         }
       },
       legalAid: [

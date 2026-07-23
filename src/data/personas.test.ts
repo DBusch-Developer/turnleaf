@@ -5724,45 +5724,221 @@ const MT: Persona[] = [
   },
 ];
 
+// RI personas come from Diana's read of R.I. Gen. Laws §§ 12-1.3-1 to -5 and
+// §§ 12-1-12 / 12-1-12.1 from webserver.rilegislature.gov — the statute-verified
+// rewrite that took RI to statute_cited on 2026-07-22, replacing the Wave 7 draft's
+// five personas. RI "expungement" is sealing with retention; the first-offender
+// lookback is ARREST-free, and the crime-of-violence list includes burglary and
+// larceny from the person. Conviction date nodes are asked (the clock runs from
+// sentence completion with all monies paid, not the conviction date).
 const RI: Persona[] = [
   {
-    source: 'Wave 7 — RI persona 1',
-    package: 'single misdemeanor 2018, done -> 5-yr met -> eligible (judge discretion caveat).',
-    record: { title: 'Single misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01', probation_status: 'completed' },
-    answers: { conv_count_ri: 'first', firstoffender_level_ri: 'misd', fo_violence_misd_ri: false },
-    expect: { resultKey: 'eligible_firstoffender_ri', reading: 'A first-offender misdemeanor 5 years past completion (2018 -> 2023) is eligible; the result names the discretionary good-character caveat.' },
+    source: 'RI statute verification (2026-07-22) — persona 1',
+    package: 'first-offender misdemeanor shoplifting, completed 6 years ago, no arrests since -> eligible, discretionary.',
+    record: { title: 'First-offender misdemeanor shoplifting', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: false, first_debt_ri: false, first_arrest_ri: false, first_level_ri: 'misd', first_misd_date_ri: '2020-01-01' },
+    expect: {
+      resultKey: 'eligible_first_ri',
+      reading: 'A first-offender misdemeanor, not a crime of violence, monies paid, arrest-free, 5+ years since completion (2020-01-01) -> eligible (discretionary, sealing with retention).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — RI persona 2',
-    package: 'three misdemeanors, last sentence done 2015 -> 10-yr multi path -> eligible 2025.',
-    record: { title: 'Three misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
-    answers: { conv_count_ri: 'multimisd', multimisd_dv_ri: false },
-    expect: { resultKey: 'eligible_multimisd_ri', reading: 'The multi-misdemeanor lane expunges any/all 10 years after the last sentence (2015 -> 2025, met at 2026) -> eligible.' },
+    source: 'RI statute verification (2026-07-22) — persona 2',
+    package: 'same but arrested (charges dropped) 2 years ago -> lookback reset by the ARREST — the trap persona.',
+    record: { title: 'First-offender misd, later arrest (dropped)', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: false, first_debt_ri: false, first_arrest_ri: true },
+    expect: {
+      resultKey: 'ineligible_arrest_ri',
+      reading: 'The lookback is arrest-free (§ 12-1.3-3(b)(1)(i)); an arrest 2 years ago — even with charges dropped — resets the 5-year clock -> not yet (the trap).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — RI persona 3',
-    package: 'single felony larceny 2012, clean -> eligible 2022+; but burglary -> never.',
-    record: { title: 'Single felony larceny', charge_type: 'felony', disposition: 'convicted', disposition_date: '2012-06-01', probation_status: 'completed' },
-    answers: { conv_count_ri: 'first', firstoffender_level_ri: 'felony', fo_violence_felony_ri: false },
-    expect: { resultKey: 'eligible_firstoffender_ri', reading: 'A first-offender non-violence felony (larceny) 10 years past completion (2012 -> 2022) is eligible; burglary would answer the violence gate "yes" and be barred.' },
+    source: 'RI statute verification (2026-07-22) — persona 3',
+    package: 'first-offender felony embezzlement, completed 11 years ago, clean -> eligible (not a listed crime of violence).',
+    record: { title: 'First-offender felony embezzlement', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: false, first_debt_ri: false, first_arrest_ri: false, first_level_ri: 'felony', first_felony_date_ri: '2015-01-01' },
+    expect: {
+      resultKey: 'eligible_first_ri',
+      reading: 'Embezzlement is not on the § 12-1.3-1(1) crime-of-violence list; a clean first-offender felony 10+ years out (2015-01-01) -> eligible.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — RI persona 4',
-    package: 'dismissal March 2023 -> should be auto-sealed — check.',
-    record: { title: 'Rule 48(a) dismissal', disposition: 'dismissed', disposition_date: '2023-03-01' },
-    answers: { dismissal_ri: true },
-    expect: { resultKey: 'check_autoseal_ri', reading: 'A Rule 48(a) dismissal on/after Jan 1, 2023 auto-seals; the cutoff gate routes it to the check-your-record result.' },
+    source: 'RI statute verification (2026-07-22) — persona 4',
+    package: 'burglary conviction -> never (on the violence list).',
+    record: { title: 'Burglary conviction', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: true },
+    expect: {
+      resultKey: 'ineligible_violence_ri',
+      reading: 'Burglary is expressly on the § 12-1.3-1(1) crime-of-violence list -> never expungeable.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — RI persona 5',
-    package: 'DUI misdemeanor + 2 others -> DUI blocked from the multi path — the nuance persona.',
-    record: { title: 'DUI plus two other misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2015-06-01', probation_status: 'completed' },
-    answers: { conv_count_ri: 'multimisd', multimisd_dv_ri: true },
-    expect: { resultKey: 'complex_multimisd_excluded_ri', reading: 'DUI is excluded from the multi-misdemeanor lane but may qualify individually; the tree routes the mixed record to the nuance/get-help result.' },
+    source: 'RI statute verification (2026-07-22) — persona 5',
+    package: 'larceny from the person -> never (surprise list member).',
+    record: { title: 'Larceny from the person', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: true },
+    expect: {
+      resultKey: 'ineligible_violence_ri',
+      reading: 'Larceny from the person is a surprising member of the § 12-1.3-1(1) crime-of-violence list -> never expungeable.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 6',
+    package: 'first-offender DUI misdemeanor, completed 6 years ago -> eligible under (a)/(c) — the DUI surprise-yes.',
+    record: { title: 'First-offender DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: false, first_debt_ri: false, first_arrest_ri: false, first_level_ri: 'misd', first_misd_date_ri: '2020-01-01' },
+    expect: {
+      resultKey: 'eligible_first_ri',
+      reading: 'A DUI is not a crime of violence, and the DUI exclusion applies only to the multi-lane — a single first-offender DUI misdemeanor is expungeable at 5 years (§ 12-1.3-2(a)/(c)) -> the surprise-yes.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 7',
+    package: 'three misdemeanors including one DUI, 12 years clean -> the two non-DUI ones expungeable via the multi path; the DUI is not.',
+    record: { title: 'Three misdemeanors incl. a DUI', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'multimisd', multimisd_excl_ri: true },
+    expect: {
+      resultKey: 'complex_multimisd_excluded_ri',
+      reading: 'DUI is excluded from the § 12-1.3-2(b) multi-lane; the non-DUI misdemeanors go via the multi-lane and the DUI individually — the split-the-paths result.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 8',
+    package: 'six misdemeanors -> over the fewer-than-six cap.',
+    record: { title: 'Six misdemeanors', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'sixplus' },
+    expect: {
+      resultKey: 'ineligible_sixplus_ri',
+      reading: 'The multi-lane reaches more than one but FEWER THAN SIX misdemeanors (§ 12-1.3-2(b)); six is over the cap -> ineligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 9',
+    package: 'person whose only history is a completed probation term -> NOT a first offender (probation kills it).',
+    record: { title: 'Only prior history: a completed probation', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: true },
+    expect: {
+      resultKey: 'ineligible_notfirst_ri',
+      reading: '"First offender" requires no prior conviction AND no prior probation (§ 12-1.3-1(3)); a completed probation term defeats first-offender status even without a conviction.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 10',
+    package: 'deferred sentence completed last month, restitution paid -> expunge now, no wait.',
+    record: { title: 'Deferred sentence completed, restitution paid', charge_type: 'felony', disposition: 'deferred', probation_status: 'completed' },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'deferred', deferred_violence_ri: false, deferred_compliance_ri: true },
+    expect: {
+      resultKey: 'eligible_deferred_ri',
+      reading: 'A completed § 12-19-19(c) deferred sentence with full compliance (incl. restitution) expunges with NO wait and no first-offender requirement (§ 12-1.3-2(e)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 11',
+    package: 'conviction for an offense since decriminalized -> anytime, free.',
+    record: { title: 'Since-decriminalized offense', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'decrim' },
+    expect: {
+      resultKey: 'eligible_decrim_ri',
+      reading: 'A since-decriminalized offense may be expunged anytime, notwithstanding all other rules, without cost (§ 12-1.3-2(g), 12-1.3-3(e)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 12',
+    package: '2015 possession-of-marijuana conviction -> automatically expunged by the 2024 sweep; expedited request if still appearing.',
+    record: { title: '2015 marijuana possession conviction', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'marijuana', marijuana_ri: 'possession' },
+    expect: {
+      resultKey: 'eligible_marijuana_ri',
+      reading: 'A possession-only marijuana record was automatically expunged by the § 12-1.3-5 sweep (due before 7/1/2024); verify and use the expedited written request if it still appears.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 13',
+    package: 'marijuana conviction + robbery conviction in the same case -> marijuana count severable and expunged; robbery stays.',
+    record: { title: 'Marijuana + robbery, same case', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ri: 'marijuana', marijuana_ri: 'mixed' },
+    expect: {
+      resultKey: 'eligible_marijuana_mixed_ri',
+      reading: 'Marijuana automatic expungement is count-severable (§ 12-1.3-5(i)): the marijuana count is expunged on its own while the robbery stays and follows the ordinary rules.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 14',
+    package: 'expunged record holder applying for a teaching certificate -> must disclose.',
+    record: { title: 'Expunged record, teaching-certificate application', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { entry_ri: 'effects' },
+    expect: {
+      resultKey: 'effects_ri',
+      reading: 'A teaching-certificate application (Title 16 ch. 11) is one of the five § 12-1.3-4(b) carve-outs where an expunged conviction must be disclosed.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 15',
+    package: 'outstanding court costs -> blocked unless reduced/waived by the court.',
+    record: { title: 'First-offender misd, outstanding court costs', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed', restitution_paid: false },
+    answers: { entry_ri: 'conviction', conv_route_ri: 'first', first_prior_ri: false, first_violence_ri: false, first_debt_ri: true },
+    expect: {
+      resultKey: 'ineligible_debt_ri',
+      reading: 'All court-imposed monies must be paid before expungement unless the court reduces or waives them (§ 12-1.3-3) -> blocked until paid or waived.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 16',
+    package: 'Rule 48(a) dismissal in March 2024 -> already auto-sealed; if still visible, that\'s a compliance failure, escalate to the clerk.',
+    record: { title: 'Rule 48(a) dismissal, March 2024', disposition: 'dismissed', disposition_date: '2024-03-01' },
+    answers: { entry_ri: 'nonconv', nonconv_dv_ri: false, nonconv_type_ri: 'rule48_post' },
+    expect: {
+      resultKey: 'eligible_autoseal_ri',
+      reading: 'A Rule 48(a) dismissal on/after 1/1/2023 is sealed by operation of law 10-20 days after (§ 12-1-12.1(a)); if it still shows, that is a compliance failure to escalate to the clerk.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 17',
+    package: 'Rule 48(a) dismissal in 2019 -> clerk request, no motion.',
+    record: { title: 'Rule 48(a) dismissal, 2019', disposition: 'dismissed', disposition_date: '2019-06-01' },
+    answers: { entry_ri: 'nonconv', nonconv_dv_ri: false, nonconv_type_ri: 'rule48_pre' },
+    expect: {
+      resultKey: 'eligible_clerkrequest_ri',
+      reading: 'A pre-1/1/2023 Rule 48(a) dismissal is sealed administratively by the clerk at the defendant\'s request (order to BCI within 5 days, executed within 90) — no motion, no hearing (§ 12-1-12.1(a)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 18',
+    package: 'acquitted at trial -> motion path, shall-seal on entitlement, prints already destroyed at 60 days.',
+    record: { title: 'Acquitted at trial', disposition: 'acquitted', disposition_date: '2024-06-01' },
+    answers: { entry_ri: 'nonconv', nonconv_dv_ri: false, nonconv_type_ri: 'other_exon' },
+    expect: {
+      resultKey: 'eligible_motionseal_ri',
+      reading: 'An acquittal seals by motion with AG/police notice and a hearing, court SHALL order on entitlement (§ 12-1-12.1(b)); identification records were destroyed within 60 days (§ 12-1-12).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'RI statute verification (2026-07-22) — persona 19',
+    package: 'DV charge resolved by filing 18 months ago -> 3-yr hold, not yet.',
+    record: { title: 'DV charge resolved by § 12-10-12 filing', disposition: 'deferred' },
+    answers: { entry_ri: 'nonconv', nonconv_dv_ri: true, nonconv_dv_date_ri: '2025-01-15' },
+    expect: {
+      resultKey: 'waiting_dv_ri',
+      reading: 'A case with a § 12-10-12 filing after a plea to a DV charge is held unsealed for 3 years from the filing (§ 12-1-12(c)); filed 2025-01-15, only 18 months before 2026-07-15 -> not yet.',
+    },
     now: NOW,
   },
 ];

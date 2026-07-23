@@ -18282,200 +18282,298 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   RI: {
     code: 'RI',
     name: 'Rhode Island',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'Chapter 12-1.3 definitions read current through P.L. 2024 ch. 386/387; § 12-1-12 through P.L. 2021 ch. '
+      + '141/142 and § 12-1-12.1 through P.L. 2023 ch. 154/155. A 2025-2026 session sweep (Rhode Island Clean '
+      + 'Slate bills) is pending — verify outcomes, do not assume.',
     terminology:
-      'Rhode Island uses EXPUNGEMENT for convictions (§ 12-1.3) and SEALING for non-convictions (§ 12-1-12). '
-      + 'It is discretionary — even when your timing is met, a judge must find good moral character and '
-      + 'rehabilitation. The core is a first-offender rule (a single conviction, nothing else ever): 5 years '
-      + 'for a misdemeanor, 10 for a felony. A 2017 reform added a multi-misdemeanor lane (more than one but '
-      + 'fewer than six misdemeanors, no felony) at 10 years from the last. One practical thing to remember: '
-      + 'the record is not really gone until, after the grant, certified orders are delivered to the state '
-      + 'Bureau of Criminal Identification and the arresting agency.',
+      'Read the word carefully: Rhode Island "expungement" is SEALING WITH RETENTION (§ 12-1.3-1(2)) — the '
+      + 'records are kept but removed from public inspection, not destroyed. It is a motion in the court of '
+      + 'conviction and it is DISCRETIONARY: even with the timing met, a judge must find rehabilitation and that '
+      + 'expungement serves the public interest. The core is the FIRST-OFFENDER rule (§ 12-1.3-2) — and "first '
+      + 'offender" is strict: no prior conviction AND no prior PROBATION for any felony or misdemeanor, and '
+      + 'nothing pending. A first offender may expunge one conviction: a misdemeanor 5 years after completion, a '
+      + 'felony after 10 — but the lookback is ARREST-FREE, so an arrest in that window (even one later dropped) '
+      + 'resets the clock. Crimes of violence are barred, and the list is broader than people expect: it '
+      + 'includes larceny from the person and BURGLARY. A favorable rule: a "misdemeanor" includes a former '
+      + 'felony since reclassified (§ 12-1.3-1(5)), and a single first-offender DUI misdemeanor IS expungeable '
+      + 'at 5 years — the DUI/DV/refusal exclusions apply ONLY to the separate MULTI-misdemeanor lane (more than '
+      + 'one but fewer than six, no felony ever, 10 years from the last). Other doors: a completed § 12-19-19(c) '
+      + 'DEFERRED sentence expunges with NO wait and no first-offender requirement; a DECRIMINALIZED offense '
+      + 'expunges anytime, WITHOUT COST; and marijuana possession records were AUTOMATICALLY expunged by a '
+      + 'statutory sweep due before July 1, 2024 (with an expedited request for anything missed), granted even '
+      + 'over prior convictions, pending charges, and debt. On effect (§ 12-1.3-4) you may generally say you '
+      + 'were never convicted — except on applications for law-enforcement jobs, bar admission, teaching or '
+      + 'coaching certificates, and early-childhood-education work, where you must disclose. NON-CONVICTIONS are '
+      + 'separate: identification records (prints, photos) are destroyed within 60 days of an acquittal or '
+      + 'dismissal (§ 12-1-12), Rule 48(a) dismissals since 2023 seal automatically, and other exonerations seal '
+      + 'on motion (§ 12-1-12.1) — but a case with a domestic-violence "filing" is held, unsealed, for 3 years.',
     keyDates: [
       {
-        label: 'Multi-misdemeanor expungement lane created (2017 reform, § 12-1.3-2)',
-        date: '2017',
-        kind: 'effective',
-        note: 'Wave 7 gives the year. Allows expunging more than one but fewer than six misdemeanors (no felony) at 10 years from the last sentence; excludes DV, DUI, and chemical-test refusal.',
-      },
-      {
-        label: 'Rule 48(a) dismissals auto-seal (§ 12-1-12.1(a)(1))',
+        label: 'Rule 48(a) dismissals seal by operation of law (§ 12-1-12.1(a))',
         date: '2023-01-01',
         kind: 'operative',
-        note: 'Rule 48(a) dismissals on or after this date are sealed automatically; older dismissals are sealed on petition.',
+        note: 'A district-court Rule 48(a) dismissal on or after January 1, 2023 is sealed by operation of law 10-20 days after dismissal, with no motion. Pre-2023 Rule 48(a) dismissals are sealed administratively by the clerk at the defendant\'s request.',
+      },
+      {
+        label: 'Marijuana automatic-expungement sweep deadline (§ 12-1.3-5)',
+        date: '2024-07-01',
+        kind: 'deadline',
+        note: 'The statutory sweep that automatically expunged decriminalized marijuana-possession records was required to be completed before July 1, 2024; an expedited written-request procedure covers any record not yet cleared.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the multi-misdemeanor exclusion nuance. Wave 7 says the multi-misdemeanor lane excludes DV (ch. 12-29), DUI, and chemical-test refusal, but that per practitioners those offenses remain INDIVIDUALLY expungable on the single-misdemeanor path if the person otherwise qualifies. The tree routes a multi-misdemeanor record containing one of those to a "get help — this is nuanced" result; confirm the individual-path availability.',
+          'Confirm the expungement filing-fee amount and where it is set. NO fee appears in the pulled §§ 12-1.3 or 12-1-12 text; the draft\'s $100 figure is UNCONFIRMED and may live in the judiciary fee schedule. The fees field is null pending this phone-tier / fee-schedule check. (The decriminalized and marijuana paths are statutorily free, and marijuana-incarceration cases get costs waived.)',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Run a 2025-2026 session sweep for Rhode Island Clean Slate bills touching §§ 12-1.3 or 12-1-12/-12.1. Verify outcomes — do not assume any automatic-sealing expansion passed.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the status of marijuana auto-expungement (§ 12-1.3-5). Wave 7 flags its operational status. The tree does not assert automatic marijuana clearing; confirm whether the automation is running and how someone checks.',
+          'Confirm what P.L. 2024 ch. 386/387 changed in § 12-1.3-1 (diff against the prior text if easily found). The current text governs either way and is what is encoded; the diff is for completeness.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Pull R.I. Gen. Laws § 12-19-19(c) (deferred-sentence mechanics) — the feeder for the § 12-1.3-2(e) no-wait deferred-sentence expungement. Cited but not read; cite-only.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'R.I. Gen. Laws § 12-1.3-2 (expungement; first-offender and multi-misdemeanor paths)', url: null, retrievedOn: null },
-      { id: 'R.I. Gen. Laws §§ 12-1-12, 12-1-12.1 (non-conviction sealing; Rule 48(a) auto-seal)', url: null, retrievedOn: null },
-      { id: 'R.I. Gen. Laws § 12-1.3-5 (marijuana auto-expungement)', url: null, retrievedOn: null },
+      { id: 'R.I. Gen. Laws § 12-1.3-1 (definitions, read through P.L. 2024 ch. 386/387 — (1) the CRIMES-OF-VIOLENCE list barred from expungement: murder, manslaughter, first-degree arson, kidnapping with intent to extort, robbery, larceny from the person, first-/second-degree sexual assault, first-/second-degree child molestation, assault with intent to murder/rob/commit first-degree sexual assault, burglary, and entering a dwelling with intent; (2) "expungement" = sealing with RETENTION, removed from public inspection; (3) "first offender" = no prior conviction and no prior probation, nothing pending; (5) "misdemeanor" includes a former felony since reclassified) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1.3-2 (motions — (a)/(c)/(d) first-offender single conviction: misdemeanor at 5 years, felony at 10; (b)/(f) multi-misdemeanor lane: more than one but fewer than six (cap 5), no felony ever, at 10 years from the last, excluding ch. 12-29 DV, § 31-27-2 DUI, and § 31-27-2.1 refusal; (e) completed § 12-19-19(c) deferred sentence, NO wait and without regard to first-offender status; (g) a decriminalized offense, anytime notwithstanding all else, without cost) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1.3-3 (standards — (b)(1)(i) the ARREST-FREE lookback: in the 5 or 10 years before the motion, no conviction NOR ARREST for any felony/misdemeanor, no pending proceedings, no unwaived court debt, good moral character; (b)(1)(ii) deferred-sentence full-compliance incl. restitution; (b)(1)(iii) multi-misdemeanor 10-year arrest-free lookback; (b)(2) discretionary rehabilitation + public-interest findings; (e) decriminalized hearing confirming completion and full payment) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1.3-4 (effect — (a) released from all penalties/disabilities EXCEPT the conviction may count as a prior at sentencing for a subsequent crime; (b) may state never convicted, EXCEPT on applications for law-enforcement positions, bar admission, teaching certificates (Title 16 ch. 11), coaching certificates (§ 16-11.1-1), and operators/employees of early-childhood-education facilities, who must disclose; (c)-(d) custodian must deny records exist except to the individual, a sentencing court after a later conviction, bar/character-and-fitness bodies, the education commissioner, and law enforcement where same-offense history changes the charge; willful refusal/release creates civil liability) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1.3-5 (2022 — AUTOMATIC marijuana expungement of decriminalized possession-only civil violations, misdemeanors, and felonies; sweep required before July 1, 2024 with an expedited written-request fallback; (d) 2-ounce presumption when the amount is unstated; (e) costs waived for anyone incarcerated on the offense; (g) granted NOTWITHSTANDING prior arrests/convictions (incl. crimes of violence), pending proceedings, and outstanding debt (related debt waived); (i) count-severable within mixed cases; (j) no refund of past fines; (k) not a prior conviction at later sentencing; (m) education-commissioner disclosure carve-out) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1-12 (read through P.L. 2021 ch. 141/142 — identification records (fingerprints, photographs, physical measurements) MUST be destroyed within 60 DAYS of acquittal, dismissal, no true bill, no information, or other exoneration — automatic, no application; $100 fine for violation; applies to persons detained but not arrested/charged and to expired filings; clerk seals per § 12-1-12.1; (c) domestic-violence-filing 3-year retention) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-1-12.1 (read through P.L. 2023 ch. 154/155 — (a) Rule 48(a) dismissals on/after 1/1/2023 sealed BY OPERATION OF LAW 10-20 days after dismissal, no motion; pre-1/1/2023 sealed administratively by the clerk at the defendant\'s request (order to BCI within 5 days, executed within 90); (b) acquittals, no true bill, no information, and other dismissals sealed on MOTION with 10-day notice to the AG and originating police, hearing, court SHALL order on entitlement, clerk seals within 45 days; (c) domestic-violence-filing 3-year hold; (d) bail-escheat advisory) via webserver.rilegislature.gov', url: 'https://webserver.rilegislature.gov', retrievedOn: '2026-07-22' },
+      { id: 'R.I. Gen. Laws § 12-10-12 (the "filing" of a case after a plea — the § 12-1-12(c)/§ 12-1-12.1(c) domestic-violence 3-year hold runs from the filing date) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'R.I. Gen. Laws § 12-19-19(c) (deferred sentence — the feeder for the § 12-1.3-2(e) no-wait expungement) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'R.I. Gen. Laws ch. 12-29 (domestic violence), §§ 31-27-2 (DUI) and 31-27-2.1 (chemical-test refusal), Title 16 ch. 11 and § 16-11.1-1 (teaching/coaching certificates) — the § 12-1.3-2 multi-lane exclusions and § 12-1.3-4 disclosure carve-outs — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_ri',
       nodes: {
-        disposition: {
+        entry_ri: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_count_ri' },
-            { label: 'Dismissed', value: 'dismissed', next: 'dismissal_ri' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'dismissal_ri' },
-            { label: 'Deferred sentence completed', value: 'deferred', next: 'eligible_deferred_ri' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Expunge a CONVICTION', value: 'conviction', next: 'conv_route_ri' },
+            { label: 'A NON-conviction (acquittal, dismissal, no true bill)', value: 'nonconv', next: 'nonconv_dv_ri' },
+            { label: 'A MARIJUANA possession record', value: 'marijuana', next: 'marijuana_ri' },
+            { label: 'An offense that has since been DECRIMINALIZED', value: 'decrim', next: 'eligible_decrim_ri' },
+            { label: 'What an expunged record lets me say (disclosure carve-outs)', value: 'effects', next: 'effects_ri' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        dismissal_ri: {
-          type: 'boolean',
-          text: 'Was the case a dismissal (Rule 48(a)) on or after January 1, 2023?',
-          yes: 'check_autoseal_ri',
-          no: 'petition_seal_ri'
-        },
-        conv_count_ri: {
+        conv_route_ri: {
           type: 'choice',
-          text: 'How would you describe your record?',
+          text: 'How would you describe the conviction record you want to expunge?',
           options: [
-            { label: 'A single conviction, and nothing else on my record ever', value: 'first', next: 'firstoffender_level_ri' },
-            { label: 'More than one but fewer than six misdemeanors, and no felony', value: 'multimisd', next: 'multimisd_dv_ri' },
+            { label: 'A completed DEFERRED sentence (§ 12-19-19(c))', value: 'deferred', next: 'deferred_violence_ri' },
+            { label: 'A single conviction — I believe I am a first offender (no prior conviction, no prior probation)', value: 'first', next: 'first_prior_ri' },
+            { label: 'More than one but fewer than six misdemeanors, and no felony ever', value: 'multimisd', next: 'multimisd_excl_ri' },
+            { label: 'Six or more misdemeanors', value: 'sixplus', next: 'ineligible_sixplus_ri' },
             { label: 'Multiple felony convictions', value: 'multifelony', next: 'ineligible_multifelony_ri' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_ri' }
           ]
         },
-        firstoffender_level_ri: {
+        first_prior_ri: {
+          type: 'boolean',
+          text: 'Do you have any PRIOR conviction, OR any prior PROBATION for a felony or misdemeanor (even without a conviction)? In Rhode Island a prior probation term defeats first-offender status.',
+          yes: 'ineligible_notfirst_ri',
+          no: 'first_violence_ri'
+        },
+        first_violence_ri: {
+          type: 'boolean',
+          text: 'Was the conviction a crime of violence on Rhode Island\'s list — murder, manslaughter, first-degree arson, kidnapping with intent to extort, robbery, LARCENY FROM THE PERSON, first-/second-degree sexual assault, first-/second-degree child molestation, assault with intent to murder/rob/commit first-degree sexual assault, BURGLARY, or entering a dwelling with intent?',
+          yes: 'ineligible_violence_ri',
+          no: 'first_debt_ri'
+        },
+        first_debt_ri: {
+          type: 'boolean',
+          text: 'Do you have outstanding court-imposed fines, fees, costs, or restitution on the case that the court has NOT reduced or waived?',
+          yes: 'ineligible_debt_ri',
+          no: 'first_arrest_ri'
+        },
+        first_arrest_ri: {
+          type: 'boolean',
+          text: 'In the lookback period before your motion (5 years for a misdemeanor, 10 for a felony), have you been ARRESTED or convicted of any felony or misdemeanor, or do you have any pending proceedings? (An arrest — even one later dropped — resets this clock.)',
+          yes: 'ineligible_arrest_ri',
+          no: 'first_level_ri'
+        },
+        first_level_ri: {
           type: 'choice',
-          text: 'Was that single conviction a misdemeanor or a felony?',
+          text: 'Was the conviction a misdemeanor or a felony?',
           options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'fo_violence_misd_ri' },
-            { label: 'Felony', value: 'felony', next: 'fo_violence_felony_ri' },
+            { label: 'Misdemeanor (this includes a former felony since reclassified as a misdemeanor)', value: 'misd', next: 'first_misd_date_ri' },
+            { label: 'Felony', value: 'felony', next: 'first_felony_date_ri' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_count_ri' }
           ]
         },
-        fo_violence_misd_ri: {
-          type: 'boolean',
-          text: 'Was the offense a crime of violence? (Rhode Island\'s list of crimes of violence includes burglary.)',
-          yes: 'ineligible_violence_ri',
-          no: 'fo_misd_date_ri'
+        first_misd_date_ri: {
+          type: 'date',
+          text: 'When did you complete the sentence, including all court fines, fees, and restitution?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'five years from sentence completion with all monies paid, arrest-free (§ 12-1.3-2(a) — first-offender misdemeanor)' },
+            nextPass: 'eligible_first_ri',
+            nextFail: 'waiting_ri'
+          }
         },
-        fo_violence_felony_ri: {
-          type: 'boolean',
-          text: 'Was the offense a crime of violence? (Rhode Island\'s list of crimes of violence includes burglary.)',
-          yes: 'ineligible_violence_ri',
-          no: 'fo_felony_date_ri'
+        first_felony_date_ri: {
+          type: 'date',
+          text: 'When did you complete the sentence, including all court fines, fees, and restitution?',
+          validation: {
+            period: { amount: 10, unit: 'years', anchor: 'ten years from sentence completion with all monies paid, arrest-free (§ 12-1.3-2(a) — first-offender felony)' },
+            nextPass: 'eligible_first_ri',
+            nextFail: 'waiting_ri'
+          }
         },
-        multimisd_dv_ri: {
+        multimisd_excl_ri: {
           type: 'boolean',
-          text: 'Do any of these misdemeanors involve domestic violence, DUI, or chemical-test refusal? (Those are excluded from the multi-misdemeanor lane, though they may qualify individually.)',
+          text: 'Does the group you want to expunge together include any domestic-violence offense (ch. 12-29), a DUI (§ 31-27-2), or a chemical-test refusal (§ 31-27-2.1)? (These are excluded from the multi-misdemeanor lane — though a single such offense may still be expungeable on its own.)',
           yes: 'complex_multimisd_excluded_ri',
+          no: 'multimisd_arrest_ri'
+        },
+        multimisd_arrest_ri: {
+          type: 'boolean',
+          text: 'In the 10 years before your motion, have you been arrested or convicted of any felony or misdemeanor, do you have any pending proceedings, or do you owe unwaived court debt?',
+          yes: 'ineligible_arrest_ri',
           no: 'multimisd_date_ri'
-        },
-        fo_misd_date_ri: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including all court fines and fees?',
-          validation: {
-            period: { amount: 5, unit: 'years', anchor: 'from sentence completion with LFOs paid (R.I. Gen. Laws § 12-1.3-2 — first-offender misdemeanor)' },
-            nextPass: 'eligible_firstoffender_ri',
-            nextFail: 'waiting_ri'
-          }
-        },
-        fo_felony_date_ri: {
-          type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete your sentence, including all court fines and fees?',
-          validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from sentence completion with LFOs paid (R.I. Gen. Laws § 12-1.3-2 — first-offender felony)' },
-            nextPass: 'eligible_firstoffender_ri',
-            nextFail: 'waiting_ri'
-          }
         },
         multimisd_date_ri: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete the LAST of the sentences?',
+          text: 'When did you complete the LAST of the sentences (including all monies)?',
           validation: {
-            period: { amount: 10, unit: 'years', anchor: 'from completion of the last sentence (R.I. Gen. Laws § 12-1.3-2 — multi-misdemeanor lane)' },
+            period: { amount: 10, unit: 'years', anchor: 'ten years from completion of the last sentence, arrest-free (§ 12-1.3-2(b) — multi-misdemeanor lane)' },
             nextPass: 'eligible_multimisd_ri',
             nextFail: 'waiting_ri'
           }
+        },
+        deferred_violence_ri: {
+          type: 'boolean',
+          text: 'Was the deferred-sentence offense a crime of violence on Rhode Island\'s list (murder, robbery, burglary, larceny from the person, a sexual offense, etc.)?',
+          yes: 'ineligible_violence_ri',
+          no: 'deferred_compliance_ri'
+        },
+        deferred_compliance_ri: {
+          type: 'boolean',
+          text: 'Have you fully completed the deferral — including all fines, fees, costs, assessments, and victim restitution — with no pending proceedings?',
+          yes: 'eligible_deferred_ri',
+          no: 'ineligible_debt_ri'
+        },
+        marijuana_ri: {
+          type: 'choice',
+          text: 'Which describes the marijuana record?',
+          options: [
+            { label: 'A possession-only marijuana conviction or civil violation', value: 'possession', next: 'eligible_marijuana_ri' },
+            { label: 'A marijuana possession count in a case that ALSO has other (non-marijuana) charges', value: 'mixed', next: 'eligible_marijuana_mixed_ri' }
+          ]
+        },
+        nonconv_dv_ri: {
+          type: 'boolean',
+          text: 'Did the case involve a "filing" under § 12-10-12 following a plea (not guilty, guilty, or nolo) to a DOMESTIC-VIOLENCE charge?',
+          yes: 'nonconv_dv_date_ri',
+          no: 'nonconv_type_ri'
+        },
+        nonconv_dv_date_ri: {
+          type: 'date',
+          text: 'When was the case filed under § 12-10-12?',
+          validation: {
+            period: { amount: 3, unit: 'years', anchor: 'three years from the § 12-10-12 filing date (§ 12-1-12(c) / § 12-1-12.1(c) — domestic-violence-filing hold)' },
+            nextPass: 'nonconv_type_ri',
+            nextFail: 'waiting_dv_ri'
+          }
+        },
+        nonconv_type_ri: {
+          type: 'choice',
+          text: 'How did the case end without a conviction?',
+          options: [
+            { label: 'A Rule 48(a) dismissal ON OR AFTER January 1, 2023', value: 'rule48_post', next: 'eligible_autoseal_ri' },
+            { label: 'A Rule 48(a) dismissal BEFORE January 1, 2023', value: 'rule48_pre', next: 'eligible_clerkrequest_ri' },
+            { label: 'An acquittal, no true bill, no information, or a dismissal outside Rule 48(a)', value: 'other_exon', next: 'eligible_motionseal_ri' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Rhode Island expunges convictions and seals non-convictions on different tracks, and the conviction rules depend on how many convictions you have. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record from the Attorney General ($5, 4 Howard Ave, Cranston) will show the disposition; the Rhode Island Public Defender resource guide can help you read it.',
+          message: 'Rhode Island expunges convictions and seals non-convictions on different tracks, and the conviction rules depend on how many convictions you have. Because the outcome is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record from the Attorney General will show the disposition; the Rhode Island Public Defender resource guide can help you read it.',
           remedy: 'Get Your Record First (court paperwork / BCI)',
           citation: 'R.I. Gen. Laws §§ 12-1.3-2, 12-1-12 (the route depends on the disposition)'
         },
-        check_autoseal_ri: {
-          status: 'eligible',
-          title: 'Likely Already Auto-Sealed — Check',
-          message: 'Because your case was a Rule 48(a) dismissal on or after January 1, 2023, Rhode Island seals it AUTOMATICALLY. So the honest first step is to CHECK whether it is already sealed — pull a BCI record from the Attorney General ($5) and look. If it is still showing, the courts.ri.gov expungement information or the Public Defender can help you follow up. Sealing non-convictions is free.',
-          remedy: 'Check your record — a post-2023 Rule 48(a) dismissal should be auto-sealed (§ 12-1-12.1)',
-          citation: 'R.I. Gen. Laws § 12-1-12.1'
+        ineligible_notfirst_ri: {
+          status: 'ineligible',
+          title: 'Not a First Offender — Prior Probation or Conviction',
+          message: 'Rhode Island\'s single-conviction expungement is only for a FIRST OFFENDER, and that is defined strictly: no prior conviction AND no prior probation for any felony or misdemeanor (§ 12-1.3-1(3)). A completed probation term — even without a conviction — defeats first-offender status, which surprises people. Because you have a prior conviction or probation, the first-offender path is closed. If your record is more than one but fewer than six MISDEMEANORS with no felony, the separate multi-misdemeanor lane may still fit; otherwise a pardon is the route. The Rhode Island Public Defender resource guide can help you check.',
+          remedy: 'None via the first-offender path (prior conviction/probation) — check the multi-misdemeanor lane',
+          citation: 'R.I. Gen. Laws §§ 12-1.3-1(3), 12-1.3-2'
         },
-        petition_seal_ri: {
-          status: 'eligible',
-          title: 'No Conviction — Sealable, Free',
-          message: 'Because your case ended without a conviction and before the 2023 auto-seal date, you can petition to seal it — sealing non-convictions is free. You file in the court of the case; the Attorney General and police are served. A BCI record from the AG ($5) helps you confirm what is on file. The Rhode Island Public Defender resource guide can help.',
-          remedy: 'Non-conviction sealing petition (§ 12-1-12) — free',
-          citation: 'R.I. Gen. Laws § 12-1-12'
+        ineligible_violence_ri: {
+          status: 'ineligible',
+          title: 'Crime of Violence — Not Expungeable',
+          message: 'Rhode Island never expunges a crime of violence, and its list (§ 12-1.3-1(1)) is broader than most people expect — alongside murder, robbery, and sexual offenses it includes LARCENY FROM THE PERSON and BURGLARY. No waiting period, and no deferred-sentence completion, changes that. For an offense on that list, a Governor\'s pardon is the remaining route. The Rhode Island Public Defender resource guide can help you confirm the classification and explain the pardon process.',
+          remedy: 'None (Crime of Violence, § 12-1.3-1(1)) — a pardon is the remaining route',
+          citation: 'R.I. Gen. Laws § 12-1.3-1(1)'
         },
-        eligible_deferred_ri: {
-          status: 'eligible',
-          title: 'Deferred Sentence Completed — Expungeable',
-          message: 'Because you completed a deferred sentence, Rhode Island allows expungement on completion (§ 12-1.3-2(e)). It is still discretionary — a judge weighs good moral character and rehabilitation — and the $100 fee applies on grant (waivable for indigency). After the grant, make sure certified orders reach the BCI and the arresting agency, or the record is not fully cleared. The Rhode Island Public Defender resource guide can help.',
-          remedy: 'Expungement of a completed deferred sentence (§ 12-1.3-2(e))',
-          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        ineligible_debt_ri: {
+          status: 'waiting',
+          title: 'Outstanding Court Debt (or Incomplete Deferral) Blocks It For Now',
+          message: 'Rhode Island requires that all court-imposed fines, fees, costs, and restitution be paid before expungement — unless the court has reduced or waived them (§ 12-1.3-3). (For a deferred sentence, the same rule requires full completion including restitution before the no-wait expungement.) Because something is still outstanding, this is a "not yet," not a "never." Once the money is paid — or you get the court to reduce or waive it — the analysis reopens. The Rhode Island Public Defender resource guide can help you sort out what is owed and whether a waiver is possible.',
+          remedy: 'Pay or get the court to waive the outstanding monies, then expunge (§ 12-1.3-3)',
+          citation: 'R.I. Gen. Laws § 12-1.3-3'
         },
-        eligible_firstoffender_ri: {
-          status: 'eligible',
-          title: 'First Offender, Waiting Period Met — Expungeable',
-          message: 'Based on your dates, you meet the first-offender waiting period (5 years for a misdemeanor, 10 for a felony) from completing your sentence with all court fines and fees paid. One honest caveat: it is discretionary, so even with the timing met a judge must find good moral character and rehabilitation. The fee is $100, payable on grant and waivable for indigency. After the grant, deliver certified orders to the BCI and the arresting agency — the record is not truly gone until that is done. The Rhode Island Public Defender resource guide can help.',
-          remedy: 'First-offender expungement (§ 12-1.3-2)',
-          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        ineligible_arrest_ri: {
+          status: 'ineligible',
+          title: 'An Arrest or Charge in the Lookback Resets the Clock',
+          message: 'This is a Rhode Island trap most people miss: the waiting period is ARREST-FREE, not just conviction-free (§ 12-1.3-3(b)(1)(i)). In the 5 years (misdemeanor) or 10 years (felony) before your motion you must have had no conviction AND NO ARREST for any offense, and nothing pending — so an arrest that was later dropped still resets the clock. Because there was such an arrest (or pending matter) in your window, you cannot file yet. This is a "not yet": the clock restarts from that arrest, and once a clean window of the required length has passed you can move again. The Rhode Island Public Defender resource guide can help you time it.',
+          remedy: 'Wait for a clean arrest-free window from the last arrest (§ 12-1.3-3(b)(1)(i))',
+          citation: 'R.I. Gen. Laws § 12-1.3-3(b)(1)(i)'
         },
-        eligible_multimisd_ri: {
+        eligible_first_ri: {
           status: 'eligible',
-          title: 'Multiple Misdemeanors, 10+ Years — Expungeable',
-          message: 'Because you have more than one but fewer than six misdemeanors (and no felony), Rhode Island\'s 2017 multi-misdemeanor lane lets you expunge any or all of them 10 years after your last sentence — and based on your dates, that has passed. It is still discretionary (good moral character and rehabilitation), and the $100 fee applies on grant (waivable for indigency). After the grant, deliver certified orders to the BCI and the arresting agency. The Rhode Island Public Defender resource guide can help.',
-          remedy: 'Multi-misdemeanor expungement (§ 12-1.3-2) — 10 years from the last',
+          title: 'First Offender, Window Met — Expungeable (Discretionary)',
+          message: 'Based on your answers — a first offender (no prior conviction or probation), not a crime of violence, all monies paid, an arrest-free lookback, and the waiting period met (5 years for a misdemeanor, 10 for a felony from completion) — you can move to expunge this conviction (§ 12-1.3-2). Two honest points. It is DISCRETIONARY: even with the timing met, the judge must find rehabilitation and that expungement serves the public interest. And note what "expungement" means here — sealing WITH RETENTION (§ 12-1.3-1(2)): the record is removed from public inspection, not destroyed. (Good news for some: a DUI is expungeable on this single-conviction path — the DUI exclusion applies only to the multi-misdemeanor lane; and a former felony since reclassified counts as a misdemeanor for the 5-year timing.) The Rhode Island Public Defender resource guide can help.',
+          remedy: 'First-offender expungement (§ 12-1.3-2) — discretionary, sealing with retention',
           citation: 'R.I. Gen. Laws § 12-1.3-2'
         },
         waiting_ri: {
           status: 'waiting',
           title: 'Waiting Period Not Yet Met',
-          message: 'Rhode Island\'s waiting periods run from sentence completion with all court fines and fees paid: 5 years for a first-offender misdemeanor, 10 for a first-offender felony, and 10 years from the last for the multi-misdemeanor lane. Based on your dates, yours has not passed yet. When it does, remember it is discretionary and the $100 fee (waivable) is due on grant. The Rhode Island Public Defender resource guide can help you plan.',
-          remedy: 'Wait for the period (§ 12-1.3-2)',
-          citation: 'R.I. Gen. Laws § 12-1.3-2'
+          message: 'Rhode Island\'s waiting periods run from sentence completion with all monies paid: 5 years for a first-offender misdemeanor, 10 for a first-offender felony, and 10 years from the last for the multi-misdemeanor lane. Based on your dates, yours has not passed yet — and remember the window must be ARREST-FREE, so a later arrest would restart it. When it does pass, expungement is still discretionary (rehabilitation + public interest). The Rhode Island Public Defender resource guide can help you plan.',
+          remedy: 'Wait for the (arrest-free) period (§ 12-1.3-2, 12-1.3-3)',
+          citation: 'R.I. Gen. Laws §§ 12-1.3-2, 12-1.3-3'
         },
-        ineligible_violence_ri: {
-          status: 'ineligible',
-          title: 'Crime of Violence — Not Expungeable',
-          message: 'Rhode Island never expunges a crime of violence, and its list is broader than you might expect — it includes burglary. No waiting period changes that. For an offense on that list, a pardon is the remaining route. The Rhode Island Public Defender resource guide can help you confirm whether yours is classified as a crime of violence and explain the pardon process.',
-          remedy: 'None (Crime of Violence) — a pardon is the remaining route',
-          citation: 'R.I. Gen. Laws § 12-1.3-2'
+        eligible_multimisd_ri: {
+          status: 'eligible',
+          title: 'Multiple Misdemeanors, 10+ Years — Expungeable',
+          message: 'Because you have more than one but fewer than six misdemeanors (none excluded, and no felony ever), Rhode Island\'s multi-misdemeanor lane lets you expunge any or all of them 10 years after your last sentence, with a 10-year arrest-free lookback (§ 12-1.3-2(b)) — and based on your dates, that has passed. It is still discretionary (rehabilitation + public interest), and expungement here means sealing with retention, not destruction. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Multi-misdemeanor expungement (§ 12-1.3-2(b)) — 10 years from the last',
+          citation: 'R.I. Gen. Laws § 12-1.3-2(b)'
         },
         complex_multimisd_excluded_ri: {
           status: 'complex',
-          title: 'DV, DUI, or Refusal in the Mix — Get Help',
-          message: 'Here is a Rhode Island nuance worth getting right. The multi-misdemeanor lane specifically excludes domestic violence, DUI, and chemical-test refusal — so those cannot ride along in a multi-misdemeanor expungement. BUT practitioners note they may still be expungable INDIVIDUALLY on the single-misdemeanor path, if you otherwise qualify. Because sorting out which of your offenses can go which way is exactly the kind of thing worth doing with help, we are routing you to it rather than guessing. The Rhode Island Public Defender resource guide and a District Court clerk can map it out.',
-          remedy: 'Get Help Sorting the Excluded Offenses (RI Public Defender)',
+          title: 'DV, DUI, or Refusal in the Group — Split the Paths',
+          message: 'A Rhode Island nuance worth getting right, and it is GOOD news. The multi-misdemeanor lane specifically excludes domestic-violence offenses, DUI, and chemical-test refusal — so those cannot ride along in a bundled multi-misdemeanor expungement. But that exclusion applies ONLY to the multi-lane: a single such offense may still be expungeable on its own on the first-offender path (a first-offender DUI, for instance, IS expungeable at 5 years). So the move is usually to split them — expunge the non-excluded misdemeanors together via the multi-lane, and handle any DUI/DV/refusal individually if it qualifies. Because sorting which offense goes which way is exactly the kind of thing worth doing with help, the Rhode Island Public Defender resource guide and a District Court clerk can map it out.',
+          remedy: 'Split the paths — multi-lane for the rest, individual path for DUI/DV/refusal (§ 12-1.3-2)',
           citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        ineligible_sixplus_ri: {
+          status: 'ineligible',
+          title: 'Six or More Misdemeanors — Over the Cap',
+          message: 'Rhode Island\'s multi-misdemeanor lane is capped: it reaches MORE THAN ONE BUT FEWER THAN SIX misdemeanors (§ 12-1.3-2(b)). Because you have six or more, the multi-lane is unavailable, and there is no larger-volume expungement path. No waiting period changes the cap. A Governor\'s pardon remains the route, and any non-conviction on your record can still be sealed separately. The Rhode Island Public Defender resource guide can help you look at what is possible.',
+          remedy: 'None (six or more misdemeanors, over the cap) — a pardon is the remaining route',
+          citation: 'R.I. Gen. Laws § 12-1.3-2(b)'
         },
         ineligible_multifelony_ri: {
           status: 'ineligible',
@@ -18487,28 +18585,95 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         complex_count_ri: {
           status: 'complex',
           title: 'We Need to Know Your Record',
-          message: 'Rhode Island\'s expungement rules turn on exactly how many convictions you have and whether any are felonies — a single first offense, a handful of misdemeanors, or multiple felonies all lead different places. Since you are not sure, we are not going to guess. A BCI record from the Attorney General ($5) will show your full record. The Rhode Island Public Defender resource guide can help you read it.',
+          message: 'Rhode Island\'s expungement rules turn on exactly how many convictions you have and whether any are felonies — a single first offense, a handful of misdemeanors, or multiple felonies all lead different places. Since you are not sure, we are not going to guess. A BCI record from the Attorney General will show your full record. The Rhode Island Public Defender resource guide can help you read it.',
           remedy: 'Get Your Full Record First (BCI)',
           citation: 'R.I. Gen. Laws § 12-1.3-2'
+        },
+        eligible_deferred_ri: {
+          status: 'eligible',
+          title: 'Deferred Sentence Completed — Expunge Now, No Wait',
+          message: 'Because you completed a § 12-19-19(c) deferred sentence, Rhode Island lets you move to expunge with NO waiting period and without regard to first-offender status (§ 12-1.3-2(e)) — provided you fully complied, including all fines, fees, costs, assessments, and victim restitution, with nothing pending. It is still discretionary (rehabilitation + public interest), and expungement here means sealing with retention. One limit: a crime of violence cannot be expunged even through a deferred sentence. The Rhode Island Public Defender resource guide can help you file.',
+          remedy: 'Deferred-sentence expungement (§ 12-1.3-2(e)) — no wait',
+          citation: 'R.I. Gen. Laws § 12-1.3-2(e)'
+        },
+        eligible_decrim_ri: {
+          status: 'eligible',
+          title: 'Decriminalized Offense — Expunge Anytime, Free',
+          message: 'If the offense you were convicted of has since been DECRIMINALIZED, Rhode Island lets you move to expunge it ANYTIME — notwithstanding all the other rules (first-offender status, waiting periods, and the like) — and the court orders it WITHOUT COST after a hearing confirming you completed the sentence and paid in full (§ 12-1.3-2(g), 12-1.3-3(e)). You may even prove the decriminalized status by affidavit. This is one of the cleanest paths in the state. The Rhode Island Public Defender resource guide can help you document it.',
+          remedy: 'Decriminalized-offense expungement (§ 12-1.3-2(g)) — anytime, without cost',
+          citation: 'R.I. Gen. Laws § 12-1.3-2(g)'
+        },
+        eligible_marijuana_ri: {
+          status: 'eligible',
+          title: 'Marijuana Possession — Automatically Expunged (Check / Expedite)',
+          message: 'A possession-only marijuana record that was decriminalized after your conviction was AUTOMATICALLY expunged in Rhode Island — the statutory sweep was required to be completed before July 1, 2024 (§ 12-1.3-5), granted NOTWITHSTANDING any prior arrests or convictions (even crimes of violence), pending charges, or outstanding debt (related debt is waived). So the honest first step is to CHECK whether it has already come off — pull a BCI record from the Attorney General and look. If it is still showing, there is an expedited WRITTEN-REQUEST procedure to finish the job. When the amount is not stated, a 2-ounce presumption applies; anyone incarcerated on the offense gets costs waived; and it does not count as a prior at later sentencing. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Automatic marijuana expungement (§ 12-1.3-5) — verify, then expedited request if needed',
+          citation: 'R.I. Gen. Laws § 12-1.3-5'
+        },
+        eligible_marijuana_mixed_ri: {
+          status: 'eligible',
+          title: 'Marijuana Count in a Mixed Case — Severable',
+          message: 'Even when your marijuana possession count sits in a case with OTHER, non-marijuana charges, Rhode Island\'s automatic marijuana expungement is COUNT-SEVERABLE (§ 12-1.3-5(i)): the marijuana-possession count is expunged on its own (with the order clarifying which count), while the other charges — a robbery, say — stay on the record and follow the ordinary expungement rules separately. So the marijuana part clears regardless of the rest. Check a BCI record from the Attorney General to confirm the marijuana count came off, and use the expedited request if it did not; the other charges you would screen on their own. The Rhode Island Public Defender resource guide can help.',
+          remedy: 'Sever and expunge the marijuana count (§ 12-1.3-5(i)) — other charges screened separately',
+          citation: 'R.I. Gen. Laws § 12-1.3-5(i)'
+        },
+        effects_ri: {
+          status: 'complex',
+          title: 'Expunged — You May Say Never Convicted, With Five Exceptions',
+          message: 'After a Rhode Island expungement you are released from the penalties and disabilities of the conviction and may state, on most applications for employment, a license, or other civil rights — and even as a witness — that you were never convicted (§ 12-1.3-4(b)). But there are FIVE carve-outs where you MUST still disclose the expunged conviction: applications for (1) a LAW-ENFORCEMENT agency position, (2) admission to the BAR, (3) a TEACHING certificate (Title 16 ch. 11), (4) a COACHING certificate (§ 16-11.1-1), and (5) work as an operator or employee of an EARLY-CHILDHOOD-EDUCATION facility. So for a teaching-certificate application, for example, you must disclose. Two more limits: the expunged conviction can still count as a PRIOR at sentencing if you are convicted of a later crime (§ 12-1.3-4(a)); and record custodians deny the record exists to everyone except a short list (the individual, a sentencing court after a later conviction, bar/fitness bodies, the education commissioner, and law enforcement where the same-offense history changes a charge). The Rhode Island Public Defender resource guide can help you apply this.',
+          remedy: 'Disclose only on the five § 12-1.3-4(b) applications (law enforcement, bar, teaching, coaching, ECE)',
+          citation: 'R.I. Gen. Laws § 12-1.3-4'
+        },
+        eligible_autoseal_ri: {
+          status: 'eligible',
+          title: 'Rule 48(a) Dismissal Since 2023 — Sealed Automatically',
+          message: 'Because your case was a district-court Rule 48(a) dismissal on or after January 1, 2023, Rhode Island seals it BY OPERATION OF LAW — 10 to 20 days after the dismissal, with NO motion needed (§ 12-1-12.1(a)). Separately, your identification records (fingerprints, photographs) had to be destroyed within 60 days of the dismissal (§ 12-1-12). So the honest step is to VERIFY: pull a BCI record from the Attorney General and confirm it is sealed. If it is still appearing, that is a compliance failure — escalate to the clerk of the court, since a willful failure to seal carries liability. The Rhode Island Public Defender resource guide can help you push it.',
+          remedy: 'Automatic sealing of a post-2023 Rule 48(a) dismissal (§ 12-1-12.1(a)) — verify with the clerk',
+          citation: 'R.I. Gen. Laws § 12-1-12.1(a)'
+        },
+        eligible_clerkrequest_ri: {
+          status: 'eligible',
+          title: 'Rule 48(a) Dismissal Before 2023 — Clerk Request, No Motion',
+          message: 'Because your case was a Rule 48(a) dismissal BEFORE January 1, 2023, the automatic-sealing rule does not apply on its own — but you do not need a full motion either. The clerk seals it administratively AT YOUR REQUEST: on request the court enters an order, transmits it to the BCI within 5 days, and it is executed within 90 days (§ 12-1-12.1(a)). No hearing is required. Your identification records should also already have been destroyed within 60 days of the dismissal (§ 12-1-12). The Rhode Island Public Defender resource guide and the clerk of the court can walk you through the request.',
+          remedy: 'Clerk-request sealing of a pre-2023 Rule 48(a) dismissal (§ 12-1-12.1(a)) — no hearing',
+          citation: 'R.I. Gen. Laws § 12-1-12.1(a)'
+        },
+        eligible_motionseal_ri: {
+          status: 'eligible',
+          title: 'Acquittal / Other Exoneration — Sealed on Motion',
+          message: 'Because your case ended in an acquittal, a no true bill, a no information, or a dismissal outside Rule 48(a), you seal it by MOTION (§ 12-1-12.1(b)): you file with 10 days\' notice to the Attorney General and the originating police department, there is a hearing, and on a showing of entitlement the court SHALL order sealing, with the clerk sealing within 45 days. Separately — and automatically — your identification records (fingerprints, photographs) had to be destroyed within 60 days of the exoneration (§ 12-1-12). So the prints piece is automatic; the court-record sealing is the motion. The Rhode Island Public Defender resource guide can help you file.',
+          remedy: 'Motion to seal an acquittal/other exoneration (§ 12-1-12.1(b)) — court shall grant',
+          citation: 'R.I. Gen. Laws § 12-1-12.1(b)'
+        },
+        waiting_dv_ri: {
+          status: 'waiting',
+          title: 'Domestic-Violence Filing — Held for 3 Years',
+          message: 'A case that involved a "filing" under § 12-10-12 following a plea to a DOMESTIC-VIOLENCE charge is handled differently: the records are RETAINED and cannot be sealed, expunged, or destroyed for 3 YEARS from the date of the filing (§ 12-1-12(c), § 12-1-12.1(c)). Based on your date, those 3 years have not passed yet, so nothing can be sealed right now. When the 3-year hold ends, the ordinary non-conviction sealing rules apply. The Rhode Island Public Defender resource guide can help you time it.',
+          remedy: 'Wait out the 3-year DV-filing hold (§ 12-1-12(c)), then seal',
+          citation: 'R.I. Gen. Laws §§ 12-1-12(c), 12-1-12.1(c)'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12)',
+          name: 'Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12, 12-1-12.1)',
           formName: 'Rhode Island courts expungement/sealing motion',
           formUrl: 'https://www.courts.ri.gov',
           steps: [
-            'Figure out your path: first offender (single conviction), the multi-misdemeanor lane (2-5 misdemeanors, no felony), or non-conviction sealing.',
-            'Confirm your waiting period is met and all court fines and fees are paid; note the grant is discretionary (good moral character + rehabilitation).',
-            'File the motion in the court of conviction; the Attorney General and police are served. Get a BCI record from the AG ($5) to confirm your record.',
-            'The $100 fee is payable on grant (waivable for indigency); after the grant, deliver certified orders to the BCI and the arresting agency to complete it.'
+            'Figure out your path: first offender (a single conviction — strictly, no prior conviction OR prior probation), the multi-misdemeanor lane (2-5 misdemeanors, no felony ever), a completed deferred sentence (no wait), a decriminalized offense (anytime, free), marijuana (automatic), or non-conviction sealing.',
+            'For a conviction, confirm it is not a crime of violence (the list includes burglary and larceny from the person), all monies are paid or waived, and the lookback is ARREST-FREE (an arrest, even one dropped, resets the 5-year misdemeanor / 10-year felony clock). The grant is discretionary (rehabilitation + public interest), and "expungement" means sealing with retention, not destruction.',
+            'File the motion in the court of conviction (AG and police served for non-conviction sealing). A non-conviction Rule 48(a) dismissal since 2023 seals automatically; a pre-2023 one seals on request to the clerk; other exonerations seal on motion. Identification records are destroyed within 60 days of an exoneration.',
+            'On effect, you may say never-convicted except on five applications (law enforcement, bar, teaching cert, coaching cert, early-childhood-education). The Rhode Island Public Defender resource guide can help throughout.'
           ],
-          // NOT null: Wave 7 gives $100 on grant (waivable) plus the $5 BCI record.
-          fees: '$100 fee payable on grant (waivable for indigency), plus a $5 BCI record from the Attorney General. Non-conviction sealing is free.',
-          feeWaiver: 'The $100 fee is waivable for indigency.',
-          courtContact: 'The court of conviction (AG BCI at 4 Howard Ave, Cranston for records)'
+          // null: no filing fee appears in the pulled §§ 12-1.3 / 12-1-12 text; the
+          // draft's $100 figure is unconfirmed (it may live in the judiciary fee
+          // schedule), so the amount is phone-tier and left null.
+          fees: null,
+          // NOT null: the decriminalized and marijuana paths are statutorily free, and
+          // marijuana-incarceration cases get costs waived; non-conviction sealing is free.
+          feeWaiver: 'The decriminalized-offense (§ 12-1.3-2(g)) and non-conviction sealing paths are statutorily free, and marijuana-incarceration cases have costs waived (§ 12-1.3-5(e)). Whether a general filing fee applies to a conviction motion — and any indigency waiver — is unconfirmed (phone-tier).',
+          courtContact: 'The court of conviction (Attorney General BCI in Cranston for records)'
         }
       },
       legalAid: [

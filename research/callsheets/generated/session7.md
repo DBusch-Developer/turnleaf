@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**28 open questions across 10 states.**
+**30 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -161,22 +161,26 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 7. RHODE ISLAND (RI)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12)** — The court of conviction (AG BCI at 4 Howard Ave, Cranston for records)
+- **Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12, 12-1-12.1)** — The court of conviction (Attorney General BCI in Cranston for records)
 - Rhode Island Public Defender — Expungement Resource Guide — https://ripd.org
 - Rhode Island Judiciary — Expungement Information — https://www.courts.ri.gov
 
 **Dates that govern:**
-- 2017 — Multi-misdemeanor expungement lane created (2017 reform, § 12-1.3-2) (effective) · Wave 7 gives the year. Allows expunging more than one but fewer than six misdemeanors (no felony) at 10 years from the last sentence; excludes DV, DUI, and chemical-test refusal.
-- 2023-01-01 — Rule 48(a) dismissals auto-seal (§ 12-1-12.1(a)(1)) (operative) · Rule 48(a) dismissals on or after this date are sealed automatically; older dismissals are sealed on petition.
+- 2023-01-01 — Rule 48(a) dismissals seal by operation of law (§ 12-1-12.1(a)) (operative) · A district-court Rule 48(a) dismissal on or after January 1, 2023 is sealed by operation of law 10-20 days after dismissal, with no motion. Pre-2023 Rule 48(a) dismissals are sealed administratively by the clerk at the defendant's request.
+- 2024-07-01 — Marijuana automatic-expungement sweep deadline (§ 12-1.3-5) (deadline) · The statutory sweep that automatically expunged decriminalized marijuana-possession records was required to be completed before July 1, 2024; an expedited written-request procedure covers any record not yet cleared.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the multi-misdemeanor exclusion nuance. Wave 7 says the multi-misdemeanor lane excludes DV (ch. 12-29), DUI, and chemical-test refusal, but that per practitioners those offenses remain INDIVIDUALLY expungable on the single-misdemeanor path if the person otherwise qualifies. The tree routes a multi-misdemeanor record containing one of those to a "get help — this is nuanced" result; confirm the individual-path availability.
+1. Confirm the expungement filing-fee amount and where it is set. NO fee appears in the pulled §§ 12-1.3 or 12-1-12 text; the draft's $100 figure is UNCONFIRMED and may live in the judiciary fee schedule. The fees field is null pending this phone-tier / fee-schedule check. (The decriminalized and marijuana paths are statutorily free, and marijuana-incarceration cases get costs waived.)
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`
+2. Run a 2025-2026 session sweep for Rhode Island Clean Slate bills touching §§ 12-1.3 or 12-1-12/-12.1. Verify outcomes — do not assume any automatic-sealing expansion passed.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the status of marijuana auto-expungement (§ 12-1.3-5). Wave 7 flags its operational status. The tree does not assert automatic marijuana clearing; confirm whether the automation is running and how someone checks.
+3. Confirm what P.L. 2024 ch. 386/387 changed in § 12-1.3-1 (diff against the prior text if easily found). The current text governs either way and is what is encoded; the diff is for completeness.
+   - *Blocks no single field — affects a branch or wording.*
+4. Pull R.I. Gen. Laws § 12-19-19(c) (deferred-sentence mechanics) — the feeder for the § 12-1.3-2(e) no-wait deferred-sentence expungement. Cited but not read; cite-only.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

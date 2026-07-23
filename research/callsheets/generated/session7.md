@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**23 open questions across 10 states.**
+**25 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -37,24 +37,30 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 2. HAWAII (HI)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Administrative Expungement (Haw. Rev. Stat. § 831-3.2)** — HCJDC Expungement Section, (808) 587-3348, 465 S. King St. Rm 102, Honolulu (and the sentencing court for a conviction order)
+- **Administrative Expungement (Haw. Rev. Stat. § 831-3.2; conviction doors §§ 706-622.5, 706-622.9)** — HCJDC Expungement Section, (808) 587-3348, Honolulu (and the sentencing court for a § 706-622.5 / § 706-622.9 conviction door)
 - HCJDC Expungement Section — (808) 587-3348 — https://ag.hawaii.gov/hcjdc/expungement/
 - Legal Aid Society of Hawaii — https://www.legalaidhawaii.org
 
 **Dates that govern:**
-- 2025-07-01 — Act 003 auto-transmit for court-record sealing begins (HRS ch. 831) (operative) · HCJDC now auto-transmits expungement orders to the Judiciary to seal the court record on eCourt Kokua. Certificates issued before July 2025 still require a separate request to the court; sealing can be denied if co-defendants or non-expunged charges share the case.
+- 2025 — Judiciary court-database scrubbing on AG expungement (HRS § 831-3.2(f)) (effective) · Amended 2023 and 2025. An AG expungement order bearing a court case number transmits to the Judiciary, which must remove the case from publicly accessible electronic databases — except where the case had multiple offenses (one outside the order) or multiple defendants (a co-defendant lacking their own order).
+- 2024 — Retroactive class-C-property expungement added (HRS § 706-622.9(4), Act 168) (effective) · Act 168 (2024) lets a person sentenced BEFORE June 22, 2006 for a class C property felony who would have qualified apply now — requires compliance with the sentence, a would-have-qualified finding (or, failing that, completion of a substance-abuse treatment program), no felony conviction before or after, and a current-nonviolence finding. Once per lifetime.
+- 2026-06-30 — HRS § 853-4(2) and (13) reenactment effective (L 2020, c 19, § 15) (effective) · Paragraphs (2) and (13) of the DAG/DANC exclusion list revert to a reenacted text on June 30, 2026. The encoding is the pre-reversion version; those two paragraphs are pending the reenacted text and are not treated as verified.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-1. Resolve the prostitution-deferral waiting period. Wave 7 flags a one-digit conflict: the HCJDC application PDF says 3 years, while HCJDC's current web page says 4 years, for expunging a prostitution (HRS 712-1200) deferred plea. The tree uses the general 1-year deferred-plea wait and notes prostitution deferrals are a special longer case; resolve the 3-vs-4 by phone.
+1. TOP PRIORITY: pull the reenacted text of HRS § 853-4(2) and (13) (L 2020, c 19, § 15, or the section as republished after June 30, 2026). These two DAG/DANC exclusion paragraphs revert to a reenacted version, so the encoded (2)/(13) lists are the pre-reversion text and are NOT verified. Everything else in § 853-4 is current (2022 c 111 items are exempt from the reversion).
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm Act 003 auto-transmit is working in practice. Wave 7 says that since July 1, 2025 HCJDC auto-transmits expungement orders to the Judiciary for court-record sealing, but flags whether this is actually operational. The tree tells post-July-2025 applicants the court step is automatic and pre-July-2025 certificate-holders to make a separate court request; confirm the handoff works.
+2. Run a 2025-2026 session sweep for amendments to §§ 831-3.2, 853-4, 706-622.5, 706-622.9 — including any cannabis-legalization or Clean-Slate act that would touch these sections. The read text is through L 2025 c 3 (831-3.2), L 2022 c 111 (853-4), and L 2024 c 168 (706-622.5/.9).
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm whether HCJDC offers any fee reduction or waiver for the $35 (first-time) / $50 (repeat) administrative fee. Wave 7 gives the fee amounts but says nothing about a waiver; the feeWaiver field is null pending confirmation with the Expungement Section ((808) 587-3348).
-   - *Blocks (null until answered):* `resources.remedies.expungement.feeWaiver`
+3. Confirm the HCJDC application fee amount and processing time. HRS § 831-3.2 states no fee for the application itself, and the court-door expungements (§§ 706-622.5/.9) state none either; fee practice is phone-tier (HCJDC Expungement Section, (808) 587-3348). The fees and feeWaiver fields are null pending this — state no numbers.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+4. Pull chapter 853 DAG/DANC mechanics (§ 853-1 in particular) if time allows — the eligibility and deferral-period rules that feed the § 831-3.2(a)(5) 1-year post-dismissal expungement. Cited but not read.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm whether an AG expungement reaches the court MINUTES (not just the electronic docket) in the two § 831-3.2(f) carve-out scenarios (multiple offenses, or multiple defendants). Attorney-tier; the encoding tells people court-website traces can remain in those situations.
+   - *Blocks no single field — affects a branch or wording.*
 
 ---
 

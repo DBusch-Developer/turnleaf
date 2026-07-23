@@ -5215,45 +5215,176 @@ const WV: Persona[] = [
 // ---------------------------------------------------------------------------
 // WAVE 7 — HI, NH, ME, MT, RI, SD, ND, AK, VT, WY (the final ten, completing 50)
 // ---------------------------------------------------------------------------
+// HI personas come from Diana's read of HRS §§ 831-3.2, 853-4, 706-622.5, and
+// 706-622.9 (capitol.hawaii.gov) — the statute-verified rewrite that took HI to
+// statute_cited on 2026-07-22, replacing the Wave 7 draft's five personas. Hawaii
+// expungement is ADMINISTRATIVE (Attorney General/HCJDC shall issue) with the
+// strongest certificate-backed honest-no in the dataset; conviction relief is three
+// narrow court doors plus the DAG/DANC-dismissal route.
 const HI: Persona[] = [
   {
-    source: 'Wave 7 — HI persona 1',
-    package: 'arrested, charges dropped 2023 -> apply now, $35, 120 days.',
-    record: { title: 'Arrest, charges dropped', disposition: 'dismissed', disposition_date: '2023-06-01' },
-    answers: { already_expunged_hi: false },
-    expect: { resultKey: 'eligible_nonconv_hi', reading: 'A non-conviction gets an administrative "shall issue" HCJDC expungement -> the apply-now result.' },
+    source: 'HI statute verification (2026-07-22) — persona 1',
+    package: 'arrested, charges dismissed, no deferral -> AG application, shall-issue, certificate honest-no.',
+    record: { title: 'Arrested, charges dismissed', disposition: 'dismissed' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: false, nonconv_abscond_hi: false, nonconv_bail_hi: 'no', nonconv_multi_hi: false },
+    expect: {
+      resultKey: 'eligible_nonconv_hi',
+      reading: 'A dismissed non-conviction with none of the § 831-3.2(a) exceptions -> the AG SHALL expunge administratively, with the certificate-backed honest-no.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — HI persona 2',
-    package: 'DANC plea, dismissed 2024 -> eligible 2025.',
-    record: { title: 'DANC deferred plea', disposition: 'deferred', disposition_date: '2024-06-01' },
-    answers: { already_expunged_hi: false },
-    expect: { resultKey: 'eligible_deferred_hi', reading: 'A DANC deferred plea is expungeable 1 year after dismissal; 2024 -> eligible 2025, met at 2026.' },
+    source: 'HI statute verification (2026-07-22) — persona 2',
+    package: 'misdemeanor non-conviction via bail forfeiture -> never.',
+    record: { title: 'Misdemeanor non-conviction, bail forfeiture', charge_type: 'misdemeanor', disposition: 'dismissed' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: false, nonconv_abscond_hi: false, nonconv_bail_hi: 'bail_felmisd' },
+    expect: {
+      resultKey: 'ineligible_bail_hi',
+      reading: 'A felony/misdemeanor non-conviction resulting from bail forfeiture is never expungeable (§ 831-3.2(a)(1)).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — HI persona 3',
-    package: 'misdemeanor conviction (ordinary) -> no path; honest-no + pardon note.',
-    record: { title: 'Ordinary misdemeanor conviction', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2018-06-01' },
-    answers: { already_expunged_hi: false, conv_type_hi: 'ordinary' },
-    expect: { resultKey: 'ineligible_conviction_hi', reading: 'An ordinary conviction is outside the narrow categories; the tree routes it to the honest-no (with the pardon-does-not-expunge note).' },
+    source: 'HI statute verification (2026-07-22) — persona 3',
+    package: 'petty misdemeanor bail forfeiture, 6 years ago -> 5-yr wait met, eligible.',
+    record: { title: 'Petty misdemeanor bail forfeiture (2020)', disposition: 'dismissed' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: false, nonconv_abscond_hi: false, nonconv_bail_hi: 'bail_petty', bail_petty_date_hi: '2020-01-01' },
+    expect: {
+      resultKey: 'eligible_nonconv_hi',
+      reading: 'A petty misdemeanor/violation resolved by bail forfeiture is expungeable 5 years after arrest/citation (§ 831-3.2(a)(2)); arrest 2020-01-01, 6+ years by 2026-07-15 -> eligible.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — HI persona 4',
-    package: 'first-time drug offender sentenced under 706-622.5 -> court order -> HCJDC.',
-    record: { title: 'First-time drug offender (706-622.5)', disposition: 'convicted', disposition_date: '2019-06-01' },
-    answers: { already_expunged_hi: false, conv_type_hi: 'drug' },
-    expect: { resultKey: 'eligible_conv_hi', reading: 'A first-time drug offender sentence is one of the three qualifying conviction categories -> court order then HCJDC.' },
+    source: 'HI statute verification (2026-07-22) — persona 4',
+    package: 'case died because the person left the islands mid-prosecution -> absconder bar.',
+    record: { title: 'Case died — left the jurisdiction', disposition: 'dismissed' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: false, nonconv_abscond_hi: true },
+    expect: {
+      resultKey: 'ineligible_abscond_hi',
+      reading: 'A non-conviction that resulted because the person absconded from the jurisdiction is excluded (§ 831-3.2(a)(3)).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — HI persona 5',
-    package: 'expunged in 2023 but still on eCourt Kokua -> the pre-Act-003 sealing-request branch.',
-    record: { title: 'Already expunged, still on eCourt Kokua', disposition: 'dismissed', disposition_date: '2023-06-01' },
-    answers: { already_expunged_hi: true },
-    expect: { resultKey: 'sealing_request_hi', reading: 'A pre-Act-003 certificate needs a separate court-record sealing request; the opening gate routes it to sealing_request_hi.' },
+    source: 'HI statute verification (2026-07-22) — persona 5',
+    package: 'NGRI acquittal -> barred.',
+    record: { title: 'NGRI acquittal', disposition: 'acquitted' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: true },
+    expect: {
+      resultKey: 'ineligible_ngri_hi',
+      reading: 'A chapter-704 NGRI acquittal/dismissal (or § 706-607 involuntary hospitalization) is excluded from expungement (§ 831-3.2(a)(4)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 6',
+    package: 'DANC discharged and dismissed 8 months ago -> 4 more months.',
+    record: { title: 'DANC discharged 8 months ago', disposition: 'deferred', disposition_date: '2025-11-15' },
+    answers: { entry_hi: 'deferred' },
+    expect: {
+      resultKey: 'waiting_deferred_hi',
+      reading: 'A dismissed DAG/DANC becomes AG-expungeable 1 year after dismissal (§ 831-3.2(a)(5)); dismissed 2025-11-15, only 8 months before 2026-07-15 -> not yet.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 7',
+    package: 'DAG discharged 2 years ago -> AG application now.',
+    record: { title: 'DAG discharged 2 years ago', disposition: 'deferred', disposition_date: '2024-01-01' },
+    answers: { entry_hi: 'deferred' },
+    expect: {
+      resultKey: 'eligible_deferred_hi',
+      reading: 'A DAG dismissed 2024-01-01 is more than 1 year out by 2026-07-15 -> AG shall expunge administratively (§ 831-3.2(a)(5)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 8',
+    package: 'charged with two offenses, one expunged one convicted -> AG order issues but court database retains the case — explain the (f) carve-out.',
+    record: { title: 'Two offenses, one expunged one convicted', disposition: 'dismissed' },
+    answers: { entry_hi: 'nonconv', nonconv_ngri_hi: false, nonconv_abscond_hi: false, nonconv_bail_hi: 'no', nonconv_multi_hi: true },
+    expect: {
+      resultKey: 'eligible_nonconv_trace_hi',
+      reading: 'The AG expungement still issues for the non-conviction, but § 831-3.2(f) does not scrub the court database where the case has multiple offenses (one outside the order) -> a court trace can remain.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 9',
+    package: 'first-offense felony meth possession under 712-1241 -> 622.5 door closed (meth exclusion).',
+    record: { title: 'Felony meth possession (§ 712-1241)', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_hi: 'conviction', conv_door_hi: 'drug', drug_meth_hi: true },
+    expect: {
+      resultKey: 'ineligible_drug_meth_hi',
+      reading: 'The § 706-622.5 drug-treatment door excludes the methamphetamine offenses (§§ 712-1240.7/.8/1241/1242) -> closed.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 10',
+    package: 'second-offense felony marijuana possession, completed treatment probation -> shall-expunge, once-only warning.',
+    record: { title: 'Second-offense felony marijuana possession', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_hi: 'conviction', conv_door_hi: 'drug', drug_meth_hi: false },
+    expect: {
+      resultKey: 'eligible_drug_hi',
+      reading: 'The § 706-622.5 door covers first- OR second-time drug possession/use (marijuana is not meth) on completed treatment probation -> court shall expunge, once only.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 11',
+    package: '2-gram marijuana possession conviction, standalone -> 622.5(5) shall-expunge.',
+    record: { title: '2-gram marijuana possession (standalone)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { entry_hi: 'conviction', conv_door_hi: 'marijuana' },
+    expect: {
+      resultKey: 'eligible_marijuana_hi',
+      reading: 'Possession of 3 grams or less of marijuana (§ 712-1249) with no other charge is a standalone § 706-622.5(5) door -> court shall expunge on motion, no wait.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 12',
+    package: '2004 class C felony theft, sentence completed, no other felonies, currently nonviolent -> Act 168 retroactive path.',
+    record: { title: '2004 class C felony theft', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_hi: 'conviction', conv_door_hi: 'property_retro' },
+    expect: {
+      resultKey: 'eligible_property_retro_hi',
+      reading: 'A pre-6/22/2006 class C property felony, sentence complied with, no felony before/after, current-nonviolence -> the 2024 Act 168 retroactive § 706-622.9(4) path.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 13',
+    package: 'property-door candidate with a prior out-of-state felony -> barred by (3).',
+    record: { title: 'Property door, prior out-of-state felony', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_hi: 'conviction', conv_door_hi: 'property', property_prior_hi: true },
+    expect: {
+      resultKey: 'ineligible_property_prior_hi',
+      reading: 'The § 706-622.9 property door requires no prior felony conviction in ANY jurisdiction (§ 706-622.9(3)); a prior out-of-state felony bars it.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 14',
+    package: 'felony charge, wants DAG, had a DAG in 2015 -> barred (11).',
+    record: { title: 'Felony charge, prior DAG in 2015', charge_type: 'felony', disposition: 'unknown' },
+    answers: { entry_hi: 'dag_eligibility', dag_excluded_hi: false, dag_prior_hi: true },
+    expect: {
+      resultKey: 'ineligible_dag_prior_hi',
+      reading: 'For a felony charge, ANY prior deferred acceptance plea bars a new one (§ 853-4(11)); a 2015 DAG bars it.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'HI statute verification (2026-07-22) — persona 15',
+    package: 'certificate holder asked under oath about the arrest -> may deny, statutory immunity.',
+    record: { title: 'Certificate holder, asked under oath', disposition: 'dismissed' },
+    answers: { entry_hi: 'effects' },
+    expect: {
+      resultKey: 'effects_certificate_hi',
+      reading: 'The § 831-3.2(c)-(d) certificate authorizes the person to state, even under oath, that they have no record of the arrest, with immunity from perjury and adverse action.',
+    },
     now: NOW,
   },
 ];

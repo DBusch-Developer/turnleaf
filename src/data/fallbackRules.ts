@@ -17307,168 +17307,370 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   HI: {
     code: 'HI',
     name: 'Hawaii',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'VERSION NOTE (DAG/DANC exclusions): HRS 853-4 paragraphs (2) and (13) were repealed and reenacted '
+      + 'effective June 30, 2026 (L 2020, c 19, § 15); the encoded text is the pre-reversion version and those '
+      + 'two paragraphs are PENDING the reenacted text (2022 c 111 items are exempt from the reversion and '
+      + 'remain current). Do not treat the (2)/(13) lists as verified. A 2025-2026 session sweep (incl. any '
+      + 'cannabis-legalization or Clean-Slate acts touching these sections) is also pending — see Open Questions.',
     terminology:
-      'Hawaii\'s expungement is ADMINISTRATIVE — you apply to the Attorney General\'s Hawaii Criminal Justice '
-      + 'Data Center (HCJDC), not a court (HRS § 831-3.2). The Center "shall issue" for arrests and charges '
-      + 'that did not end in a conviction, which is most of what it does. Convictions almost never qualify — '
-      + 'only a few narrow categories (under-21 DUI, first-time drug offenders, first-time property offenders), '
-      + 'and even a PARDON does not make a conviction expungeable (it stays on the record with a pardon '
-      + 'notation). Since July 1, 2025 (Act 003), an expungement order is auto-transmitted to the courts to '
-      + 'seal the court record too — but for older certificates that court step is separate, so it is worth '
-      + 'thinking of it as two systems: the state criminal history, and the court record.',
+      'Hawaii\'s expungement is ADMINISTRATIVE, and that is the headline: for a non-conviction you file a written '
+      + 'application with the ATTORNEY GENERAL\'s Hawaii Criminal Justice Data Center (HCJDC), who SHALL issue the '
+      + 'order (HRS § 831-3.2) — no court petition, no hearing, no judicial discretion. And the effect is the '
+      + 'strongest honest-no in this dataset: the AG issues a CERTIFICATE that expressly authorizes you to state, '
+      + 'in answer to any question or inquiry — WHETHER OR NOT UNDER OATH — that you have no record of that arrest, '
+      + 'with immunity from perjury, civil suit, or being fired for it. A few non-convictions are excluded: any '
+      + 'that resulted from a BAIL FORFEITURE (never for a felony or misdemeanor; a 5-year wait for a petty '
+      + 'misdemeanor or violation), any where the person ABSCONDED, and NGRI/chapter-704 acquittals or involuntary '
+      + 'hospitalizations. A completed DEFERRED plea (DAG/DANC under chapter 853) ends in dismissal and then '
+      + 'becomes AG-expungeable 1 year later. There is NO general conviction expungement; conviction relief is '
+      + 'limited to three narrow court doors — the § 706-622.5 first/second-time DRUG-treatment door (not meth, '
+      + 'not distribution), the § 706-622.5(5) standalone door for possession of 3 grams or less of MARIJUANA, '
+      + 'and the § 706-622.9 first-time class-C PROPERTY door (with a 2024 Act 168 RETROACTIVE path for pre-June-'
+      + '2006 sentences) — each a "shall expunge" on successful completion, each once per lifetime. When an AG '
+      + 'order carries a court case number it now transmits to the Judiciary to scrub the case from public court '
+      + 'databases, EXCEPT where the case had multiple offenses (one outside the order) or multiple defendants '
+      + '(a co-defendant without their own order) — in those two situations the AG expungement still issues but '
+      + 'court-website traces can remain. Chapter 661B wrongful-conviction redress recipients are also expressly '
+      + 'eligible for AG expungement.',
     keyDates: [
       {
-        label: 'Act 003 auto-transmit for court-record sealing begins (HRS ch. 831)',
-        date: '2025-07-01',
-        kind: 'operative',
-        note: 'HCJDC now auto-transmits expungement orders to the Judiciary to seal the court record on eCourt Kokua. Certificates issued before July 2025 still require a separate request to the court; sealing can be denied if co-defendants or non-expunged charges share the case.',
+        label: 'Judiciary court-database scrubbing on AG expungement (HRS § 831-3.2(f))',
+        date: '2025',
+        kind: 'effective',
+        note: 'Amended 2023 and 2025. An AG expungement order bearing a court case number transmits to the Judiciary, which must remove the case from publicly accessible electronic databases — except where the case had multiple offenses (one outside the order) or multiple defendants (a co-defendant lacking their own order).',
+      },
+      {
+        label: 'Retroactive class-C-property expungement added (HRS § 706-622.9(4), Act 168)',
+        date: '2024',
+        kind: 'effective',
+        note: 'Act 168 (2024) lets a person sentenced BEFORE June 22, 2006 for a class C property felony who would have qualified apply now — requires compliance with the sentence, a would-have-qualified finding (or, failing that, completion of a substance-abuse treatment program), no felony conviction before or after, and a current-nonviolence finding. Once per lifetime.',
+      },
+      {
+        label: 'HRS § 853-4(2) and (13) reenactment effective (L 2020, c 19, § 15)',
+        date: '2026-06-30',
+        kind: 'effective',
+        note: 'Paragraphs (2) and (13) of the DAG/DANC exclusion list revert to a reenacted text on June 30, 2026. The encoding is the pre-reversion version; those two paragraphs are pending the reenacted text and are not treated as verified.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Resolve the prostitution-deferral waiting period. Wave 7 flags a one-digit conflict: the HCJDC application PDF says 3 years, while HCJDC\'s current web page says 4 years, for expunging a prostitution (HRS 712-1200) deferred plea. The tree uses the general 1-year deferred-plea wait and notes prostitution deferrals are a special longer case; resolve the 3-vs-4 by phone.',
+          'TOP PRIORITY: pull the reenacted text of HRS § 853-4(2) and (13) (L 2020, c 19, § 15, or the section as republished after June 30, 2026). These two DAG/DANC exclusion paragraphs revert to a reenacted version, so the encoded (2)/(13) lists are the pre-reversion text and are NOT verified. Everything else in § 853-4 is current (2022 c 111 items are exempt from the reversion).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm Act 003 auto-transmit is working in practice. Wave 7 says that since July 1, 2025 HCJDC auto-transmits expungement orders to the Judiciary for court-record sealing, but flags whether this is actually operational. The tree tells post-July-2025 applicants the court step is automatic and pre-July-2025 certificate-holders to make a separate court request; confirm the handoff works.',
+          'Run a 2025-2026 session sweep for amendments to §§ 831-3.2, 853-4, 706-622.5, 706-622.9 — including any cannabis-legalization or Clean-Slate act that would touch these sections. The read text is through L 2025 c 3 (831-3.2), L 2022 c 111 (853-4), and L 2024 c 168 (706-622.5/.9).',
         blocksFields: [],
       },
       {
         question:
-          'Confirm whether HCJDC offers any fee reduction or waiver for the $35 (first-time) / $50 (repeat) administrative fee. Wave 7 gives the fee amounts but says nothing about a waiver; the feeWaiver field is null pending confirmation with the Expungement Section ((808) 587-3348).',
-        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+          'Confirm the HCJDC application fee amount and processing time. HRS § 831-3.2 states no fee for the application itself, and the court-door expungements (§§ 706-622.5/.9) state none either; fee practice is phone-tier (HCJDC Expungement Section, (808) 587-3348). The fees and feeWaiver fields are null pending this — state no numbers.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Pull chapter 853 DAG/DANC mechanics (§ 853-1 in particular) if time allows — the eligibility and deferral-period rules that feed the § 831-3.2(a)(5) 1-year post-dismissal expungement. Cited but not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether an AG expungement reaches the court MINUTES (not just the electronic docket) in the two § 831-3.2(f) carve-out scenarios (multiple offenses, or multiple defendants). Attorney-tier; the encoding tells people court-website traces can remain in those situations.',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Haw. Rev. Stat. § 831-3.2 (administrative expungement via HCJDC)', url: null, retrievedOn: null },
-      { id: 'Haw. Rev. Stat. ch. 853 (deferred acceptance pleas — DAG/DANC; 1-year expungement)', url: null, retrievedOn: null },
-      { id: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64 (narrow conviction-expungement categories)', url: null, retrievedOn: null },
-      { id: 'Act 003 (2025) (auto-transmit of expungement orders for court-record sealing, eff. Jul 1, 2025)', url: null, retrievedOn: null },
+      { id: 'Haw. Rev. Stat. § 831-3.2 (read through L 2025, c 3 — administrative NON-conviction expungement; (a) AG/HCJDC SHALL expunge an arrest not ending in conviction, with exceptions: (1) felony/misdemeanor non-conviction by BAIL FORFEITURE never, (2) petty misdemeanor/violation bail forfeiture 5-year wait from arrest/citation, (3) absconder never, (4) § 706-607 involuntary hospitalization / chapter-704 NGRI never, (5) chapter-853 deferred acceptance 1-year wait after discharge and dismissal; fingerprints/photos returned within 120 days; (b)-(e) effect — treated as never arrested, confidential AG file, and a CERTIFICATE authorizing the person to deny the arrest even under oath with immunity; (f) Judiciary database scrubbing except the multiple-offense and multiple-defendant carve-outs; chapter 661B wrongful-conviction recipients eligible) via capitol.hawaii.gov', url: 'https://www.capitol.hawaii.gov', retrievedOn: '2026-07-22' },
+      { id: 'Haw. Rev. Stat. § 853-4 (read through L 2022, c 111 — DAG/DANC exclusions: (1) killing offenses, (3) conspiracy/solicitation to kill or cause serious bodily injury, (4) class A felonies, (5) nonprobationable offenses, (6)-(8) any prior felony conviction or felony delinquency adjudication in any jurisdiction, (9) firearm used in the offense, (10) drug distribution to a minor, (11)-(12) prior-DAG bars (felony charge + any prior DAG; misdemeanor charge + prior DAG whose deferral period has not expired), (14) campaign-spending falsification, (15) CDL holders charged with non-parking traffic offenses; PARAGRAPHS (2) AND (13) reenacted effective 6/30/2026 per L 2020 c 19 §15 — encoded from the pre-reversion text and NOT verified, see version note) via capitol.hawaii.gov', url: 'https://www.capitol.hawaii.gov', retrievedOn: '2026-07-22' },
+      { id: 'Haw. Rev. Stat. § 706-622.5 (read through L 2024, c 168 — first/second-time DRUG-offender treatment probation for § 329-43.5 paraphernalia (excl. decriminalized) or chapter-712 part IV possession/use, NOT distribution/manufacture and NOT the meth offenses (§§ 712-1240.7/.8/1241/1242); on successful completion the court SHALL expunge, ONE TIME (case-law gloss 129 H. 363: completing probation and being discharged satisfies compliance); (5) STANDALONE marijuana door — a § 712-1249 conviction for possession of 3 grams or less arising from facts producing no other charge, SHALL expunge on motion, no wait/treatment) via capitol.hawaii.gov', url: 'https://www.capitol.hawaii.gov', retrievedOn: '2026-07-22' },
+      { id: 'Haw. Rev. Stat. § 706-622.9 (read through L 2024, c 168 — first-time class-C-felony PROPERTY-offender treatment probation (never sentenced under §§ 706-606.5/622.5/this section, nonviolence + substance-dependency nexus + motivation findings); on completion SHALL expunge, but (3) ONLY if no prior felony conviction in any jurisdiction; (4) Act 168 RETROACTIVE path for pre-6/22/2006 class-C-property sentences that would have qualified — compliance, would-have-qualified finding (fallback: completed treatment program), no felony before or after, current-nonviolence finding, once per lifetime) via capitol.hawaii.gov', url: 'https://www.capitol.hawaii.gov', retrievedOn: '2026-07-22' },
+      { id: 'Haw. Rev. Stat. ch. 853 (deferred acceptance of guilty/no-contest plea — DAG/DANC; § 853-1 eligibility/deferral-period mechanics feeding the § 831-3.2(a)(5) 1-year post-dismissal expungement) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Haw. Rev. Stat. § 712-1249 (promoting a detrimental drug — the 3-grams-or-less marijuana offense reached by § 706-622.5(5)); chapter 712 part IV drug offenses; §§ 712-1240.7/.8/1241/1242 methamphetamine offenses excluded from § 706-622.5 — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'Haw. Rev. Stat. §§ 706-607, ch. 704, 706-606.5, 329-43.5, ch. 661B (involuntary hospitalization, NGRI, repeat-offender sentencing, paraphernalia, and wrongful-conviction redress referenced by the pulled sections) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'already_expunged_hi',
+      startNode: 'entry_hi',
       nodes: {
-        already_expunged_hi: {
+        entry_hi: {
+          type: 'choice',
+          text: 'What would you like to check?',
+          options: [
+            { label: 'A NON-conviction (arrested or charged but not convicted)', value: 'nonconv', next: 'nonconv_ngri_hi' },
+            { label: 'A completed DEFERRED plea (DAG/DANC) that was dismissed', value: 'deferred', next: 'deferred_date_hi' },
+            { label: 'A CONVICTION — for drugs, marijuana, or a property offense', value: 'conviction', next: 'conv_door_hi' },
+            { label: 'I am considering a DEFERRED plea (DAG/DANC) and want to know if I qualify', value: 'dag_eligibility', next: 'dag_excluded_hi' },
+            { label: 'What an expungement CERTIFICATE I already have lets me say', value: 'effects', next: 'effects_certificate_hi' },
+            { label: 'I have an AG expungement but the case still shows on the court system (eCourt Kokua)', value: 'court_trace', next: 'court_trace_hi' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
+          ]
+        },
+        // NON-conviction path (831-3.2(a)), exceptions screened in order.
+        nonconv_ngri_hi: {
           type: 'boolean',
-          text: 'Have you ALREADY received an expungement from the Attorney General (HCJDC), but the case still shows up on the court\'s online system (eCourt Kokua)?',
-          yes: 'sealing_request_hi',
-          no: 'disposition'
+          text: 'Did the case end in an NGRI acquittal or dismissal (chapter 704 mental disease or defect), or an involuntary hospitalization under § 706-607?',
+          yes: 'ineligible_ngri_hi',
+          no: 'nonconv_abscond_hi'
         },
-        disposition: {
+        nonconv_abscond_hi: {
+          type: 'boolean',
+          text: 'Did the non-conviction result because you absconded — left the jurisdiction to avoid prosecution?',
+          yes: 'ineligible_abscond_hi',
+          no: 'nonconv_bail_hi'
+        },
+        nonconv_bail_hi: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'Did the non-conviction result from a BAIL FORFEITURE?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_hi' },
-            { label: 'Dismissed / Charges dropped', value: 'dismissed', next: 'eligible_nonconv_hi' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'eligible_nonconv_hi' },
-            { label: 'Deferred plea (DAG/DANC) completed and dismissed', value: 'deferred', next: 'deferred_date_hi' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'No — dismissed, acquitted, or charges dropped normally', value: 'no', next: 'nonconv_multi_hi' },
+            { label: 'Yes — and it was a felony or a (non-petty) misdemeanor', value: 'bail_felmisd', next: 'ineligible_bail_hi' },
+            { label: 'Yes — and it was a petty misdemeanor or a violation', value: 'bail_petty', next: 'bail_petty_date_hi' }
           ]
         },
-        conv_type_hi: {
-          type: 'choice',
-          text: 'Convictions can be expunged in Hawaii only in a few narrow situations. Which describes yours?',
-          options: [
-            { label: 'An under-21 DUI (§ 291E-64)', value: 'dui21', next: 'eligible_conv_hi' },
-            { label: 'A first-time drug offender sentence (§§ 706-622.5/.8)', value: 'drug', next: 'eligible_conv_hi' },
-            { label: 'A first-time property offender sentence (§ 706-622.9)', value: 'property', next: 'eligible_conv_hi' },
-            { label: 'None of these / an ordinary conviction', value: 'ordinary', next: 'ineligible_conviction_hi' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_hi' }
-          ]
+        bail_petty_date_hi: {
+          type: 'date',
+          text: 'When were you arrested or cited for the petty misdemeanor / violation?',
+          validation: {
+            period: { amount: 5, unit: 'years', anchor: 'five years from arrest/citation for a petty misdemeanor or violation resolved by bail forfeiture (§ 831-3.2(a)(2))' },
+            nextPass: 'eligible_nonconv_hi',
+            nextFail: 'waiting_bail_hi'
+          }
+        },
+        nonconv_multi_hi: {
+          type: 'boolean',
+          text: 'In this case, were you charged with MULTIPLE offenses where at least one is NOT being expunged (e.g. one ended in a conviction), OR were you one of MULTIPLE defendants where a co-defendant has no expungement order?',
+          yes: 'eligible_nonconv_trace_hi',
+          no: 'eligible_nonconv_hi'
         },
         deferred_date_hi: {
           type: 'date',
           field: 'disposition_date',
           text: 'When was the deferred plea discharged and the case dismissed?',
           validation: {
-            period: { amount: 1, unit: 'years', anchor: 'after discharge and dismissal of a DAG/DANC deferred plea (Haw. Rev. Stat. ch. 853; prostitution deferrals are a longer special case)' },
+            period: { amount: 1, unit: 'years', anchor: 'one year after discharge and dismissal of a chapter-853 DAG/DANC deferred plea (§ 831-3.2(a)(5))' },
             nextPass: 'eligible_deferred_hi',
             nextFail: 'waiting_deferred_hi'
           }
+        },
+        // CONVICTION doors (the only three; no general conviction expungement).
+        conv_door_hi: {
+          type: 'choice',
+          text: 'Hawaii expunges a conviction only through three narrow doors. Which fits yours?',
+          options: [
+            { label: 'Felony drug possession/use or paraphernalia, sentenced to treatment probation (§ 706-622.5)', value: 'drug', next: 'drug_meth_hi' },
+            { label: 'Possession of 3 grams or less of marijuana (§ 712-1249), standalone', value: 'marijuana', next: 'eligible_marijuana_hi' },
+            { label: 'First-time class C felony PROPERTY offense, treatment probation (§ 706-622.9)', value: 'property', next: 'property_prior_hi' },
+            { label: 'An older (before June 22, 2006) class C felony property offense — the Act 168 retroactive path', value: 'property_retro', next: 'eligible_property_retro_hi' },
+            { label: 'An ordinary conviction (none of these)', value: 'ordinary', next: 'ineligible_conviction_hi' },
+            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_hi' }
+          ]
+        },
+        drug_meth_hi: {
+          type: 'boolean',
+          text: 'Was the drug offense methamphetamine (§§ 712-1240.7, 712-1240.8, 712-1241, or 712-1242), OR distribution or manufacture (rather than simple possession or use)?',
+          yes: 'ineligible_drug_meth_hi',
+          no: 'eligible_drug_hi'
+        },
+        property_prior_hi: {
+          type: 'boolean',
+          text: 'Do you have any prior felony conviction in ANY jurisdiction?',
+          yes: 'ineligible_property_prior_hi',
+          no: 'eligible_property_hi'
+        },
+        // DAG/DANC eligibility (853-4). (2) and (13) are pending the 6/30/2026
+        // reenactment — see the version note; this screens the verified paragraphs.
+        dag_excluded_hi: {
+          type: 'boolean',
+          text: 'Is the current offense any of these, or does any apply: a killing offense, or conspiracy/solicitation to kill or cause serious bodily injury; a class A felony; a nonprobationable offense; ANY prior felony conviction or felony delinquency adjudication (any jurisdiction); a firearm used in the offense; distribution of drugs to a minor; campaign-spending falsification; or — if you hold a CDL — a non-parking traffic offense?',
+          yes: 'ineligible_dag_excluded_hi',
+          no: 'dag_prior_hi'
+        },
+        dag_prior_hi: {
+          type: 'boolean',
+          text: 'Have you previously had a deferred acceptance (DAG/DANC) plea? (For a FELONY charge, any prior DAG bars a new one; for a MISDEMEANOR charge, a prior DAG whose deferral period has not yet expired bars it — § 853-4(11)-(12).)',
+          yes: 'ineligible_dag_prior_hi',
+          no: 'eligible_dag_available_hi'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Hawaii expunges non-convictions readily but convictions almost never, so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an HCJDC record request will show the disposition; the HCJDC Expungement Section ((808) 587-3348) can help.',
+          message: 'Hawaii expunges non-convictions readily (administratively, through the Attorney General) but convictions only through three narrow doors, so the outcome decides everything. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or an HCJDC record request will show the disposition; the HCJDC Expungement Section ((808) 587-3348) can help.',
           remedy: 'Get Your Record First (court paperwork / HCJDC)',
           citation: 'Haw. Rev. Stat. § 831-3.2 (the route depends on the disposition)'
         },
-        sealing_request_hi: {
-          status: 'complex',
-          title: 'Ask the Court to Seal — the Second Step',
-          message: 'This is Hawaii\'s two-system quirk. You already have an HCJDC expungement (the state criminal history is cleared), but the case still shows on the court\'s eCourt Kokua system — because your certificate predates July 1, 2025, when the auto-transmit to the courts began. For older certificates, sealing the COURT record is a separate request you make to the court. One caution: the court can decline if co-defendants or non-expunged charges share the same case. The HCJDC Expungement Section ((808) 587-3348) can point you to the right court request.',
-          remedy: 'Make a separate court-record sealing request (pre-Act-003 certificate)',
-          citation: 'Act 003 (2025); Haw. Rev. Stat. § 831-3.2'
+        ineligible_ngri_hi: {
+          status: 'ineligible',
+          title: 'Mental-Disease Disposition — Not Expungeable',
+          message: 'Hawaii\'s administrative expungement does not reach a non-conviction that resulted from an NGRI acquittal or dismissal (chapter 704, mental disease or defect) or an involuntary hospitalization under § 706-607 (§ 831-3.2(a)(4)). Because yours ended that way, the AG cannot expunge it, and no waiting period changes that. The HCJDC Expungement Section ((808) 587-3348) can confirm the disposition and any other options.',
+          remedy: 'None (chapter-704 / involuntary-hospitalization exclusion)',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(4)'
+        },
+        ineligible_abscond_hi: {
+          status: 'ineligible',
+          title: 'Absconded — Not Expungeable',
+          message: 'Hawaii excludes from expungement a non-conviction that resulted because the person absconded from the jurisdiction (§ 831-3.2(a)(3)). Because that is how your case ended, the AG cannot expunge it, and no waiting period changes that. If the underlying matter is later resolved on the merits without a conviction, the analysis could change. The HCJDC Expungement Section ((808) 587-3348) can advise.',
+          remedy: 'None (absconder exclusion)',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(3)'
+        },
+        ineligible_bail_hi: {
+          status: 'ineligible',
+          title: 'Bail Forfeiture on a Felony/Misdemeanor — Not Expungeable',
+          message: 'When a felony or misdemeanor non-conviction resulted from a BAIL FORFEITURE, Hawaii does not allow expungement at all (§ 831-3.2(a)(1)) — no waiting period changes that. (Only a petty misdemeanor or violation resolved by bail forfeiture can be expunged, and only after 5 years.) The HCJDC Expungement Section ((808) 587-3348) can confirm how your case was resolved.',
+          remedy: 'None (bail-forfeiture exclusion for a felony/misdemeanor)',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(1)'
         },
         eligible_nonconv_hi: {
           status: 'eligible',
-          title: 'No Conviction — Apply Now, It Is Administrative',
-          message: 'Because your case ended without a conviction, Hawaii "shall issue" an expungement — and it is administrative, so you apply directly to the Attorney General\'s HCJDC, not a court. The fee is $35 (first-time) or $50 (repeat), paid by cashier\'s check or money order, and it takes about 120 days with no expediting. A few non-convictions are excluded (bail forfeitures, absconders, and chapter 704 mental-disease acquittals), so if yours was one of those, check first. Since July 2025 the court record is sealed automatically too. The HCJDC Expungement Section ((808) 587-3348) can help.',
-          remedy: 'HCJDC administrative expungement (§ 831-3.2)',
+          title: 'No Conviction — Apply Now, and the Certificate Is Powerful',
+          message: 'Because your case ended without a conviction, Hawaii\'s Attorney General SHALL expunge it — and it is ADMINISTRATIVE, so you apply directly to the AG\'s HCJDC, not a court, with no hearing and no judicial discretion. The effect is unusually strong: the AG issues a CERTIFICATE that authorizes you to state, in response to any question or inquiry — even under oath — that you have no record of that arrest, with immunity from perjury, civil suit, or being fired for it. Your records move to a confidential AG file, and (since the 2023/2025 amendments) an order carrying a court case number is transmitted to the Judiciary to remove the case from public court databases too. The HCJDC Expungement Section ((808) 587-3348) can help you apply.',
+          remedy: 'HCJDC administrative expungement (§ 831-3.2) — certificate-backed honest-no',
           citation: 'Haw. Rev. Stat. § 831-3.2'
+        },
+        eligible_nonconv_trace_hi: {
+          status: 'eligible',
+          title: 'No Conviction — AG Expunges, but a Court Trace May Remain',
+          message: 'Because your case ended without a conviction, the Attorney General SHALL expunge it administratively (§ 831-3.2), and you get the same powerful certificate — you may state, even under oath, that you have no record of that arrest, with immunity. One honest caveat specific to your situation: the Judiciary\'s automatic scrubbing of the court database does NOT apply where a case had multiple offenses (with at least one outside the order) or multiple defendants (a co-defendant without their own order) — § 831-3.2(f). So the AG expungement still issues and the certificate still protects you, but the case may still appear on the court\'s public system (eCourt Kokua). The HCJDC Expungement Section ((808) 587-3348) can help you apply and address the court trace.',
+          remedy: 'HCJDC expungement (§ 831-3.2) — but a court-database trace may persist (f)',
+          citation: 'Haw. Rev. Stat. § 831-3.2(f)'
+        },
+        waiting_bail_hi: {
+          status: 'waiting',
+          title: 'Petty Misdemeanor Bail Forfeiture — 5-Year Wait Not Yet Met',
+          message: 'A petty misdemeanor or violation that ended in a BAIL FORFEITURE can be expunged, but only 5 years after the arrest or citation (§ 831-3.2(a)(2)). Based on your date, those 5 years have not passed yet. Once they do, you apply administratively to the HCJDC and it shall issue. The HCJDC Expungement Section ((808) 587-3348) can help you time it.',
+          remedy: 'Wait until 5 years after arrest/citation, then apply (§ 831-3.2(a)(2))',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(2)'
         },
         eligible_deferred_hi: {
           status: 'eligible',
           title: 'Deferred Plea, 1+ Year — Expungeable',
-          message: 'Because you completed a deferred plea (DAG or DANC) and the case was dismissed at least a year ago, it is expungeable through the HCJDC. The fee is $35 (first-time) or $50 (repeat), and processing takes about 120 days. One thing to confirm if yours was a prostitution-related deferral: the waiting period there is longer (the sources say 3 or 4 years — worth a call to pin down). The HCJDC Expungement Section ((808) 587-3348) can help.',
-          remedy: 'HCJDC expungement of a deferred plea (ch. 853)',
-          citation: 'Haw. Rev. Stat. ch. 853'
+          message: 'Because you completed a deferred plea (DAG or DANC under chapter 853) and the case was discharged and dismissed at least a year ago, the Attorney General shall expunge it administratively (§ 831-3.2(a)(5)) — and you get the same certificate-backed honest-no as any non-conviction. You apply to the HCJDC, not a court. The HCJDC Expungement Section ((808) 587-3348) can help.',
+          remedy: 'HCJDC expungement of a dismissed deferred plea (§ 831-3.2(a)(5))',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(5)'
         },
         waiting_deferred_hi: {
           status: 'waiting',
           title: 'Not Yet One Year Since Dismissal',
-          message: 'A deferred plea (DAG/DANC) becomes expungeable one year after it is discharged and dismissed. Based on your date, that year has not passed yet. Once it does, you apply administratively to the HCJDC. (If yours was a prostitution-related deferral, the wait is longer — 3 or 4 years, worth confirming by phone.) The HCJDC Expungement Section ((808) 587-3348) can help you time it.',
-          remedy: 'Wait until 1 year after dismissal, then apply (ch. 853)',
-          citation: 'Haw. Rev. Stat. ch. 853'
+          message: 'A deferred plea (DAG/DANC) becomes AG-expungeable one year after it is discharged and dismissed (§ 831-3.2(a)(5)). Based on your date, that year has not passed yet. Once it does, you apply administratively to the HCJDC. The HCJDC Expungement Section ((808) 587-3348) can help you time it.',
+          remedy: 'Wait until 1 year after dismissal, then apply (§ 831-3.2(a)(5))',
+          citation: 'Haw. Rev. Stat. § 831-3.2(a)(5)'
         },
-        eligible_conv_hi: {
+        eligible_drug_hi: {
           status: 'eligible',
-          title: 'A Qualifying Conviction — Court Order First, Then HCJDC',
-          message: 'Yours is one of the few conviction types Hawaii will expunge (under-21 DUI, first-time drug offender, or first-time property offender). The process has two steps: you first get a court ORDER, then apply to the HCJDC to carry out the expungement. The fee is $35 (first-time) or $50 (repeat), about 120 days to process. The HCJDC Expungement Section ((808) 587-3348) can explain the court-order step for your specific category.',
-          remedy: 'Court order, then HCJDC expungement (§§ 706-622.5/.9, 291E-64)',
-          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64'
+          title: 'Drug-Treatment Door — Court Shall Expunge on Completion',
+          message: 'Because your conviction is a first- OR second-time drug possession/use or paraphernalia offense (not methamphetamine, and not distribution or manufacture) for which you were sentenced to treatment probation, the court SHALL expunge it on written application once you successfully complete probation (§ 706-622.5) — and the case law confirms that completing probation and being discharged satisfies the compliance requirement. One important limit: this door is available ONE TIME only, so if you have more than one eligible drug conviction, choose deliberately. After the court order, the record clears; the HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help with the motion.',
+          remedy: 'Drug-treatment expungement (§ 706-622.5) — court shall grant, once only',
+          citation: 'Haw. Rev. Stat. § 706-622.5'
+        },
+        ineligible_drug_meth_hi: {
+          status: 'ineligible',
+          title: 'Methamphetamine / Distribution — Outside the Drug Door',
+          message: 'Hawaii\'s drug-treatment expungement (§ 706-622.5) reaches simple possession or use (and paraphernalia), but NOT the methamphetamine offenses (§§ 712-1240.7/.8/1241/1242) and NOT distribution or manufacture. Because yours is one of those, the § 706-622.5 door is closed, and no completion changes that. If the case was instead resolved by a deferred plea or ended without a conviction, those routes could still apply. The HCJDC Expungement Section ((808) 587-3348) can confirm.',
+          remedy: 'None via § 706-622.5 (meth / distribution) — check deferred/non-conviction routes',
+          citation: 'Haw. Rev. Stat. § 706-622.5'
+        },
+        eligible_marijuana_hi: {
+          status: 'eligible',
+          title: 'Marijuana, 3 Grams or Less — Standalone Expungement',
+          message: 'Hawaii has a dedicated door for a conviction for possession of THREE GRAMS OR LESS of marijuana (§ 712-1249) that arose from facts producing no other criminal charge: the court SHALL expunge it on motion, with no waiting period and no treatment requirement (§ 706-622.5(5)). This is one of the cleaner conviction-expungement paths in the state. The HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help you file the motion.',
+          remedy: 'Standalone marijuana expungement (§ 706-622.5(5)) — court shall grant',
+          citation: 'Haw. Rev. Stat. § 706-622.5(5)'
+        },
+        eligible_property_hi: {
+          status: 'eligible',
+          title: 'Property-Treatment Door — Court Shall Expunge on Completion',
+          message: 'Because your conviction is a first-time class C felony PROPERTY offense for which you were sentenced to treatment probation (with the required nonviolence, substance-dependency, and motivation findings), and you have no prior felony conviction in any jurisdiction, the court SHALL expunge it on successful completion (§ 706-622.9). This is once per lifetime. After the court order, the record clears; the HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help with the motion.',
+          remedy: 'Property-treatment expungement (§ 706-622.9) — court shall grant',
+          citation: 'Haw. Rev. Stat. § 706-622.9'
+        },
+        ineligible_property_prior_hi: {
+          status: 'ineligible',
+          title: 'A Prior Felony Blocks the Property Door',
+          message: 'The class C property-offender expungement (§ 706-622.9) is available only if you have NO prior felony conviction in any jurisdiction (§ 706-622.9(3)). Because you have a prior felony, this door is closed, and no completion changes that. (If your class C property sentence predates June 22, 2006, note the door\'s retroactive path has its own no-felony-before-or-after rule too.) The HCJDC Expungement Section ((808) 587-3348) can confirm your options.',
+          remedy: 'None via § 706-622.9 (prior felony conviction)',
+          citation: 'Haw. Rev. Stat. § 706-622.9(3)'
+        },
+        eligible_property_retro_hi: {
+          status: 'eligible',
+          title: 'Act 168 Retroactive Property Path — You May Apply Now',
+          message: 'This is a door many people do not know exists: 2024 Act 168 lets a person sentenced BEFORE June 22, 2006 for a class C property felony — who would have qualified for treatment-probation expungement had it been available — apply now (§ 706-622.9(4)). The requirements are that you complied with your sentence, the court makes a "would have qualified" finding (or, if it cannot, that you completed a substance-abuse treatment program), you have NO felony conviction before or after the target conviction, and the court makes a current-nonviolence finding. It is once per lifetime. If that describes an old class C property case of yours, it is well worth pursuing. The HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help you file.',
+          remedy: 'Retroactive class-C-property expungement (§ 706-622.9(4), Act 168)',
+          citation: 'Haw. Rev. Stat. § 706-622.9(4)'
         },
         ineligible_conviction_hi: {
           status: 'ineligible',
-          title: 'This Conviction Cannot Be Expunged',
-          message: 'Hawaii expunges convictions only in a few narrow categories (under-21 DUI, first-time drug offender, first-time property offender), and yours is not one of them, so there is no expungement route. One counterintuitive thing worth knowing: even a PARDON does not make a Hawaii conviction expungeable — a pardoned conviction stays on the record with a pardon notation. So the honest answer here is that the record remains. If any part of your case ended without a conviction, that piece may still be expungeable separately. The HCJDC Expungement Section ((808) 587-3348) can confirm.',
-          remedy: 'None (conviction outside the narrow categories) — a pardon does not expunge it here',
-          citation: 'Haw. Rev. Stat. § 831-3.2'
+          title: 'This Conviction Is Outside Hawaii\'s Three Doors',
+          message: 'Hawaii has no general conviction expungement — a conviction can be expunged only through three narrow doors: the § 706-622.5 drug-treatment door, the § 706-622.5(5) standalone marijuana door (3 grams or less), and the § 706-622.9 class C property-treatment door (including its Act 168 retroactive path). Because yours is not one of those, there is no expungement route for it. One thing that IS still open: if any part of your case ended WITHOUT a conviction — a dismissed charge, or a completed deferred plea — that piece can be expunged administratively through the Attorney General. The HCJDC Expungement Section ((808) 587-3348) can confirm.',
+          remedy: 'None (outside the three conviction doors) — check any non-conviction pieces',
+          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9'
         },
         complex_convtype_hi: {
           status: 'complex',
-          title: 'We Need to Match Your Conviction to the Categories',
-          message: 'Hawaii will expunge a conviction only if it fits one of three narrow categories: under-21 DUI, first-time drug offender (§§ 706-622.5/.8), or first-time property offender (§ 706-622.9). Whether yours qualifies depends on exactly how you were sentenced, which we will not guess at. Your court paperwork shows the sentencing statute. The HCJDC Expungement Section ((808) 587-3348) can help you check it against the categories.',
-          remedy: 'Match Your Sentence to the Categories (court paperwork / HCJDC)',
-          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9, 291E-64'
+          title: 'We Need to Match Your Conviction to the Doors',
+          message: 'Hawaii will expunge a conviction only if it fits one of three narrow doors: drug-treatment (§ 706-622.5), standalone marijuana of 3 grams or less (§ 706-622.5(5)), or class C property-treatment (§ 706-622.9, incl. the Act 168 retroactive path). Whether yours qualifies depends on exactly how you were sentenced, which we will not guess at. Your court paperwork shows the sentencing statute. The HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help you check it against the doors.',
+          remedy: 'Match Your Sentence to the Doors (court paperwork / HCJDC)',
+          citation: 'Haw. Rev. Stat. §§ 706-622.5, 706-622.9'
+        },
+        ineligible_dag_excluded_hi: {
+          status: 'ineligible',
+          title: 'This Offense Is Excluded From a Deferred Plea',
+          message: 'A deferred acceptance plea (DAG/DANC) is not available for the offense you described — chapter 853\'s exclusion list (§ 853-4) rules out killing offenses and conspiracy/solicitation to kill or cause serious bodily injury, class A felonies, nonprobationable offenses, anyone with a prior felony conviction or felony delinquency adjudication in any jurisdiction, offenses where a firearm was used, drug distribution to a minor, campaign-spending falsification, and CDL holders charged with non-parking traffic offenses. One honest caveat: two more categories of the exclusion list (paragraphs (2) and (13)) are being reenacted effective June 30, 2026, and we have not yet read the reenacted text — so this is not the complete list. A defense attorney is the right person to confirm DAG eligibility for a specific charge.',
+          remedy: 'A deferred plea is likely unavailable (§ 853-4) — confirm with defense counsel',
+          citation: 'Haw. Rev. Stat. § 853-4'
+        },
+        ineligible_dag_prior_hi: {
+          status: 'ineligible',
+          title: 'A Prior Deferred Plea Bars a New One',
+          message: 'Chapter 853 limits repeat deferred pleas: for a FELONY charge, ANY prior deferred acceptance (DAG/DANC) bars a new one; for a misdemeanor charge, a prior DAG whose deferral period has not yet expired bars it (§ 853-4(11)-(12)). Because you have a prior deferred plea, a new one is likely unavailable. Note two exclusion paragraphs ((2) and (13)) are being reenacted effective June 30, 2026 and are not yet verified, so a defense attorney should confirm the full picture for your specific charge. If your earlier deferred plea was itself completed and dismissed, THAT record can be expunged through the Attorney General 1 year after dismissal.',
+          remedy: 'A new deferred plea is likely barred (§ 853-4(11)-(12)) — confirm with counsel',
+          citation: 'Haw. Rev. Stat. § 853-4(11)-(12)'
+        },
+        eligible_dag_available_hi: {
+          status: 'complex',
+          title: 'A Deferred Plea May Be Available — Confirm With Counsel',
+          message: 'Based on what you told us, none of the deferred-plea disqualifiers we screened applies, so a deferred acceptance plea (DAG/DANC) may be available for your charge — and that matters, because a completed and dismissed deferred plea can then be expunged by the Attorney General 1 year later, giving you the certificate-backed honest-no. Two honest limits: whether a DAG is granted is a court decision (this screening does not grant it), and two paragraphs of the exclusion list ((2) and (13)) are being reenacted effective June 30, 2026 and are not yet verified — so this is not a complete eligibility check. A defense attorney is the right person to pursue a DAG for a pending charge. The Legal Aid Society of Hawaii can point you to help.',
+          remedy: 'A deferred plea may be available (ch. 853) — pursue it with defense counsel',
+          citation: 'Haw. Rev. Stat. § 853-4'
+        },
+        effects_certificate_hi: {
+          status: 'complex',
+          title: 'Your Certificate Lets You Deny the Arrest — Even Under Oath',
+          message: 'Hawaii gives the strongest honest-no in this dataset. When the Attorney General expunges a non-conviction, it issues a CERTIFICATE that expressly authorizes you to state, in response to any question or inquiry — WHETHER OR NOT UNDER OATH — that you have no record of that specific arrest (§ 831-3.2(c)-(d)). You are protected from a perjury charge, from civil suit, and from being discharged from employment or subjected to other adverse action for answering that way. So on a job application, and even testifying under oath, you may lawfully say you have no record of that arrest. Two narrow real-world exceptions to be aware of: the records remain accessible to courts preparing presentence reports, to federal/state agencies vetting national- or state-security positions, and to law enforcement within their duties — and if the court database was not scrubbed (multiple-offense or multiple-defendant cases), a trace may still appear online even though your certificate still protects your answer. Keep the certificate; the HCJDC Expungement Section ((808) 587-3348) can reissue it.',
+          remedy: 'You may deny the arrest, even under oath (§ 831-3.2(c)-(d)) — keep the certificate',
+          citation: 'Haw. Rev. Stat. § 831-3.2(c)-(d)'
+        },
+        court_trace_hi: {
+          status: 'complex',
+          title: 'AG Expunged, but the Court Record Still Shows — Here Is Why',
+          message: 'You already have an Attorney General expungement (your state criminal history is cleared and your certificate protects your answers), but the case still shows on the court\'s public system (eCourt Kokua). Since the 2023/2025 amendments, an AG order with a court case number is transmitted to the Judiciary to remove the case from public court databases — EXCEPT in two situations: the case had multiple offenses with at least one outside your order, or you were one of multiple defendants and a co-defendant has no order of their own (§ 831-3.2(f)). If one of those applies, the court trace can persist even though the expungement is valid. The HCJDC Expungement Section ((808) 587-3348) can tell you whether a further court step is possible in your case.',
+          remedy: 'Court-database scrubbing has two carve-outs (§ 831-3.2(f)) — ask HCJDC about your case',
+          citation: 'Haw. Rev. Stat. § 831-3.2(f)'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Administrative Expungement (Haw. Rev. Stat. § 831-3.2)',
+          name: 'Administrative Expungement (Haw. Rev. Stat. § 831-3.2; conviction doors §§ 706-622.5, 706-622.9)',
           formName: 'HCJDC expungement application',
           formUrl: 'https://ag.hawaii.gov/hcjdc/expungement/',
           steps: [
-            'Apply to the Attorney General\'s HCJDC (not a court) — it "shall issue" for non-convictions and completed deferred pleas.',
-            'For a qualifying conviction (under-21 DUI, first-time drug, first-time property), get a court order first, then apply to HCJDC.',
-            'Pay $35 (first-time) or $50 (repeat) by cashier\'s check or money order; expect about 120 days, with no expediting.',
-            'Since July 2025 the court record is sealed automatically; for a certificate issued before then, make a separate court request to seal on eCourt Kokua.'
+            'For a NON-conviction or a dismissed deferred plea (DAG/DANC, 1 year after dismissal), apply to the Attorney General\'s HCJDC (not a court) — it SHALL issue, and you receive a certificate that lets you deny the arrest even under oath.',
+            'Watch the non-conviction exclusions: a bail forfeiture (never for a felony/misdemeanor; 5 years for a petty misdemeanor/violation), an absconder, or an NGRI/involuntary-hospitalization disposition cannot be expunged.',
+            'For a CONVICTION, only three court doors exist: the § 706-622.5 drug-treatment door (not meth/distribution), the § 706-622.5(5) standalone marijuana door (3 grams or less), and the § 706-622.9 class C property door (incl. the 2024 Act 168 retroactive path for pre-6/22/2006 sentences). Each is "shall expunge" on completion, once per lifetime.',
+            'An AG order with a court case number is transmitted to the Judiciary to scrub the case from public court databases — except in multiple-offense or multiple-defendant cases, where a court trace can remain. The HCJDC Expungement Section ((808) 587-3348) and Legal Aid Society of Hawaii can help.'
           ],
-          // NOT null: Wave 7 gives the fee ($35 first-time / $50 repeat, incl. $10 nonrefundable).
-          fees: '$35 first-time / $50 repeat administrative fee (includes a $10 nonrefundable portion), by cashier\'s check or money order only.',
-          // null: Wave 7 gives no waiver information for the HCJDC fee.
+          // null: HRS § 831-3.2 states no fee for the application itself, and the
+          // court-door expungements (§§ 706-622.5/.9) state none either; HCJDC fee
+          // practice is phone-tier, so the fee and any waiver are unknown.
+          fees: null,
           feeWaiver: null,
-          courtContact: 'HCJDC Expungement Section, (808) 587-3348, 465 S. King St. Rm 102, Honolulu (and the sentencing court for a conviction order)'
+          courtContact: 'HCJDC Expungement Section, (808) 587-3348, Honolulu (and the sentencing court for a § 706-622.5 / § 706-622.9 conviction door)'
         }
       },
       legalAid: [

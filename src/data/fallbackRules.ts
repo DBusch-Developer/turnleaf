@@ -17682,167 +17682,288 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   ME: {
     code: 'ME',
     name: 'Maine',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'Chapter 310-A read current through 2023 c 639 (§ 2261), 2023 c 666 (§ 2262), and 2023 c 409 (§§ 2262-A, '
+      + '2263, 2264); a 2024-2026 session sweep is pending — Maine amends this chapter nearly every session. '
+      + 'Non-conviction records are governed by the Title 16 CHRI Act (16 M.R.S. ch. 3), which was NOT pulled — '
+      + 'the non-conviction node is left pending that pull and states no non-conviction rules.',
     terminology:
-      'Maine has NO expungement. The remedy is a post-judgment MOTION TO SEAL (15 M.R.S. ch. 310-A, '
-      + '§§ 2261-2265). Two things make Maine distinctive. First, a structural quirk: most non-conviction '
-      + 'information is already confidential by law (16 M.R.S. § 703), so dismissals and acquittals are '
-      + 'generally non-public WITHOUT any petition — you often do not need to file. Second, a 2024 change '
-      + 'that most guides have not caught up to: the old rule limiting sealing to convictions from ages 18-27 '
-      + 'was REMOVED, so now ALL Class E convictions (the lowest level) except sexual assault can be sealed, '
-      + 'at any age, four years after the sentence is satisfied. Filing is about $5 — among the cheapest in '
-      + 'the country.',
+      'Maine has no expungement; the remedy is a motion to SEAL under 15 M.R.S. chapter 310-A (§§ 2261-2269), '
+      + 'filed in the underlying criminal case. It is deliberately narrow: only CLASS E convictions qualify '
+      + '(the lowest level) — EXCEPT Class E crimes under Title 17-A chapter 11 (sexual assaults) — plus a '
+      + 'legacy list of pre-January-30-2017 marijuana convictions (Class D cultivation and possession and three '
+      + 'aggravated-cultivating variants). No Class D outside that marijuana list, and NO felony class, ever. '
+      + '(An earlier age-at-offense limit was REPEALED, so age no longer matters.) The prerequisites (§ 2262), '
+      + 'all proven by the movant by a preponderance, are strict: an eligible conviction; at least 4 YEARS since '
+      + 'FULL satisfaction of every sentencing alternative; no other Maine conviction AND — the counterintuitive '
+      + 'trap — NO completed DEFERRED-DISPOSITION DISMISSAL since; no out-of-state conviction over the window; '
+      + 'and no pending charges anywhere. There is a faster mandatory door for former § 853-A prostitution '
+      + 'convictions (§ 2262-A): sealed at just 1 year if the person has no promotion/trafficking convictions. '
+      + 'Two Maine features to hold onto: sealing is CONDITIONAL FOR LIFE — any later conviction anywhere '
+      + 'unseals the record, and the person has an affirmative duty to report their own new conviction '
+      + '(§ 2264(7)-(8)); and the honest-no is BOUNDED (§ 2266) — you may decline to disclose a sealed '
+      + 'conviction to most inquiries without penalty, but NOT to criminal-justice agencies, the entities '
+      + 'authorized to see it (§ 2265 — which include professional LICENSING boards and mandated-check '
+      + 'employers), or when under oath while being prosecuted for a later crime.',
     keyDates: [
       {
-        label: 'Age cap (18-27) for Class E sealing removed (HP1435)',
-        date: '2024',
+        label: 'Eligible-conviction definition replaced — Class E + legacy marijuana (§ 2261(6), 2023 c 639)',
+        date: '2023',
         kind: 'effective',
-        note: 'Wave 7 gives the year only. The old 18-to-27 age limitation was removed in 2024; ALL Class E convictions except sexual assault are now sealable regardless of age. Most online guides still state the age cap — encode from the current statute.',
+        note: '2023 c 639 replaced § 2261(6): eligible convictions are any current/former Class E crime except Title 17-A chapter 11 offenses, plus the pre-1/30/2017 marijuana list. No Class D outside that list, no felonies.',
       },
       {
-        label: 'Sealing for sex-trafficking/exploitation-related convictions (LD 1871)',
-        date: '2026-01-11',
+        label: 'Age-at-offense requirement repealed (§ 2262(6), 2023 c 666)',
+        date: '2023',
         kind: 'effective',
-        note: 'Enacted Jan 11, 2026. Any conviction substantially resulting from sex trafficking or sexual exploitation is sealable anytime, no waiting period; documentation creates a presumption. Two weeks old in legislative terms — confirm operative status.',
+        note: '2023 c 666 repealed the former § 2262(6) age requirement, so Class E sealing no longer turns on the person\'s age at the offense. Many guides still state the old age cap.',
       },
       {
-        label: 'Marijuana-sealing cutoff (Class D/E convictions before this date)',
+        label: 'Marijuana-sealing cutoff (convictions before January 30, 2017)',
         date: '2017-01-30',
         kind: 'effective',
-        note: 'Class D and E marijuana convictions from BEFORE January 30, 2017 are sealable.',
+        note: 'The legacy marijuana list reaches Class D cultivation (former § 1105), the three aggravated-cultivating variants (§ 1105-D), and Class D possession (former § 1107) for convictions before January 30, 2017.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm the 2024 removal of the age cap for Class E sealing (HP1435) against the current 15 M.R.S. § 2261 text. Wave 7 calls this "discrepancy gold" — most online guides and both major court-records sites still state the old 18-to-27 age limitation. The tree encodes the repeal (no age question); confirm it against the statute.',
+          'TOP PRIORITY: pull the Title 16 CHRI Act (16 M.R.S. chapter 3, §§ 703-705) for the NON-conviction confidentiality rules. Chapter 310-A governs only convictions; non-conviction records (dismissals, acquittals) are handled by Title 16, which was not read. Until it is pulled, this state states NO non-conviction rules — the non-conviction node routes to a pending-pull result.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the ~$5 filing fee is current. Wave 7 gives it as the cheapest in the nation (Motion CR-218) but flags it for confirmation. The fees field encodes ~$5 and flags this; courts.maine.gov is the check.',
+          'Run a 2024-2026 session sweep for amendments to chapter 310-A (Maine LD tracker by statute). Maine amends this chapter nearly every session; the read text is through 2023 c 639/666/409. In particular, confirm whether any post-2023 act EXPANDED eligibility beyond Class E — do NOT assume it did; verify.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm LD 1871 (sex-trafficking/exploitation sealing, enacted Jan 11, 2026) is operative, and confirm whether any indigency fee waiver applies to the sealing motion. Wave 7 gives LD 1871 as two weeks old and gives no waiver information; the feeWaiver field is null pending confirmation.',
-        blocksFields: ['resources.remedies.expungement.feeWaiver'],
+          'Confirm the sealing-motion filing-fee practice. No fee is stated in the chapter for the motion; the amount and any indigency waiver are phone-tier (courts.maine.gov / the clerk of the court of conviction). The fees and feeWaiver fields are null pending this — state no numbers.',
+        blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Pull the Title 17-A chapter 11 offense list (the Class E crimes excluded from sealing under § 2261(6)(A)). Cited but not read; the tree screens it as a category without the specific enumeration.',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Me. Rev. Stat. tit. 15, §§ 2261-2265 (motion to seal; 4-year prerequisite)', url: null, retrievedOn: null },
-      { id: 'Me. Rev. Stat. tit. 16, § 703 (records classification — non-conviction confidentiality)', url: null, retrievedOn: null },
-      { id: 'HP1435 (2024) (removed the 18-27 age cap for Class E sealing)', url: null, retrievedOn: null },
-      { id: 'LD 1871 (2026) (sealing for sex-trafficking/exploitation-related convictions)', url: null, retrievedOn: null },
+      { id: 'Me. Rev. Stat. tit. 15, § 2261 (definitions — (6), as replaced by 2023 c 639: eligible convictions are (A) any current/former CLASS E crime except Title 17-A chapter 11 offenses, and (B) pre-1/30/2017 marijuana convictions: Class D cultivation (former § 1105), the three aggravated-cultivating variants (§ 1105-D), and Class D possession (former § 1107)) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2262 (prerequisites, movant\'s preponderance burden — (1) eligible conviction; (2) at least 4 years since full satisfaction of every sentencing alternative; (3) no other Maine conviction AND no deferred-disposition dismissal since satisfying the most recent eligible conviction; (4) no out-of-state conviction over the window; (5) no pending charges; former (6) age requirement REPEALED by 2023 c 666) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2262-A (2023 c 409 — MANDATORY sealing of former § 853-A engaging-in-prostitution convictions: eligible conviction, at least 1 year since full satisfaction, and no convictions under 17-A §§ 852, 853, 853-B, or 855 (or substantially similar out-of-state conduct)) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2263 (2023 c 409 — motion procedure: written motion in the underlying case addressing each prerequisite; retained but no appointed counsel; hearing required; Maine Rules of Evidence do not apply, affidavits/reliable hearsay allowed; preponderance burden; written findings) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2264 (2023 c 409 — effect of an order; SBI electronically notified, amends records, mails a compliance notification; (7)-(8) UNSEAL-on-reconviction: any new conviction in any jurisdiction at any time requires unsealing, the person has an affirmative duty to file written notice of their own new conviction, and if the court learns of an apparent new conviction the person bears a clear-and-convincing burden to prove none, else automatic unsealing) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2265 (dissemination carve-outs — sealed records remain available to the subject/designee; criminal justice agencies (incl. charging instruments, open court in later prosecutions, evidence/discovery); the Secretary of State for motor-vehicle compliance; victims and their representatives; the Insurance/Consumer-Credit/Financial-Institutions/Securities regulators; PROFESSIONAL LICENSING agencies (plus 5 § 5303(2) functions and the Veterinary Board); financial institutions with legally mandated checks; and entities required to run fingerprint checks under 25 § 1542-A) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2266 (BOUNDED honest-no — the person may not disclose a sealed conviction without sanctions, and non-disclosure is not unsworn falsification or false swearing (17-A §§ 451-453), EXCEPT to criminal-justice agencies, to any entity authorized under § 2265, and when under oath while being prosecuted for a subsequent crime) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2267 (appeals — the person has NO appeal as of right (discretionary review by the Supreme Judicial Court only); the STATE appeals a grant as of right) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2268 (former-chapter-310 (former § 2254) sealed convictions keep confidentiality with the same unseal-on-reconviction rule) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 15, § 2269 (intentional unlawful dissemination of sealed records is a Class E crime) via legislature.maine.gov', url: 'https://legislature.maine.gov', retrievedOn: '2026-07-22' },
+      { id: 'Me. Rev. Stat. tit. 16, ch. 3 (§§ 703-705, the Criminal History Record Information Act governing NON-conviction confidentiality) — CITE-ONLY, NOT pulled; non-conviction rules pending this pull', url: null, retrievedOn: null },
+      { id: 'Me. Rev. Stat. tit. 17-A, ch. 11 (sexual-assault offenses — the Class E crimes excluded from sealing by § 2261(6)(A)); 17-A §§ 852/853/853-B/855 (promotion/trafficking offenses that disqualify the § 2262-A prostitution-survivor path) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_me',
       nodes: {
-        disposition: {
+        entry_me: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_type_me' },
-            { label: 'Dismissed', value: 'dismissed', next: 'already_confidential_me' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'already_confidential_me' },
-            { label: 'Deferred disposition dismissed', value: 'deferred', next: 'already_confidential_me' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Whether a CONVICTION can be sealed', value: 'conviction', next: 'conv_door_me' },
+            { label: 'A NON-conviction (dismissed or acquitted)', value: 'nonconv', next: 'nonconv_pending_me' },
+            { label: 'What a sealed record I already have means (disclosure, licensing, a new conviction)', value: 'effects', next: 'effects_me' },
+            { label: 'Whether I can appeal a denied sealing motion', value: 'appeal', next: 'appeal_me' },
+            { label: 'Does my AGE affect eligibility?', value: 'age', next: 'age_me' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        conv_type_me: {
+        conv_door_me: {
           type: 'choice',
-          text: 'What kind of conviction is it?',
+          text: 'Which best describes the conviction you want to seal?',
           options: [
-            { label: 'A Class E offense (the lowest level — max 6 months / $1,000)', value: 'classE', next: 'classE_sexual_me' },
-            { label: 'A Class D or E marijuana conviction from before January 30, 2017', value: 'marijuana', next: 'eligible_marijuana_me' },
-            { label: 'A conviction resulting from sex trafficking or sexual exploitation', value: 'trafficking', next: 'eligible_trafficking_me' },
-            { label: 'An OUI (operating under the influence)', value: 'oui', next: 'ineligible_oui_me' },
-            { label: 'Another Class A, B, C, or D conviction', value: 'other', next: 'ineligible_conviction_me' },
-            { label: 'I\'m not sure', value: 'unsure', next: 'complex_convtype_me' }
+            { label: 'A Class E offense (the lowest level — max 6 months / $1,000)', value: 'classE', next: 'classE_ch11_me' },
+            { label: 'A pre-January-30-2017 MARIJUANA conviction (Class D cultivation or possession, or a listed aggravated-cultivating variant)', value: 'marijuana', next: 'prereq_deferral_me' },
+            { label: 'A former § 853-A engaging-in-prostitution conviction', value: 'prostitution', next: 'prostitution_clean_me' },
+            { label: 'A Class D offense (other than the marijuana list), or a Class C, B, or A offense', value: 'higher', next: 'ineligible_class_me' },
+            { label: 'I\'m not sure of the class', value: 'unsure', next: 'complex_convtype_me' }
           ]
         },
-        classE_sexual_me: {
+        classE_ch11_me: {
           type: 'boolean',
-          text: 'Was the offense a sexual assault?',
-          yes: 'ineligible_conviction_me',
+          text: 'Is the Class E offense a sexual assault or other offense under Title 17-A chapter 11?',
+          yes: 'ineligible_ch11_me',
+          no: 'prereq_deferral_me'
+        },
+        // The deferral trap (§ 2262(3)): a COMPLETED deferred disposition breaks the
+        // clean-record requirement even though it ends in a dismissal — opposite of
+        // most states. Asked as its own gate.
+        prereq_deferral_me: {
+          type: 'boolean',
+          text: 'Since you satisfied this conviction, have you COMPLETED a deferred disposition — even one that ended in a dismissal? (In Maine, unusually, a completed deferred disposition breaks the clean-record requirement.)',
+          yes: 'ineligible_deferral_me',
+          no: 'prereq_otherconv_me'
+        },
+        prereq_otherconv_me: {
+          type: 'boolean',
+          text: 'Since satisfying this conviction, have you been convicted of any other crime — in Maine or any other jurisdiction — or do you have any charges pending anywhere?',
+          yes: 'ineligible_otherconv_me',
           no: 'classE_date_me'
         },
         classE_date_me: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When was your sentence satisfied, including all fines and fees?',
+          text: 'When did you FULLY satisfy every part of the sentence — all jail/probation and all fines and fees?',
           validation: {
-            period: { amount: 4, unit: 'years', anchor: 'since sentence satisfied incl. LFOs, no other convictions (15 M.R.S. § 2262 — Class E sealing)' },
-            nextPass: 'eligible_classE_me',
+            period: { amount: 4, unit: 'years', anchor: 'at least 4 years since full satisfaction of every sentencing alternative (§ 2262(2))' },
+            nextPass: 'eligible_seal_me',
             nextFail: 'waiting_me'
           }
+        },
+        prostitution_clean_me: {
+          type: 'boolean',
+          text: 'Do you have any conviction under 17-A §§ 852, 853, 853-B, or 855 (promotion of prostitution, aggravated sex trafficking, sex trafficking, or patronizing), or substantially similar out-of-state conduct?',
+          yes: 'ineligible_prostitution_excl_me',
+          no: 'prostitution_date_me'
+        },
+        prostitution_date_me: {
+          type: 'date',
+          text: 'When did you FULLY satisfy the sentence for the prostitution conviction?',
+          validation: {
+            period: { amount: 1, unit: 'years', anchor: 'at least 1 year since full satisfaction (§ 2262-A — mandatory prostitution-survivor sealing)' },
+            nextPass: 'eligible_prostitution_me',
+            nextFail: 'waiting_prostitution_me'
+          }
+        },
+        effects_me: {
+          type: 'choice',
+          text: 'What do you want to know about a sealed record?',
+          options: [
+            { label: 'I got a NEW conviction after sealing — what happens?', value: 'reconviction', next: 'effects_unseal_me' },
+            { label: 'Can a LICENSING board or a mandated-check employer still see it?', value: 'licensing', next: 'effects_licensing_me' },
+            { label: 'What can I say to a regular private employer?', value: 'honestno', next: 'effects_honestno_me' }
+          ]
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Maine seals a narrow set of convictions, but most non-convictions are already confidential by law without any filing — so the outcome matters a lot. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Maine State Bureau of Identification record request will show the disposition; Pine Tree Legal Assistance can help you read it.',
+          message: 'Maine seals a narrow set of CONVICTIONS through chapter 310-A, while non-convictions are handled under a different law (the Title 16 records act) — so the outcome decides the route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a Maine State Bureau of Identification record request will show the disposition; Pine Tree Legal Assistance can help you read it.',
           remedy: 'Get Your Record First (court paperwork / SBI)',
           citation: '15 M.R.S. ch. 310-A (the route depends on the disposition)'
         },
-        already_confidential_me: {
-          status: 'eligible',
-          title: 'Likely Already Confidential — You May Not Need to File',
-          message: 'Here is a Maine-specific piece of good news: because your case ended without a conviction, the information is generally CONFIDENTIAL by law already (16 M.R.S. § 703) — non-public without you filing anything. So in most cases you do not need a sealing motion for a dismissal or acquittal; it should already be off public view. If you find it is still appearing somewhere it should not, Pine Tree Legal Assistance can help you address that specific record. But the default answer is reassuring: you likely do not need to do anything.',
-          remedy: 'Usually nothing to file — non-convictions are confidential by classification (§ 703)',
-          citation: 'Me. Rev. Stat. tit. 16, § 703'
+        nonconv_pending_me: {
+          status: 'complex',
+          title: 'Non-Convictions Are Governed by a Different Law — We Have Not Read It Yet',
+          message: 'Because your case ended WITHOUT a conviction, it is not handled by Maine\'s sealing chapter (15 M.R.S. ch. 310-A) at all — non-conviction records are governed by the separate Title 16 Criminal History Record Information Act (16 M.R.S. ch. 3). We have verified the sealing chapter but have NOT yet read the Title 16 rules, so we are not going to state how a Maine dismissal or acquittal is treated and risk getting it wrong. This is a "we need to check," not a dead end — Pine Tree Legal Assistance can tell you how non-conviction confidentiality works for your specific record, and we are flagging the Title 16 pull as the top open item.',
+          remedy: 'Non-conviction rules pending (16 M.R.S. ch. 3) — check with Pine Tree Legal Assistance',
+          citation: 'Me. Rev. Stat. tit. 16, ch. 3 (CHRI Act — pending verification)'
         },
-        eligible_classE_me: {
-          status: 'eligible',
-          title: 'Class E Conviction, 4+ Years — Sealable (Age No Longer Matters)',
-          message: 'Based on your dates — 4 years since your sentence was satisfied, with no other convictions — this Class E conviction is sealable under 15 M.R.S. § 2262. The important update: Maine REMOVED the old rule that limited this to ages 18-27, so your age does not matter anymore — most guides still show the old age cap, but it is gone as of 2024. You file a Motion to Seal (CR-218); the fee is about $5, among the lowest anywhere. Once sealed, the record is deniable except to criminal-justice agencies and a few listed entities. Pine Tree Legal Assistance can help.',
-          remedy: 'Motion to seal a Class E conviction (§ 2262)',
-          citation: 'Me. Rev. Stat. tit. 15, § 2262'
-        },
-        waiting_me: {
-          status: 'waiting',
-          title: 'Not Yet Four Years',
-          message: 'Maine lets you seal a Class E conviction 4 years after the sentence is satisfied (including all fines and fees), with no other convictions in the window. Based on your dates, that has not passed yet. When it does, the motion (CR-218) costs about $5 to file. Pine Tree Legal Assistance can help you time it.',
-          remedy: 'Wait for the 4-year period (§ 2262)',
-          citation: 'Me. Rev. Stat. tit. 15, § 2262'
-        },
-        eligible_marijuana_me: {
-          status: 'eligible',
-          title: 'Pre-2017 Marijuana Conviction — Sealable',
-          message: 'Because this is a Class D or E marijuana conviction from before January 30, 2017, Maine allows it to be sealed. You file a Motion to Seal (CR-218) — filing is about $5. Pine Tree Legal Assistance can help you prepare it.',
-          remedy: 'Motion to seal a pre-2017 marijuana conviction',
-          citation: 'Me. Rev. Stat. tit. 15, ch. 310-A'
-        },
-        eligible_trafficking_me: {
-          status: 'eligible',
-          title: 'Trafficking-Related Conviction — Sealable Anytime (New Law)',
-          message: 'Because your conviction substantially resulted from sex trafficking or sexual exploitation, Maine\'s new law (LD 1871, enacted January 2026) lets you seal it ANYTIME — no waiting period — and documentation of the trafficking creates a presumption in your favor. This law is very new, so it is worth filing with help. Pine Tree Legal Assistance can guide the motion and the documentation.',
-          remedy: 'Motion to seal a trafficking-related conviction (LD 1871) — no wait',
-          citation: 'LD 1871 (2026)'
-        },
-        ineligible_conviction_me: {
+        ineligible_class_me: {
           status: 'ineligible',
-          title: 'This Conviction Cannot Be Sealed',
-          message: 'Maine seals only Class E convictions (except sexual assault), pre-2017 marijuana convictions, and trafficking-related convictions. A Class A, B, C, or D conviction (or a Class E sexual assault) is not sealable. No waiting period changes that. The remaining route is a pardon: eligible 5 years after your sentence, and a full-and-free pardon makes the record confidential. Pine Tree Legal Assistance can explain the pardon process.',
-          remedy: 'None (not a sealable class) — a pardon (5 yrs) is the remaining route',
-          citation: 'Me. Rev. Stat. tit. 15, § 2261'
-        },
-        ineligible_oui_me: {
-          status: 'ineligible',
-          title: 'OUI — No Sealing, and the Pardon Board Will Not Take It',
-          message: 'This one is a double no, and it is better to know it up front. An OUI (operating under the influence) is not a sealable class in Maine — and unlike other convictions, it does not even have a pardon fallback, because the Board of Pardons will not consider OUI applications (nor registry-removal or firearms-motivated ones). So there is no record-clearing route for an OUI here. If you have OTHER, sealable convictions on your record, those may still qualify separately. Pine Tree Legal Assistance can help you check the rest of your record.',
-          remedy: 'None — OUI is neither sealable nor pardonable in Maine',
-          citation: 'Me. Rev. Stat. tit. 15, § 2261'
+          title: 'Not a Sealable Class',
+          message: 'Maine\'s sealing chapter reaches only CLASS E convictions (except Title 17-A chapter 11 sexual offenses) plus a legacy list of pre-2017 marijuana convictions. A Class D offense outside that marijuana list, or any Class C, B, or A conviction, cannot be sealed — no waiting period changes that. This is the trap most guides get wrong: sealing is not available for "misdemeanors" generally, only for the lowest class. A Governor\'s pardon is the remaining route for an unsealable conviction. Pine Tree Legal Assistance can confirm the class and explain the pardon process.',
+          remedy: 'None (not Class E) — a pardon is the remaining route',
+          citation: 'Me. Rev. Stat. tit. 15, § 2261(6)'
         },
         complex_convtype_me: {
           status: 'complex',
           title: 'We Need the Conviction Class',
-          message: 'Maine seals only Class E convictions (except sexual assault), pre-2017 marijuana, and trafficking-related convictions — so the class matters. Since you are not sure which yours is, we are not going to guess. Your court paperwork states the class, and a Maine SBI record request will show it. Pine Tree Legal Assistance can help you read it.',
+          message: 'Maine seals only Class E convictions (except Title 17-A chapter 11 offenses) and the pre-2017 marijuana list — so the exact class is decisive, and a Class D or higher cannot be sealed. Since you are not sure which yours is, we are not going to guess. Your court paperwork states the class, and a Maine SBI record request will show it. Pine Tree Legal Assistance can help you read it.',
           remedy: 'Get the Conviction Class First (court paperwork / SBI)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2261(6)'
+        },
+        ineligible_ch11_me: {
+          status: 'ineligible',
+          title: 'Class E Sexual Offense — Excluded',
+          message: 'Even though it is a Class E offense, a sexual assault or other Title 17-A chapter 11 offense is expressly excluded from sealing (§ 2261(6)(A)), so this conviction cannot be sealed and no waiting period changes that. A Governor\'s pardon is the remaining route. Pine Tree Legal Assistance can confirm the offense and explain the pardon process.',
+          remedy: 'None (Title 17-A chapter 11 exclusion) — a pardon is the remaining route',
+          citation: 'Me. Rev. Stat. tit. 15, § 2261(6)(A)'
+        },
+        ineligible_deferral_me: {
+          status: 'ineligible',
+          title: 'A Completed Deferred Disposition Breaks the Clean-Record Rule',
+          message: 'This is Maine\'s counterintuitive trap. Sealing requires that since satisfying your conviction you have had no other Maine conviction AND no completed DEFERRED-DISPOSITION DISMISSAL (§ 2262(3)). In most states a deferred disposition ending in dismissal is a good thing — here, completing one actually BREAKS the clean-record requirement for sealing, even though it is a dismissal. Because you completed one, the motion cannot be granted now. This is unusual enough that it is worth confirming the sequence and timing with counsel. Pine Tree Legal Assistance can review it with you.',
+          remedy: 'None now (completed deferred disposition breaks cleanliness) — § 2262(3)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262(3)'
+        },
+        ineligible_otherconv_me: {
+          status: 'ineligible',
+          title: 'Another Conviction or Pending Charge Blocks Sealing',
+          message: 'Sealing requires a clean record since you satisfied this conviction: no other conviction in Maine, none in any other jurisdiction over the window, and no charges pending anywhere (§ 2262(3)-(5)). Because one of those applies — for example a new out-of-state misdemeanor — the motion cannot be granted now. Depending on how the other matter resolves, and how the timing runs, the analysis may reopen later. Pine Tree Legal Assistance can help you work out the timing.',
+          remedy: 'None now (a later conviction or pending charge) — § 2262(3)-(5)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262'
+        },
+        eligible_seal_me: {
+          status: 'eligible',
+          title: 'Eligible Conviction, 4+ Years, Clean — Sealable',
+          message: 'Based on your answers — an eligible Class E conviction (or a pre-2017 marijuana conviction on the legacy list), at least 4 years since you fully satisfied the sentence, and no other conviction, no completed deferred disposition, and no pending charges since — this conviction is sealable under § 2262. (Age no longer matters; that requirement was repealed.) You file a written Motion to Seal in the underlying criminal case; there is a hearing, you carry a preponderance burden, and the court makes written findings. Two things to hold onto: sealing is CONDITIONAL FOR LIFE — any later conviction anywhere unseals it, and you must report your own new conviction (§ 2264) — and the honest-no is bounded: licensing boards and mandated-check employers can still see it (§ 2265). Pine Tree Legal Assistance can help with the motion.',
+          remedy: 'Motion to seal (§ 2262) — conditional for life, bounded honest-no',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262'
+        },
+        waiting_me: {
+          status: 'waiting',
+          title: 'Not Yet Four Years Since Full Satisfaction',
+          message: 'Maine lets you seal an eligible conviction at least 4 years after you FULLY satisfy every part of the sentence — all jail/probation and all fines and fees (§ 2262(2)). Based on your date, that has not passed yet. When it does — and provided you stay conviction-free, complete no deferred disposition, and have no pending charges — you file the Motion to Seal in the underlying case. Pine Tree Legal Assistance can help you time it.',
+          remedy: 'Wait for the 4-year period from full satisfaction (§ 2262(2))',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262(2)'
+        },
+        ineligible_prostitution_excl_me: {
+          status: 'ineligible',
+          title: 'A Promotion/Trafficking Conviction Disqualifies the Fast Path',
+          message: 'The mandatory 1-year prostitution-survivor sealing (§ 2262-A) is available only if you have no conviction under 17-A §§ 852, 853, 853-B, or 855 (promotion of prostitution, aggravated sex trafficking, sex trafficking, or patronizing), or substantially similar out-of-state conduct. Because you have such a conviction, this fast path is unavailable. If the underlying prostitution conviction is itself a Class E offense, it might still be sealable through the ordinary 4-year path once its prerequisites are met. Pine Tree Legal Assistance can sort out which applies.',
+          remedy: 'None via § 2262-A (disqualifying conviction) — check the ordinary path',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262-A'
+        },
+        eligible_prostitution_me: {
+          status: 'eligible',
+          title: 'Prostitution Conviction — Mandatory Sealing at 1 Year',
+          message: 'Maine has a survivor-oriented fast path: a former § 853-A engaging-in-prostitution conviction MUST be sealed (it is mandatory, not discretionary) if you have no promotion or sex-trafficking conviction and at least 1 year has passed since you fully satisfied the sentence (§ 2262-A). Based on your dates, the 1-year period has passed, so the court is required to seal it on your motion. The same lifelong condition applies — a later conviction anywhere unseals it — and the honest-no is bounded (licensing boards and mandated-check employers can still see it). Pine Tree Legal Assistance can help you file.',
+          remedy: 'Mandatory prostitution-survivor sealing (§ 2262-A) — 1-year path',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262-A'
+        },
+        waiting_prostitution_me: {
+          status: 'waiting',
+          title: 'Prostitution Sealing — Not Yet One Year',
+          message: 'A former § 853-A engaging-in-prostitution conviction must be sealed once at least 1 year has passed since you fully satisfied the sentence, if you have no disqualifying promotion/trafficking conviction (§ 2262-A). Based on your date, that year has not passed yet. When it does, the sealing is mandatory on your motion. Pine Tree Legal Assistance can help you time it.',
+          remedy: 'Wait until 1 year after full satisfaction (§ 2262-A)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2262-A'
+        },
+        effects_unseal_me: {
+          status: 'complex',
+          title: 'A New Conviction Unseals a Maine Sealed Record — and You Must Report It',
+          message: 'Maine sealing is conditional for life. ANY new conviction, in any jurisdiction, at any time after sealing, requires the record to be UNSEALED (§ 2264(7)-(8)) — there is no expiration on that condition. And there is an affirmative duty most people do not expect: you must promptly file WRITTEN NOTICE of your own new conviction in the old (sealed) case. If instead the court learns of an apparent new conviction on its own, you may request a hearing where YOU bear a clear-and-convincing burden to prove there was no new conviction; if you do not request that hearing, the record is unsealed automatically. So a sealed Maine record is best thought of as sealed-so-long-as-you-stay-conviction-free. Pine Tree Legal Assistance can advise on the reporting duty.',
+          remedy: 'A new conviction unseals it — report your own new conviction (§ 2264(7)-(8))',
+          citation: 'Me. Rev. Stat. tit. 15, § 2264(7)-(8)'
+        },
+        effects_licensing_me: {
+          status: 'complex',
+          title: 'Licensing Boards and Mandated-Check Employers Still See a Sealed Conviction',
+          message: 'Maine\'s sealing is real but bounded. A sealed conviction remains available to a specific list of entities (§ 2265) — and the one that catches people is PROFESSIONAL LICENSING agencies conducting checks on licensees or applicants (for example, a nursing or other state license). Also on the list: criminal-justice agencies, victims and their representatives, the Secretary of State for motor-vehicle purposes, the insurance/consumer-credit/financial-institutions/securities regulators, financial institutions with legally mandated checks, and employers required to run fingerprint-based checks under 25 § 1542-A. For any of those, the sealed conviction can still be seen, and the honest-no does NOT apply to them (§ 2266). So for a state license application, expect the board to see it and answer truthfully. Pine Tree Legal Assistance can tell you whether a specific check is on the list.',
+          remedy: 'Licensing/mandated-check entities can see it (§ 2265) — disclose to them',
+          citation: 'Me. Rev. Stat. tit. 15, §§ 2265, 2266'
+        },
+        effects_honestno_me: {
+          status: 'complex',
+          title: 'To a Regular Employer, You May Decline to Disclose',
+          message: 'For an ordinary inquiry — a typical private employer with no legally mandated background check — Maine lets you NOT disclose a sealed conviction, and doing so is not unsworn falsification or false swearing, with no penalty (§ 2266). So on a standard job application you may lawfully leave it off. But the honest-no is BOUNDED: it does not apply when you are responding to a criminal-justice agency, to any entity authorized to see the record under § 2265 (which includes professional licensing boards and mandated-check employers), or when you are under oath while being prosecuted for a later crime. In those situations you must disclose. So the rule of thumb is: decline to a regular employer, disclose to a licensing board or under oath. Pine Tree Legal Assistance can help you tell which inquiry is which.',
+          remedy: 'Decline to a regular employer; disclose to § 2265 entities and under oath (§ 2266)',
+          citation: 'Me. Rev. Stat. tit. 15, § 2266'
+        },
+        appeal_me: {
+          status: 'complex',
+          title: 'You Cannot Appeal a Denial as of Right — the State Can Appeal a Grant',
+          message: 'Maine builds in an asymmetry worth knowing before you rely on an appeal. If your sealing motion is DENIED, you have NO appeal as of right — the only review is DISCRETIONARY, by the Supreme Judicial Court, which can decline to hear it (§ 2267). The STATE, by contrast, may appeal a GRANT as of right. So a denial is hard to overturn, while a grant can be challenged by the prosecution. The practical takeaway is to put your best case in at the hearing, because there is no guaranteed second chance. Pine Tree Legal Assistance can help you make the strongest motion the first time.',
+          remedy: 'No appeal of right on denial (discretionary review only) — § 2267',
+          citation: 'Me. Rev. Stat. tit. 15, § 2267'
+        },
+        age_me: {
+          status: 'complex',
+          title: 'Age No Longer Affects Eligibility',
+          message: 'Good news, and a common source of confusion: Maine USED to limit Class E sealing to convictions from a set age range, but that age-at-offense requirement was REPEALED (former § 2262(6), repealed by 2023 c 666). So your age does not affect eligibility anymore — most online guides and court-records sites still show the old age cap, but it is gone. What matters now is the offense class (Class E, or the legacy marijuana list), the 4-year full-satisfaction wait, and a clean record since. If those fit, you can seal regardless of how old you were or are. Pine Tree Legal Assistance can run the current rules against your record.',
+          remedy: 'Age is no longer a requirement (former § 2262(6) repealed) — check the class and wait',
           citation: 'Me. Rev. Stat. tit. 15, § 2262'
         }
       }
@@ -17850,20 +17971,21 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
     resources: {
       remedies: {
         expungement: {
-          name: 'Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2265)',
+          name: 'Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2269)',
           formName: 'Motion to Seal (CR-218)',
           formUrl: 'https://www.courts.maine.gov/fees-forms/forms.html',
           steps: [
-            'For a dismissal or acquittal, you likely do not need to file — the information is confidential by classification (16 M.R.S. § 703).',
-            'For a Class E conviction (except sexual assault), confirm 4 years have passed since your sentence was satisfied, with no other convictions — the old age cap no longer applies.',
-            'File a Motion to Seal (CR-218) in the court of conviction; the fee is about $5.',
-            'For a pre-2017 marijuana or a trafficking-related conviction, the same motion applies (trafficking-related has no waiting period). Pine Tree Legal Assistance can help.'
+            'Confirm the conviction is sealable: only a CLASS E offense (except Title 17-A chapter 11 sexual offenses), or a pre-1/30/2017 marijuana conviction on the legacy list. No Class D outside that list, and no felony class, is sealable. Age no longer matters.',
+            'Confirm the prerequisites (§ 2262): at least 4 years since you fully satisfied the sentence; no other conviction and — the trap — no COMPLETED deferred disposition since; no out-of-state conviction over the window; and no pending charges. (A former § 853-A prostitution conviction has a mandatory 1-year fast path under § 2262-A.)',
+            'File a written Motion to Seal in the underlying criminal case; there is a hearing (Maine Rules of Evidence do not apply), you carry a preponderance burden, and the court makes written findings. A denial has no appeal of right; the State can appeal a grant.',
+            'Know the standing conditions: any later conviction anywhere UNSEALS the record and you must report your own new conviction; and licensing boards and mandated-check employers can still see a sealed conviction. Pine Tree Legal Assistance can help.'
           ],
-          // NOT null: Wave 7 gives ~$5 (flagged to confirm current).
-          fees: 'About $5 to file the Motion to Seal (CR-218) — among the lowest in the nation (confirm current).',
-          // null: Wave 7 gives no indigency-waiver information for the sealing motion.
+          // null: the chapter states no fee for the sealing motion; filing-fee
+          // practice is phone-tier, so the fee and any waiver are unknown. (Non-
+          // conviction records are a separate Title 16 matter, pending pull.)
+          fees: null,
           feeWaiver: null,
-          courtContact: 'The court of conviction'
+          courtContact: 'The court of conviction (the underlying criminal case)'
         }
       },
       legalAid: [

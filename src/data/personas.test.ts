@@ -5440,45 +5440,155 @@ const NH: Persona[] = [
   },
 ];
 
+// ME personas come from Diana's read of 15 M.R.S. §§ 2261-2269 (chapter 310-A) from
+// legislature.maine.gov — the statute-verified rewrite that took ME to statute_cited
+// on 2026-07-22, replacing the Wave 7 draft's five personas. Maine sealing is CLASS E
+// convictions only (plus legacy marijuana), with the deferral-breaks-cleanliness trap
+// and a lifelong unseal-on-reconviction condition. Non-convictions are Title 16
+// (pending pull) and route to the pending-pull node. Date nodes are asked (the anchor
+// is full satisfaction of the sentence, not the conviction date).
 const ME: Persona[] = [
   {
-    source: 'Wave 7 — ME persona 1',
-    package: 'Class E theft 2019 at age 45, done 2020 -> eligible 2024 under the new law — the age-cap-repeal persona.',
-    record: { title: 'Class E theft (age 45)', disposition: 'convicted', disposition_date: '2020-06-01', probation_status: 'completed' },
-    answers: { conv_type_me: 'classE', classE_sexual_me: false },
-    expect: { resultKey: 'eligible_classE_me', reading: 'The 2024 repeal removed the 18-27 age cap, so a Class E conviction 4 years past sentence (done 2020 -> 2024) is sealable regardless of age; the tree asks no age question.' },
+    source: 'ME statute verification (2026-07-22) — persona 1',
+    package: 'Class E theft conviction, satisfied 5 years ago, clean, no deferrals -> eligible.',
+    record: { title: 'Class E theft', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'classE', classE_ch11_me: false, prereq_deferral_me: false, prereq_otherconv_me: false, classE_date_me: '2021-01-01' },
+    expect: {
+      resultKey: 'eligible_seal_me',
+      reading: 'A Class E conviction (not a chapter-11 offense), 4+ years since full satisfaction (2021-01-01), clean with no deferral -> sealable under § 2262.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ME persona 2',
-    package: 'Class D assault -> no sealing; pardon path.',
-    record: { title: 'Class D assault', disposition: 'convicted', disposition_date: '2018-06-01' },
-    answers: { conv_type_me: 'other' },
-    expect: { resultKey: 'ineligible_conviction_me', reading: 'A Class D conviction is not a sealable class in Maine; the tree routes it to the no-sealing/pardon result.' },
+    source: 'ME statute verification (2026-07-22) — persona 2',
+    package: 'Class D assault conviction -> NOT eligible — Class E only; the over-promise trap persona.',
+    record: { title: 'Class D assault', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'higher' },
+    expect: {
+      resultKey: 'ineligible_class_me',
+      reading: 'Maine sealing reaches only Class E convictions (plus legacy marijuana); a Class D offense outside that list is not sealable (§ 2261(6)) -> the over-promise trap.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ME persona 3',
-    package: 'pre-2017 Class D marijuana -> sealable.',
-    record: { title: 'Pre-2017 Class D marijuana', disposition: 'convicted', disposition_date: '2015-06-01' },
-    answers: { conv_type_me: 'marijuana' },
-    expect: { resultKey: 'eligible_marijuana_me', reading: 'Class D/E marijuana convictions from before Jan 30, 2017 are sealable; the tree routes them there.' },
+    source: 'ME statute verification (2026-07-22) — persona 3',
+    package: 'Class C felony -> never.',
+    record: { title: 'Class C felony', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'higher' },
+    expect: {
+      resultKey: 'ineligible_class_me',
+      reading: 'No felony class is sealable in Maine; a Class C conviction is never sealable under chapter 310-A (§ 2261(6)).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ME persona 4',
-    package: 'dismissal -> already confidential by classification — explain, don\'t file.',
-    record: { title: 'Dismissal', disposition: 'dismissed', disposition_date: '2022-06-01' },
-    answers: {},
-    expect: { resultKey: 'already_confidential_me', reading: 'Non-convictions are confidential by classification (16 M.R.S. § 703); the tree explains you likely need not file.' },
+    source: 'ME statute verification (2026-07-22) — persona 4',
+    package: 'Class E conviction satisfied 4.5 years ago, but completed a deferred disposition 2 years ago -> cleanliness broken by the deferral (2262(3)) — the counterintuitive trap.',
+    record: { title: 'Class E, later deferred disposition', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'classE', classE_ch11_me: false, prereq_deferral_me: true },
+    expect: {
+      resultKey: 'ineligible_deferral_me',
+      reading: 'A COMPLETED deferred disposition since satisfying the conviction breaks the clean-record requirement (§ 2262(3)) even though it ends in a dismissal -> the counterintuitive trap.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ME persona 5',
-    package: 'OUI -> no sealing, no pardon — the double honest-no.',
-    record: { title: 'OUI', disposition: 'convicted', disposition_date: '2018-06-01' },
-    answers: { conv_type_me: 'oui' },
-    expect: { resultKey: 'ineligible_oui_me', reading: 'OUI is neither a sealable class nor one the Board of Pardons will consider; the tree routes it to the double honest-no.' },
+    source: 'ME statute verification (2026-07-22) — persona 5',
+    package: 'Class E conviction, new out-of-state misdemeanor last year -> not eligible.',
+    record: { title: 'Class E, later out-of-state misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'classE', classE_ch11_me: false, prereq_deferral_me: false, prereq_otherconv_me: true },
+    expect: {
+      resultKey: 'ineligible_otherconv_me',
+      reading: 'A conviction in another jurisdiction since satisfying the target conviction breaks the clean-record requirement (§ 2262(3)-(4)) -> not eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 6',
+    package: 'pre-2017 Class D marijuana possession -> eligible via the legacy list.',
+    record: { title: 'Pre-2017 Class D marijuana possession', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'marijuana', prereq_deferral_me: false, prereq_otherconv_me: false, classE_date_me: '2016-06-01' },
+    expect: {
+      resultKey: 'eligible_seal_me',
+      reading: 'Class D marijuana possession (former § 1107) before 1/30/2017 is on the legacy eligible list (§ 2261(6)(B)); satisfied long ago and clean -> sealable.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 7',
+    package: 'former 853-A engaging-in-prostitution conviction, satisfied 14 months ago, no pimping/trafficking convictions -> MANDATORY sealing.',
+    record: { title: 'Former § 853-A prostitution conviction', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_me: 'conviction', conv_door_me: 'prostitution', prostitution_clean_me: false, prostitution_date_me: '2025-05-01' },
+    expect: {
+      resultKey: 'eligible_prostitution_me',
+      reading: 'A former § 853-A prostitution conviction with no promotion/trafficking conviction and 1+ year since full satisfaction (2025-05-01) MUST be sealed (§ 2262-A) -> mandatory.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 8',
+    package: 'sealed record, then a new conviction -> unsealed; explain the self-report duty.',
+    record: { title: 'Sealed record, then new conviction', disposition: 'convicted' },
+    answers: { entry_me: 'effects', effects_me: 'reconviction' },
+    expect: {
+      resultKey: 'effects_unseal_me',
+      reading: 'Any new conviction anywhere at any time unseals a Maine sealed record (§ 2264(7)-(8)), and the person must file written notice of their own new conviction.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 9',
+    package: 'sealed record holder applying for a state nursing license -> licensing agency sees it; honest-no doesn\'t apply to that inquiry.',
+    record: { title: 'Sealed record, nursing-license application', disposition: 'convicted' },
+    answers: { entry_me: 'effects', effects_me: 'licensing' },
+    expect: {
+      resultKey: 'effects_licensing_me',
+      reading: 'Professional licensing agencies are on the § 2265 access list, and the § 2266 honest-no does not apply to them -> a nursing board sees the sealed conviction; disclose.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 10',
+    package: 'sealed record holder asked by a private employer with no mandated check -> may decline to disclose, no sanctions.',
+    record: { title: 'Sealed record, ordinary employer', disposition: 'convicted' },
+    answers: { entry_me: 'effects', effects_me: 'honestno' },
+    expect: {
+      resultKey: 'effects_honestno_me',
+      reading: 'To an ordinary employer with no mandated check, § 2266 lets the person not disclose a sealed conviction without sanction (not unsworn falsification) -> may decline.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 11',
+    package: 'motion denied, person wants to appeal -> discretionary review only; State could appeal a grant as of right.',
+    record: { title: 'Sealing motion denied, wants to appeal', disposition: 'convicted' },
+    answers: { entry_me: 'appeal' },
+    expect: {
+      resultKey: 'appeal_me',
+      reading: 'The person has no appeal of right from a denial (discretionary SJC review only), while the State appeals a grant as of right (§ 2267) -> the asymmetry.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 12',
+    package: '27-year-old asking about the old age limit -> repealed, no age requirement.',
+    record: { title: 'Age-limit question', disposition: 'convicted' },
+    answers: { entry_me: 'age' },
+    expect: {
+      resultKey: 'age_me',
+      reading: 'The former § 2262(6) age-at-offense requirement was repealed by 2023 c 666, so age no longer affects eligibility.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ME statute verification (2026-07-22) — persona 13',
+    package: 'charges dismissed without conviction -> route to the Title 16 pullNote node; do not state rules.',
+    record: { title: 'Charges dismissed (non-conviction)', disposition: 'dismissed' },
+    answers: { entry_me: 'nonconv' },
+    expect: {
+      resultKey: 'nonconv_pending_me',
+      reading: 'Non-conviction records are governed by the unpulled Title 16 CHRI Act, not chapter 310-A; the node routes to the pending-pull result and states no non-conviction rules.',
+    },
     now: NOW,
   },
 ];

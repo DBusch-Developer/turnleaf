@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**25 open questions across 10 states.**
+**26 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -66,26 +66,28 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 3. MAINE (ME)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2265)** — The court of conviction
+- **Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2269)** — The court of conviction (the underlying criminal case)
 - Pine Tree Legal Assistance — https://www.ptla.org
 - Maine Judicial Branch — Fees & Forms — https://www.courts.maine.gov/fees-forms/forms.html
 
 **Dates that govern:**
-- 2024 — Age cap (18-27) for Class E sealing removed (HP1435) (effective) · Wave 7 gives the year only. The old 18-to-27 age limitation was removed in 2024; ALL Class E convictions except sexual assault are now sealable regardless of age. Most online guides still state the age cap — encode from the current statute.
-- 2026-01-11 — Sealing for sex-trafficking/exploitation-related convictions (LD 1871) (effective) · Enacted Jan 11, 2026. Any conviction substantially resulting from sex trafficking or sexual exploitation is sealable anytime, no waiting period; documentation creates a presumption. Two weeks old in legislative terms — confirm operative status.
-- 2017-01-30 — Marijuana-sealing cutoff (Class D/E convictions before this date) (effective) · Class D and E marijuana convictions from BEFORE January 30, 2017 are sealable.
+- 2023 — Eligible-conviction definition replaced — Class E + legacy marijuana (§ 2261(6), 2023 c 639) (effective) · 2023 c 639 replaced § 2261(6): eligible convictions are any current/former Class E crime except Title 17-A chapter 11 offenses, plus the pre-1/30/2017 marijuana list. No Class D outside that list, no felonies.
+- 2023 — Age-at-offense requirement repealed (§ 2262(6), 2023 c 666) (effective) · 2023 c 666 repealed the former § 2262(6) age requirement, so Class E sealing no longer turns on the person's age at the offense. Many guides still state the old age cap.
+- 2017-01-30 — Marijuana-sealing cutoff (convictions before January 30, 2017) (effective) · The legacy marijuana list reaches Class D cultivation (former § 1105), the three aggravated-cultivating variants (§ 1105-D), and Class D possession (former § 1107) for convictions before January 30, 2017.
 
-**Verify — 3 open questions. Each answer closes a numbered question in the database:**
+**Verify — 4 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm the 2024 removal of the age cap for Class E sealing (HP1435) against the current 15 M.R.S. § 2261 text. Wave 7 calls this "discrepancy gold" — most online guides and both major court-records sites still state the old 18-to-27 age limitation. The tree encodes the repeal (no age question); confirm it against the statute.
+1. TOP PRIORITY: pull the Title 16 CHRI Act (16 M.R.S. chapter 3, §§ 703-705) for the NON-conviction confidentiality rules. Chapter 310-A governs only convictions; non-conviction records (dismissals, acquittals) are handled by Title 16, which was not read. Until it is pulled, this state states NO non-conviction rules — the non-conviction node routes to a pending-pull result.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the ~$5 filing fee is current. Wave 7 gives it as the cheapest in the nation (Motion CR-218) but flags it for confirmation. The fees field encodes ~$5 and flags this; courts.maine.gov is the check.
+2. Run a 2024-2026 session sweep for amendments to chapter 310-A (Maine LD tracker by statute). Maine amends this chapter nearly every session; the read text is through 2023 c 639/666/409. In particular, confirm whether any post-2023 act EXPANDED eligibility beyond Class E — do NOT assume it did; verify.
    - *Blocks no single field — affects a branch or wording.*
-3. Confirm LD 1871 (sex-trafficking/exploitation sealing, enacted Jan 11, 2026) is operative, and confirm whether any indigency fee waiver applies to the sealing motion. Wave 7 gives LD 1871 as two weeks old and gives no waiver information; the feeWaiver field is null pending confirmation.
-   - *Blocks (null until answered):* `resources.remedies.expungement.feeWaiver`
+3. Confirm the sealing-motion filing-fee practice. No fee is stated in the chapter for the motion; the amount and any indigency waiver are phone-tier (courts.maine.gov / the clerk of the court of conviction). The fees and feeWaiver fields are null pending this — state no numbers.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+4. Pull the Title 17-A chapter 11 offense list (the Class E crimes excluded from sealing under § 2261(6)(A)). Cited but not read; the tree screens it as a category without the specific enumeration.
+   - *Blocks no single field — affects a branch or wording.*
 
 ---
 

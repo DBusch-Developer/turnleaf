@@ -12,11 +12,18 @@ export type OffenseCategory =
   | 'dui' | 'marijuana' | 'drug' | 'sex_offense' | 'violent' | 'property' | 'other';
 export type Disposition = 'convicted' | 'dismissed' | 'deferred' | 'acquitted';
 
-/** The facts about ONE charge, stated once so its state's tree stops re-asking. */
+/** The facts about ONE charge, stated once so its state's tree stops re-asking.
+ *
+ * `chargeType` and `disposition` span the FULL record domains (see
+ * FIELD_DOMAINS in ./screening) — including `infraction` and `unknown`. These
+ * are field-backed for the trees, and narrowing them would force a person with
+ * a traffic infraction, or who genuinely doesn't know their outcome, to assert
+ * a wrong value: NY routes `infraction` to its violation-seal branch and
+ * `unknown` to the honest `unknown_disposition` hedge. Unknown is never guessed. */
 export interface IntakeProfile {
   offenseCategory: OffenseCategory;
-  disposition: Disposition;
-  chargeType: 'misdemeanor' | 'felony';
+  disposition: 'convicted' | 'dismissed' | 'deferred' | 'acquitted' | 'unknown';
+  chargeType: 'misdemeanor' | 'felony' | 'infraction' | 'unknown';
   sentenceCompleted: boolean;
   dischargeDate: string | null;
   priorFelony: boolean;

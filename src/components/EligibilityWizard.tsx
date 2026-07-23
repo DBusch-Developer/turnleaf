@@ -7,7 +7,7 @@ import { groupByState, screenAll, type ScreeningResultItem } from '../data/multi
 import type { ConvictionRecord } from '../data/screening';
 import type { IntakeProfile, OffenseCategory, Disposition } from '../data/intake';
 import { answersForState } from '../data/intakeMaps';
-import { sharedFieldsFor, stateFieldsFor, type SharedFieldKey } from '../data/intakeForm';
+import { sharedFieldsFor, stateFieldsFor, CHARGE_TYPE_OPTIONS, DISPOSITION_OPTIONS, type SharedFieldKey } from '../data/intakeForm';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 import { useScrollToTop } from '../utils/useScrollToTop';
 
@@ -46,16 +46,6 @@ const OFFENSE_CATEGORY_OPTIONS: { label: string; value: OffenseCategory }[] = [
   { label: 'Violent offense', value: 'violent' },
   { label: 'Property offense', value: 'property' },
   { label: 'Other', value: 'other' },
-];
-const DISPOSITION_OPTIONS: { label: string; value: Disposition }[] = [
-  { label: 'Convicted (Guilty / No Contest)', value: 'convicted' },
-  { label: 'Dismissed / Charges Dropped', value: 'dismissed' },
-  { label: 'Deferred Adjudication / Diversion', value: 'deferred' },
-  { label: 'Acquitted (Not Guilty)', value: 'acquitted' },
-];
-const CHARGE_TYPE_OPTIONS: { label: string; value: 'misdemeanor' | 'felony' }[] = [
-  { label: 'Misdemeanor', value: 'misdemeanor' },
-  { label: 'Felony', value: 'felony' },
 ];
 const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
   offenseCategory: 'Type of offense',
@@ -255,7 +245,13 @@ export default function EligibilityWizard({
         <div key={key}>
           {label}
           <select className="input-field" value={p.disposition}
-            onChange={e => setProfileField(record.id, 'disposition', e.target.value as Disposition)}>
+            onChange={e => {
+              const v = e.target.value as IntakeProfile['disposition'];
+              // "unknown" is the honest not-sure path — surface the RAP-sheet
+              // helper, exactly as the old form did via updateRecord.
+              if (v === 'unknown') setShowRapSheetInstructions(true);
+              setProfileField(record.id, 'disposition', v);
+            }}>
             {DISPOSITION_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
@@ -266,7 +262,11 @@ export default function EligibilityWizard({
         <div key={key}>
           {label}
           <select className="input-field" value={p.chargeType}
-            onChange={e => setProfileField(record.id, 'chargeType', e.target.value as 'misdemeanor' | 'felony')}>
+            onChange={e => {
+              const v = e.target.value as IntakeProfile['chargeType'];
+              if (v === 'unknown') setShowRapSheetInstructions(true);
+              setProfileField(record.id, 'chargeType', v);
+            }}>
             {CHARGE_TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>

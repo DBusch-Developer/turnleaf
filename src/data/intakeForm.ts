@@ -8,6 +8,26 @@ const ALL_SHARED: SharedFieldKey[] = [
   'dischargeDate', 'priorFelony', 'restitutionPaid',
 ];
 
+// The charge_type and disposition controls are field-backed: the value chosen
+// here is written onto the record and read by the trees verbatim. Their option
+// value lists MUST cover the full record domains (FIELD_DOMAINS in ./screening)
+// or an unmapped state silently mis-screens a value it can no longer receive —
+// e.g. NY's `infraction` branch, or the `unknown` disposition hedge. The order
+// matches FIELD_DOMAINS so a regression test can assert exact parity.
+export const CHARGE_TYPE_OPTIONS: { label: string; value: IntakeProfile['chargeType'] }[] = [
+  { label: 'Misdemeanor', value: 'misdemeanor' },
+  { label: 'Felony', value: 'felony' },
+  { label: 'Infraction', value: 'infraction' },
+  { label: "I Don't Know / Not Sure", value: 'unknown' },
+];
+export const DISPOSITION_OPTIONS: { label: string; value: IntakeProfile['disposition'] }[] = [
+  { label: 'Convicted (Guilty / No Contest)', value: 'convicted' },
+  { label: 'Dismissed / Charges Dropped', value: 'dismissed' },
+  { label: 'Deferred Adjudication / Diversion', value: 'deferred' },
+  { label: 'Acquitted (Not Guilty)', value: 'acquitted' },
+  { label: "I Don't Know / Not Sure", value: 'unknown' },
+];
+
 /**
  * Which shared fields to render. For a mapped state, show the fields its map
  * actually consumes (inferred by running each map fn against two probe profiles

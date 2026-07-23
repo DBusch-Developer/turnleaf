@@ -46,8 +46,12 @@ Form: two clearly-labeled questions (restitution = to a victim; fines/fees = to 
 3. **All-money states (AZ, UT, TN, AL)** — two-gate restructure + persona updates, one state at a time, each gated on its personas.
 4. **AZ intake map + equivalence** — update for the two-gate shape.
 
-## 5. Open questions for review
+## 5. Decisions (resolved 2026-07-23 with Diana)
 
-1. **FL (`sentence_complete_fl`):** its text is "all terms … including … payment of restitution." Is Florida a restitution-only state (fines don't block) or an all-money state? Needs a read of the FL statute we cited before deciding which bucket it lands in.
-2. **Fines vs fees vs costs:** lump all court-owed money into one `finesPaid` fact (recommended — the states that distinguish only split *restitution* out), or model fees separately? Recommend lumping.
-3. **Defaults:** should the two money questions default to "paid = yes" (matches today's `restitution_paid: true` default) or force an explicit answer? Defaulting "yes" risks asserting paid-when-not; forcing an answer is safer but adds friction.
+1. **Florida → restitution-only bucket (provisional).** FL's node (`sentence_complete_fl`) names "all terms … including any probation and payment of **restitution**" — it does NOT name fines, and asserting a fines-block would invent a rule the encoded text doesn't state (violates the never-invent-law rule). So FL's money node reads the `restitutionPaid` fact. **Open verification item (does NOT block this work):** re-read § 943.059(1) to confirm whether unpaid fines independently block FL sealing; if they do, FL moves to the all-money bucket in a follow-up. Until verified, we do not add a fines requirement FL doesn't clearly state.
+2. **Lump fines + fees + costs into one `finesPaid` fact.** The states that distinguish only pull *restitution* out separately; all other court-owed money is one question.
+3. **Force an explicit answer** on both money questions — no silent "paid = yes" default. Asserting paid-when-unknown could wrongly grant eligibility in a legal screener; the person must choose. (Implication: the intake form must not let submission proceed with the money questions unanswered for a state whose tree reads them — or must carry a genuine "not sure" that routes to a hedge, never a silent "yes".)
+
+**Buckets (final for this pass):**
+- **Restitution-only** (money node reads `restitutionPaid`): PA, NC, FL (provisional).
+- **All-money** (two gates: `restitutionPaid` AND `finesPaid`): AZ, UT, TN, AL.

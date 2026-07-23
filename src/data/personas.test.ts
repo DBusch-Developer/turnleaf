@@ -6151,45 +6151,121 @@ const ND: Persona[] = [
   },
 ];
 
+// AK personas come from Diana's read of AS 12.62.180, 12.62.190, and 22.35.030 plus a
+// 34th-Legislature SIRS sweep and the HB 81 bill history (akleg.gov) — the statute-
+// verified rewrite that took AK to statute_cited on 2026-07-22, replacing the Wave 7
+// draft's five personas. Alaska is the most restrictive state: no conviction
+// expungement/sealing/set-aside; the honest-triage answers are the point. SEJ criteria
+// (12.55.078) are pending pull, so that node states no eligibility rules.
 const AK: Persona[] = [
   {
-    source: 'Wave 7 — AK persona 1',
-    package: 'entire case dismissed 2023 -> TF-810 CourtView removal — the one real win.',
-    record: { title: 'Entire case dismissed', disposition: 'dismissed', disposition_date: '2023-06-01' },
-    answers: { mistaken_ak: false, courtview_ak: true },
-    expect: { resultKey: 'eligible_courtview_ak', reading: 'An entire case ending without a conviction qualifies for CourtView removal (TF-810); the tree routes it there — the one real win.' },
+    source: 'AK statute verification (2026-07-22) — persona 1',
+    package: 'felony theft conviction, completed 15 years ago, spotless since -> NO path; honest explanation + SEJ-was-sentencing-stage note + clemency context.',
+    record: { title: 'Felony theft conviction (15 years old)', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ak: 'conviction', conv_mistaken_ak: false, conv_falseaccusation_ak: false },
+    expect: {
+      resultKey: 'ineligible_conviction_ak',
+      reading: 'Alaska has no conviction expungement/sealing/set-aside; a valid felony conviction has no path however old or clean — the deepest honest-no, with the SEJ-is-a-sentencing-decision and clemency context noted.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — AK persona 2',
-    package: 'misdemeanor conviction, probation done under SIS -> set aside, still visible — expectation-setting.',
-    record: { title: 'SIS completed', disposition: 'deferred', disposition_date: '2019-06-01' },
-    answers: {},
-    expect: { resultKey: 'sis_setaside_ak', reading: 'A completed SIS is set aside as of right, but per Journey the record stays visible; the tree routes it to the set-aside-but-visible result.' },
+    source: 'AK statute verification (2026-07-22) — persona 2',
+    package: 'misdemeanor conviction, any age -> same answer; no misdemeanor path exists.',
+    record: { title: 'Misdemeanor conviction', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ak: 'conviction', conv_mistaken_ak: false, conv_falseaccusation_ak: false },
+    expect: {
+      resultKey: 'ineligible_conviction_ak',
+      reading: 'There is no misdemeanor-specific path in Alaska; a valid misdemeanor conviction has no record-clearing route -> the same honest-no.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — AK persona 3',
-    package: 'any ordinary conviction -> no path; pardon effectively unavailable.',
-    record: { title: 'Ordinary conviction', disposition: 'convicted', disposition_date: '2015-06-01' },
-    answers: { conv_marijuana_ak: false, conv_sis_ak: false },
-    expect: { resultKey: 'ineligible_conviction_ak', reading: 'An ordinary conviction has no path (no expungement law; pardons effectively unavailable, ~188 ever, none since 2006) -> the deepest honest-no.' },
+    source: 'AK statute verification (2026-07-22) — persona 3',
+    package: 'acquitted at trial 3 months ago -> CourtView entry must already be down; DPS record remains; no filing needed.',
+    record: { title: 'Acquitted at trial', disposition: 'acquitted', disposition_date: '2026-04-01' },
+    answers: { entry_ak: 'nonconv', nonconv_rule11_ak: false },
+    expect: {
+      resultKey: 'eligible_courtview_ak',
+      reading: 'An acquittal of all charges is barred from CourtView publication once 60 days pass, automatically (§ 22.35.030) — nothing to file; the DPS record still reports.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — AK persona 4',
-    package: 'mistaken-identity arrest -> § 12.62.180 sealing.',
-    record: { title: 'Mistaken-identity arrest', disposition: 'dismissed', disposition_date: '2022-06-01' },
-    answers: { mistaken_ak: true },
-    expect: { resultKey: 'eligible_sealing_ak', reading: 'A record from mistaken identity/false accusation is the one sealing path (§ 12.62.180); the mistaken-ID gate routes it there.' },
+    source: 'AK statute verification (2026-07-22) — persona 4',
+    package: 'charges dismissed as part of a plea deal in another case -> CourtView removal DENIED by the Rule 11 exclusion; the other case\'s conviction has no path.',
+    record: { title: 'Dismissed via Rule 11 plea deal in another case', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: { entry_ak: 'nonconv', nonconv_rule11_ak: true },
+    expect: {
+      resultKey: 'ineligible_rule11_ak',
+      reading: 'A dismissal that was part of a Rule 11 plea agreement in another case is excluded from CourtView non-publication (§ 22.35.030(2)); the plea conviction in the other case has no path either.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — AK persona 5',
-    package: 'old marijuana possession -> the 2024 non-publication branch ⚠️.',
-    record: { title: 'Old marijuana possession', disposition: 'convicted', disposition_date: '2013-06-01' },
-    answers: { conv_marijuana_ak: true },
-    expect: { resultKey: 'marijuana_ak', reading: 'A decriminalized marijuana-possession conviction routes to the 2024 non-publication branch (scope flagged).' },
+    source: 'AK statute verification (2026-07-22) — persona 5',
+    package: 'SEJ completed, case dismissed -> CourtView removed at 60 days; DPS record remains; explain the limits.',
+    record: { title: 'SEJ completed, case dismissed', disposition: 'deferred', probation_status: 'completed' },
+    answers: { entry_ak: 'sej' },
+    expect: {
+      resultKey: 'sej_pending_ak',
+      reading: 'A completed SEJ dismissal qualifies for automatic CourtView non-publication (§ 22.35.030(4)); the website listing comes off at 60 days, the DPS record remains, and the SEJ eligibility criteria (12.55.078) are pending pull.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AK statute verification (2026-07-22) — persona 6',
+    package: 'person convicted after someone used their stolen identity -> 12.62.180 request to each agency, BARD standard, may-deny effect if granted.',
+    record: { title: 'Conviction from stolen identity', charge_type: 'felony', disposition: 'convicted' },
+    answers: { entry_ak: 'conviction', conv_mistaken_ak: true },
+    expect: {
+      resultKey: 'eligible_mistaken_ak',
+      reading: 'A record that resulted from mistaken identity is the one conviction record Alaska seals (§ 12.62.180) — beyond-a-reasonable-doubt, per agency, with a total may-deny honest-no if granted.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AK statute verification (2026-07-22) — persona 7',
+    package: 'person who believes the accuser lied but was convicted at trial -> 12.62.180 can\'t collaterally attack the judgment — attorney referral (PCR territory).',
+    record: { title: 'Convicted at trial, disputes the accusation', charge_type: 'felony', disposition: 'convicted' },
+    answers: { entry_ak: 'conviction', conv_mistaken_ak: false, conv_falseaccusation_ak: true },
+    expect: {
+      resultKey: 'complex_pcr_ak',
+      reading: '§ 12.62.180 may not collaterally attack a judgment; a disputed conviction after trial is post-conviction-relief territory, not sealing -> attorney referral.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AK statute verification (2026-07-22) — persona 8',
+    package: 'marijuana possession conviction -> no special path; HB 81 not law; standard no-path answer.',
+    record: { title: 'Marijuana possession conviction', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_ak: 'conviction', conv_mistaken_ak: false, conv_falseaccusation_ak: false },
+    expect: {
+      resultKey: 'ineligible_conviction_ak',
+      reading: 'There is no marijuana-record path in current Alaska law (HB 81 was referred to House Finance 2/9/2026 and is not law); a marijuana conviction gets the standard no-path answer.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AK statute verification (2026-07-22) — persona 9',
+    package: 'arrested, never charged -> 22.35.030 doesn\'t cover arrest-only records (no case to unpublish); DPS record governed by 12.62 generally — keep to what the pulled text supports.',
+    record: { title: 'Arrested, never charged', disposition: 'dismissed' },
+    answers: { entry_ak: 'arrest' },
+    expect: {
+      resultKey: 'arrest_ak',
+      reading: '§ 22.35.030 works on a court case ended by acquittal/dismissal, so an arrest-only record has nothing to unpublish; the DPS record\'s removal route is not verified — the encoding states none from memory, flagging § 12.62.180 for mistaken identity.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'AK statute verification (2026-07-22) — persona 10',
+    package: 'case still on CourtView 6 months after acquittal -> compliance failure; contact the court system.',
+    record: { title: 'Still on CourtView 6 months after acquittal', disposition: 'acquitted', disposition_date: '2026-01-15' },
+    answers: { entry_ak: 'nonconv', nonconv_rule11_ak: false },
+    expect: {
+      resultKey: 'eligible_courtview_ak',
+      reading: 'Non-publication is automatic at 60 days (§ 22.35.030); a qualifying case still visible after that is a compliance failure to raise with the court system, not a petition — the result carries that escalation.',
+    },
     now: NOW,
   },
 ];

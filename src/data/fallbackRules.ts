@@ -19206,153 +19206,182 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   AK: {
     code: 'AK',
     name: 'Alaska',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'A 34th Legislature SIRS sweep of AS 12, 12.62, and 22.35 shows no enacted sealing/expungement changes. '
+      + 'HB 81 ("Access to Marijuana Conviction Records," which would restrict release of certain conviction '
+      + 'records) was referred to House Finance 2/9/2026 with no further action through the session and is NOT '
+      + 'law as of retrieval — its existence confirms current law contains no marijuana-record restriction. '
+      + 'Expungement bills have been introduced and died repeatedly.',
     terminology:
-      'Alaska requires the most honest answer of any state: there is NO expungement law. Sealing (§ 12.62.180) '
-      + 'exists only for records proven to result from mistaken identity or a false accusation. For a valid '
-      + 'conviction, Alaska law makes essentially no provision to seal or expunge it. What Alaska CAN offer is '
-      + 'narrower and worth knowing precisely: if your ENTIRE case ended in dismissal or acquittal, you can '
-      + 'remove it from the public online court index (CourtView); a suspended imposition of sentence can be '
-      + 'set aside on completion, though the public record still shows the conviction and the set-aside; and a '
-      + 'newer tool avoids a conviction entering at all. Pardons are effectively unavailable — about 188 in '
-      + 'the state\'s history, and none since 2006.',
-    keyDates: [
-      {
-        label: 'Marijuana decriminalized-possession non-publication (2024)',
-        date: '2024',
-        kind: 'effective',
-        note: 'Wave 7 gives the year. Decriminalized marijuana-possession convictions are barred from release/publication; scope and mechanics flagged for verification.',
-      },
-    ],
+      'Alaska requires the most honest answer of any state, so hear it plainly: there is NO expungement, '
+      + 'sealing, or set-aside statute for CONVICTIONS. For a standard conviction — misdemeanor or felony, '
+      + 'however old, however clean you have been since — Alaska law provides no record-clearing path at all. '
+      + 'It is the most restrictive state in this dataset. Four narrow things do exist, and it is worth being '
+      + 'precise about each. (1) SEALING for MISTAKEN IDENTITY or a FALSE ACCUSATION only (AS 12.62.180): a '
+      + 'written request to the HEAD OF EACH AGENCY holding the record, proven BEYOND A REASONABLE DOUBT — the '
+      + 'highest relief burden anywhere — and if granted it is a total honest-no (you may deny the record and '
+      + 'any arrest, charge, conviction, or sentence in it). (2) CourtView NON-PUBLICATION (AS 22.35.030): for '
+      + 'a case that ended without a conviction (acquittal or dismissal of all charges, or a completed suspended '
+      + 'entry of judgment), the court system MAY NOT publish the record on its public website once 60 days have '
+      + 'passed — automatic, nothing to file — but this removes the WEBSITE ENTRY only; the underlying court '
+      + 'record still exists, the DPS criminal-history record is completely untouched, a DPS background check '
+      + 'still reports the case, and no right to deny it attaches. A trap: a dismissal that was part of a Rule '
+      + '11 plea agreement in ANOTHER case does not qualify. (3) SUSPENDED ENTRY OF JUDGMENT (AS 12.55.078) — a '
+      + 'decision made at SENTENCING that, on successful completion, ends in dismissal and CourtView removal; it '
+      + 'is the only route to avoid a conviction record, and it is prospective, not post-conviction relief (its '
+      + 'eligibility criteria are pending a further read). (4) Gubernatorial CLEMENCY — technically the only '
+      + 'route for a conviction, but effectively unavailable. (Agency record PURGING under AS 12.62.190 is '
+      + 'discretionary housekeeping, not a remedy you can request.)',
+    keyDates: [],
     openQuestions: [
       {
         question:
-          'Confirm the 2024 marijuana provision\'s scope and mechanics. Wave 7 says decriminalized marijuana-possession convictions are barred from release/publication but flags scope/mechanics for verification. The tree routes an old marijuana-possession conviction to a "non-publication may apply" result; confirm what it covers and how it works.',
+          'TOP PRIORITY: pull AS 12.55.078 (suspended entry of judgment) — the eligibility criteria and exclusions. It is Alaska\'s only route to avoid a conviction record (completion → dismissal → CourtView removal under 22.35.030(4)), but its criteria were not read; the SEJ node states no eligibility rules pending this pull.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm any fees for the CourtView removal (Form TF-810 / Admin Rule 40) and the § 12.62.180 sealing request, and whether waivers apply. Wave 7 gives the forms/processes but no fee information; the fees and feeWaiver fields are null pending confirmation with courts.alaska.gov and the DPS record-sealing process.',
+          'Confirm whether Chapter 22.35 contains any section after AS 22.35.030 (a table-of-contents check). The CourtView non-publication rule is 22.35.030; confirm nothing later in the chapter modifies it.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the DPS Criminal Justice Information Systems Program request procedure for an AS 12.62.180 sealing request, and any processing fee. No fee is stated for the administrative request letter; the mechanics and any fee are phone-tier (Alaska DPS). The fees and feeWaiver fields are null pending this.',
         blocksFields: ['resources.remedies.expungement.fees', 'resources.remedies.expungement.feeWaiver'],
+      },
+      {
+        question:
+          'Clemency-process context (AS 33.20) — cite-only. Gubernatorial clemency is technically the only route for a conviction; the process details were not pulled and are provided as context only.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm whether the AS 22.35.030 CourtView non-publication is reliably applied in practice within 60 days. If a qualifying case still appears after 60 days, the remedy is contacting the court system, not a petition — but how often compliance lags is a phone-tier question (Alaska Court System).',
+        blocksFields: [],
       },
     ],
     sources: [
-      { id: 'Alaska Stat. § 12.62.180 (sealing — mistaken identity / false accusation only)', url: null, retrievedOn: null },
-      { id: 'Alaska Stat. § 12.55.085 (suspended imposition of sentence — set-aside)', url: null, retrievedOn: null },
-      { id: 'Alaska Stat. § 12.55.078 (suspended entry of judgment)', url: null, retrievedOn: null },
-      { id: 'Alaska R. Admin. P. 40 / Alaska Stat. § 22.35.030 (CourtView removal; Form TF-810)', url: null, retrievedOn: null },
+      { id: 'Alaska Stat. § 12.62.180 (sealing — mistaken identity / false accusation ONLY; written request to the head of each agency maintaining the information (each agency seals only its own records); standard is BEYOND A REASONABLE DOUBT that the information resulted from mistaken identity or false accusation; the agency head\'s decision is final administrative action, appealable to court on a "clearly mistaken" standard with the burden on the appellant and no collateral attack on judgments or corrections decisions; EFFECT — the person may DENY the existence of the information and of any arrest/charge/conviction/sentence in it; sealed information flows only for record management/audit, criminal-justice employment, self-review, research, imminent-harm prevention, or statute/court-order authorization) via akleg.gov', url: 'https://akleg.gov', retrievedOn: '2026-07-22' },
+      { id: 'Alaska Stat. § 22.35.030 (mandatory CourtView non-publication — the court system may not publish the court record on a publicly available website once 60 days have elapsed from acquittal or dismissal, in four cases: (1) acquitted of all charges; (2) all charges dismissed AND not dismissed as part of a Rule 11 plea agreement in another criminal case; (3) acquitted of some charges with the rest dismissed; (4) all charges dismissed after a suspended entry of judgment under AS 12.55.078; LIMITS — removes the website entry only, the underlying court record and the DPS criminal-history record are untouched, DPS background checks still report the case, and no denial right attaches; automatic by operation of law) via akleg.gov', url: 'https://akleg.gov', retrievedOn: '2026-07-22' },
+      { id: 'Alaska Stat. § 12.62.190 (agency-discretion PURGING of records based on usefulness — death, age, nature, volume; NOT a remedy and no application right — encoded as context only) via akleg.gov', url: 'https://akleg.gov', retrievedOn: '2026-07-22' },
+      { id: '34th Alaska Legislature SIRS sweep of AS 12, AS 12.62, AS 22.35, plus HB 81 bill history (no enacted sealing/expungement changes; HB 81 "Access to Marijuana Conviction Records" referred to House Finance 2/9/2026, NOT enacted as of retrieval — confirming current law has no marijuana-record restriction) via akleg.gov', url: 'https://akleg.gov', retrievedOn: '2026-07-22' },
+      { id: 'Alaska Stat. § 12.55.078 (suspended entry of judgment — the only route to avoid a conviction record; completion → dismissal → CourtView removal under § 22.35.030(4); ELIGIBILITY CRITERIA AND EXCLUSIONS NOT PULLED) — CITE-ONLY, pending pull', url: null, retrievedOn: null },
+      { id: 'Alaska Stat. ch. 33.20 (executive clemency — the only route for a conviction, effectively unavailable) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_ak',
       nodes: {
-        disposition: {
+        entry_ak: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check? (Alaska\'s options are unusually narrow.)',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'conv_marijuana_ak' },
-            { label: 'Dismissed', value: 'dismissed', next: 'mistaken_ak' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'mistaken_ak' },
-            { label: 'Suspended imposition / suspended entry of judgment completed', value: 'deferred', next: 'sis_setaside_ak' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Clear a CONVICTION', value: 'conviction', next: 'conv_mistaken_ak' },
+            { label: 'A NON-conviction (acquittal, or dismissal of all charges)', value: 'nonconv', next: 'nonconv_rule11_ak' },
+            { label: 'A SUSPENDED ENTRY OF JUDGMENT (SEJ) that I completed', value: 'sej', next: 'sej_pending_ak' },
+            { label: 'An arrest that never led to charges', value: 'arrest', next: 'arrest_ak' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        mistaken_ak: {
+        conv_mistaken_ak: {
           type: 'boolean',
-          text: 'Was the arrest or charge the result of mistaken identity or a false accusation — something you could prove to the state?',
-          yes: 'eligible_sealing_ak',
-          no: 'courtview_ak'
+          text: 'Did this conviction result because someone else used YOUR identity — the offense was really committed by another person in your name (mistaken identity)?',
+          yes: 'eligible_mistaken_ak',
+          no: 'conv_falseaccusation_ak'
         },
-        courtview_ak: {
+        conv_falseaccusation_ak: {
           type: 'boolean',
-          text: 'Did the ENTIRE case end without any conviction (every charge in it dismissed or acquitted)?',
-          yes: 'eligible_courtview_ak',
-          no: 'complex_partial_ak'
-        },
-        conv_marijuana_ak: {
-          type: 'boolean',
-          text: 'Was this a marijuana-possession conviction that has since been decriminalized?',
-          yes: 'marijuana_ak',
-          no: 'conv_sis_ak'
-        },
-        conv_sis_ak: {
-          type: 'boolean',
-          text: 'Was this a suspended imposition of sentence (SIS) that you completed, or a suspended entry of judgment?',
-          yes: 'sis_setaside_ak',
+          text: 'Do you believe you were convicted on a FALSE accusation — but you were tried and found guilty, so a valid judgment stands against you?',
+          yes: 'complex_pcr_ak',
           no: 'ineligible_conviction_ak'
+        },
+        nonconv_rule11_ak: {
+          type: 'boolean',
+          text: 'Were ALL charges in this case dismissed as PART OF A RULE 11 PLEA AGREEMENT in ANOTHER criminal case?',
+          yes: 'ineligible_rule11_ak',
+          no: 'eligible_courtview_ak'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'Alaska\'s options are narrow and depend entirely on the outcome — a fully dismissed case can come off the online index, but a conviction almost never can. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork (CourtView) or a DPS record will show the disposition; the Alaska Court System self-help and Alaska Legal Services can help you read it.',
+          message: 'Alaska\'s options are unusually narrow and depend entirely on the outcome — a case that ended without a conviction can come off the public court website, but a conviction almost never can. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork (CourtView) or a DPS record will show the disposition; the Alaska Court System self-help and Alaska Legal Services can help you read it.',
           remedy: 'Get Your Record First (CourtView / DPS)',
           citation: 'Alaska Stat. §§ 12.62.180, 22.35.030 (the route depends on the disposition)'
         },
-        eligible_sealing_ak: {
+        eligible_mistaken_ak: {
           status: 'eligible',
-          title: 'Mistaken Identity / False Accusation — Sealing Available',
-          message: 'This is the one situation Alaska allows sealing: if the record resulted from mistaken identity or a false accusation, you can apply to have it sealed (§ 12.62.180). The catch is the standard — you have to prove it to the agency, essentially beyond a reasonable doubt — so documentation matters. The Department of Public Safety has a record-sealing request process. Alaska Legal Services can help you put the strongest showing together.',
-          remedy: 'Sealing for mistaken identity / false accusation (§ 12.62.180)',
+          title: 'Mistaken Identity — the One Sealing Alaska Allows',
+          message: 'This is the one situation in which Alaska genuinely seals a conviction record: where it resulted from MISTAKEN IDENTITY (someone else committed the offense in your name) — or a false accusation (§ 12.62.180). Two things to set expectations honestly. The standard is the highest in the country: you must prove it BEYOND A REASONABLE DOUBT to the head of each agency that holds the record — and because each agency seals only its own records, a full clean-up means separate written requests to each holder (for example, the Department of Public Safety AND the court system). But if it is granted, the effect is powerful and complete: you may lawfully DENY the existence of the record and of any arrest, charge, conviction, or sentence in it — a true honest-no. Documentation is everything here. Alaska Legal Services can help you build the strongest showing and identify every agency to serve.',
+          remedy: 'Mistaken-identity sealing (§ 12.62.180) — beyond-a-reasonable-doubt, per agency; total honest-no',
           citation: 'Alaska Stat. § 12.62.180'
         },
-        eligible_courtview_ak: {
-          status: 'eligible',
-          title: 'Entire Case Dismissed/Acquitted — Remove It From CourtView',
-          message: 'Because your ENTIRE case ended without a conviction, you can have it removed from the public online court index (CourtView) 60 days after disposition, using Form TF-810 (Admin Rule 40). This is the one clean win Alaska offers — the case stops showing up in the online search. Note it removes the online listing; it is not a full sealing of every record. The Alaska Court System self-help pages have the form and instructions.',
-          remedy: 'CourtView removal (Form TF-810 / Admin Rule 40) — 60 days after disposition',
-          citation: 'Alaska Stat. § 22.35.030'
-        },
-        complex_partial_ak: {
+        complex_pcr_ak: {
           status: 'complex',
-          title: 'A Partial Win Does Not Qualify — Let\'s Confirm',
-          message: 'Here is an Alaska limitation worth being precise about: CourtView removal only works if the ENTIRE case ended without a conviction. If your case had any conviction in it, a dismissed or acquitted charge WITHIN that case stays visible online — a partial win does not qualify. Because the details of what was and was not convicted matter here, it is worth confirming exactly how your case is recorded before assuming anything. The Alaska Court System self-help and Alaska Legal Services can check it against the Rule 40 requirements.',
-          remedy: 'Confirm the full case disposition (a partial dismissal does not qualify for removal)',
-          citation: 'Alaska Stat. § 22.35.030'
-        },
-        marijuana_ak: {
-          status: 'eligible',
-          title: 'Old Marijuana Possession — Non-Publication May Apply',
-          message: 'Because this was a marijuana-possession conviction that has since been decriminalized, Alaska\'s 2024 law bars it from being released or published — a meaningful protection in a state that otherwise does not clear convictions. Because the law is new, the exact scope and how you invoke it are things worth confirming rather than assuming. Alaska Legal Services can help you check whether and how it applies to your specific conviction.',
-          remedy: 'Marijuana non-publication (2024 law) — confirm scope/mechanics',
+          title: 'A Disputed Conviction Is Not a Sealing Question',
+          message: 'Alaska\'s one sealing statute (§ 12.62.180) reaches a record that RESULTED from mistaken identity or a false accusation — but it expressly may NOT be used to collaterally attack a judgment. So if you were tried and CONVICTED, and your position is that the accusation was false, that is a challenge to the conviction itself, not a sealing request — and it belongs in post-conviction relief (an appeal or a PCR application), which has its own strict rules and deadlines. This screening cannot evaluate a PCR claim, and getting it wrong would be worse than saying so. Please talk with a criminal-defense or post-conviction attorney — Alaska Legal Services can point you toward the right help.',
+          remedy: 'Post-conviction relief, not sealing (§ 12.62.180 cannot attack a judgment) — see an attorney',
           citation: 'Alaska Stat. § 12.62.180'
-        },
-        sis_setaside_ak: {
-          status: 'eligible',
-          title: 'Set Aside — But Know It Stays Visible',
-          message: 'Because you completed a suspended imposition of sentence (SIS), the conviction can be set aside as a matter of right, absent good cause (§ 12.55.085) — and a suspended entry of judgment means no conviction entered in the first place. Worth doing, but here is the honest caveat for SIS: per the Alaska courts (Journey v. State), the public record REMAINS and shows both the conviction and the set-aside. So it clears the legal effect, not the visibility. (SIS excludes DUI/refusal, sex offenses, felony crimes against a person, firearm use, and prior DV.) Alaska Legal Services can confirm which applies to you.',
-          remedy: 'SIS set-aside (§ 12.55.085) — nullifies the conviction, but it stays visible',
-          citation: 'Alaska Stat. § 12.55.085'
         },
         ineligible_conviction_ak: {
           status: 'ineligible',
-          title: 'No Path to Clear This Conviction',
-          message: 'This is the hardest honest answer in the country, and you deserve it straight: Alaska has no expungement law, and for an ordinary valid conviction there is essentially no way to seal or remove it. A pardon is technically the only route, but it is effectively unavailable — there have been about 188 pardons in Alaska\'s entire history, and none since 2006. So we are not going to point you toward a door that does not really open. What CAN sometimes help: if any charge in your history ended without a conviction, that piece may be removable; and if a record ever resulted from mistaken identity, that can be sealed. Alaska Legal Services can review your full record for anything that qualifies.',
-          remedy: 'None realistically (no expungement; pardons effectively unavailable) — check non-convictions',
-          citation: 'Alaska Stat. § 12.62.180'
+          title: 'No Path to Clear This Conviction in Alaska',
+          message: 'This is the hardest honest answer in the country, and you deserve it straight: Alaska has NO expungement, sealing, or set-aside statute for a valid conviction — misdemeanor or felony, however old, and no matter how spotless you have been since. There is no waiting-period path that opens later. Two narrow things to know, so you are not left with only a "no": if a conviction ever resulted from MISTAKEN IDENTITY, that specific record can be sealed (§ 12.62.180); and if any charge in your history ended WITHOUT a conviction, that piece comes off the public court website automatically. Otherwise the only route is gubernatorial clemency, which is technically available but effectively unavailable in practice. (Alaska\'s only tool to AVOID a conviction record — a suspended entry of judgment — is a decision made at sentencing, not something that can be applied for after the fact. And note: there is no special marijuana-record path; a bill to add one has not become law.) Alaska Legal Services can review your full record for anything that qualifies.',
+          remedy: 'None (no conviction expungement/sealing) — check mistaken identity, non-convictions, or clemency',
+          citation: 'Alaska Stat. §§ 12.62.180, 22.35.030'
+        },
+        eligible_courtview_ak: {
+          status: 'eligible',
+          title: 'No Conviction — It Comes Off CourtView Automatically',
+          message: 'Because your case ended without a conviction (an acquittal, or dismissal of all charges not tied to a Rule 11 plea deal in another case), the Alaska Court System MAY NOT publish it on its public website (CourtView) once 60 days have passed — and this is AUTOMATIC, by operation of law, with nothing to file (§ 22.35.030). If the case still appears after 60 days, the fix is to contact the court system about the non-publication, NOT to file a petition. But be clear-eyed about what this does and does not do, because Alaska is unusual here: it removes the CourtView WEBSITE listing only. The underlying court record still exists, your DPS criminal-history record is COMPLETELY UNTOUCHED, a fingerprint or DPS background check will still report the case, and there is no right to deny it. So it helps with casual online searches, not with a formal background check. The Alaska Court System self-help pages explain the non-publication rule.',
+          remedy: 'Automatic CourtView non-publication at 60 days (§ 22.35.030) — website only, DPS record remains',
+          citation: 'Alaska Stat. § 22.35.030'
+        },
+        ineligible_rule11_ak: {
+          status: 'ineligible',
+          title: 'Dismissed Via a Plea Deal in Another Case — Does Not Qualify',
+          message: 'Here is an Alaska trap worth being precise about. CourtView non-publication reaches a case whose charges were all dismissed — EXCEPT where the dismissal was part of a Rule 11 plea agreement in ANOTHER criminal case (§ 22.35.030(2)). Because your charges were dismissed as part of a plea deal in another case, this dismissal does not qualify for automatic non-publication; it keeps showing on the court website. And the conviction you pleaded to in that other case has no clearing path (Alaska has no conviction expungement or sealing). If any part of your history instead resulted from mistaken identity, that can be sealed under § 12.62.180. Alaska Legal Services can review the specifics.',
+          remedy: 'None via § 22.35.030 (Rule 11 plea-deal dismissal) — the plea conviction has no path either',
+          citation: 'Alaska Stat. § 22.35.030(2)'
+        },
+        sej_pending_ak: {
+          status: 'eligible',
+          title: 'Suspended Entry of Judgment Completed — Off CourtView, but the DPS Record Remains',
+          message: 'Because you completed a suspended entry of judgment (SEJ) and the case was dismissed, it qualifies for automatic CourtView non-publication: the Alaska Court System may not publish it on its public website once 60 days have passed (§ 22.35.030(4)) — nothing to file. That is a real benefit, and SEJ is Alaska\'s only way to end a case WITHOUT a conviction on the record. But hold onto the same honest limits as any CourtView non-publication: it removes the website listing only. The underlying court record still exists, your DPS criminal-history record is untouched and still reports on a background check, and there is no right to deny it. One thing we are NOT going to state, because we have not yet read it: the eligibility criteria for who can get an SEJ in the first place (§ 12.55.078) — that is a sentencing-stage decision, and a defense attorney is the right source. The Alaska Court System self-help and Alaska Legal Services can help.',
+          remedy: 'CourtView non-publication after SEJ dismissal (§ 22.35.030(4)) — SEJ criteria (§ 12.55.078) pending',
+          citation: 'Alaska Stat. §§ 22.35.030(4), 12.55.078'
+        },
+        arrest_ak: {
+          status: 'complex',
+          title: 'Arrest, Never Charged — Limited and Uncertain',
+          message: 'An arrest that never led to charges is a hard case in Alaska, and we would rather be precise than overpromise. The CourtView non-publication rule (§ 22.35.030) works on a court CASE ended by acquittal or dismissal — with no case filed, there may be nothing on the court website to unpublish in the first place. The arrest itself lives in the Department of Public Safety criminal-history system, which is governed by AS chapter 12.62 generally, and we have not verified a specific removal route for an arrest-only DPS record — so we are not going to state one from memory. The one clear path that could apply: if the arrest resulted from mistaken identity or a false accusation, you can seek sealing of it under § 12.62.180 (beyond a reasonable doubt, per agency). Alaska Legal Services can tell you what, if anything, applies to your specific arrest record.',
+          remedy: 'Uncertain for an arrest-only record — check § 12.62.180 (mistaken identity) with Alaska Legal Services',
+          citation: 'Alaska Stat. §§ 22.35.030, 12.62.180'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Record relief in Alaska (CourtView removal; SIS set-aside; § 12.62.180 sealing)',
-          formName: 'CourtView removal request (Form TF-810)',
-          formUrl: 'https://courts.alaska.gov/shc/records/records-removal.htm',
+          name: 'Record relief in Alaska (§ 12.62.180 mistaken-identity sealing; § 22.35.030 CourtView non-publication)',
+          formName: 'Written sealing request to the agency head (§ 12.62.180); CourtView non-publication is automatic',
+          formUrl: 'https://courts.alaska.gov/shc/',
           steps: [
-            'If your ENTIRE case ended without a conviction, file Form TF-810 (Admin Rule 40) to remove it from the online CourtView index 60 days after disposition.',
-            'If a record resulted from mistaken identity or a false accusation, apply for sealing under § 12.62.180 (a high proof standard).',
-            'If you completed a suspended imposition of sentence, seek a set-aside (§ 12.55.085) — but know the public record still shows the conviction and set-aside.',
-            'For an ordinary conviction, be aware there is no expungement and pardons are effectively unavailable. Alaska Legal Services can review your record for anything that qualifies.'
+            'Understand the hard baseline first: Alaska has NO expungement, sealing, or set-aside for a valid conviction. A misdemeanor or felony conviction has no record-clearing path (clemency is the only route, and it is effectively unavailable).',
+            'If a record resulted from MISTAKEN IDENTITY or a false accusation, send a written sealing request to the HEAD OF EACH AGENCY holding it (e.g., DPS and the court system) — the standard is beyond a reasonable doubt (§ 12.62.180); if granted, you may deny the record entirely.',
+            'If your case ended WITHOUT a conviction (acquittal, or dismissal of all charges not via a Rule 11 plea deal in another case, or a completed suspended entry of judgment), it comes off the public CourtView website automatically 60 days after disposition (§ 22.35.030) — nothing to file. If it still shows after 60 days, contact the court system.',
+            'Be clear-eyed: CourtView non-publication removes the website listing only; the DPS criminal-history record is untouched and still reports on a background check. Alaska Legal Services can review your record for anything that qualifies.'
           ],
-          // null: Wave 7 gives no fee information for the TF-810 removal or § 12.62.180
-          // sealing — the fee and any waiver are unknown.
+          // null: no fee is stated for the § 12.62.180 administrative sealing request,
+          // and CourtView non-publication is automatic (nothing filed); DPS processing
+          // details are phone-tier, so the fee and any waiver are unknown.
           fees: null,
           feeWaiver: null,
-          courtContact: 'The Alaska Court System (CourtView removal) and Department of Public Safety (sealing)'
+          courtContact: 'The Department of Public Safety and the Alaska Court System (each agency seals only its own records)'
         }
       },
       legalAid: [

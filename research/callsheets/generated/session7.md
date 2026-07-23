@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**34 open questions across 10 states.**
+**37 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -16,22 +16,25 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 1. ALASKA (AK)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Record relief in Alaska (CourtView removal; SIS set-aside; § 12.62.180 sealing)** — The Alaska Court System (CourtView removal) and Department of Public Safety (sealing)
+- **Record relief in Alaska (§ 12.62.180 mistaken-identity sealing; § 22.35.030 CourtView non-publication)** — The Department of Public Safety and the Alaska Court System (each agency seals only its own records)
 - Alaska Legal Services Corporation — https://www.alsc-law.org
 - Alaska Court System — Self-Help / Records Removal — https://courts.alaska.gov/shc/
 
-**Dates that govern:**
-- 2024 — Marijuana decriminalized-possession non-publication (2024) (effective) · Wave 7 gives the year. Decriminalized marijuana-possession convictions are barred from release/publication; scope and mechanics flagged for verification.
+**Verify — 5 open questions. Each answer closes a numbered question in the database:**
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
-
-1. Confirm the 2024 marijuana provision's scope and mechanics. Wave 7 says decriminalized marijuana-possession convictions are barred from release/publication but flags scope/mechanics for verification. The tree routes an old marijuana-possession conviction to a "non-publication may apply" result; confirm what it covers and how it works.
+1. TOP PRIORITY: pull AS 12.55.078 (suspended entry of judgment) — the eligibility criteria and exclusions. It is Alaska's only route to avoid a conviction record (completion → dismissal → CourtView removal under 22.35.030(4)), but its criteria were not read; the SEJ node states no eligibility rules pending this pull.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm any fees for the CourtView removal (Form TF-810 / Admin Rule 40) and the § 12.62.180 sealing request, and whether waivers apply. Wave 7 gives the forms/processes but no fee information; the fees and feeWaiver fields are null pending confirmation with courts.alaska.gov and the DPS record-sealing process.
+2. Confirm whether Chapter 22.35 contains any section after AS 22.35.030 (a table-of-contents check). The CourtView non-publication rule is 22.35.030; confirm nothing later in the chapter modifies it.
+   - *Blocks no single field — affects a branch or wording.*
+3. Confirm the DPS Criminal Justice Information Systems Program request procedure for an AS 12.62.180 sealing request, and any processing fee. No fee is stated for the administrative request letter; the mechanics and any fee are phone-tier (Alaska DPS). The fees and feeWaiver fields are null pending this.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
+4. Clemency-process context (AS 33.20) — cite-only. Gubernatorial clemency is technically the only route for a conviction; the process details were not pulled and are provided as context only.
+   - *Blocks no single field — affects a branch or wording.*
+5. Confirm whether the AS 22.35.030 CourtView non-publication is reliably applied in practice within 60 days. If a qualifying case still appears after 60 days, the remedy is contacting the court system, not a petition — but how often compliance lags is a phone-tier question (Alaska Court System).
+   - *Blocks no single field — affects a branch or wording.*
 
 ---
 

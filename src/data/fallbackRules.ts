@@ -683,7 +683,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // now, each citing its own subsection, with a result for the gap.
         excluded_setaside_az: {
           type: 'boolean',
-          text: 'Was the offense a dangerous offense (one involving a deadly weapon, a dangerous instrument, or serious physical injury), an offense requiring sex offender registration, an offense with a sexual motivation finding, or a crime against a victim under 15?',
+          text: 'Did this offense involve any of these? — a weapon or dangerous instrument · serious physical injury to someone · a sexual element or motivation · a victim under 15. (Why we ask: Arizona keeps its most serious offenses out of a set-aside, § 13-905(P).)',
           yes: 'ineligible_serious',
           no: 'marijuana_offense'
         },
@@ -732,7 +732,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // here does not end the screening: the set-aside survives it.
         excluded_sealing_az: {
           type: 'boolean',
-          text: 'Was the offense any of these: a serious, violent or aggravated offense (ARS § 13-706); a dangerous crime against children (ARS § 13-705); sex trafficking (ARS § 13-1307); an offense with a deadly weapon or serious physical injury as an element; or a class 2, 3, 4 or 5 felony under chapter 14 (sexual offenses) or chapter 35.1 (sexual exploitation of children)?',
+          text: 'Did this offense involve any of these? — a serious, violent, or aggravated offense · a dangerous crime against a child · sex trafficking · a weapon or dangerous instrument · serious physical injury to someone · a sexual offense or child sexual exploitation offense charged as a felony class 2, 3, 4, or 5. (Why we ask: sealing excludes a wider list of offenses than a set-aside does, § 13-911(O).)',
           yes: 'eligible_setaside_only_az',
           no: 'prior_felony_az'
         },

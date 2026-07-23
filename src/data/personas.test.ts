@@ -750,87 +750,299 @@ const MI: Persona[] = [
 // ---------------------------------------------------------------------------
 const PA: Persona[] = [
   {
-    source: 'Wave 1 — PA persona 1',
-    package: 'M2 conviction, 8 yrs conviction-free, fines paid → likely auto-sealed → check-record path.',
+    source: 'Wave 1 — PA persona 1 (statute-verified 7/18)',
+    package: 'M2 conviction, 8 yrs conviction-free, restitution paid, clean auto screen → 7-yr automatic branch: may already be auto-sealed (the RESOLVED conflict).',
     record: { title: 'M2 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
     answers: {
+      pardon_pa: false,
       sealing_excluded_pa: false,
-      misd_count_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
       grade_pa: 'm2_m3',
-      petition_misd_date_pa: '2018-07-15',   // 8 conviction-free years
+      petition_misd_m2m3_date_pa: '2018-07-15',   // 8 conviction-free years
+      auto_screen_misd_pa: false,
     },
     expect: {
-      resultKey: 'check_record_unknown_period_pa',
+      resultKey: 'eligible_auto_or_petition_misd_pa',
       reading:
-        'THE CONFLICT persona. At 8 years the person is past the 7-year PETITION period, so that '
-        + 'much is solid and the result says so. Whether the AUTOMATIC sealing has already fired '
-        + 'depends on a period Wave 1\'s sources split on (7 vs 10) — so the null-period node routes '
-        + 'to nextUnknown and the result says plainly that we cannot tell them, and to check rather '
-        + 'than assume. The package says "likely auto-sealed"; that is only true on the 7-year '
-        + 'reading. Flagged approximate: this resolves the moment § 9122.2 is read.',
+        'The old "we cannot say" conflict persona, now resolved. Act 36 of 2023 set the automatic '
+        + 'misdemeanor period at SEVEN years (§ 9122.2(a)(1)); at 8 conviction-free years, past the '
+        + 'petition period and clearing the stricter automatic screen, the person may already be '
+        + 'auto-sealed — and can petition either way. Exact (no longer approximate).',
     },
-    expectIsApproximate: true,
     now: NOW,
   },
   {
-    source: 'Wave 1 — PA persona 2',
-    package: 'M1, 5 yrs → waiting (7y).',
-    record: { title: 'M1 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
+    source: 'Wave 1 — PA persona 2 (statute-verified 7/18)',
+    package: 'qualifying PROPERTY felony (F3 theft), 12 yrs conviction-free, not a drug offense → qualifying-felony PETITION path.',
+    record: { title: 'Theft (F3)', charge_type: 'felony', disposition: 'convicted' },
     answers: {
+      pardon_pa: false,
       sealing_excluded_pa: false,
-      misd_count_pa: false,
-      grade_pa: 'm1',
-      petition_m1_date_pa: '2021-07-15',   // 5 of the 7 needed
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'felony_qualifying',
+      felony_qualifying_date_pa: '2014-07-15',   // 12 conviction-free years
+      felony_qualifying_type_pa: false,          // not a drug qualifying offense
     },
-    expect: { resultKey: 'waiting_misd_pa', reading: 'M1: 7 conviction-free years for petition sealing, and no automatic path reaches a first-degree misdemeanour. 5 years elapsed → waiting. Exact.' },
-    now: NOW,
-  },
-  {
-    source: 'Wave 1 — PA persona 3',
-    package: 'F1 → ineligible for sealing → pardon path.',
-    record: { title: 'First-Degree Felony', charge_type: 'felony', disposition: 'convicted' },
-    answers: { sealing_excluded_pa: true },
     expect: {
-      resultKey: 'ineligible_serious_pa',
+      resultKey: 'eligible_felony_petition_pa',
       reading:
-        'A first-degree felony is on the sealing exclusion list, so no waiting period helps. The '
-        + 'result routes to the Board of Pardons — which since June 2024 carries automatic '
-        + 'expungement once granted, and which Pennsylvania grants more often than most states. '
-        + 'Exact: the package asks for the pardon path and that is what it gets.',
+        'Corrected felony criteria: § 9122.1(a.1) reaches theft (Ch. 39) below F1/F2 after TEN '
+        + 'conviction-free years — there is NO "sentence under 7 years" test. A non-drug qualifying '
+        + 'felony is a PETITION path (no automatic route). 12 years clears it. Exact.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — PA persona 4',
-    package: 'drug felony, 3-yr sentence, 11 yrs clean → eligible (3.0 automatic — verify).',
-    record: { title: 'Drug Felony', charge_type: 'felony', disposition: 'convicted' },
+    source: 'Wave 1 — PA persona 3 (statute-verified 7/18)',
+    package: 'summary conviction, 6 yrs since judgment, restitution paid → two-track: automatic-sealing floor + arrest-free petition-expungement.',
+    record: { title: 'Summary Offense', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2020-01-01' },
     answers: {
+      pardon_pa: false,
       sealing_excluded_pa: false,
-      misd_count_pa: false,
-      grade_pa: 'felony_eligible',
-      felony_date_pa: '2015-07-15',   // 11 conviction-free years
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'summary',
     },
     expect: {
-      resultKey: 'eligible_felony_pa',
+      resultKey: 'eligible_summary_pa',
       reading:
-        'A drug felony with a 3-year sentence is inside the "under 7 years of confinement" window, '
-        + 'and 11 conviction-free years clears the 10-year period. The package flags the Clean Slate '
-        + '3.0 automatic drug-felony path as needing verification, so the result tells the person to '
-        + 'check their record before filing rather than asserting it already happened. Exact.',
+        'The two-track split. Automatic summary sealing is FIVE ELAPSED years since entry of judgment '
+        + '(§ 9122.2(a)(3), cut from 10 by Act 36) — anchored on the conviction date, not arrest-free '
+        + 'time; 6 years elapsed → the floor is met. The result also states the stronger arrest-free '
+        + 'petition-expungement (§ 9122(b)(3)). Exact.',
     },
     now: NOW,
   },
   {
-    source: 'Wave 1 — PA persona 5',
+    source: 'Wave 1 — PA persona 4 (statute-verified 7/18)',
+    package: 'completed ARD for a sexual offense, victim under 18 → expungement BARRED (§ 9122(b.1)).',
+    record: { title: 'ARD — indecent assault (victim under 18)', disposition: 'deferred' },
+    answers: { ard_pa: true, ard_sexoffense_minor_pa: true },
+    expect: {
+      resultKey: 'ineligible_ard_sexoffense_pa',
+      reading:
+        '§ 9122(b.1): a court SHALL NOT expunge an ARD record where the victim was under 18 for the '
+        + 'listed sexual offenses. The old tree wrongly sent every completed ARD to eligible; this '
+        + 'carve-out now catches it. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 5 (statute-verified 7/18)',
+    package: 'full acquittal of ALL charges after a trial → AUTOMATIC expungement (§ 9122(a)(4)).',
+    record: { title: 'Acquitted at trial', disposition: 'acquitted' },
+    answers: { acquittal_full_pa: true },
+    expect: {
+      resultKey: 'eligible_acquittal_auto_pa',
+      reading:
+        'New under Act 36: a full acquittal of every charge from the same conduct after trial is '
+        + 'expunged AUTOMATICALLY (§ 9122(a)(4)) — 60-day Commonwealth objection window, completed '
+        + 'within 12 months. Distinct from the ordinary non-conviction route. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 6 (statute-verified 7/18)',
+    package: 'qualifying DRUG felony (§13 CSA, no 30/60-mo sentence), 11 yrs conviction-free → automatic drug-felony path.',
+    record: { title: 'Drug Felony (§13 CSA)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'felony_qualifying',
+      felony_qualifying_date_pa: '2015-07-15',   // 11 conviction-free years
+      felony_qualifying_type_pa: true,           // a "qualifying offense" (drug)
+    },
+    expect: {
+      resultKey: 'eligible_felony_auto_pa',
+      reading:
+        'A "qualifying offense" (§ 9102: a §13 drug felony without a 30-mo-min or 60-mo-max sentence) '
+        + 'is sealed AUTOMATICALLY at ten conviction-free years (§ 9122.2(a)(1.1)) and is also '
+        + 'petition-eligible. 11 years clears it. The draft only had this as an open question. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 7 (statute-verified 7/18)',
+    package: 'old F3 felony in history (>15 yrs), current M3, 8 yrs conviction-free → petition-eligible but NOT automatic (§ 9122.3(a)(2)(i)).',
+    record: { title: 'M3 (with an old felony in history)', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,       // the old felony is not murder/F1/20-yr
+      petition_lookback_pa: false,      // the felony is >15 yrs ago, outside the petition window
+      restitution_pa: true,
+      grade_pa: 'm2_m3',
+      petition_misd_m2m3_date_pa: '2018-07-15',
+      auto_screen_misd_pa: true,        // EVER any felony -> auto-sealing barred
+    },
+    expect: {
+      resultKey: 'eligible_petition_only_misd_pa',
+      reading:
+        'The petition and automatic screens differ. A felony too old to fall in the 15-year petition '
+        + 'window does not bar the § 9122.1 petition, but § 9122.3(a)(2)(i) bars automatic sealing for '
+        + 'ANY prior felony ever — so the person can petition but should not wait for automation. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 8 (statute-verified 7/18)',
+    package: 'unconditional pardon → AUTOMATIC expungement (§ 9122(a)(2.1)/(a.1)).',
+    record: { title: 'Unconditional pardon', charge_type: 'felony', disposition: 'convicted' },
+    answers: { pardon_pa: true, pardon_type_pa: true },
+    expect: {
+      resultKey: 'eligible_pardon_auto_pa',
+      reading:
+        'An unconditional pardon carries automatic expungement via the Board of Pardons -> AOPC -> '
+        + 'common pleas pipeline (§ 9122(a)(2.1)/(a.1)) — no petition. The result says to verify it '
+        + 'ran rather than to file. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 9 (statute-verified 7/18)',
+    package: 'conditional pardon → clean slate limited access (§ 9122.2(a)(4)).',
+    record: { title: 'Conditional pardon', charge_type: 'felony', disposition: 'convicted' },
+    answers: { pardon_pa: true, pardon_type_pa: false },
+    expect: {
+      resultKey: 'eligible_pardon_conditional_pa',
+      reading:
+        'A conditional pardon takes the other track: not automatic expungement but Clean Slate '
+        + 'limited access (§ 9122.2(a)(4)). The two pardon tracks are distinguished. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 10 (statute-verified 7/18)',
     package: 'dismissed charges last year → auto-sealed, expungement available.',
     record: { title: 'Dismissed Charges', disposition: 'dismissed', disposition_date: '2025-07-15' },
     expect: {
       resultKey: 'eligible_nonconviction_pa',
       reading:
-        'Non-convictions seal automatically with no waiting period, AND expungement is available '
-        + 'because there was no conviction. The result gives both and explains why expungement is '
-        + 'the stronger of the two — sealing keeps the record visible to law enforcement. Exact.',
+        'Non-convictions seal automatically with no waiting period (§ 9122.2(a)(2)), AND expungement '
+        + 'is available because there was no conviction. Dismissals keep this result. Exact.',
     },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 11 (statute-verified 7/18)',
+    package: 'F1 → lifetime petition bar → pardon path.',
+    record: { title: 'First-Degree Felony', charge_type: 'felony', disposition: 'convicted' },
+    answers: { pardon_pa: false, sealing_excluded_pa: true },
+    expect: {
+      resultKey: 'ineligible_serious_pa',
+      reading:
+        'Murder / F1 / 20-year offenses are the LIFETIME petition bar (§ 9122.1(b)); no waiting period '
+        + 'helps. The result routes to the Board of Pardons and notes an unconditional pardon carries '
+        + 'automatic expungement. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 12 (statute-verified 7/18)',
+    package: 'otherwise-eligible M2 but court-ordered restitution unpaid → not yet (restitution gate).',
+    record: { title: 'M2, restitution outstanding', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: false,
+    },
+    expect: {
+      resultKey: 'waiting_restitution_pa',
+      reading:
+        'Both § 9122.1 and § 9122.2 condition on restitution paid (fines/costs do not block). Unpaid '
+        + 'restitution -> "not yet." The result discloses the restitution-triggered Clean Slate fee and '
+        + 'that a summary/non-conviction may not be gated by it. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 13 (statute-verified 7/18)',
+    package: 'second-degree felony not on the qualifying list → not sealable → pardon path.',
+    record: { title: 'Aggravated Assault (F2)', charge_type: 'felony', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'felony_other',
+    },
+    expect: {
+      resultKey: 'ineligible_felony_pa',
+      reading:
+        'An F2 (and anything off the § 9122.1(a.1) qualifying-felony list) is not sealable; the route '
+        + 'is a pardon (unconditional -> automatic expungement) or the age-70 path. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 14 (statute-verified 7/18)',
+    package: 'recent felony within the 15-year petition window → windowed exclusion (a "not yet", not lifetime).',
+    record: { title: 'Recent record', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,     // not murder/F1/20-yr
+      petition_lookback_pa: true,     // a felony within the last 15 years
+    },
+    expect: {
+      resultKey: 'complex_petition_excluded_pa',
+      reading:
+        'The § 9122.1(b) petition exclusions are mostly TIME-WINDOWED (15/10 years), not lifetime — '
+        + 'the draft wrongly treated them as permanent. The result explains the windows and routes to '
+        + 'the free eligibility check. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 15 (statute-verified 7/18)',
+    package: 'M1, 8 yrs conviction-free → petition sealing (no automatic path for an M1).',
+    record: { title: 'M1 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'm1',
+      petition_m1_date_pa: '2018-07-15',   // 8 conviction-free years
+    },
+    expect: {
+      resultKey: 'eligible_petition_m1_pa',
+      reading:
+        'An M1 is a qualifying misdemeanor for the 7-year § 9122.1(a) petition (max <=5 years) but has '
+        + 'no automatic path — filing is the route. 8 years clears it. Exact.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 16 (statute-verified 7/18)',
+    package: 'M2, only 3 conviction-free years → waiting (7y).',
+    record: { title: 'M2 Conviction', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'm2_m3',
+      petition_misd_m2m3_date_pa: '2023-07-15',   // 3 of the 7 needed
+    },
+    expect: { resultKey: 'waiting_misd_pa', reading: 'Misdemeanor petition and automatic sealing both need 7 conviction-free years (Act 36 cut both from 10). 3 years elapsed -> waiting. Exact.' },
+    now: NOW,
+  },
+  {
+    source: 'Wave 1 — PA persona 17 (statute-verified 7/18)',
+    package: 'summary conviction, only 2 yrs since judgment → waiting (5y elapsed).',
+    record: { title: 'Summary Offense', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2024-06-01' },
+    answers: {
+      pardon_pa: false,
+      sealing_excluded_pa: false,
+      petition_lookback_pa: false,
+      restitution_pa: true,
+      grade_pa: 'summary',
+    },
+    expect: { resultKey: 'waiting_summary_pa', reading: 'Automatic summary sealing is 5 elapsed years since judgment (§ 9122.2(a)(3), cut from 10). Only 2 years elapsed -> waiting. Exact.' },
     now: NOW,
   },
 ];

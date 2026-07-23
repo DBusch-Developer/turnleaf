@@ -12,15 +12,20 @@ import {
   hasUnsupportedCitation,
 } from './chatRetrieval';
 import { fallbackRules, type StateRuleConfig } from './fallbackRules';
+import { isScreenable } from '../db/client';
 
 describe('VERIFIED_STATE_CODES', () => {
   test('contains only screenable states and excludes drafts', () => {
     expect(VERIFIED_STATE_CODES.has('CA')).toBe(true); // statute_cited
     expect(VERIFIED_STATE_CODES.has('OH')).toBe(true);
-    // A draft state must not be in scope. Pick any state that is draft in the data.
-    const draft = Object.values(fallbackRules).find(s => s.verificationStatus === 'draft');
-    expect(draft).toBeTruthy();
-    expect(VERIFIED_STATE_CODES.has(draft!.code)).toBe(false);
+    // A draft state must never be in scope. All 50 real states are now verified
+    // (PA, the last draft, was verified 2026-07-18), so assert the exclusion at the
+    // semantic level rather than via a live draft row: 'draft' is not screenable,
+    // and every code that IS in scope maps to a screenable state in the data.
+    expect(isScreenable('draft')).toBe(false);
+    for (const code of VERIFIED_STATE_CODES) {
+      expect(isScreenable(fallbackRules[code].verificationStatus)).toBe(true);
+    }
   });
 });
 

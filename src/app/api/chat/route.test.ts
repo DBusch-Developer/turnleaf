@@ -33,12 +33,14 @@ describe('/api/chat (deterministic path, no GROQ key)', () => {
     expect(data.answer.toLowerCase()).toContain('confirm');
   });
 
-  test('unverified/draft state -> BEYOND tier with legal aid, no citations', async () => {
-    // PA is a still-draft state (WA verified 2026-07-18, WV verified 2026-07-22 now return VERIFIED).
-    const res = await call({ message: 'What about my record?', stateCode: 'PA' });
+  test('out-of-scope state -> BEYOND tier with legal aid, no citations', async () => {
+    // All 50 real states are now verified (PA, the last draft, verified 2026-07-18).
+    // Use a non-existent code to exercise the out-of-scope/BEYOND path deterministically —
+    // getState('ZZ') is null, so it is never screenable and cannot silently become verified.
+    const res = await call({ message: 'What about my record?', stateCode: 'ZZ' });
     const data = await res.json();
     expect(data.tier).toBe('BEYOND');
-    expect(data.legalAid.length).toBeGreaterThan(0);
+    expect(data.legalAid.length).toBeGreaterThan(0);   // nationalReferrals always appended
     expect(data.citations).toEqual([]);
   });
 });

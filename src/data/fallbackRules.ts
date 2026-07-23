@@ -11601,14 +11601,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         misd_restitution_al: {
           type: 'boolean',
           field: 'restitution_paid',
-          text: 'Have you completed all probation/parole AND paid ALL restitution and court-ordered amounts owed to a victim in full?',
+          text: 'Have you completed all probation/parole AND paid all RESTITUTION in full?',
           yes: 'fines_al',
           no: 'ineligible_restitution_al'
         },
         fines_al: {
           type: 'boolean',
           field: 'fines_paid',
-          text: 'Have you paid ALL fines and costs in full?',
+          text: 'Have you paid all fines, costs, and other court-ordered amounts in full?',
           yes: 'misd_conv_date_al',
           no: 'ineligible_restitution_al'
         },

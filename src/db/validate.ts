@@ -4,10 +4,11 @@
 // Structure only — never legal correctness. See src/data/validateState.ts.
 
 import { fallbackRules } from '../data/fallbackRules';
-import { validateAll, formatErrors } from '../data/validateState';
+import { validateAll, validateIntakeMaps, formatErrors } from '../data/validateState';
+import { intakeMaps } from '../data/intakeMaps';
 
 const stateCount = Object.keys(fallbackRules).length;
-const errors = validateAll(fallbackRules);
+const errors = [...validateAll(fallbackRules), ...validateIntakeMaps(fallbackRules, intakeMaps)];
 
 if (errors.length > 0) {
   console.error(`\nStructural validation FAILED — ${errors.length} problem(s):\n`);

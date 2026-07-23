@@ -26,6 +26,7 @@
 
 import type { StateRuleConfig, RuleNode } from './fallbackRules';
 import { FIELD_DOMAINS, BOOLEAN_FIELDS, DATE_FIELDS } from './screening';
+import type { IntakeMap } from './intake';
 
 export type ValidationRule =
   | 'missing-field'
@@ -398,6 +399,43 @@ export function validateState(config: StateRuleConfig): ValidationError[] {
 /** Validate every state, tagging each error with its state code. */
 export function validateAll(rules: Record<string, StateRuleConfig>): ValidationError[] {
   return Object.values(rules).flatMap(validateState);
+}
+
+/**
+ * Every node id a map names must exist in that state's tree, and a stateField's
+ * optionsFrom must be a choice node. A map is additive data; a dangling id means
+ * it would silently prefill nothing (or the wrong node), so it fails the build.
+ */
+export function validateIntakeMaps(
+  rules: Record<string, StateRuleConfig>,
+  maps: Record<string, IntakeMap>,
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  for (const [code, map] of Object.entries(maps)) {
+    const config = rules[code];
+    if (!config) {
+      errors.push({ state: code, rule: 'unresolved-ref', path: `intakeMaps.${code}`,
+        message: `intake map names state '${code}', which has no rules` });
+      continue;
+    }
+    const nodes = config.rules.nodes;
+    const check = (id: string, path: string) => {
+      if (!(id in nodes)) {
+        errors.push({ state: code, rule: 'unresolved-ref', path,
+          message: `intake map targets node '${id}', which the ${code} tree does not have` });
+      }
+    };
+    for (const id of Object.keys(map.derived)) check(id, `intakeMaps.${code}.derived.${id}`);
+    for (const sf of map.stateFields ?? []) {
+      check(sf.optionsFrom, `intakeMaps.${code}.stateFields.${sf.key}.optionsFrom`);
+      if (nodes[sf.optionsFrom] && nodes[sf.optionsFrom].type !== 'choice') {
+        errors.push({ state: code, rule: 'bad-shape', path: `intakeMaps.${code}.stateFields.${sf.key}.optionsFrom`,
+          message: `optionsFrom '${sf.optionsFrom}' is not a choice node, so it has no options to show` });
+      }
+      for (const id of sf.fills) check(id, `intakeMaps.${code}.stateFields.${sf.key}.fills`);
+    }
+  }
+  return errors;
 }
 
 /** Render errors for a terminal, grouped by state. */

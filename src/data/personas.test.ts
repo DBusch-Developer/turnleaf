@@ -64,6 +64,7 @@ const base: ConvictionRecord = {
   probation_status: 'completed',
   prison_sentenced: false,
   restitution_paid: true,
+  fines_paid: true,
 };
 
 const NOW = '2026-07-15';

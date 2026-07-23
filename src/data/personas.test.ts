@@ -5986,45 +5986,167 @@ const SD: Persona[] = [
   },
 ];
 
+// ND personas come from Diana's read of N.D.C.C. ch. 12-60.1 (complete, incl. the
+// 2025-session § 12-60.1-05) and ch. 12.1-32 relevant sections (ndlegis.gov) — the
+// statute-verified rewrite that took ND to statute_cited on 2026-07-22, replacing the
+// Wave 7 draft's five personas. ND sealing reaches only court/prosecution records (the
+// BCI rap sheet is unaffected; no honest-no), the 3/5-yr is a conviction-free lookback
+// before filing, and completion + restitution are separate gates. Conviction date
+// nodes are asked (they measure the conviction-free lookback from the most recent
+// conviction, not the disposition date).
 const ND: Persona[] = [
   {
-    source: 'Wave 7 — ND persona 1',
-    package: 'misdemeanor 2020, probation done 2021 -> 3-yr met -> eligible, free.',
-    record: { title: 'Misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
-    answers: { excluded_nd: false, level_nd: 'misd' },
-    expect: { resultKey: 'eligible_nd', reading: 'A misdemeanor 3 conviction-free years past completion (2021 -> 2024) is sealable; the result notes filing is free.' },
+    source: 'ND statute verification (2026-07-22) — persona 1',
+    package: 'misdemeanor theft, sentence done, 3.5 conviction-free years -> eligible, clear-and-convincing + BCI-limit messaging.',
+    record: { title: 'Misdemeanor theft', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'waiting', conv_register_nd: false, conv_violent_nd: false, conv_completion_nd: true, conv_restitution_nd: true, conv_level_nd: 'misd', conv_misd_date_nd: '2023-01-01' },
+    expect: {
+      resultKey: 'eligible_conv_nd',
+      reading: 'A misdemeanor with a 3+-year conviction-free lookback (last conviction 2023-01-01), completed and restitution paid -> sealable (§ 12-60.1-02); the result carries the clear-and-convincing + BCI-rap-sheet-unaffected messaging.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ND persona 2',
-    package: 'C felony theft 2017, done 2019 -> 5-yr met -> eligible.',
-    record: { title: 'Class C felony theft', charge_type: 'felony', disposition: 'convicted', disposition_date: '2019-06-01', probation_status: 'completed' },
-    answers: { excluded_nd: false, level_nd: 'felony' },
-    expect: { resultKey: 'eligible_nd', reading: 'A felony 5 conviction-free years past completion (2019 -> 2024) is sealable -> eligible.' },
+    source: 'ND statute verification (2026-07-22) — persona 2',
+    package: 'felony forgery, 6 conviction-free years, restitution unpaid -> lookback met but grant criterion (d) fails.',
+    record: { title: 'Felony forgery, restitution unpaid', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed', restitution_paid: false },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'waiting', conv_register_nd: false, conv_violent_nd: false, conv_completion_nd: true, conv_restitution_nd: false },
+    expect: {
+      resultKey: 'ineligible_restitution_nd',
+      reading: 'Paying all restitution is a separate grant criterion (§ 12-60.1-04(1)(d)); unpaid restitution blocks sealing even though the 5-year lookback is met -> a "not yet".',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ND persona 3',
-    package: 'DUI misdemeanor 2021 -> sealable 2024+ — the surprise-yes.',
-    record: { title: 'DUI misdemeanor', charge_type: 'misdemeanor', disposition: 'convicted', disposition_date: '2021-06-01', probation_status: 'completed' },
-    answers: { excluded_nd: false, level_nd: 'misd' },
-    expect: { resultKey: 'eligible_nd', reading: 'DUI is not excluded in North Dakota (rare); as a misdemeanor 3 years past completion (2021 -> 2024) it is sealable -> the surprise-yes.' },
+    source: 'ND statute verification (2026-07-22) — persona 3',
+    package: 'felony aggravated assault, 6 years out -> check the 62.1-02-01 window — wait-extension node, cite-only outcome.',
+    record: { title: 'Felony aggravated assault', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'waiting', conv_register_nd: false, conv_violent_nd: true },
+    expect: {
+      resultKey: 'waiting_firearm_nd',
+      reading: 'A violent/intimidation felony is excluded while within its § 62.1-02-01(1)(a) firearm-ineligibility window (§ 12-60.1-02(2)(a)) — a temporary wait-extension; the window length is cite-only (not stated).',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ND persona 4',
-    package: 'dismissal September 2025 -> auto-closes in 61 days — wait, don\'t file.',
-    record: { title: 'Dismissal, Sept 2025', disposition: 'dismissed', disposition_date: '2025-09-01' },
-    answers: { nonconv_cutoff_nd: true },
-    expect: { resultKey: 'check_autoclose_nd', reading: 'A non-conviction order on/after Aug 1, 2025 auto-closes 61 days later (HB 1166); the cutoff gate routes it to the wait-do-not-file result.' },
+    source: 'ND statute verification (2026-07-22) — persona 4',
+    package: 'registered offender -> barred while registration lasts.',
+    record: { title: 'Registered offender', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'waiting', conv_register_nd: true },
+    expect: {
+      resultKey: 'ineligible_register_nd',
+      reading: 'A § 12.1-32-15 registrable offense cannot be sealed while registration is required (§ 12-60.1-02(2)(b)) — a temporary bar that reopens when registration ends.',
+    },
     now: NOW,
   },
   {
-    source: 'Wave 7 — ND persona 5',
-    package: 'old 2018 dismissal -> petition, 10-day mandatory grant.',
-    record: { title: 'Old 2018 dismissal', disposition: 'dismissed', disposition_date: '2018-06-01' },
-    answers: { nonconv_cutoff_nd: false },
-    expect: { resultKey: 'petition_nonconv_nd', reading: 'A pre-Aug-2025 non-conviction is petitioned with a mandatory 10-day grant; the cutoff gate routes it to the petition result.' },
+    source: 'ND statute verification (2026-07-22) — persona 5',
+    package: 'felony sentenced to 300 days, no revocation -> deemed misdemeanor, 3-yr lookback.',
+    record: { title: 'Felony, 300-day sentence, no revocation', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'waiting', conv_register_nd: false, conv_violent_nd: false, conv_completion_nd: true, conv_restitution_nd: true, conv_level_nd: 'misd', conv_misd_date_nd: '2022-06-01' },
+    expect: {
+      resultKey: 'eligible_conv_nd',
+      reading: 'A felony sentenced to <=360 days with no probation revocation is DEEMED a misdemeanor (§ 12.1-32-02(9)), so it uses the 3-year lookback; last conviction 2022-06-01 -> eligible.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 6',
+    package: 'pardoned conviction -> sealing ground (c), no wait.',
+    record: { title: 'Pardoned conviction', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'conviction', conv_ground_nd: 'pardon' },
+    expect: {
+      resultKey: 'eligible_pardon_nd',
+      reading: 'An unconditional gubernatorial pardon is an independent sealing ground with no waiting period (§ 12-60.1-02(1)(c)).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 7',
+    package: 'charges dismissed October 2025 -> auto-closed at 61 days; if visible, compliance escalation.',
+    record: { title: 'Dismissed October 2025', disposition: 'dismissed', disposition_date: '2025-10-01' },
+    answers: { entry_nd: 'nonconv', nonconv_excl_nd: false, nonconv_cutoff_nd: true },
+    expect: {
+      resultKey: 'eligible_autoclose_nd',
+      reading: 'A non-conviction order on/after 8/1/2025 has its court record closed automatically at 61 days (§ 12-60.1-05); if still visible, that is a compliance failure to escalate to the clerk.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 8',
+    package: 'charges dismissed 2019 -> free petition, closed within 10 days.',
+    record: { title: 'Dismissed 2019', disposition: 'dismissed', disposition_date: '2019-06-01' },
+    answers: { entry_nd: 'nonconv', nonconv_excl_nd: false, nonconv_cutoff_nd: false },
+    expect: {
+      resultKey: 'eligible_petition_nonconv_nd',
+      reading: 'A non-conviction disposed before 8/1/2025 is closed within 10 days on a free petition (§ 12-60.1-05).',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 9',
+    package: 'dismissal via plea deal with conviction on another count -> 05 excluded; analyze the conviction instead.',
+    record: { title: 'Plea-deal dismissal (conviction on another count)', disposition: 'dismissed', disposition_date: '2024-06-01' },
+    answers: { entry_nd: 'nonconv', nonconv_excl_nd: true },
+    expect: {
+      resultKey: 'ineligible_nonconv_excl_nd',
+      reading: 'A dismissal via plea agreement with a conviction on another offense is excluded from § 12-60.1-05 closing; the conviction is screened on the sealing path instead.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 10',
+    package: 'NGRI acquittal -> 05 excluded.',
+    record: { title: 'NGRI acquittal', disposition: 'acquitted', disposition_date: '2023-06-01' },
+    answers: { entry_nd: 'nonconv', nonconv_excl_nd: true },
+    expect: {
+      resultKey: 'ineligible_nonconv_excl_nd',
+      reading: 'A lack-of-criminal-responsibility (NGRI) verdict (ch. 12.1-04.1) is excluded from § 12-60.1-05 closing.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 11',
+    package: 'deferred imposition completed -> withdraw/dismiss + automatic restricted access; felony->misdemeanor reduction option flagged.',
+    record: { title: 'Deferred imposition completed', charge_type: 'felony', disposition: 'deferred', probation_status: 'completed' },
+    answers: { entry_nd: 'deferred' },
+    expect: {
+      resultKey: 'eligible_deferred_nd',
+      reading: 'A completed deferred imposition is withdrawn/set aside and dismissed with automatic restricted access (§§ 12.1-32-07.1/07.2(2)); the court may first reduce a felony to a misdemeanor.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 12',
+    package: 'petitioner whose prosecutor stipulates -> no hearing needed, faster.',
+    record: { title: 'Prosecutor stipulates to sealing', charge_type: 'misdemeanor', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'stipulation' },
+    expect: {
+      resultKey: 'eligible_stipulation_nd',
+      reading: 'A prosecutor stipulation lets the court seal without a hearing or faster (§ 12-60.1-04(5)) — the ask-the-prosecutor tip.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 13',
+    package: 'denial with 1-year refile bar -> wait-out messaging.',
+    record: { title: 'Sealing denied, refile question', charge_type: 'felony', disposition: 'convicted', probation_status: 'completed' },
+    answers: { entry_nd: 'denied' },
+    expect: {
+      resultKey: 'denied_refile_nd',
+      reading: 'A district court may bar refiling up to 1 year on stated good cause (§ 12-60.1-04); municipal denials appeal de novo free.',
+    },
+    now: NOW,
+  },
+  {
+    source: 'ND statute verification (2026-07-22) — persona 14',
+    package: 'sealed-record holder asked on a fingerprint background check -> BCI record still reports; no honest-no.',
+    record: { title: 'Sealed record, fingerprint background check', charge_type: 'misdemeanor', disposition: 'convicted' },
+    answers: { entry_nd: 'effects' },
+    expect: {
+      resultKey: 'effects_bci_nd',
+      reading: '"Criminal record" excludes BCI CHRI (§ 12-60.1-01(4)) and sealed info is still released to statutory-check entities (§ 12-60.1-04(8)); the BCI rap sheet still reports, and there is no honest-no.',
+    },
     now: NOW,
   },
 ];

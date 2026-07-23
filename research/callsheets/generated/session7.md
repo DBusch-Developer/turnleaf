@@ -3,7 +3,7 @@
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
 > Source: the states database (or fallbackRules when no DATABASE_URL).
 
-**30 open questions across 10 states.**
+**34 open questions across 10 states.**
 
 **What this cannot generate** — the hand-written sheet is still the one you call from:
 - **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
@@ -120,22 +120,30 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 ## 5. NORTH DAKOTA (ND)
 
-**Status:** `draft` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
 **Contacts (from the data — no phone numbers are stored; see header):**
-- **Sealing (N.D. Cent. Code ch. 12-60.1)** — The court where the case was handled
+- **Sealing / Closing (N.D. Cent. Code ch. 12-60.1; deferred imposition § 12.1-32-07.1)** — The court where the case was handled (the existing criminal case)
 - North Dakota Legal Self Help Center — https://www.ndcourts.gov/legal-self-help
 - Legal Services of North Dakota — https://www.legalassist.org
 
 **Dates that govern:**
-- 2019 — Sealing law enacted (N.D. Cent. Code ch. 12-60.1) (effective) · Wave 7 gives the year. Misdemeanors 3 years / felonies 5 years, conviction-free from completion; no filing fee (the statute forbids charging one).
-- 2025-08-01 — Non-conviction court records auto-close (HB 1166) (operative) · Non-conviction court records auto-close 61 days after a non-conviction order entered on or after this date; older non-convictions are petitioned with a mandatory 10-day grant if requirements are met (§ 12-60.1-05).
+- 2019 — Conviction-sealing chapter (N.D. Cent. Code ch. 12-60.1) (effective) · Misdemeanor 3-year / felony 5-year conviction-free lookback before filing, clear-and-convincing burden; sealing reaches court and prosecution records only, not the BCI rap sheet.
+- 2025-08-01 — Nonconviction court-record closing (§ 12-60.1-05) (operative) · A dismissal or acquittal of all charges entered on/after August 1, 2025 has its court record closed automatically 61 days after the order (no filing); cases disposed before this date are closed within 10 days on a free petition.
 
-**Verify — 2 open questions. Each answer closes a numbered question in the database:**
+**Verify — 6 open questions. Each answer closes a numbered question in the database:**
 
-1. Confirm HB 1166 (2025) operative details. Wave 7 says non-conviction court records auto-close 61 days after a non-conviction order entered on or after August 1, 2025, and that older non-convictions are petitioned with a mandatory 10-day grant. The tree routes post-Aug-2025 non-convictions to an auto-close "wait, do not file" result and older ones to a petition result; confirm the mechanics against ndcourts.gov.
+1. Pull N.D.C.C. § 62.1-02-01(1)(a) — the firearm-ineligibility period that sets the length of the § 12-60.1-02(2)(a) exclusion for a violent/intimidation felony. Cited but not read; the encoding treats it as a wait-extension without stating the period.
    - *Blocks no single field — affects a branch or wording.*
-2. Confirm the no-fee statutory line (ch. 12-60.1 forbids charging a filing fee) and the 61-day auto-seal of completed deferred impositions (§ 12.1-32-07.1). Wave 7 says the ndlegis.gov PDF confirms the no-fee line; confirm both against current text.
+2. Pull N.D.C.C. § 12.1-33-02.1 — the provision the grant order expressly preserves ("rehabilitated but subject to § 12.1-33-02.1"). What that caveat carves out was not read.
+   - *Blocks no single field — affects a branch or wording.*
+3. PULL-NEEDED: N.D.C.C. § 12-60-16.6 and the BCI non-conviction criminal-history-record-information rules — whether the BCI rap-sheet side has its own removal route separate from court-record sealing/closing. Not read; the encoding states only that sealing/closing does not reach the BCI record, and does not state any BCI removal rules from memory.
+   - *Blocks no single field — affects a branch or wording.*
+4. Confirm the conviction-sealing petition filing-fee practice. No fee is stated in ch. 12-60.1 for a conviction petition (nonconviction closing and a municipal-denial appeal are statutorily free). The fees field is null pending this phone-tier check; state no numbers.
+   - *Blocks (null until answered):* `resources.remedies.expungement.fees`
+5. Confirm N.D. Sup. Ct. Admin. R. 41 and N.D. Rules of Court 3.4 (the court-rule mechanics for sealing/closing). Cited but not read — cite-only.
+   - *Blocks no single field — affects a branch or wording.*
+6. Run a quick 2025-session sweep for acts touching N.D.C.C. § 12.1-32-07.1 (deferred-imposition set-aside/restricted-access mechanics). The relevant text was read, but a targeted confirmation is worthwhile.
    - *Blocks no single field — affects a branch or wording.*
 
 ---

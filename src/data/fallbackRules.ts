@@ -18887,180 +18887,314 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   ND: {
     code: 'ND',
     name: 'North Dakota',
-    lastReviewed: '2026-07-16',
-    verificationStatus: 'draft',
+    lastReviewed: '2026-07-22',
+    verificationStatus: 'statute_cited',
+    verifiedDate: '2026-07-22',
     sourcePackage: 'research/waves/Turnleaf_Wave7_Draft_Package.md',
+    sessionNote:
+      'Chapter 12-60.1 read complete, including the 2025-session § 12-60.1-05 (nonconviction closing, eff. '
+      + '8/1/2025); ch. 12.1-32 relevant sections read (02(4)/(9), 07.1, 07.2). A quick 2025-session sweep for '
+      + 'acts touching § 12.1-32-07.1 is pending — see Open Questions.',
     terminology:
-      'North Dakota is quietly one of the friendlier small states. It SEALS convictions (ch. 12-60.1, 2019): '
-      + 'misdemeanors 3 years, felonies 5 years, conviction-free from completing incarceration, probation, or '
-      + 'parole — and there is NO FILING FEE, because the statute forbids charging one. DUI is sealable here, '
-      + 'which is rare. A 2025 law (HB 1166) added automatic closure of non-conviction court records 61 days '
-      + 'after the order, for non-convictions entered on or after August 1, 2025; older non-convictions are '
-      + 'petitioned with a mandatory 10-day grant if the requirements are met. Deferred impositions are '
-      + 'auto-sealed 61 days after probation ends.',
+      'Read the architecture carefully, because North Dakota\'s "sealing" is narrower than the word suggests. '
+      + 'It prohibits DISCLOSURE OF COURT AND PROSECUTION records only — the definition of "criminal record" '
+      + 'EXPRESSLY EXCLUDES the Bureau of Criminal Investigation criminal-history record information '
+      + '(§ 12-60.1-01(4)), the grant order must state you are rehabilitated but remain subject to '
+      + '§ 12.1-33-02.1, and sealed information MUST still be released to any entity with a statutory '
+      + 'background-check obligation (§ 12-60.1-04(8)). So there is NO honest-no here: sealing hides the court '
+      + 'file, but your BCI rap sheet is unaffected — say that plainly. For a CONVICTION (§ 12-60.1-02) you '
+      + 'petition in the existing criminal case: a misdemeanor needs no new-crime conviction for at least 3 '
+      + 'years BEFORE FILING, a felony 5 years — that period is a conviction-free LOOKBACK measured back from '
+      + 'the filing date, NOT from sentence completion; completing all imprisonment/probation and paying all '
+      + 'restitution are SEPARATE grant criteria. The burden is CLEAR AND CONVINCING, and a felony sentenced to '
+      + 'no more than 360 days is deemed a misdemeanor (3-year lookback) unless probation is later revoked. Two '
+      + 'temporary bars: a violent/intimidation felony is excluded only while its § 62.1-02-01(1)(a) firearm '
+      + 'window runs, and a registrable offense only while registration is required; an unconditional pardon is '
+      + 'its own no-wait ground. Ask the prosecutor to STIPULATE — that can skip the hearing. NON-convictions '
+      + '(dismissal or acquittal of all charges) are different and free: orders on/after August 1, 2025 have '
+      + 'their court record CLOSED automatically at 61 days, and older ones close within 10 days on a free '
+      + 'petition (but "closed" is only restricted access, a narrower remedy than sealing). A completed DEFERRED '
+      + 'imposition ends in withdrawal/set-aside and dismissal (with an option to reduce a felony to a '
+      + 'misdemeanor first) and goes to restricted access — though it still counts as a prior later.',
     keyDates: [
       {
-        label: 'Sealing law enacted (N.D. Cent. Code ch. 12-60.1)',
+        label: 'Conviction-sealing chapter (N.D. Cent. Code ch. 12-60.1)',
         date: '2019',
         kind: 'effective',
-        note: 'Wave 7 gives the year. Misdemeanors 3 years / felonies 5 years, conviction-free from completion; no filing fee (the statute forbids charging one).',
+        note: 'Misdemeanor 3-year / felony 5-year conviction-free lookback before filing, clear-and-convincing burden; sealing reaches court and prosecution records only, not the BCI rap sheet.',
       },
       {
-        label: 'Non-conviction court records auto-close (HB 1166)',
+        label: 'Nonconviction court-record closing (§ 12-60.1-05)',
         date: '2025-08-01',
         kind: 'operative',
-        note: 'Non-conviction court records auto-close 61 days after a non-conviction order entered on or after this date; older non-convictions are petitioned with a mandatory 10-day grant if requirements are met (§ 12-60.1-05).',
+        note: 'A dismissal or acquittal of all charges entered on/after August 1, 2025 has its court record closed automatically 61 days after the order (no filing); cases disposed before this date are closed within 10 days on a free petition.',
       },
     ],
     openQuestions: [
       {
         question:
-          'Confirm HB 1166 (2025) operative details. Wave 7 says non-conviction court records auto-close 61 days after a non-conviction order entered on or after August 1, 2025, and that older non-convictions are petitioned with a mandatory 10-day grant. The tree routes post-Aug-2025 non-convictions to an auto-close "wait, do not file" result and older ones to a petition result; confirm the mechanics against ndcourts.gov.',
+          'Pull N.D.C.C. § 62.1-02-01(1)(a) — the firearm-ineligibility period that sets the length of the § 12-60.1-02(2)(a) exclusion for a violent/intimidation felony. Cited but not read; the encoding treats it as a wait-extension without stating the period.',
         blocksFields: [],
       },
       {
         question:
-          'Confirm the no-fee statutory line (ch. 12-60.1 forbids charging a filing fee) and the 61-day auto-seal of completed deferred impositions (§ 12.1-32-07.1). Wave 7 says the ndlegis.gov PDF confirms the no-fee line; confirm both against current text.',
+          'Pull N.D.C.C. § 12.1-33-02.1 — the provision the grant order expressly preserves ("rehabilitated but subject to § 12.1-33-02.1"). What that caveat carves out was not read.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'PULL-NEEDED: N.D.C.C. § 12-60-16.6 and the BCI non-conviction criminal-history-record-information rules — whether the BCI rap-sheet side has its own removal route separate from court-record sealing/closing. Not read; the encoding states only that sealing/closing does not reach the BCI record, and does not state any BCI removal rules from memory.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Confirm the conviction-sealing petition filing-fee practice. No fee is stated in ch. 12-60.1 for a conviction petition (nonconviction closing and a municipal-denial appeal are statutorily free). The fees field is null pending this phone-tier check; state no numbers.',
+        blocksFields: ['resources.remedies.expungement.fees'],
+      },
+      {
+        question:
+          'Confirm N.D. Sup. Ct. Admin. R. 41 and N.D. Rules of Court 3.4 (the court-rule mechanics for sealing/closing). Cited but not read — cite-only.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Run a quick 2025-session sweep for acts touching N.D.C.C. § 12.1-32-07.1 (deferred-imposition set-aside/restricted-access mechanics). The relevant text was read, but a targeted confirmation is worthwhile.',
         blocksFields: [],
       },
     ],
     sources: [
-      { id: 'N.D. Cent. Code ch. 12-60.1 (sealing of convictions; 3/5-year waits; no filing fee)', url: null, retrievedOn: null },
-      { id: 'N.D. Cent. Code § 12.1-32-07.1 (deferred imposition; 61-day auto-seal)', url: null, retrievedOn: null },
-      { id: 'HB 1166 (2025) (non-conviction court-record auto-close; mandatory 10-day grant for older non-convictions)', url: null, retrievedOn: null },
+      { id: 'N.D. Cent. Code ch. 12-60.1 §§ 01-04 (read complete — 01(4) "criminal record" EXCLUDES BCI criminal-history record information; 02(1) grounds: (a) misdemeanor no new-crime conviction for at least 3 years before filing, (b) felony 5 years, (c) unconditional gubernatorial pardon, no wait; 02(2) temporary exclusions — (a) violent/intimidation felony during the § 62.1-02-01(1)(a) firearm window, (b) offense requiring § 12.1-32-15 registration while required; 03-04 petition in the existing case, worldwide criminal history and all prior relief requests, Rule 49 service, CLEAR AND CONVINCING on good cause/completion/restitution/reformation, hearing no earlier than 45 days, 04(5) prosecutor STIPULATION valve, 04(8) sealed info still released to statutory-background-check entities, grant order states rehabilitated subject to § 12.1-33-02.1; municipal-denial appeal de novo without fee; district denial may bar refiling up to 1 year) via ndlegis.gov', url: 'https://ndlegis.gov', retrievedOn: '2026-07-22' },
+      { id: 'N.D. Cent. Code § 12-60.1-05 (2025 session, eff. 8/1/2025 — NONCONVICTION closing; "nonconviction" = dismissal or acquittal of ALL charges; orders on/after 8/1/2025 court SHALL close the record automatically at 61 days, no filing; cases before 8/1/2025 free petition, court SHALL close within 10 days; excludes a dismissal via plea agreement with a conviction on another offense, unfit-to-proceed dismissals (ch. 12.1-04), lack-of-criminal-responsibility verdicts (ch. 12.1-04.1), and appealed cases; NO fee; "closed" = restricted-access list) via ndlegis.gov', url: 'https://ndlegis.gov', retrievedOn: '2026-07-22' },
+      { id: 'N.D. Cent. Code §§ 12.1-32-02(4), 12.1-32-07.1, 12.1-32-07.2(2) (deferred imposition — court may defer with probation; on fulfillment/early discharge the defendant may withdraw the plea or the court set aside the verdict and dismiss, and may first REDUCE a felony to a misdemeanor; released from penalties/disabilities EXCEPT § 12.1-32-15 registration and § 62.1-02-01 firearms; after set-aside + dismissal the file goes to RESTRICTED ACCESS (07.2(2)); a deferred prosecution still counts as a prior (02(4))) via ndlegis.gov', url: 'https://ndlegis.gov', retrievedOn: '2026-07-22' },
+      { id: 'N.D. Cent. Code § 12.1-32-02(9) (DEEMED-MISDEMEANOR rule — a felony conviction sentenced to imprisonment of not more than 360 days is deemed a misdemeanor conviction, unless probation imposed as part of the sentence is later revoked) via ndlegis.gov', url: 'https://ndlegis.gov', retrievedOn: '2026-07-22' },
+      { id: 'N.D. Cent. Code § 62.1-02-01(1)(a) (firearm-ineligibility period — sets the length of the § 12-60.1-02(2)(a) violent-felony sealing exclusion) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'N.D. Cent. Code § 12.1-33-02.1 (the provision the sealing grant order preserves) — CITE-ONLY, not pulled', url: null, retrievedOn: null },
+      { id: 'N.D. Cent. Code § 12-60-16.6 and the BCI non-conviction criminal-history rules (whether the rap-sheet side has its own removal route) — CITE-ONLY, NOT pulled; the encoding states no BCI removal rules', url: null, retrievedOn: null },
+      { id: 'N.D. Cent. Code §§ 12.1-32-15 (offender registration), 12.1-20-03(1)(a) (GSI — no early deferred-termination absent 8 years\' supervision + manifest injustice), ch. 12.1-04 / 12.1-04.1 (fitness to proceed / lack of criminal responsibility) — CITE-ONLY, referenced by the encoded paths', url: null, retrievedOn: null },
     ],
     rules: {
-      startNode: 'disposition',
+      startNode: 'entry_nd',
       nodes: {
-        disposition: {
+        entry_nd: {
           type: 'choice',
-          field: 'disposition',
-          text: 'What was the outcome of the case?',
+          text: 'What would you like to check?',
           options: [
-            { label: 'Convicted (Guilty)', value: 'convicted', next: 'excluded_nd' },
-            { label: 'Dismissed', value: 'dismissed', next: 'nonconv_cutoff_nd' },
-            { label: 'Acquitted (Found Not Guilty)', value: 'acquitted', next: 'nonconv_cutoff_nd' },
-            { label: 'Deferred imposition completed', value: 'deferred', next: 'check_deferred_nd' },
-            { label: 'I don\'t know / Not sure', value: 'unknown', next: 'unknown_disposition' }
+            { label: 'Seal a CONVICTION', value: 'conviction', next: 'conv_ground_nd' },
+            { label: 'A NON-conviction (dismissal or acquittal of ALL charges)', value: 'nonconv', next: 'nonconv_excl_nd' },
+            { label: 'A completed DEFERRED IMPOSITION of sentence', value: 'deferred', next: 'eligible_deferred_nd' },
+            { label: 'What a sealed record means on a background check (BCI)', value: 'effects', next: 'effects_bci_nd' },
+            { label: 'My prosecutor is willing to STIPULATE to sealing', value: 'stipulation', next: 'eligible_stipulation_nd' },
+            { label: 'My sealing petition was DENIED — can I refile?', value: 'denied', next: 'denied_refile_nd' },
+            { label: 'I don\'t know the outcome', value: 'unknown', next: 'unknown_disposition' }
           ]
         },
-        nonconv_cutoff_nd: {
-          type: 'boolean',
-          text: 'Did the case end (the non-conviction order) on or after August 1, 2025?',
-          yes: 'check_autoclose_nd',
-          no: 'petition_nonconv_nd'
-        },
-        excluded_nd: {
-          type: 'boolean',
-          text: 'Are you a registrable sex offender or offender against children, or was this a violent or intimidation felony still within its 10-year firearm-prohibition window?',
-          yes: 'ineligible_excluded_nd',
-          no: 'level_nd'
-        },
-        level_nd: {
+        conv_ground_nd: {
           type: 'choice',
-          text: 'What was the level of the conviction?',
+          text: 'On what basis are you seeking to seal the conviction?',
           options: [
-            { label: 'Misdemeanor', value: 'misd', next: 'misd_date_nd' },
-            { label: 'Felony', value: 'felony', next: 'felony_date_nd' },
+            { label: 'The waiting-period path (misdemeanor 3 years / felony 5 years conviction-free)', value: 'waiting', next: 'conv_register_nd' },
+            { label: 'An unconditional gubernatorial PARDON', value: 'pardon', next: 'eligible_pardon_nd' }
+          ]
+        },
+        conv_register_nd: {
+          type: 'boolean',
+          text: 'Are you currently required to register as an offender under § 12.1-32-15 (a sex offense or an offense against a child)?',
+          yes: 'ineligible_register_nd',
+          no: 'conv_violent_nd'
+        },
+        conv_violent_nd: {
+          type: 'boolean',
+          text: 'Is this a FELONY involving violence or intimidation that is still within its firearm-ineligibility period under § 62.1-02-01(1)(a)?',
+          yes: 'waiting_firearm_nd',
+          no: 'conv_completion_nd'
+        },
+        conv_completion_nd: {
+          type: 'boolean',
+          text: 'Have you completed all imprisonment and probation for this case?',
+          yes: 'conv_restitution_nd',
+          no: 'waiting_completion_nd'
+        },
+        conv_restitution_nd: {
+          type: 'boolean',
+          text: 'Have you paid all restitution ordered in the case?',
+          yes: 'conv_level_nd',
+          no: 'ineligible_restitution_nd'
+        },
+        conv_level_nd: {
+          type: 'choice',
+          text: 'What is the conviction level? (A felony sentenced to no more than 360 days of imprisonment, with no later probation revocation, is DEEMED a misdemeanor.)',
+          options: [
+            { label: 'A misdemeanor — or a felony deemed a misdemeanor (≤360 days, no revocation)', value: 'misd', next: 'conv_misd_date_nd' },
+            { label: 'A felony', value: 'felony', next: 'conv_felony_date_nd' },
             { label: 'I\'m not sure', value: 'unsure', next: 'complex_level_nd' }
           ]
         },
-        misd_date_nd: {
+        conv_misd_date_nd: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete incarceration, probation, or parole for this case?',
+          text: 'When were you MOST RECENTLY convicted of ANY crime — this conviction, or any newer one? (The 3-year clock is conviction-free time counted back from when you file.)',
           validation: {
-            period: { amount: 3, unit: 'years', anchor: 'conviction-free from completion of incarceration/probation/parole (N.D. Cent. Code ch. 12-60.1 — misdemeanor)' },
-            nextPass: 'eligible_nd',
+            period: { amount: 3, unit: 'years', anchor: 'three years conviction-free before filing, measured from the most recent conviction of any crime (§ 12-60.1-02(1)(a) — misdemeanor)' },
+            nextPass: 'eligible_conv_nd',
             nextFail: 'waiting_nd'
           }
         },
-        felony_date_nd: {
+        conv_felony_date_nd: {
           type: 'date',
-          field: 'disposition_date',
-          text: 'When did you complete incarceration, probation, or parole for this case?',
+          text: 'When were you MOST RECENTLY convicted of ANY crime — this conviction, or any newer one? (The 5-year clock is conviction-free time counted back from when you file.)',
           validation: {
-            period: { amount: 5, unit: 'years', anchor: 'conviction-free from completion of incarceration/probation/parole (N.D. Cent. Code ch. 12-60.1 — felony)' },
-            nextPass: 'eligible_nd',
+            period: { amount: 5, unit: 'years', anchor: 'five years conviction-free before filing, measured from the most recent conviction of any crime (§ 12-60.1-02(1)(b) — felony)' },
+            nextPass: 'eligible_conv_nd',
             nextFail: 'waiting_nd'
           }
+        },
+        nonconv_excl_nd: {
+          type: 'boolean',
+          text: 'Did the non-conviction fall into any of these: a dismissal via plea agreement where you were convicted of another offense; a dismissal because you were found unfit to proceed (ch. 12.1-04); a verdict of lack of criminal responsibility (NGRI, ch. 12.1-04.1); or a case that was appealed?',
+          yes: 'ineligible_nonconv_excl_nd',
+          no: 'nonconv_cutoff_nd'
+        },
+        nonconv_cutoff_nd: {
+          type: 'boolean',
+          text: 'Was the non-conviction order (dismissal or acquittal of all charges) entered ON OR AFTER August 1, 2025?',
+          yes: 'eligible_autoclose_nd',
+          no: 'eligible_petition_nonconv_nd'
         }
       },
       results: {
         unknown_disposition: {
           status: 'complex',
           title: 'We Need the Case Outcome First',
-          message: 'North Dakota seals convictions and (since 2025) auto-closes many non-conviction records, so the outcome decides the route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record check will show the disposition; the ndcourts.gov sealing instructions can help you read it.',
+          message: 'North Dakota seals convictions and (since 2025) closes many non-conviction records, so the outcome decides the route. Because it is marked "I don\'t know," this screening cannot tell you anything reliable yet. Your court paperwork or a BCI record check will show the disposition; the ndcourts.gov sealing instructions can help you read it.',
           remedy: 'Get Your Record First (court paperwork / BCI)',
           citation: 'N.D. Cent. Code ch. 12-60.1 (the route depends on the disposition)'
         },
-        check_autoclose_nd: {
+        eligible_pardon_nd: {
           status: 'eligible',
-          title: 'Non-Conviction Since Aug 2025 — Auto-Closes, Do Not File',
-          message: 'Good news, and it means you should NOT file. Because your non-conviction order was entered on or after August 1, 2025, North Dakota\'s new law (HB 1166) closes the court record AUTOMATICALLY — 61 days after the order. So you do not need to petition; you just wait for the 61 days to run, then confirm it closed. If it is still showing well after that, the ndcourts.gov instructions or a clerk can help you follow up. Filing a petition you do not need would only cost you effort.',
-          remedy: 'Wait — the record auto-closes 61 days after the order (HB 1166)',
-          citation: 'HB 1166 (2025)'
+          title: 'Unconditional Pardon — a No-Wait Sealing Ground',
+          message: 'Because you received an unconditional gubernatorial pardon, you have an independent ground to seal the conviction with NO waiting period (§ 12-60.1-02(1)(c)). You petition in the existing criminal case; the burden is still clear and convincing and the court weighs the usual factors, and the prosecutor can stipulate to speed it up. One honest limit that applies to every North Dakota sealing: it hides the COURT and prosecution records, not your BCI criminal-history record — the rap sheet is separate. The ndcourts.gov sealing instructions and the North Dakota Legal Self Help Center can help.',
+          remedy: 'Sealing on a pardon (§ 12-60.1-02(1)(c)) — no wait',
+          citation: 'N.D. Cent. Code § 12-60.1-02(1)(c)'
         },
-        petition_nonconv_nd: {
-          status: 'eligible',
-          title: 'Older Non-Conviction — Petition, Mandatory 10-Day Grant',
-          message: 'Because your non-conviction ended before the August 1, 2025 auto-close date, you petition to seal it — but with a nice feature: if you meet the requirements, the grant is MANDATORY within 10 days (§ 12-60.1-05). And filing is FREE — North Dakota law forbids charging a fee. You name the arresting agency and prosecutor as respondents. The ndcourts.gov sealing instructions walk you through it.',
-          remedy: 'Non-conviction sealing petition — mandatory 10-day grant, free (§ 12-60.1-05)',
-          citation: 'N.D. Cent. Code § 12-60.1-05'
+        ineligible_register_nd: {
+          status: 'ineligible',
+          title: 'Registration Required — Not Sealable While It Lasts',
+          message: 'While you are required to register under § 12.1-32-15 (a sex offense or an offense against a child), that conviction cannot be sealed (§ 12-60.1-02(2)(b)). This is a TEMPORARY bar, not necessarily a permanent one: if and when your registration obligation ends, the ordinary sealing analysis applies. (A completed deferred imposition also does not end a registration duty.) The North Dakota Legal Self Help Center can help you confirm when registration ends.',
+          remedy: 'None while registration is required (§ 12-60.1-02(2)(b)) — reassess when it ends',
+          citation: 'N.D. Cent. Code § 12-60.1-02(2)(b)'
         },
-        check_deferred_nd: {
-          status: 'eligible',
-          title: 'Deferred Imposition Completed — Auto-Sealed, Check',
-          message: 'Because you completed a deferred imposition of sentence, it results in a set-aside and dismissal, and the record is auto-sealed 61 days after probation ends (for misdemeanors and infractions, by court rule). So the honest first step is to CHECK — confirm it sealed rather than assume you must file. If it did not, the ndcourts.gov instructions or a clerk can help you follow up. Filing is free either way.',
-          remedy: 'Check your record — a completed deferred imposition auto-seals (§ 12.1-32-07.1)',
-          citation: 'N.D. Cent. Code § 12.1-32-07.1'
+        waiting_firearm_nd: {
+          status: 'waiting',
+          title: 'Violent Felony — Wait Out the Firearm-Ineligibility Window',
+          message: 'A felony involving violence or intimidation cannot be sealed while it is still within its firearm-ineligibility period under § 62.1-02-01(1)(a) (§ 12-60.1-02(2)(a)). This is a TEMPORARY bar tied to that firearm window, not a permanent one — so it is a "not yet." We are not stating the length of that window here because we have not yet read § 62.1-02-01(1)(a); a defense attorney or the North Dakota Legal Self Help Center can tell you exactly when it ends, after which the ordinary sealing analysis applies. An unconditional pardon would also open the no-wait sealing ground.',
+          remedy: 'Wait out the § 62.1-02-01(1)(a) firearm window, then seal (§ 12-60.1-02(2)(a))',
+          citation: 'N.D. Cent. Code § 12-60.1-02(2)(a)'
         },
-        eligible_nd: {
+        waiting_completion_nd: {
+          status: 'waiting',
+          title: 'Finish the Sentence First',
+          message: 'Sealing a conviction requires that you have completed all imprisonment and probation for the case — that is a separate grant criterion from the conviction-free waiting period (§ 12-60.1-04(1)(c)). Because you have not finished the sentence yet, you cannot seal now. This is a "not yet": once imprisonment and probation are complete (and restitution is paid), the conviction-free lookback is what governs. The ndcourts.gov sealing instructions can help you plan.',
+          remedy: 'Complete imprisonment and probation, then seal (§ 12-60.1-04(1)(c))',
+          citation: 'N.D. Cent. Code § 12-60.1-04(1)(c)'
+        },
+        ineligible_restitution_nd: {
+          status: 'waiting',
+          title: 'Restitution Must Be Paid First',
+          message: 'North Dakota treats paying all ordered restitution as its own requirement for sealing, separate from the conviction-free waiting period (§ 12-60.1-04(1)(d)). Because restitution is still outstanding, you are not eligible yet even if the 3- or 5-year lookback is met — this is a "not yet," and it clears once restitution is satisfied. The North Dakota Legal Self Help Center can help you confirm the balance and plan.',
+          remedy: 'Pay all restitution, then seal (§ 12-60.1-04(1)(d))',
+          citation: 'N.D. Cent. Code § 12-60.1-04(1)(d)'
+        },
+        eligible_conv_nd: {
           status: 'eligible',
-          title: 'Waiting Period Met — Sealable, Free',
-          message: 'Based on your dates, the waiting period has passed — 3 years for a misdemeanor, 5 for a felony, conviction-free from completing incarceration, probation, or parole. You petition to seal, naming the arresting agency and prosecutor as respondents; it is discretionary (the court balances risk, rehabilitation, and any victim input). And here is North Dakota\'s standout feature: there is NO FILING FEE — the statute forbids charging one. DUI is sealable here, which is unusual. The ndcourts.gov sealing instructions can help.',
-          remedy: 'Sealing petition (ch. 12-60.1) — no filing fee',
-          citation: 'N.D. Cent. Code ch. 12-60.1'
+          title: 'Conviction-Free Window Met — Sealable (Clear and Convincing)',
+          message: 'Based on your answers — no new-crime conviction within the required window before filing (3 years for a misdemeanor, or a felony deemed a misdemeanor at ≤360 days; 5 years for a felony), all imprisonment and probation completed, and all restitution paid, with no registration or firearm-window bar — you can petition to seal this conviction (§ 12-60.1-02). Two honest points. The burden is CLEAR AND CONVINCING: you must show good cause, that the benefit outweighs the presumption of court-record openness, and reformation, and the court weighs risk, rehabilitation, employment, and law-enforcement and VICTIM input. And crucially — this is North Dakota\'s catch — sealing reaches only the COURT and prosecution records; your BCI criminal-history rap sheet is NOT sealed and must still be released to entities with a statutory background-check obligation (§ 12-60.1-04(8)). There is no honest-no here. A good move: ask the prosecutor to STIPULATE (§ 12-60.1-04(5)) — that can skip the hearing. The ndcourts.gov sealing instructions can help.',
+          remedy: 'Sealing petition (§ 12-60.1-02) — court records only, BCI rap sheet unaffected',
+          citation: 'N.D. Cent. Code §§ 12-60.1-02, 12-60.1-04'
         },
         waiting_nd: {
           status: 'waiting',
-          title: 'Waiting Period Not Yet Met',
-          message: 'North Dakota\'s sealing waiting periods run conviction-free from when you complete incarceration, probation, or parole: 3 years for a misdemeanor, 5 for a felony. Based on your dates, yours has not passed yet. When it does, the good news is that filing is free (the statute forbids a fee), and DUI is sealable here. The ndcourts.gov sealing instructions can help you plan. (A denial carries a 3-year re-petition bar, so it is worth waiting until you clearly qualify.)',
-          remedy: 'Wait for the period, then seal for free (ch. 12-60.1)',
-          citation: 'N.D. Cent. Code ch. 12-60.1'
-        },
-        ineligible_excluded_nd: {
-          status: 'ineligible',
-          title: 'This Offense Is Not Yet Sealable',
-          message: 'North Dakota does not seal for registrable sex offenders or offenders against children, and a violent or intimidation felony cannot be sealed until it clears its 10-year firearm-prohibition window. If a registration requirement or that firearm window is the barrier, this may become a "not yet" once it ends; for a permanently ineligible offense, a pardon is the remaining route. The ndcourts.gov instructions and North Dakota Legal Self Help Center can help you check.',
-          remedy: 'None for now (registration / firearm window) — reassess when it ends, or a pardon',
-          citation: 'N.D. Cent. Code ch. 12-60.1'
+          title: 'Conviction-Free Window Not Yet Met',
+          message: 'North Dakota\'s sealing window is a conviction-free LOOKBACK measured back from when you file: no new-crime conviction for at least 3 years (misdemeanor) or 5 years (felony) before the petition. Based on your most recent conviction date, that window has not run yet. Note this runs from your latest conviction of any crime, not from sentence completion — so a newer conviction restarts it. When the window is clear (and imprisonment/probation are complete and restitution paid), you can petition. The ndcourts.gov sealing instructions can help you plan.',
+          remedy: 'Wait for the conviction-free window (§ 12-60.1-02(1))',
+          citation: 'N.D. Cent. Code § 12-60.1-02(1)'
         },
         complex_level_nd: {
           status: 'complex',
           title: 'We Need the Conviction Level',
-          message: 'North Dakota\'s waiting period is 3 years for a misdemeanor and 5 for a felony, so the level matters. Since you are not sure which yours is, we are not going to guess. Your court paperwork states it, and a BCI record check will show it. The ndcourts.gov instructions can help you read it — and remember, sealing here is free.',
-          remedy: 'Get the Conviction Level First (court paperwork / BCI)',
-          citation: 'N.D. Cent. Code ch. 12-60.1'
+          message: 'North Dakota\'s conviction-free window is 3 years for a misdemeanor and 5 for a felony — and a felony sentenced to no more than 360 days (with no probation revocation) is DEEMED a misdemeanor, so it uses the 3-year window. Since you are not sure which yours is, we are not going to guess. Your court paperwork states the level and the sentence length, and a BCI record check will show it. The ndcourts.gov instructions can help you read it.',
+          remedy: 'Get the Conviction Level and Sentence Length First (court paperwork / BCI)',
+          citation: 'N.D. Cent. Code §§ 12-60.1-02, 12.1-32-02(9)'
+        },
+        ineligible_nonconv_excl_nd: {
+          status: 'ineligible',
+          title: 'This Non-Conviction Is Outside the Closing Statute',
+          message: 'North Dakota\'s nonconviction closing (§ 12-60.1-05) does not reach every non-conviction. It excludes a dismissal that came via a plea agreement where you were convicted of another offense, a dismissal because you were found unfit to proceed (ch. 12.1-04), a lack-of-criminal-responsibility (NGRI) verdict (ch. 12.1-04.1), and any case that was appealed. Because yours falls in one of those, the automatic/petition closing does not apply. If your case involved a conviction on another count, that conviction would be screened on the sealing path instead. The North Dakota Legal Self Help Center can help you confirm the disposition and options.',
+          remedy: 'None via § 12-60.1-05 (excluded non-conviction) — screen any conviction separately',
+          citation: 'N.D. Cent. Code § 12-60.1-05'
+        },
+        eligible_autoclose_nd: {
+          status: 'eligible',
+          title: 'Non-Conviction Since Aug 2025 — Court Record Closes Automatically',
+          message: 'Because your non-conviction (a dismissal or acquittal of all charges) was entered on or after August 1, 2025, North Dakota closes the COURT record AUTOMATICALLY — the court SHALL close it 61 days after the order, with no filing and no fee (§ 12-60.1-05). So you do not need to petition; you wait for the 61 days, then verify it closed. If it is still showing well after that, that is a compliance failure worth escalating to the clerk of court. Two honest notes: "closed" means restricted access (a narrower remedy than full sealing), and it reaches the court record only — your BCI record is separate. The ndcourts.gov instructions can help you confirm.',
+          remedy: 'Automatic court-record closing at 61 days (§ 12-60.1-05) — verify, then escalate if needed',
+          citation: 'N.D. Cent. Code § 12-60.1-05'
+        },
+        eligible_petition_nonconv_nd: {
+          status: 'eligible',
+          title: 'Older Non-Conviction — Free Petition, Closed Within 10 Days',
+          message: 'Because your non-conviction was disposed BEFORE August 1, 2025, it does not close automatically — but you can file a FREE petition, and the court SHALL close the record within 10 days (§ 12-60.1-05). There is no filing fee for this path. As with the automatic path, "closed" means restricted access (narrower than full sealing) and reaches the court record only — your BCI record is separate. The ndcourts.gov sealing instructions walk through the petition.',
+          remedy: 'Free petition to close an older non-conviction (§ 12-60.1-05) — 10-day close',
+          citation: 'N.D. Cent. Code § 12-60.1-05'
+        },
+        eligible_deferred_nd: {
+          status: 'eligible',
+          title: 'Deferred Imposition Completed — Set Aside, Dismissed, Restricted',
+          message: 'Because you completed a deferred imposition of sentence, North Dakota lets you withdraw your guilty plea (or the court set aside the verdict) and DISMISS the case (§ 12.1-32-07.1) — and before dismissal the court may REDUCE a felony to a misdemeanor, which is worth asking about. After the withdrawal/set-aside and dismissal, the file goes automatically to RESTRICTED ACCESS (§ 12.1-32-07.2(2)). Three honest limits: you are released from penalties and disabilities EXCEPT sex-offender registration (§ 12.1-32-15) and firearm restrictions (§ 62.1-02-01); a deferred imposition still counts as a PRIOR if you are prosecuted later; and for a gross-sexual-imposition offense there is no early termination absent 8 years of supervision and a manifest-injustice finding. The North Dakota Legal Self Help Center can help you file the withdrawal and ask about the felony-to-misdemeanor reduction.',
+          remedy: 'Withdraw/set-aside + dismiss a completed deferred imposition (§ 12.1-32-07.1) — restricted access',
+          citation: 'N.D. Cent. Code §§ 12.1-32-07.1, 12.1-32-07.2(2)'
+        },
+        effects_bci_nd: {
+          status: 'complex',
+          title: 'Sealing Hides the Court File — Not Your BCI Rap Sheet',
+          message: 'This is the most important thing to understand about North Dakota "sealing," and it is better to hear it now: it prohibits disclosure of the COURT and prosecution records only. The statutory definition of "criminal record" EXPRESSLY EXCLUDES the Bureau of Criminal Investigation criminal-history record information (§ 12-60.1-01(4)), and sealed information MUST still be released to any entity with a statutory background-check obligation (§ 12-60.1-04(8)). So on a fingerprint-based background check that pulls the BCI rap sheet, the conviction can still appear — sealing does not stop that. And there is NO honest-no: North Dakota\'s statute gives you no right to say you were never convicted. Sealing genuinely helps by taking the court file off public view, but it is not the record-erasure people often expect. The North Dakota Legal Self Help Center can explain what sealing will and will not do for your specific situation.',
+          remedy: 'Sealing hides the court file, not the BCI rap sheet (§§ 12-60.1-01(4), 12-60.1-04(8)) — no honest-no',
+          citation: 'N.D. Cent. Code §§ 12-60.1-01(4), 12-60.1-04(8)'
+        },
+        eligible_stipulation_nd: {
+          status: 'eligible',
+          title: 'Prosecutor Stipulation — You Can Skip the Hearing',
+          message: 'This is a genuinely useful North Dakota shortcut: if the prosecutor STIPULATES to sealing, the court may seal without a hearing or on a faster track (§ 12-60.1-04(5)). Normally a sealing petition sets a hearing no earlier than 45 days out, with the prosecutor gathering input from law enforcement, witnesses, victims, and corrections — but a stipulation can bypass much of that. So a practical tip is to ASK the prosecutor whether they will stipulate before you brace for a contested hearing. You still need to meet the underlying requirements (the conviction-free window, completion, restitution, and clear-and-convincing good cause). The North Dakota Legal Self Help Center can help you approach the prosecutor and prepare the petition.',
+          remedy: 'Ask the prosecutor to stipulate (§ 12-60.1-04(5)) — can skip the hearing',
+          citation: 'N.D. Cent. Code § 12-60.1-04(5)'
+        },
+        denied_refile_nd: {
+          status: 'complex',
+          title: 'Denied — When You Can Refile',
+          message: 'If a district court denied your sealing petition, it may bar you from refiling for up to 1 YEAR, but only on stated good cause (§ 12-60.1-04) — so check your denial order for whether, and for how long, a refiling bar was imposed. If none was stated, you are generally not locked out for a fixed period; if one was, wait it out and come back with a stronger showing (more conviction-free time, restitution cleared, evidence of rehabilitation, and ideally a prosecutor who will stipulate). Separately, a denial by a MUNICIPAL court can be appealed de novo to the district court with NO filing fee. The North Dakota Legal Self Help Center can help you read the order and plan the next filing.',
+          remedy: 'Check the denial for a refiling bar (up to 1 year, § 12-60.1-04); municipal denials appeal free',
+          citation: 'N.D. Cent. Code § 12-60.1-04'
         }
       }
     },
     resources: {
       remedies: {
         expungement: {
-          name: 'Sealing (N.D. Cent. Code ch. 12-60.1)',
-          formName: 'North Dakota Courts sealing petition',
+          name: 'Sealing / Closing (N.D. Cent. Code ch. 12-60.1; deferred imposition § 12.1-32-07.1)',
+          formName: 'North Dakota Courts sealing/closing petition',
           formUrl: 'https://www.ndcourts.gov/legal-self-help',
           steps: [
-            'For a non-conviction entered on or after August 1, 2025, do not file — it auto-closes 61 days after the order (HB 1166).',
-            'For an older non-conviction, petition — the grant is mandatory within 10 days if you meet the requirements.',
-            'For a conviction, wait 3 years (misdemeanor) or 5 years (felony) conviction-free from completing incarceration/probation/parole, then petition, naming the arresting agency and prosecutor.',
-            'There is no filing fee — the statute forbids one. The ndcourts.gov self-help has the petition instructions.'
+            'Understand the limit first: North Dakota "sealing"/"closing" reaches the COURT and prosecution records only. Your BCI criminal-history rap sheet is expressly excluded (§ 12-60.1-01(4)) and must still be released to statutory background-check entities (§ 12-60.1-04(8)) — there is no honest-no.',
+            'For a NON-conviction (dismissal or acquittal of all charges), it is free: an order on/after 8/1/2025 closes automatically at 61 days (no filing); an older one closes within 10 days on a free petition. Exclusions: plea-deal dismissals with a conviction on another count, unfit-to-proceed, NGRI, and appealed cases.',
+            'For a CONVICTION, confirm no new-crime conviction in the 3-year (misdemeanor) / 5-year (felony) window BEFORE filing, all imprisonment/probation completed and restitution paid, and no registration or firearm-window bar. A felony ≤360 days (no revocation) counts as a misdemeanor. Petition in the criminal case; ask the prosecutor to stipulate to skip the hearing.',
+            'A completed deferred imposition is withdrawn/set aside and dismissed (with an option to reduce a felony to a misdemeanor) and goes to restricted access. The North Dakota Legal Self Help Center has the instructions.'
           ],
-          // NOT null: Wave 7 states the statute forbids charging a filing fee.
-          fees: 'No filing fee — North Dakota law (ch. 12-60.1) forbids charging one to petition for sealing.',
-          feeWaiver: 'Not needed — the statute prohibits any filing fee.',
-          courtContact: 'The court where the case was handled'
+          // null: nonconviction closing and municipal-denial appeals are statutorily
+          // free, but NO fee is stated for a conviction-sealing petition — the amount
+          // is phone-tier. So the overall fee is left null (blocked by open question).
+          fees: null,
+          // NOT null: the nonconviction and deferred paths, and a municipal-denial
+          // appeal, are statutorily free.
+          feeWaiver: 'Nonconviction closing (§ 12-60.1-05) is free on both the automatic and petition paths, and a municipal-denial appeal to district court is free (§ 12-60.1-04). Whether a fee applies to a conviction-sealing petition is unconfirmed (phone-tier).',
+          courtContact: 'The court where the case was handled (the existing criminal case)'
         }
       },
       legalAid: [

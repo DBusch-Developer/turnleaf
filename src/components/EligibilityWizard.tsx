@@ -51,8 +51,13 @@ const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
   offenseCategory: 'Type of offense',
   disposition: 'Outcome / Disposition',
   chargeType: 'Misdemeanor or felony?',
-  sentenceCompleted: 'Sentence fully completed (probation, jail, fines)?',
-  dischargeDate: 'Date sentence fully completed / discharged',
+  // Money owed is deliberately NOT part of "completed" here: e.g. Arizona's clock
+  // (A.R.S. § 13-911(E)) runs from finishing the NON-money conditions + discharge;
+  // unpaid fines/restitution are a condition of FILING (§ 13-911(G)), not of the
+  // clock, and are asked separately (restitutionPaid). Bundling "fines" into this
+  // question misled a user, so keep the two apart.
+  sentenceCompleted: 'Finished the non-money parts of your sentence (probation, jail/prison, classes, community service)? Money you still owe does not count here — it is asked separately below.',
+  dischargeDate: 'Date you finished those non-money parts / were discharged',
   priorFelony: 'Any prior felony conviction?',
   restitutionPaid: 'All fines & restitution paid?',
 };

@@ -7,7 +7,7 @@ import { groupByState, screenAll, type ScreeningResultItem } from '../data/multi
 import type { ConvictionRecord } from '../data/screening';
 import type { IntakeProfile, OffenseCategory, Disposition } from '../data/intake';
 import { answersForState } from '../data/intakeMaps';
-import { sharedFieldsFor, stateFieldsFor, CHARGE_TYPE_OPTIONS, DISPOSITION_OPTIONS, type SharedFieldKey } from '../data/intakeForm';
+import { sharedFieldsFor, stateFieldsFor, moneyFieldsFor, CHARGE_TYPE_OPTIONS, DISPOSITION_OPTIONS, type SharedFieldKey } from '../data/intakeForm';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 import { useScrollToTop } from '../utils/useScrollToTop';
 
@@ -29,14 +29,16 @@ interface EligibilityWizardProps {
 // same behavior — just named, so the checker doesn't flag it.
 const makeRecordId = () => Math.random().toString(36).substr(2, 9);
 
-// The profile is the facts about ONE charge, asked once. Its defaults describe
-// the commonest case (a completed conviction) so an untouched field is a stated
-// value, not a guess the person never made — the checkpoint still lets them fix
-// it before anything is screened.
+// The profile is the facts about ONE charge, asked once. Its non-money defaults
+// describe the commonest case (a completed conviction) so an untouched field is a
+// stated value, not a guess the person never made — the checkpoint still lets them
+// fix it before anything is screened. The two money facts start `null` (unanswered)
+// on purpose: a wrong "paid" default can mislead someone about their record, so the
+// dedicated money block forces a Yes/No before submit rather than defaulting.
 const emptyProfile: IntakeProfile = {
   offenseCategory: 'other', disposition: 'convicted', chargeType: 'misdemeanor',
-  sentenceCompleted: true, dischargeDate: null, priorFelony: false, restitutionPaid: true,
-  finesPaid: true,
+  sentenceCompleted: true, dischargeDate: null, priorFelony: false, restitutionPaid: null,
+  finesPaid: null,
 };
 
 const OFFENSE_CATEGORY_OPTIONS: { label: string; value: OffenseCategory }[] = [
@@ -60,11 +62,13 @@ const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
   sentenceCompleted: 'Finished the non-money parts of your sentence (probation, jail/prison, classes, community service)? Money you still owe does not count here — it is asked separately below.',
   dischargeDate: 'Date you finished those non-money parts / were discharged',
   priorFelony: 'Any prior felony conviction?',
-  restitutionPaid: 'All fines & restitution paid?',
-  // Not yet asked (not in ALL_SHARED / sharedFieldsFor) — fines/fees split from
-  // restitution as its own fact lands in a later task; this label exists only
-  // so SHARED_FIELD_LABELS satisfies Record<SharedFieldKey, string>.
-  finesPaid: 'All fines & fees paid?',
+  // The two money facts are NOT rendered by the generic shared-field loop (they
+  // are absent from ALL_SHARED / sharedFieldsFor). Each is asked instead by the
+  // dedicated, state-aware money block below, which forces an answer and labels
+  // restitution and fines/fees separately. These entries exist only so
+  // SHARED_FIELD_LABELS still satisfies Record<SharedFieldKey, string>.
+  restitutionPaid: 'Restitution paid in full?',
+  finesPaid: 'Court fines, fees, and costs paid in full?',
 };
 
 // minHeight reserves two lines so a one-line label and a wrapping two-line
@@ -119,6 +123,9 @@ export default function EligibilityWizard({
 
   // An empty charge for a given state. Every seeded/added record is built here
   // so a record always carries the state whose group it sits in.
+  // No restitution_paid / fines_paid default: the money answer must come from the
+  // person via the forced money block, never a silent "paid" default. Left unset,
+  // an unanswered money field reaches the engine as undefined and hedges.
   const makeEmptyRecord = (stateCode: string): ConvictionRecord => ({
     id: makeRecordId(),
     state: stateCode,
@@ -128,7 +135,6 @@ export default function EligibilityWizard({
     disposition_date: new Date().toISOString().split('T')[0],
     probation_status: 'completed',
     prison_sentenced: false,
-    restitution_paid: true
   });
 
   // Sync prepopulated records (from Checkr panel), else seed ONE empty charge
@@ -209,11 +215,24 @@ export default function EligibilityWizard({
     onScreeningComplete(results, records);
   };
 
+  // A record whose STATE reads a money fact (moneyFieldsFor) but whose person has
+  // not answered it yet (null). Used to force an answer: it blocks submit and,
+  // as a belt-and-braces guard, short-circuits onSubmitIntake.
+  const moneyUnansweredFor = (r: ConvictionRecord) => {
+    const m = moneyFieldsFor(r.state);
+    const p = profileOf(r.id);
+    return (m.restitution && p.restitutionPaid === null) || (m.fines && p.finesPaid === null);
+  };
+  const moneyIncomplete = records.some(moneyUnansweredFor);
+
   // Review & Submit: fold each CHARGE's profile onto its record and pre-seed
   // that charge's answers. Iterate records (charges), not states — a state may
   // hold several charges, each with its own profile. Pre-seeding means each
   // charge's `pending` naturally contains only its unmapped tail nodes.
   const onSubmitIntake = () => {
+    // Never submit with a required money question unanswered — the button is
+    // disabled for this, but guard the handler too so no other path slips past.
+    if (records.some(moneyUnansweredFor)) return;
     const seeded: Record<string, Answers> = {};
     const updated = records.map(r => {
       const p = profileOf(r.id);
@@ -223,7 +242,9 @@ export default function EligibilityWizard({
         disposition: p.disposition,
         charge_type: p.chargeType,
         disposition_date: p.dischargeDate ?? r.disposition_date,
+        // undefined = unanswered → the engine hedges as a safety net.
         restitution_paid: p.restitutionPaid ?? undefined,
+        fines_paid: p.finesPaid ?? undefined,
         // California-only field-backed nodes (see caFields note above). For
         // every other state these keep their existing values, unchanged.
         probation_status: caFields[r.id]?.probation_status ?? r.probation_status,
@@ -294,8 +315,9 @@ export default function EligibilityWizard({
         </div>
       );
     }
-    // The three booleans: sentenceCompleted / priorFelony / restitutionPaid.
-    const boolKey = key as 'sentenceCompleted' | 'priorFelony' | 'restitutionPaid';
+    // The remaining shared booleans: sentenceCompleted / priorFelony. The money
+    // booleans are not shared fields — they render via renderMoneyField below.
+    const boolKey = key as 'sentenceCompleted' | 'priorFelony';
     const current = p[boolKey];
     return (
       <div key={key}>
@@ -312,6 +334,36 @@ export default function EligibilityWizard({
                 fontWeight: current === opt.value ? 700 : 400,
               }}
               onClick={() => setProfileField(record.id, boolKey, opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // A dedicated, forced money question for one charge. Same Yes/No pill styling
+  // as the shared booleans, but wired to a `boolean | null` field: when the value
+  // is null (unanswered) NEITHER pill is active, so there is no default answer to
+  // a money question. Which of these render is decided per state by moneyFieldsFor.
+  const renderMoneyField = (record: ConvictionRecord, field: 'restitutionPaid' | 'finesPaid', label: string) => {
+    const current = profileOf(record.id)[field];
+    return (
+      <div key={field}>
+        <label style={labelStyle}>{label}</label>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {[{ label: 'Yes', value: true }, { label: 'No', value: false }].map(opt => (
+            <button
+              key={String(opt.value)}
+              type="button"
+              className="btn btn-outline"
+              style={{
+                padding: '0.5rem 1.1rem', fontSize: '0.9rem',
+                opacity: current === opt.value ? 1 : 0.55,
+                fontWeight: current === opt.value ? 700 : 400,
+              }}
+              onClick={() => setProfileField(record.id, field, opt.value)}
             >
               {opt.label}
             </button>
@@ -350,6 +402,7 @@ export default function EligibilityWizard({
                 )}
                 {group.items.map((record) => {
                   const index = records.indexOf(record);
+                  const money = moneyFieldsFor(record.state);
                   return (
               <div
                 key={record.id}
@@ -401,6 +454,13 @@ export default function EligibilityWizard({
                   </div>
 
                   {sharedFieldsFor([record.state]).map(key => renderSharedField(record, key))}
+
+                  {/* State-aware, forced money questions. Only the money facts
+                      this state's tree actually reads (moneyFieldsFor) are shown,
+                      each REQUIRED (no default selection) — a money-free state
+                      shows neither. Submit is blocked until these are answered. */}
+                  {money.restitution && renderMoneyField(record, 'restitutionPaid', 'Restitution (money a court ordered you to pay a victim) paid in full?')}
+                  {money.fines && renderMoneyField(record, 'finesPaid', 'Court fines, fees, and costs paid in full?')}
 
                   {stateFieldsFor([record.state]).map(({ spec, options }) => (
                     <div key={spec.key}>
@@ -506,8 +566,18 @@ export default function EligibilityWizard({
           {/* Adding a charge is per-group ("Add charge in {state}") so it lands
               in the right state. A global add button here duplicated that and,
               multi-state, always added to the first state — removed. */}
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button className="btn btn-primary" onClick={onSubmitIntake}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+            {moneyIncomplete && (
+              <p style={{ fontSize: '0.85rem', color: 'var(--color-error)', margin: 0 }}>
+                Please answer the money question(s) above before continuing.
+              </p>
+            )}
+            <button
+              className="btn btn-primary"
+              onClick={onSubmitIntake}
+              disabled={moneyIncomplete}
+              style={{ opacity: moneyIncomplete ? 0.6 : 1 }}
+            >
               Review & Submit
             </button>
           </div>

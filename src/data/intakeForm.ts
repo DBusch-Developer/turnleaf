@@ -3,9 +3,12 @@ import { intakeMaps } from './intakeMaps';
 import { fallbackRules } from './fallbackRules';
 
 export type SharedFieldKey = keyof IntakeProfile;
+// Money facts (restitutionPaid / finesPaid) are deliberately NOT here: they are
+// rendered by a dedicated, state-aware money block (moneyFieldsFor) that forces
+// an answer per state, not by the generic shared-field loop.
 const ALL_SHARED: SharedFieldKey[] = [
   'offenseCategory', 'disposition', 'chargeType', 'sentenceCompleted',
-  'dischargeDate', 'priorFelony', 'restitutionPaid',
+  'dischargeDate', 'priorFelony',
 ];
 
 // The charge_type and disposition controls are field-backed: the value chosen

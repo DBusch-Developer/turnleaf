@@ -105,7 +105,7 @@ export type OffenseCategory =
   | 'dui' | 'marijuana' | 'drug' | 'sex_offense' | 'violent' | 'property' | 'other';
 export type Disposition = 'convicted' | 'dismissed' | 'deferred' | 'acquitted';
 
-/** The facts a person states ONCE, shared across every selected state. */
+/** The facts about ONE charge, stated once so its state's tree stops re-asking. */
 export interface IntakeProfile {
   offenseCategory: OffenseCategory;
   disposition: Disposition;
@@ -520,35 +520,44 @@ Expected: PASS (3 tests).
 
 In `src/components/EligibilityWizard.tsx`:
 
-1. Add state for the profile and per-state class values:
+**The unit is a CHARGE, not a session.** A charge lives in one state; a person can have several charges, in the same or different states (the existing `records` list, grouped by state). So the profile is **per charge (per record)** — never one profile shared across states.
+
+1. Add per-charge profile state, keyed by record id:
 ```tsx
-const [profile, setProfile] = useState<IntakeProfile>({
+const emptyProfile: IntakeProfile = {
   offenseCategory: 'other', disposition: 'convicted', chargeType: 'misdemeanor',
   sentenceCompleted: true, dischargeDate: null, priorFelony: false, restitutionPaid: true,
-});
-const [stateFieldValues, setStateFieldValues] = useState<Record<string, string>>({});
+};
+const [profiles, setProfiles] = useState<Record<string, IntakeProfile>>({});           // recordId -> profile
+const [stateFieldValues, setStateFieldValues] = useState<Record<string, Record<string, string>>>({}); // recordId -> {fieldKey: value}
+const profileOf = (id: string): IntakeProfile => profiles[id] ?? emptyProfile;
+const setProfileField = <K extends keyof IntakeProfile>(id: string, k: K, v: IntakeProfile[K]) =>
+  setProfiles(p => ({ ...p, [id]: { ...profileOf(id), [k]: v } }));
 ```
-2. Replace the per-record intake grid (the block rendering Charge Name / Offense Class / Outcome / Disposition Date / Probation, lines ~185–282) with **one** profile form: a labeled control per `sharedFieldsFor(states.map(s=>s.code))` key (a `<select>` for `offenseCategory`/`disposition`/`chargeType`, radio pills for the booleans `sentenceCompleted`/`priorFelony`/`restitutionPaid`, a `<input type="date">` for `dischargeDate`), plus one `<select>` per entry from `stateFieldsFor(...)` (grouped under the state name when `states.length > 1`). Keep the free-text "Charge Name" as an optional label only. Reuse existing `.input-field` styling.
-3. On **"Review & Submit"** (`setShowCheckpoint(true)` handler), first build records + seed answers:
+2. Replace the per-record intake grid (the block rendering Charge Name / Offense Class / Outcome / Disposition Date / Probation, lines ~185–282) with a **per-charge** profile form rendered inside the existing per-record card (still grouped by state via `groupByState`). For each `record`, render a labeled control per `sharedFieldsFor([record.state])` key (a `<select>` for `offenseCategory`/`disposition`/`chargeType`, radio pills for the booleans `sentenceCompleted`/`priorFelony`/`restitutionPaid`, a `<input type="date">` for `dischargeDate`), each wired to `profileOf(record.id)` / `setProfileField(record.id, …)`, plus one `<select>` per entry from `stateFieldsFor([record.state])` wired to `stateFieldValues[record.id]`. Keep the free-text "Charge Name" as an optional label only. Reuse existing `.input-field` styling and the existing "Add charge in {state}" / remove-record controls unchanged.
+3. On **"Review & Submit"** (`setShowCheckpoint(true)` handler), fold each charge's profile onto its record and seed that charge's answers — iterate **records** (charges), not states:
 ```tsx
 const onSubmitIntake = () => {
-  const built = states.map(s => ({
-    ...makeEmptyRecord(s.code),
-    disposition: profile.disposition,
-    charge_type: profile.chargeType,
-    disposition_date: profile.dischargeDate ?? new Date().toISOString().split('T')[0],
-    restitution_paid: profile.restitutionPaid,
-  }));
-  setRecords(built);
   const seeded: Record<string, Answers> = {};
-  for (const r of built) seeded[r.id] = answersForState(r.state, profile, stateFieldValues);
+  const updated = records.map(r => {
+    const p = profileOf(r.id);
+    seeded[r.id] = answersForState(r.state, p, stateFieldValues[r.id] ?? {});
+    return {
+      ...r,
+      disposition: p.disposition,
+      charge_type: p.chargeType,
+      disposition_date: p.dischargeDate ?? r.disposition_date,
+      restitution_paid: p.restitutionPaid,
+    };
+  });
+  setRecords(updated);
   setAnswers(seeded);
   setShowCheckpoint(true);
 };
 ```
    Point the submit button's `onClick` at `onSubmitIntake`.
-4. Leave the checkpoint block (the `pending`/`answerNode`/`handleScreening` machinery) UNCHANGED. Because `answers` is now pre-seeded, `pending` naturally contains only the unmapped tail nodes.
-5. Remove the now-dead `prepopulatedRecords`/Checkr seeding ONLY if it conflicts; otherwise keep it — when `prepopulatedRecords.length > 0` it still seeds records directly (that path does not use the profile form and is out of scope here).
+4. Leave the checkpoint block (the `pending`/`answerNode`/`handleScreening` machinery) UNCHANGED. Because `answers` is now pre-seeded per charge, each charge's `pending` naturally contains only its unmapped tail nodes.
+5. **Checkr path (do NOT drop it):** when `prepopulatedRecords.length > 0`, those records are charges pulled from the report (title, charge_type, disposition, date) and it jumps straight to the checkpoint. Keep that working: for each prepopulated record, derive a partial profile from what the report gives — `{ ...emptyProfile, disposition: r.disposition, chargeType: (r.charge_type === 'felony' ? 'felony' : 'misdemeanor'), dischargeDate: r.disposition_date, restitutionPaid: r.restitution_paid }` — and seed `answersForState(r.state, thatProfile, {})`. The facts the report does not carry (offense **category**, fine **class**, prior felony, sentence-complete) are simply not prefilled, so they fall to that charge's short tail and get asked at the checkpoint — the same graceful path an unmapped state uses. Full prefill for Checkr later just needs the report to include the offense category. Add this seeding in the `prepopulatedRecords` effect (around lines 65–76), alongside the existing `setRecords(prepopulatedRecords…)` / `setShowCheckpoint(true)`.
 
 - [ ] **Step 6: Verify the app builds and the flow shrinks**
 

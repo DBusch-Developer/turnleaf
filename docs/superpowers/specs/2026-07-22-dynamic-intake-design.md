@@ -18,13 +18,13 @@ Measured in `src/data/fallbackRules.ts` today:
 - **122** separate "when were you discharged?" questions.
 - **90** offense level/class questions, **41** sex-offense/registration questions, **38** outcome questions.
 
-Concrete failure (the one that started this): a person types **"Aggravated DUI"**, then Arizona asks — as separate cards — a Prop 207 *marijuana* question (irrelevant), "was this a DUI?" (already answered by the title), a second exclusion question that overlaps the first, an offense-level question that overlaps the intake `charge_type`, and a discharge-date question that overlaps the intake date. **5 of 8 cards are redundant, irrelevant, or overlapping.** And in multi-state screening the whole skeleton repeats once per selected state.
+Concrete failure (the one that started this): a person types **"Aggravated DUI"**, then Arizona asks — as separate cards — a Prop 207 *marijuana* question (irrelevant), "was this a DUI?" (already answered by the title), a second exclusion question that overlaps the first, an offense-level question that overlaps the intake `charge_type`, and a discharge-date question that overlaps the intake date. **5 of 8 cards are redundant, irrelevant, or overlapping.** This runs *per charge* — every charge on a person's record walks the same gauntlet. (A conviction lives in the state where it happened, and only that state's law can clear it; "multiple states" just means a person has charges in different states, each screened under its own law. There is no screening one charge against several states.)
 
 This is systemic, not Arizona, and it directly contradicts the "simple, plain language" promise.
 
 ## 2. Goals
 
-1. A fact the person can state once is **asked once** — never re-asked mid-flow, never repeated per state.
+1. A fact the person can state once for a charge is **asked once** — never re-asked mid-flow by that charge's own tree.
 2. The intake is **dynamic per selected state**: it shows the fields those states actually need, derived from the trees themselves.
 3. A person sees a **short form + only the genuinely state-specific questions** ("the guided tail"), in plain language.
 4. Applies to **all 50 states**, and degrades safely: a state not yet migrated simply keeps today's flow.
@@ -49,7 +49,7 @@ Three approaches were considered:
 
 ## 5. The canonical IntakeProfile
 
-One object per screening session (not per state), holding only facts that are **genuinely shared and largely unconditional** across states:
+One object **per charge** — a charge lives in one state, and this holds that charge's facts. These are the facts nearly every state tree asks about a charge, so capturing them up front lets the tree stop re-asking:
 
 ```ts
 interface IntakeProfile {
@@ -76,7 +76,7 @@ A new declarative data file (`src/data/intakeMaps.ts`), keyed by state code. Eac
 
 ```ts
 interface IntakeMap {
-  // Nodes answered from the shared profile. Value is a pure function profile -> answer.
+  // Nodes answered from the charge's profile. Value is a pure function profile -> answer.
   derived: Record<string /*nodeId*/, (p: IntakeProfile) => string | boolean | null>;
   // Nodes collected as a per-state FORM field using the tree node's own options
   // (e.g. offense_level), then prefilled. Rendered in the form grouped under the state.
@@ -93,7 +93,7 @@ AZ: {
     dui_offense:         p => p.offenseCategory === 'dui',
     prior_felony_az:     p => p.priorFelony,
     sentence_completed:  p => p.sentenceCompleted,
-    // discharge-anchored date nodes read the shared dischargeDate:
+    // discharge-anchored date nodes read the charge's dischargeDate:
     discharge_date_f23:  p => p.dischargeDate,
     discharge_date_f456: p => p.dischargeDate,
     discharge_date_m1:   p => p.dischargeDate,
@@ -112,12 +112,12 @@ Rules for a map:
 
 ## 7. The dynamic intake form
 
-Rewrite the intake portion of `EligibilityWizard.tsx`:
+Rewrite the intake portion of `EligibilityWizard.tsx`. The unit is a **charge**, and each charge is in one state (charges are already grouped by state today):
 
-1. On state selection, compute the **union of profile fields** consumed by the selected states' IntakeMaps → show exactly those shared fields (a field no selected state uses is not shown).
-2. Render each selected state's `stateFields` (e.g., `offense_level`) as a labeled dropdown built from that node's own `options`, grouped under the state name when more than one state is selected.
-3. Shared facts are collected **once** and apply to every selected state.
-4. On **Screen**: for each selected state, build (a) a `ConvictionRecord` with the record-level facts (state, disposition, disposition_date = the mapped date, charge_type, restitution_paid, prison_sentenced) and (b) an `answers` map prefilled by `buildAnswers(state, profile, stateFieldValues)`.
+1. For each charge, show the profile fields **its state's** IntakeMap consumes (a field that state doesn't use isn't shown).
+2. Render that charge's state `stateFields` (e.g., `offense_level`) as a labeled dropdown built from the node's own `options`.
+3. Each charge's facts are entered **once for that charge**; its state's tree reads them instead of re-asking. A second charge — same state or different — is its own independent profile. Multiple charges ✓, charges in different states ✓.
+4. On **Screen**: for **each charge**, build (a) a `ConvictionRecord` (its state, disposition, disposition_date = the mapped date, charge_type, restitution_paid, prison_sentenced) and (b) an `answers` map prefilled by `buildAnswers(profile, map, stateFieldValues)` for that charge's state.
 
 ## 8. Prefill engine
 
@@ -167,7 +167,7 @@ The 774-persona suite is the regression net; results must not move.
 | A wrong map produces a wrong result | Persona-equivalence tests per state; the map is pure data, easy to review against the tree |
 | Date anchor mismatch (eligible-years-early bug returns) | Maps may only feed a date node whose anchor matches the collected date; validator checks node type; anything else stays asked |
 | Canonical taxonomy too coarse for some state's category logic | That node stays in the tail (unmapped) — correctness preserved, just one extra question there |
-| Multi-state form with differing per-state levels | `stateFields` render per state; shared facts stay shared |
+| A charge's fine class differs by state | each charge's `stateFields` come from its own state's tree; the coarse `chargeType` is per-charge |
 | Scope creep into results/legal changes | Explicit non-goals; maps cannot change nodes or results |
 
 ## 14. Files touched

@@ -5,6 +5,9 @@ import { StateRuleConfig } from '../data/fallbackRules';
 import { currentNode, isAsked, type Answers } from '../data/rulesEngine';
 import { groupByState, screenAll, type ScreeningResultItem } from '../data/multiState';
 import type { ConvictionRecord } from '../data/screening';
+import type { IntakeProfile, OffenseCategory, Disposition } from '../data/intake';
+import { answersForState } from '../data/intakeMaps';
+import { sharedFieldsFor, stateFieldsFor, type SharedFieldKey } from '../data/intakeForm';
 import { Trash2, AlertTriangle, Plus, ClipboardList, HelpCircle } from 'lucide-react';
 import { useScrollToTop } from '../utils/useScrollToTop';
 
@@ -26,6 +29,46 @@ interface EligibilityWizardProps {
 // same behavior — just named, so the checker doesn't flag it.
 const makeRecordId = () => Math.random().toString(36).substr(2, 9);
 
+// The profile is the facts about ONE charge, asked once. Its defaults describe
+// the commonest case (a completed conviction) so an untouched field is a stated
+// value, not a guess the person never made — the checkpoint still lets them fix
+// it before anything is screened.
+const emptyProfile: IntakeProfile = {
+  offenseCategory: 'other', disposition: 'convicted', chargeType: 'misdemeanor',
+  sentenceCompleted: true, dischargeDate: null, priorFelony: false, restitutionPaid: true,
+};
+
+const OFFENSE_CATEGORY_OPTIONS: { label: string; value: OffenseCategory }[] = [
+  { label: 'DUI / impaired driving', value: 'dui' },
+  { label: 'Marijuana', value: 'marijuana' },
+  { label: 'Other drug offense', value: 'drug' },
+  { label: 'Sex offense', value: 'sex_offense' },
+  { label: 'Violent offense', value: 'violent' },
+  { label: 'Property offense', value: 'property' },
+  { label: 'Other', value: 'other' },
+];
+const DISPOSITION_OPTIONS: { label: string; value: Disposition }[] = [
+  { label: 'Convicted (Guilty / No Contest)', value: 'convicted' },
+  { label: 'Dismissed / Charges Dropped', value: 'dismissed' },
+  { label: 'Deferred Adjudication / Diversion', value: 'deferred' },
+  { label: 'Acquitted (Not Guilty)', value: 'acquitted' },
+];
+const CHARGE_TYPE_OPTIONS: { label: string; value: 'misdemeanor' | 'felony' }[] = [
+  { label: 'Misdemeanor', value: 'misdemeanor' },
+  { label: 'Felony', value: 'felony' },
+];
+const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
+  offenseCategory: 'Type of offense',
+  disposition: 'Outcome / Disposition',
+  chargeType: 'Misdemeanor or felony?',
+  sentenceCompleted: 'Sentence fully completed (probation, jail, fines)?',
+  dischargeDate: 'Date sentence fully completed / discharged',
+  priorFelony: 'Any prior felony conviction?',
+  restitutionPaid: 'All fines & restitution paid?',
+};
+
+const labelStyle: React.CSSProperties = { fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' };
+
 export default function EligibilityWizard({
   configs,
   prepopulatedRecords,
@@ -36,6 +79,21 @@ export default function EligibilityWizard({
   const states = Object.values(configs);
 
   const [records, setRecords] = useState<ConvictionRecord[]>([]);
+
+  // Per-charge intake, keyed by record id — never one profile shared across a
+  // state or a session. A charge lives in one state; a person can have several.
+  const [profiles, setProfiles] = useState<Record<string, IntakeProfile>>({});           // recordId -> profile
+  const [stateFieldValues, setStateFieldValues] = useState<Record<string, Record<string, string>>>({}); // recordId -> {fieldKey: value}
+  const profileOf = (id: string): IntakeProfile => profiles[id] ?? emptyProfile;
+  const setProfileField = <K extends keyof IntakeProfile>(id: string, k: K, v: IntakeProfile[K]) =>
+    setProfiles(p => ({ ...p, [id]: { ...profileOf(id), [k]: v } }));
+  const setStateFieldValue = (id: string, key: string, value: string) =>
+    setStateFieldValues(s => ({ ...s, [id]: { ...(s[id] ?? {}), [key]: value } }));
+
+  /** Answers to ASKED nodes, per record id: { [recordId]: { [nodeId]: answer } }.
+   *  Declared before the prepopulated-records effect that seeds it. */
+  const [answers, setAnswers] = useState<Record<string, Answers>>({});
+
   const [checkpointVerified, setCheckpointVerified] = useState(false);
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showRapSheetInstructions, setShowRapSheetInstructions] = useState(false);
@@ -68,7 +126,25 @@ export default function EligibilityWizard({
       // an in-research state has no config in `configs` (configFor → undefined,
       // which would crash screenRecord / configs[group.state].name); that state
       // is represented by its in-research note on the page, not screened here.
-      setRecords(prepopulatedRecords.filter(r => configs[r.state]));
+      const screenable = prepopulatedRecords.filter(r => configs[r.state]);
+      setRecords(screenable);
+      // Seed each Checkr charge from the facts the report carries (disposition,
+      // class, date, restitution). What the report does NOT carry — offense
+      // category, fine class, prior felony, sentence-complete — is simply not
+      // prefilled, so it falls to that charge's short tail and gets asked at the
+      // checkpoint, the same graceful path an unmapped state uses.
+      const seeded: Record<string, Answers> = {};
+      for (const r of screenable) {
+        const p: IntakeProfile = {
+          ...emptyProfile,
+          disposition: r.disposition as Disposition,
+          chargeType: r.charge_type === 'felony' ? 'felony' : 'misdemeanor',
+          dischargeDate: r.disposition_date,
+          restitutionPaid: r.restitution_paid,
+        };
+        seeded[r.id] = answersForState(r.state, p, {});
+      }
+      setAnswers(seeded);
       setShowCheckpoint(true); // Auto-advance to checkpoint for quick demo
     } else if (records.length === 0) {
       setRecords(states.map(s => makeEmptyRecord(s.code)));
@@ -99,9 +175,6 @@ export default function EligibilityWizard({
   // The engine lives in src/data/rulesEngine.ts and is tested there. This
   // component asks questions and shows answers; it does not decide anything.
 
-  /** Answers to ASKED nodes, per record id: { [recordId]: { [nodeId]: answer } } */
-  const [answers, setAnswers] = useState<Record<string, Answers>>({});
-
   /** The question a record is currently sitting on, if any. */
   const pendingFor = (record: ConvictionRecord) =>
     currentNode(configFor(record), answers[record.id] ?? {}, record);
@@ -119,6 +192,104 @@ export default function EligibilityWizard({
   const handleScreening = () => {
     const results = screenAll(configs, answers, records);
     onScreeningComplete(results, records);
+  };
+
+  // Review & Submit: fold each CHARGE's profile onto its record and pre-seed
+  // that charge's answers. Iterate records (charges), not states — a state may
+  // hold several charges, each with its own profile. Pre-seeding means each
+  // charge's `pending` naturally contains only its unmapped tail nodes.
+  const onSubmitIntake = () => {
+    const seeded: Record<string, Answers> = {};
+    const updated = records.map(r => {
+      const p = profileOf(r.id);
+      seeded[r.id] = answersForState(r.state, p, stateFieldValues[r.id] ?? {});
+      return {
+        ...r,
+        disposition: p.disposition,
+        charge_type: p.chargeType,
+        disposition_date: p.dischargeDate ?? r.disposition_date,
+        restitution_paid: p.restitutionPaid,
+      };
+    });
+    setRecords(updated);
+    setAnswers(seeded);
+    setShowCheckpoint(true);
+  };
+
+  // One labeled control for a shared profile field on a given charge: a select
+  // for the enumerated facts, Yes/No pills for the booleans, a date input for
+  // the discharge date. Wired to that record's profile via profileOf/setProfileField.
+  const renderSharedField = (record: ConvictionRecord, key: SharedFieldKey) => {
+    const p = profileOf(record.id);
+    const label = <label style={labelStyle}>{SHARED_FIELD_LABELS[key]}</label>;
+
+    if (key === 'offenseCategory') {
+      return (
+        <div key={key}>
+          {label}
+          <select className="input-field" value={p.offenseCategory}
+            onChange={e => setProfileField(record.id, 'offenseCategory', e.target.value as OffenseCategory)}>
+            {OFFENSE_CATEGORY_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+      );
+    }
+    if (key === 'disposition') {
+      return (
+        <div key={key}>
+          {label}
+          <select className="input-field" value={p.disposition}
+            onChange={e => setProfileField(record.id, 'disposition', e.target.value as Disposition)}>
+            {DISPOSITION_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+      );
+    }
+    if (key === 'chargeType') {
+      return (
+        <div key={key}>
+          {label}
+          <select className="input-field" value={p.chargeType}
+            onChange={e => setProfileField(record.id, 'chargeType', e.target.value as 'misdemeanor' | 'felony')}>
+            {CHARGE_TYPE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+      );
+    }
+    if (key === 'dischargeDate') {
+      return (
+        <div key={key}>
+          {label}
+          <input type="date" className="input-field" value={p.dischargeDate ?? ''}
+            onChange={e => setProfileField(record.id, 'dischargeDate', e.target.value || null)} />
+        </div>
+      );
+    }
+    // The three booleans: sentenceCompleted / priorFelony / restitutionPaid.
+    const boolKey = key as 'sentenceCompleted' | 'priorFelony' | 'restitutionPaid';
+    const current = p[boolKey];
+    return (
+      <div key={key}>
+        {label}
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {[{ label: 'Yes', value: true }, { label: 'No', value: false }].map(opt => (
+            <button
+              key={String(opt.value)}
+              type="button"
+              className="btn btn-outline"
+              style={{
+                padding: '0.5rem 1.1rem', fontSize: '0.9rem',
+                opacity: current === opt.value ? 1 : 0.55,
+                fontWeight: current === opt.value ? 700 : 400,
+              }}
+              onClick={() => setProfileField(record.id, boolKey, opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   };
 
 
@@ -182,103 +353,39 @@ export default function EligibilityWizard({
                   )}
                 </div>
 
+                {/* Per-CHARGE profile form: shared facts (asked once) plus any
+                    per-state dropdown (e.g. Arizona's offense class), all wired
+                    to this record's own profile. On submit these seed the tree
+                    walk so a prefilled node's card never shows at the checkpoint. */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>Charge Name</label>
-                    <input 
-                      type="text" 
-                      className="input-field" 
-                      placeholder="e.g. Petty Theft, Possession" 
+                    <label style={labelStyle}>
+                      Charge Name <span style={{ fontWeight: 400, color: 'var(--color-text-light)' }}>(optional label)</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="e.g. Petty Theft, Possession"
                       value={record.title}
                       onChange={(e) => updateRecord(record.id, 'title', e.target.value)}
                     />
                   </div>
 
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>Offense Class</label>
-                    <select 
-                      className="input-field"
-                      value={record.charge_type}
-                      onChange={(e) => updateRecord(record.id, 'charge_type', e.target.value)}
-                    >
-                      <option value="misdemeanor">Misdemeanor</option>
-                      <option value="felony">Felony</option>
-                      <option value="infraction">Infraction</option>
-                      <option value="unknown">I Don't Know / Not Sure</option>
-                    </select>
-                  </div>
+                  {sharedFieldsFor([record.state]).map(key => renderSharedField(record, key))}
 
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>Outcome / Disposition</label>
-                    <select 
-                      className="input-field"
-                      value={record.disposition}
-                      onChange={(e) => updateRecord(record.id, 'disposition', e.target.value)}
-                    >
-                      <option value="convicted">Convicted (Guilty / No Contest)</option>
-                      <option value="dismissed">Dismissed / Charges Dropped</option>
-                      <option value="deferred">Deferred Adjudication / Diversion</option>
-                      <option value="acquitted">Acquitted (Not Guilty)</option>
-                      <option value="unknown">I Don't Know / Not Sure</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>Disposition / Sentence Date</label>
-                    <input 
-                      type="date" 
-                      className="input-field"
-                      value={record.disposition_date}
-                      onChange={(e) => updateRecord(record.id, 'disposition_date', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {/* Conditional Fields based on State selection */}
-                <div style={{ marginTop: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', paddingTop: '1rem', borderTop: '1px dashed var(--color-card-border)' }}>
-                  <div>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>Probation Status</label>
-                    <select 
-                      className="input-field"
-                      value={record.probation_status}
-                      onChange={(e) => updateRecord(record.id, 'probation_status', e.target.value)}
-                    >
-                      <option value="completed">Completed Successfully</option>
-                      <option value="none">No Probation Sentenced</option>
-                      <option value="failed">Did Not Complete Successfully</option>
-                      <option value="active">Active (Still on Probation)</option>
-                    </select>
-                  </div>
-
-                  {record.state === 'CA' && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-                      <input 
-                        type="checkbox" 
-                        id={`prison-${record.id}`}
-                        checked={record.prison_sentenced}
-                        onChange={(e) => updateRecord(record.id, 'prison_sentenced', e.target.checked)}
-                        style={{ width: '1.2rem', height: '1.2rem', cursor: 'pointer' }}
-                      />
-                      <label htmlFor={`prison-${record.id}`} style={{ fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer' }}>
-                        Sentenced to state prison?
-                      </label>
+                  {stateFieldsFor([record.state]).map(({ spec, options }) => (
+                    <div key={spec.key}>
+                      <label style={labelStyle}>{spec.label}</label>
+                      <select
+                        className="input-field"
+                        value={stateFieldValues[record.id]?.[spec.key] ?? ''}
+                        onChange={(e) => setStateFieldValue(record.id, spec.key, e.target.value)}
+                      >
+                        <option value="">Select…</option>
+                        {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      </select>
                     </div>
-                  )}
-
-                  {record.state === 'AZ' && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-                      <input 
-                        type="checkbox" 
-                        id={`restitution-${record.id}`}
-                        checked={record.restitution_paid}
-                        onChange={(e) => updateRecord(record.id, 'restitution_paid', e.target.checked)}
-                        style={{ width: '1.2rem', height: '1.2rem', cursor: 'pointer' }}
-                      />
-                      <label htmlFor={`restitution-${record.id}`} style={{ fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer' }}>
-                        All fines & restitution paid?
-                      </label>
-                    </div>
-                  )}
+                  ))}
                 </div>
               </div>
                   );
@@ -336,7 +443,7 @@ export default function EligibilityWizard({
               in the right state. A global add button here duplicated that and,
               multi-state, always added to the first state — removed. */}
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button className="btn btn-primary" onClick={() => setShowCheckpoint(true)}>
+            <button className="btn btn-primary" onClick={onSubmitIntake}>
               Review & Submit
             </button>
           </div>

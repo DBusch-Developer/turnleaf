@@ -683,7 +683,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // now, each citing its own subsection, with a result for the gap.
         excluded_setaside_az: {
           type: 'boolean',
-          text: 'Did this offense involve any of these? — a weapon or dangerous instrument · serious physical injury to someone · a sexual element or motivation · a victim under 15. (Why we ask: Arizona keeps its most serious offenses out of a set-aside, § 13-905(P).)',
+          text: 'Did this offense involve any of these? — using or threatening someone with a deadly weapon or dangerous instrument, or causing serious physical injury · an offense you have to register as a sex offender for · an offense a court found was sexually motivated · a victim under 15. (Why we ask: Arizona keeps its most serious offenses out of a set-aside, § 13-905(P).)',
           yes: 'ineligible_serious',
           no: 'marijuana_offense'
         },
@@ -732,7 +732,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // here does not end the screening: the set-aside survives it.
         excluded_sealing_az: {
           type: 'boolean',
-          text: 'Did this offense involve any of these? — a serious, violent, or aggravated offense · a dangerous crime against a child · sex trafficking · a weapon or dangerous instrument · serious physical injury to someone · a sexual offense or child sexual exploitation offense charged as a felony class 2, 3, 4, or 5. (Why we ask: sealing excludes a wider list of offenses than a set-aside does, § 13-911(O).)',
+          text: 'Did this offense involve any of these? — a serious, violent, or aggravated offense · a dangerous crime against a child · sex trafficking · an offense that has using a deadly weapon or causing serious physical injury as a required part of the crime · a sexual offense or child sexual exploitation offense charged as a felony class 2, 3, 4, or 5. (Why we ask: sealing excludes a wider list of offenses than a set-aside does, § 13-911(O).)',
           yes: 'eligible_setaside_only_az',
           no: 'prior_felony_az'
         },

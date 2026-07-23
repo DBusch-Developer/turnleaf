@@ -1,24 +1,28 @@
 # Turnleaf — Call Session 1 (Wave 1: CO · MI · NJ · PA · UT)
 
+_Every number pulled July 15 from official court/agency pages — confirm office scope with your first question._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 1`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **23 open questions across 5 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (you're in Prescott, AZ — no DST, so Pacific time this summer):
+- 8:00–10:00 AM your time → Mountain states (UT, CO are 1 hr ahead): their 9–11 AM. Start here.
+- 10:00 AM–1:00 PM your time → Eastern states (MI, PA, NJ are 3 hrs ahead): their 1–4 PM. Avoid 12–1 PM their time.
+- AZ offices anytime 9 AM–4 PM — you're local.
+Universal opener: "Hi — I'm building a free tool that helps people find the correct forms and fees for record-clearing petitions in [state]. I have two or three quick logistics questions about filing — no legal questions. Do you have two minutes, or is there a better number for filing questions?"
+Log every call in the Call Log — including no-answers. When they correct a website: Discrepancy column. That's the gold.
 
 ---
 
-## 1. COLORADO (CO)
+## 1. COLORADO (CO) — call 8–10 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Denver District Court Clerk's Offices** — (303) 606-2300 · M–F 8–4
+- **Denver District Pro Se / Self-Help Center** — assists with Petitions to Seal — get their direct line from the main number
 - **Motion to Seal Conviction Records (C.R.S. 24-72-704 to -710)** — The court that handled your criminal case
 - Expunge Colorado (free pro bono sealing clinics) — https://expungecolorado.org
 - Colorado Legal Services — https://www.coloradolegalservices.org
@@ -44,13 +48,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. The LexisNexis prints used for the 2026 chapters are pre-OLLS-certification text. Re-confirm the 2026 amendments (esp. SB 26-149 ch. 142 § 48 integration in § 705) against the certified C.R.S. once published.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fee split is the whole call: "For a Motion to Seal Conviction Records (JDF 612) filed into the existing criminal case — what's the filing fee? Packets show $65 in one place and $224 in another."
+- Read: JDF 612 motions INTO the case ≈ $65; petitions opening a NEW civil case (JDF 641) = $224; non-conviction JDF 477 = free. Get the clerk to confirm the split.
+- CBI criminal history report cost (~$12.50?) and where users get it.
+- Whether remote hearings for sealing are the norm now (2024 law allows them).
+
 ---
 
-## 2. MICHIGAN (MI)
+## 2. MICHIGAN (MI) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Michigan State Police — set-aside questions line** — (517) 241-0606 · MSP CJIC processes the $50 + fingerprints · PO Box 30266, Lansing 48909
 - **Application to Set Aside Conviction (MCL 780.621)** — The court that convicted you
 - **Automatic Set-Aside (MCL 780.621g) — no application** — Michigan State Police (criminal history record check)
 - Michigan Legal Help (free guided set-aside interview) — https://michiganlegalhelp.org
@@ -74,13 +85,29 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. ADD SECTION: MCL 780.621h (grounds for REINSTATEMENT of an automatic set-aside) was NOT read on 7/18. Reinstatement handling is unencoded until GS/MCL 780.621h is read.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "$50 processing fee to MSP with the MC 227 packet — current?"
+- Current MSP processing time (site says 8 weeks; a district court says 4–6 — documented discrepancy).
+- The court's own motion filing fee when filing MC 227 (~$20, varies) — confirm with one district court (36th District, Detroit).
+- ICHAT self-check $10 / fingerprint personal records check $30 — confirm (feeds the "check if you were auto-set-aside" copy).
+
 ---
 
-## 3. NEW JERSEY (NJ)
+## 3. NEW JERSEY (NJ) — call 10 AM–1 PM your time
+
+*statewide directory exists!*
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Essex (Newark)** — (973) 776-9300 · ext. 56587 or 57328
+- **Hudson (Jersey City)** — (201) 748-4400 · ext. 60152
+- **Mercer (Trenton)** — (609) 571-4200 · ext. 74048
+- **Middlesex (New Brunswick)** — (732) 645-4300 · ext. 88155
+- **Gloucester (Woodbury)** — (856) 878-5050 · ext. 15392
+- **Atlantic (Mays Landing)** — (609) 402-0100
+- **LSNJ statewide legal hotline (backup/legal-aid confirm)** — 1-888-576-5529
+- **NJ Courts county-by-county Expungement Clerk directory** — njcourts.gov, form #13267 PDF — download and attach to your call log as a source artifact
 - **eCourts Expungement (N.J.S.A. 2C:52-1 et seq.)** — Superior Court — county of residence or of any conviction
 - LSNJ Law — Clearing Your Record (hotline 888-576-5529) — https://www.lsnjlaw.org
 - NJ Courts Expungement Self-Help — https://www.njcourts.gov/self-help/expunge-record
@@ -101,13 +128,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. Read 2C:52-4 (ordinance violations). It is referenced by the 2C:52-14(e)(1) previous-expungement exception but was not pulled, so ordinance-violation eligibility is disclosed in prose only.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Pick 2 counties. "Filing through the eCourts Expungement System is free — correct? No filing fee at all?" (njcourts.gov says free; older sites say $75 — best single Discrepancy entry).
+- Whether paper filing is still accepted for people without internet, and if THAT has a fee.
+- Typical time from filing to signed order right now; ask if the 2025 status-portal is live and what it's called.
+
 ---
 
-## 4. PENNSYLVANIA (PA)
+## 4. PENNSYLVANIA (PA) — call 10 AM–1 PM your time
+
+*the fee-variance showcase*
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Montgomery County Expungement Clerk (direct!)** — (610) 278-5956 · Clerk of Courts main: (610) 278-3295
+- **Philadelphia Clerk of Courts / Office of Judicial Records, Criminal** — courts.phila.gov (1301 Filbert St) — get the criminal filing counter number from the main line
+- **Chester County Clerk of Courts** — via chesco.org
 - **Petition for Limited Access — sealing (§ 9122.1, Pa.R.Crim.P. 791)** — Court of Common Pleas, county of conviction
 - **Petition for Expungement (§ 9122) — destroys the record** — Court of Common Pleas (or Magisterial District Court for summary offenses), county of the case
 - MyCleanSlatePA (Community Legal Services — free eligibility check) — https://mycleanslatepa.com
@@ -129,13 +166,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. How are completed deferrals/diversions OTHER than ARD treated (e.g., § 17/§ 18 probation without verdict, veterans/mental-health diversion)? Standing call-sheet question. ARD is a statute-cited expungement path (§ 9122); nothing else is yet.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Documented spread: Philadelphia lists "Expungement $15.00"; Chester County $168; Montgomery $176.50 + $13.50/agency.
+- Montgomery: "Your packet lists $176.50 including one agency served, $13.50 each additional — current?"
+- Philadelphia: "Your fee guide lists expungement at $15 — is that the Municipal/Common Pleas filing fee for a Rule 790 petition, or does a Common Pleas petition cost more?"
+- Ask one: fee for a Rule 791 Limited Access (sealing) petition vs a Rule 490/790 expungement — same or different?
+- PSP criminal history via ePATCH required within 60 days of filing — confirm current ePATCH cost (~$22?).
+
 ---
 
-## 5. UTAH (UT)
+## 5. UTAH (UT) — call 8–10 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave1_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **BCI Expungement Section (the big one)** — (801) 281-5198 · bciexpungements@utah.gov
+- **BCI main (Taylorsville)** — (801) 965-4445
+- **Salt Lake City Justice Court (fee cross-check)** — via slc.gov/courts
 - **Petition to Expunge Records (Utah R. Crim. P. Rule 42)** — The court that handled the case
 - **BCI Certificate of Eligibility (required before any petition)** — Utah Bureau of Criminal Identification (BCI)
 - Clean Slate Utah (fee assistance available) — https://cleanslateutah.org
@@ -158,10 +205,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Pull the § 76-3-203.5(1)(c)(i) violent-felony list to enumerate it — the never-eligible screen (§ 303(2)(a)) currently keys on the cross-reference and asks the person, rather than listing the offenses.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "Your site lists the Certificate of Eligibility application fee as $65, plus $65 per conviction case at issuance — is that current?"
+- Court filing fee: Holladay Justice Court posts $135 — ask BCI whether that's standard statewide; confirm $135 with one district court.
+- Prosecutor response time: SLC says 35 days, Holladay says 60 — which is right? (documented discrepancy).
+- The automatic-expungement form requirement ended Jan 1, 2026 — confirm how someone checks whether their case was auto-expunged ($15 record request?).
+
 ---
+
+## Session targets
+
+- Minimum win: 6 calls logged, 3 fields flipped to phone_verified (AZ set-aside fee, UT $65/$65+$135, NJ free-filing).
+- Great session: all six touched, CO fee-split resolved, PA county spread confirmed in 2–3 counties, 1+ Discrepancy entries.
+- After each call: update verification_status/fees in fallbackRules, note call_log_ref, set Verified Date in the tracker.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Numbers came from official pages today, but numbers rot — the office name + site in each entry re-finds it in 30 seconds. If a clerk says "that's a legal question," the phrasing drifted — go back to confirm-don't-ask._

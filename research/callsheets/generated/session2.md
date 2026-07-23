@@ -1,24 +1,26 @@
 # Turnleaf — Call Session 2 (Wave 2: CT · DE · MN · OK · VA)
 
+_Every number pulled July 15 from official agency/court pages — confirm office scope with your first question._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 2`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **22 open questions across 5 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- 7:00–9:00 AM your time → Central (OK, MN are 2 hrs ahead): their 9–11 AM. Start here.
+- 10:00 AM–1:00 PM your time → Eastern (CT, DE, VA are 3 hrs ahead): their 1–4 PM.
+Wave 2 reality check: three of these five are mid-rollout regimes. Your questions are less "what's the fee" and more "what's actually happening right now" — which makes these calls MORE valuable, because the answers aren't on any website yet.
 
 ---
 
-## 1. CONNECTICUT (CT)
+## 1. CONNECTICUT (CT) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Board of Pardons and Paroles — Pardons Division** — (203) 805-6643 · ct.bpp@ct.gov · M–F 8:30–4:30 ET · 55 West Main St, Suite 520, Waterbury · parole line is 203-805-6605, don't get routed there
+- **Clean Slate erasure status** — portal.ct.gov/cleanslate — screenshot it the morning of your call
 - **Absolute Pardon (Board of Pardons and Paroles) — full erasure** — Connecticut Board of Pardons and Paroles
 - **Petition for Erasure (pre-2000 convictions, decriminalized offenses, cannabis)** — The court where you were sentenced
 - **Diversion Feeders (Accelerated Rehabilitation, Supervised Diversionary Program)** — The sentencing court / Court Support Services Division
@@ -46,13 +48,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 6. Absolute-pardon application mechanics and fees are set by the Board of Pardons and Paroles outside the statute (§ 54-130a fixes the 3-year misdemeanor / 5-year felony application windows, not the process or cost). Confirm the current BOPP process and any fee (phone tier).
    - *Blocks (null until answered):* `resources.remedies.pardon.fees`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Pardon application: "Free to apply, eligible 3 years after most recent misdemeanor / 5 after felony, absolute pardon erases the entire record — all current?"
+- Clean Slate rollout: "Erasures resumed October 2025 — is the automatic process now running continuously? Roughly how current?" (~50k done as of Oct).
+- Petition erasure JD-CR-202 (pre-2000 convictions): confirm no fee, filed in the sentencing court.
+- DUI: "Is a first § 14-227a conviction eligible for automatic erasure, or excluded?" (if they punt, the statute settles it — log the attempt).
+
 ---
 
-## 2. DELAWARE (DE)
+## 2. DELAWARE (DE) — call 10 AM–1 PM your time
+
+*fee discrepancy pre-loaded*
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **SBI fingerprint appointments / info** — (302) 739-2528
+- **SBI Kent County office (criminal history)** — (302) 739-5871 · M–F 8:30–5:15 ET · 600/655 S. Bay Rd, Dover
+- **Family Court expungement email (written answers!)** — FC_Expungement@delaware.gov
 - **Post-Pardon Expungement (11 Del. C. § 4375)** — Delaware Board of Pardons, then Superior/Family Court
 - **Automatic Clean Slate Expungement (11 Del. C. § 4373A)** — Delaware State Bureau of Identification (SBI)
 - **Mandatory Expungement (State Bureau of Identification, 11 Del. C. § 4373)** — Delaware State Bureau of Identification (SBI)
@@ -77,13 +90,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Juvenile expungement (Title 10) was not pulled — it is a separate track from the adult subchapter VII rules encoded here; route juvenile matters to counsel (cite-only).
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fee stack is the whole call. DSP's page says: initial application fee $72, then if you qualify for mandatory, $75 money order to DSP (service code 27S23V). The ACLU guide said $52 fingerprinting.
+- "To apply for a mandatory expungement: is it $72 to apply, then $75 on approval — $147 total? Does the $72 include fingerprinting, or is that separate?"
+- Discretionary path: the court fee schedule under § 4374(j) — get the number from Superior Court Prothonotary (New Castle) or the Family Court email.
+- Automatic Clean Slate: "Automatic expungements began August 2024 — if a case qualifies but hasn't been processed, do they still apply through SBI?"
+
 ---
 
-## 3. MINNESOTA (MN)
+## 3. MINNESOTA (MN) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **MN State Law Library (expungement guidance)** — (651) 297-7651 · M–F 8:00–4:30
+- **Volunteer Lawyers Network expungement intake** — (612) 752-6677 · M–Th 10 AM–1 PM Central
+- **BCA record checks** — chs.state.mn.us (online) · BCA CHA Unit, 1430 Maryland Ave E, St. Paul (lobby M–F 8:15–4:00)
+- **County clinics** — (651) 266-8391 · Ramsey; Anoka (763) 324-5560
 - **Petition Expungement (Minn. Stat. §§ 609A.02 / 609A.03)** — District court of the case
 - Volunteer Lawyers Network (expungement clinics) — https://www.vlnmn.org
 - Until We Are All Free (Clean Slate implementation tracking) — https://www.uwaaf.org
@@ -102,13 +125,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. Pull the § 299C.11 / § 13.82 arrest-record-return path (return/destruction of arrest records where no charge or a favorable outcome) — not in this pull; it is a separate mechanism from § 609A sealing.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fee conflict (#1 MN question): "For a petition-based expungement under 609A.02, what's the district court filing fee?" One guide says FREE; older sources say ~$300. Ask the Law Library, confirm with Hennepin.
+- Clean Slate completion: "BCA reported ~94% of eligible records expunged by spring — is the remainder still in the 60-day judicial review loop?"
+- How a person checks whether THEIR record was auto-expunged (chs.state.mn.us cost — $15–20?).
+- Whether prosecutor-agreed sealing (609A.025) is actually being used — VLN will know.
+
 ---
 
-## 4. OKLAHOMA (OK)
+## 4. OKLAHOMA (OK) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **OSBI Expungement/Disposition Services** — (405) 879-2641 · expungements@osbi.ok.gov · if the line's busy, email the same questions and paste the reply into your log as a written source
 - **Section 18 Expungement (seals arrest + court record)** — District court where the arrest information is located; OSBI for the arrest record
 - **Section 991c Expungement (deferred-sentence disposition cleanup)** — The court that handled the case
 - Legal Aid Services of Oklahoma — https://oklaw.org
@@ -131,13 +161,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm the exact scope of 2025 c. 292's § 19 changes and 2025 c. 305's § 991c changes — the pulled text shows the history lines; verify no further-reaching substantive change before the next review.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "$150 processing fee for the arrest-record (Section 18) expungement, court record free — current?"
+- Clean Slate rollout: "Automatic processing was slated to begin November 1, 2025 — has the monthly OSBI run started? Any automatic expungements actually completed?"
+- Single-source rule: "If someone has an out-of-state arrest, they're excluded from the automatic path but can still petition — correct?"
+
 ---
 
-## 5. VIRGINIA (VA)
+## 5. VIRGINIA (VA) — call 10 AM–1 PM your time
+
+*the two-week-old law*
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave2_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **VSP Central Criminal Records Exchange (CCRE)** — (804) 674-6723 · VSP can't give legal advice — keep it to pure logistics
+- **One circuit court clerk** — Fairfax Circuit Court is the marquee call (only circuit running its own case-management system) · fairfaxcounty.gov; Richmond City a good second
 - **Petition to Seal (Va. Code § 19.2-392.12; lighter track § 19.2-392.12:1)** — Circuit Court where the charge originated
 - **Expungement (non-convictions, Va. Code § 19.2-392.2)** — Circuit Court where the charge was heard
 - Legal Aid Justice Center — https://www.justice4all.org
@@ -155,10 +194,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. Are Circuit Court clerks circulating a § 19.2-392.12:1 petition form yet, or are petitioners drafting their own? The 12:1 track is new and lighter (free, 7 years, no manifest-injustice element); the statute is clear but the local filing mechanics may not have caught up. Phone-verify with a Circuit Court clerk.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The headline date: "Petition sealing under the new law is live as of July 1 — but automatic sealing lists from VSP to the courts start October 1, 2026 — right?"
+- "Is the OES sealing petition form now available on the Virginia Judicial System website?" (get its name/number).
+- The no-fee claim: "What does it cost, all-in, to file a sealing petition today?" (a ~$12 Commonwealth's-Attorney service fee may apply).
+- "Is the CCRE online portal for sending criminal history to circuit courts live yet, or still paper/electronic request?"
+
 ---
+
+## Session targets
+
+- Minimum win: 5 calls logged, the DE fee stack resolved, the VA Oct-1 date confirmed, the MN fee conflict killed.
+- Great session: all five touched + written email answers from OSBI and DE Family Court in the log.
+- Rollout answers (CT, OK, VA portal status) go into UI copy with a "verified by phone [date]" note — sentences no competitor scraping the web can publish.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Numbers were pulled from official pages today but rot; office name + site re-finds them. Confirm-don't-ask. Log the no-answers._

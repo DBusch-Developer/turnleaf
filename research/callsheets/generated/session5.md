@@ -1,24 +1,26 @@
 # Turnleaf — Call Session 5 (Wave 5: AL · LA · MD · SC · WI)
 
+_Contacts pulled July 15 from official pages where marked — confirm office scope first._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 5`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **19 open questions across 5 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- 7:00–9:00 AM your time → WI, AL, LA (Central, +2): their 9–11 AM.
+- 10:00 AM–1:00 PM your time → MD, SC (Eastern, +3): their 1–4 PM.
 
 ---
 
-## 1. ALABAMA (AL)
+## 1. ALABAMA (AL) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave5_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Circuit Clerk, Jefferson County (Birmingham) or Montgomery County** — numbers via alacourt.gov / county sites
+- **AL Board of Pardons and Paroles (felony-pardon gateway)** — via paroles.alabama.gov
+- **Montgomery Volunteer Lawyer Program** — montgomeryvlp.org — their CLE expungement handout is the best practitioner doc
 - **Expungement Petition (Ala. Code § 15-27)** — Circuit court (criminal division) of the county where the charges were filed
 - Montgomery Volunteer Lawyers Program (CLE handout) — https://www.montgomeryvlp.org
 - Alabama Board of Pardons and Paroles — https://paroles.alabama.gov
@@ -41,13 +43,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. The § 15-27-3(c) victim-notice cross-reference points to "(4)a. of Section 15-27-2," which reflects pre-amendment numbering (the current § 15-27-2 renumbered). The tree applies victim notice to violent-offense-related petitions and flags the drafting artifact; confirm the intended target on the next pull.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "$500 administrative filing fee per case — current after Act 2024-407? What does the indigency process under § 15-27-4 look like — who qualifies, what form?"
+- Lifetime caps under § 15-27-2.1 — confirm the misdemeanor-conviction count (2?) and one-pardoned-felony rule.
+- Pardon path timing: current Board processing time from application to certificate.
+- Confirm DUI = serious traffic offense = never expungable since Jul 1, 2023.
+
 ---
 
-## 2. LOUISIANA (LA)
+## 2. LOUISIANA (LA) — call 7–9 AM your time
+
+*the automated-system call*
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave5_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Justice & Accountability Center of Louisiana** — (504) 273-1091 · verified — workshops, CLEAN JACKET app; the implementation-truth org
+- **LSP BCII Expungement Unit** — number via lsp.org/about → BCII → Expungements
+- **One parish clerk (Orleans or East Baton Rouge)** — for the clerk-fee portion
 - **Motion to Expunge (La. C.Cr.P. arts. 971-999)** — The parish of arrest or conviction (clerk of court)
 - Justice & Accountability Center of Louisiana (CLEAN JACKET app; (504) 273-1091) — https://www.jaclouisiana.org
 - Louisiana Law Help — https://www.louisianalawhelp.org
@@ -68,13 +81,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Session-law sweep: the history lines in this pull end at the 2024 acts. Verify whether any 2025-26 act amended arts. 971-999 (especially the fee schedule, the 978 exclusion/CDS lists, or the marijuana-fee sunset) before the next review.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- THE question: "The automated expungement system under 2023's SB 111 went live January 1 — is the BCII request process actually operational? Where does someone submit, real turnaround?" (JAC honest / LSP official — get both).
+- $550 fee breakdown current ($250 LSP + $50 sheriff + $50 DA + clerk ≤$200)? One fee per arrest event confirmed?
+- Marijuana first-possession $300 reduced fee — confirm it sunsets Aug 1, 2026.
+- Felony count rule: "Can a person expunge more than one eligible felony in a 10-year period under current art. 978(F)?"
+
 ---
 
-## 3. MARYLAND (MD)
+## 3. MARYLAND (MD) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave5_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Maryland Court Help Center (free brief legal advice, statewide)** — number via mdcourts.gov/helpcenter
+- **MVLS — Maryland Volunteer Lawyers Service** — mvlslaw.org — their 2025 expungement presentation is your what-passed-in-2025 check
+- **One District Court clerk** — for the fee
 - **Expungement of a Conviction (Md. Crim. Proc. § 10-110)** — The court of the case
 - Maryland Court Help Centers (free brief advice) — https://www.mdcourts.gov/legalhelp
 - Maryland Volunteer Lawyers Service (MVLS) — https://www.mvlslaw.org
@@ -90,13 +112,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. What is the conviction petition FEE amount and current clerk practice? The § 10-103 arrest path is free by statute; the "$30 per conviction petition" figure is not in the sections pulled — confirm the amount with a clerk. It is waivable.
    - *Blocks (null until answered):* `resources.remedies.conviction.fees`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Conviction-petition filing fee ($30?) — current, per petition or per case? Non-conviction petitions confirmed free?
+- The 2025 question: "Did the 2025 session change expungement law?" (a '2025 Expungement Reform Act' headline exists).
+- Waiting-clock practice: does the wait run from probation/parole EXPIRATION or sentence completion? (the HB 73 dispute).
+- Cannabis: confirm auto-expungement hit CJIS only and the court-record petition is still needed — and fee-waived.
+
 ---
 
-## 4. SOUTH CAROLINA (SC)
+## 4. SOUTH CAROLINA (SC) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave5_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Your test circuit's Solicitor's Office expungement desk** — 5th Circuit (Richland/Columbia) or 9th (Charleston) — applications + numbers on each circuit solicitor's site
+- **SLED (records verification layer)** — sled.sc.gov
 - **Expungement through the Circuit Solicitor (S.C. Code § 17-22-910 et seq.)** — The circuit solicitor's office (16 judicial circuits)
 - South Carolina Courts — Expungement self-help — https://www.sccourts.org/selfHelp/
 - SC Appleseed Legal Justice Center — https://www.scjustice.org
@@ -118,13 +148,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Session sweep: § 22-5-910's history ends at 2018 (plus 2024 Act 111) and South Carolina runs perennial expungement-expansion bills. Verify nothing in the 2025-26 session amended the § 17-22-910 catalog or added a general first-offense path before the next review.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "$310 total — $250 solicitor + $25 SLED + $35 clerk, separate money orders — current? Which fees come back if SLED finds the offense ineligible?"
+- Plea-deal dismissals: confirm they pay full fees while no-plea dismissals are free.
+- The legislative watch: "Has the general first-offense expungement bill (§ 17-22-915 / H.3730) passed?"
+- Typical processing time application-to-order (6-month norm?).
+- Summary-court auto-expungement of dismissals since 2009: reliable, or verify with the summary court?
+
 ---
 
-## 5. WISCONSIN (WI)
+## 5. WISCONSIN (WI) — call 7–9 AM your time
+
+*the short call*
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave5_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Clerk of Circuit Court, Milwaukee County (or Ozaukee)** — Ozaukee's expungement page is unusually clear · numbers via wicourts.gov county directory
+- **Governor's Office pardon information** — evers.wi.gov (Pardon Advisory Board application)
 - **Governor's Pardon (the route for most Wisconsin convictions)** — Governor's Pardon Advisory Board
 - Wisconsin Governor — Pardon Information — https://evers.wi.gov/Pages/Pardon-Information.aspx
 - Wisconsin Court System — Expungement information — https://www.wicourts.gov
@@ -140,10 +181,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. Confirm the juvenile § 938.355(4m) expungement-petition track (a petition available at 17). It is a separate statute, not part of § 973.015, and was not pulled — the tree discloses it in prose only. Pull § 938.355(4m) before encoding its requirements.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Confirm the negative on the record: "For an adult whose judge did not order expungement at sentencing, is there any petition process today?" (expected: no — a dated clerk quote is your honest-no citation).
+- Confirm the 2025 budget expungement provisions were stripped — any clerk guidance since?
+- If expungement WAS ordered and sentence completed: does the clerk confirm the self-executing discharge-certificate flow (State v. Hemp), or do people need to nudge?
+- Pardon: current eligibility (5 yrs post-sentence?), application backlog.
+
 ---
+
+## Session targets
+
+- Minimum win: 5 logged; LA automated-system status documented; AL indigency process captured; MD 2025-session question answered.
+- Great session: all five + WI honest-no confirmed on the record + SC bill status + written JAC/MVLS replies filed.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask · log everything · numbers rot, office+site re-finds them · night-before emails where possible._

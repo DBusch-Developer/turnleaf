@@ -1,16 +1,18 @@
 # Turnleaf — Call Session 6 (Wave 6: AR · IA · ID · KS · KY · MS · NE · NM · NV · OR · WV)
 
+_Eleven states — split across two mornings if needed. Contacts are office+site unless marked verified._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 6`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **64 open questions across 11 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- 7:00–9:00 AM your time → WV (Eastern +3), KY-Louisville/Lexington (Eastern +3): their 10 AM–noon.
+- 8:00–11:00 AM your time → IA, AR, MS, KS, NE (Central +2): their 10 AM–1 PM.
+- 9:00 AM–noon your time → NM, ID (Mountain +1): their 10 AM–1 PM.
+- Anytime → OR, NV (your timezone).
+Suggested split: Day 1 = KY, WV, MS, AR, IA, NE (eastern-leaning). Day 2 = KS, NM, ID, NV, OR.
 
 ---
 
@@ -18,7 +20,10 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Pulaski County Circuit Clerk (Little Rock)**
+- **ACIC (forms authority)**
+- **Legal Aid of Arkansas**
 - **Record Sealing (Comprehensive Criminal Record Sealing Act, A.C.A. § 16-90-1401 et seq.)** — The circuit or district court where the case was decided (county of conviction; county of arrest for an uncharged arrest)
 - Legal Aid of Arkansas — https://arlegalaid.org
 - Center for Arkansas Legal Services — https://arlegalservices.org
@@ -40,13 +45,19 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm no 2025 regular-session or 1st Ex. Sess. 2026 amendment altered §§ 16-90-1404–1417, § 5-65-111, or §§ 16-93-301–303 beyond the version read here (the Lexis banner says the text is current, but a targeted session sweep is the confirm-kill).
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Zero filing fee confirmed statewide; immediate eligibility for non-violent C/D felonies on completion — clerk-counter confirmation.
+- Misdemeanor DWI 10-yr wait (⚠️); one-prior-felony cap mechanics; felony 90-day wait before grant.
+
 ---
 
 ## 2. IOWA (IA)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Polk County Clerk of Court (Des Moines)** — via iowacourts.gov
+- **Iowa Legal Aid**
 - **Expungement (Iowa Code §§ 901C.2, 901C.3; deferred judgments § 907.9)** — The court where the criminal case was filed
 - Iowa Legal Aid — https://www.iowalegalaid.org
 - Iowa Judicial Branch — Court Forms — https://www.iowacourts.gov/for-the-public/court-forms/
@@ -67,13 +78,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm how employers and background-check practice treat § 22.7-confidential expunged records, and what an applicant may lawfully say. None of the three sections grants a statutory right to deny the record exists, so this is attorney-tier — the encoding never promises an honest-no.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Any filing fee for 901C applications? Once-per-lifetime misdemeanor rule + same-transaction bundling.
+- Non-conviction LFO gate ("court costs must be paid even for dismissals — clerks enforcing that?").
+- Deferred-judgment auto-expungement reliability in rural counties.
+
 ---
 
 ## 3. IDAHO (ID)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **ISP Bureau of Criminal Identification** — via isp.idaho.gov/bci — the expungement application unit
+- **Ada County District Court (Boise)**
 - **Idaho record relief (dismissal/reduction § 19-2604; shielding § 67-3004(11); ISP non-conviction expungement § 67-3004(10))** — Idaho State Police (BCI) for non-convictions; the district court (in the underlying criminal case) for shielding, dismissal, and reduction
 - Idaho Legal Aid Services — https://www.idaholegalaid.org
 - Idaho Courts — Self-Help — https://www.courtselfhelp.idaho.gov
@@ -94,13 +112,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Pull I.C. § 18-310 (restoration of civil rights and firearms) if time allows. § 19-2604(1) dismissal "restores civil rights," and firearm mechanics run through § 18-310, which is untouched by shielding — cited but not read, so firearm questions are attorney-tier.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- § 67-3004(10) ISP request — free? turnaround?
+- Shielding (§ 67-3004(11)): filings actually being granted? fee? form? (fresh-law reality check).
+- Withheld-judgment dismissal flow at the clerk counter.
+
 ---
 
 ## 4. KANSAS (KS)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **KLS expungement clinics** — kls_expunge@klsinc.org · email tonight; written reply = citable
+- **A district clerk (Sedgwick or Johnson County)**
+- **KBI fact-sheet line**
 - **Expungement (Kan. Stat. Ann. § 21-6614; arrests § 22-2410; municipal § 12-4516)** — The convicting court (municipal court for a city ordinance; district court for an arrest record)
 - Kansas Legal Services (free expungement clinics; kls_expunge@klsinc.org) — https://www.kansaslegalservices.org
 - Kansas Judicial Council — Expungement Forms — https://www.kansasjudicialcouncil.org
@@ -127,13 +153,19 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 7. Read K.S.A. 22-4908 (relief from the Kansas Offender Registration Act registration requirement). Cited as the route out of the 21-6614(f) registration bar but not pulled; its mechanics are cite-only for now.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Docket fee — $176 (statute) or $195 (current Supreme Court order)?
+- Specialty-court immediate petition + fee waiver practice; KBI post-grant timeline (8–12 wks?).
+- Firearm-restoration language on the order.
+
 ---
 
 ## 5. KENTUCKY (KY)
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **AOC/KSP certification unit** — via kycourts.gov → Expungement Certification Process; KSP records via kentuckystatepolice.ky.gov/expungements
 - **Certificate of Eligibility (Ky. Rev. Stat. § 431.079 — required for conviction expungements)** — Kentucky State Police / Administrative Office of the Courts
 - **Drug-Possession Voiding and Sealing (Ky. Rev. Stat. §§ 218A.275, 218A.276)** — The court where the conviction was entered
 - **Misdemeanor Expungement (Ky. Rev. Stat. § 431.078; certificate § 431.079)** — The court of conviction (or the county-of-residence District Court for pre-1992 convictions)
@@ -161,13 +193,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 6. Whether a § 431.076 non-conviction expungement carries any court filing fee in practice: no fee appears in the statute text and the § 431.079 certification does not apply, so it is encoded as free — confirm at the clerk (phone tier).
    - *Blocks (null until answered):* `resources.remedies.nonConviction.fees`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Current certificate backlog ("your page says 4–5 months — still accurate?"); cert $40 + 30-day validity; felony $50 + $250-on-grant + 18-month plan mechanics.
+- The 2023 multiple-felony amendment: "can a person expunge Class D felonies from separate incidents in one or several applications?"
+- Auto-expungement of post-2020 acquittals actually firing?
+
 ---
 
 ## 6. MISSISSIPPI (MS)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Hinds County Circuit Clerk (Jackson)**
+- **Mississippi Center for Justice**
 - **Expunction (Miss. Code Ann. § 99-19-71)** — The justice, county, circuit, or municipal court that handled the case
 - Mississippi Center for Justice — https://www.mscenterforjustice.org
 - Mission First Legal Aid Office — https://missionfirst.org
@@ -193,13 +232,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 7. Does a pauper's/indigency waiver apply to the $150 § 99-19-72 fee? The fee amount is statutory; the pulled text says nothing about a waiver, so feeWaiver is null pending confirmation with a circuit clerk (Hinds).
    - *Blocks (null until answered):* `resources.remedies.expunction.feeWaiver`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- $150 fee current + does it apply to non-conviction petitions? First-offender misdemeanor: any wait?
+- "Did HB 1344 (automatic expungement, 2026 session) pass?"
+- Typical time petition → hearing → order.
+
 ---
 
 ## 7. NEBRASKA (NE)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Douglas County District Court (Omaha)** — via nebraskajudicial.gov
+- **Legal Aid of Nebraska Clean Slate AccessLine**
 - **Set-Aside / Sealing / Expungement (Neb. Rev. Stat. §§ 29-2264, 29-3523)** — The sentencing court for a set-aside; the court that had the case for sealing; the district court of the county of arrest for a law-enforcement-error expungement
 - Legal Aid of Nebraska — Clean Slate Program (AccessLine) — https://www.legalaidofnebraska.org
 - Nebraska Judicial Branch — Self-Help — https://supremecourt.nebraska.gov/self-help
@@ -221,13 +267,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm the scope of "Nebraska Rules of the Road" offenses that trigger the Path B motor-vehicle bar (§ 29-2264(3)(b)(iii)) — cite-only to Neb. Rev. Stat. §§ 60-601 et seq., not pulled.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Set-aside filing mechanics + any fee.
+- Confirm on the record: "no sealing of conviction records exists absent pardon" (your honest-no citation).
+- § 29-3523 non-conviction removal process; pardon-then-seal pathway basics.
+
 ---
 
 ## 8. NEW MEXICO (NM)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Second Judicial District Court self-help (Albuquerque)** — via nmcourts.gov
+- **NM DPS records**
 - **Expungement (Criminal Record Expungement Act, NMSA 1978 §§ 29-3A-1 to 29-3A-9)** — The district court where the case was decided (all petitions go to district court)
 - New Mexico Legal Aid — https://www.newmexicolegalaid.org
 - New Mexico Courts — Self-Help / Expungement — https://www.nmcourts.gov
@@ -250,13 +303,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm whether "an offense committed against a child" (a § 29-3A-5(G) exclusion) has a settled definition in New Mexico case law, or whether its scope is contested. Attorney-tier; encoded as a categorical exclusion without a case-law gloss.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- District court filing fee for CREA petitions; RAP-sheet-attached + filed-under-seal mechanics.
+- Cannabis auto-expungement (§ 29-3A-8): actually running? how does someone check?
+- The degree ladder as clerks apply it (kill the "2/4 years" oversimplification).
+
 ---
 
-## 9. NEVADA (NV)
+## 9. NEVADA (NV) — your timezone
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Nevada Legal Services (record-sealing manual authors)**
+- **Eighth Judicial District / LV Justice Court clerk**
+- **Records Repository, Carson City**
 - **Reentry-Program Sealing (Nev. Rev. Stat. § 179.259)** — The court where the conviction was entered
 - **Record Sealing (Nev. Rev. Stat. §§ 179.245, 179.255)** — The court where the case was decided
 - **Decriminalized-Offense Sealing Request (Nev. Rev. Stat. § 179.271)** — The court that entered the conviction
@@ -284,13 +345,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 7. Is there a petition FORM for a § 179.259 reentry-program sealing, or is the petition drafted from the statute? No reentry-specific form was found statewide (selfhelp.nvcourts.gov lists no criminal record-sealing forms at all), in Clark County, or in the NV Legal Services manual. Ask a district court clerk which document they expect. The answer may legitimately be "no form exists" — in which case formUrl stays null permanently and the steps should say so.
    - *Blocks (null until answered):* `resources.remedies.reentry.formUrl`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- All-in self-filed cost (~$150 LVJC?).
+- Package rule in practice ("one ineligible case blocks the rest — how strictly applied?").
+- Repository backlog after orders; general misdemeanor 1-yr tier (⚠️).
+
 ---
 
-## 10. OREGON (OR)
+## 10. OREGON (OR) — your timezone
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Multnomah County Circuit Court clerk** — via courts.oregon.gov
+- **Legal Aid Services of Oregon** — 1-800-351-7248 · number from their published materials — confirm on site
+- **OSP CJIS record-check unit**
 - **Set Aside a Conviction (ORS 137.225)** — The court of conviction (arrest/declination motions: the county of arrest); Oregon State Police for the record check
 - **Marijuana Set-Aside Fast Paths (ORS 137.226)** — The court of conviction; Oregon State Police for the record check
 - Legal Aid Services of Oregon (1-800-351-7248) — https://lasoregon.org
@@ -317,13 +386,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 7. Juvenile set-aside (ORS 419A series) was not pulled — out of scope for this pass; route juvenile matters to counsel.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- OSP fee — $33 or $80?
+- Current county backlog honestly stated ("still up to 2 years anywhere?").
+- The dismissed-charges drafting error: fixed or still biting? 2025 LFO amendment (expired judgments) — clerks aware?
+
 ---
 
 ## 11. WEST VIRGINIA (WV)
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave6_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Kanawha County Circuit Clerk (Charleston)** — via courtswv.gov
+- **Legal Aid of WV / Jobs & Hope WV**
 - **Expungement (W. Va. Code §§ 61-11-25, 61-11-26, 61-11-26a)** — The circuit court of conviction or charge (Kanawha County is a reference for fee confirmation)
 - Legal Aid of West Virginia — https://www.lawv.net
 - Jobs & Hope WV (acceleration-lane program hub) — https://jobsandhope.wv.gov
@@ -341,10 +417,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm the practical scope of the § 61-11-26(c)(4) catch-all — ANY offense in which the petitioner "used or exhibited a deadly weapon or dangerous instrument." How broadly courts read it (e.g. constructive possession, a weapon present but unused) is attorney-tier.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Circuit filing fee + the $100 WSP fee mechanics.
+- The once-ever rule: "SCA-C900 says a person may only request expungement once; once per lifetime total?"
+- 26a fast-lane: which programs count, how graduates document it; any automation bill passed?
+
 ---
+
+## Session targets
+
+- Minimum win: KY backlog + fee stack; KS fee conflict resolved; OR fee conflict resolved; NE honest-no on the record; AR zero-fee confirmed.
+- Great session: + WV once-ever scoped; ID shielding reality; NM cannabis automation status; MS 2026 bill outcome; NV package-rule practice.
+- Three fee-number conflicts this wave (KS $176/$195, OR $33/$80, NV ~$150) — exactly the class of error Turnleaf exists to kill.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask · log everything · numbers rot, office+site re-finds them · night-before emails (KLS especially)._

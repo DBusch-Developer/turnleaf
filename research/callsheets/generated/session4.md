@@ -1,24 +1,26 @@
 # Turnleaf — Call Session 4 (Wave 4: IN · MA · MO · TN · WA)
 
+_Contacts pulled July 15 from official pages where marked; others pull-from-site — confirm office scope first._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 4`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **14 open questions across 5 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- WA is YOUR timezone — call 9–11 AM straight up. The one state where scheduling is easy.
+- 7:00–9:00 AM your time → TN (Central, +2; east TN is Eastern) and MO (Central, +2): their 9–11 AM.
+- 10:00 AM–1:00 PM your time → MA and IN (Eastern, +3): their 1–4 PM.
 
 ---
 
-## 1. INDIANA (IN)
+## 1. INDIANA (IN) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Marion County Clerk (Indianapolis) — criminal division** — via indy.gov; their Second Chance page is the state's best official explainer
+- **Indiana Legal Services** — indianalegalservices.org — statewide expungement help
 - **Expungement of an Arrest / Non-Conviction (§ 35-38-9-1)** — The court where the case was handled
 - **Expungement of a Conviction (Ind. Code § 35-38-9)** — The convicting court
 - Indiana Legal Services (expungement) — https://www.indianalegalservices.org/expungement
@@ -33,13 +35,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 1. What is the conviction-petition filing FEE amount? The statute now settles the mechanics — conviction petitions pay the standard civil filing fee, the court may reduce or waive it for indigency (§ 35-38-9-8(d)), and arrest/non-conviction petitions and collateral-action requests are free (§§ 35-38-9-1(e), 9.5(e)). The exact dollar amount is county-set — confirm with the clerk of the convicting court.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Conviction-petition filing fee (civil, county-set — get Marion's number). Arrest-record petitions (§ 9-1) confirmed free?
+- The one-shot mechanics: "Multi-county records — separate petitions per county within 365 days, counted as one lifetime petition — is that how the clerk processes them?"
+- Post-2022 automatic expungement of dismissed-case arrests: actually happening, or petition-in-practice?
+- Prosecutor consent for § 9-5 petitions: process for obtaining written consent.
+
 ---
 
-## 2. MASSACHUSETTS (MA)
+## 2. MASSACHUSETTS (MA) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Massachusetts Probation Service — sealing/expungement unit** — Commissioner of Probation, One Ashburton Place Rm 405, Boston 02108 · phone via mass.gov "Seal your criminal record"
+- **Greater Boston Legal Services CORI unit** — gbls.org — the practitioner authority
 - **Administrative Sealing of a Conviction (M.G.L. c. 276 § 100A)** — Commissioner of Probation (by mail), One Ashburton Place, Room 405, Boston, MA 02108
 - Mass.gov — Seal your criminal record — https://www.mass.gov/how-to/seal-your-criminal-record
 - Greater Boston Legal Services (CORI self-help) — https://www.gbls.org
@@ -63,13 +73,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Recheck the 194th-session expungement-expansion bills (successors to H.4325) after the session ends — the bill has been filed and died three sessions running, so watch rather than assume any change.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "Petition to Seal by mail — current form name/number (TC-005?), current mailing address, still no-fee?"
+- Typical processing time for administrative sealing right now.
+- Confirm non-discretionary: "If the waiting period and criteria are met, sealing is granted as of right — correct?"
+- Which conviction categories are excluded from ADMINISTRATIVE sealing (vs needing court).
+- iCORI self-check: $25, waiver process.
+
 ---
 
-## 3. MISSOURI (MO)
+## 3. MISSOURI (MO) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Jackson County Circuit Clerk (Kansas City) or St. Louis City/County** — numbers via courts.mo.gov circuit pages
+- **Clear My Record Missouri** — clearmyrecordmo.org — the implementation-truth org; their law-change page is current
 - **Petition to Expunge (Mo. Rev. Stat. § 610.140)** — The court of the case
 - Clear My Record MO (law-change page + forms help) — https://www.clearmyrecordmo.org
 - Missouri Courts — Expungement self-help — https://www.courts.mo.gov/page.jsp?id=98230
@@ -85,13 +104,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. What is the status of the 2022 Amendment XIV automatic marijuana expungement rollout? That is a constitutional provision, not in this statutory pull; Wave 4 says courts are still processing. Confirm the current status.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fee conflict (main event): "Filing fee for a § 610.140 expungement petition: a $250 surcharge, standard civil filing fee, or both?" Fee-waiver (in forma pauperis) process.
+- The 2025 limits: "2 felonies + 3 misdemeanors lifetime as of Jan 1 — is the clerk applying the new limits? Form updates?" (many sites still publish 1F+2M).
+- Marijuana automatic expungement (Amendment 3): current court backlog — Clear My Record MO will know.
+- Clean Slate automation: did anything pass this session, or still petition-only?
+
 ---
 
-## 4. TENNESSEE (TN)
+## 4. TENNESSEE (TN) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-19 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Davidson County Criminal Court Clerk** — Justice A.A. Birch Building, Nashville — expungement counter, 2nd floor · number via ccc.nashville.gov
+- **TBI — certificate-of-eligibility issuer** — process page via tbi.tn.gov; tncourts.gov/expungements links it
 - **Conviction Expunction (T.C.A. § 40-32-107)** — The court of conviction; TBI for the certificate
 - **Non-Conviction Expunction (T.C.A. § 40-32-106(a))** — The court that handled the case
 - Tennessee Courts — Expunctions — https://www.tncourts.gov/programs/expunctions
@@ -109,13 +136,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. Confirm the clerk-fee AMOUNT and current practice. The statute is clear that a clerk fee applies to conviction (§ 40-32-108(a)) and diversion (§ 40-32-106(d)(3)) expunctions via § 8-21-401, and that non-conviction is free (§ 40-32-106(a)(1)). The "up to $100" figure and the indigency-waiver practice come from § 8-21-401, which was not pulled — confirm with a clerk (Davidson County).
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The 2024 gate: "Since Jan 1, 2024 a TBI certificate of eligibility must accompany conviction expunction orders — how does a pro se petitioner request it, turnaround, any fee?"
+- Clerk fee for conviction/diversion expunctions — statute caps at $100; what does Davidson charge? Dismissals confirmed free?
+- The reorganization: "§ 40-32-101 is being renumbered (106/107) — forms updated, which citation should petitions use today?"
+- The newer C/D felony 10-year tier — confirm the clerk is seeing/processing these.
+
 ---
 
-## 5. WASHINGTON (WA)
+## 5. WASHINGTON (WA) — call 9–11 AM your time — local hours
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave4_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **King County Superior Court Clerk and/or Pierce County Clerk** — Pierce publishes the most complete vacate packets · piercecountywa.gov / kingcounty.gov
+- **Washington State Law Library (answers reference questions)** — courts.wa.gov/library
+- **WSP WATCH (record self-check, $11 online)** — watch.wsp.wa.gov
 - **Motion to Vacate a Conviction (RCW 9.96.060 / 9.94A.640)** — The sentencing court
 - WashingtonLawHelp.org (vacate guides, 2024-updated) — https://www.washingtonlawhelp.org
 - Washington Courts self-help forms — https://www.courts.wa.gov/forms/
@@ -137,10 +173,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. How are completed diversions and deferred prosecutions treated beyond the RCW 10.97.060 nonconviction-deletion path the tree now routes them to? A deferred prosecution ends in dismissal (nothing to vacate) but is the first thing an agency may refuse to delete (10.97.060(1)), and a DUI deferred prosecution still counts as a "prior offense" under 46.61.5055. Confirm the remaining boundaries with the call sheet.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Filing fee for a motion to vacate — confirm per county (a motion into an existing criminal case should be free or minimal).
+- The 2024 change: "The waiting period no longer requires LFOs paid first — is the clerk processing under that rule? Is there a form for waiving remaining LFOs?"
+- Confirm the statewide vacate forms on courts.wa.gov are what the county wants.
+- Certificate of Discharge (felonies): how a person gets one if the court never issued it.
+
 ---
+
+## Session targets
+
+- Minimum win: 5 calls logged; MA no-fee + form confirmed; MO fee conflict resolved; TN TBI-gate process documented.
+- Great session: all five + WA LFO-rule and IN one-shot mechanics confirmed at the counter; written replies from GBLS or Clear My Record MO filed.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask · log everything including no-answers · numbers rot, office+site re-finds them · night-before emails to the emailable orgs._

@@ -1,24 +1,27 @@
 # Turnleaf — Call Session 0 (Wave 0: AZ · CA · NY · TX)
 
+_Slot this before or after Session 1 — CA/AZ are your timezone-friendly states._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 0`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **25 open questions across 4 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- AZ is local — anytime; start here. CA is YOUR timezone — 9–11 AM straight up.
+- 7:00–9:00 AM your time → TX (Central, +2): their 9–11 AM.
+- 10:00 AM–1:00 PM your time → NY (Eastern, +3): their 1–4 PM.
+These four deserve the most verification because they are LIVE — a wrong fee on a coming-soon state embarrasses you; a wrong fee on a live state harms a user.
 
 ---
 
-## 1. ARIZONA (AZ)
+## 1. ARIZONA (AZ) — local — call anytime; YOUR first call
 
 **Status:** `statute_cited` · reviewed 2026-07-15 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Clerk of Superior Court, Maricopa County** — (602) 372-5375 · also billed as (602) 37-CLERK · M–F 8–5
+- **Criminal Administration (set-aside order status)** — (602) 506-8575
 - **Petition to Seal Case Records (ARS § 13-911)** — Clerk of the court that handled the original case
 - **Application to Set Aside Conviction (ARS § 13-905)** — Clerk of the Superior Court / Municipal or Justice Court Clerk (wherever you were sentenced)
 - AZLawHelp (Arizona Legal Services) — https://www.azlawhelp.org
@@ -47,13 +50,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 8. Confirm plainly: there is no automatic record-clearing in Arizona — every remedy is petition-based, correct? Wave 0 says so and the app states it as fact in its terminology and its user-facing copy, so it needs the same confirmation any other asserted claim gets. Users arrive expecting "clean slate" automation because other states have it.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- This list matches the app's openQuestions for AZ; each answer closes a numbered question in the database.
+- The 13-911 waiting ladder (confirm-don't-ask): "Class 2–3 felonies 10 years, class 4–6 felonies 5, class 1 misdemeanors 3, lower misdemeanors 2 — from completion of the entire sentence including restitution — is that how you apply it?"
+- Dismissed/never-charged: "Can a dismissal be sealed under 13-911 immediately, or is there a wait?" (un-hedges the most common happy path).
+- Certificate of Second Chance — confirm it issues with qualifying set-asides, no separate fee.
+- Confirm plainly: "There's no automatic record-clearing in Arizona, correct — everything is petition-based?"
+
 ---
 
-## 2. CALIFORNIA (CA)
+## 2. CALIFORNIA (CA) — 9–11 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **LA Superior Court Self-Help Center** — (213) 830-0845 · M–F 8:30–4:30 · verified 7/15 on lacourt.org — phone appointments, English/Spanish
+- **CA Courts Self-Help (Clean Your Record)** — selfhelp.courts.ca.gov
+- **CA DOJ — record review unit (fingerprint-based, $25)** — via oag.ca.gov
 - **Arrest Record Sealing (PC 851.91 / 851.87)** — County Superior Court Clerk
 - **Petition for Dismissal (PC 1203.4 / 1203.4a / 1203.41)** — County Superior Court Clerk
 - LawHelpCA — https://www.lawhelpca.org
@@ -72,13 +85,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 3. Adjacent-remedy statutes cited only in result PROSE, not yet human-read: PC § 4852.01 (Certificate of Rehabilitation), § 17(b) (felony reduction), § 1203.3 (early termination of probation), § 290.5 (ending registration). No routing claim traces to them (badge call, 7/16 — CA flipped to statute_cited on the six verified sections + 1203.4 with these retained as unread citations). Read them when convenient to link.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The no-fee question: "Is there a filing fee for a PC 1203.4 dismissal petition today?" (confirm-kill; old county schedules said ~$120–150).
+- Automation reality: "For a conviction eligible under PC 1203.425, is DOJ's monthly automatic relief actually landing? If not, wait or petition?"
+- SB 731 felony tiers: confirm the 4-yr post-sentence rule for non-serious/non-violent felonies.
+
 ---
 
-## 3. NEW YORK (NY)
+## 3. NEW YORK (NY) — 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **NYS DCJS Record Review Unit** — (518) 457-9847 · RecordReview@dcjs.ny.gov · also (518) 485-7675 · M–F 8–4 · verified 7/15 on criminaljustice.ny.gov — how people check if they're sealed
+- **Legal Action Center** — (212) 243-1313
+- **Community Service Society Record Repair Hotline** — (212) 614-5441 · NYC implementation-truth orgs
+- **NY Unified Court System / OCA** — Clean Slate rollout updates · nycourts.gov (screenshot before calling)
+- **Legal Aid Society / LawNY Clean Slate units** — legalaidnyc.org / lawny.org
 - **CPL 160.59 Sealing Motion (petition path)** — Sentencing Court Clerk (Supreme / County / City / Town Court)
 - **Clean Slate Automatic Sealing (CPL 160.57)** — NYS Unified Court System / Division of Criminal Justice Services
 - LawHelpNY — https://www.lawhelpny.org
@@ -101,13 +124,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. The Certificate of Disposition cost ($5 outside NYC, $10 within) is stated in the § 160.59 filing steps but is a court-clerk practice figure, not in the verified statute. Confirm the current cost with a court clerk.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- THE question: "Clean Slate sealing of the pre-Nov-2024 backlog — how far along is OCA? Are 2019-era misdemeanors sealed yet, or still queued toward the Nov 2027 deadline?"
+- How someone checks whether THEIR record is sealed (DCJS record review — process, cost, turnaround).
+- CPL 160.59 petition: confirm no filing fee, typical time-to-decision, and whether judges defer petitions because "Clean Slate will get it."
+- Confirm the drug-Class-A-felony inclusion in Clean Slate before you encode it.
+- How are deferred dispositions (ACDs, completed deferrals) treated — seal like non-convictions under 160.50/.55, or Clean Slate timing?
+
 ---
 
-## 4. TEXAS (TX)
+## 4. TEXAS (TX) — 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave0_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Texas State Law Library — Ask a Librarian** — (844) 829-2843 · toll-free; also (512) 463-1722 · M–F · verified 7/15 on sll.texas.gov — they answer these questions
+- **Harris County District Clerk (Houston)** — civil filing (expunctions file as civil) · hcdistrictclerk.com
 - **Petition for Expunction (CCP Ch. 55A)** — County District Court Clerk
 - **Order of Nondisclosure** — Sentencing Court Clerk
 - TexasLawHelp — https://texaslawhelp.org
@@ -139,10 +171,24 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 10. Confirm the first-DWI nondisclosure timing and which section governs: 2 years after sentence completion with a full-term ignition interlock, 5 years without? Wave 0 gives the rule but flags the mapping across §§ 411.0726 / .0731 / .0736. The DWI path is disclosed in prose on the conviction result but is NOT a branch — the tree has no interlock question — so a first-DWI person is currently told less than the research knows.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Both fee stacks: "Total to file an expunction in Harris County — filing fee plus agency service costs? And for an order of nondisclosure — civil fee plus the $28?"
+- The renumbering: "Petitions citing Code of Criminal Procedure Chapter 55A (not 55) since January 2025 — are the clerk's forms updated?"
+- Automatic expunction at acquittal: "If someone was acquitted this year, does the trial court order expunction automatically, or must they still petition?"
+- Nondisclosure § 411.0735 misdemeanor-conviction wait: 2 or 5 years — ask the Law Library to read the current section with you.
+
 ---
+
+## Session targets
+
+- Minimum win: AZ openQuestions 1–5 answered (fees + the dismissal wait); all four touched; CA no-fee + TX fee stacks + NY backlog status documented.
+- Great session: the TX 411.0735 conflict resolved live with the Law Library; a dated NY rollout answer; CA automation reality from the self-help center.
+- These answers update LIVE pages — flip fields to phone_verified same-day, commit, reseed.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask · log everything · numbers rot · night-before emails where possible._

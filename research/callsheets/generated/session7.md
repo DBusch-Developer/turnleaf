@@ -1,24 +1,29 @@
 # Turnleaf — Call Session 7 (Wave 7: AK · HI · ME · MT · ND · NH · RI · SD · VT · WY)
 
+_The final ten. One quirk: Hawaii is 3 hours BEHIND you — save it for after lunch._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 7`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **44 open questions across 10 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- 7:00–10:00 AM your time → NH, ME, RI, VT (Eastern +3): their 10 AM–1 PM.
+- 8:00–11:00 AM your time → SD, ND (Central +2, Pierre/Bismarck): their 10 AM–1 PM.
+- 9:00 AM–noon → MT, WY (Mountain +1).
+- Anytime → AK (Alaska is 1 hr behind Pacific: call late morning).
+- NOON–4:00 PM your time → HI (−3): their 9 AM–1 PM.
+Suggested split: Day 1 = NH, ME, VT, RI, ND, SD (east-first). Day 2 = MT, WY, AK + HI in the afternoon.
 
 ---
 
-## 1. ALASKA (AK)
+## 1. ALASKA (AK) — late morning
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Alaska Court System self-help** — via courts.alaska.gov
+- **DPS Criminal Records & Identification** — sealing requests
 - **Record relief in Alaska (§ 12.62.180 mistaken-identity sealing; § 22.35.030 CourtView non-publication)** — The Department of Public Safety and the Alaska Court System (each agency seals only its own records)
 - Alaska Legal Services Corporation — https://www.alsc-law.org
 - Alaska Court System — Self-Help / Records Removal — https://courts.alaska.gov/shc/
@@ -36,13 +41,19 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm whether the AS 22.35.030 CourtView non-publication is reliably applied in practice within 60 days. If a qualifying case still appears after 60 days, the remedy is contacting the court system, not a petition — but how often compliance lags is a phone-tier question (Alaska Court System).
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- TF-810 CourtView removal — process, 60-day rule, whole-case requirement on record.
+- § 12.62.180 sealing standard as DPS applies it.
+- The 2024 marijuana non-publication provision — what does it actually do, and does anyone process requests? Confirm the honest-no plainly ("no general expungement, correct?").
+
 ---
 
-## 2. HAWAII (HI)
+## 2. HAWAII (HI) — NOON–4 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **HCJDC Expungement Section** — (808) 587-3348 · from ag.hawaii.gov — verified on their page 7/15
 - **Administrative Expungement (Haw. Rev. Stat. § 831-3.2; conviction doors §§ 706-622.5, 706-622.9)** — HCJDC Expungement Section, (808) 587-3348, Honolulu (and the sentencing court for a § 706-622.5 / § 706-622.9 conviction door)
 - HCJDC Expungement Section — (808) 587-3348 — https://ag.hawaii.gov/hcjdc/expungement/
 - Legal Aid Society of Hawaii — https://www.legalaidhawaii.org
@@ -65,13 +76,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Confirm whether an AG expungement reaches the court MINUTES (not just the electronic docket) in the two § 831-3.2(f) carve-out scenarios (multiple offenses, or multiple defendants). Attorney-tier; the encoding tells people court-website traces can remain in those situations.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- $35/$50 fees + money-order-only + 120-day timeline current.
+- The 3-vs-4-year prostitution-deferral conflict (their PDF vs their web page).
+- Act 003 auto-transmit: are post-Jul-2025 expungement orders reaching the Judiciary and producing Orders to Seal without applicant action? Pardoned-conviction non-eligibility confirmed.
+
 ---
 
-## 3. MAINE (ME)
+## 3. MAINE (ME) — 7–10 AM
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **A Superior/District Court clerk** — via courts.maine.gov
+- **Pine Tree Legal Assistance**
 - **Motion to Seal (15 M.R.S. ch. 310-A, §§ 2261-2269)** — The court of conviction (the underlying criminal case)
 - Pine Tree Legal Assistance — https://www.ptla.org
 - Maine Judicial Branch — Fees & Forms — https://www.courts.maine.gov/fees-forms/forms.html
@@ -92,13 +110,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. Pull the Title 17-A chapter 11 offense list (the Class E crimes excluded from sealing under § 2261(6)(A)). Cited but not read; the tree screens it as a category without the specific enumeration.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The age-cap repeal: "Can a 50-year-old seal a Class E conviction today?" (kills the stale guides on the record).
+- CR-218 filing fee (~$5?); 4-yr prerequisite mechanics.
+- Pre-2017 Class D/E marijuana sealing practice; LD 1871 trafficking-survivor sealing operative?
+
 ---
 
-## 4. MONTANA (MT)
+## 4. MONTANA (MT) — 9 AM–noon
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **District court clerk (Yellowstone or Missoula)** — via courts.mt.gov
+- **MT DOJ CRISS** — their expungement page has the mail-in mechanics
+- **Montana Legal Services Association**
 - **Misdemeanor Expungement (Mont. Code Ann. §§ 46-18-1102 to -1111); felony deferred-imposition dismissal (§ 46-18-204)** — A district court of conviction (any judicial district where a bundled offense was convicted)
 - Montana Legal Services Association — https://www.mtlsa.org
 - Montana Judicial Branch — Self-Help — https://courts.mt.gov/selfhelp/
@@ -119,13 +145,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Pull Mont. Code Ann. § 46-18-208 (early termination of a deferred imposition), which feeds the § 46-18-204 dismissal. Cited but not read — cite-only.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- District-court filing fee.
+- Bundling: "one lifetime petition — can it cover misdemeanors from several counties/courts, or one district only?" (practitioner-reported inconsistency).
+- Military no-wait branch in practice; cite check: clerks using §§ 1102–1111 or still saying 1101?
+
 ---
 
-## 5. NORTH DAKOTA (ND)
+## 5. NORTH DAKOTA (ND) — 8–11 AM
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **District court clerk (Burleigh County/Bismarck)** — via ndcourts.gov
+- **BCI record unit**
 - **Sealing / Closing (N.D. Cent. Code ch. 12-60.1; deferred imposition § 12.1-32-07.1)** — The court where the case was handled (the existing criminal case)
 - North Dakota Legal Self Help Center — https://www.ndcourts.gov/legal-self-help
 - Legal Services of North Dakota — https://www.legalassist.org
@@ -149,13 +182,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 6. Run a quick 2025-session sweep for acts touching N.D.C.C. § 12.1-32-07.1 (deferred-imposition set-aside/restricted-access mechanics). The relevant text was read, but a targeted confirmation is worthwhile.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Zero filing fee confirmed at the counter; 3-yr misd / 5-yr felony waits as applied.
+- HB 1166: non-conviction auto-close starting Aug 1 — clerks briefed? pre-Aug-2025 petition with 10-day grant working?
+- DUI sealing confirmed.
+
 ---
 
-## 6. NEW HAMPSHIRE (NH)
+## 6. NEW HAMPSHIRE (NH) — 7–10 AM
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Court Service Centers / a Circuit Court clerk** — via courts.nh.gov
+- **NH State Police Criminal Records Unit**
 - **Annulment (N.H. Rev. Stat. Ann. § 651:5)** — The court that handled the case
 - New Hampshire Legal Assistance — https://www.nhla.org
 - New Hampshire Judicial Branch — Annulments Self-Help — https://www.courts.nh.gov/self-help/annulments
@@ -168,13 +208,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 1. Confirm the court filing fee amount. Diana verified RSA 651:5 against gc.nh.gov (7/16): the three statutory fees are now known — $100 DOC investigation (IX), $100 DPS record-correction, and up to $100 State Police removal (X(d)), each waived if indigent, acquitted, or dismissed. The COURT filing fee is not set by statute and remains a phone-tier item (a waiver form exists); confirm the amount with courts.nh.gov.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- $125 filing fee (vs the $100 some guides say) + the $100 SP fee + DOC fee amounts.
+- Current Class B misdemeanor wait from RSA 651:5(III).
+- The trap on record: "if someone files before the wait is up and is denied, is the 3-year re-file bar applied?"
+- Post-2019 auto-annulment of dismissals actually firing.
+
 ---
 
-## 7. RHODE ISLAND (RI)
+## 7. RHODE ISLAND (RI) — 7–10 AM
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **District/Superior Court clerk** — via courts.ri.gov
+- **AG's BCI unit, Cranston** — record copies, $5
+- **RI Public Defender's expungement resources** — ripd.org
 - **Expungement / Sealing (R.I. Gen. Laws §§ 12-1.3-2, 12-1-12, 12-1-12.1)** — The court of conviction (Attorney General BCI in Cranston for records)
 - Rhode Island Public Defender — Expungement Resource Guide — https://ripd.org
 - Rhode Island Judiciary — Expungement Information — https://www.courts.ri.gov
@@ -194,13 +243,20 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. Pull R.I. Gen. Laws § 12-19-19(c) (deferred-sentence mechanics) — the feeder for the § 12-1.3-2(e) no-wait deferred-sentence expungement. Cited but not read; cite-only.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- $100-on-grant fee mechanics + waiver; multi-misdemeanor 10-yr path in practice.
+- Rule 48(a) auto-sealing since Jan 2023 — reliable, or do people still need to file?
+- Judge-discretion reality (denial rates for pro se).
+
 ---
 
-## 8. SOUTH DAKOTA (SD)
+## 8. SOUTH DAKOTA (SD) — 8–11 AM
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **UJS clerk (Minnehaha/Hughes County)** — via ujs.sd.gov
+- **DCI, Pierre** — (605) 773-3331 · from their page
 - **Expungement (S.D. Codified Laws §§ 23A-3-26 to -37)** — The circuit court where the case was handled (DCI in Pierre for records, (605) 773-3331)
 - South Dakota Unified Judicial System — Expungement Self-Help — https://ujs.sd.gov
 - East River Legal Services — https://www.erlservices.org
@@ -218,13 +274,22 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. Confirm the circuit court filing fee, and whether any fee waiver applies. Wave 7 gives the DCI record check as $24 (Pierre, (605) 773-3331) but flags the circuit court filing fee as a per-clerk phone target and gives no waiver information. The fees and feeWaiver fields are null pending both.
    - *Blocks (null until answered):* `resources.remedies.expungement.fees`, `resources.remedies.expungement.feeWaiver`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- § 23A-3-34 automatic removal — 5 or 10 years? and is it actually automatic in the system? (the wave's ugliest source conflict).
+- Expungement filing fee; Guide-and-File working.
+- Suspended-imposition sealing on completion confirmed.
+
 ---
 
-## 9. VERMONT (VT)
+## 9. VERMONT (VT) — 7–10 AM
+
+*the fresh-law flagship call*
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Superior Court Criminal Division clerk (any county)** — via vtcourts.gov
+- **Vermont Legal Aid** — 1-800-917-7787 · their published clinic line — confirm on site
 - **Expungement / Sealing (13 V.S.A. ch. 230, as restructured by 2025 Act 60)** — The Criminal Division of the Superior Court where the case was decided
 - Vermont Legal Aid — Expungement Clinics (1-800-917-7787) — https://vtlawhelp.org/expungement
 - Vermont Judiciary — Expungement — https://www.vermontjudiciary.org/criminal/expungement
@@ -245,13 +310,19 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 5. Verify the encoded text against the OFFICIAL VSA print. legislature.vermont.gov serves an unofficial copy of the Vermont Statutes Annotated (per the site's own banner) — the source notes carry this caveat; a check against the official print closes it.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Act 60 in practice: "Since July 1, are misdemeanor sealing petitions at 3 years being granted without hearings when the State doesn't object?"
+- $90 + $30 VCIC fees; the 18–21 30-day path — real filings yet?
+- Qualifying-felony list as clerks read it (drug trafficking really in?).
+
 ---
 
-## 10. WYOMING (WY)
+## 10. WYOMING (WY) — 9 AM–noon
 
 **Status:** `statute_cited` · reviewed 2026-07-22 · from `research/waves/Turnleaf_Wave7_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Circuit/District clerk (Laramie County/Cheyenne)** — via wyocourts.gov
 - **Expungement (Wyo. Stat. §§ 7-13-1401, 7-13-1501, 7-13-1502)** — The court that handled the case
 - Wyoming Judicial Branch — Expungement Self-Help — https://www.courts.state.wy.us/expungement/
 - Legal Aid of Wyoming — https://www.lawyoming.org
@@ -276,10 +347,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 7. Confirm whether an indigency fee waiver applies to the $100 (misdemeanor) / $300 (felony) filing fees. The sections state the fee amounts but no waiver; the feeWaiver field is null pending confirmation with a circuit clerk (Laramie or Natrona).
    - *Blocks (null until answered):* `resources.remedies.expungement.feeWaiver`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- $100 misd / $300 felony fees current; non-conviction § 1401 fee + 180-day mechanics.
+- Once-per-lifetime scope: "one 1501 petition ever — should someone bundle all eligible misdemeanors into it?"
+- DV-misdemeanor expungement + firearms-restoration paperwork reality.
+
 ---
+
+## Session targets
+
+- Minimum win: VT Act 60 reality + ND zero-fee + SD 5-vs-10 resolved + HI fee/timeline confirmed + AK honest-no on record.
+- Great session: + ME age-cap kill-quote; NH early-filing trap confirmed; MT bundling answer; WY fee pair; RI auto-seal reliability.
+- This wave completes 50/50 — the fee table, honest-no ladder, and fresh-law list are all fully sourced.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask · log everything · numbers rot, office+site re-finds them · HI after lunch._

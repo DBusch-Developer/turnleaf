@@ -1,24 +1,26 @@
 # Turnleaf — Call Session 3 (Wave 3: FL · GA · IL · NC · OH)
 
+_Numbers pulled July 15 from official pages — confirm office scope with your first question._
+
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 3`.
-> Source: the states database (or fallbackRules when no DATABASE_URL).
+> Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
 **11 open questions across 5 states.**
 
-**What this cannot generate** — the hand-written sheet is still the one you call from:
-- **Phone numbers.** None are stored. `courtContact` holds a role ("Clerk of the Superior Court"), not a number, and legalAid holds URLs. Every number on the hand sheet was researched and lives only there.
-- **Timezone plans, call order, session targets, and confirm-don't-ask phrasing.** None of it is in the data model.
-- **Verified-on dates for contacts.** `StatuteSource.retrievedOn` exists for statutes; nothing equivalent exists for a phone number.
-
-This sheet is authoritative for one thing only: **what is still open, and what it blocks.**
+Timezone plan (Prescott = Pacific-equivalent in July):
+- 7:00–9:00 AM your time → Illinois (Central, +2): their 9–11 AM.
+- 10:00 AM–1:00 PM your time → FL, OH, GA, NC (Eastern, +3): their 1–4 PM.
+Wave 3 twist: these calls verify FEES, but the two fresh-law states (IL, NC) also get a "is the new rule live in your office yet?" question — clerks sometimes lag statute changes by months, and that's publishable intel.
 
 ---
 
-## 1. FLORIDA (FL)
+## 1. FLORIDA (FL) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **FDLE Seal & Expunge Section** — (850) 410-7870 · SEinfo@fdle.state.fl.us · status requests need a photo-ID copy attached
+- **One county clerk for the petition fee** — Duval, Miami-Dade (Gerstein bldg), or Pinellas — pull the number from that clerk's seal/expunge page
 - **Seal or Expunge (FDLE Certificate, then court petition)** — FDLE for the certificate; county clerk (county of arrest) for the petition
 - Florida Justice Center — https://www.floridajusticecenter.org
 - Florida Courts self-help (find your county legal aid) — https://www.flcourts.gov/Resources-Services/Court-Improvement/Self-Help-Center
@@ -31,13 +33,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 1. What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county's fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.
    - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "$75 application fee, ~12-week processing — both current?" (confirm currency and the real backlog).
+- Certificate validity window (12 months?) — how long after issuance can the petition be filed?
+- The § 943.0595 question: "Is FDLE's administrative/automatic sealing of non-conviction records running? If charges were dropped, is the arrest record auto-sealed, or should they still apply?"
+- County clerk: petition filing fee for seal/expunge (~$42–60), certified disposition cost.
+- Email SEinfo the night before — a written FDLE reply is a citable artifact.
+
 ---
 
-## 2. GEORGIA (GA)
+## 2. GEORGIA (GA) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Georgia Justice Project** — gjp.org — statewide record-restriction experts; the implementation-truth org
+- **GBI/GCIC (restriction mechanics)** — pull the GCIC record-restriction unit number from gbi.georgia.gov
+- **One court-of-conviction clerk** — Fulton or Gwinnett State Court, for petition costs
 - **Record Restriction and Sealing — court petition (O.C.G.A. § 35-3-37)** — The court of conviction
 - **Arrest Record Restriction — agency route (O.C.G.A. § 35-3-37)** — The arresting agency (GBI/GCIC for the record itself)
 - Georgia Justice Project (wrote the law; statewide clinics) — https://www.gjp.org
@@ -59,13 +71,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 4. How does the § 42-8-66 retroactive-First-Offender prosecutor-consent requirement play out in practice? Sumrall (2024) and Ballard (2025) make consent a threshold; confirm with GJP how often prosecutors consent and any local practice for seeking it.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- "Post-July-2013 non-conviction arrests restrict automatically — working reliably, or should people pull their GCIC report to confirm?"
+- Pre-2013 arrests: application to the arresting agency — typical fee range?
+- SB 288 misdemeanor petition: county court costs to file (no statewide fee) — get one county's number.
+- Pardon-then-restrict felony path: current Board of Pardons processing time (GJP tracks this).
+
 ---
 
-## 3. ILLINOIS (IL)
+## 3. ILLINOIS (IL) — call 7–9 AM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Cook County Circuit Clerk — expungement info line (suburban districts)** — (847) 818-2436
+- **New Leaf Illinois hotline (cannabis + general record relief)** — (855) 963-9532
+- **Legal Aid Chicago** — (312) 229-6071
+- **Adult Expungement Advice Desk (free legal help)** — Daley Center, 50 W Washington, 10th Fl Rm 1006 — Mon & Wed 9 AM–12 PM walk-in
 - **Expungement or Sealing Petition (20 ILCS 2630/5.2)** — Circuit court of the county of the case
 - Illinois Legal Aid Online (Easy Form) — https://www.illinoislegalaid.org
 - Cabrini Green Legal Aid — https://www.cgla.net
@@ -86,13 +108,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 2. What is the county filing fee, and specifically the Cook County rule that one fee covers all petitions filed the same day? Wave 3 flags it. A fee waiver is available.
    - *Blocks (null until answered):* `resources.remedies.petition.fees`
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fresh-law question: "As of June 30, the misdemeanor sealing wait dropped from 3 years to 2 under the Clean Slate Act — is the clerk's office processing under the new period?" (if they haven't heard of it, that's a dated Discrepancy entry).
+- Cook County filing fee for expungement/sealing; confirm the one-fee-per-day rule for multiple petitions.
+- When does AUTOMATIC sealing under the Clean Slate Act begin? (ask New Leaf or the Advice Desk, not the clerk).
+- Whether e-filing is required or in-person is fine for pro se petitioners.
+
 ---
 
-## 4. NORTH CAROLINA (NC)
+## 4. NORTH CAROLINA (NC) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-18 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Clerk of Superior Court, county of conviction** — Mecklenburg or Wake — numbers on nccourts.gov county pages
+- **NC Second Chance Alliance** — ncsecondchance.org — the implementation-truth org for automatic expunction
 - **Expunction of a Nonviolent Conviction (§ 15A-145.5)** — Clerk of Superior Court, county of conviction
 - **Expunction of a Non-Conviction (§ 15A-146)** — Clerk of Superior Court, county of the case
 - NC Second Chance Alliance (statewide clinics) — https://www.ncsecondchance.org
@@ -111,13 +141,21 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 3. ADD SECTION: § 15A-145.8A (offense committed while under 18 but tried/convicted as an adult) was NOT read on 7/18 — the 15A-145.8 PDF covers remand-to-juvenile only. A "convicted as an adult for an under-18 offense" path stays unrouted until GS_15A-145.8A.pdf is read. One-download fix.
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- The fresh-law question: "For petitions filed after July 9, 2025, the single nonviolent misdemeanor wait is 3 years — is the AOC form updated?" (form AOC-CR-298 has had statute-inconsistent findings before — if form and statute disagree TODAY, that's gold).
+- $175 filing fee for conviction expunctions — current? Non-conviction petitions free? Indigent waiver process?
+- Automatic expunction: "Dismissals since Dec 2021 auto-expunge 180–210 days after disposition — running normally since the July 2024 restart?"
+- Whether AOC forms are accepted statewide uniformly or the county wants local variants.
+
 ---
 
-## 5. OHIO (OH)
+## 5. OHIO (OH) — call 10 AM–1 PM your time
 
 **Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
-**Contacts (from the data — no phone numbers are stored; see header):**
+**Call:**
+- **Hamilton County Clerk of Courts** — courtclerk.org — dedicated record-sealing page; pull the criminal division number from the site
+- **Franklin County Municipal Court Self-Help Resource Center** — misdemeanor side; number on fcmcclerk.com
 - **Application to Seal a Conviction (R.C. 2953.32)** — The sentencing court (common pleas for felonies, municipal for misdemeanours)
 - Ohio Justice & Policy Center (plain-language guide) — https://www.ohiojpc.org
 - Ohio Legal Help — https://www.ohiolegalhelp.org
@@ -132,10 +170,23 @@ This sheet is authoritative for one thing only: **what is still open, and what i
 1. Diversion / intervention-in-lieu that did NOT end in a dismissal: the tree routes a completed diversion whose charges were dismissed into the R.C. 2953.33 non-conviction path (a dismissed complaint is textually within 2953.33(A)(1)); a diversion that did not end in dismissal keeps the punt node. Confirm local practice for the non-dismissal case. (R.C. 2953.39 prosecutor-initiated sealing for low-level drug offences remains a referral mention.)
    - *Blocks no single field — affects a branch or wording.*
 
+**On the call (your research — confirm-don't-ask phrasing, watch-fors):**
+- Filing fee for a sealing application (statute-era $50; court schedules set it — get today's number, felony vs misdemeanor court).
+- "One application covering multiple cases in this court — allowed, one fee?"
+- Real-world timing: statute says hearing 45–90 days — what's actual now?
+- Count-rule check: "Is there any overall cap on the number of felonies that can be sealed, or is it per-offense with the F3-specific limits?" (if the clerk won't touch it, the Supreme Court bench card settles it — log the attempt).
+
 ---
+
+## Session targets
+
+- Minimum win: 5 calls logged; FL FDLE processing time + fee confirmed; IL and NC fresh-law questions asked and answered ("clerk unaware of new law" is publishable intel with a date).
+- Great session: all five + written replies from SEinfo@fdle and GJP in the log; OH fee in two courts; the NC form-vs-statute check done.
 
 ## After the calls
 
-For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open.
+For each answer: fill the field(s) in `src/data/fallbackRules.ts`, delete the question that blocked them, and flip `verificationStatus` by hand if the state is fully confirmed. Then `npm run validate`, `npm run db:seed`, and regenerate this sheet — what is left is what is still open. Re-verified a phone number? Update it in `src/db/callContacts.ts`.
 
 A field may not be filled while a question still blocks it, and a question may not stand against a filled field. The validator enforces both.
+
+_Confirm-don't-ask; log no-answers; numbers rot — office name + site re-finds them; email the emailable agencies the night before._

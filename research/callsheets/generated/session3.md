@@ -5,7 +5,7 @@ _Numbers pulled July 15 from official pages — confirm office scope with your f
 > GENERATED FILE — do not edit. Regenerate with `npm run callsheet -- 3`.
 > Contacts & scripts live in `src/db/callContacts.ts`; status & open questions come from the rules data.
 
-**11 open questions across 5 states.**
+**13 open questions across 5 states.**
 
 Timezone plan (Prescott = Pacific-equivalent in July):
 - 7:00–9:00 AM your time → Illinois (Central, +2): their 9–11 AM.
@@ -16,7 +16,7 @@ Wave 3 twist: these calls verify FEES, but the two fresh-law states (IL, NC) als
 
 ## 1. FLORIDA (FL) — call 10 AM–1 PM your time
 
-**Status:** `statute_cited` · reviewed 2026-07-16 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
+**Status:** `statute_cited` · reviewed 2026-07-23 · from `research/waves/Turnleaf_Wave3_Draft_Package.md`
 
 **Call:**
 - **FDLE Seal & Expunge Section** — (850) 410-7870 · SEinfo@fdle.state.fl.us · status requests need a photo-ID copy attached
@@ -28,10 +28,14 @@ Wave 3 twist: these calls verify FEES, but the two fresh-law states (IL, NC) als
 **Dates that govern:**
 - 2019 — Administrative/automatic sealing of qualifying non-conviction arrests (§ 943.0595) (effective) · FDLE MANDATORILY auto-seals qualifying non-conviction arrest records (§ 943.0595), with no lifetime limit ((2)(b)) — but NOT forcible felonies (§ 776.08) or specified sex-registry offenses ((2)(a)), and FDLE sealing its own copy does not force other agencies to seal theirs ((3)(c)). (Diana, statute pass 2026-07-16.)
 
-**Verify — 1 open question. Each answer closes a numbered question in the database:**
+**Verify — 3 open questions. Each answer closes a numbered question in the database:**
 
 1. What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county's fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.
    - *Blocks (null until answered):* `resources.remedies.petition.fees`, `resources.remedies.petition.feeWaiver`
+2. Does FDLE certificate-of-eligibility processing IN PRACTICE check for outstanding court debt (restitution/fines/costs), even though § 943.059 sets no financial eligibility criterion? Phone-tier — the statute does not require payment, but confirm FDLE's operational practice with the Seal & Expunge Section (SEinfo@fdle.state.fl.us / (850) 410-7870) so the "money is not a bar" guidance holds at the counter.
+   - *Blocks no single field — affects a branch or wording.*
+3. Re-check the 2025 text of § 943.0585 (EXPUNCTION) directly. Diana re-read § 943.059 (sealing) on 2026-07-23 and confirmed it has no financial criterion; § 943.0585 was NOT re-read in that pass. The encoded expunction path (eligible_expunction_fl) has no completion/supervision/money gate, which is consistent with non-convictions — but confirm § 943.0585 likewise sets no financial-obligation eligibility criterion (mirror the § 943.059 correction only if its text matches).
+   - *Blocks no single field — affects a branch or wording.*
 
 **On the call (your research — confirm-don't-ask phrasing, watch-fors):**
 - "$75 application fee, ~12-week processing — both current?" (confirm currency and the real backlog).

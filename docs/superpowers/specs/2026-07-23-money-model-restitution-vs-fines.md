@@ -56,3 +56,13 @@ Form: two clearly-labeled questions (restitution = to a victim; fines/fees = to 
 - **Restitution-only** (money node reads `restitutionPaid`, fines don't block): NC. (PA reads restitution via an ASKED node, not the money field — unaffected by the model.)
 - **All-money** (two gates: `restitutionPaid` AND `finesPaid`): AZ, UT, TN, AL.
 - **Not money-gated** (removed from the model): FL — § 943.059 has no financial criterion; gated on court supervision (§ 943.059(1)(d)), not money.
+
+## 6. Scope limit, and the follow-up it implies (2026-07-23)
+
+This model only ever reached the states whose trees read the `restitution_paid` **record field** — 5 of them after FL left and PA turned out to be an asked node. It fixed a field-overloading bug; it did not audit whether any state's money requirement is real.
+
+A sweep of all 50 trees found **31 states with money-conditioned nodes**: 5 wired to the money facts, and 26 more asking money through their own asked or date nodes. Those 26 are not broken — each asks in its own words, so there is no overloaded-boolean problem — but **none has been checked against its statute the way § 943.059 finally was**, and 10 of them carry the exact shape that was wrong in Florida: money folded into a broad "all terms of your sentence" completion or date gate.
+
+That triage — every money node's text, its adjacent citations, and a risk tier per state — is in [`docs/reviews/2026-07-23-money-gate-triage.md`](../../reviews/2026-07-23-money-gate-triage.md). It is a shape analysis, not a legal review: no statute was read to produce it, and nothing in it may be encoded until a package or Diana's read settles it.
+
+Deliberately **not** done: turning those triage questions into `open_questions` entries on the 26 states. Open questions record ⚠️ flags raised by a research package (Data Integrity Rule 2); these are review questions raised by us, and writing them into state data would blur a distinction the validator depends on.

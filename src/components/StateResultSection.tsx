@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
 import type { ScreeningResultItem } from '../data/multiState';
 import SourcesList from './SourcesList';
-import { actionableRecords, remedyPanelCopy, statusLabel } from '../utils/remedyPanel';
+import { actionableRecords, remedyPanelCopy, statusLabel, visibleRemedyKeys } from '../utils/remedyPanel';
 import { FileText, Landmark, ShieldCheck, RefreshCw } from 'lucide-react';
 
 /**
@@ -67,10 +67,12 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
     }
   };
 
-  // Which records the filing panel speaks for, and how it is framed. Shared with
-  // the printed report so the two can no longer drift — see ../utils/remedyPanel.
+  // Which records the filing panel speaks for, how it is framed, and which of
+  // the state's remedies it may show. Shared with the printed report so the two
+  // can no longer drift — see ../utils/remedyPanel.
   const actionableResults = actionableRecords(results);
   const { show: showRemedies, heading: remedyHeading, note: remedyNote } = remedyPanelCopy(results);
+  const visibleKeys = visibleRemedyKeys(results, Object.keys(stateConfig.resources.remedies));
 
   return (
     <section style={{ marginBottom: '2.5rem' }}>
@@ -173,7 +175,7 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
       </div>
 
       {/* Filing Actions Checklist (FR-15 / FR-16) */}
-      {showRemedies && Object.keys(stateConfig.resources.remedies).length > 0 && (
+      {showRemedies && visibleKeys.length > 0 && (
         <div style={{ marginBottom: '2.5rem' }}>
           <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <FileText size={22} style={{ color: 'var(--color-primary)' }} /> {remedyHeading}
@@ -200,7 +202,7 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {Object.entries(stateConfig.resources.remedies).map(([key, remedy]) => (
+            {visibleKeys.map(key => [key, stateConfig.resources.remedies[key]] as const).map(([key, remedy]) => (
               <div
                 key={key}
                 style={{

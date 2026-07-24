@@ -154,6 +154,24 @@ export interface RuleResult {
   message: string;
   remedy: string;
   citation: string;
+  /**
+   * WHICH remedies in `resources.remedies` this result actually points at, by
+   * key. Omit it and the filing panel shows every remedy the state has — the
+   * long-standing default, correct for the common case where a state has one
+   * remedy or the result reaches all of them.
+   *
+   * Set it when a result endorses one remedy and NOT another. Showing someone a
+   * form is a soft endorsement, and a result that deliberately withholds an
+   * answer must not hand over the paperwork for the thing it withheld:
+   * `complex_dui_az` says outright that § 13-911 sealing for a DUI is unresolved
+   * while the § 13-905 set-aside is worth pursuing, so it lists ONLY
+   * `['set_aside']` and the sealing petition stops appearing for DUIs.
+   *
+   * This is a display narrowing, not a legal claim — it never adds a remedy a
+   * result did not already reach, and an empty array means "no forms", not "no
+   * relief". The validator checks every key resolves (`remedy-keys-resolve`).
+   */
+  remedyKeys?: string[];
 }
 
 export interface StateRuleConfig {
@@ -888,7 +906,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           title: 'DUI — Set-Aside Likely, Sealing Being Verified',
           message: 'A set-aside under ARS § 13-905 appears to be available for a DUI once your sentence is complete and everything is paid — that part looks the same as any other conviction. What we are not going to tell you is whether Record Sealing under ARS § 13-911 is available for a DUI: our sources do not agree, and this is exactly the kind of thing that is worth a phone call rather than a guess. Ask the clerk of the court that handled your case whether a DUI can be sealed under § 13-911, or ask one of the legal aid organizations below. The set-aside is worth pursuing either way.',
           remedy: 'Set-Aside (ARS § 13-905); § 13-911 sealing eligibility unverified for DUI',
-          citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (DUI treatment under 13-911 not yet resolved)'
+          citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (DUI treatment under 13-911 not yet resolved)',
+          // Set-aside ONLY. This result's own text refuses to say whether a DUI
+          // can be sealed under § 13-911 (open question 2), so it must not hand
+          // over the sealing petition — a form is a soft endorsement, and this
+          // is the one thing we told the person we would not answer.
+          remedyKeys: ['set_aside']
         },
         eligible_marijuana_az: {
           status: 'eligible',

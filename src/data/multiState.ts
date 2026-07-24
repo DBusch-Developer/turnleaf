@@ -17,6 +17,9 @@ export interface ScreeningResultItem {
   resultMessage: string;
   remedy: string;
   citation: string;
+  /** Which of the state's remedies this result points at, by key. Undefined =
+   *  all of them (the default); see RuleResult.remedyKeys. */
+  remedyKeys?: string[];
 }
 
 /** Evaluate one record against one state's config. The config MUST be the one
@@ -39,6 +42,7 @@ export function screenRecord(
     resultMessage: evaluation.message,
     remedy: evaluation.remedy,
     citation: evaluation.citation,
+    remedyKeys: evaluation.remedyKeys,
   };
 }
 

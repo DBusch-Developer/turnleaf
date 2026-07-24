@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { actionableRecords, remedyPanelCopy, statusLabel } from './remedyPanel';
+import { actionableRecords, remedyPanelCopy, statusLabel, visibleRemedyKeys } from './remedyPanel';
 
 interface PDFRecord {
   title: string;
@@ -9,6 +9,8 @@ interface PDFRecord {
   resultTitle: string;
   resultMessage: string;
   citation: string;
+  /** Which remedies this result points at. Undefined = all; see RuleResult. */
+  remedyKeys?: string[];
 }
 
 interface PDFStateInfo {
@@ -132,7 +134,8 @@ export function generateReportPDF(candidateName: string, sections: PDFStateSecti
     // report and the screen can no longer disagree about who gets a form.
     const actionable = actionableRecords(section.records);
     const panel = remedyPanelCopy(section.records);
-    if (panel.show && Object.keys(section.remedies).length > 0) {
+    const visibleKeys = visibleRemedyKeys(section.records, Object.keys(section.remedies));
+    if (panel.show && visibleKeys.length > 0) {
       y = addTextWithWrapping(`${panel.heading}:`, margin, y, 13, 'bold', [77, 124, 89]);
 
       if (panel.note) {
@@ -148,7 +151,7 @@ export function generateReportPDF(candidateName: string, sections: PDFStateSecti
       );
       y += 2;
 
-      Object.entries(section.remedies).forEach(([_, remedy]) => {
+      visibleKeys.map(k => section.remedies[k]).forEach(remedy => {
         y = addTextWithWrapping(`Remedy: ${remedy.name}`, margin, y, 11, 'bold');
         y = addTextWithWrapping(`Required Form: ${remedy.formName ?? NOT_VERIFIED}`, margin + 5, y, 9.5, 'normal');
         // The link line is omitted entirely when unverified — printing

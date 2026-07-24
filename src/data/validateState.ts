@@ -50,7 +50,12 @@ export type ValidationRule =
    *  badge is: set on a non-draft state, absent on a draft one, and a real date
    *  when present. A badge with no date, or a date on unverified rules, is a
    *  verification claim that does not line up with itself. */
-  | 'verified-date-integrity';
+  | 'verified-date-integrity'
+  /** A result's remedyKeys names a remedy the state does not have. The filing
+   *  panel renders exactly these keys, so a typo silently shows NO form to
+   *  someone the screening said had a path — the failure is invisible in the
+   *  data and only appears on screen, which is the worst place to find it. */
+  | 'remedy-keys-resolve';
 
 export interface ValidationError {
   /** Two-letter state code, so a seed failure names the state. */
@@ -387,6 +392,7 @@ export function validateState(config: StateRuleConfig): ValidationError[] {
   checkShape(config, err);
   checkProducibility(config, err);
   checkReferences(config, err);
+  checkRemedyKeys(config, err);
 
   if (!errors.some(e => e.rule === 'unresolved-ref')) {
     checkReachability(config, err);
@@ -394,6 +400,41 @@ export function validateState(config: StateRuleConfig): ValidationError[] {
   }
 
   return errors;
+}
+
+/**
+ * Every key in a result's `remedyKeys` must name a remedy the state actually
+ * has, and the array must not be empty when present.
+ *
+ * The filing panel renders exactly these keys. A typo therefore shows NO form to
+ * someone the screening just told had a path — a failure that is invisible in
+ * the data and surfaces only on a results page, which is the worst place to find
+ * it. An empty array is rejected too: "this result points at no remedy" is
+ * spelled by omitting the field (which means "all of them"), not by an empty
+ * list, so an empty one is far more likely to be an accident than an intent.
+ */
+function checkRemedyKeys(
+  config: StateRuleConfig,
+  err: (rule: ValidationRule, path: string, message: string) => void,
+): void {
+  const available = Object.keys(config.resources.remedies);
+  for (const [key, result] of Object.entries(config.rules.results)) {
+    const keys = result.remedyKeys;
+    if (keys === undefined) continue;
+
+    const path = `rules.results.${key}.remedyKeys`;
+    if (keys.length === 0) {
+      err('remedy-keys-resolve', path,
+        'remedyKeys is an empty array. Omit the field entirely to reach every remedy the state has; an empty list renders no filing packet at all.');
+      continue;
+    }
+    for (const k of keys) {
+      if (!available.includes(k)) {
+        err('remedy-keys-resolve', path,
+          `remedyKeys names "${k}", which is not a remedy in resources.remedies (has: ${available.join(', ') || 'none'}).`);
+      }
+    }
+  }
 }
 
 /** Validate every state, tagging each error with its state code. */

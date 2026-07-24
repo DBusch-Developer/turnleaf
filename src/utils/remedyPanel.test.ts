@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { actionableRecords, isActionable, remedyPanelCopy, statusLabel } from './remedyPanel';
+import { actionableRecords, isActionable, remedyPanelCopy, statusLabel, visibleRemedyKeys } from './remedyPanel';
 import { fallbackRules } from '../data/fallbackRules';
 import { evaluate } from '../data/rulesEngine';
 import { intakeMaps, answersForState } from '../data/intakeMaps';
@@ -71,6 +71,52 @@ describe('remedy panel visibility', () => {
   });
 });
 
+describe('which remedies the panel may show', () => {
+  const KEYS = ['set_aside', 'sealing'];
+
+  test('a record with no remedyKeys reaches every remedy (the default)', () => {
+    expect(visibleRemedyKeys([r('eligible')], KEYS)).toEqual(KEYS);
+  });
+
+  test('a record that names keys narrows to them', () => {
+    expect(visibleRemedyKeys([{ resultStatus: 'complex', remedyKeys: ['set_aside'] }], KEYS))
+      .toEqual(['set_aside']);
+  });
+
+  test('narrowing never invents a remedy the state does not have', () => {
+    expect(visibleRemedyKeys([{ resultStatus: 'eligible', remedyKeys: ['nonexistent'] }], KEYS))
+      .toEqual([]);
+  });
+
+  test('mixed records union — one unnarrowed record opens the panel back up', () => {
+    const records = [
+      { resultStatus: 'complex', remedyKeys: ['set_aside'] },
+      { resultStatus: 'eligible' },
+    ];
+    expect(visibleRemedyKeys(records, KEYS)).toEqual(KEYS);
+  });
+
+  test('two narrowed records union their keys, in the state\'s key order', () => {
+    const records = [
+      { resultStatus: 'complex', remedyKeys: ['sealing'] },
+      { resultStatus: 'waiting', remedyKeys: ['set_aside'] },
+    ];
+    expect(visibleRemedyKeys(records, KEYS)).toEqual(['set_aside', 'sealing']);
+  });
+
+  test('an ineligible record cannot drag its remedies into view', () => {
+    const records = [
+      { resultStatus: 'ineligible', remedyKeys: ['sealing'] },
+      { resultStatus: 'complex', remedyKeys: ['set_aside'] },
+    ];
+    expect(visibleRemedyKeys(records, KEYS)).toEqual(['set_aside']);
+  });
+
+  test('no actionable records means no remedies', () => {
+    expect(visibleRemedyKeys([r('ineligible')], KEYS)).toEqual([]);
+  });
+});
+
 describe('AZ DUI — the live case that surfaced the bug', () => {
   // A DUI walks the AZ tree to complex_dui_az, whose own copy says the § 13-905
   // set-aside "is worth pursuing either way". Under the old 'eligible'-only gate
@@ -115,6 +161,20 @@ describe('AZ DUI — the live case that surfaced the bug', () => {
     const panel = remedyPanelCopy([{ resultStatus: duiResult().status }]);
     expect(panel.show).toBe(true);
     expect(panel.note).not.toBeNull();   // shown, but never as a green light
+  });
+
+  test('a DUI is shown the set-aside form and NOT the sealing petition', () => {
+    // The result's own text refuses to say whether § 13-911 sealing reaches a
+    // DUI (AZ open question 2). Handing over the sealing petition would answer
+    // it by implication — the exact thing the copy declines to do.
+    const az = fallbackRules['AZ'];
+    const result = duiResult();
+    const shown = visibleRemedyKeys(
+      [{ resultStatus: result.status, remedyKeys: result.remedyKeys }],
+      Object.keys(az.resources.remedies),
+    );
+    expect(Object.keys(az.resources.remedies)).toContain('sealing');   // the state HAS it
+    expect(shown).toEqual(['set_aside']);                              // the DUI is not shown it
   });
 
   test('the live intake map can actually reach the DUI branch', () => {

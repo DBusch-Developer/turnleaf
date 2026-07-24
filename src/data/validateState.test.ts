@@ -489,6 +489,52 @@ describe('validateState — verified-date integrity', () => {
   });
 });
 
+describe('validateState — remedyKeys resolution', () => {
+  test('accepts a result with no remedyKeys (the default: all remedies)', () => {
+    expect(validateState(validConfig())).toEqual([]);
+  });
+
+  test('accepts remedyKeys naming a real remedy', () => {
+    const c = validConfig();
+    c.rules.results.eligible_dismissed.remedyKeys = ['Sealing'];
+    expect(validateState(c)).toEqual([]);
+  });
+
+  test('flags remedyKeys naming a remedy the state does not have', () => {
+    const c = validConfig();
+    c.rules.results.eligible_dismissed.remedyKeys = ['set_aside'];   // ZZ has only 'Sealing'
+    const errors = validateState(c);
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('remedy-keys-resolve');
+    expect(errors[0].path).toBe('rules.results.eligible_dismissed.remedyKeys');
+    expect(errors[0].message).toMatch(/set_aside/);
+  });
+
+  test('flags an empty remedyKeys array — omit the field instead', () => {
+    const c = validConfig();
+    c.rules.results.waiting.remedyKeys = [];
+    const errors = validateState(c);
+    expect(errors).toHaveLength(1);
+    expect(errors[0].rule).toBe('remedy-keys-resolve');
+    expect(errors[0].message).toMatch(/empty/i);
+  });
+
+  test('catches a typo in one key while the others resolve', () => {
+    const c = validConfig();
+    c.rules.results.eligible_dismissed.remedyKeys = ['Sealing', 'Seeling'];
+    const errors = validateState(c);
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toMatch(/Seeling/);
+  });
+
+  test('the live AZ DUI narrowing resolves against real AZ data', () => {
+    const az = fallbackRules['AZ'];
+    expect(az.rules.results['complex_dui_az'].remedyKeys).toEqual(['set_aside']);
+    expect(Object.keys(az.resources.remedies)).toContain('set_aside');
+    expect(validateState(az).filter(e => e.rule === 'remedy-keys-resolve')).toEqual([]);
+  });
+});
+
 describe('validateState — error reporting', () => {
   test('reports every error, not just the first', () => {
     const c = validConfig();

@@ -94,6 +94,34 @@ export function remedyPanelCopy(records: Array<{ resultStatus: string }>): Remed
   };
 }
 
+/**
+ * Which remedy keys the panel should render, given the records it speaks for.
+ *
+ * A record with no `remedyKeys` reaches every remedy the state has — the
+ * long-standing default, and correct for the ~32 states with a single remedy.
+ * A record that names keys narrows to those, because showing a form is a soft
+ * endorsement and some results deliberately withhold one: `complex_dui_az`
+ * tells an Arizona DUI that § 13-911 sealing is unresolved, so it must not also
+ * hand over the sealing petition.
+ *
+ * Union across records, so a mixed screening still sees everything its records
+ * reached between them. Narrowing NEVER adds a remedy — the result is always a
+ * subset of what the state actually has, in the state's own key order.
+ */
+export function visibleRemedyKeys(
+  records: Array<{ resultStatus: string; remedyKeys?: string[] }>,
+  availableKeys: string[],
+): string[] {
+  const actionable = actionableRecords(records);
+  if (actionable.length === 0) return [];
+
+  // Any record without an explicit narrowing opens the panel to everything.
+  if (actionable.some(r => r.remedyKeys === undefined)) return availableKeys;
+
+  const named = new Set(actionable.flatMap(r => r.remedyKeys ?? []));
+  return availableKeys.filter(k => named.has(k));
+}
+
 /** Short per-record label for the "Shown for:" line. */
 export function statusLabel(status: string): string {
   switch (status) {

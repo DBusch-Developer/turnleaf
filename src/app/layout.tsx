@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: 'Turnleaf | 50-State Criminal Record Expungement Eligibility Checker',
   description: 'Check your eligibility for expungement, record sealing, and set-asides across all 50 states. 100% confidential, free, and anonymous.',
   keywords: 'expungement, record sealing, criminal record, set aside, certificate of second chance, legal aid, reentry, fair chance, justice impacted',
-  authors: [{ name: 'Diana Busch' }]
 };
 
 export const viewport: Viewport = {

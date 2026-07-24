@@ -27,4 +27,4 @@ Store rules in a Neon (serverless PostgreSQL) `states` table using **JSONB** col
 
 - **Database as sole source of truth** — rejected: loses local-without-DB dev and version-controlled diffs; complicates the research workflow.
 - **Relational tables for nodes/results** — rejected: heavy schema for a tree that varies per state; JSONB is a better fit.
-- **Flat JSON files only, no DB** — rejected: the DB path supports future querying/analytics and matches the cohort stack.
+- **Flat JSON files only, no DB** — rejected: the DB path supports future querying and analytics, and keeps the rules queryable outside the app process.

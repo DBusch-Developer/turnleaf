@@ -107,7 +107,7 @@ export default function RootLayout({
                 Turnleaf is a screening tool built to reference published legal rules. It displays potential eligibility and references state statutes, but does not provide legal advice or definitive filing determinations. A legal aid attorney, public defender, or court clerk should verify all details before filing any petition. Use of this application does not establish an attorney-client relationship.
               </p>
               <p style={{ color: 'var(--color-text-light)', fontSize: '0.75rem' }}>
-                &copy; {new Date().getFullYear()} Turnleaf. Designed for the Next Chapter AI-Augmented Builder Cohort.
+                &copy; {new Date().getFullYear()} Turnleaf.
               </p>
               <p style={{ fontSize: '0.72rem' }}>
                 <a href="/?demo=checkr" style={{ color: 'var(--color-text-light)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>

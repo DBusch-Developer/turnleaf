@@ -83,72 +83,47 @@ describe('money regression — restitution-only vs all-money (live PA/NC/FL bug 
   });
 
   // --------------------------------------------------------------------
-  // FL — ALL-MONEY (M3 fix). `sentence_complete_fl` (field:restitution_paid)
-  // now feeds a second gate, `fines_fl` (field:fines_paid), before
-  // eligible_sealing_fl: a two-gate ladder like AZ/UT/TN/AL, not a
-  // restitution-only bucket. FL was moved here because its own node text
-  // ("completed all terms of your sentence") is broad enough to imply fines,
-  // and the conservative reading is the one that never over-clears.
+  // FL — NOT money-gated (corrected 2026-07-23 against § 943.059's 2025 text,
+  // flsenate.gov, Diana). The section has NO financial-obligation eligibility
+  // criterion: the sealing completion gate is (1)(d) court SUPERVISION, not
+  // restitution/fines/costs. So FL was REMOVED from the money model — the old
+  // `sentence_complete_fl` (field:restitution_paid) + `fines_fl` money nodes
+  // are gone, replaced by an asked `supervision_fl` node. Money owed does NOT
+  // block; still-under-supervision does. (Unpaid amounts can EXTEND supervision,
+  // but that is indirect — never the eligibility bar.) These two tests guard
+  // against a regression that re-introduces a money gate on FL.
   //
-  // Traced path from startNode 'prior_relief_fl':
-  //   prior_relief_fl (asked, answer=false: no prior FL relief) -> prior_adjudication_fl
-  //   prior_adjudication_fl (asked, answer=false: no other adjudication) -> disposition
-  //   disposition (field:disposition='convicted' = "adjudication withheld" option) -> disqualified_offense_fl
-  //   disqualified_offense_fl (asked choice, answer='none') -> sentence_complete_fl
-  //   sentence_complete_fl (field:restitution_paid=true) -> fines_fl
-  //   fines_fl (field:fines_paid) ->
-  //     false -> ineligible_incomplete_fl (the fines gate BITES)
-  //     true  -> eligible_sealing_fl
-  //
-  // The point: fines owed now DOES block FL, same as AZ/UT/TN/AL — the fix
-  // no longer under-blocks FL relative to its own broad "all terms" text.
+  // Traced: prior_relief_fl(false)->prior_adjudication_fl(false)->disposition
+  //   ('convicted'=adjudication withheld)->disqualified_offense_fl('none')->supervision_fl.
   // --------------------------------------------------------------------
-  test('FL: restitution paid, fines owed -> fines gate bites at ineligible_incomplete_fl', () => {
+  test('FL: supervision ended but money still owed -> ELIGIBLE (money is not a bar)', () => {
     const record: ConvictionRecord = {
       id: 'p', state: 'FL', title: 'Withheld Adjudication', charge_type: 'misdemeanor',
       disposition: 'convicted', disposition_date: '2019-01-01',
       probation_status: 'completed', prison_sentenced: false,
-      restitution_paid: true, fines_paid: false,
+      restitution_paid: false, fines_paid: false,   // owed — must NOT matter to FL
     };
     const answers: Answers = {
-      prior_relief_fl: false,
-      prior_adjudication_fl: false,
-      disqualified_offense_fl: 'none',
-    };
-    const result = evaluate(fallbackRules['FL'], answers, record, NOW);
-    expect(keyOf('FL', result)).toBe('ineligible_incomplete_fl');
-  });
-
-  test('FL: restitution paid AND fines paid -> eligible_sealing_fl', () => {
-    const record: ConvictionRecord = {
-      id: 'p', state: 'FL', title: 'Withheld Adjudication', charge_type: 'misdemeanor',
-      disposition: 'convicted', disposition_date: '2019-01-01',
-      probation_status: 'completed', prison_sentenced: false,
-      restitution_paid: true, fines_paid: true,
-    };
-    const answers: Answers = {
-      prior_relief_fl: false,
-      prior_adjudication_fl: false,
-      disqualified_offense_fl: 'none',
+      prior_relief_fl: false, prior_adjudication_fl: false,
+      disqualified_offense_fl: 'none', supervision_fl: false,   // supervision ended
     };
     const result = evaluate(fallbackRules['FL'], answers, record, NOW);
     expect(keyOf('FL', result)).toBe('eligible_sealing_fl');
   });
 
-  test('FL control: restitution/sentence NOT complete still blocks at ineligible_incomplete_fl', () => {
+  test('FL: still under court supervision -> not yet (supervision gate, not money)', () => {
     const record: ConvictionRecord = {
       id: 'p', state: 'FL', title: 'Withheld Adjudication', charge_type: 'misdemeanor',
       disposition: 'convicted', disposition_date: '2019-01-01',
-      probation_status: 'completed', prison_sentenced: false,
+      probation_status: 'active', prison_sentenced: false,
       restitution_paid: false, fines_paid: false,
     };
     const answers: Answers = {
-      prior_relief_fl: false,
-      prior_adjudication_fl: false,
-      disqualified_offense_fl: 'none',
+      prior_relief_fl: false, prior_adjudication_fl: false,
+      disqualified_offense_fl: 'none', supervision_fl: true,   // still supervised
     };
     const result = evaluate(fallbackRules['FL'], answers, record, NOW);
-    expect(keyOf('FL', result)).toBe('ineligible_incomplete_fl');
+    expect(keyOf('FL', result)).toBe('supervision_pending_fl');
   });
 
   // --------------------------------------------------------------------

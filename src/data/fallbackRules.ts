@@ -6651,7 +6651,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
   FL: {
     code: 'FL',
     name: 'Florida',
-    lastReviewed: '2026-07-16',
+    lastReviewed: '2026-07-23',
     verificationStatus: 'statute_cited',
     verifiedDate: '2026-07-16',
     sourcePackage: 'research/waves/Turnleaf_Wave3_Draft_Package.md',
@@ -6678,13 +6678,23 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           'What is the county clerk filing fee for a seal or expunge petition? Wave 3 gives "~$42-$60 range commonly cited" and flags it as a phone target — a range across counties is not any one county\'s fee. The FDLE application fee is separately confirmed at $75 (see below). Ask one county clerk.',
         blocksFields: ['resources.remedies.petition.fees', 'resources.remedies.petition.feeWaiver'],
       },
+      {
+        question:
+          'Does FDLE certificate-of-eligibility processing IN PRACTICE check for outstanding court debt (restitution/fines/costs), even though § 943.059 sets no financial eligibility criterion? Phone-tier — the statute does not require payment, but confirm FDLE\'s operational practice with the Seal & Expunge Section (SEinfo@fdle.state.fl.us / (850) 410-7870) so the "money is not a bar" guidance holds at the counter.',
+        blocksFields: [],
+      },
+      {
+        question:
+          'Re-check the 2025 text of § 943.0585 (EXPUNCTION) directly. Diana re-read § 943.059 (sealing) on 2026-07-23 and confirmed it has no financial criterion; § 943.0585 was NOT re-read in that pass. The encoded expunction path (eligible_expunction_fl) has no completion/supervision/money gate, which is consistent with non-convictions — but confirm § 943.0585 likewise sets no financial-obligation eligibility criterion (mirror the § 943.059 correction only if its text matches).',
+        blocksFields: [],
+      },
     ],
     sources: [
       // Diana read all seven directly (7/16); FL statute URLs (leg.state.fl.us uses
       // chapter-range paths) not yet supplied, so retrievedOn is set and url is
       // held pending her links — read-but-unlinked.
       { id: 'Fla. Stat. § 943.0585 (expunction; (1)(g) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity; (5)-(6) $75/fingerprint/notarized COE mechanics)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0585', retrievedOn: '2026-07-16' },
-      { id: 'Fla. Stat. § 943.059 (court-ordered sealing; (1)(e) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.059', retrievedOn: '2026-07-16' },
+      { id: 'Fla. Stat. § 943.059 (court-ordered sealing; 2025 text re-read 2026-07-23, history ends ch. 2023-18, no 2024-25 amendments. Completion gates are (1)(c) NO adjudication of guilt/delinquency on the petitioned acts and (1)(d) NO LONGER under court supervision applicable to the disposition — there is NO financial-obligation eligibility criterion anywhere in the section (no restitution, fines, or costs language). (1)(e) lifetime bar cross-references only FL relief; (2)(b) 12-month COE validity)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.059', retrievedOn: '2026-07-23' },
       { id: 'Fla. Stat. § 943.0578 (lawful self-defense expunction; (1) notwithstanding 943.0585(1)&(2) — overrides the lifetime and conviction bars; (2) own COE; (4) imports 943.0585(5)-(6))', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0578', retrievedOn: '2026-07-16' },
       { id: 'Fla. Stat. § 943.0581 (administrative expunction; read 7/16)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0581', retrievedOn: '2026-07-16' },
       { id: 'Fla. Stat. § 943.0582 (juvenile diversion expunction; (4) does not use the adult once-per-lifetime relief)', url: 'https://flsenate.gov/Laws/Statutes/2025/0943.0582', retrievedOn: '2026-07-16' },
@@ -6761,22 +6771,26 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
             { label: 'Terrorism, illegal use of explosives, or aircraft piracy', value: 'terrorism', next: 'ineligible_disqualified_fl' },
             { label: 'Communications or wire fraud (the Florida Communications Fraud Act)', value: 'fraud', next: 'ineligible_disqualified_fl' },
             { label: 'An offense that requires sexual-predator or sex-offender registration', value: 'registry', next: 'ineligible_disqualified_fl' },
-            { label: 'None of the above', value: 'none', next: 'sentence_complete_fl' }
+            { label: 'None of the above', value: 'none', next: 'supervision_fl' }
           ]
         },
-        sentence_complete_fl: {
+        // CORRECTED 2026-07-23 against the 2025 text of § 943.059 (Diana,
+        // flsenate.gov, retrievedOn 2026-07-23). The sealing completion gate is
+        // NOT financial: § 943.059 has NO restitution/fines/costs eligibility
+        // criterion anywhere in the section. Its two completion gates are
+        // (1)(c) — no adjudication of guilt on the petitioned acts (already
+        // screened by the withheld-adjudication disposition + disqualified list)
+        // — and (1)(d) — no longer under court supervision for the disposition.
+        // So the old money question was wrong: it invented a financial bar. This
+        // asks supervision status instead. Money still matters INDIRECTLY —
+        // unpaid restitution/fines/costs commonly EXTEND supervision — but it is
+        // never itself the eligibility bar, so we never tell a Florida user to
+        // pay as a prerequisite.
+        supervision_fl: {
           type: 'boolean',
-          field: 'restitution_paid',
-          text: 'Have you completed all terms of your sentence, including any probation and payment of restitution?',
-          yes: 'fines_fl',
-          no: 'ineligible_incomplete_fl'
-        },
-        fines_fl: {
-          type: 'boolean',
-          field: 'fines_paid',
-          text: 'Have you also paid all fines and court costs in the case in full?',
-          yes: 'eligible_sealing_fl',
-          no: 'ineligible_incomplete_fl'
+          text: 'Are you still on probation, community control, or any other court supervision for THIS case?',
+          yes: 'supervision_pending_fl',
+          no: 'eligible_sealing_fl'
         }
       },
       results: {
@@ -6815,12 +6829,12 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           remedy: 'None (Disqualified Offense under § 943.0584) — confirm the classification; ask about clemency',
           citation: 'Fla. Stat. § 943.0584'
         },
-        ineligible_incomplete_fl: {
-          status: 'ineligible',
-          title: 'Finish the Sentence First',
-          message: 'Sealing a withheld-adjudication case in Florida requires that you have completed all terms of your sentence, including probation and restitution. Based on what you told us, something is still outstanding, so you are not eligible to apply yet — but this is a "not yet", not a "no". Complete the remaining terms, and then come back: the offense itself qualifies. If an unpaid balance is the obstacle, ask the clerk about your exact payoff and whether a payment plan is available.',
-          remedy: 'Complete the Sentence First, then apply for a Certificate of Eligibility',
-          citation: 'Fla. Stat. § 943.059'
+        supervision_pending_fl: {
+          status: 'waiting',
+          title: 'Still Under Court Supervision — Not Yet',
+          message: 'Sealing a withheld-adjudication case in Florida turns on ONE completion question: are you still under court supervision for the case? Under § 943.059(1)(d) you must no longer be under supervision applicable to the disposition. There is NO requirement in the statute to have paid restitution, fines, or court costs — money owed is not, by itself, an eligibility bar. Because you are still on probation or supervision, you are not eligible to apply yet, but this is a "not yet," not a "no": once supervision ends, the offense qualifies. One practical note that is easy to misread: unpaid restitution, fines, or costs commonly EXTEND supervision, so clearing a balance can be what actually ends your supervision — and therefore what starts your eligibility. But you are not paying to "qualify"; you are paying to end supervision. Ask the clerk or your probation officer about your supervision status and any payoff.',
+          remedy: 'Wait until court supervision ends (§ 943.059(1)(d)) — money owed is not itself a bar',
+          citation: 'Fla. Stat. § 943.059(1)(d)'
         },
         eligible_expunction_fl: {
           status: 'eligible',
@@ -6831,8 +6845,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         },
         eligible_sealing_fl: {
           status: 'eligible',
-          title: 'Withheld Adjudication, Sentence Complete — Sealing Available',
-          message: 'Because adjudication was withheld, your offense is not on the disqualified list, and you have completed your sentence, you appear eligible to SEAL this record under Fla. Stat. § 943.059. The process starts with FDLE, not the court: apply for a Certificate of Eligibility — a $75 application (non-refundable, by money order), a notarized form, fingerprints, and a certified disposition — and FDLE estimates about 12 weeks. With the certificate in hand, you file the petition in the county of arrest; the clerk\'s filing fee varies by county. Two things to hold onto: this is your one court-ordered relief for life, so use it where it counts most; and after a record has been sealed for 10 years, you may then petition to EXPUNGE it, which is stronger.',
+          title: 'Withheld Adjudication, Supervision Ended — Sealing Available',
+          message: 'Because adjudication was withheld, your offense is not on the disqualified list, and you are no longer under court supervision for the case, you appear eligible to SEAL this record under Fla. Stat. § 943.059. Note what is NOT required: the statute has no restitution/fines/costs eligibility criterion, so an unpaid balance does not, by itself, block your Certificate of Eligibility once supervision has ended. The process starts with FDLE, not the court: apply for a Certificate of Eligibility — a $75 application (non-refundable, by money order; the FDLE executive director may waive it in cases of demonstrated hardship), a notarized form, fingerprints, and a certified disposition — and FDLE estimates about 12 weeks. With the certificate in hand, you file the petition in the county of arrest; the clerk\'s filing fee varies by county. Two things to hold onto: this is your one court-ordered relief for life, so use it where it counts most; and after a record has been sealed for 10 years, you may then petition to EXPUNGE it, which is stronger.',
           remedy: 'FDLE Certificate of Eligibility, then Sealing Petition (§ 943.059)',
           citation: 'Fla. Stat. § 943.059'
         },
@@ -6864,7 +6878,8 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           formUrl: 'https://www.fdle.state.fl.us/seal-and-expunge-process',
           steps: [
             'Check first whether a non-conviction arrest was already sealed automatically (§ 943.0595) — request your FDLE criminal history.',
-            'Apply to FDLE for a Certificate of Eligibility: $75 non-refundable money order, notarized application, fingerprints, and a certified copy of the disposition.',
+            'Confirm the completion gate for SEALING is met: adjudication withheld (not a conviction) AND you are no longer under court supervision for the case (§ 943.059(1)(c)-(d)). There is NO requirement to have paid restitution, fines, or costs — money owed is not an eligibility bar (though it can extend supervision).',
+            'Apply to FDLE for a Certificate of Eligibility: a $75 money order (non-refundable; the FDLE executive director may waive the fee in cases of demonstrated financial hardship), a notarized application, fingerprints, and a certified copy of the disposition.',
             'For an expunction, have the State Attorney complete Section B certifying the outcome. FDLE estimates about 12 weeks to process.',
             'With the certificate, file the seal or expunge petition in the county of arrest. The clerk\'s filing fee varies by county.',
             'Remember: only ONE court-ordered seal or expunge is allowed per lifetime.'
@@ -6872,10 +6887,10 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           // The FDLE application fee IS known ($75, in the steps). The COUNTY
           // clerk filing fee is the null one — Wave 3 gives only a range.
           fees: null,
-          // NOT null: fee-waiver practice is a separate question, but Wave 3
-          // records no waiver claim to null out, and the FDLE $75 is stated as
-          // non-refundable with no waiver. Leave feeWaiver as an honest unknown
-          // tied to the same open question as the county fee.
+          // null: the FDLE $75 IS waivable by the executive director in hardship
+          // (stated in the steps, a cost fact distinct from eligibility). What is
+          // still unknown is the COUNTY clerk filing fee and any waiver of it,
+          // which is the open question this field is tied to.
           feeWaiver: null,
           courtContact: 'FDLE for the certificate; county clerk (county of arrest) for the petition'
         }

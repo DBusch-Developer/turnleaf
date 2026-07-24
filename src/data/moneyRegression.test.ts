@@ -17,11 +17,15 @@ import type { ConvictionRecord } from './screening';
 //
 //   - a RESTITUTION-ONLY state (its money node's `field` is `restitution_paid`
 //     and nothing downstream reads `fines_paid`) no longer blocks someone who
-//     has paid restitution but still owes fines — NC and FL, the two states
-//     where the live bug actually manifested.
+//     has paid restitution but still owes fines — NC is the case tested here.
 //   - an ALL-MONEY state (a two-gate ladder: restitution THEN fines) still
 //     requires BOTH — the fines gate bites on its own — so the fix does not
-//     under-block. AZ is the contrast case.
+//     under-block. AZ and FL are the contrast cases. (FL was originally
+//     bucketed restitution-only, matching where the live bug manifested, but
+//     M3 review moved it to all-money: its own node text — "completed all
+//     terms of your sentence" — is broad enough to imply fines too, so the
+//     conservative, text-faithful reading requires both. See the spec's open
+//     verification item for Diana on whether § 943.059 actually exempts fines.)
 //
 // Every expected key below was reached by tracing fallbackRules.ts node-by-
 // node from each state's startNode, not by running the code first and
@@ -79,25 +83,48 @@ describe('money regression — restitution-only vs all-money (live PA/NC/FL bug 
   });
 
   // --------------------------------------------------------------------
-  // FL — restitution-only. Node `sentence_complete_fl` reads ONLY
-  // `restitution_paid` (its `field`); `fines_paid` appears nowhere in FL.
+  // FL — ALL-MONEY (M3 fix). `sentence_complete_fl` (field:restitution_paid)
+  // now feeds a second gate, `fines_fl` (field:fines_paid), before
+  // eligible_sealing_fl: a two-gate ladder like AZ/UT/TN/AL, not a
+  // restitution-only bucket. FL was moved here because its own node text
+  // ("completed all terms of your sentence") is broad enough to imply fines,
+  // and the conservative reading is the one that never over-clears.
   //
   // Traced path from startNode 'prior_relief_fl':
   //   prior_relief_fl (asked, answer=false: no prior FL relief) -> prior_adjudication_fl
   //   prior_adjudication_fl (asked, answer=false: no other adjudication) -> disposition
   //   disposition (field:disposition='convicted' = "adjudication withheld" option) -> disqualified_offense_fl
   //   disqualified_offense_fl (asked choice, answer='none') -> sentence_complete_fl
-  //   sentence_complete_fl (field:restitution_paid=true) -> eligible_sealing_fl
+  //   sentence_complete_fl (field:restitution_paid=true) -> fines_fl
+  //   fines_fl (field:fines_paid) ->
+  //     false -> ineligible_incomplete_fl (the fines gate BITES)
+  //     true  -> eligible_sealing_fl
   //
-  // fines_paid: false is set and never read on this path. The point: fines
-  // owed does NOT block FL once restitution/sentence terms are paid/done.
+  // The point: fines owed now DOES block FL, same as AZ/UT/TN/AL — the fix
+  // no longer under-blocks FL relative to its own broad "all terms" text.
   // --------------------------------------------------------------------
-  test('FL: restitution paid, fines owed -> proceeds past sentence_complete_fl to eligible_sealing_fl', () => {
+  test('FL: restitution paid, fines owed -> fines gate bites at ineligible_incomplete_fl', () => {
     const record: ConvictionRecord = {
       id: 'p', state: 'FL', title: 'Withheld Adjudication', charge_type: 'misdemeanor',
       disposition: 'convicted', disposition_date: '2019-01-01',
       probation_status: 'completed', prison_sentenced: false,
       restitution_paid: true, fines_paid: false,
+    };
+    const answers: Answers = {
+      prior_relief_fl: false,
+      prior_adjudication_fl: false,
+      disqualified_offense_fl: 'none',
+    };
+    const result = evaluate(fallbackRules['FL'], answers, record, NOW);
+    expect(keyOf('FL', result)).toBe('ineligible_incomplete_fl');
+  });
+
+  test('FL: restitution paid AND fines paid -> eligible_sealing_fl', () => {
+    const record: ConvictionRecord = {
+      id: 'p', state: 'FL', title: 'Withheld Adjudication', charge_type: 'misdemeanor',
+      disposition: 'convicted', disposition_date: '2019-01-01',
+      probation_status: 'completed', prison_sentenced: false,
+      restitution_paid: true, fines_paid: true,
     };
     const answers: Answers = {
       prior_relief_fl: false,

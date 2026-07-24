@@ -6768,6 +6768,13 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'boolean',
           field: 'restitution_paid',
           text: 'Have you completed all terms of your sentence, including any probation and payment of restitution?',
+          yes: 'fines_fl',
+          no: 'ineligible_incomplete_fl'
+        },
+        fines_fl: {
+          type: 'boolean',
+          field: 'fines_paid',
+          text: 'Have you also paid all fines and court costs in the case in full?',
           yes: 'eligible_sealing_fl',
           no: 'ineligible_incomplete_fl'
         }

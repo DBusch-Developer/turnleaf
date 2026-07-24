@@ -48,10 +48,10 @@ Form: two clearly-labeled questions (restitution = to a victim; fines/fees = to 
 
 ## 5. Decisions (resolved 2026-07-23 with Diana)
 
-1. **Florida → restitution-only bucket (provisional).** FL's node (`sentence_complete_fl`) names "all terms … including any probation and payment of **restitution**" — it does NOT name fines, and asserting a fines-block would invent a rule the encoded text doesn't state (violates the never-invent-law rule). So FL's money node reads the `restitutionPaid` fact. **Open verification item (does NOT block this work):** re-read § 943.059(1) to confirm whether unpaid fines independently block FL sealing; if they do, FL moves to the all-money bucket in a follow-up. Until verified, we do not add a fines requirement FL doesn't clearly state.
+1. **Florida → all-money bucket (revised 2026-07-23, M3 whole-branch review).** FL's node (`sentence_complete_fl`) originally moved to the restitution-only bucket on the theory that it names "restitution" but not "fines." Final review overturned that: the node's actual text reads "completed **all terms** of your sentence, including any probation and payment of restitution" — "all terms" is broad and, read plainly, implies fines/costs too, so restitution-only was itself an unverified (and likely wrong) narrowing, not the conservative reading. FL is now bucketed **ALL-MONEY**, split into the same two-gate ladder as AZ/UT/TN/AL (`sentence_complete_fl` reads `restitution_paid`, then a new `fines_fl` reads `fines_paid`, both required to reach `eligible_sealing_fl`). This is the conservative direction: worst case it tells someone to pay fines first, never a wrong "eligible." **Open verification item (does NOT block this work):** confirm against § 943.059 whether fines are actually exempt from the sealing prerequisite; if fines ARE exempt, move FL back to restitution-only in a follow-up, verified against the statute rather than inferred from node phrasing either way.
 2. **Lump fines + fees + costs into one `finesPaid` fact.** The states that distinguish only pull *restitution* out separately; all other court-owed money is one question.
 3. **Force an explicit answer** on both money questions — no silent "paid = yes" default. Asserting paid-when-unknown could wrongly grant eligibility in a legal screener; the person must choose. (Implication: the intake form must not let submission proceed with the money questions unanswered for a state whose tree reads them — or must carry a genuine "not sure" that routes to a hedge, never a silent "yes".)
 
-**Buckets (final for this pass):**
-- **Restitution-only** (money node reads `restitutionPaid`): PA, NC, FL (provisional).
-- **All-money** (two gates: `restitutionPaid` AND `finesPaid`): AZ, UT, TN, AL.
+**Buckets (final for this pass, revised 2026-07-23 M3):**
+- **Restitution-only** (money node reads `restitutionPaid`): PA, NC.
+- **All-money** (two gates: `restitutionPaid` AND `finesPaid`): AZ, UT, TN, AL, FL.

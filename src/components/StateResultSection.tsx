@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { StateRuleConfig } from '../data/fallbackRules';
 import type { ScreeningResultItem } from '../data/multiState';
 import SourcesList from './SourcesList';
+import { actionableRecords, remedyPanelCopy, statusLabel } from '../utils/remedyPanel';
 import { FileText, Landmark, ShieldCheck, RefreshCw } from 'lucide-react';
 
 /**
@@ -66,7 +67,10 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
     }
   };
 
-  const hasEligible = results.some(r => r.resultStatus === 'eligible');
+  // Which records the filing panel speaks for, and how it is framed. Shared with
+  // the printed report so the two can no longer drift — see ../utils/remedyPanel.
+  const actionableResults = actionableRecords(results);
+  const { show: showRemedies, heading: remedyHeading, note: remedyNote } = remedyPanelCopy(results);
 
   return (
     <section style={{ marginBottom: '2.5rem' }}>
@@ -169,11 +173,31 @@ export default function StateResultSection({ stateConfig, results, onSummaryLoad
       </div>
 
       {/* Filing Actions Checklist (FR-15 / FR-16) */}
-      {hasEligible && Object.keys(stateConfig.resources.remedies).length > 0 && (
+      {showRemedies && Object.keys(stateConfig.resources.remedies).length > 0 && (
         <div style={{ marginBottom: '2.5rem' }}>
           <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <FileText size={22} style={{ color: 'var(--color-primary)' }} /> The Form & Instructions to File Next
+            <FileText size={22} style={{ color: 'var(--color-primary)' }} /> {remedyHeading}
           </h3>
+
+          {remedyNote && (
+            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+              {remedyNote}
+            </p>
+          )}
+
+          {/* Name the records this panel is for. The remedies listed below belong
+              to the state, not to one record, so without this a person with a
+              mixed screening cannot tell which of their charges the form is for. */}
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+            Shown for:{' '}
+            {actionableResults.map((r, idx) => (
+              <span key={r.recordId}>
+                {idx > 0 && ', '}
+                <strong style={{ color: 'var(--color-text)' }}>{r.title}</strong>{' '}
+                ({statusLabel(r.resultStatus)})
+              </span>
+            ))}
+          </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {Object.entries(stateConfig.resources.remedies).map(([key, remedy]) => (

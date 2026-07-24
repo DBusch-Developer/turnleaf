@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { actionableRecords, remedyPanelCopy, statusLabel } from './remedyPanel';
 
 interface PDFRecord {
   title: string;
@@ -126,10 +127,25 @@ export function generateReportPDF(candidateName: string, sections: PDFStateSecti
       y += 3;
     });
 
-    // Next Steps / Filing Instructions
-    const hasEligible = section.records.some(r => r.resultStatus === 'eligible');
-    if (hasEligible && Object.keys(section.remedies).length > 0) {
-      y = addTextWithWrapping('State Filing Actions & Forms:', margin, y, 13, 'bold', [77, 124, 89]);
+    // Next Steps / Filing Instructions. The visibility decision and its framing
+    // are shared with the on-screen panel (see ./remedyPanel) so the printed
+    // report and the screen can no longer disagree about who gets a form.
+    const actionable = actionableRecords(section.records);
+    const panel = remedyPanelCopy(section.records);
+    if (panel.show && Object.keys(section.remedies).length > 0) {
+      y = addTextWithWrapping(`${panel.heading}:`, margin, y, 13, 'bold', [77, 124, 89]);
+
+      if (panel.note) {
+        y = addTextWithWrapping(panel.note, margin, y, 9, 'normal', [90, 98, 92]);
+      }
+
+      // Name the records these forms are for — the remedies belong to the state,
+      // not to one record, so a mixed screening otherwise leaves the reader
+      // guessing which charge the paperwork applies to.
+      y = addTextWithWrapping(
+        `Shown for: ${actionable.map(r => `${r.title} (${statusLabel(r.resultStatus)})`).join(', ')}`,
+        margin, y, 9, 'normal', [90, 98, 92]
+      );
       y += 2;
 
       Object.entries(section.remedies).forEach(([_, remedy]) => {

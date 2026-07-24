@@ -34,7 +34,7 @@ Turnleaf screens a user's criminal record against their state's researched, cite
 ### Results, guidance & output
 - **FR-12** — Generate a warm, plain-language summary of the results via the Groq API.
 - **FR-13** — If no AI key or the API fails, generate a deterministic plain-language summary with the same safety guarantees.
-- **FR-15** — For eligible results, present the required petition form(s) with links.
+- **FR-15** — For any result that is not `ineligible` — that is, `eligible`, `waiting`, or `complex` — present the required petition form(s) with links. A `complex` result exists to hand someone a lead for a clerk or legal aid, and the lead is the form; a `waiting` result should show what the person is waiting to file. When nothing is `eligible`, the packet is framed as "not a clearance to file" rather than withheld. `ineligible` results show no packet.
 - **FR-16** — For each remedy, show estimated fees, fee-waiver info, where to file, and a step-by-step filing checklist.
 - **FR-17** — Show per-state legal-aid referral links, recommending attorney review before filing.
 - **FR-18** — Generate a downloadable PDF report of the screening, compiled client-side.

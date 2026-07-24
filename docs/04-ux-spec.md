@@ -43,7 +43,7 @@ The whole flow is a single page with step-based rendering driven by state in `pa
 - **Optional candidate name** for PDF, labeled "processed locally."
 - **Plain-language summary (FR-12/13):** hedged paragraph; shows a loading state while generating.
 - **Records breakdown (FR-3):** one card per charge, color-coded by status (eligible = success, waiting = warning, ineligible = error, complex = neutral), with the message and the applied citation. Waiting cards show the earliest eligibility date (FR-8).
-- **Filing packet (FR-15/16):** for eligible results — form link, fees, fee waiver, where to file, and a checkbox step list.
+- **Filing packet (FR-15/16):** for eligible, waiting, and complex results — form link, fees, fee waiver, where to file, and a checkbox step list. Hidden only when every record for that state is `ineligible`. The heading and a caveat line follow the statuses present ("The Form & Instructions to File Next" when something is eligible; "The Form Behind the Open Question" for complex; "What You'll File When the Wait Is Over" for waiting), and a "Shown for:" line names which charges the packet applies to, since remedies belong to the state rather than to one record. Copy lives in `src/utils/remedyPanel.ts`, shared by the screen and the PDF.
 - **Legal-aid referrals (FR-17):** per-state links with a recommendation to have an attorney review before filing.
 - **Download PDF (FR-18):** client-side generation.
 

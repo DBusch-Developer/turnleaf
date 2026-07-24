@@ -5,7 +5,6 @@ import StateSelector, { StateSummary } from '../components/StateSelector';
 import EligibilityWizard, { ConvictionRecord } from '../components/EligibilityWizard';
 import ResultsDisplay from '../components/ResultsDisplay';
 import CheckrReportDemo from '../components/CheckrReportDemo';
-import CheckrUpload from '../components/CheckrUpload';
 import { StateRuleConfig } from '../data/fallbackRules';
 import { groupByState, type ScreeningResultItem } from '../data/multiState';
 import ComingSoonPanel, { ComingSoonConfig } from '../components/ComingSoonPanel';
@@ -37,7 +36,6 @@ export default function Home() {
   const [prepopulatedRecords, setPrepopulatedRecords] = useState<ConvictionRecord[]>([]);
   const [results, setResults] = useState<any[] | null>(null);
   const [showCheckr, setShowCheckr] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
   // Which selected states' config fetch FAILED, tracked per-state so one state
   // going down never sinks the others. A code lands here only after its own
   // fetch rejects; the render infers "opening" vs "empty" from this plus the
@@ -79,15 +77,9 @@ export default function Home() {
   // The Checkr integration demo opens via the footer link (?demo=checkr). Read on
   // mount (not a lazy initial state) so SSR and first client render agree.
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const demo = new URLSearchParams(window.location.search).get('demo');
-    if (demo === 'checkr') {
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === 'checkr') {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-shot mount read
       setShowCheckr(true);
-    } else if (demo === 'upload') {
-      // ?demo=upload opens the real-report importer. Same one-shot mount read.
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-shot mount read
-      setShowUpload(true);
     }
   }, []);
 
@@ -362,15 +354,6 @@ export default function Home() {
         />
       )}
 
-      {/* Real background-check import. Parsed in this browser; the file is never
-          uploaded anywhere. Same handoff as the demo — the records go straight
-          into the wizard, which then asks for what a report cannot say. */}
-      {showUpload && (
-        <CheckrUpload
-          onRunScreening={(records) => { setShowUpload(false); handleLoadMockReport(records); }}
-          onClose={() => setShowUpload(false)}
-        />
-      )}
 
       {onLanding ? (
         <>

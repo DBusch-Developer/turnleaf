@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { ConvictionRecord } from './EligibilityWizard';
-import { X, ChevronDown, CheckCircle2, AlertTriangle, ArrowRight, Fingerprint, Search, ShieldCheck, Landmark } from 'lucide-react';
+import { X, ChevronDown, CheckCircle2, AlertTriangle, ArrowRight, Fingerprint, Search, ShieldCheck, Landmark, UploadCloud } from 'lucide-react';
+import CheckrUpload from './CheckrUpload';
 
 interface CheckrReportDemoProps {
   /** Hand the report's records to Turnleaf's screening engine. The engine
@@ -57,6 +58,8 @@ const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 export default function CheckrReportDemo({ onRunScreening, onClose }: CheckrReportDemoProps) {
   const [personas, setPersonas] = useState<PersonaItem[]>([]);
   const [selectedId, setSelectedId] = useState<string>('');
+  /** 'sample' = the simulated personas; 'upload' = import a real report. */
+  const [mode, setMode] = useState<'sample' | 'upload'>('sample');
   const [loaded, setLoaded] = useState<{ id: string; report: CheckrReport } | null>(null);
 
   useEffect(() => {
@@ -169,6 +172,39 @@ export default function CheckrReportDemo({ onRunScreening, onClose }: CheckrRepo
       </div>
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '1.5rem 1.25rem 4rem' }}>
+        {/* Sample report vs. your own. The panel is a simulated Checkr product
+            for the demo, but the importer under the second tab is real: it reads
+            an actual downloaded report, in this browser, and uploads nothing. */}
+        <div role="tablist" aria-label="Report source" style={{
+          display: 'inline-flex', gap: 4, padding: 4, marginBottom: '1.5rem',
+          background: 'var(--color-bg-alt)', border: '1px solid var(--color-card-border)', borderRadius: 12,
+        }}>
+          {([['sample', 'Sample reports'], ['upload', 'Upload my report']] as const).map(([value, label]) => (
+            <button
+              key={value}
+              role="tab"
+              aria-selected={mode === value}
+              onClick={() => setMode(value)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.45rem 0.9rem', borderRadius: 9, cursor: 'pointer', fontSize: '0.88rem',
+                fontWeight: mode === value ? 700 : 500,
+                border: mode === value ? '1px solid var(--color-card-border)' : '1px solid transparent',
+                background: mode === value ? '#fff' : 'transparent',
+                color: mode === value ? 'var(--color-text)' : 'var(--color-text-muted)',
+                boxShadow: mode === value ? 'var(--shadow-sm)' : 'none',
+              }}
+            >
+              {value === 'upload' && <UploadCloud size={15} />}
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {mode === 'upload' ? (
+          <CheckrUpload onRunScreening={onRunScreening} />
+        ) : (
+        <>
         {/* Candidate switcher */}
         <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--color-text-light)', marginBottom: '0.4rem' }}>
           Candidate report
@@ -287,6 +323,8 @@ export default function CheckrReportDemo({ onRunScreening, onClose }: CheckrRepo
               Simulated demonstration for illustrative purposes. Not real background-check data, and not affiliated with, sponsored by, or endorsed by Checkr, Inc.
             </p>
           </>
+        )}
+        </>
         )}
       </div>
     </div>

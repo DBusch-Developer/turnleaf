@@ -22,14 +22,19 @@ import {
   type CheckrParsedRecord, type CheckrParseProblem,
 } from '../data/checkrParse';
 import { extractCheckrLines } from '../utils/pdfText';
-import { UploadCloud, ShieldCheck, AlertTriangle, ArrowRight, FileText, X } from 'lucide-react';
+import { UploadCloud, ShieldCheck, AlertTriangle, ArrowRight, FileText } from 'lucide-react';
 
 interface Props {
   onRunScreening: (records: ConvictionRecord[]) => void;
-  onClose: () => void;
 }
 
-export default function CheckrUpload({ onRunScreening, onClose }: Props) {
+/**
+ * Rendered INSIDE the Checkr panel (CheckrReportDemo), as the "Upload my own
+ * report" mode beside the sample reports. It is a content block, not a screen:
+ * the panel owns the overlay, the top bar and the close control, so this must
+ * not paint its own chrome or it ends up floating over the page behind it.
+ */
+export default function CheckrUpload({ onRunScreening }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [records, setRecords] = useState<CheckrParsedRecord[] | null>(null);
@@ -58,14 +63,7 @@ export default function CheckrUpload({ onRunScreening, onClose }: Props) {
   };
 
   return (
-    <div style={{ maxWidth: '850px', margin: '0 auto', padding: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h2 style={{ fontSize: '1.5rem', color: 'var(--color-primary-dark)' }}>Upload your background check</h2>
-        <button onClick={onClose} aria-label="Close" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-          <X size={22} />
-        </button>
-      </div>
-
+    <div>
       {/* The privacy claim, stated plainly and specifically. */}
       <div style={{ ...card, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
         <ShieldCheck size={22} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: 2 }} />

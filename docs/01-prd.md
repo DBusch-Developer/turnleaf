@@ -44,7 +44,7 @@ Turnleaf screens a user's criminal record against their state's researched, cite
 ### Data & operations
 - **FR-21** — Provide a validated, idempotent seed (`npm run db:seed`) that mirrors `fallbackRules` into the database.
 - **FR-22** — Provide a demo panel that loads mock Checkr background-check personas to prepopulate records (demo/testing only).
-- **FR-23** — Let a person import their own Checkr background-check PDF to prepopulate records, parsed **entirely in the browser** with no upload endpoint and with identity fields discarded at the parse boundary ([ADR-0006](./decisions/ADR-0006-pdfjs-for-client-side-report-import.md)). Records that cannot be read with confidence are reported as such, never guessed at. Reached at `/?demo=upload`.
+- **FR-23** — Let a person import their own Checkr background-check PDF to prepopulate records, parsed **entirely in the browser** with no upload endpoint and with identity fields discarded at the parse boundary ([ADR-0006](./decisions/ADR-0006-pdfjs-for-client-side-report-import.md)). Records that cannot be read with confidence are reported as such, never guessed at. Reached from the Checkr panel's **Upload my report** tab (the footer's `/?demo=checkr` link), so both the sample reports and a real import live in one place.
 
 ## 4. Non-functional requirements
 

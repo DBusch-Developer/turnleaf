@@ -21,7 +21,7 @@ Add **`pdfjs-dist`** (Mozilla pdf.js, v6.1.200) and parse the report **entirely 
 
 - The file is read with `File.arrayBuffer()` and parsed by pdf.js in a worker on the page. **There is no upload endpoint** — not one that discards the file, not one that streams it. There is nothing to send to.
 - `src/utils/pdfText.ts` turns glyph positions into two-column lines. `src/data/checkrParse.ts` reduces those to charge / level / disposition / date / state / case number and **discards identity fields at the type boundary** — `toConvictionRecords` has no field that could carry a name or a date of birth.
-- The import is reached at `/?demo=upload`, alongside the existing `/?demo=checkr` fixture demo.
+- The import lives **inside the existing Checkr panel** (`/?demo=checkr`) as an "Upload my report" tab beside the sample reports — one place for both, and the panel already owns the full-screen overlay and its close control. `CheckrUpload` renders as a content block and paints no chrome of its own.
 - pdf.js is imported lazily, so it is only fetched when someone actually chooses a file.
 
 ### Why parsing by columns, not lines

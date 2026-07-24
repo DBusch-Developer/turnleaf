@@ -19,7 +19,9 @@ Turnleaf is an anonymous, web-based record-clearing (expungement) eligibility sc
 
 ## Current coverage
 
-**All 50 states are encoded and `statute_cited`** — each one's rules were read against its official statute text and carry citations, with 521 sources recorded (358 of them linked to official text that a human opened and dated). No state sits at `draft`.
+**All 50 states are encoded and `statute_cited`** — each one's rules were read against its official statute text and carry citations. No state sits at `draft`.
+
+**521 sources** are recorded. **384 carry a `retrievedOn`** — a human opened that official text and dated it. **358 of those also carry a `url`.** The 26-source gap is deliberate: a link is a per-source claim that someone read *that* text, so a `url` may never be set without a `retrievedOn`, but a source can be read before its official URL is supplied (Florida's statutes were read on 7/16 with links held pending). The validator enforces the asymmetry — zero sources carry a url without a date. The remaining 137 sources are cited but not yet individually read.
 
 `statute_cited` is not the top of the ladder. The verification tiers are:
 

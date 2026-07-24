@@ -38,7 +38,7 @@ Turnleaf is a Next.js 16 (App Router) application. The UI is a single-page, step
 
 ## 3. Layers & responsibilities
 
-- **Presentation (client components).** `page.tsx` orchestrates a step machine (select → wizard → results, or in-research). Components: `StateSelector`, `EligibilityWizard`, `ResultsDisplay`, `ComingSoonPanel`, `CheckrMockPanel`.
+- **Presentation (client components).** `page.tsx` orchestrates a step machine (select → wizard → results, or in-research). Components: `StateSelector`, `EligibilityWizard`, `ResultsDisplay`, `ComingSoonPanel`, `CheckrMockPanel`, `CheckrUpload` (client-side report import).
 - **Rules engine (client).** `evaluateRecord` in `EligibilityWizard` walks a state's decision tree (`startNode` → nodes → result). Deterministic; no network call. See [`03-data-model.md`](./03-data-model.md).
 - **Route Handlers (server).** Own all server-side concerns and secrets. `/api/summarize` is the only holder of the Groq key.
 - **Data access.** `db/client.ts` wraps Neon and encapsulates the DB→`fallbackRules` fallback. `db/seed.ts` mirrors code rules into the DB.
@@ -70,7 +70,7 @@ Turnleaf is a Next.js 16 (App Router) application. The UI is a single-page, step
 
 - **Neon** — serverless Postgres; tolerate cold starts.
 - **Groq** — plain-language rephrasing; must degrade to the deterministic summary on any failure.
-- **Checkr** — *not integrated*; mock personas only.
+- **Checkr** — *no API integration*; mock personas for the demo panel. A person's own downloaded report PDF can be imported client-side (`CheckrUpload` -> `utils/pdfText` -> `data/checkrParse`); the file never leaves the browser and there is no upload endpoint (ADR-0006).
 
 ## 8. Known architectural debt
 

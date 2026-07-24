@@ -37,7 +37,7 @@ A justice-impacted person (or a reentry navigator helping them) who wants a fast
 - Not a lawyer or a substitute for legal advice.
 - Not a document-filing service — Turnleaf points to forms; it does not file them.
 - Not an account system — no login, no saved history.
-- Not a real background-check integration — the Checkr panel is mock data for demo/testing only.
+- Not a real background-check *API* integration — the Checkr panel is mock data, and there is no Checkr account or server call. A person can, however, import their own downloaded Checkr report PDF; it is parsed in their browser and never uploaded (ADR-0006).
 
 ## Constraints
 

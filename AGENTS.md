@@ -62,7 +62,7 @@ Evidence before assertions. Never state that a build is green, a screening works
 
 ## Required stack
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Neon PostgreSQL (`@neondatabase/serverless`) · Groq (with deterministic fallback) · `jspdf` · `lucide-react` · Vitest (tests, [ADR-0005](./docs/decisions/ADR-0005-vitest-for-structural-validation.md)).
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS 4 · Neon PostgreSQL (`@neondatabase/serverless`) · Groq (with deterministic fallback) · `jspdf` · `lucide-react` · Vitest (tests, [ADR-0005](./docs/decisions/ADR-0005-vitest-for-structural-validation.md)) · `pdfjs-dist` (client-side background-check import, [ADR-0006](./docs/decisions/ADR-0006-pdfjs-for-client-side-report-import.md) — parsing stays in the browser; there is no upload endpoint).
 
 Do not replace a stack element without an approved ADR (`docs/decisions/`).
 

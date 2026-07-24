@@ -602,6 +602,22 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         blocksFields: ['resources.remedies.sealing.fees'],
       },
       {
+        // RAISED 2026-07-23 by a real Arizona record set (six Navajo County
+        // cases, discharged, fines on a payment plan). The set-aside step list
+        // has six steps: four cite a subsection (§ 13-905(B), (K),(L), (O)) and
+        // step 2 — "Pay any outstanding fines, fees, and victim restitution" —
+        // cites nothing. It is the only asserted requirement in the AZ resource
+        // data with no statutory anchor, and it is decisive for anyone on a
+        // payment plan: it is the difference between filing this week and
+        // filing years from now. It also reads against our own § 13-911 copy,
+        // which is careful that money is a FILING condition for sealing and not
+        // a clock condition. This is the Florida shape — a money requirement
+        // inferred from a completion phrase rather than read from the text.
+        question:
+          'Does ARS § 13-905 condition the SET-ASIDE on paying fines, fees and restitution in full, or is payment only the § 13-911(G) filing condition for SEALING? Statute tier — read § 13-905 directly. The set-aside step list tells people to "pay any outstanding fines, fees, and victim restitution" (resources.remedies.set_aside.steps[1]) with no subsection cited, while every result message says the set-aside has no waiting period once discharged. Someone on a court payment plan gets opposite answers from the two. If § 13-905 sets no payment criterion, drop the step; if it does, cite the subsection and say so in the results.',
+        blocksFields: [],
+      },
+      {
         question:
           'Is a DUI misdemeanor eligible for a set-aside, and is it excluded from § 13-911 sealing? DUI does not appear among the § 13-911(O) items recorded on 7/15 — but that list was given as "including", not as exhaustive, so its absence is not an answer. The tree still hedges DUI rather than infer from a partial list.',
         blocksFields: [],
@@ -744,7 +760,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
           type: 'boolean',
           text: 'Have you finished the NON-MONEY parts of your sentence and been discharged — probation, parole, any jail or prison time, classes, community service? (Money you still owe does not matter for this question. Unpaid fines, fees and restitution do NOT delay your waiting period; they only have to be paid by the time you file.)',
           yes: 'excluded_sealing_az',
-          no: 'ineligible_not_discharged_az'
+          no: 'waiting_not_discharged_az'
         },
         // The SECOND gate — § 13-911(O)'s additions over § 13-905(P). A "yes"
         // here does not end the screening: the set-aside survives it.
@@ -904,7 +920,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         complex_dui_az: {
           status: 'complex',
           title: 'DUI — Set-Aside Likely, Sealing Being Verified',
-          message: 'A set-aside under ARS § 13-905 appears to be available for a DUI once your sentence is complete and everything is paid — that part looks the same as any other conviction. What we are not going to tell you is whether Record Sealing under ARS § 13-911 is available for a DUI: our sources do not agree, and this is exactly the kind of thing that is worth a phone call rather than a guess. Ask the clerk of the court that handled your case whether a DUI can be sealed under § 13-911, or ask one of the legal aid organizations below. The set-aside is worth pursuing either way.',
+          message: 'A set-aside under ARS § 13-905 appears to be available for a DUI once your sentence is complete and everything is paid — that part looks the same as any other conviction. What we are not going to tell you is whether Record Sealing under ARS § 13-911 is available for a DUI: our sources do not agree, and this is exactly the kind of thing that is worth a phone call rather than a guess. Ask the clerk of the court that handled your case whether a DUI can be sealed under § 13-911, or ask one of the legal aid organizations below. The set-aside is worth pursuing either way — and ask for a Certificate of Second Chance with it (§ 13-905(K),(L)): immediately for a misdemeanor, two years after discharge for a class 4, 5 or 6 felony, five years for a class 2 or 3 felony. For felonies it is once in a lifetime, so if you have more than one felony case, choose which one to use it on rather than filing in whatever order comes to hand.',
           remedy: 'Set-Aside (ARS § 13-905); § 13-911 sealing eligibility unverified for DUI',
           citation: 'Arizona Revised Statutes §§ 13-905, 13-911 (DUI treatment under 13-911 not yet resolved)',
           // Set-aside ONLY. This result's own text refuses to say whether a DUI
@@ -930,14 +946,14 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_both_az: {
           status: 'eligible',
           title: 'Potential Set-Aside AND Sealing Eligible',
-          message: 'You appear potentially eligible for both Arizona remedies, and they do different things. A SET-ASIDE under ARS § 13-905 is available any time after discharge with no waiting period, and it costs nothing — the clerk is not permitted to charge a filing fee (§ 13-905(B)). It vacates the judgment of guilt, but the record stays publicly visible with a "set aside" annotation. It also restores your right to possess a firearm, unless the offense was a serious offense under § 13-706 (§ 13-905(O)). SEALING under ARS § 13-911 is the stronger remedy — it hides the record from public view and most background checks — and based on your dates the waiting period appears satisfied. Many people pursue both. Two things to plan around before you file the sealing petition. First, the court cannot rule for 60 calendar days unless nobody objects (§ 13-911(D)), so build that into your timeline. Second, and more important: if a sealing petition is DENIED, you must wait three years before filing again (§ 13-911(L)). That makes this worth getting right the first time rather than fast — if anything about your case is borderline, the free legal aid organizations below are worth a call before you file.',
+          message: 'You appear potentially eligible for both Arizona remedies, and they do different things. A SET-ASIDE under ARS § 13-905 is available any time after discharge with no waiting period, and it costs nothing — the clerk is not permitted to charge a filing fee (§ 13-905(B)). It vacates the judgment of guilt, but the record stays publicly visible with a "set aside" annotation. It also restores your right to possess a firearm, unless the offense was a serious offense under § 13-706 (§ 13-905(O)). SEALING under ARS § 13-911 is the stronger remedy — it hides the record from public view and most background checks — and based on your dates the waiting period appears satisfied. Many people pursue both. Two things to plan around before you file the sealing petition. First, the court cannot rule for 60 calendar days unless nobody objects (§ 13-911(D)), so build that into your timeline. Second, and more important: if a sealing petition is DENIED, you must wait three years before filing again (§ 13-911(L)). That makes this worth getting right the first time rather than fast — if anything about your case is borderline, the free legal aid organizations below are worth a call before you file. Ask for a Certificate of Second Chance alongside the set-aside as well (§ 13-905(K),(L)): immediately for a misdemeanor, two years after discharge for a class 4, 5 or 6 felony, five years for a class 2 or 3 felony — and for felonies it is once in a lifetime, so if you have more than one felony case, choose deliberately which one to use it on.',
           remedy: 'Set-Aside (ARS § 13-905) + Petition to Seal (ARS § 13-911)',
           citation: 'Arizona Revised Statutes §§ 13-905(B), 13-905(O), 13-911(D), 13-911(L)'
         },
         waiting_seal_az: {
           status: 'waiting',
           title: 'Set-Aside Available Now; Sealing Waiting Period Not Met',
-          message: 'Two different answers here, and the first one is good. You appear potentially eligible RIGHT NOW for a Set-Aside under ARS § 13-905 — there is no waiting period once you are discharged, and it costs nothing, because the clerk is not permitted to charge a filing fee (§ 13-905(B)). It also restores your firearm rights unless the offense was a serious offense under § 13-706 (§ 13-905(O)). Do not wait to do that. Record Sealing under ARS § 13-911 is the one that needs time. The periods run from when you finished the NON-MONEY conditions of your sentence and were discharged (§ 13-911(E)): 10 years for a class 2 or 3 felony, 5 for a class 4, 5 or 6 felony, 3 for a class 1 misdemeanor, 2 for a class 2 or 3 misdemeanor — and five years is added to each if you have a prior felony conviction (§ 13-911(F)). Based on your dates, yours has not run yet. Worth knowing: money you still owe does NOT delay this clock. Under § 13-911(G) it has to be paid by the time you file, but the waiting period runs regardless — so if you owe a balance, your clock is still going.',
+          message: 'Two different answers here, and the first one is good. You appear potentially eligible RIGHT NOW for a Set-Aside under ARS § 13-905 — there is no waiting period once you are discharged, and it costs nothing, because the clerk is not permitted to charge a filing fee (§ 13-905(B)). It also restores your firearm rights unless the offense was a serious offense under § 13-706 (§ 13-905(O)). Do not wait to do that. Record Sealing under ARS § 13-911 is the one that needs time. The periods run from when you finished the NON-MONEY conditions of your sentence and were discharged (§ 13-911(E)): 10 years for a class 2 or 3 felony, 5 for a class 4, 5 or 6 felony, 3 for a class 1 misdemeanor, 2 for a class 2 or 3 misdemeanor — and five years is added to each if you have a prior felony conviction (§ 13-911(F)). Based on your dates, yours has not run yet. Worth knowing: money you still owe does NOT delay this clock. Under § 13-911(G) it has to be paid by the time you file, but the waiting period runs regardless — so if you owe a balance, your clock is still going. One more thing to put on your calendar while you wait: ask for a Certificate of Second Chance with your set-aside (§ 13-905(K),(L)). For a misdemeanor it can issue immediately; for a class 4, 5 or 6 felony it comes two years after discharge, and for a class 2 or 3 felony five years. For felonies it is once in a lifetime — so if you have more than one felony case, decide which one to spend it on rather than letting the order you happen to file decide for you.',
           remedy: 'Set-Aside Now (ARS § 13-905); Sealing Later (ARS § 13-911)',
           citation: 'Arizona Revised Statutes §§ 13-905(B), 13-911(E), 13-911(F), 13-911(G)'
         },
@@ -954,8 +970,16 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         // NON-MONETARY completion plus discharge, and § 13-911(G) makes payment
         // a filing condition. Telling someone their clock had not started
         // because they owed money was simply false.
-        ineligible_not_discharged_az: {
-          status: 'ineligible',
+        // STATUS CORRECTED 2026-07-23: 'ineligible' -> 'waiting'. This result's
+        // own message says "come back when you are discharged" — that is a NOT
+        // YET, not a no, and it is the same legal shape as FL's
+        // supervision_pending_fl. It mattered beyond semantics: 'ineligible'
+        // suppresses the filing packet, so an Arizona person still finishing
+        // supervision saw no forms at all — including the § 13-905 set-aside
+        // they will be able to file for free the day they are discharged.
+        // Renamed to match the status (was ineligible_not_discharged_az).
+        waiting_not_discharged_az: {
+          status: 'waiting',
           title: 'Not Discharged Yet — Your Clock Has Not Started',
           message: 'Arizona\'s sealing clock starts when you finish the non-money parts of your sentence and are discharged — probation, parole, any jail or prison time, classes, community service. Until that happens the waiting period has not begun. A Set-Aside under ARS § 13-905 also comes after discharge. One thing worth being clear about, because it is commonly misunderstood: money you still owe does NOT hold your clock back. Under § 13-911(G) fines, fees and restitution have to be paid by the time you FILE, but the waiting period runs regardless. So if the only thing outstanding is a balance, your clock is already running — come back when you are discharged.',
           remedy: 'Finish the non-money conditions and get discharged first',
@@ -973,7 +997,7 @@ export const fallbackRules: Record<string, StateRuleConfig> = {
         eligible_pay_then_file_az: {
           status: 'eligible',
           title: 'Your Waiting Period Is Done — Pay the Balance, Then File',
-          message: 'Your waiting period has run. The only thing between you and filing is the money: under ARS § 13-911(G), fines, fees and restitution must be paid in full at the time you file — but, and this matters, an unpaid balance does NOT delay your waiting period. It has been running this whole time and it is finished. So there is no more waiting to do here; there is a balance to clear. Ask the court clerk for your exact payoff amount. Once it is paid you can file the Petition to Seal (ARS § 13-911) immediately, and a Set-Aside under § 13-905 alongside it — that one has no filing fee at all, because the clerk is not permitted to charge one. If the balance is the obstacle, ask the clerk about a payment plan or a community-restitution conversion; people do get these resolved.',
+          message: 'Your waiting period has run. The only thing between you and filing is the money: under ARS § 13-911(G), fines, fees and restitution must be paid in full at the time you file — but, and this matters, an unpaid balance does NOT delay your waiting period. It has been running this whole time and it is finished. So there is no more waiting to do here; there is a balance to clear. Ask the court clerk for your exact payoff amount. Once it is paid you can file the Petition to Seal (ARS § 13-911) immediately, and a Set-Aside under § 13-905 alongside it — that one has no filing fee at all, because the clerk is not permitted to charge one. If the balance is the obstacle, ask the clerk about a payment plan or a community-restitution conversion; people do get these resolved. While you are there, ask for a Certificate of Second Chance with the set-aside (§ 13-905(K),(L)): immediately for a misdemeanor, two years after discharge for a class 4, 5 or 6 felony, five years for a class 2 or 3 felony — once in a lifetime for felonies, so choose which case deliberately.',
           remedy: 'Pay the balance, then Set-Aside (§ 13-905) + Petition to Seal (§ 13-911)',
           citation: 'Arizona Revised Statutes §§ 13-905, 13-911(E), 13-911(G)'
         }
